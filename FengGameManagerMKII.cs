@@ -1,12 +1,15 @@
 using ExitGames.Client.Photon;
+using Mod;
 using Photon;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using Mod.Interface;
 using UnityEngine;
 
 public class FengGameManagerMKII : Photon.MonoBehaviour
@@ -2048,22 +2051,22 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
             if (inputRC.isInputLevel(InputCodeRC.levelForward))
             {
                 Transform transform = this.selectedObj.transform;
-                transform.position += (Vector3) (num * new Vector3(Camera.mainCamera.transform.forward.x, 0f, Camera.mainCamera.transform.forward.z));
+                transform.position += (Vector3) (num * new Vector3(Camera.main.transform.forward.x, 0f, Camera.main.transform.forward.z));
             }
             else if (inputRC.isInputLevel(InputCodeRC.levelBack))
             {
                 Transform transform9 = this.selectedObj.transform;
-                transform9.position -= (Vector3) (num * new Vector3(Camera.mainCamera.transform.forward.x, 0f, Camera.mainCamera.transform.forward.z));
+                transform9.position -= (Vector3) (num * new Vector3(Camera.main.transform.forward.x, 0f, Camera.main.transform.forward.z));
             }
             if (inputRC.isInputLevel(InputCodeRC.levelLeft))
             {
                 Transform transform10 = this.selectedObj.transform;
-                transform10.position -= (Vector3) (num * new Vector3(Camera.mainCamera.transform.right.x, 0f, Camera.mainCamera.transform.right.z));
+                transform10.position -= (Vector3) (num * new Vector3(Camera.main.transform.right.x, 0f, Camera.main.transform.right.z));
             }
             else if (inputRC.isInputLevel(InputCodeRC.levelRight))
             {
                 Transform transform11 = this.selectedObj.transform;
-                transform11.position += (Vector3) (num * new Vector3(Camera.mainCamera.transform.right.x, 0f, Camera.mainCamera.transform.right.z));
+                transform11.position += (Vector3) (num * new Vector3(Camera.main.transform.right.x, 0f, Camera.main.transform.right.z));
             }
             if (inputRC.isInputLevel(InputCodeRC.levelDown))
             {
@@ -5267,185 +5270,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
     {
         float num7;
         float num8;
-        if ((IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.STOP) && (Application.loadedLevelName != "characterCreation"))
-        {
-            if (isAssetLoaded)
-            {
-                string text = GameObject.Find("VERSION").GetComponent<UILabel>().text;
-                if (text != null)
-                {
-                    if (text.StartsWith("Verifying"))
-                    {
-                        GUI.backgroundColor = new Color(0f, 0f, 0f, 1f);
-                        float left = (Screen.width / 2) - 115f;
-                        float top = (Screen.height / 2) - 45f;
-                        GUI.Box(new Rect(left, top, 230f, 90f), string.Empty);
-                        GUI.DrawTexture(new Rect(left + 2f, top + 2f, 226f, 86f), this.textureBackgroundBlack);
-                        GUI.Label(new Rect(left + 13f, top + 20f, 172f, 70f), "Verifying client...please wait before joining the server.");
-                    }
-                    else if (text.StartsWith("Verification"))
-                    {
-                        GUI.backgroundColor = new Color(0f, 0f, 0f, 1f);
-                        float num3 = (Screen.width / 2) - 115f;
-                        float num4 = (Screen.height / 2) - 45f;
-                        GUI.Box(new Rect(num3, num4, 230f, 90f), string.Empty);
-                        GUI.DrawTexture(new Rect(num3 + 2f, num4 + 2f, 226f, 86f), this.textureBackgroundBlack);
-                        GUI.Label(new Rect(num3 + 13f, num4 + 20f, 172f, 70f), "Verification failed. Please clear your cache or try a different browser.");
-                    }
-                    else if (text.StartsWith("Mod"))
-                    {
-                        GUI.backgroundColor = new Color(0f, 0f, 0f, 1f);
-                        float num5 = (Screen.width / 2) - 115f;
-                        float num6 = (Screen.height / 2) - 45f;
-                        GUI.Box(new Rect(num5, num6, 230f, 90f), string.Empty);
-                        GUI.DrawTexture(new Rect(num5 + 2f, num6 + 2f, 226f, 86f), this.textureBackgroundBlack);
-                        GUI.Label(new Rect(num5 + 13f, num6 + 20f, 172f, 70f), "Mod is outdated. Please clear your cache or try a different browser.");
-                    }
-                    else if (((GameObject.Find("ButtonCREDITS") != null) && (GameObject.Find("ButtonCREDITS").transform.parent.gameObject != null)) && NGUITools.GetActive(GameObject.Find("ButtonCREDITS").transform.parent.gameObject))
-                    {
-                        num7 = (((float) Screen.width) / 2f) - 85f;
-                        num8 = ((float) Screen.height) / 2f;
-                        GUI.backgroundColor = new Color(0.08f, 0.3f, 0.4f, 1f);
-                        GUI.DrawTexture(new Rect(12f, 32f, 216f, 146f), this.textureBackgroundBlue);
-                        GUI.DrawTexture(new Rect(num7 + 2f, 7f, 146f, 101f), this.textureBackgroundBlue);
-                        GUI.Box(new Rect(num7, 5f, 150f, 105f), string.Empty);
-                        if (GUI.Button(new Rect(num7 + 11f, 15f, 128f, 25f), "Level Editor"))
-                        {
-                            settings[0x40] = 0x65;
-                            Application.LoadLevel(2);
-                        }
-                        else if (GUI.Button(new Rect(num7 + 11f, 45f, 128f, 25f), "Custom Characters"))
-                        {
-                            Application.LoadLevel("characterCreation");
-                        }
-                        else if (GUI.Button(new Rect(num7 + 11f, 75f, 128f, 25f), "Snapshot Reviewer"))
-                        {
-                            Application.LoadLevel("SnapShot");
-                        }
-                        GUI.Box(new Rect(10f, 30f, 220f, 150f), string.Empty);
-                        if (GUI.Button(new Rect(17.5f, 40f, 40f, 25f), "Login", "box"))
-                        {
-                            settings[0xbb] = 0;
-                        }
-                        else if (GUI.Button(new Rect(65f, 40f, 95f, 25f), "Custom Name", "box"))
-                        {
-                            settings[0xbb] = 1;
-                        }
-                        else if (GUI.Button(new Rect(167.5f, 40f, 55f, 25f), "Servers", "box"))
-                        {
-                            settings[0xbb] = 2;
-                        }
-                        if (((int) settings[0xbb]) == 1)
-                        {
-                            if (loginstate == 3)
-                            {
-                                GUI.Label(new Rect(30f, 80f, 180f, 60f), "You're already logged in!", "Label");
-                            }
-                            else
-                            {
-                                GUI.Label(new Rect(20f, 80f, 45f, 20f), "Name:", "Label");
-                                nameField = GUI.TextField(new Rect(65f, 80f, 145f, 20f), nameField, 40);
-                                GUI.Label(new Rect(20f, 105f, 45f, 20f), "Guild:", "Label");
-                                LoginFengKAI.player.guildname = GUI.TextField(new Rect(65f, 105f, 145f, 20f), LoginFengKAI.player.guildname, 40);
-                                if (GUI.Button(new Rect(42f, 140f, 50f, 25f), "Save"))
-                                {
-                                    PlayerPrefs.SetString("name", nameField);
-                                    PlayerPrefs.SetString("guildname", LoginFengKAI.player.guildname);
-                                }
-                                else if (GUI.Button(new Rect(128f, 140f, 50f, 25f), "Load"))
-                                {
-                                    nameField = PlayerPrefs.GetString("name", string.Empty);
-                                    LoginFengKAI.player.guildname = PlayerPrefs.GetString("guildname", string.Empty);
-                                }
-                            }
-                        }
-                        else if (((int) settings[0xbb]) == 0)
-                        {
-                            if (loginstate == 3)
-                            {
-                                GUI.Label(new Rect(20f, 80f, 70f, 20f), "Username:", "Label");
-                                GUI.Label(new Rect(90f, 80f, 90f, 20f), LoginFengKAI.player.name, "Label");
-                                GUI.Label(new Rect(20f, 105f, 45f, 20f), "Guild:", "Label");
-                                LoginFengKAI.player.guildname = GUI.TextField(new Rect(65f, 105f, 145f, 20f), LoginFengKAI.player.guildname, 40);
-                                if (GUI.Button(new Rect(35f, 140f, 70f, 25f), "Set Guild"))
-                                {
-                                    base.StartCoroutine(this.setGuildFeng());
-                                }
-                                else if (GUI.Button(new Rect(130f, 140f, 65f, 25f), "Logout"))
-                                {
-                                    loginstate = 0;
-                                }
-                            }
-                            else
-                            {
-                                GUI.Label(new Rect(20f, 80f, 70f, 20f), "Username:", "Label");
-                                usernameField = GUI.TextField(new Rect(90f, 80f, 130f, 20f), usernameField, 40);
-                                GUI.Label(new Rect(20f, 105f, 70f, 20f), "Password:", "Label");
-                                passwordField = GUI.PasswordField(new Rect(90f, 105f, 130f, 20f), passwordField, '*', 40);
-                                if (GUI.Button(new Rect(30f, 140f, 50f, 25f), "Login") && (loginstate != 1))
-                                {
-                                    base.StartCoroutine(this.loginFeng());
-                                    loginstate = 1;
-                                }
-                                if (loginstate == 1)
-                                {
-                                    GUI.Label(new Rect(100f, 140f, 120f, 25f), "Logging in...", "Label");
-                                }
-                                else if (loginstate == 2)
-                                {
-                                    GUI.Label(new Rect(100f, 140f, 120f, 25f), "Login Failed.", "Label");
-                                }
-                            }
-                        }
-                        else if (((int) settings[0xbb]) == 2)
-                        {
-                            if (UIMainReferences.version == UIMainReferences.fengVersion)
-                            {
-                                GUI.Label(new Rect(37f, 75f, 190f, 25f), "Connected to public server.", "Label");
-                            }
-                            else if (UIMainReferences.version == s[0])
-                            {
-                                GUI.Label(new Rect(28f, 75f, 190f, 25f), "Connected to RC private server.", "Label");
-                            }
-                            else if (UIMainReferences.version == "DontUseThisVersionPlease173")
-                            {
-                                GUI.Label(new Rect(28f, 75f, 190f, 25f), "Connecting to crypto server...", "Label");
-                            }
-                            else
-                            {
-                                GUI.Label(new Rect(37f, 75f, 190f, 25f), "Connected to custom server.", "Label");
-                            }
-                            GUI.Label(new Rect(20f, 100f, 90f, 25f), "Public Server:", "Label");
-                            GUI.Label(new Rect(20f, 125f, 80f, 25f), "RC Private:", "Label");
-                            GUI.Label(new Rect(20f, 150f, 60f, 25f), "Custom:", "Label");
-                            if (GUI.Button(new Rect(160f, 100f, 60f, 20f), "Connect"))
-                            {
-                                UIMainReferences.version = UIMainReferences.fengVersion;
-                            }
-                            else if (GUI.Button(new Rect(160f, 125f, 60f, 20f), "Connect"))
-                            {
-                                UIMainReferences.version = s[0];
-                            }
-                            else if (GUI.Button(new Rect(160f, 150f, 60f, 20f), "Connect"))
-                            {
-                                UIMainReferences.version = privateServerField;
-                            }
-                            privateServerField = GUI.TextField(new Rect(78f, 153f, 70f, 18f), privateServerField, 50);
-                        }
-                    }
-                }
-            }
-            else
-            {
-                GUI.backgroundColor = new Color(0f, 0f, 0f, 1f);
-                float num9 = (Screen.width / 2) - 115f;
-                float num10 = (Screen.height / 2) - 45f;
-                GUI.Box(new Rect(num9, num10, 230f, 90f), string.Empty);
-                GUI.DrawTexture(new Rect(num9 + 2f, num10 + 2f, 226f, 86f), this.textureBackgroundBlack);
-                GUI.Label(new Rect(num9 + 13f, num10 + 20f, 172f, 70f), "Downloading custom assets. Clear your cache or try a different browser if this takes longer than 10 seconds.");
-            }
-        }
-        else if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.STOP)
+        if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.STOP)
         {
             bool flag2;
             int num13;
@@ -8802,9 +8627,12 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
 
     public void OnJoinedLobby()
     {
-        NGUITools.SetActive(GameObject.Find("UIRefer").GetComponent<UIMainReferences>().panelMultiStart, false);
-        NGUITools.SetActive(GameObject.Find("UIRefer").GetComponent<UIMainReferences>().panelMultiROOM, true);
-        NGUITools.SetActive(GameObject.Find("UIRefer").GetComponent<UIMainReferences>().PanelMultiJoinPrivate, false);
+        Loading.Stop("ConnectingToLobby");
+        ServerList.Alpha = 0f;
+
+//        NGUITools.SetActive(GameObject.Find("UIRefer").GetComponent<UIMainReferences>().panelMultiStart, false);
+//        NGUITools.SetActive(GameObject.Find("UIRefer").GetComponent<UIMainReferences>().panelMultiROOM, true);
+//        NGUITools.SetActive(GameObject.Find("UIRefer").GetComponent<UIMainReferences>().PanelMultiJoinPrivate, false);
     }
 
     public void OnJoinedRoom()
@@ -11230,14 +11058,6 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
         }
     }
 
-    public void setBackground()
-    {
-        if (isAssetLoaded)
-        {
-            UnityEngine.Object.Instantiate(RCassets.Load("backgroundCamera"));
-        }
-    }
-
     private void setGameSettings(ExitGames.Client.Photon.Hashtable hash)
     {
         string str;
@@ -12920,23 +12740,58 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
             this.textureBackgroundBlue.Apply();
         }
         this.loadconfig();
-        List<string> list2 = new List<string> { "AOTTG_HERO", "Colossal", "Icosphere", "Cube", "colossal", "CITY", "city", "rock", "PanelLogin", "LOGIN" };
-        foreach (GameObject obj2 in UnityEngine.Object.FindObjectsOfType(typeof(GameObject)))
-        {
-            foreach (string str in list2)
-            {
-                if ((obj2.name.Contains(str) || (obj2.name == "Button")) || ((obj2.name == "Label") && obj2.GetComponent<UILabel>().text.Contains("Snap")))
-                {
-                    UnityEngine.Object.Destroy(obj2);
-                }
-                else if (obj2.name == "Checkbox")
-                {
-                    UnityEngine.Object.Destroy(obj2);
-                }
-            }
-        }
-        this.setBackground();
+//        List<string> list2 = new List<string> { "AOTTG_HERO", "Colossal", "Icosphere", "Cube", "colossal", "CITY", "city", "rock", "PanelLogin", "LOGIN" };
+//        foreach (GameObject obj2 in UnityEngine.Object.FindObjectsOfType(typeof(GameObject)))
+//        {
+//            foreach (string str in list2)
+//            {
+//                if ((obj2.name.Contains(str) || (obj2.name == "Button")) || ((obj2.name == "Label") && obj2.GetComponent<UILabel>().text.Contains("Snap")))
+//                {
+//                    UnityEngine.Object.Destroy(obj2);
+//                }
+//                else if (obj2.name == "Checkbox")
+//                {
+//                    UnityEngine.Object.Destroy(obj2);
+//                }
+//            }
+//        }
         ChangeQuality.setCurrentQuality();
+
+        try
+        {
+            DestroyOldMenu();
+            GameObject shelter = new GameObject("Shelter");
+            shelter.AddComponent<Shelter>();
+            DontDestroyOnLoad(shelter);
+        }
+        catch (Exception e)
+        {
+            UnityEngine.Debug.LogException(e);
+        }
+    }
+
+    private void DestroyOldMenu()
+    {
+        var whitelist = new List<string>
+        {
+            "Shelter",
+            "Interface",
+            "MainCamera_Mono",
+            "PhotonMono",
+            "EventSystem",
+            "UIRefer",
+            "MultiplayerManager",
+            "InputManagerController",
+            "UI Root",
+            "Camera",
+            "MenuBackGround",
+        };
+
+        foreach (GameObject obj2 in FindObjectsOfType(typeof(GameObject)))
+        {
+            if (whitelist.All(x => !x.ContainsIgnoreCase(obj2.name)))
+                Destroy(obj2);
+        }
     }
 
     [RPC]

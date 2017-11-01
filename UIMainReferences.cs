@@ -44,7 +44,6 @@ public class UIMainReferences : MonoBehaviour
             }
             FengGameManagerMKII.RCassets = iteratorVariable2.assetBundle;
             FengGameManagerMKII.isAssetLoaded = true;
-            FengGameManagerMKII.instance.setBackground();
             GameObject.Find("VERSION").GetComponent<UILabel>().text = versionShow + " Loaded.";
         }
     }

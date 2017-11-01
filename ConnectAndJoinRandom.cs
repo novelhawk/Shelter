@@ -1,5 +1,6 @@
 using Photon;
 using System;
+using Mod.Interface;
 using UnityEngine;
 
 public class ConnectAndJoinRandom : Photon.MonoBehaviour
@@ -24,12 +25,10 @@ public class ConnectAndJoinRandom : Photon.MonoBehaviour
 
     public virtual void OnJoinedLobby()
     {
-        Debug.Log("OnJoinedLobby(). Use a GUI to show existing rooms available in PhotonNetwork.GetRoomList().");
     }
 
     public void OnJoinedRoom()
     {
-        Debug.Log("OnJoinedRoom() called by PUN. Now this client is in a room. From here on, your game would be running. For reference, all callbacks are listed in enum: PhotonNetworkingMessage");
     }
 
     public virtual void OnPhotonRandomJoinFailed()

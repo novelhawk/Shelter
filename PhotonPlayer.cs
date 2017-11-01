@@ -2,6 +2,7 @@ using ExitGames.Client.Photon;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Mod;
 using UnityEngine;
 
 public class PhotonPlayer
@@ -10,6 +11,7 @@ public class PhotonPlayer
     public readonly bool isLocal;
     private string nameField;
     public object TagObject;
+    private string _hexName;
 
     protected internal PhotonPlayer(bool isLocal, int actorID, Hashtable properties)
     {
@@ -30,6 +32,8 @@ public class PhotonPlayer
         this.actorID = actorID;
         this.nameField = name;
     }
+
+    public string HexName => _hexName;
 
     public override bool Equals(object p)
     {
@@ -97,16 +101,22 @@ public class PhotonPlayer
         return ((num == 0x7fffffff) ? mActors[num2] : mActors[num]);
     }
 
+    public bool Has(string prop)
+    {
+        return customProperties[prop] != null;
+    }
+
     internal void InternalCacheProperties(Hashtable properties)
     {
         if (((properties != null) && (properties.Count != 0)) && !this.customProperties.Equals(properties))
         {
-            if (properties.ContainsKey((byte) 0xff))
+            if (properties.ContainsKey((byte)0xff))
             {
-                this.nameField = (string) properties[(byte) 0xff];
+                this.nameField = (string)properties[(byte)0xff];
             }
             this.customProperties.MergeStringKeys(properties);
             this.customProperties.StripKeysWithNullValues();
+            _hexName = customProperties[PhotonPlayerProperty.name].ToString().HexColor();
         }
     }
 
@@ -135,6 +145,7 @@ public class PhotonPlayer
             }
             object[] parameters = new object[] { this, propertiesToSet };
             NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnPhotonPlayerPropertiesChanged, parameters);
+            _hexName = customProperties[PhotonPlayerProperty.name].ToString().HexColor();
         }
     }
 
@@ -158,7 +169,7 @@ public class PhotonPlayer
         {
             Hashtable target = new Hashtable();
             target.Merge(this.customProperties);
-            target[(byte) 0xff] = this.name;
+            target[(byte)0xff] = this.name;
             return target;
         }
     }

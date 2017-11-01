@@ -320,7 +320,7 @@ public static class NGUIMath
         return vector6.magnitude;
     }
 
-    public static unsafe float DistanceToRectangle(Vector2[] screenPoints, Vector2 mousePos)
+    public static  float DistanceToRectangle(Vector2[] screenPoints, Vector2 mousePos)//unsafe
     {
         bool flag = false;
         int val = 4;

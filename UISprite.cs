@@ -85,7 +85,7 @@ public class UISprite : UIWidget
         return true;
     }
 
-    protected unsafe void FilledFill(BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols)
+    protected  void FilledFill(BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols) //unsafe
     {
         float x = 0f;
         float y = 0f;
