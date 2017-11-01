@@ -68,7 +68,7 @@ public class InstantiateTracker
             case "fx/boom5":
             case "fx/rockthrow":
             case "fx/bite":
-                if ((LevelInfo.getInfo(FengGameManagerMKII.level).teamTitan || (RCSettings.infectionMode > 0)) || (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.BOSS_FIGHT_CT))
+                if ((LevelInfoManager.GetInfo(FengGameManagerMKII.level).PlayerTitansAllowed || (RCSettings.infectionMode > 0)) || (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.BOSS_FIGHT_CT))
                 {
                     return this.Instantiated(photonPlayer, GameResource.effect);
                 }
@@ -167,7 +167,7 @@ public class InstantiateTracker
                 return false;
 
             case "horse":
-                if (LevelInfo.getInfo(FengGameManagerMKII.level).horse || (RCSettings.horseMode != 0))
+                if (LevelInfoManager.GetInfo(FengGameManagerMKII.level).Horse || (RCSettings.horseMode != 0))
                 {
                     return this.Instantiated(photonPlayer, GameResource.general);
                 }
@@ -198,7 +198,7 @@ public class InstantiateTracker
                     }
                     break;
                 }
-                if (((LevelInfo.getInfo(FengGameManagerMKII.level).teamTitan || (RCSettings.infectionMode > 0)) || (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.BOSS_FIGHT_CT)) || FengGameManagerMKII.instance.restartingTitan)
+                if (((LevelInfoManager.GetInfo(FengGameManagerMKII.level).PlayerTitansAllowed || (RCSettings.infectionMode > 0)) || (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.BOSS_FIGHT_CT)) || FengGameManagerMKII.instance.restartingTitan)
                 {
                     if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.BOSS_FIGHT_CT)
                     {

@@ -191,7 +191,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     private void CreateMinimap()
     {
-        LevelInfo info = LevelInfo.getInfo(FengGameManagerMKII.level);
+        LevelInfo info = LevelInfoManager.GetInfo(FengGameManagerMKII.level);
         if (info != null)
         {
             Minimap minimap = base.gameObject.AddComponent<Minimap>();
@@ -202,7 +202,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 Minimap.instance.myCam.farClipPlane = 1000f;
                 Minimap.instance.myCam.enabled = false;
             }
-            minimap.CreateMinimap(Minimap.instance.myCam, 0x200, 0.3f, info.minimapPreset);
+            minimap.CreateMinimap(Minimap.instance.myCam, 0x200, 0.3f, info.MinimapPreset);
             if ((((int) FengGameManagerMKII.settings[0xe7]) == 0) || (RCSettings.globalDisableMinimap == 1))
             {
                 minimap.SetEnabled(false);

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Mod.Managers;
+﻿using System.Linq;
 using UnityEngine;
 
 namespace Mod.Interface
@@ -120,7 +118,7 @@ namespace Mod.Interface
         private string roomName = "Room name";
         private string roomCharacter = "LEVI";
         private string roomPassword = string.Empty;
-        private readonly string[] roomMaps = LevelInfo.levels.Select(x => x.mapName).ToArray();
+        private readonly string[] roomMaps = LevelInfoManager.Levels.Select(x => x.Map).ToArray();
         private int roomMapIndex = 1;
         private string roomMaxPlayers = "10";
         private string roomTime = "99999";
@@ -184,7 +182,7 @@ namespace Mod.Interface
                     if (roomMaps[roomMapIndex] == "trainning_0")
                         IN_GAME_MAIN_CAMERA.difficulty = -1;
                     FengGameManagerMKII.level = roomMaps[roomMapIndex];
-                    Application.LoadLevel(LevelInfo.getInfo(roomMaps[roomMapIndex]).mapName);
+                    Application.LoadLevel(LevelInfoManager.GetInfo(roomMaps[roomMapIndex]).Map);
                     Shelter.InterfaceManager.OnJoinedGame();
                 }
             }

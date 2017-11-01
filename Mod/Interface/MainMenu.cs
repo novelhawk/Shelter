@@ -51,8 +51,8 @@ namespace Mod.Interface
             GUI.Label(rect = new Rect(145, 347, 166, 40), "Create", IsVisible("CreateRoom") ? selected : text);
             if (GUI.Button(new Rect(rect.x, rect.y - 10f, rect.width, rect.height), string.Empty, GUIStyle.none))
             {
-                Disable("ServerList");
                 Enable("CreateRoom");
+                Disable("ServerList");
             }
             GUI.Label(rect = new Rect(143, 370, 167, 40), "Server list", IsVisible("ServerList") ? selected : text);
             if (GUI.Button(new Rect(rect.x, rect.y - 10f, rect.width, rect.height), string.Empty, GUIStyle.none))

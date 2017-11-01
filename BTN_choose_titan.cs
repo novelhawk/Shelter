@@ -59,7 +59,7 @@ public class BTN_choose_titan : MonoBehaviour
 
     private void Start()
     {
-        if (!LevelInfo.getInfo(FengGameManagerMKII.level).teamTitan)
+        if (!LevelInfoManager.GetInfo(FengGameManagerMKII.level).PlayerTitansAllowed)
         {
             base.gameObject.GetComponent<UIButton>().isEnabled = false;
         }

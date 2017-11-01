@@ -635,7 +635,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
         base.name = "COLOSSAL_TITAN";
         this.NapeArmor = 0x3e8;
         bool flag = false;
-        if (LevelInfo.getInfo(FengGameManagerMKII.level).respawnMode == RespawnMode.NEVER)
+        if (LevelInfoManager.GetInfo(FengGameManagerMKII.level).RespawnMode == RespawnMode.NEVER)
         {
             flag = true;
         }

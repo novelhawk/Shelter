@@ -5,10 +5,10 @@ public class MapNameChange : MonoBehaviour
 {
     private void OnSelectionChange()
     {
-        LevelInfo info = LevelInfo.getInfo(base.GetComponent<UIPopupList>().selection);
+        LevelInfo info = LevelInfoManager.GetInfo(base.GetComponent<UIPopupList>().selection);
         if (info != null)
         {
-            GameObject.Find("LabelLevelInfo").GetComponent<UILabel>().text = info.desc;
+            GameObject.Find("LabelLevelInfo").GetComponent<UILabel>().text = info.Description;
         }
         if (!base.GetComponent<UIPopupList>().items.Contains("Custom"))
         {

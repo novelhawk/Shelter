@@ -611,7 +611,7 @@ public class HERO : Photon.MonoBehaviour
 
     private void changeBlade()
     {
-        if ((!this.useGun || this.grounded) || (LevelInfo.getInfo(FengGameManagerMKII.level).type != GAMEMODE.PVP_AHSS))
+        if ((!this.useGun || this.grounded) || (LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode != GAMEMODE.PVP_AHSS))
         {
             this.state = HERO_STATE.ChangeBlade;
             this.throwedBlades = false;
@@ -2727,7 +2727,7 @@ public class HERO : Photon.MonoBehaviour
             iteratorVariable3 = true;
         }
         bool iteratorVariable4 = false;
-        if (LevelInfo.getInfo(FengGameManagerMKII.level).horse || (RCSettings.horseMode == 1))
+        if (LevelInfoManager.GetInfo(FengGameManagerMKII.level).Horse || (RCSettings.horseMode == 1))
         {
             iteratorVariable4 = true;
         }
@@ -4263,7 +4263,7 @@ public class HERO : Photon.MonoBehaviour
             this.skillCDLast = 120f;
             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
             {
-                if ((!LevelInfo.getInfo(FengGameManagerMKII.level).teamTitan && (LevelInfo.getInfo(FengGameManagerMKII.level).type != GAMEMODE.RACING)) && ((LevelInfo.getInfo(FengGameManagerMKII.level).type != GAMEMODE.PVP_CAPTURE) && (LevelInfo.getInfo(FengGameManagerMKII.level).type != GAMEMODE.TROST)))
+                if ((!LevelInfoManager.GetInfo(FengGameManagerMKII.level).PlayerTitansAllowed && (LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode != GAMEMODE.RACING)) && ((LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode != GAMEMODE.PVP_CAPTURE) && (LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode != GAMEMODE.TROST)))
                 {
                     int num = 0;
                     foreach (PhotonPlayer player in PhotonNetwork.playerList)
@@ -4403,7 +4403,7 @@ public class HERO : Photon.MonoBehaviour
             this.skillCDLast = 120f;
             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
             {
-                if ((LevelInfo.getInfo(FengGameManagerMKII.level).teamTitan || (LevelInfo.getInfo(FengGameManagerMKII.level).type == GAMEMODE.RACING)) || ((LevelInfo.getInfo(FengGameManagerMKII.level).type == GAMEMODE.PVP_CAPTURE) || (LevelInfo.getInfo(FengGameManagerMKII.level).type == GAMEMODE.TROST)))
+                if ((LevelInfoManager.GetInfo(FengGameManagerMKII.level).PlayerTitansAllowed || (LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode == GAMEMODE.RACING)) || ((LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode == GAMEMODE.PVP_CAPTURE) || (LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode == GAMEMODE.TROST)))
                 {
                     this.skillId = "petra";
                     this.skillCDLast = 1f;
@@ -5139,7 +5139,7 @@ public class HERO : Photon.MonoBehaviour
     private void Start()
     {
         FengGameManagerMKII.instance.addHero(this);
-        if (((LevelInfo.getInfo(FengGameManagerMKII.level).horse || (RCSettings.horseMode == 1)) && (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)) && base.photonView.isMine)
+        if (((LevelInfoManager.GetInfo(FengGameManagerMKII.level).Horse || (RCSettings.horseMode == 1)) && (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)) && base.photonView.isMine)
         {
             this.myHorse = PhotonNetwork.Instantiate("horse", this.baseTransform.position + ((Vector3) (Vector3.up * 5f)), this.baseTransform.rotation, 0);
             this.myHorse.GetComponent<Horse>().myHero = base.gameObject;
@@ -5896,7 +5896,7 @@ public class HERO : Photon.MonoBehaviour
                                     this.facingDirection = this.gunDummy.transform.rotation.eulerAngles.y;
                                     this.targetRotation = Quaternion.Euler(0f, this.facingDirection, 0f);
                                 }
-                                else if (flag4 && (this.grounded || (LevelInfo.getInfo(FengGameManagerMKII.level).type != GAMEMODE.PVP_AHSS)))
+                                else if (flag4 && (this.grounded || (LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode != GAMEMODE.PVP_AHSS)))
                                 {
                                     this.changeBlade();
                                 }
@@ -7020,7 +7020,7 @@ public class HERO : Photon.MonoBehaviour
                                     this.facingDirection = this.gunDummy.transform.rotation.eulerAngles.y;
                                     this.targetRotation = Quaternion.Euler(0f, this.facingDirection, 0f);
                                 }
-                                else if (flag5 && (this.grounded || ((LevelInfo.getInfo(FengGameManagerMKII.level).type != GAMEMODE.PVP_AHSS) && (RCSettings.ahssReload == 0))))
+                                else if (flag5 && (this.grounded || ((LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode != GAMEMODE.PVP_AHSS) && (RCSettings.ahssReload == 0))))
                                 {
                                     this.changeBlade();
                                 }

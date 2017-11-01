@@ -1433,7 +1433,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         this.AnkleLHPMAX = 50;
         this.AnkleRHPMAX = 50;
         bool flag = false;
-        if (LevelInfo.getInfo(FengGameManagerMKII.level).respawnMode == RespawnMode.NEVER)
+        if (LevelInfoManager.GetInfo(FengGameManagerMKII.level).RespawnMode == RespawnMode.NEVER)
         {
             flag = true;
         }

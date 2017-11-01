@@ -41,7 +41,7 @@ public class AHSSShotGunCollider : MonoBehaviour
         {
             if (other.gameObject.tag == "playerHitbox")
             {
-                if (LevelInfo.getInfo(FengGameManagerMKII.level).pvp)
+                if (LevelInfoManager.GetInfo(FengGameManagerMKII.level).IsPvP)
                 {
                     float b = 1f - (Vector3.Distance(other.gameObject.transform.position, base.transform.position) * 0.05f);
                     b = Mathf.Min(1f, b);
