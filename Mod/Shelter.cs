@@ -9,7 +9,6 @@ namespace Mod
     public class Shelter : MonoBehaviour
     {
         public static Assembly Assembly => Assembly.GetExecutingAssembly();
-        private static ImageManager _imageManager;
         private static InterfaceManager _interfaceManager;
 
         public void Start()
@@ -25,7 +24,6 @@ namespace Mod
 
         private void InitComponents()
         {
-            _imageManager = new ImageManager();
             _interfaceManager = new InterfaceManager();
         }
         
@@ -50,9 +48,34 @@ namespace Mod
 
         }
 
+        public static Texture2D GetImage(string image)
+        {
+            if (Assembly.GetManifestResourceInfo($@"Mod.Resources.{image}.png") == null) return null;
+            using (var stream = Assembly.GetManifestResourceStream($@"Mod.Resources.{image}.png"))
+            {
+                var texture = new Texture2D(0, 0, TextureFormat.RGBA32, false);
+                texture.LoadImage(ReadFully(stream));
+                texture.Apply();
+                return texture;
+            }
+        }
+
+        public static byte[] ReadFully(Stream input)
+        {
+            byte[] buffer = new byte[8 * 1024];
+            using (MemoryStream ms = new MemoryStream())
+            {
+                int read;
+                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
+                {
+                    ms.Write(buffer, 0, read);
+                }
+                return ms.ToArray();
+            }
+        }
+
         #endregion
 
-        public static ImageManager ImageManager => _imageManager;
         public static InterfaceManager InterfaceManager => _interfaceManager;
     }
 }
