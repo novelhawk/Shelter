@@ -45,9 +45,6 @@
     <Reference Include="Boo.Lang">
       <HintPath>D:\Attack on Titan\Assemblies\Boo.Lang.dll</HintPath>
     </Reference>
-    <Reference Include="ICSharpCode.SharpZipLib">
-      <HintPath>D:\Attack on Titan\Assemblies\ICSharpCode.SharpZipLib.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Security">
       <HintPath>D:\Attack on Titan\Assemblies\Mono.Security.dll</HintPath>
     </Reference>
