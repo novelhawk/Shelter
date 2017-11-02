@@ -14,6 +14,7 @@ namespace Mod.Managers
             GameObject go = new GameObject("Interface");
             guis.AddRange(new Gui[]
             {
+                go.AddComponent<Notify>(),
                 go.AddComponent<Scoreboard>(),
                 go.AddComponent<Loading>(),
                 go.AddComponent<ServerList>(),
@@ -50,7 +51,6 @@ namespace Mod.Managers
         {
             Enable("Scoreboard");
             Disable("CreateRoom");
-            Disable("Loading");
             Disable("MainMenu");
             Disable("ServerList");
             Disable("Background");
