@@ -139,103 +139,108 @@ namespace Mod.Interface
                 singleplayer = false;
             if (GUI.Button(new Rect(rect.x + rect.width / 2f + 50, rect.y + 50, 100, 40), "Offline", !singleplayer ? button : buttonSelected))
                 singleplayer = true;
-            
+
             if (singleplayer)
-            {
-                rect = new Rect(rect.x + rect.width / 100f * 10, rect.y + 120f, rect.width - rect.width / 100f * 20, rect.height - 200f);
-                GUI.DrawTexture(new Rect(rect.x + rect.width / 2f - 1, rect.y, 2, 160), hover);
-                Rect r;
-                GUI.Label(r = new Rect(rect.x, rect.y, rect.width / 2f - 20, 30), "Character", label);
-                GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Map", label);
-                GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Time", label);
-                GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Difficulty", label);
-                GUI.Label(new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Daylight", label);
-                roomCharacter = GUI.TextField(r = new Rect(rect.x + rect.width / 2f + 20, rect.y, rect.width / 2f - 20, 30), roomCharacter, textField);
-                var btn = CustomButton(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomMaps[roomMapIndex], button);
-                if (btn == 1)
-                    roomMapIndex = roomMaps.Length - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
-                else if (btn == -1)
-                    roomMapIndex = roomMapIndex == 0 ? roomMaps.Length - 1 : roomMapIndex - 1;
-                roomTime = GUI.TextField(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomTime, textField);
-                r = new Rect(r.x, r.y + r.height + 3, r.width, r.height);
-                if (GUI.Button(new Rect(r.x, r.y, r.width / 3 - 20, r.height), "Easy", roomDifficultySingle == 0 ? buttonSelected : button))
-                    roomDifficultySingle = 0;
-                if (GUI.Button(new Rect(r.x + r.width / 3 + 10, r.y, r.width / 3 - 20, r.height), "Normal", roomDifficultySingle == 1 ? buttonSelected : button))
-                    roomDifficultySingle = 1;
-                if (GUI.Button(new Rect(r.x + r.width / 3 * 2 + 20, r.y, r.width / 3 - 20, r.height), "Hard", roomDifficultySingle == 2 ? buttonSelected : button))
-                    roomDifficultySingle = 2;
-                r = new Rect(r.x, r.y + r.height + 3, r.width, r.height);
-                if (GUI.Button(new Rect(r.x, r.y, r.width / 3 - 20, r.height), "Day", roomDayLight == DayLight.Day ? buttonSelected : button))
-                    roomDayLight = DayLight.Day;
-                if (GUI.Button(new Rect(r.x + r.width / 3 + 10, r.y, r.width / 3 - 20, r.height), "Dawn", roomDayLight == DayLight.Dawn ? buttonSelected : button))
-                    roomDayLight = DayLight.Dawn;
-                if (GUI.Button(new Rect(r.x + r.width / 3 * 2 + 20, r.y, r.width / 3 - 20, r.height), "Night", roomDayLight == DayLight.Night ? buttonSelected : button))
-                    roomDayLight = DayLight.Night;
-                if (GUI.Button(new Rect(rect.x + rect.width / 2f - 100f, rect.y + rect.height - 90f, 200f, 70f), "Play", button))
-                {
-                    IN_GAME_MAIN_CAMERA.gametype = GAMETYPE.SINGLE;
-                    IN_GAME_MAIN_CAMERA.singleCharacter = roomCharacter.ToUpper();
-                    IN_GAME_MAIN_CAMERA.difficulty = roomDifficultySingle;
-                    if (IN_GAME_MAIN_CAMERA.cameraMode == CAMERA_TYPE.TPS)
-                        Screen.lockCursor = true;
-                    Screen.showCursor = false;
-                    if (roomMaps[roomMapIndex] == "trainning_0")
-                        IN_GAME_MAIN_CAMERA.difficulty = -1;
-                    FengGameManagerMKII.level = roomMaps[roomMapIndex];
-                    Application.LoadLevel(LevelInfoManager.GetInfo(roomMaps[roomMapIndex]).Map);
-                    Shelter.InterfaceManager.OnJoinedGame();
-                }
-            }
-
+                SingleplayerUI(rect);
             else
-            {
-                rect = new Rect(rect.x + rect.width / 100f * 10, rect.y + 120f, rect.width - rect.width / 100f * 20, rect.height - 200f);
-                GUI.DrawTexture(new Rect(rect.x + rect.width/2f - 1, rect.y, 2, 300), hover);
-                Rect r;
-                GUI.Label(r = new Rect(rect.x, rect.y, rect.width / 2f - 20, 30), "Name", label);
-                GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Password", label);
-                GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Map", label);
-                GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Players", label);
-                GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Time", label);
-                GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Difficulty", label);
-                GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Daylight", label);
-                GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Open", label);
-                GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Visible", label);
-                roomName = GUI.TextField(r = new Rect(rect.x + rect.width / 2f + 20, rect.y, rect.width / 2f - 20, 30), roomName, textField);
-                roomPassword = GUI.TextField(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomPassword, textField);
-                var btn = CustomButton(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomMaps[roomMapIndex], button);
-                if (btn == 1)
-                    roomMapIndex = roomMaps.Length - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
-                else if (btn == -1)
-                    roomMapIndex = roomMapIndex == 0 ? roomMaps.Length - 1 : roomMapIndex - 1;
-                roomMaxPlayers = GUI.TextField(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomMaxPlayers, textField);
-                roomTime = GUI.TextField(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomTime, textField);
-                r = new Rect(r.x, r.y + r.height + 3, r.width, r.height);
-                if (GUI.Button(new Rect(r.x, r.y, r.width / 3 - 20, r.height), "Easy", roomDifficulty == "easy" ? buttonSelected : button))
-                    roomDifficulty = "easy";
-                if (GUI.Button(new Rect(r.x + r.width / 3 + 10, r.y, r.width / 3 - 20, r.height), "Normal", roomDifficulty == "normal" ? buttonSelected : button))
-                    roomDifficulty = "normal";
-                if (GUI.Button(new Rect(r.x + r.width / 3 * 2 + 20, r.y, r.width / 3 - 20, r.height), "Hard", roomDifficulty == "hard" ? buttonSelected : button))
-                    roomDifficulty = "hard";
-                r = new Rect(r.x, r.y + r.height + 3, r.width, r.height);
-                if (GUI.Button(new Rect(r.x, r.y, r.width / 3 - 20, r.height), "Day", roomDayLight == DayLight.Day ? buttonSelected : button))
-                    roomDayLight = DayLight.Day;
-                if (GUI.Button(new Rect(r.x + r.width / 3 + 10, r.y, r.width / 3 - 20, r.height), "Dawn", roomDayLight == DayLight.Dawn ? buttonSelected : button))
-                    roomDayLight = DayLight.Dawn;
-                if (GUI.Button(new Rect(r.x + r.width / 3 * 2 + 20, r.y, r.width / 3 - 20, r.height), "Night", roomDayLight == DayLight.Night ? buttonSelected : button))
-                    roomDayLight = DayLight.Night;
-                if (GUI.Button(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomOpen.ToString(), button))
-                    roomOpen = !roomOpen;
-                if (GUI.Button(new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomVisible.ToString(), button))
-                    roomVisible = !roomVisible;
-                if (GUI.Button(new Rect(rect.x + rect.width / 2f - 100f, rect.y + rect.height - 90f, 200f, 70f), "Play", button))
-                {
-                    string roomFullName = $"{roomName}`{roomMaps[roomMapIndex]}`{roomDifficulty}`{roomMaxPlayers}`{roomDayLight}`{(roomPassword != string.Empty ? aes.Encrypt(roomPassword) : roomPassword)}`{roomTime}";
-                    PhotonNetwork.CreateRoom(roomFullName, roomVisible, roomOpen, roomMaxPlayers.ToInt());
-                }
-            }
-
+                MultiplayerUI(rect);
         }
+
+        private void SingleplayerUI(Rect rect)
+        {
+            rect = new Rect(rect.x + rect.width / 100f * 10, rect.y + 120f, rect.width - rect.width / 100f * 20, rect.height - 200f);
+            GUI.DrawTexture(new Rect(rect.x + rect.width / 2f - 1, rect.y, 2, 160), hover);
+            Rect r;
+            GUI.Label(r = new Rect(rect.x, rect.y, rect.width / 2f - 20, 30), "Character", label);
+            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Map", label);
+            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Time", label);
+            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Difficulty", label);
+            GUI.Label(new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Daylight", label);
+            roomCharacter = GUI.TextField(r = new Rect(rect.x + rect.width / 2f + 20, rect.y, rect.width / 2f - 20, 30), roomCharacter, textField);
+            var btn = CustomButton(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomMaps[roomMapIndex], button);
+            if (btn == 1)
+                roomMapIndex = roomMaps.Length - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
+            else if (btn == -1)
+                roomMapIndex = roomMapIndex == 0 ? roomMaps.Length - 1 : roomMapIndex - 1;
+            roomTime = GUI.TextField(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomTime, textField);
+            r = new Rect(r.x, r.y + r.height + 3, r.width, r.height);
+            if (GUI.Button(new Rect(r.x, r.y, r.width / 3 - 20, r.height), "Easy", roomDifficultySingle == 0 ? buttonSelected : button))
+                roomDifficultySingle = 0;
+            if (GUI.Button(new Rect(r.x + r.width / 3 + 10, r.y, r.width / 3 - 20, r.height), "Normal", roomDifficultySingle == 1 ? buttonSelected : button))
+                roomDifficultySingle = 1;
+            if (GUI.Button(new Rect(r.x + r.width / 3 * 2 + 20, r.y, r.width / 3 - 20, r.height), "Hard", roomDifficultySingle == 2 ? buttonSelected : button))
+                roomDifficultySingle = 2;
+            r = new Rect(r.x, r.y + r.height + 3, r.width, r.height);
+            if (GUI.Button(new Rect(r.x, r.y, r.width / 3 - 20, r.height), "Day", roomDayLight == DayLight.Day ? buttonSelected : button))
+                roomDayLight = DayLight.Day;
+            if (GUI.Button(new Rect(r.x + r.width / 3 + 10, r.y, r.width / 3 - 20, r.height), "Dawn", roomDayLight == DayLight.Dawn ? buttonSelected : button))
+                roomDayLight = DayLight.Dawn;
+            if (GUI.Button(new Rect(r.x + r.width / 3 * 2 + 20, r.y, r.width / 3 - 20, r.height), "Night", roomDayLight == DayLight.Night ? buttonSelected : button))
+                roomDayLight = DayLight.Night;
+            if (GUI.Button(new Rect(rect.x + rect.width / 2f - 100f, rect.y + rect.height - 90f, 200f, 70f), "Play", button))
+            {
+                IN_GAME_MAIN_CAMERA.gametype = GAMETYPE.SINGLE;
+                IN_GAME_MAIN_CAMERA.singleCharacter = roomCharacter.ToUpper();
+                IN_GAME_MAIN_CAMERA.difficulty = roomDifficultySingle;
+                if (IN_GAME_MAIN_CAMERA.cameraMode == CAMERA_TYPE.TPS)
+                    Screen.lockCursor = true;
+                Screen.showCursor = false;
+                if (roomMaps[roomMapIndex] == "trainning_0")
+                    IN_GAME_MAIN_CAMERA.difficulty = -1;
+                FengGameManagerMKII.level = roomMaps[roomMapIndex];
+                Application.LoadLevel(LevelInfoManager.GetInfo(roomMaps[roomMapIndex]).Map);
+                Shelter.InterfaceManager.OnJoinedGame();
+            }
+        }
+
+        private void MultiplayerUI(Rect rect)
+        {
+            rect = new Rect(rect.x + rect.width / 100f * 10, rect.y + 120f, rect.width - rect.width / 100f * 20, rect.height - 200f);
+            GUI.DrawTexture(new Rect(rect.x + rect.width / 2f - 1, rect.y, 2, 300), hover);
+            Rect r;
+            GUI.Label(r = new Rect(rect.x, rect.y, rect.width / 2f - 20, 30), "Name", label);
+            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Password", label);
+            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Map", label);
+            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Players", label);
+            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Time", label);
+            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Difficulty", label);
+            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Daylight", label);
+            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Open", label);
+            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Visible", label);
+            roomName = GUI.TextField(r = new Rect(rect.x + rect.width / 2f + 20,  rect.y, rect.width / 2f - 20, 30), roomName, textField);
+            roomPassword = GUI.TextField(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomPassword, textField);
+            var btn = CustomButton(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomMaps[roomMapIndex], button);
+            if (btn == 1)
+                roomMapIndex = roomMaps.Length - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
+            else if (btn == -1)
+                roomMapIndex = roomMapIndex == 0 ? roomMaps.Length - 1 : roomMapIndex - 1;
+            roomMaxPlayers = GUI.TextField(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomMaxPlayers, textField);
+            roomTime = GUI.TextField(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomTime, textField);
+            r = new Rect(r.x, r.y + r.height + 3, r.width, r.height);
+            if (GUI.Button(new Rect(r.x, r.y, r.width / 3 - 20, r.height), "Easy", roomDifficulty == "easy" ? buttonSelected : button))
+                roomDifficulty = "easy";
+            if (GUI.Button(new Rect(r.x + r.width / 3 + 10, r.y, r.width / 3 - 20, r.height), "Normal", roomDifficulty == "normal" ? buttonSelected : button))
+                roomDifficulty = "normal";
+            if (GUI.Button(new Rect(r.x + r.width / 3 * 2 + 20, r.y, r.width / 3 - 20, r.height), "Hard", roomDifficulty == "hard" ? buttonSelected : button))
+                roomDifficulty = "hard";
+            r = new Rect(r.x, r.y + r.height + 3, r.width, r.height);
+            if (GUI.Button(new Rect(r.x, r.y, r.width / 3 - 20, r.height), "Day", roomDayLight == DayLight.Day ? buttonSelected : button))
+                roomDayLight = DayLight.Day;
+            if (GUI.Button(new Rect(r.x + r.width / 3 + 10, r.y, r.width / 3 - 20, r.height), "Dawn", roomDayLight == DayLight.Dawn ? buttonSelected : button))
+                roomDayLight = DayLight.Dawn;
+            if (GUI.Button(new Rect(r.x + r.width / 3 * 2 + 20, r.y, r.width / 3 - 20, r.height), "Night", roomDayLight == DayLight.Night ? buttonSelected : button))
+                roomDayLight = DayLight.Night;
+            if (GUI.Button(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomOpen.ToString(), button))
+                roomOpen = !roomOpen;
+            if (GUI.Button(new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomVisible.ToString(), button))
+                roomVisible = !roomVisible;
+            if (GUI.Button(new Rect(rect.x + rect.width / 2f - 100f, rect.y + rect.height - 90f, 200f, 70f), "Play", button))
+            {
+                string roomFullName = $"{roomName}`{roomMaps[roomMapIndex]}`{roomDifficulty}`{roomMaxPlayers}`{roomDayLight}`{(roomPassword != string.Empty ? aes.Encrypt(roomPassword) : roomPassword)}`{roomTime}";
+                PhotonNetwork.CreateRoom(roomFullName, roomVisible, roomOpen, roomMaxPlayers.ToInt());
+            }
+        }
+
 
         public override void OnHide()
         {
