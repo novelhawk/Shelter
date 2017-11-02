@@ -1,6 +1,8 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using Mod.Interface;
 using Mod.Managers;
 using UnityEngine;
 
@@ -9,6 +11,7 @@ namespace Mod
     public class Shelter : MonoBehaviour
     {
         public static Assembly Assembly => Assembly.GetExecutingAssembly();
+        public static Stopwatch Stopwatch = Stopwatch.StartNew();
         private static InterfaceManager _interfaceManager;
 
         public void Start()
@@ -54,23 +57,9 @@ namespace Mod
             using (var stream = Assembly.GetManifestResourceStream($@"Mod.Resources.{image}.png"))
             {
                 var texture = new Texture2D(0, 0, TextureFormat.RGBA32, false);
-                texture.LoadImage(ReadFully(stream));
+                texture.LoadImage(stream.ToBytes());
                 texture.Apply();
                 return texture;
-            }
-        }
-
-        public static byte[] ReadFully(Stream input)
-        {
-            byte[] buffer = new byte[8 * 1024];
-            using (MemoryStream ms = new MemoryStream())
-            {
-                int read;
-                while ((read = input.Read(buffer, 0, buffer.Length)) > 0)
-                {
-                    ms.Write(buffer, 0, read);
-                }
-                return ms.ToArray();
             }
         }
 
