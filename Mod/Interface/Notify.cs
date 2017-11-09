@@ -17,7 +17,7 @@ namespace Mod.Interface
             Shelter.InterfaceManager.Enable("Notify");
         }
 
-        public override void OnShow()
+        protected override void OnShow()
         {
             black = Shelter.CreateTexture(137, 137, 137, 140);
             white = Shelter.CreateTexture(255, 255, 255, 140);
@@ -37,7 +37,7 @@ namespace Mod.Interface
         private float _width;
         private const float FinalWidth = 300;
         private Notification current;
-        public override void Render()
+        protected override void Render()
         {
             if (current != null && !current.Done && _width < FinalWidth)
                 _width = Mathf.Clamp(_width + 50 * Time.deltaTime + current.ElapsedTime / 500f, 0, FinalWidth);
@@ -62,7 +62,7 @@ namespace Mod.Interface
             GUI.Label(new Rect(rect.x, rect.y + 30, FinalWidth, rect.height - 30), current.Message, message);
         }
 
-        public override void OnHide()
+        protected override void OnHide()
         {
             _width = 0f;
             Destroy(white);

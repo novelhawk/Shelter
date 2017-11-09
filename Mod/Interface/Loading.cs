@@ -31,12 +31,12 @@ namespace Mod.Interface
                 Shelter.InterfaceManager.Disable("Loading");
         }
 
-        public override void OnShow()
+        protected override void OnShow()
         {
             texture = GetImage("Loading");
         }
 
-        public override void Render()
+        protected override void Render()
         {
             Rect rect = new Rect(Screen.width - 79, Screen.height - 79, 69, 69);
 
@@ -50,7 +50,7 @@ namespace Mod.Interface
             rotAngle += Time.deltaTime * 250;
         }
 
-        public override void OnHide()
+        protected override void OnHide()
         {
             Destroy(texture);
         }

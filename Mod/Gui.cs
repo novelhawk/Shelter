@@ -41,9 +41,17 @@ namespace Mod
             return new Color(r/255f, g/255f, b/255f, a/255f);
         }
 
-        public abstract void OnShow();
-        public abstract void Render();
-        public abstract void OnHide();
+        protected virtual void OnShow()
+        {
+        }
+
+        protected virtual void Render()
+        {
+        }
+
+        protected virtual void OnHide()
+        {
+        }
 
         public Texture2D GetImage(string image) => Shelter.GetImage(image);
         public void Enable(string gui) => Shelter.InterfaceManager.Enable(gui);

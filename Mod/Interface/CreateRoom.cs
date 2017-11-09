@@ -27,7 +27,7 @@ namespace Mod.Interface
             aes = new SimpleAES();
         }
 
-        public override void OnShow()
+        protected override void OnShow()
         {
             normal = Shelter.CreateTexture(200, 200, 200, 69);
             selectedNormal = Shelter.CreateTexture(230, 230, 230, 160);
@@ -128,7 +128,7 @@ namespace Mod.Interface
         private bool roomOpen = true;
         private bool roomVisible = true;
         #endregion
-        public override void Render()
+        protected override void Render()
         {
             Rect rect;
             GUI.DrawTexture(rect = new Rect(Screen.width / 2f - width/2, Screen.height / 2f - height/2, width, height), background);
@@ -242,7 +242,7 @@ namespace Mod.Interface
         }
 
 
-        public override void OnHide()
+        protected override void OnHide()
         {
 //            aes.Dispose();
             Destroy(background);

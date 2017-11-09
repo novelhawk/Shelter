@@ -20,7 +20,7 @@ namespace Mod.Interface
             Enable();
         }
 
-        public override void OnShow()
+        protected override void OnShow()
         {
             btnNormal = Shelter.CreateTexture(169, 169, 169, 100);
             btnHover = Shelter.CreateTexture(169, 169, 169, 255);
@@ -44,7 +44,7 @@ namespace Mod.Interface
             };
         }
 
-        public override void Render()
+        protected override void Render()
         {
             Rect rect;
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(Screen.width / 1920f, Screen.height / 1080f, 1)); // Scale the gui for any resoultion
@@ -53,12 +53,21 @@ namespace Mod.Interface
             {
                 Enable("CreateRoom");
                 Disable("ServerList");
+                Disable("ProfileManager");
             }
             GUI.Label(rect = new Rect(143, 370, 167, 40), "Server list", IsVisible("ServerList") ? selected : text);
             if (GUI.Button(new Rect(rect.x, rect.y - 10f, rect.width, rect.height), string.Empty, GUIStyle.none))
             {
-                Disable("CreateRoom");
                 Enable("ServerList");
+                Disable("CreateRoom");
+                Disable("ProfileManager");
+            }
+            GUI.Label(rect = new Rect(143, 393, 167, 40), "Profile Manager", IsVisible("ProfileManager") ? selected : text);
+            if (GUI.Button(new Rect(rect.x, rect.y - 10f, rect.width, rect.height), string.Empty, GUIStyle.none))
+            {
+                Enable("ProfileManager");
+                Disable("CreateRoom");
+                Disable("ServerList");
             }
 
             GUI.matrix = Matrix4x4.identity;
@@ -97,7 +106,7 @@ namespace Mod.Interface
 
         }
 
-        public override void OnHide()
+        protected override void OnHide()
         {
             Destroy(btnActive);
             Destroy(btnHover);

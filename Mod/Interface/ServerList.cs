@@ -1,5 +1,4 @@
-﻿using System;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Mod.Interface
 {
@@ -17,7 +16,7 @@ namespace Mod.Interface
         private float height;
         public static float Alpha;
 
-        public override void OnShow()
+        protected override void OnShow()
         {
             if (PhotonNetwork.connectionStatesDetailed != PeerStates.JoinedLobby)
                 Loading.Start("ConnectingToLobby");
@@ -45,9 +44,6 @@ namespace Mod.Interface
                 active = {background = buttonActive},
                 hover = {background = buttonHover}
             };
-            Alpha = 0f;
-            width = 0f;
-            height = 0f;
             background = Shelter.CreateTexture(255, 255, 255, 63);
         }
 
@@ -71,7 +67,7 @@ namespace Mod.Interface
                 Alpha = Mathf.Clamp(Alpha, 0, 255);
             }
         }
-        public override void Render()
+        protected override void Render()
         {
             Rect rect;
             GUI.DrawTexture(rect = new Rect(Screen.width / 2f - width/2, Screen.height / 2f - height/2, width, height), background);
@@ -99,8 +95,11 @@ namespace Mod.Interface
             GUILayout.EndArea();
         }
 
-        public override void OnHide()
+        protected override void OnHide()
         {
+            Alpha = 0f;
+            width = 0f;
+            height = 0f;
             Destroy(background);
             Destroy(buttonActive);
             Destroy(buttonHover);

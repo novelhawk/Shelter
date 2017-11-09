@@ -8,16 +8,7 @@ namespace Mod.Interface
     {
         private const string EntryLayout = "<color=#672A42>[<b><color=#DC3052>{0}</color></b>] {10}{1}{2} <b><color=#6E8EEB>{3}</color></b>{9}  <color=#31A5E4>{4}</color>|<color=#31A5E4>{5}</color>|<color=#31A5E4>{6}</color>|<color=#31A5E4>{6}</color>|<color=#31A5E4>{7}</color></color>";
 
-//        public Scoreboard()
-//        {
-//            Enable();
-//        }
-
-        public override void OnShow()
-        {
-        }
-
-        public override void Render()
+        protected override void Render()
         {
             if (!PhotonNetwork.inRoom) return;
             Rect rect = new Rect(0, -14, Screen.width * 0.35f, 20);
@@ -88,10 +79,6 @@ namespace Mod.Interface
                 player.name != string.Empty ? " | " + player.name : "",
                 player.isMasterClient ? "|<b><color=#8DFF00>MC</color></b>| " : ""
             );
-        }
-
-        public override void OnHide()
-        {
         }
     }
 }
