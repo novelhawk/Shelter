@@ -20,8 +20,8 @@ namespace Mod.Interface
         {
             if (PhotonNetwork.connectionStatesDetailed != PeerStates.JoinedLobby)
                 Loading.Start("ConnectingToLobby");
-            buttonHover = Shelter.CreateTexture(255, 255, 255, 70);
-            buttonActive = Shelter.CreateTexture(255, 255, 255, 140);
+            buttonHover = Texture(255, 255, 255, 70);
+            buttonActive = Texture(255, 255, 255, 140);
             filterStyle = new GUIStyle(GUI.skin.textArea)
             {
                 fontSize = 22,
@@ -44,7 +44,7 @@ namespace Mod.Interface
                 active = {background = buttonActive},
                 hover = {background = buttonHover}
             };
-            background = Shelter.CreateTexture(255, 255, 255, 63);
+            background = Texture(255, 255, 255, 63);
         }
 
         private void Animation()

@@ -8,7 +8,7 @@ namespace Mod.Interface
 
         public Background()
         {
-            Enable();
+//            Enable();
         }
 
         protected override void OnShow()

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections;
+using System.Linq;
 using UnityEngine;
 
 namespace Mod.Interface
@@ -29,12 +30,12 @@ namespace Mod.Interface
 
         protected override void OnShow()
         {
-            normal = Shelter.CreateTexture(200, 200, 200, 69);
-            selectedNormal = Shelter.CreateTexture(230, 230, 230, 160);
-            selectedHover = Shelter.CreateTexture(230, 230, 230, 200);
-            selectedActive = Shelter.CreateTexture(230, 230, 230, 255);
-            hover = Shelter.CreateTexture(200, 200, 200, 120);
-            _active = Shelter.CreateTexture(200, 200, 200, 255);
+            normal = Texture(200, 200, 200, 69);
+            selectedNormal = Texture(230, 230, 230, 160);
+            selectedHover = Texture(230, 230, 230, 200);
+            selectedActive = Texture(230, 230, 230, 255);
+            hover = Texture(200, 200, 200, 120);
+            _active = Texture(200, 200, 200, 255);
             label = new GUIStyle
             {
                 alignment = TextAnchor.MiddleRight,
@@ -60,7 +61,7 @@ namespace Mod.Interface
                 fontSize = 22,
             };
             animDone = false;
-            background = Shelter.CreateTexture(255, 255, 255, 63);
+            background = Texture(255, 255, 255, 63);
             width = 0f;
             height = 0f;
         }
@@ -113,12 +114,12 @@ namespace Mod.Interface
             GUI.Label(rect, txt, style);
             return 0;
         }
-
-        #region x
+        //TODO: Remove this temp stuff and do it better
+        #region tmp
         private string roomName = "Room name";
         private string roomCharacter = "LEVI";
         private string roomPassword = string.Empty;
-        private readonly string[] roomMaps = LevelInfoManager.Levels.Select(x => x.Map).ToArray();
+        private readonly string[] roomMaps = LevelInfoManager.Levels.Select(x => x.Map).ToArray(); // Got a lot of errors by this fucking line.. May aswell change it
         private int roomMapIndex = 1;
         private string roomMaxPlayers = "10";
         private string roomTime = "99999";
@@ -234,11 +235,19 @@ namespace Mod.Interface
                 roomOpen = !roomOpen;
             if (GUI.Button(new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomVisible.ToString(), button))
                 roomVisible = !roomVisible;
-            if (GUI.Button(new Rect(rect.x + rect.width / 2f - 100f, rect.y + rect.height - 90f, 200f, 70f), "Play", button))
-            {
-                string roomFullName = $"{roomName}`{roomMaps[roomMapIndex]}`{roomDifficulty}`{roomMaxPlayers}`{roomDayLight}`{(roomPassword != string.Empty ? aes.Encrypt(roomPassword) : roomPassword)}`{roomTime}";
-                PhotonNetwork.CreateRoom(roomFullName, roomVisible, roomOpen, roomMaxPlayers.ToInt());
-            }
+            if (GUI.Button(new Rect(rect.x + rect.width / 2f - 100f, rect.y + rect.height - 90f, 200f, 70f), "Play", button) && !isRunning)
+                StartCoroutine(AwaitConnect());
+        }
+
+        private bool isRunning;
+        private IEnumerator AwaitConnect()
+        {
+            isRunning = true;
+            while (PhotonNetwork.connectionStatesDetailed != PeerStates.JoinedLobby && PhotonNetwork.connectionStatesDetailed != PeerStates.Joined)
+                yield return null;
+            string roomFullName = $"{roomName}`{roomMaps[roomMapIndex]}`{roomDifficulty}`{roomMaxPlayers}`{roomDayLight}`{(roomPassword != string.Empty ? aes.Encrypt(roomPassword) : roomPassword)}`{roomTime}";
+            PhotonNetwork.CreateRoom(roomFullName, roomVisible, roomOpen, roomMaxPlayers.ToInt());
+            isRunning = false;
         }
 
 

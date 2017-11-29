@@ -19,8 +19,8 @@ namespace Mod.Interface
 
         protected override void OnShow()
         {
-            black = Shelter.CreateTexture(137, 137, 137, 140);
-            white = Shelter.CreateTexture(255, 255, 255, 140);
+            black = Texture(137, 137, 137, 140);
+            white = Texture(255, 255, 255, 140);
             message = new GUIStyle
             {
                 alignment = TextAnchor.UpperCenter,

@@ -1,9 +1,12 @@
-﻿using UnityEngine;
+﻿using System.Drawing.Text;
+using Mod.Managers;
+using UnityEngine;
 
 namespace Mod
 {
     public abstract class Gui : MonoBehaviour
     {
+        protected Rect windowRect;
         public string Name;
         public bool Visible;
 
@@ -24,22 +27,23 @@ namespace Mod
             Visible = false;
         }
 
-        public void Switch(string gui)
+        protected void Switch(string gui)
         {
             Disable();
             Shelter.InterfaceManager.Enable(gui);
         }
 
-        public void OnGUI()
+        private void OnGUI()
         {
             if (Visible)
                 Render();
         }
 
-        public static Color Color(int r, int g, int b, int a = 255)
+        protected virtual void Update()
         {
-            return new Color(r/255f, g/255f, b/255f, a/255f);
+
         }
+
 
         protected virtual void OnShow()
         {
@@ -53,10 +57,19 @@ namespace Mod
         {
         }
 
-        public Texture2D GetImage(string image) => Shelter.GetImage(image);
-        public void Enable(string gui) => Shelter.InterfaceManager.Enable(gui);
-        public void Disable(string gui) => Shelter.InterfaceManager.Disable(gui);
-        public bool IsVisible(string gui) => Shelter.InterfaceManager.IsVisible(gui);
+        protected Texture2D Texture(byte r, byte g, byte b, byte a = 255)
+        {
+            Texture2D texture = new Texture2D(1, 1);
+            texture.SetPixel(1, 1, Color(r, g, b, a));
+            texture.Apply();
+            return texture;
+        }
+
+        protected Color Color(byte r, byte g, int b, byte a = 255) => new Color(r/255f, g/255f, b/255f, a/255f);
+        protected Texture2D GetImage(string image) => Shelter.GetImage(image);
+        protected void Enable(string gui) => Shelter.InterfaceManager.Enable(gui);
+        protected void Disable(string gui) => Shelter.InterfaceManager.Disable(gui);
+        protected bool IsVisible(string gui) => Shelter.InterfaceManager.IsVisible(gui);
 
     }
 }

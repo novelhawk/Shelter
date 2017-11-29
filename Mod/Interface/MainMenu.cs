@@ -1,4 +1,6 @@
 ﻿using System.Globalization;
+using System.IO.Pipes;
+using Mod.Discord;
 using UnityEngine;
 
 namespace Mod.Interface
@@ -12,19 +14,24 @@ namespace Mod.Interface
         private GUIStyle text;
         private GUIStyle selected;
 
-        public MainMenu()
-        {
-            PhotonNetwork.Disconnect();
-            PhotonNetwork.ConnectToMaster(PlayerPrefs.GetString("ShelterServer", "app-eu.exitgamescloud.com"), 5055, FengGameManagerMKII.applicationId, UIMainReferences.version);
-//            PhotonNetwork.ConnectToMaster("localhost", 5055, FengGameManagerMKII.applicationId, UIMainReferences.version);
-            Enable();
-        }
-
         protected override void OnShow()
         {
-            btnNormal = Shelter.CreateTexture(169, 169, 169, 100);
-            btnHover = Shelter.CreateTexture(169, 169, 169, 255);
-            btnActive = Shelter.CreateTexture(134, 134, 134, 255);
+            PhotonNetwork.Disconnect();
+            PhotonNetwork.ConnectToMaster(PlayerPrefs.GetString("ShelterServer", "app-eu.exitgamescloud.com"), 5055, FengGameManagerMKII.applicationId, UIMainReferences.Version);
+//            TODO: Work in progress
+//            DiscordRpc.EventHandlers handlers = new DiscordRpc.EventHandlers();
+//            DiscordRpc.Initialize("378900623875244042", ref handlers, true, null);
+//            DiscordRpc.RichPresence r = new DiscordRpc.RichPresence();
+//            r.endTimestamp = long.MaxValue;
+//            r.state = "In game";
+//            r.partySize = 1;
+//            r.partyMax = 5;
+//            r.details = "Hellothere11!";
+//            DiscordRpc.UpdatePresence(ref r);
+
+            btnNormal = Texture(169, 169, 169, 100);
+            btnHover = Texture(169, 169, 169, 255);
+            btnActive = Texture(134, 134, 134, 255);
             serverSelect = new GUIStyle(GUIStyle.none)
             {
                 normal = {background = btnNormal},
@@ -76,28 +83,28 @@ namespace Mod.Interface
             if (GUILayout.Button("EU", serverSelect))
             {
                 PhotonNetwork.Disconnect();
-                PhotonNetwork.ConnectToMaster("app-eu.exitgamescloud.com", 5055, FengGameManagerMKII.applicationId, UIMainReferences.version);
+                PhotonNetwork.ConnectToMaster("app-eu.exitgamescloud.com", 5055, FengGameManagerMKII.applicationId, UIMainReferences.Version);
                 PlayerPrefs.SetString("ShelterServer", "app-eu.exitgamescloud.com");
                 Loading.Start("ConnectingToLobby");
             }
             if (GUILayout.Button("US", serverSelect))
             {
                 PhotonNetwork.Disconnect();
-                PhotonNetwork.ConnectToMaster("app-us.exitgamescloud.com", 5055, FengGameManagerMKII.applicationId, UIMainReferences.version);
+                PhotonNetwork.ConnectToMaster("app-us.exitgamescloud.com", 5055, FengGameManagerMKII.applicationId, UIMainReferences.Version);
                 PlayerPrefs.SetString("ShelterServer", "app-us.exitgamescloud.com");
                 Loading.Start("ConnectingToLobby");
             }
             if (GUILayout.Button("JPN", serverSelect))
             {
                 PhotonNetwork.Disconnect();
-                PhotonNetwork.ConnectToMaster("app-jp.exitgamescloud.com", 5055, FengGameManagerMKII.applicationId, UIMainReferences.version);
+                PhotonNetwork.ConnectToMaster("app-jp.exitgamescloud.com", 5055, FengGameManagerMKII.applicationId, UIMainReferences.Version);
                 PlayerPrefs.SetString("ShelterServer", "app-jp.exitgamescloud.com");
                 Loading.Start("ConnectingToLobby");
             }
             if (GUILayout.Button("ASIA", serverSelect))
             {
                 PhotonNetwork.Disconnect();
-                PhotonNetwork.ConnectToMaster("app-asia.exitgamescloud.com", 5055, FengGameManagerMKII.applicationId, UIMainReferences.version);
+                PhotonNetwork.ConnectToMaster("app-asia.exitgamescloud.com", 5055, FengGameManagerMKII.applicationId, UIMainReferences.Version);
                 PlayerPrefs.SetString("ShelterServer", "app-asia.exitgamescloud.com");
                 Loading.Start("ConnectingToLobby");
             }

@@ -13,7 +13,7 @@ namespace Mod.Interface
 
         public Loading()
         {
-            Enable();
+//            Enable();
         }
 
         public static void Start(string id)

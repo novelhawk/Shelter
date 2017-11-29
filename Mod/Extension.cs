@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 
@@ -39,7 +40,25 @@ namespace Mod
 
         public static bool ContainsIgnoreCase(this string str, string str1)
         {
-            return str.ToLower().Contains(str1.ToLower());
+            if (str == null && str1 == null) return true;
+            if (str != null && str1 != null)
+                return str.ToLower().Contains(str1.ToLower());
+            return false;
+        }
+
+        public static bool EqualsIgnoreCase(this string str, string str1)
+        {
+            if (str == null && str1 == null) return true;
+            if (str != null && str1 != null)
+                return str.Equals(str1, StringComparison.CurrentCultureIgnoreCase);
+            return false;
+        }
+
+        public static bool ContainsIgnoreCase(this string[] arr, string str)
+        {
+            if (arr != null)
+                return arr.Any(x => x.Equals(str, StringComparison.CurrentCultureIgnoreCase));
+            return false;
         }
 
         public static bool ToBool(this object obj, bool @default = false)

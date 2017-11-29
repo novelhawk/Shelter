@@ -20,11 +20,11 @@ namespace Mod.Interface
         {
             object temp;
             string playerName = player.HexName.Trim() == string.Empty ? "Unknown" : (player.HexName ?? "Unknown"), humanType;
-            var type = !FengGameManagerMKII.ignoreList.Contains(player.ID) ? ((temp = player.customProperties[PhotonPlayerProperty.dead]) != null ? ((bool)temp ? 4 : (temp = player.customProperties[PhotonPlayerProperty.team]) != null ? ((int)temp == 2 ? 2 : ((int)temp == 1 ? 1 : 3)) : 0) : 0) : 5;
-            var kills = (temp = player.customProperties[PhotonPlayerProperty.kills]) != null && temp is int ? ((int)temp) : 0;
-            var deaths = (temp = player.customProperties[PhotonPlayerProperty.deaths]) != null && temp is int ? ((int)temp) : 0;
-            var maxDmg = (temp = player.customProperties[PhotonPlayerProperty.max_dmg]) != null && temp is int ? ((int)temp) : 0;
-            var totDmg = (temp = player.customProperties[PhotonPlayerProperty.total_dmg]) != null && temp is int ? ((int)temp) : 0;
+            var type = !FengGameManagerMKII.ignoreList.Contains(player.ID) ? ((temp = player.CustomProperties[PhotonPlayerProperty.dead]) != null ? ((bool)temp ? 4 : (temp = player.CustomProperties[PhotonPlayerProperty.team]) != null ? ((int)temp == 2 ? 2 : ((int)temp == 1 ? 1 : 3)) : 0) : 0) : 5;
+            var kills = (temp = player.CustomProperties[PhotonPlayerProperty.kills]) != null && temp is int ? ((int)temp) : 0;
+            var deaths = (temp = player.CustomProperties[PhotonPlayerProperty.deaths]) != null && temp is int ? ((int)temp) : 0;
+            var maxDmg = (temp = player.CustomProperties[PhotonPlayerProperty.max_dmg]) != null && temp is int ? ((int)temp) : 0;
+            var totDmg = (temp = player.CustomProperties[PhotonPlayerProperty.total_dmg]) != null && temp is int ? ((int)temp) : 0;
             var averangeDmg = totDmg > 0 && kills > 0 ? Convert.ToInt32(Math.Floor((decimal)totDmg / kills)) : 0;
 
             switch (type)
@@ -77,7 +77,7 @@ namespace Mod.Interface
                 totDmg,
                 averangeDmg,
                 player.name != string.Empty ? " | " + player.name : "",
-                player.isMasterClient ? "|<b><color=#8DFF00>MC</color></b>| " : ""
+                player.IsMasterClient ? "|<b><color=#8DFF00>MC</color></b>| " : ""
             );
         }
     }

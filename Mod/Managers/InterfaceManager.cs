@@ -16,6 +16,7 @@ namespace Mod.Managers
             {
                 go.AddComponent<Notify>(),
                 go.AddComponent<Scoreboard>(),
+                go.AddComponent<Chat>(),
                 go.AddComponent<Loading>(),
                 go.AddComponent<ServerList>(),
                 go.AddComponent<CreateRoom>(),
@@ -47,13 +48,26 @@ namespace Mod.Managers
                 gui.Disable();
         }
 
+        public void DisableAll()
+        {
+            foreach (Gui gui in guis)
+                if (gui != null && gui.Visible)
+                    gui.Disable();
+        }
+
         public void OnJoinedGame()
         {
+            DisableAll();
+            Enable("Chat");
             Enable("Scoreboard");
-            Disable("CreateRoom");
-            Disable("MainMenu");
-            Disable("ServerList");
-            Disable("Background");
+        }
+
+        public void OnMainMenu()
+        {
+            DisableAll();
+            Enable("Background");
+            Enable("Loading");
+            Enable("MainMenu");
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿using Mod.Managers;
+﻿using System;
+using Mod.Managers;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Mod.Interface;
 using UnityEngine;
 
 namespace Mod
@@ -12,32 +14,21 @@ namespace Mod
         public static Assembly Assembly => Assembly.GetExecutingAssembly();
         public static Stopwatch Stopwatch = Stopwatch.StartNew();
         private static InterfaceManager _interfaceManager;
+        private static CommandManager _commandManager;
 
-        public void Start()
+        public void InitComponents()
         {
-            InitComponents();
+            _interfaceManager = new InterfaceManager();
+            _commandManager = new CommandManager();
         }
 
         public void Update()
         {
             if (Input.GetKeyDown(KeyCode.I) && Input.GetKey(KeyCode.LeftControl))
-                File.WriteAllLines($"GameObjects{UnityEngine.Random.Range(0, 0xFF)}.txt", FindObjectsOfType(typeof(GameObject)).OrderBy(x => x.GetInstanceID()).Select(x => $"{x.GetInstanceID()} - {x.name}").ToArray());
+                File.WriteAllLines($"GameObjects{UnityEngine.Random.Range(0, 255)}.txt", FindObjectsOfType(typeof(GameObject)).OrderBy(x => x.GetInstanceID()).Select(x => $"{x.GetInstanceID()} - {x.name}").ToArray());
         }
 
-        private void InitComponents()
-        {
-            _interfaceManager = new InterfaceManager();
-        }
-        
         #region Static methods
-
-        public static Texture2D CreateTexture(int r, int g, int b, int a)
-        {
-            Texture2D texture = new Texture2D(1, 1);
-            texture.SetPixel(1, 1, new Color(r/255f, g/255f, b/255f, a/255f));
-            texture.Apply();
-            return texture;
-        }
 
         public static void Log(params object[] messages)
         {
@@ -65,5 +56,6 @@ namespace Mod
         #endregion
 
         public static InterfaceManager InterfaceManager => _interfaceManager;
+        public static CommandManager CommandManager => _commandManager;
     }
 }
