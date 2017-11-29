@@ -1,9 +1,6 @@
 namespace Xft
 {
-    using System;
     using System.Collections.Generic;
-    using System.Reflection;
-    using System.Runtime.InteropServices;
     using UnityEngine;
 
     public class Spline
@@ -34,21 +31,21 @@ namespace Xft
             double num7 = -0.5;
             double num8 = -0.5;
             double num9 = 0.5;
-            double num10 = (((num * T0.x) + (num2 * P0.x)) + (num3 * P1.x)) + (num4 * T1.x);
-            double num11 = ((T0.x + (num5 * P0.x)) + (num6 * P1.x)) + (num7 * T1.x);
-            double num12 = (num8 * T0.x) + (num9 * P1.x);
+            double num10 = num * T0.x + num2 * P0.x + num3 * P1.x + num4 * T1.x;
+            double num11 = T0.x + num5 * P0.x + num6 * P1.x + num7 * T1.x;
+            double num12 = num8 * T0.x + num9 * P1.x;
             double x = P0.x;
-            double num14 = (((num * T0.y) + (num2 * P0.y)) + (num3 * P1.y)) + (num4 * T1.y);
-            double num15 = ((T0.y + (num5 * P0.y)) + (num6 * P1.y)) + (num7 * T1.y);
-            double num16 = (num8 * T0.y) + (num9 * P1.y);
+            double num14 = num * T0.y + num2 * P0.y + num3 * P1.y + num4 * T1.y;
+            double num15 = T0.y + num5 * P0.y + num6 * P1.y + num7 * T1.y;
+            double num16 = num8 * T0.y + num9 * P1.y;
             double y = P0.y;
-            double num18 = (((num * T0.z) + (num2 * P0.z)) + (num3 * P1.z)) + (num4 * T1.z);
-            double num19 = ((T0.z + (num5 * P0.z)) + (num6 * P1.z)) + (num7 * T1.z);
-            double num20 = (num8 * T0.z) + (num9 * P1.z);
+            double num18 = num * T0.z + num2 * P0.z + num3 * P1.z + num4 * T1.z;
+            double num19 = T0.z + num5 * P0.z + num6 * P1.z + num7 * T1.z;
+            double num20 = num8 * T0.z + num9 * P1.z;
             double z = P0.z;
-            float num22 = (float) ((((((num10 * f) + num11) * f) + num12) * f) + x);
-            float num23 = (float) ((((((num14 * f) + num15) * f) + num16) * f) + y);
-            return new Vector3(num22, num23, (float) ((((((num18 * f) + num19) * f) + num20) * f) + z));
+            float num22 = (float) (((num10 * f + num11) * f + num12) * f + x);
+            float num23 = (float) (((num14 * f + num15) * f + num16) * f + y);
+            return new Vector3(num22, num23, (float) (((num18 * f + num19) * f + num20) * f + z));
         }
 
         public void Clear()
@@ -205,7 +202,7 @@ namespace Xft
         {
             get
             {
-                if ((index > -1) && (index < this.mSegments.Count))
+                if (index > -1 && index < this.mSegments.Count)
                 {
                     return this.mSegments[index];
                 }

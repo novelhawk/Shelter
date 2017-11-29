@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [ExecuteInEditMode, AddComponentMenu("NGUI/UI/Stretch")]
@@ -33,7 +32,7 @@ public class UIStretch : MonoBehaviour
 
     private void Update()
     {
-        if (((this.mAnim == null) || !this.mAnim.isPlaying) && (this.style != Style.None))
+        if ((this.mAnim == null || !this.mAnim.isPlaying) && this.style != Style.None)
         {
             float pixelSizeAdjustment = 1f;
             if (this.panelContainer != null)
@@ -48,8 +47,8 @@ public class UIStretch : MonoBehaviour
                 else
                 {
                     Vector4 clipRange = this.panelContainer.clipRange;
-                    this.mRect.x = clipRange.x - (clipRange.z * 0.5f);
-                    this.mRect.y = clipRange.y - (clipRange.w * 0.5f);
+                    this.mRect.x = clipRange.x - clipRange.z * 0.5f;
+                    this.mRect.y = clipRange.y - clipRange.w * 0.5f;
                     this.mRect.width = clipRange.z;
                     this.mRect.height = clipRange.w;
                 }
@@ -83,9 +82,9 @@ public class UIStretch : MonoBehaviour
             }
             float width = this.mRect.width;
             float height = this.mRect.height;
-            if ((pixelSizeAdjustment != 1f) && (height > 1f))
+            if (pixelSizeAdjustment != 1f && height > 1f)
             {
-                float num4 = ((float) this.mRoot.activeHeight) / height;
+                float num4 = (float) this.mRoot.activeHeight / height;
                 width *= num4;
                 height *= num4;
             }
@@ -131,11 +130,11 @@ public class UIStretch : MonoBehaviour
             }
             else
             {
-                if ((this.style == Style.Both) || (this.style == Style.Horizontal))
+                if (this.style == Style.Both || this.style == Style.Horizontal)
                 {
                     localScale.x = this.relativeSize.x * width;
                 }
-                if ((this.style == Style.Both) || (this.style == Style.Vertical))
+                if (this.style == Style.Both || this.style == Style.Vertical)
                 {
                     localScale.y = this.relativeSize.y * height;
                 }

@@ -1,5 +1,3 @@
-using System;
-
 public class ParameterCode
 {
     public const byte ActorList = 252;

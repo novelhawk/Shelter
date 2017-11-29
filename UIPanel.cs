@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [ExecuteInEditMode, AddComponentMenu("NGUI/UI/Panel")]
@@ -11,7 +10,7 @@ public class UIPanel : MonoBehaviour
     [SerializeField, HideInInspector]
     private float mAlpha = 1f;
     private Camera mCam;
-    private BetterList<Material> mChanged = new BetterList<Material>();
+    private readonly BetterList<Material> mChanged = new BetterList<Material>();
     private UIPanel[] mChildPanels;
     [SerializeField, HideInInspector]
     private UIDrawCall.Clipping mClipping;
@@ -19,25 +18,25 @@ public class UIPanel : MonoBehaviour
     private Vector4 mClipRange = Vector4.zero;
     [HideInInspector, SerializeField]
     private Vector2 mClipSoftness = new Vector2(40f, 40f);
-    private BetterList<Color32> mCols = new BetterList<Color32>();
+    private readonly BetterList<Color32> mCols = new BetterList<Color32>();
     private float mCullTime;
     [HideInInspector, SerializeField]
     private DebugInfo mDebugInfo = DebugInfo.Gizmos;
     private bool mDepthChanged;
-    private BetterList<UIDrawCall> mDrawCalls = new BetterList<UIDrawCall>();
+    private readonly BetterList<UIDrawCall> mDrawCalls = new BetterList<UIDrawCall>();
     private GameObject mGo;
     private int mLayer = -1;
     private float mMatrixTime;
     private Vector2 mMax = Vector2.zero;
     private Vector2 mMin = Vector2.zero;
-    private BetterList<Vector3> mNorms = new BetterList<Vector3>();
-    private BetterList<Vector4> mTans = new BetterList<Vector4>();
-    private static float[] mTemp = new float[4];
+    private readonly BetterList<Vector3> mNorms = new BetterList<Vector3>();
+    private readonly BetterList<Vector4> mTans = new BetterList<Vector4>();
+    private static readonly float[] mTemp = new float[4];
     private Transform mTrans;
     private float mUpdateTime;
-    private BetterList<Vector2> mUvs = new BetterList<Vector2>();
-    private BetterList<Vector3> mVerts = new BetterList<Vector3>();
-    private BetterList<UIWidget> mWidgets = new BetterList<UIWidget>();
+    private readonly BetterList<Vector2> mUvs = new BetterList<Vector2>();
+    private readonly BetterList<Vector3> mVerts = new BetterList<Vector3>();
+    private readonly BetterList<UIWidget> mWidgets = new BetterList<UIWidget>();
     public OnChangeDelegate onChange;
     public bool showInPanelTool = true;
     public bool widgetsAreStatic;
@@ -46,7 +45,7 @@ public class UIPanel : MonoBehaviour
 
     public void AddWidget(UIWidget w)
     {
-        if ((w != null) && !this.mWidgets.Contains(w))
+        if (w != null && !this.mWidgets.Contains(w))
         {
             this.mWidgets.Add(w);
             if (!this.mChanged.Contains(w.material))
@@ -125,7 +124,7 @@ public class UIPanel : MonoBehaviour
             }
             else
             {
-                if ((widget.material == mat) && widget.isVisible)
+                if (widget.material == mat && widget.isVisible)
                 {
                     if (widget.panel == this)
                     {
@@ -150,7 +149,7 @@ public class UIPanel : MonoBehaviour
         if (this.mVerts.size > 0)
         {
             UIDrawCall drawCall = this.GetDrawCall(mat, true);
-            drawCall.depthPass = this.depthPass && (this.mClipping == UIDrawCall.Clipping.None);
+            drawCall.depthPass = this.depthPass && this.mClipping == UIDrawCall.Clipping.None;
             drawCall.Set(this.mVerts, !this.generateNormals ? null : this.mNorms, !this.generateNormals ? null : this.mTans, this.mUvs, this.mCols);
         }
         else
@@ -185,13 +184,13 @@ public class UIPanel : MonoBehaviour
                 break;
             }
             component = trans.GetComponent<UIPanel>();
-            if ((component != null) || (trans.parent == null))
+            if (component != null || trans.parent == null)
             {
                 break;
             }
             trans = trans.parent;
         }
-        if ((createIfMissing && (component == null)) && (trans != transform))
+        if (createIfMissing && component == null && trans != transform)
         {
             component = trans.gameObject.AddComponent<UIPanel>();
             SetChildLayer(component.cachedTransform, component.cachedGameObject.layer);
@@ -231,7 +230,7 @@ public class UIPanel : MonoBehaviour
         {
             return false;
         }
-        if ((!w.enabled || !NGUITools.GetActive(w.cachedGameObject)) || (w.alpha < 0.001f))
+        if (!w.enabled || !NGUITools.GetActive(w.cachedGameObject) || w.alpha < 0.001f)
         {
             return false;
         }
@@ -328,7 +327,7 @@ public class UIPanel : MonoBehaviour
         {
             this.mLayer = this.mGo.layer;
             UICamera camera = UICamera.FindCameraForLayer(this.mLayer);
-            this.mCam = (camera == null) ? NGUITools.FindCameraForLayer(this.mLayer) : camera.cachedCamera;
+            this.mCam = camera == null ? NGUITools.FindCameraForLayer(this.mLayer) : camera.cachedCamera;
             SetChildLayer(this.cachedTransform, this.mLayer);
             int num = 0;
             int num2 = this.drawCalls.size;
@@ -338,7 +337,7 @@ public class UIPanel : MonoBehaviour
                 num++;
             }
         }
-        bool forceVisible = !this.cullWhileDragging ? ((this.clipping == UIDrawCall.Clipping.None) || (this.mCullTime > this.mUpdateTime)) : false;
+        bool forceVisible = !this.cullWhileDragging ? this.clipping == UIDrawCall.Clipping.None || this.mCullTime > this.mUpdateTime : false;
         int num3 = 0;
         int size = this.mWidgets.size;
         while (num3 < size)
@@ -350,7 +349,7 @@ public class UIPanel : MonoBehaviour
             }
             num3++;
         }
-        if ((this.mChanged.size != 0) && (this.onChange != null))
+        if (this.mChanged.size != 0 && this.onChange != null)
         {
             this.onChange();
         }
@@ -433,7 +432,7 @@ public class UIPanel : MonoBehaviour
 
     public void RemoveWidget(UIWidget w)
     {
-        if (((w != null) && (w != null)) && (this.mWidgets.Remove(w) && (w.material != null)))
+        if (w != null && w != null && this.mWidgets.Remove(w) && w.material != null)
         {
             this.mChanged.Add(w.material);
         }
@@ -441,7 +440,7 @@ public class UIPanel : MonoBehaviour
 
     public void SetAlphaRecursive(float val, bool rebuildList)
     {
-        if (rebuildList || (this.mChildPanels == null))
+        if (rebuildList || this.mChildPanels == null)
         {
             this.mChildPanels = base.GetComponentsInChildren<UIPanel>(true);
         }
@@ -474,7 +473,7 @@ public class UIPanel : MonoBehaviour
     {
         this.mLayer = this.mGo.layer;
         UICamera camera = UICamera.FindCameraForLayer(this.mLayer);
-        this.mCam = (camera == null) ? NGUITools.FindCameraForLayer(this.mLayer) : camera.cachedCamera;
+        this.mCam = camera == null ? NGUITools.FindCameraForLayer(this.mLayer) : camera.cachedCamera;
     }
 
     public void UpdateDrawcalls()
@@ -510,7 +509,7 @@ public class UIPanel : MonoBehaviour
             call.clipping = this.mClipping;
             call.clipRange = zero;
             call.clipSoftness = this.mClipSoftness;
-            call.depthPass = this.depthPass && (this.mClipping == UIDrawCall.Clipping.None);
+            call.depthPass = this.depthPass && this.mClipping == UIDrawCall.Clipping.None;
             Transform transform = call.transform;
             transform.position = cachedTransform.position;
             transform.rotation = cachedTransform.rotation;
@@ -521,7 +520,7 @@ public class UIPanel : MonoBehaviour
 
     private void UpdateTransformMatrix()
     {
-        if ((this.mUpdateTime == 0f) || (this.mMatrixTime != this.mUpdateTime))
+        if (this.mUpdateTime == 0f || this.mMatrixTime != this.mUpdateTime)
         {
             this.mMatrixTime = this.mUpdateTime;
             this.worldToLocal = this.cachedTransform.worldToLocalMatrix;
@@ -530,11 +529,11 @@ public class UIPanel : MonoBehaviour
                 Vector2 vector = new Vector2(this.mClipRange.z, this.mClipRange.w);
                 if (vector.x == 0f)
                 {
-                    vector.x = (this.mCam != null) ? this.mCam.pixelWidth : ((float) Screen.width);
+                    vector.x = this.mCam != null ? this.mCam.pixelWidth : (float) Screen.width;
                 }
                 if (vector.y == 0f)
                 {
-                    vector.y = (this.mCam != null) ? this.mCam.pixelHeight : ((float) Screen.height);
+                    vector.y = this.mCam != null ? this.mCam.pixelHeight : (float) Screen.height;
                 }
                 vector = (Vector2) (vector * 0.5f);
                 this.mMin.x = this.mClipRange.x - vector.x;
@@ -621,7 +620,7 @@ public class UIPanel : MonoBehaviour
         {
             if (this.mClipRange != value)
             {
-                this.mCullTime = (this.mCullTime != 0f) ? (Time.realtimeSinceStartup + 0.15f) : 0.001f;
+                this.mCullTime = this.mCullTime != 0f ? Time.realtimeSinceStartup + 0.15f : 0.001f;
                 this.mClipRange = value;
                 this.mMatrixTime = 0f;
                 this.UpdateDrawcalls();
@@ -657,7 +656,7 @@ public class UIPanel : MonoBehaviour
             {
                 this.mDebugInfo = value;
                 BetterList<UIDrawCall> drawCalls = this.drawCalls;
-                HideFlags flags = (this.mDebugInfo != DebugInfo.Geometry) ? HideFlags.HideAndDontSave : (HideFlags.NotEditable | HideFlags.DontSave);
+                HideFlags flags = this.mDebugInfo != DebugInfo.Geometry ? HideFlags.HideAndDontSave : HideFlags.NotEditable | HideFlags.DontSave;
                 int num = 0;
                 int size = drawCalls.size;
                 while (num < size)

@@ -1,7 +1,6 @@
 using AnimationOrTween;
 using System;
 using System.Collections;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [RequireComponent(typeof(Animation)), AddComponentMenu("NGUI/Internal/Active Animation")]
@@ -23,7 +22,7 @@ public class ActiveAnimation : IgnoreTimeScale
             this.mAnim.enabled = false;
             if (playDirection == AnimationOrTween.Direction.Toggle)
             {
-                playDirection = (this.mLastDirection == AnimationOrTween.Direction.Forward) ? AnimationOrTween.Direction.Reverse : AnimationOrTween.Direction.Forward;
+                playDirection = this.mLastDirection == AnimationOrTween.Direction.Forward ? AnimationOrTween.Direction.Reverse : AnimationOrTween.Direction.Forward;
             }
             if (string.IsNullOrEmpty(clipName))
             {
@@ -42,15 +41,15 @@ public class ActiveAnimation : IgnoreTimeScale
                 while (enumerator.MoveNext())
                 {
                     AnimationState current = (AnimationState) enumerator.Current;
-                    if (string.IsNullOrEmpty(clipName) || (current.name == clipName))
+                    if (string.IsNullOrEmpty(clipName) || current.name == clipName)
                     {
                         float num = Mathf.Abs(current.speed);
-                        current.speed = num * ((float) playDirection);
-                        if ((playDirection == AnimationOrTween.Direction.Reverse) && (current.time == 0f))
+                        current.speed = num * (float) playDirection;
+                        if (playDirection == AnimationOrTween.Direction.Reverse && current.time == 0f)
                         {
                             current.time = current.length;
                         }
-                        else if ((playDirection == AnimationOrTween.Direction.Forward) && (current.time == current.length))
+                        else if (playDirection == AnimationOrTween.Direction.Forward && current.time == current.length)
                         {
                             current.time = 0f;
                         }
@@ -203,11 +202,11 @@ public class ActiveAnimation : IgnoreTimeScale
                         {
                             this.onFinished(this);
                         }
-                        if ((this.eventReceiver != null) && !string.IsNullOrEmpty(this.callWhenFinished))
+                        if (this.eventReceiver != null && !string.IsNullOrEmpty(this.callWhenFinished))
                         {
                             this.eventReceiver.SendMessage(this.callWhenFinished, this, SendMessageOptions.DontRequireReceiver);
                         }
-                        if ((this.mDisableDirection != AnimationOrTween.Direction.Toggle) && (this.mLastDirection == this.mDisableDirection))
+                        if (this.mDisableDirection != AnimationOrTween.Direction.Toggle && this.mLastDirection == this.mDisableDirection)
                         {
                             NGUITools.SetActive(base.gameObject, false);
                         }

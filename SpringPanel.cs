@@ -1,5 +1,3 @@
-using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Internal/Spring Panel"), RequireComponent(typeof(UIPanel))]
@@ -65,7 +63,7 @@ public class SpringPanel : IgnoreTimeScale
         {
             this.mDrag.UpdateScrollbars(false);
         }
-        if (flag && (this.onFinished != null))
+        if (flag && this.onFinished != null)
         {
             this.onFinished();
         }

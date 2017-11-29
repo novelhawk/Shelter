@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Examples/Drag and Drop Item")]
@@ -18,7 +17,7 @@ public class DragDropItem : MonoBehaviour
     private void Drop()
     {
         Collider collider = UICamera.lastHit.collider;
-        DragDropContainer container = (collider == null) ? null : collider.gameObject.GetComponent<DragDropContainer>();
+        DragDropContainer container = collider == null ? null : collider.gameObject.GetComponent<DragDropContainer>();
         if (container != null)
         {
             this.mTrans.parent = container.transform;
@@ -36,7 +35,7 @@ public class DragDropItem : MonoBehaviour
 
     private void OnDrag(Vector2 delta)
     {
-        if (base.enabled && (UICamera.currentTouchID > -2))
+        if (base.enabled && UICamera.currentTouchID > -2)
         {
             if (!this.mIsDragging)
             {

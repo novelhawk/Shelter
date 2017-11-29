@@ -76,7 +76,7 @@ public class Xffect : MonoBehaviour
                     if (current != null)
                     {
                         EffectLayer component = (EffectLayer) current.GetComponent(typeof(EffectLayer));
-                        if ((component != null) && (component.Material != null))
+                        if (component != null && component.Material != null)
                         {
                             MeshFilter filter;
                             MeshRenderer renderer;
@@ -129,7 +129,7 @@ public class Xffect : MonoBehaviour
         {
             pair.Value.LateUpdate();
         }
-        if ((this.ElapsedTime > this.LifeTime) && (this.LifeTime >= 0f))
+        if (this.ElapsedTime > this.LifeTime && this.LifeTime >= 0f)
         {
             foreach (EffectLayer layer in this.EflList)
             {

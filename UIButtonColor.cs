@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Button Color")]
@@ -49,7 +48,7 @@ public class UIButtonColor : MonoBehaviour
 
     private void OnDisable()
     {
-        if (this.mStarted && (this.tweenTarget != null))
+        if (this.mStarted && this.tweenTarget != null)
         {
             TweenColor component = this.tweenTarget.GetComponent<TweenColor>();
             if (component != null)

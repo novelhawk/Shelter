@@ -1,5 +1,3 @@
-using Photon;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -33,7 +31,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        if (stream.isWriting && (this.SecondsBeforeRespawn <= 0f))
+        if (stream.isWriting && this.SecondsBeforeRespawn <= 0f)
         {
             stream.SendNext(base.gameObject.transform.position);
         }
@@ -47,7 +45,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
     public void OnTriggerEnter(Collider other)
     {
         PhotonView component = other.GetComponent<PhotonView>();
-        if ((this.PickupOnTrigger && (component != null)) && component.isMine)
+        if (this.PickupOnTrigger && component != null && component.isMine)
         {
             this.Pickup();
         }

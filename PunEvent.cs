@@ -1,5 +1,3 @@
-using System;
-
 internal class PunEvent
 {
     public const byte AssignMaster = 208;

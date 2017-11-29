@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Examples/Equipment")]
@@ -25,8 +24,8 @@ public class InvEquipment : MonoBehaviour
     {
         if (slot != InvBaseItem.Slot.None)
         {
-            int index = ((int) slot) - 1;
-            if ((this.mItems != null) && (index < this.mItems.Length))
+            int index = (int) slot - 1;
+            if (this.mItems != null && index < this.mItems.Length)
             {
                 return this.mItems[index];
             }
@@ -43,7 +42,7 @@ public class InvEquipment : MonoBehaviour
             while (index < length)
             {
                 InvBaseItem baseItem = this.mItems[index].baseItem;
-                if ((baseItem != null) && (baseItem.slot == slot))
+                if (baseItem != null && baseItem.slot == slot)
                 {
                     return true;
                 }
@@ -73,10 +72,10 @@ public class InvEquipment : MonoBehaviour
 
     public InvGameItem Replace(InvBaseItem.Slot slot, InvGameItem item)
     {
-        InvBaseItem item2 = (item == null) ? null : item.baseItem;
+        InvBaseItem item2 = item == null ? null : item.baseItem;
         if (slot != InvBaseItem.Slot.None)
         {
-            if ((item2 != null) && (item2.slot != slot))
+            if (item2 != null && item2.slot != slot)
             {
                 return item;
             }
@@ -84,8 +83,8 @@ public class InvEquipment : MonoBehaviour
             {
                 this.mItems = new InvGameItem[8];
             }
-            InvGameItem item3 = this.mItems[((int) slot) - 1];
-            this.mItems[((int) slot) - 1] = item;
+            InvGameItem item3 = this.mItems[(int) slot - 1];
+            this.mItems[(int) slot - 1] = item;
             if (this.mAttachments == null)
             {
                 this.mAttachments = base.GetComponentsInChildren<InvAttachmentPoint>();
@@ -97,8 +96,8 @@ public class InvEquipment : MonoBehaviour
                 InvAttachmentPoint point = this.mAttachments[index];
                 if (point.slot == slot)
                 {
-                    GameObject obj2 = point.Attach((item2 == null) ? null : item2.attachment);
-                    if ((item2 != null) && (obj2 != null))
+                    GameObject obj2 = point.Attach(item2 == null ? null : item2.attachment);
+                    if (item2 != null && obj2 != null)
                     {
                         Renderer renderer = obj2.renderer;
                         if (renderer != null)

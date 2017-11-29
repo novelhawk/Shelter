@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(UIInput)), AddComponentMenu("NGUI/Examples/Chat Input")]
@@ -27,11 +26,11 @@ public class ChatInput : MonoBehaviour
     private void Start()
     {
         this.mInput = base.GetComponent<UIInput>();
-        if (this.fillWithDummyData && (this.textList != null))
+        if (this.fillWithDummyData && this.textList != null)
         {
             for (int i = 0; i < 30; i++)
             {
-                this.textList.Add(string.Concat(new object[] { ((i % 2) != 0) ? "[AAAAAA]" : "[FFFFFF]", "This is an example paragraph for the text list, testing line ", i, "[-]" }));
+                this.textList.Add(string.Concat(new object[] { i % 2 != 0 ? "[AAAAAA]" : "[FFFFFF]", "This is an example paragraph for the text list, testing line ", i, "[-]" }));
             }
         }
     }

@@ -1,5 +1,4 @@
 using ExitGames.Client.Photon;
-using System;
 using UnityEngine;
 
 public class BTN_choose_human : MonoBehaviour
@@ -10,7 +9,7 @@ public class BTN_choose_human : MonoBehaviour
         int num2 = 0;
         foreach (PhotonPlayer player in PhotonNetwork.playerList)
         {
-            if (((int) player.CustomProperties[PhotonPlayerProperty.isTitan]) == 1)
+            if ((int) player.CustomProperties[PhotonPlayerProperty.isTitan] == 1)
             {
                 num++;
                 if ((bool) player.CustomProperties[PhotonPlayerProperty.dead])
@@ -19,7 +18,7 @@ public class BTN_choose_human : MonoBehaviour
                 }
             }
         }
-        return (num == num2);
+        return num == num2;
     }
 
     public bool isPlayerAllDead2()
@@ -37,7 +36,7 @@ public class BTN_choose_human : MonoBehaviour
                 }
             }
         }
-        return (num == num2);
+        return num == num2;
     }
 
     private void OnClick()
@@ -49,7 +48,7 @@ public class BTN_choose_human : MonoBehaviour
         {
             GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().checkpoint = GameObject.Find("PVPchkPtH");
         }
-        if (!PhotonNetwork.isMasterClient && (GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().roundTime > 60f))
+        if (!PhotonNetwork.isMasterClient && GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().roundTime > 60f)
         {
             if (!this.isPlayerAllDead2())
             {
@@ -61,7 +60,7 @@ public class BTN_choose_human : MonoBehaviour
                 GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().photonView.RPC("restartGameByClient", PhotonTargets.MasterClient, new object[0]);
             }
         }
-        else if (((IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.BOSS_FIGHT_CT) || (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.TROST)) || (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.PVP_CAPTURE))
+        else if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.BOSS_FIGHT_CT || IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.TROST || IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.PVP_CAPTURE)
         {
             if (this.isPlayerAllDead2())
             {

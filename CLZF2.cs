@@ -1,5 +1,3 @@
-using System;
-
 public static class CLZF2
 {
     public static readonly long[] HashTable = new long[HSIZE];

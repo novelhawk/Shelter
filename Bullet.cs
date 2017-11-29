@@ -1,12 +1,9 @@
-using Photon;
-using System;
 using System.Collections;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class Bullet : Photon.MonoBehaviour
 {
-    private Vector3 heightOffSet = ((Vector3) (Vector3.up * 0.48f));
+    private Vector3 heightOffSet = (Vector3) (Vector3.up * 0.48f);
     private bool isdestroying;
     private float killTime;
     private float killTime2;
@@ -29,10 +26,10 @@ public class Bullet : Photon.MonoBehaviour
     public void checkTitan()
     {
         GameObject obj2 = Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().main_object;
-        if (((obj2 != null) && (this.master != null)) && (this.master == obj2))
+        if (obj2 != null && this.master != null && this.master == obj2)
         {
             RaycastHit hit;
-            LayerMask mask = ((int) 1) << LayerMask.NameToLayer("PlayerAttackBox");
+            LayerMask mask = (int) 1 << LayerMask.NameToLayer("PlayerAttackBox");
             if (Physics.Raycast(base.transform.position, this.velocity, out hit, 10f, mask.value))
             {
                 Collider collider = hit.collider;
@@ -71,7 +68,7 @@ public class Bullet : Photon.MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!(((this.phase == 2) || (this.phase == 1)) ? !this.leviMode : true))
+        if (!(this.phase == 2 || this.phase == 1 ? !this.leviMode : true))
         {
             this.spiralcount++;
             if (this.spiralcount >= 60)
@@ -81,12 +78,12 @@ public class Bullet : Photon.MonoBehaviour
                 return;
             }
         }
-        if (!((IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE) || base.photonView.isMine))
+        if (!(IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || base.photonView.isMine))
         {
             if (this.phase == 0)
             {
                 Transform transform = base.gameObject.transform;
-                transform.position += (Vector3) (((this.velocity * Time.deltaTime) * 50f) + (this.velocity2 * Time.deltaTime));
+                transform.position += (Vector3) (this.velocity * Time.deltaTime * 50f + this.velocity2 * Time.deltaTime);
                 this.nodes.Add(new Vector3(base.gameObject.transform.position.x, base.gameObject.transform.position.y, base.gameObject.transform.position.z));
             }
         }
@@ -95,11 +92,11 @@ public class Bullet : Photon.MonoBehaviour
             RaycastHit hit;
             this.checkTitan();
             Transform transform3 = base.gameObject.transform;
-            transform3.position += (Vector3) (((this.velocity * Time.deltaTime) * 50f) + (this.velocity2 * Time.deltaTime));
-            LayerMask mask = ((int) 1) << LayerMask.NameToLayer("EnemyBox");
-            LayerMask mask2 = ((int) 1) << LayerMask.NameToLayer("Ground");
-            LayerMask mask3 = ((int) 1) << LayerMask.NameToLayer("NetworkObject");
-            LayerMask mask4 = (mask | mask2) | mask3;
+            transform3.position += (Vector3) (this.velocity * Time.deltaTime * 50f + this.velocity2 * Time.deltaTime);
+            LayerMask mask = (int) 1 << LayerMask.NameToLayer("EnemyBox");
+            LayerMask mask2 = (int) 1 << LayerMask.NameToLayer("Ground");
+            LayerMask mask3 = (int) 1 << LayerMask.NameToLayer("NetworkObject");
+            LayerMask mask4 = mask | mask2 | mask3;
             bool flag2 = false;
             bool flag3 = false;
             if (this.nodes.Count > 1)
@@ -127,7 +124,7 @@ public class Bullet : Photon.MonoBehaviour
                 {
                     this.master.GetComponent<HERO>().lastHook = null;
                 }
-                else if (((hit.collider.transform.gameObject.layer == LayerMask.NameToLayer("NetworkObject")) && (hit.collider.transform.gameObject.tag == "Player")) && !this.leviMode)
+                else if (hit.collider.transform.gameObject.layer == LayerMask.NameToLayer("NetworkObject") && hit.collider.transform.gameObject.tag == "Player" && !this.leviMode)
                 {
                     if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
                     {
@@ -192,25 +189,25 @@ public class Bullet : Photon.MonoBehaviour
         float num3 = 2f;
         float num4 = 0.5f;
         num = 30f;
-        num3 = 0.05f + (this.spiralcount * 0.03f);
+        num3 = 0.05f + this.spiralcount * 0.03f;
         if (this.spiralcount < 5)
         {
             num = Vector2.Distance(new Vector2(masterposition.x, masterposition.z), new Vector2(base.gameObject.transform.position.x, base.gameObject.transform.position.z));
         }
         else
         {
-            num = 1.2f + ((60 - this.spiralcount) * 0.1f);
+            num = 1.2f + (60 - this.spiralcount) * 0.1f;
         }
         num4 -= this.spiralcount * 0.06f;
         float num6 = num / num2;
         float num7 = num3 / num2;
-        float num8 = (num7 * 2f) * 3.141593f;
+        float num8 = num7 * 2f * 3.141593f;
         num4 *= 6.283185f;
         this.spiralNodes = new ArrayList();
         for (int i = 1; i <= num2; i++)
         {
-            float num10 = (i * num6) * (1f + (0.05f * i));
-            float f = (((i * num8) + num4) + 1.256637f) + (masterrotation.y * 0.0173f);
+            float num10 = i * num6 * (1f + 0.05f * i);
+            float f = i * num8 + num4 + 1.256637f + masterrotation.y * 0.0173f;
             float x = Mathf.Cos(f) * num10;
             float z = -Mathf.Sin(f) * num10;
             this.spiralNodes.Add(new Vector3(x, 0f, z));
@@ -219,7 +216,7 @@ public class Bullet : Photon.MonoBehaviour
 
     public bool isHooked()
     {
-        return (this.phase == 1);
+        return this.phase == 1;
     }
 
     [RPC]
@@ -265,7 +262,7 @@ public class Bullet : Photon.MonoBehaviour
             this.phase = 0;
             this.leviMode = leviMode;
             this.left = isLeft;
-            if ((IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE) && base.photonView.isMine)
+            if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && base.photonView.isMine)
             {
                 object[] parameters = new object[] { hero.GetComponent<HERO>().photonView.viewID, launcher_ref };
                 base.photonView.RPC("myMasterIs", PhotonTargets.Others, parameters);
@@ -312,20 +309,20 @@ public class Bullet : Photon.MonoBehaviour
         this.phase = 2;
         this.leviMode = true;
         this.getSpiral(masterPosition, masterrotation);
-        Vector3 vector = masterPosition - ((Vector3) this.spiralNodes[0]);
-        this.lineRenderer.SetVertexCount(this.spiralNodes.Count - ((int) (this.spiralcount * 0.5f)));
-        for (int i = 0; i <= ((this.spiralNodes.Count - 1) - (this.spiralcount * 0.5f)); i++)
+        Vector3 vector = masterPosition - (Vector3) this.spiralNodes[0];
+        this.lineRenderer.SetVertexCount(this.spiralNodes.Count - (int) (this.spiralcount * 0.5f));
+        for (int i = 0; i <= this.spiralNodes.Count - 1 - this.spiralcount * 0.5f; i++)
         {
             if (this.spiralcount < 5)
             {
-                Vector3 position = ((Vector3) this.spiralNodes[i]) + vector;
-                float num2 = (this.spiralNodes.Count - 1) - (this.spiralcount * 0.5f);
-                position = new Vector3(position.x, (position.y * ((num2 - i) / num2)) + (newPosition.y * (((float) i) / num2)), position.z);
+                Vector3 position = (Vector3) this.spiralNodes[i] + vector;
+                float num2 = this.spiralNodes.Count - 1 - this.spiralcount * 0.5f;
+                position = new Vector3(position.x, position.y * ((num2 - i) / num2) + newPosition.y * ((float) i / num2), position.z);
                 this.lineRenderer.SetPosition(i, position);
             }
             else
             {
-                this.lineRenderer.SetPosition(i, ((Vector3) this.spiralNodes[i]) + vector);
+                this.lineRenderer.SetPosition(i, (Vector3) this.spiralNodes[i] + vector);
             }
         }
     }
@@ -355,7 +352,7 @@ public class Bullet : Photon.MonoBehaviour
     public void removeMe()
     {
         this.isdestroying = true;
-        if ((IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE) && base.photonView.isMine)
+        if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && base.photonView.isMine)
         {
             PhotonNetwork.Destroy(base.photonView);
             PhotonNetwork.RemoveRPCs(base.photonView);
@@ -376,11 +373,11 @@ public class Bullet : Photon.MonoBehaviour
         }
         else if (this.nodes.Count > 0)
         {
-            Vector3 vector = this.myRef.transform.position - ((Vector3) this.nodes[0]);
+            Vector3 vector = this.myRef.transform.position - (Vector3) this.nodes[0];
             this.lineRenderer.SetVertexCount(this.nodes.Count);
-            for (int i = 0; i <= (this.nodes.Count - 1); i++)
+            for (int i = 0; i <= this.nodes.Count - 1; i++)
             {
-                this.lineRenderer.SetPosition(i, ((Vector3) this.nodes[i]) + ((Vector3) (vector * Mathf.Pow(0.75f, (float) i))));
+                this.lineRenderer.SetPosition(i, (Vector3) this.nodes[i] + (Vector3) (vector * Mathf.Pow(0.75f, (float) i)));
             }
             if (this.nodes.Count > 1)
             {
@@ -461,10 +458,10 @@ public class Bullet : Photon.MonoBehaviour
                 {
                     int num6 = num3 / 2;
                     float num7 = Mathf.Abs((int) (index - num6));
-                    float num8 = (num6 - num7) / ((float) num6);
+                    float num8 = (num6 - num7) / (float) num6;
                     num8 = Mathf.Pow(num8, 0.5f);
-                    float max = ((num5 + magnitude) * 0.0015f) * num8;
-                    this.lineRenderer.SetPosition(index, (Vector3) ((((new Vector3(UnityEngine.Random.Range(-max, max), UnityEngine.Random.Range(-max, max), UnityEngine.Random.Range(-max, max)) + this.myRef.transform.position) + (vector * (((float) index) / ((float) num3)))) - (((Vector3.up * num5) * 0.05f) * num8)) - (((velocity * 0.001f) * num8) * num5)));
+                    float max = (num5 + magnitude) * 0.0015f * num8;
+                    this.lineRenderer.SetPosition(index, (Vector3) (new Vector3(UnityEngine.Random.Range(-max, max), UnityEngine.Random.Range(-max, max), UnityEngine.Random.Range(-max, max)) + this.myRef.transform.position + vector * ((float) index / (float) num3) - Vector3.up * num5 * 0.05f * num8 - velocity * 0.001f * num8 * num5));
                     index++;
                 }
                 this.lineRenderer.SetPosition(num3 - 1, base.transform.position);
@@ -486,20 +483,20 @@ public class Bullet : Photon.MonoBehaviour
                 else
                 {
                     this.getSpiral(this.master.transform.position, this.master.transform.rotation.eulerAngles);
-                    Vector3 vector4 = this.myRef.transform.position - ((Vector3) this.spiralNodes[0]);
-                    this.lineRenderer.SetVertexCount(this.spiralNodes.Count - ((int) (this.spiralcount * 0.5f)));
-                    for (int i = 0; i <= ((this.spiralNodes.Count - 1) - (this.spiralcount * 0.5f)); i++)
+                    Vector3 vector4 = this.myRef.transform.position - (Vector3) this.spiralNodes[0];
+                    this.lineRenderer.SetVertexCount(this.spiralNodes.Count - (int) (this.spiralcount * 0.5f));
+                    for (int i = 0; i <= this.spiralNodes.Count - 1 - this.spiralcount * 0.5f; i++)
                     {
                         if (this.spiralcount < 5)
                         {
-                            Vector3 position = ((Vector3) this.spiralNodes[i]) + vector4;
-                            float num11 = (this.spiralNodes.Count - 1) - (this.spiralcount * 0.5f);
-                            position = new Vector3(position.x, (position.y * ((num11 - i) / num11)) + (base.gameObject.transform.position.y * (((float) i) / num11)), position.z);
+                            Vector3 position = (Vector3) this.spiralNodes[i] + vector4;
+                            float num11 = this.spiralNodes.Count - 1 - this.spiralcount * 0.5f;
+                            position = new Vector3(position.x, position.y * ((num11 - i) / num11) + base.gameObject.transform.position.y * ((float) i / num11), position.z);
                             this.lineRenderer.SetPosition(i, position);
                         }
                         else
                         {
-                            this.lineRenderer.SetPosition(i, ((Vector3) this.spiralNodes[i]) + vector4);
+                            this.lineRenderer.SetPosition(i, (Vector3) this.spiralNodes[i] + vector4);
                         }
                     }
                 }
@@ -507,13 +504,13 @@ public class Bullet : Photon.MonoBehaviour
             else if (this.phase == 4)
             {
                 Transform transform = base.gameObject.transform;
-                transform.position += this.velocity + ((Vector3) (this.velocity2 * Time.deltaTime));
+                transform.position += this.velocity + (Vector3) (this.velocity2 * Time.deltaTime);
                 this.nodes.Add(new Vector3(base.gameObject.transform.position.x, base.gameObject.transform.position.y, base.gameObject.transform.position.z));
-                Vector3 vector10 = this.myRef.transform.position - ((Vector3) this.nodes[0]);
-                for (int j = 0; j <= (this.nodes.Count - 1); j++)
+                Vector3 vector10 = this.myRef.transform.position - (Vector3) this.nodes[0];
+                for (int j = 0; j <= this.nodes.Count - 1; j++)
                 {
                     this.lineRenderer.SetVertexCount(this.nodes.Count);
-                    this.lineRenderer.SetPosition(j, ((Vector3) this.nodes[j]) + ((Vector3) (vector10 * Mathf.Pow(0.5f, (float) j))));
+                    this.lineRenderer.SetPosition(j, (Vector3) this.nodes[j] + (Vector3) (vector10 * Mathf.Pow(0.5f, (float) j)));
                 }
                 this.killTime2 += Time.deltaTime;
                 if (this.killTime2 > 0.8f)

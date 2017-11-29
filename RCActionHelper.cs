@@ -71,7 +71,7 @@ public class RCActionHelper
                             return this.nextHelper.returnBool(player.CustomProperties[PhotonPlayerProperty.RCteam]);
 
                         case 2:
-                            return !((bool) player.CustomProperties[PhotonPlayerProperty.dead]);
+                            return !(bool) player.CustomProperties[PhotonPlayerProperty.dead];
 
                         case 3:
                             return this.nextHelper.returnBool(player.CustomProperties[PhotonPlayerProperty.isTitan]);

@@ -1,9 +1,5 @@
-using Photon;
-using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class CannonBall : Photon.MonoBehaviour
@@ -46,15 +42,15 @@ public class CannonBall : Photon.MonoBehaviour
             {
                 foreach (HERO hero in FengGameManagerMKII.instance.getPlayers())
                 {
-                    if (((hero != null) && (Vector3.Distance(hero.transform.position, base.transform.position) <= 20f)) && !hero.photonView.isMine)
+                    if (hero != null && Vector3.Distance(hero.transform.position, base.transform.position) <= 20f && !hero.photonView.isMine)
                     {
                         GameObject gameObject = hero.gameObject;
                         PhotonPlayer owner = gameObject.GetPhotonView().owner;
-                        if (((RCSettings.teamMode > 0) && (PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.RCteam] != null)) && (owner.CustomProperties[PhotonPlayerProperty.RCteam] != null))
+                        if (RCSettings.teamMode > 0 && PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.RCteam] != null && owner.CustomProperties[PhotonPlayerProperty.RCteam] != null)
                         {
                             int num2 = RCextensions.returnIntFromObject(PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.RCteam]);
                             int num3 = RCextensions.returnIntFromObject(owner.CustomProperties[PhotonPlayerProperty.RCteam]);
-                            if ((num2 == 0) || (num2 != num3))
+                            if (num2 == 0 || num2 != num3)
                             {
                                 gameObject.GetComponent<HERO>().markDie();
                                 gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name]) + " " });
@@ -88,12 +84,12 @@ public class CannonBall : Photon.MonoBehaviour
     {
         if (base.photonView.isMine && !this.disabled)
         {
-            LayerMask mask = ((int) 1) << LayerMask.NameToLayer("PlayerAttackBox");
-            LayerMask mask2 = ((int) 1) << LayerMask.NameToLayer("EnemyBox");
+            LayerMask mask = (int) 1 << LayerMask.NameToLayer("PlayerAttackBox");
+            LayerMask mask2 = (int) 1 << LayerMask.NameToLayer("EnemyBox");
             LayerMask mask3 = mask | mask2;
             if (!this.isCollider)
             {
-                LayerMask mask4 = ((int) 1) << LayerMask.NameToLayer("Ground");
+                LayerMask mask4 = (int) 1 << LayerMask.NameToLayer("Ground");
                 mask3 |= mask4;
             }
             Collider[] colliderArray = Physics.OverlapSphere(base.transform.position, 0.6f, mask3.value);
@@ -104,7 +100,7 @@ public class CannonBall : Photon.MonoBehaviour
                 if (gameObject.layer == 16)
                 {
                     TitanTrigger component = gameObject.GetComponent<TitanTrigger>();
-                    if (!((component == null) || this.myTitanTriggers.Contains(component)))
+                    if (!(component == null || this.myTitanTriggers.Contains(component)))
                     {
                         component.isCollide = true;
                         this.myTitanTriggers.Add(component);
@@ -141,7 +137,7 @@ public class CannonBall : Photon.MonoBehaviour
                         this.destroyMe();
                     }
                 }
-                else if ((gameObject.layer == 9) && (gameObject.transform.root.name.Contains("CannonWall") || gameObject.transform.root.name.Contains("CannonGround")))
+                else if (gameObject.layer == 9 && (gameObject.transform.root.name.Contains("CannonWall") || gameObject.transform.root.name.Contains("CannonGround")))
                 {
                     flag2 = true;
                 }

@@ -21,18 +21,18 @@ public class PingMonoEditor : PhotonPing
 
     public override bool Done()
     {
-        if (!base.GotResult && (this.sock != null))
+        if (!base.GotResult && this.sock != null)
         {
             if (this.sock.Available <= 0)
             {
                 return false;
             }
             int num = this.sock.Receive(base.PingBytes, SocketFlags.None);
-            if ((base.PingBytes[base.PingBytes.Length - 1] != base.PingId) || (num != base.PingLength))
+            if (base.PingBytes[base.PingBytes.Length - 1] != base.PingId || num != base.PingLength)
             {
                 Debug.Log("ReplyMatch is false! ");
             }
-            base.Successful = (num == base.PingBytes.Length) && (base.PingBytes[base.PingBytes.Length - 1] == base.PingId);
+            base.Successful = num == base.PingBytes.Length && base.PingBytes[base.PingBytes.Length - 1] == base.PingId;
             base.GotResult = true;
         }
         return true;

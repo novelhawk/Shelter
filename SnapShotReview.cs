@@ -19,7 +19,7 @@ public class SnapShotReview : MonoBehaviour
         }
         else
         {
-            this.page.text = ((SnapShotSaves.getCurrentIndex() + 1)).ToString() + "/" + SnapShotSaves.getLength().ToString();
+            this.page.text = (SnapShotSaves.getCurrentIndex() + 1).ToString() + "/" + SnapShotSaves.getLength().ToString();
         }
         if (SnapShotSaves.getCurrentDMG() > 0)
         {
@@ -36,18 +36,18 @@ public class SnapShotReview : MonoBehaviour
         if (SnapShotSaves.getLength() != 0)
         {
             float num = 1.6f;
-            float num2 = ((float) this.texture.GetComponent<UITexture>().mainTexture.width) / ((float) this.texture.GetComponent<UITexture>().mainTexture.height);
+            float num2 = (float) this.texture.GetComponent<UITexture>().mainTexture.width / (float) this.texture.GetComponent<UITexture>().mainTexture.height;
             if (num2 > num)
             {
                 this.texture.transform.localScale = new Vector3(this.textureW, this.textureW / num2, 0f);
-                this.labelDMG.transform.localPosition = new Vector3((float) ((int) ((this.textureW * 0.5f) - 20f)), (float) ((int) ((0f + ((this.textureW * 0.5f) / num2)) - 20f)), -20f);
-                this.labelInfo.transform.localPosition = new Vector3((float) ((int) ((this.textureW * 0.5f) - 20f)), (float) ((int) ((0f - ((this.textureW * 0.5f) / num2)) + 20f)), -20f);
+                this.labelDMG.transform.localPosition = new Vector3((float) (int) (this.textureW * 0.5f - 20f), (float) (int) (0f + this.textureW * 0.5f / num2 - 20f), -20f);
+                this.labelInfo.transform.localPosition = new Vector3((float) (int) (this.textureW * 0.5f - 20f), (float) (int) (0f - this.textureW * 0.5f / num2 + 20f), -20f);
             }
             else
             {
                 this.texture.transform.localScale = new Vector3(this.textureH * num2, this.textureH, 0f);
-                this.labelDMG.transform.localPosition = new Vector3((float) ((int) (((this.textureH * num2) * 0.5f) - 20f)), (float) ((int) ((0f + (this.textureH * 0.5f)) - 20f)), -20f);
-                this.labelInfo.transform.localPosition = new Vector3((float) ((int) (((this.textureH * num2) * 0.5f) - 20f)), (float) ((int) ((0f - (this.textureH * 0.5f)) + 20f)), -20f);
+                this.labelDMG.transform.localPosition = new Vector3((float) (int) (this.textureH * num2 * 0.5f - 20f), (float) (int) (0f + this.textureH * 0.5f - 20f), -20f);
+                this.labelInfo.transform.localPosition = new Vector3((float) (int) (this.textureH * num2 * 0.5f - 20f), (float) (int) (0f - this.textureH * 0.5f + 20f), -20f);
             }
         }
     }

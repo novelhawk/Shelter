@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Examples/Lag Position")]
@@ -16,7 +15,7 @@ public class LagPosition : MonoBehaviour
         Transform parent = this.mTrans.parent;
         if (parent != null)
         {
-            Vector3 vector = parent.position + (parent.rotation * this.mRelative);
+            Vector3 vector = parent.position + parent.rotation * this.mRelative;
             this.mAbsolute.x = Mathf.Lerp(this.mAbsolute.x, vector.x, Mathf.Clamp01(delta * this.speed.x));
             this.mAbsolute.y = Mathf.Lerp(this.mAbsolute.y, vector.y, Mathf.Clamp01(delta * this.speed.y));
             this.mAbsolute.z = Mathf.Lerp(this.mAbsolute.z, vector.z, Mathf.Clamp01(delta * this.speed.z));

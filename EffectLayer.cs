@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -163,7 +162,7 @@ public class EffectLayer : MonoBehaviour
 
     public RibbonTrail GetRibbonTrail()
     {
-        if ((!((this.ActiveENodes == null) | (this.ActiveENodes.Length != 1)) && (this.MaxENodes == 1)) && (this.RenderType == 1))
+        if (!((this.ActiveENodes == null) | (this.ActiveENodes.Length != 1)) && this.MaxENodes == 1 && this.RenderType == 1)
         {
             return this.ActiveENodes[0].Ribbon;
         }
@@ -215,7 +214,7 @@ public class EffectLayer : MonoBehaviour
             {
                 float num = mainTex.width / this.Cols;
                 float num2 = mainTex.height / this.Rows;
-                Vector2 cellSize = new Vector2(num / ((float) mainTex.width), num2 / ((float) mainTex.height));
+                Vector2 cellSize = new Vector2(num / (float) mainTex.width, num2 / (float) mainTex.height);
                 Vector2 start = new Vector2(0f, 1f);
                 frame.BuildUVAnim(start, cellSize, this.Cols, this.Rows, this.Cols * this.Rows);
                 this.OriLowerLeftUV = start;
@@ -234,7 +233,7 @@ public class EffectLayer : MonoBehaviour
                 list.Add(affector);
             }
         }
-        if (this.RotAffectorEnable && (this.RotateType != RSTYPE.NONE))
+        if (this.RotAffectorEnable && this.RotateType != RSTYPE.NONE)
         {
             Affector affector2;
             if (this.RotateType == RSTYPE.CURVE)
@@ -247,7 +246,7 @@ public class EffectLayer : MonoBehaviour
             }
             list.Add(affector2);
         }
-        if (this.ScaleAffectorEnable && (this.ScaleType != RSTYPE.NONE))
+        if (this.ScaleAffectorEnable && this.ScaleType != RSTYPE.NONE)
         {
             Affector affector3;
             if (this.ScaleType == RSTYPE.CURVE)
@@ -260,7 +259,7 @@ public class EffectLayer : MonoBehaviour
             }
             list.Add(affector3);
         }
-        if (this.ColorAffectorEnable && (this.ColorAffectType != 0))
+        if (this.ColorAffectorEnable && this.ColorAffectType != 0)
         {
             ColorAffector affector4;
             if (this.ColorAffectType == 2)

@@ -1,5 +1,3 @@
-using Photon;
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
@@ -12,7 +10,7 @@ public class PickupItemSimple : Photon.MonoBehaviour
     public void OnTriggerEnter(Collider other)
     {
         PhotonView component = other.GetComponent<PhotonView>();
-        if ((this.PickupOnCollide && (component != null)) && component.isMine)
+        if (this.PickupOnCollide && component != null && component.isMine)
         {
             this.Pickup();
         }
@@ -30,7 +28,7 @@ public class PickupItemSimple : Photon.MonoBehaviour
     [RPC]
     public void PunPickupSimple(PhotonMessageInfo msgInfo)
     {
-        if ((!this.SentPickup || !msgInfo.sender.isLocal) || !base.gameObject.GetActive())
+        if (!this.SentPickup || !msgInfo.sender.isLocal || !base.gameObject.GetActive())
         {
         }
         this.SentPickup = false;
@@ -41,7 +39,7 @@ public class PickupItemSimple : Photon.MonoBehaviour
         else
         {
             double num = PhotonNetwork.time - msgInfo.timestamp;
-            float time = this.SecondsBeforeRespawn - ((float) num);
+            float time = this.SecondsBeforeRespawn - (float) num;
             if (time > 0f)
             {
                 base.gameObject.SetActive(false);

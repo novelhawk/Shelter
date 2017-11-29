@@ -1,5 +1,3 @@
-using System;
-
 public static class RCSettings
 {
     public static int ahssReload;

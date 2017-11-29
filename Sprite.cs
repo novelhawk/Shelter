@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class Sprite
@@ -249,7 +248,7 @@ public class Sprite
         if (this.Type == STYPE.BILLBOARD)
         {
             UnityEngine.Transform transform = this.MainCamera.transform;
-            this.MyTransform.LookAt(this.MyTransform.position + (transform.rotation * Vector3.up), (Vector3) (transform.rotation * Vector3.back));
+            this.MyTransform.LookAt(this.MyTransform.position + transform.rotation * Vector3.up, (Vector3) (transform.rotation * Vector3.back));
         }
         this.WorldMat.SetTRS(this.MyTransform.position, this.MyTransform.rotation, Vector3.one);
         Matrix4x4 matrixx = this.WorldMat * this.LocalMat;
@@ -311,7 +310,7 @@ public class Sprite
     public void Update(bool force)
     {
         this.ElapsedTime += Time.deltaTime;
-        if ((this.ElapsedTime > this.Fps) || force)
+        if (this.ElapsedTime > this.Fps || force)
         {
             this.Transform();
             if (this.UVChanged)
@@ -348,17 +347,17 @@ public class Sprite
         int vertStart = this.Vertexsegment.VertStart;
         if (this.UVDimensions.y > 0f)
         {
-            pool.UVs[vertStart] = this.LowerLeftUV + ((Vector2) (Vector2.up * this.UVDimensions.y));
+            pool.UVs[vertStart] = this.LowerLeftUV + (Vector2) (Vector2.up * this.UVDimensions.y);
             pool.UVs[vertStart + 1] = this.LowerLeftUV;
-            pool.UVs[vertStart + 2] = this.LowerLeftUV + ((Vector2) (Vector2.right * this.UVDimensions.x));
+            pool.UVs[vertStart + 2] = this.LowerLeftUV + (Vector2) (Vector2.right * this.UVDimensions.x);
             pool.UVs[vertStart + 3] = this.LowerLeftUV + this.UVDimensions;
         }
         else
         {
             pool.UVs[vertStart] = this.LowerLeftUV;
-            pool.UVs[vertStart + 1] = this.LowerLeftUV + ((Vector2) (Vector2.up * this.UVDimensions.y));
+            pool.UVs[vertStart + 1] = this.LowerLeftUV + (Vector2) (Vector2.up * this.UVDimensions.y);
             pool.UVs[vertStart + 2] = this.LowerLeftUV + this.UVDimensions;
-            pool.UVs[vertStart + 3] = this.LowerLeftUV + ((Vector2) (Vector2.right * this.UVDimensions.x));
+            pool.UVs[vertStart + 3] = this.LowerLeftUV + (Vector2) (Vector2.right * this.UVDimensions.x);
         }
         this.Vertexsegment.Pool.UVChanged = true;
     }

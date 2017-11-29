@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Forward Events")]
@@ -18,7 +17,7 @@ public class UIForwardEvents : MonoBehaviour
 
     private void OnClick()
     {
-        if (this.onClick && (this.target != null))
+        if (this.onClick && this.target != null)
         {
             this.target.SendMessage("OnClick", SendMessageOptions.DontRequireReceiver);
         }
@@ -26,7 +25,7 @@ public class UIForwardEvents : MonoBehaviour
 
     private void OnDoubleClick()
     {
-        if (this.onDoubleClick && (this.target != null))
+        if (this.onDoubleClick && this.target != null)
         {
             this.target.SendMessage("OnDoubleClick", SendMessageOptions.DontRequireReceiver);
         }
@@ -34,7 +33,7 @@ public class UIForwardEvents : MonoBehaviour
 
     private void OnDrag(Vector2 delta)
     {
-        if (this.onDrag && (this.target != null))
+        if (this.onDrag && this.target != null)
         {
             this.target.SendMessage("OnDrag", delta, SendMessageOptions.DontRequireReceiver);
         }
@@ -42,7 +41,7 @@ public class UIForwardEvents : MonoBehaviour
 
     private void OnDrop(GameObject go)
     {
-        if (this.onDrop && (this.target != null))
+        if (this.onDrop && this.target != null)
         {
             this.target.SendMessage("OnDrop", go, SendMessageOptions.DontRequireReceiver);
         }
@@ -50,7 +49,7 @@ public class UIForwardEvents : MonoBehaviour
 
     private void OnHover(bool isOver)
     {
-        if (this.onHover && (this.target != null))
+        if (this.onHover && this.target != null)
         {
             this.target.SendMessage("OnHover", isOver, SendMessageOptions.DontRequireReceiver);
         }
@@ -58,7 +57,7 @@ public class UIForwardEvents : MonoBehaviour
 
     private void OnInput(string text)
     {
-        if (this.onInput && (this.target != null))
+        if (this.onInput && this.target != null)
         {
             this.target.SendMessage("OnInput", text, SendMessageOptions.DontRequireReceiver);
         }
@@ -66,7 +65,7 @@ public class UIForwardEvents : MonoBehaviour
 
     private void OnPress(bool pressed)
     {
-        if (this.onPress && (this.target != null))
+        if (this.onPress && this.target != null)
         {
             this.target.SendMessage("OnPress", pressed, SendMessageOptions.DontRequireReceiver);
         }
@@ -74,7 +73,7 @@ public class UIForwardEvents : MonoBehaviour
 
     private void OnScroll(float delta)
     {
-        if (this.onScroll && (this.target != null))
+        if (this.onScroll && this.target != null)
         {
             this.target.SendMessage("OnScroll", delta, SendMessageOptions.DontRequireReceiver);
         }
@@ -82,7 +81,7 @@ public class UIForwardEvents : MonoBehaviour
 
     private void OnSelect(bool selected)
     {
-        if (this.onSelect && (this.target != null))
+        if (this.onSelect && this.target != null)
         {
             this.target.SendMessage("OnSelect", selected, SendMessageOptions.DontRequireReceiver);
         }
@@ -90,7 +89,7 @@ public class UIForwardEvents : MonoBehaviour
 
     private void OnSubmit()
     {
-        if (this.onSubmit && (this.target != null))
+        if (this.onSubmit && this.target != null)
         {
             this.target.SendMessage("OnSubmit", SendMessageOptions.DontRequireReceiver);
         }

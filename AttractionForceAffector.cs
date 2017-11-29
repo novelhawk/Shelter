@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class AttractionForceAffector : Affector
@@ -32,7 +31,7 @@ public class AttractionForceAffector : Affector
         }
         else
         {
-            vector = (base.Node.ClientTrans.position + this.Position) - base.Node.GetLocalPosition();
+            vector = base.Node.ClientTrans.position + this.Position - base.Node.GetLocalPosition();
         }
         float elapsedTime = base.Node.GetElapsedTime();
         if (this.UseCurve)
@@ -44,7 +43,7 @@ public class AttractionForceAffector : Affector
             magnitude = this.Magnitude;
         }
         float num3 = magnitude;
-        base.Node.Velocity += (Vector3) ((vector.normalized * num3) * Time.deltaTime);
+        base.Node.Velocity += (Vector3) (vector.normalized * num3 * Time.deltaTime);
     }
 }
 

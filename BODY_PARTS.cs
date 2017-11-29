@@ -1,5 +1,3 @@
-using System;
-
 public enum BODY_PARTS
 {
     UPPER,

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class BodyPushBox : MonoBehaviour
@@ -10,7 +9,7 @@ public class BodyPushBox : MonoBehaviour
         if (other.gameObject.tag == "bodyCollider")
         {
             BodyPushBox component = other.gameObject.GetComponent<BodyPushBox>();
-            if ((component != null) && (component.parent != null))
+            if (component != null && component.parent != null)
             {
                 float num3;
                 Vector3 vector = component.parent.transform.position - this.parent.transform.position;
@@ -19,7 +18,7 @@ public class BodyPushBox : MonoBehaviour
                 vector.y = 0f;
                 if (vector.magnitude > 0f)
                 {
-                    num3 = (radius + num2) - vector.magnitude;
+                    num3 = radius + num2 - vector.magnitude;
                     vector.Normalize();
                 }
                 else

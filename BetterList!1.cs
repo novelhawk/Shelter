@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -13,7 +12,7 @@ public class BetterList<T>
 
     public void Add(T item)
     {
-        if ((this.buffer == null) || (this.size == this.buffer.Length))
+        if (this.buffer == null || this.size == this.buffer.Length)
         {
             this.AllocateMore();
         }
@@ -22,8 +21,8 @@ public class BetterList<T>
 
     private void AllocateMore()
     {
-        T[] array = (this.buffer == null) ? new T[32] : new T[Mathf.Max(this.buffer.Length << 1, 32)];
-        if ((this.buffer != null) && (this.size > 0))
+        T[] array = this.buffer == null ? new T[32] : new T[Mathf.Max(this.buffer.Length << 1, 32)];
+        if (this.buffer != null && this.size > 0)
         {
             this.buffer.CopyTo(array, 0);
         }
@@ -58,7 +57,7 @@ public class BetterList<T>
 
     public void Insert(int index, T item)
     {
-        if ((this.buffer == null) || (this.size == this.buffer.Length))
+        if (this.buffer == null || this.size == this.buffer.Length)
         {
             this.AllocateMore();
         }
@@ -79,7 +78,7 @@ public class BetterList<T>
 
     public T Pop()
     {
-        if ((this.buffer != null) && (this.size != 0))
+        if (this.buffer != null && this.size != 0)
         {
             T local = this.buffer[--this.size];
             this.buffer[this.size] = default(T);
@@ -118,7 +117,7 @@ public class BetterList<T>
 
     public void RemoveAt(int index)
     {
-        if ((this.buffer != null) && (index < this.size))
+        if (this.buffer != null && index < this.size)
         {
             this.size--;
             this.buffer[index] = default(T);

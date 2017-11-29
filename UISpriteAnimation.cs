@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,7 +23,7 @@ public class UISpriteAnimation : MonoBehaviour
             this.mSprite = base.GetComponent<UISprite>();
         }
         this.mSpriteNames.Clear();
-        if ((this.mSprite != null) && (this.mSprite.atlas != null))
+        if (this.mSprite != null && this.mSprite.atlas != null)
         {
             List<UIAtlas.Sprite> spriteList = this.mSprite.atlas.spriteList;
             int num = 0;
@@ -46,7 +45,7 @@ public class UISpriteAnimation : MonoBehaviour
     {
         this.mActive = true;
         this.mIndex = 0;
-        if ((this.mSprite != null) && (this.mSpriteNames.Count > 0))
+        if (this.mSprite != null && this.mSpriteNames.Count > 0)
         {
             this.mSprite.spriteName = this.mSpriteNames[this.mIndex];
             this.mSprite.MakePixelPerfect();
@@ -60,13 +59,13 @@ public class UISpriteAnimation : MonoBehaviour
 
     private void Update()
     {
-        if ((this.mActive && (this.mSpriteNames.Count > 1)) && (Application.isPlaying && (this.mFPS > 0f)))
+        if (this.mActive && this.mSpriteNames.Count > 1 && Application.isPlaying && this.mFPS > 0f)
         {
             this.mDelta += Time.deltaTime;
-            float num = 1f / ((float) this.mFPS);
+            float num = 1f / (float) this.mFPS;
             if (num < this.mDelta)
             {
-                this.mDelta = (num <= 0f) ? 0f : (this.mDelta - num);
+                this.mDelta = num <= 0f ? 0f : this.mDelta - num;
                 if (++this.mIndex >= this.mSpriteNames.Count)
                 {
                     this.mIndex = 0;

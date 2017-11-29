@@ -1,6 +1,5 @@
 using ExitGames.Client.Photon;
 using System;
-using UnityEngine;
 
 public class RCAction
 {
@@ -54,7 +53,7 @@ public class RCAction
                         }
                         else
                         {
-                            FengGameManagerMKII.intVariables[key] = ((int) FengGameManagerMKII.intVariables[key]) + num2;
+                            FengGameManagerMKII.intVariables[key] = (int) FengGameManagerMKII.intVariables[key] + num2;
                         }
                         return;
 
@@ -65,7 +64,7 @@ public class RCAction
                         }
                         else
                         {
-                            FengGameManagerMKII.intVariables[key] = ((int) FengGameManagerMKII.intVariables[key]) - num2;
+                            FengGameManagerMKII.intVariables[key] = (int) FengGameManagerMKII.intVariables[key] - num2;
                         }
                         return;
 
@@ -76,7 +75,7 @@ public class RCAction
                         }
                         else
                         {
-                            FengGameManagerMKII.intVariables[key] = ((int) FengGameManagerMKII.intVariables[key]) * num2;
+                            FengGameManagerMKII.intVariables[key] = (int) FengGameManagerMKII.intVariables[key] * num2;
                         }
                         return;
 
@@ -87,7 +86,7 @@ public class RCAction
                         }
                         else
                         {
-                            FengGameManagerMKII.intVariables[key] = ((int) FengGameManagerMKII.intVariables[key]) / num2;
+                            FengGameManagerMKII.intVariables[key] = (int) FengGameManagerMKII.intVariables[key] / num2;
                         }
                         return;
 
@@ -98,7 +97,7 @@ public class RCAction
                         }
                         else
                         {
-                            FengGameManagerMKII.intVariables[key] = ((int) FengGameManagerMKII.intVariables[key]) % num2;
+                            FengGameManagerMKII.intVariables[key] = (int) FengGameManagerMKII.intVariables[key] % num2;
                         }
                         return;
 
@@ -109,7 +108,7 @@ public class RCAction
                         }
                         else
                         {
-                            FengGameManagerMKII.intVariables[key] = (int) Math.Pow((double) ((int) FengGameManagerMKII.intVariables[key]), (double) num2);
+                            FengGameManagerMKII.intVariables[key] = (int) Math.Pow((double) (int) FengGameManagerMKII.intVariables[key], (double) num2);
                         }
                         return;
 
@@ -139,7 +138,7 @@ public class RCAction
                         }
                         else
                         {
-                            FengGameManagerMKII.boolVariables[str2] = !((bool) FengGameManagerMKII.boolVariables[str2]);
+                            FengGameManagerMKII.boolVariables[str2] = !(bool) FengGameManagerMKII.boolVariables[str2];
                         }
                         return;
 
@@ -198,7 +197,7 @@ public class RCAction
                         }
                         else
                         {
-                            FengGameManagerMKII.stringVariables[str3] = ((string) FengGameManagerMKII.stringVariables[str3]) + str6;
+                            FengGameManagerMKII.stringVariables[str3] = (string) FengGameManagerMKII.stringVariables[str3] + str6;
                         }
                         return;
                     }
@@ -254,7 +253,7 @@ public class RCAction
                         }
                         else
                         {
-                            FengGameManagerMKII.floatVariables[str9] = ((float) FengGameManagerMKII.floatVariables[str9]) + num4;
+                            FengGameManagerMKII.floatVariables[str9] = (float) FengGameManagerMKII.floatVariables[str9] + num4;
                         }
                         return;
 
@@ -265,7 +264,7 @@ public class RCAction
                         }
                         else
                         {
-                            FengGameManagerMKII.floatVariables[str9] = ((float) FengGameManagerMKII.floatVariables[str9]) - num4;
+                            FengGameManagerMKII.floatVariables[str9] = (float) FengGameManagerMKII.floatVariables[str9] - num4;
                         }
                         return;
 
@@ -276,7 +275,7 @@ public class RCAction
                         }
                         else
                         {
-                            FengGameManagerMKII.floatVariables[str9] = ((float) FengGameManagerMKII.floatVariables[str9]) * num4;
+                            FengGameManagerMKII.floatVariables[str9] = (float) FengGameManagerMKII.floatVariables[str9] * num4;
                         }
                         return;
 
@@ -287,7 +286,7 @@ public class RCAction
                         }
                         else
                         {
-                            FengGameManagerMKII.floatVariables[str9] = ((float) FengGameManagerMKII.floatVariables[str9]) / num4;
+                            FengGameManagerMKII.floatVariables[str9] = (float) FengGameManagerMKII.floatVariables[str9] / num4;
                         }
                         return;
 
@@ -298,7 +297,7 @@ public class RCAction
                         }
                         else
                         {
-                            FengGameManagerMKII.floatVariables[str9] = ((float) FengGameManagerMKII.floatVariables[str9]) % num4;
+                            FengGameManagerMKII.floatVariables[str9] = (float) FengGameManagerMKII.floatVariables[str9] % num4;
                         }
                         return;
 
@@ -309,7 +308,7 @@ public class RCAction
                         }
                         else
                         {
-                            FengGameManagerMKII.floatVariables[str9] = (float) Math.Pow((double) ((int) FengGameManagerMKII.floatVariables[str9]), (double) num4);
+                            FengGameManagerMKII.floatVariables[str9] = (float) Math.Pow((double) (int) FengGameManagerMKII.floatVariables[str9], (double) num4);
                         }
                         return;
 

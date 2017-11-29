@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -18,7 +17,7 @@ public class Localization : MonoBehaviour
             mInstance = this;
             UnityEngine.Object.DontDestroyOnLoad(base.gameObject);
             this.currentLanguage = PlayerPrefs.GetString("Language", this.startingLanguage);
-            if ((string.IsNullOrEmpty(this.mLanguage) && (this.languages != null)) && (this.languages.Length > 0))
+            if (string.IsNullOrEmpty(this.mLanguage) && this.languages != null && this.languages.Length > 0)
             {
                 this.currentLanguage = this.languages[0].name;
             }
@@ -32,7 +31,7 @@ public class Localization : MonoBehaviour
     public string Get(string key)
     {
         string str;
-        return (!this.mDictionary.TryGetValue(key, out str) ? key : str);
+        return !this.mDictionary.TryGetValue(key, out str) ? key : str;
     }
 
     private void Load(TextAsset asset)
@@ -45,7 +44,7 @@ public class Localization : MonoBehaviour
 
     public static string Localize(string key)
     {
-        return ((instance == null) ? key : instance.Get(key));
+        return instance == null ? key : instance.Get(key);
     }
 
     private void OnDestroy()
@@ -84,7 +83,7 @@ public class Localization : MonoBehaviour
                         while (index < length)
                         {
                             TextAsset asset = this.languages[index];
-                            if ((asset != null) && (asset.name == value))
+                            if (asset != null && asset.name == value)
                             {
                                 this.Load(asset);
                                 return;
@@ -127,7 +126,7 @@ public class Localization : MonoBehaviour
     {
         get
         {
-            return (mInstance != null);
+            return mInstance != null;
         }
     }
 }

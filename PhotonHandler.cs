@@ -1,5 +1,4 @@
 using ExitGames.Client.Photon;
-using Photon;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -22,7 +21,7 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
 
     protected void Awake()
     {
-        if (((SP != null) && (SP != this)) && (SP.gameObject != null))
+        if (SP != null && SP != this && SP.gameObject != null)
         {
             UnityEngine.Object.DestroyImmediate(SP.gameObject);
         }
@@ -43,11 +42,11 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
         {
             UnityEngine.Debug.LogWarning(message);
         }
-        else if ((level == DebugLevel.INFO) && (PhotonNetwork.logLevel >= PhotonLogLevel.Informational))
+        else if (level == DebugLevel.INFO && PhotonNetwork.logLevel >= PhotonLogLevel.Informational)
         {
             UnityEngine.Debug.Log(message);
         }
-        else if ((level == DebugLevel.ALL) && (PhotonNetwork.logLevel == PhotonLogLevel.Full))
+        else if (level == DebugLevel.ALL && PhotonNetwork.logLevel == PhotonLogLevel.Full)
         {
             UnityEngine.Debug.Log(message);
         }
@@ -55,7 +54,7 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
 
     public static bool FallbackSendAckThread()
     {
-        if (sendThreadShouldRun && (PhotonNetwork.networkingPeer != null))
+        if (sendThreadShouldRun && PhotonNetwork.networkingPeer != null)
         {
             PhotonNetwork.networkingPeer.SendAcksOnly();
         }
@@ -128,13 +127,13 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
         {
             UnityEngine.Debug.LogError("NetworkPeer broke!");
         }
-        else if ((((PhotonNetwork.connectionStatesDetailed != PeerStates.PeerCreated) && (PhotonNetwork.connectionStatesDetailed != PeerStates.Disconnected)) && !PhotonNetwork.offlineMode) && PhotonNetwork.isMessageQueueRunning)
+        else if (PhotonNetwork.connectionStatesDetailed != PeerStates.PeerCreated && PhotonNetwork.connectionStatesDetailed != PeerStates.Disconnected && !PhotonNetwork.offlineMode && PhotonNetwork.isMessageQueueRunning)
         {
             for (bool flag = true; PhotonNetwork.isMessageQueueRunning && flag; flag = PhotonNetwork.networkingPeer.DispatchIncomingCommands())
             {
             }
             int num = (int)(Time.realtimeSinceStartup * 1000f);
-            if (PhotonNetwork.isMessageQueueRunning && (num > this.nextSendTickCountOnSerialize))
+            if (PhotonNetwork.isMessageQueueRunning && num > this.nextSendTickCountOnSerialize)
             {
                 PhotonNetwork.networkingPeer.RunViewUpdate();
                 this.nextSendTickCountOnSerialize = num + this.updateIntervalOnSerialize;
@@ -213,7 +212,7 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
             }
             if (PhotonNetwork.networkingPeer.AvailableRegions == null)
             {
-                if ((PhotonNetwork.connectionStatesDetailed != PeerStates.ConnectingToNameServer) && (PhotonNetwork.connectionStatesDetailed != PeerStates.ConnectedToNameServer))
+                if (PhotonNetwork.connectionStatesDetailed != PeerStates.ConnectingToNameServer && PhotonNetwork.connectionStatesDetailed != PeerStates.ConnectedToNameServer)
                 {
                     UnityEngine.Debug.LogError("Call ConnectToNameServer to ping available regions.");
                     goto Label_0266;
@@ -223,7 +222,7 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
                 this.SPC = 1;
                 goto Label_0268;
             }
-            if ((PhotonNetwork.networkingPeer.AvailableRegions == null) || (PhotonNetwork.networkingPeer.AvailableRegions.Count == 0))
+            if (PhotonNetwork.networkingPeer.AvailableRegions == null || PhotonNetwork.networkingPeer.AvailableRegions.Count == 0)
             {
                 UnityEngine.Debug.LogError("No regions available. Are you sure your appid is valid and setup?");
                 goto Label_0266;

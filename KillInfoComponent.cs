@@ -1,5 +1,3 @@
-using System;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class KillInfoComponent : MonoBehaviour
@@ -123,7 +121,7 @@ public class KillInfoComponent : MonoBehaviour
     {
         this.start = true;
         base.transform.localScale = new Vector3(0.85f, 0.85f, 0.85f);
-        base.transform.localPosition = new Vector3(0f, -100f + (Screen.height * 0.5f), 0f);
+        base.transform.localPosition = new Vector3(0f, -100f + Screen.height * 0.5f, 0f);
     }
 
     private void Update()
@@ -142,15 +140,15 @@ public class KillInfoComponent : MonoBehaviour
             if (this.timeElapsed > this.lifeTime)
             {
                 base.transform.position += new Vector3(0f, Time.deltaTime * 0.15f, 0f);
-                this.alpha = ((1f - (Time.deltaTime * 45f)) + this.lifeTime) - this.timeElapsed;
+                this.alpha = 1f - Time.deltaTime * 45f + this.lifeTime - this.timeElapsed;
                 this.setAlpha(this.alpha);
             }
             else
             {
-                float num = ((int) (100f - (Screen.height * 0.5f))) + (this.col * this.offset);
+                float num = (int) (100f - Screen.height * 0.5f) + this.col * this.offset;
                 base.transform.localPosition = Vector3.Lerp(base.transform.localPosition, new Vector3(0f, -num, 0f), Time.deltaTime * 10f);
             }
-            if (this.timeElapsed > (this.lifeTime + 0.5f))
+            if (this.timeElapsed > this.lifeTime + 0.5f)
             {
                 UnityEngine.Object.Destroy(base.gameObject);
             }

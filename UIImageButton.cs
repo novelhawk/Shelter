@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/UI/Image Button"), ExecuteInEditMode]
@@ -25,7 +24,7 @@ public class UIImageButton : MonoBehaviour
 
     private void OnHover(bool isOver)
     {
-        if (this.isEnabled && (this.target != null))
+        if (this.isEnabled && this.target != null)
         {
             this.target.spriteName = !isOver ? this.normalSprite : this.hoverSprite;
             this.target.MakePixelPerfect();
@@ -66,12 +65,12 @@ public class UIImageButton : MonoBehaviour
         get
         {
             Collider collider = base.collider;
-            return ((collider != null) && collider.enabled);
+            return collider != null && collider.enabled;
         }
         set
         {
             Collider collider = base.collider;
-            if ((collider != null) && (collider.enabled != value))
+            if (collider != null && collider.enabled != value)
             {
                 collider.enabled = value;
                 this.UpdateImage();

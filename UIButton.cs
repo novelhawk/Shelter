@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Button")]
@@ -58,12 +57,12 @@ public class UIButton : UIButtonColor
         get
         {
             Collider collider = base.collider;
-            return ((collider != null) && collider.enabled);
+            return collider != null && collider.enabled;
         }
         set
         {
             Collider collider = base.collider;
-            if ((collider != null) && (collider.enabled != value))
+            if (collider != null && collider.enabled != value)
             {
                 collider.enabled = value;
                 this.UpdateColor(value, false);

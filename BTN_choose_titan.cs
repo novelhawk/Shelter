@@ -1,5 +1,4 @@
 using ExitGames.Client.Photon;
-using System;
 using UnityEngine;
 
 public class BTN_choose_titan : MonoBehaviour
@@ -11,7 +10,7 @@ public class BTN_choose_titan : MonoBehaviour
             string id = "AHSS";
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[0], true);
             GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().needChooseSide = false;
-            if (!PhotonNetwork.isMasterClient && (GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().roundTime > 60f))
+            if (!PhotonNetwork.isMasterClient && GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().roundTime > 60f)
             {
                 GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().NOTSpawnPlayer(id);
                 GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().photonView.RPC("restartGameByClient", PhotonTargets.MasterClient, new object[0]);
@@ -39,7 +38,7 @@ public class BTN_choose_titan : MonoBehaviour
             string selection = GameObject.Find("PopupListCharacterTITAN").GetComponent<UIPopupList>().selection;
             NGUITools.SetActive(base.transform.parent.gameObject, false);
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[0], true);
-            if ((!PhotonNetwork.isMasterClient && (GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().roundTime > 60f)) || GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().justSuicide)
+            if (!PhotonNetwork.isMasterClient && GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().roundTime > 60f || GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().justSuicide)
             {
                 GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().justSuicide = false;
                 GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().NOTSpawnNonAITitan(selection);

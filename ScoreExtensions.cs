@@ -1,6 +1,4 @@
 using ExitGames.Client.Photon;
-using System;
-using System.Runtime.CompilerServices;
 
 internal static class ScoreExtensions
 {

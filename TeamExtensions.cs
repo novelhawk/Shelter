@@ -1,6 +1,4 @@
 using ExitGames.Client.Photon;
-using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 internal static class TeamExtensions
@@ -10,7 +8,7 @@ internal static class TeamExtensions
         object obj2;
         if (player.CustomProperties.TryGetValue("team", out obj2))
         {
-            return (PunTeams.Team) ((byte) obj2);
+            return (PunTeams.Team) (byte) obj2;
         }
         return PunTeams.Team.none;
     }

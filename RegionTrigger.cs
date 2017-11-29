@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class RegionTrigger : MonoBehaviour
@@ -42,7 +41,7 @@ public class RegionTrigger : MonoBehaviour
                 }
             }
         }
-        else if ((gameObject.layer == 11) && (this.titanEventEnter != null))
+        else if (gameObject.layer == 11 && this.titanEventEnter != null)
         {
             TITAN titan = gameObject.transform.root.gameObject.GetComponent<TITAN>();
             if (titan != null)
@@ -84,7 +83,7 @@ public class RegionTrigger : MonoBehaviour
                 }
             }
         }
-        else if ((gameObject.layer == 11) && (this.titanEventExit != null))
+        else if (gameObject.layer == 11 && this.titanEventExit != null)
         {
             TITAN titan = gameObject.GetComponent<TITAN>();
             if (titan != null)

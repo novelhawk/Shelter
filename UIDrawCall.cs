@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [ExecuteInEditMode, AddComponentMenu("NGUI/Internal/Draw Call")]
@@ -33,7 +32,7 @@ public class UIDrawCall : MonoBehaviour
                 this.mMesh0.MarkDynamic();
                 rebuildIndices = true;
             }
-            else if (rebuildIndices || (this.mMesh0.vertexCount != vertexCount))
+            else if (rebuildIndices || this.mMesh0.vertexCount != vertexCount)
             {
                 rebuildIndices = true;
                 this.mMesh0.Clear();
@@ -48,7 +47,7 @@ public class UIDrawCall : MonoBehaviour
             this.mMesh1.MarkDynamic();
             rebuildIndices = true;
         }
-        else if (rebuildIndices || (this.mMesh1.vertexCount != vertexCount))
+        else if (rebuildIndices || this.mMesh1.vertexCount != vertexCount)
         {
             rebuildIndices = true;
             this.mMesh1.Clear();
@@ -91,7 +90,7 @@ public class UIDrawCall : MonoBehaviour
     public void Set(BetterList<Vector3> verts, BetterList<Vector3> norms, BetterList<Vector4> tans, BetterList<Vector2> uvs, BetterList<Color32> cols)
     {
         int size = verts.size;
-        if (((size > 0) && (size == uvs.size)) && ((size == cols.size) && ((size % 4) == 0)))
+        if (size > 0 && size == uvs.size && size == cols.size && size % 4 == 0)
         {
             if (this.mFilter == null)
             {
@@ -110,7 +109,7 @@ public class UIDrawCall : MonoBehaviour
                 this.mRen = base.gameObject.AddComponent<MeshRenderer>();
                 this.UpdateMaterials();
             }
-            else if ((this.mClippedMat != null) && (this.mClippedMat.mainTexture != this.mSharedMat.mainTexture))
+            else if (this.mClippedMat != null && this.mClippedMat.mainTexture != this.mSharedMat.mainTexture)
             {
                 this.UpdateMaterials();
             }
@@ -118,7 +117,7 @@ public class UIDrawCall : MonoBehaviour
             {
                 bool flag;
                 int num2 = (size >> 1) * 3;
-                if (flag = (this.mIndices == null) || (this.mIndices.Length != num2))
+                if (flag = this.mIndices == null || this.mIndices.Length != num2)
                 {
                     this.mIndices = new int[num2];
                     int num3 = 0;
@@ -178,7 +177,7 @@ public class UIDrawCall : MonoBehaviour
             if (this.mClipping != Clipping.None)
             {
                 string str = this.mSharedMat.shader.name.Replace(" (AlphaClip)", string.Empty).Replace(" (SoftClip)", string.Empty);
-                if ((this.mClipping != Clipping.HardClip) && (this.mClipping != Clipping.AlphaClip))
+                if (this.mClipping != Clipping.HardClip && this.mClipping != Clipping.AlphaClip)
                 {
                     if (this.mClipping == Clipping.SoftClip)
                     {
@@ -230,10 +229,10 @@ public class UIDrawCall : MonoBehaviour
             NGUITools.Destroy(this.mDepthMat);
             this.mDepthMat = null;
         }
-        Material material = (this.mClippedMat == null) ? this.mSharedMat : this.mClippedMat;
+        Material material = this.mClippedMat == null ? this.mSharedMat : this.mClippedMat;
         if (this.mDepthMat != null)
         {
-            if (((this.mRen.sharedMaterials == null) || (this.mRen.sharedMaterials.Length != 2)) || (this.mRen.sharedMaterials[1] != material))
+            if (this.mRen.sharedMaterials == null || this.mRen.sharedMaterials.Length != 2 || this.mRen.sharedMaterials[1] != material)
             {
                 this.mRen.sharedMaterials = new Material[] { this.mDepthMat, material };
             }
@@ -316,7 +315,7 @@ public class UIDrawCall : MonoBehaviour
     {
         get
         {
-            return (this.mClippedMat != null);
+            return this.mClippedMat != null;
         }
     }
 
@@ -337,7 +336,7 @@ public class UIDrawCall : MonoBehaviour
         get
         {
             Mesh mesh = !this.mEven ? this.mMesh1 : this.mMesh0;
-            return ((mesh == null) ? 0 : (mesh.vertexCount >> 1));
+            return mesh == null ? 0 : mesh.vertexCount >> 1;
         }
     }
 

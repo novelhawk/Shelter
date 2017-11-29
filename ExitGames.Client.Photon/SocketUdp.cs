@@ -3,7 +3,6 @@ namespace ExitGames.Client.Photon
     using System;
     using System.Net;
     using System.Net.Sockets;
-    using System.Runtime.InteropServices;
     using System.Security;
     using System.Threading;
 
@@ -118,7 +117,7 @@ namespace ExitGames.Client.Photon
                 }
                 catch (Exception exception)
                 {
-                    if ((base.State != PhotonSocketState.Disconnecting) && (base.State != PhotonSocketState.Disconnected))
+                    if (base.State != PhotonSocketState.Disconnecting && base.State != PhotonSocketState.Disconnected)
                     {
                         if (base.ReportDebugOfLevel(DebugLevel.ERROR))
                         {

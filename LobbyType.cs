@@ -1,5 +1,3 @@
-using System;
-
 public enum LobbyType : byte
 {
     Default = 0,

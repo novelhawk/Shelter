@@ -1,5 +1,3 @@
-using System;
-
 public class CostumeHair
 {
     public string hair = string.Empty;

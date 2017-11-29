@@ -1,5 +1,4 @@
 using AnimationOrTween;
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Button Tween")]
@@ -22,7 +21,7 @@ public class UIButtonTween : MonoBehaviour
 
     private void OnActivate(bool isActive)
     {
-        if (base.enabled && (((this.trigger == AnimationOrTween.Trigger.OnActivate) || ((this.trigger == AnimationOrTween.Trigger.OnActivateTrue) && isActive)) || ((this.trigger == AnimationOrTween.Trigger.OnActivateFalse) && !isActive)))
+        if (base.enabled && (this.trigger == AnimationOrTween.Trigger.OnActivate || this.trigger == AnimationOrTween.Trigger.OnActivateTrue && isActive || this.trigger == AnimationOrTween.Trigger.OnActivateFalse && !isActive))
         {
             this.Play(isActive);
         }
@@ -30,7 +29,7 @@ public class UIButtonTween : MonoBehaviour
 
     private void OnClick()
     {
-        if (base.enabled && (this.trigger == AnimationOrTween.Trigger.OnClick))
+        if (base.enabled && this.trigger == AnimationOrTween.Trigger.OnClick)
         {
             this.Play(true);
         }
@@ -38,7 +37,7 @@ public class UIButtonTween : MonoBehaviour
 
     private void OnDoubleClick()
     {
-        if (base.enabled && (this.trigger == AnimationOrTween.Trigger.OnDoubleClick))
+        if (base.enabled && this.trigger == AnimationOrTween.Trigger.OnDoubleClick)
         {
             this.Play(true);
         }
@@ -56,7 +55,7 @@ public class UIButtonTween : MonoBehaviour
     {
         if (base.enabled)
         {
-            if (((this.trigger == AnimationOrTween.Trigger.OnHover) || ((this.trigger == AnimationOrTween.Trigger.OnHoverTrue) && isOver)) || ((this.trigger == AnimationOrTween.Trigger.OnHoverFalse) && !isOver))
+            if (this.trigger == AnimationOrTween.Trigger.OnHover || this.trigger == AnimationOrTween.Trigger.OnHoverTrue && isOver || this.trigger == AnimationOrTween.Trigger.OnHoverFalse && !isOver)
             {
                 this.Play(isOver);
             }
@@ -66,7 +65,7 @@ public class UIButtonTween : MonoBehaviour
 
     private void OnPress(bool isPressed)
     {
-        if (base.enabled && (((this.trigger == AnimationOrTween.Trigger.OnPress) || ((this.trigger == AnimationOrTween.Trigger.OnPressTrue) && isPressed)) || ((this.trigger == AnimationOrTween.Trigger.OnPressFalse) && !isPressed)))
+        if (base.enabled && (this.trigger == AnimationOrTween.Trigger.OnPress || this.trigger == AnimationOrTween.Trigger.OnPressTrue && isPressed || this.trigger == AnimationOrTween.Trigger.OnPressFalse && !isPressed))
         {
             this.Play(isPressed);
         }
@@ -74,7 +73,7 @@ public class UIButtonTween : MonoBehaviour
 
     private void OnSelect(bool isSelected)
     {
-        if (base.enabled && (((this.trigger == AnimationOrTween.Trigger.OnSelect) || ((this.trigger == AnimationOrTween.Trigger.OnSelectTrue) && isSelected)) || ((this.trigger == AnimationOrTween.Trigger.OnSelectFalse) && !isSelected)))
+        if (base.enabled && (this.trigger == AnimationOrTween.Trigger.OnSelect || this.trigger == AnimationOrTween.Trigger.OnSelectTrue && isSelected || this.trigger == AnimationOrTween.Trigger.OnSelectFalse && !isSelected))
         {
             this.Play(true);
         }
@@ -82,7 +81,7 @@ public class UIButtonTween : MonoBehaviour
 
     public void Play(bool forward)
     {
-        GameObject go = (this.tweenTarget != null) ? this.tweenTarget : base.gameObject;
+        GameObject go = this.tweenTarget != null ? this.tweenTarget : base.gameObject;
         if (!NGUITools.GetActive(go))
         {
             if (this.ifDisabledOnPlay != EnableCondition.EnableThenPlay)
@@ -131,7 +130,7 @@ public class UIButtonTween : MonoBehaviour
                         tweener.Reset();
                     }
                     tweener.onFinished = this.onFinished;
-                    if ((this.eventReceiver != null) && !string.IsNullOrEmpty(this.callWhenFinished))
+                    if (this.eventReceiver != null && !string.IsNullOrEmpty(this.callWhenFinished))
                     {
                         tweener.eventReceiver = this.eventReceiver;
                         tweener.callWhenFinished = this.callWhenFinished;
@@ -153,7 +152,7 @@ public class UIButtonTween : MonoBehaviour
 
     private void Update()
     {
-        if ((this.disableWhenFinished != DisableCondition.DoNotDisable) && (this.mTweens != null))
+        if (this.disableWhenFinished != DisableCondition.DoNotDisable && this.mTweens != null)
         {
             bool flag = true;
             bool flag2 = true;
@@ -169,7 +168,7 @@ public class UIButtonTween : MonoBehaviour
                         flag = false;
                         break;
                     }
-                    if (tweener.direction != ((AnimationOrTween.Direction) ((int) this.disableWhenFinished)))
+                    if (tweener.direction != (AnimationOrTween.Direction) (int) this.disableWhenFinished)
                     {
                         flag2 = false;
                     }

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class ParentFollow : MonoBehaviour
@@ -26,7 +25,7 @@ public class ParentFollow : MonoBehaviour
 
     private void Update()
     {
-        if (this.isActiveInScene && (this.parent != null))
+        if (this.isActiveInScene && this.parent != null)
         {
             this.bTransform.position = this.parent.position;
         }

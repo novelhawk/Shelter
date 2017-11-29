@@ -7,7 +7,7 @@ public class IComparerRacingResult : IComparer
     {
         float time = ((RacingResult) x).time;
         float num2 = ((RacingResult) y).time;
-        if ((time == num2) || (Math.Abs((float) (time - num2)) < float.Epsilon))
+        if (time == num2 || Math.Abs((float) (time - num2)) < float.Epsilon)
         {
             return 0;
         }

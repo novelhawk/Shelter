@@ -1,5 +1,3 @@
-using System;
-
 public class OperationCode
 {
     public const byte Authenticate = 230;

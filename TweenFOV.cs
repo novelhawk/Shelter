@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Camera)), AddComponentMenu("NGUI/Tween/Field of View")]
@@ -23,7 +22,7 @@ public class TweenFOV : UITweener
 
     protected override void OnUpdate(float factor, bool isFinished)
     {
-        this.cachedCamera.fieldOfView = (this.from * (1f - factor)) + (this.to * factor);
+        this.cachedCamera.fieldOfView = this.@from * (1f - factor) + this.to * factor;
     }
 
     public Camera cachedCamera

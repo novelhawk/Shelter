@@ -1,5 +1,3 @@
-using System;
-using System.Runtime.InteropServices;
 using UnityEngine;
 
 public class CustomCharacterManager : MonoBehaviour
@@ -57,7 +55,7 @@ public class CustomCharacterManager : MonoBehaviour
             num += this.setup.myCostume.stat.SPD;
             num += this.setup.myCostume.stat.GAS;
             num += this.setup.myCostume.stat.BLA;
-            return (num + this.setup.myCostume.stat.ACL);
+            return num + this.setup.myCostume.stat.ACL;
         }
         return 400;
     }
@@ -236,7 +234,7 @@ public class CustomCharacterManager : MonoBehaviour
         this.labelCostume.GetComponent<UILabel>().text = "costume_" + this.costumeId.ToString();
         this.labelCape.GetComponent<UILabel>().text = "cape_" + this.capeId.ToString();
         this.labelDivision.GetComponent<UILabel>().text = this.divisionOption[this.divisionId].ToString();
-        this.labelPOINT.GetComponent<UILabel>().text = "Points: " + ((400 - this.calTotalPoints())).ToString();
+        this.labelPOINT.GetComponent<UILabel>().text = "Points: " + (400 - this.calTotalPoints()).ToString();
         this.labelSPD.GetComponent<UILabel>().text = "SPD " + this.setup.myCostume.stat.SPD.ToString();
         this.labelGAS.GetComponent<UILabel>().text = "GAS " + this.setup.myCostume.stat.GAS.ToString();
         this.labelBLA.GetComponent<UILabel>().text = "BLA " + this.setup.myCostume.stat.BLA.ToString();
@@ -292,7 +290,7 @@ public class CustomCharacterManager : MonoBehaviour
 
     public void OnHairBChange(float value)
     {
-        if (((this.setup != null) && (this.setup.myCostume != null)) && (this.setup.part_hair != null))
+        if (this.setup != null && this.setup.myCostume != null && this.setup.part_hair != null)
         {
             this.setup.myCostume.hair_color = new Color(this.setup.part_hair.renderer.material.color.r, this.setup.part_hair.renderer.material.color.g, value);
             this.setHairColor();
@@ -301,7 +299,7 @@ public class CustomCharacterManager : MonoBehaviour
 
     public void OnHairGChange(float value)
     {
-        if ((this.setup.myCostume != null) && (this.setup.part_hair != null))
+        if (this.setup.myCostume != null && this.setup.part_hair != null)
         {
             this.setup.myCostume.hair_color = new Color(this.setup.part_hair.renderer.material.color.r, value, this.setup.part_hair.renderer.material.color.b);
             this.setHairColor();
@@ -310,7 +308,7 @@ public class CustomCharacterManager : MonoBehaviour
 
     public void OnHairRChange(float value)
     {
-        if ((this.setup.myCostume != null) && (this.setup.part_hair != null))
+        if (this.setup.myCostume != null && this.setup.part_hair != null)
         {
             this.setup.myCostume.hair_color = new Color(value, this.setup.part_hair.renderer.material.color.g, this.setup.part_hair.renderer.material.color.b);
             this.setHairColor();
@@ -460,7 +458,7 @@ public class CustomCharacterManager : MonoBehaviour
         {
             id = start;
         }
-        id = Mathf.Clamp(id, start, (start + Count) - 1);
+        id = Mathf.Clamp(id, start, start + Count - 1);
         return id;
     }
 
@@ -725,7 +723,7 @@ public class CustomCharacterManager : MonoBehaviour
         {
             id = Count - 1;
         }
-        id = Mathf.Clamp(id, start, (start + Count) - 1);
+        id = Mathf.Clamp(id, start, start + Count - 1);
         return id;
     }
 }

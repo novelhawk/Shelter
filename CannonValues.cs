@@ -1,5 +1,3 @@
-using System;
-
 public class CannonValues
 {
     public string settings = string.Empty;

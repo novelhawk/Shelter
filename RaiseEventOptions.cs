@@ -1,5 +1,4 @@
 using ExitGames.Client.Photon.Lite;
-using System;
 
 public class RaiseEventOptions
 {

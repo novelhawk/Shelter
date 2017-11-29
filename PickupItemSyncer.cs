@@ -1,5 +1,3 @@
-using Photon;
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,11 +19,11 @@ public class PickupItemSyncer : Photon.MonoBehaviour
             else
             {
                 PhotonPlayer next = PhotonNetwork.masterClient.GetNext();
-                if ((next == null) || next.Equals(PhotonPlayer.Self))
+                if (next == null || next.Equals(PhotonPlayer.Self))
                 {
                     next = PhotonPlayer.Self.GetNext();
                 }
-                if ((next != null) && !next.Equals(PhotonPlayer.Self))
+                if (next != null && !next.Equals(PhotonPlayer.Self))
                 {
                     base.photonView.RPC("RequestForPickupTimes", next, new object[0]);
                 }
@@ -60,7 +58,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
     public void PickupItemInit(double timeBase, float[] inactivePickupsAndTimes)
     {
         this.IsWaitingForPickupInit = false;
-        for (int i = 0; i < (inactivePickupsAndTimes.Length / 2); i++)
+        for (int i = 0; i < inactivePickupsAndTimes.Length / 2; i++)
         {
             int index = i * 2;
             int viewID = (int) inactivePickupsAndTimes[index];

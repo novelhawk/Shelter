@@ -80,7 +80,7 @@ public class EffectNode
         {
             this.Ribbon.SetUVCoord(this.LowerLeftUV, this.UVDimensions);
             this.Ribbon.SetColor(oriColor);
-            this.Ribbon.SetHeadPosition((this.ClientTrans.position + this.Position) + ((Vector3) (this.OriDirection.normalized * this.Owner.TailDistance)));
+            this.Ribbon.SetHeadPosition(this.ClientTrans.position + this.Position + (Vector3) (this.OriDirection.normalized * this.Owner.TailDistance));
             this.Ribbon.ResetElementsPos();
         }
         if (this.Type == 1)
@@ -129,7 +129,7 @@ public class EffectNode
         }
         else if (this.Type == 2)
         {
-            this.Ribbon.SetHeadPosition(this.ClientTrans.position + ((Vector3) (this.OriDirection.normalized * this.Owner.TailDistance)));
+            this.Ribbon.SetHeadPosition(this.ClientTrans.position + (Vector3) (this.OriDirection.normalized * this.Owner.TailDistance));
             this.Ribbon.Reset();
             this.Ribbon.SetColor(UnityEngine.Color.clear);
             this.Ribbon.UpdateVertices(Vector3.zero);
@@ -182,7 +182,7 @@ public class EffectNode
         this.Position += (Vector3) (this.Velocity * Time.deltaTime);
         if (Mathf.Abs(this.Acceleration) > 0.0001)
         {
-            this.Velocity += (Vector3) ((this.Velocity.normalized * this.Acceleration) * Time.deltaTime);
+            this.Velocity += (Vector3) (this.Velocity.normalized * this.Acceleration * Time.deltaTime);
         }
         if (this.SyncClient)
         {
@@ -201,7 +201,7 @@ public class EffectNode
             this.UpdateRibbonTrail();
         }
         this.LastWorldPos = this.CurWorldPos;
-        if ((this.ElapsedTime > this.LifeTime) && (this.LifeTime > 0f))
+        if (this.ElapsedTime > this.LifeTime && this.LifeTime > 0f)
         {
             this.Reset();
             this.Remove();

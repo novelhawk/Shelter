@@ -101,7 +101,7 @@ public class BMFont
     {
         get
         {
-            return (!this.isValid ? 0 : this.mSaved.Count);
+            return !this.isValid ? 0 : this.mSaved.Count;
         }
     }
 
@@ -109,7 +109,7 @@ public class BMFont
     {
         get
         {
-            return (this.mSaved.Count > 0);
+            return this.mSaved.Count > 0;
         }
     }
 

@@ -60,7 +60,7 @@ public class PhotonPingManager
             foreach (Region region2 in PhotonNetwork.networkingPeer.AvailableRegions)
             {
                 Debug.Log("BestRegion checks region: " + region2);
-                if ((region2.Ping != 0) && (region2.Ping < ping))
+                if (region2.Ping != 0 && region2.Ping < ping)
                 {
                     ping = region2.Ping;
                     region = region2;
@@ -74,7 +74,7 @@ public class PhotonPingManager
     {
         get
         {
-            return (PingsRunning == 0);
+            return PingsRunning == 0;
         }
     }
 
@@ -171,7 +171,7 @@ public class PhotonPingManager
                     goto Label_02B2;
                 }
                 rtt__9 = (int)sw__7.ElapsedMilliseconds;
-                if ((!IgnoreInitialAttempt || (i__5 != 0)) && (ping__0.Successful && !overtime__6))
+                if ((!IgnoreInitialAttempt || i__5 != 0) && ping__0.Successful && !overtime__6)
                 {
                     rttSum__1 += rtt__9;
                     replyCount__2++;

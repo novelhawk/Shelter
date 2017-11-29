@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/UI/Texture"), ExecuteInEditMode]
@@ -56,7 +55,7 @@ public class UITexture : UIWidget
     {
         get
         {
-            return (this.mDynamicMat != null);
+            return this.mDynamicMat != null;
         }
     }
 
@@ -72,11 +71,11 @@ public class UITexture : UIWidget
     {
         get
         {
-            return ((this.mTexture == null) ? base.mainTexture : this.mTexture);
+            return this.mTexture == null ? base.mainTexture : this.mTexture;
         }
         set
         {
-            if ((base.mPanel != null) && (base.mMat != null))
+            if (base.mPanel != null && base.mMat != null)
             {
                 base.mPanel.RemoveWidget(this);
             }
@@ -101,7 +100,7 @@ public class UITexture : UIWidget
     {
         get
         {
-            if (!this.mCreatingMat && (base.mMat == null))
+            if (!this.mCreatingMat && base.mMat == null)
             {
                 this.mCreatingMat = true;
                 if (this.mainTexture != null)
@@ -122,7 +121,7 @@ public class UITexture : UIWidget
         }
         set
         {
-            if ((this.mDynamicMat != value) && (this.mDynamicMat != null))
+            if (this.mDynamicMat != value && this.mDynamicMat != null)
             {
                 NGUITools.Destroy(this.mDynamicMat);
                 this.mDynamicMat = null;
@@ -139,9 +138,9 @@ public class UITexture : UIWidget
             if (this.mPMA == -1)
             {
                 Material material = this.material;
-                this.mPMA = (((material == null) || (material.shader == null)) || !material.shader.name.Contains("Premultiplied")) ? 0 : 1;
+                this.mPMA = material == null || material.shader == null || !material.shader.name.Contains("Premultiplied") ? 0 : 1;
             }
-            return (this.mPMA == 1);
+            return this.mPMA == 1;
         }
     }
 

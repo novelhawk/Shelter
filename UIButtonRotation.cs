@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Button Rotation")]
@@ -14,7 +13,7 @@ public class UIButtonRotation : MonoBehaviour
 
     private void OnDisable()
     {
-        if (this.mStarted && (this.tweenTarget != null))
+        if (this.mStarted && this.tweenTarget != null)
         {
             TweenRotation component = this.tweenTarget.GetComponent<TweenRotation>();
             if (component != null)
@@ -41,7 +40,7 @@ public class UIButtonRotation : MonoBehaviour
             {
                 this.Start();
             }
-            TweenRotation.Begin(this.tweenTarget.gameObject, this.duration, !isOver ? this.mRot : (this.mRot * Quaternion.Euler(this.hover))).method = UITweener.Method.EaseInOut;
+            TweenRotation.Begin(this.tweenTarget.gameObject, this.duration, !isOver ? this.mRot : this.mRot * Quaternion.Euler(this.hover)).method = UITweener.Method.EaseInOut;
             this.mHighlighted = isOver;
         }
     }
@@ -54,7 +53,7 @@ public class UIButtonRotation : MonoBehaviour
             {
                 this.Start();
             }
-            TweenRotation.Begin(this.tweenTarget.gameObject, this.duration, !isPressed ? (!UICamera.IsHighlighted(base.gameObject) ? this.mRot : (this.mRot * Quaternion.Euler(this.hover))) : (this.mRot * Quaternion.Euler(this.pressed))).method = UITweener.Method.EaseInOut;
+            TweenRotation.Begin(this.tweenTarget.gameObject, this.duration, !isPressed ? (!UICamera.IsHighlighted(base.gameObject) ? this.mRot : this.mRot * Quaternion.Euler(this.hover)) : this.mRot * Quaternion.Euler(this.pressed)).method = UITweener.Method.EaseInOut;
         }
     }
 

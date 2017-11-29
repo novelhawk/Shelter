@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -218,7 +217,7 @@ public class iTween : MonoBehaviour
         {
             this.thisTransform.position = this.path.Interp(Mathf.Clamp(num, 0f, 1f));
         }
-        if (this.tweenArguments.Contains("orienttopath") && ((bool)this.tweenArguments["orienttopath"]))
+        if (this.tweenArguments.Contains("orienttopath") && (bool)this.tweenArguments["orienttopath"])
         {
             float lookAhead;
             if (this.tweenArguments.Contains("lookahead"))
@@ -936,17 +935,17 @@ public class iTween : MonoBehaviour
         float num2 = 360f;
         float num3 = Mathf.Abs((float)((num2 - num) * 0.5f));
         float num5 = 0f;
-        if ((end - start) < -num3)
+        if (end - start < -num3)
         {
-            num5 = ((num2 - start) + end) * value;
-            return (start + num5);
+            num5 = (num2 - start + end) * value;
+            return start + num5;
         }
-        if ((end - start) > num3)
+        if (end - start > num3)
         {
-            num5 = -((num2 - end) + start) * value;
-            return (start + num5);
+            num5 = -(num2 - end + start) * value;
+            return start + num5;
         }
-        return (start + ((end - start) * value));
+        return start + (end - start) * value;
     }
 
     public static void ColorFrom(GameObject target, Hashtable args)
@@ -954,7 +953,7 @@ public class iTween : MonoBehaviour
         Color color = new Color();
         Color color2 = new Color();
         args = CleanArgs(args);
-        if (!args.Contains("includechildren") || ((bool)args["includechildren"]))
+        if (!args.Contains("includechildren") || (bool)args["includechildren"])
         {
             IEnumerator enumerator = target.transform.GetEnumerator();
             try
@@ -1061,7 +1060,7 @@ public class iTween : MonoBehaviour
     public static void ColorTo(GameObject target, Hashtable args)
     {
         args = CleanArgs(args);
-        if (!args.Contains("includechildren") || ((bool)args["includechildren"]))
+        if (!args.Contains("includechildren") || (bool)args["includechildren"])
         {
             IEnumerator enumerator = target.transform.GetEnumerator();
             try
@@ -1104,7 +1103,7 @@ public class iTween : MonoBehaviour
         float updateTime;
         CleanArgs(args);
         Color[] colorArray = new Color[4];
-        if (!args.Contains("includechildren") || ((bool)args["includechildren"]))
+        if (!args.Contains("includechildren") || (bool)args["includechildren"])
         {
             IEnumerator enumerator = target.transform.GetEnumerator();
             try
@@ -1209,7 +1208,7 @@ public class iTween : MonoBehaviour
             {
                 return;
             }
-            if (tween.isRunning && (tween.type == this.type))
+            if (tween.isRunning && tween.type == this.type)
             {
                 if (tween.method != this.method)
                 {
@@ -1231,7 +1230,7 @@ public class iTween : MonoBehaviour
                             tween.Dispose();
                             break;
                         }
-                        if (!tween.tweenArguments[current.Key].Equals(this.tweenArguments[current.Key]) && (((string)current.Key) != "id"))
+                        if (!tween.tweenArguments[current.Key].Equals(this.tweenArguments[current.Key]) && (string)current.Key != "id")
                         {
                             tween.Dispose();
                             break;
@@ -1262,7 +1261,7 @@ public class iTween : MonoBehaviour
         for (int i = 0; i < tweens.Count; i++)
         {
             Hashtable hashtable = tweens[i];
-            if ((((string)hashtable["type"]) + ((string)hashtable["method"])).Substring(0, type.Length).ToLower() == type.ToLower())
+            if (((string)hashtable["type"] + (string)hashtable["method"]).Substring(0, type.Length).ToLower() == type.ToLower())
             {
                 num++;
             }
@@ -1297,7 +1296,7 @@ public class iTween : MonoBehaviour
         for (int i = 0; i < tweens.Count; i++)
         {
             Hashtable hashtable = tweens[i];
-            if (((string)hashtable["id"]) == this.id)
+            if ((string)hashtable["id"] == this.id)
             {
                 tweens.RemoveAt(i);
                 break;
@@ -1435,7 +1434,7 @@ public class iTween : MonoBehaviour
     private static void DrawLineHelper(Vector3[] line, Color color, string method)
     {
         Gizmos.color = color;
-        for (int i = 0; i < (line.Length - 1); i++)
+        for (int i = 0; i < line.Length - 1; i++)
         {
             if (method == "gizmos")
             {
@@ -1582,7 +1581,7 @@ public class iTween : MonoBehaviour
         int num = path.Length * 20;
         for (int i = 1; i <= num; i++)
         {
-            float t = ((float)i) / ((float)num);
+            float t = (float)i / (float)num;
             Vector3 from = Interp(pts, t);
             if (method == "gizmos")
             {
@@ -1601,26 +1600,26 @@ public class iTween : MonoBehaviour
         end -= start;
         value /= 1f;
         float num = 1.70158f;
-        return ((((end * value) * value) * (((num + 1f) * value) - num)) + start);
+        return end * value * value * ((num + 1f) * value - num) + start;
     }
 
     private float easeInBounce(float start, float end, float value)
     {
         end -= start;
         float num = 1f;
-        return ((end - this.easeOutBounce(0f, end, num - value)) + start);
+        return end - this.easeOutBounce(0f, end, num - value) + start;
     }
 
     private float easeInCirc(float start, float end, float value)
     {
         end -= start;
-        return ((-end * (Mathf.Sqrt(1f - (value * value)) - 1f)) + start);
+        return -end * (Mathf.Sqrt(1f - value * value) - 1f) + start;
     }
 
     private float easeInCubic(float start, float end, float value)
     {
         end -= start;
-        return ((((end * value) * value) * value) + start);
+        return end * value * value * value + start;
     }
 
     private float easeInElastic(float start, float end, float value)
@@ -1636,24 +1635,24 @@ public class iTween : MonoBehaviour
         }
         if ((value /= num) == 1f)
         {
-            return (start + end);
+            return start + end;
         }
-        if ((num4 == 0f) || (num4 < Mathf.Abs(end)))
+        if (num4 == 0f || num4 < Mathf.Abs(end))
         {
             num4 = end;
             num3 = num2 / 4f;
         }
         else
         {
-            num3 = (num2 / 6.283185f) * Mathf.Asin(end / num4);
+            num3 = num2 / 6.283185f * Mathf.Asin(end / num4);
         }
-        return (-((num4 * Mathf.Pow(2f, 10f * --value)) * Mathf.Sin((((value * num) - num3) * 6.283185f) / num2)) + start);
+        return -(num4 * Mathf.Pow(2f, 10f * --value) * Mathf.Sin((value * num - num3) * 6.283185f / num2)) + start;
     }
 
     private float easeInExpo(float start, float end, float value)
     {
         end -= start;
-        return ((end * Mathf.Pow(2f, 10f * (value - 1f))) + start);
+        return end * Mathf.Pow(2f, 10f * (value - 1f)) + start;
     }
 
     private float easeInOutBack(float start, float end, float value)
@@ -1664,22 +1663,22 @@ public class iTween : MonoBehaviour
         if (value < 1f)
         {
             num *= 1.525f;
-            return (((end * 0.5f) * ((value * value) * (((num + 1f) * value) - num))) + start);
+            return end * 0.5f * (value * value * ((num + 1f) * value - num)) + start;
         }
         value -= 2f;
         num *= 1.525f;
-        return (((end * 0.5f) * (((value * value) * (((num + 1f) * value) + num)) + 2f)) + start);
+        return end * 0.5f * (value * value * ((num + 1f) * value + num) + 2f) + start;
     }
 
     private float easeInOutBounce(float start, float end, float value)
     {
         end -= start;
         float num = 1f;
-        if (value < (num * 0.5f))
+        if (value < num * 0.5f)
         {
-            return ((this.easeInBounce(0f, end, value * 2f) * 0.5f) + start);
+            return this.easeInBounce(0f, end, value * 2f) * 0.5f + start;
         }
-        return (((this.easeOutBounce(0f, end, (value * 2f) - num) * 0.5f) + (end * 0.5f)) + start);
+        return this.easeOutBounce(0f, end, value * 2f - num) * 0.5f + end * 0.5f + start;
     }
 
     private float easeInOutCirc(float start, float end, float value)
@@ -1688,10 +1687,10 @@ public class iTween : MonoBehaviour
         end -= start;
         if (value < 1f)
         {
-            return (((-end * 0.5f) * (Mathf.Sqrt(1f - (value * value)) - 1f)) + start);
+            return -end * 0.5f * (Mathf.Sqrt(1f - value * value) - 1f) + start;
         }
         value -= 2f;
-        return (((end * 0.5f) * (Mathf.Sqrt(1f - (value * value)) + 1f)) + start);
+        return end * 0.5f * (Mathf.Sqrt(1f - value * value) + 1f) + start;
     }
 
     private float easeInOutCubic(float start, float end, float value)
@@ -1700,10 +1699,10 @@ public class iTween : MonoBehaviour
         end -= start;
         if (value < 1f)
         {
-            return (((((end * 0.5f) * value) * value) * value) + start);
+            return end * 0.5f * value * value * value + start;
         }
         value -= 2f;
-        return (((end * 0.5f) * (((value * value) * value) + 2f)) + start);
+        return end * 0.5f * (value * value * value + 2f) + start;
     }
 
     private float easeInOutElastic(float start, float end, float value)
@@ -1717,24 +1716,24 @@ public class iTween : MonoBehaviour
         {
             return start;
         }
-        if ((value /= (num * 0.5f)) == 2f)
+        if ((value /= num * 0.5f) == 2f)
         {
-            return (start + end);
+            return start + end;
         }
-        if ((num4 == 0f) || (num4 < Mathf.Abs(end)))
+        if (num4 == 0f || num4 < Mathf.Abs(end))
         {
             num4 = end;
             num3 = num2 / 4f;
         }
         else
         {
-            num3 = (num2 / 6.283185f) * Mathf.Asin(end / num4);
+            num3 = num2 / 6.283185f * Mathf.Asin(end / num4);
         }
         if (value < 1f)
         {
-            return ((-0.5f * ((num4 * Mathf.Pow(2f, 10f * --value)) * Mathf.Sin((((value * num) - num3) * 6.283185f) / num2))) + start);
+            return -0.5f * (num4 * Mathf.Pow(2f, 10f * --value) * Mathf.Sin((value * num - num3) * 6.283185f / num2)) + start;
         }
-        return (((((num4 * Mathf.Pow(2f, -10f * --value)) * Mathf.Sin((((value * num) - num3) * 6.283185f) / num2)) * 0.5f) + end) + start);
+        return num4 * Mathf.Pow(2f, -10f * --value) * Mathf.Sin((value * num - num3) * 6.283185f / num2) * 0.5f + end + start;
     }
 
     private float easeInOutExpo(float start, float end, float value)
@@ -1743,10 +1742,10 @@ public class iTween : MonoBehaviour
         end -= start;
         if (value < 1f)
         {
-            return (((end * 0.5f) * Mathf.Pow(2f, 10f * (value - 1f))) + start);
+            return end * 0.5f * Mathf.Pow(2f, 10f * (value - 1f)) + start;
         }
         value--;
-        return (((end * 0.5f) * (-Mathf.Pow(2f, -10f * value) + 2f)) + start);
+        return end * 0.5f * (-Mathf.Pow(2f, -10f * value) + 2f) + start;
     }
 
     private float easeInOutQuad(float start, float end, float value)
@@ -1755,10 +1754,10 @@ public class iTween : MonoBehaviour
         end -= start;
         if (value < 1f)
         {
-            return ((((end * 0.5f) * value) * value) + start);
+            return end * 0.5f * value * value + start;
         }
         value--;
-        return (((-end * 0.5f) * ((value * (value - 2f)) - 1f)) + start);
+        return -end * 0.5f * (value * (value - 2f) - 1f) + start;
     }
 
     private float easeInOutQuart(float start, float end, float value)
@@ -1767,10 +1766,10 @@ public class iTween : MonoBehaviour
         end -= start;
         if (value < 1f)
         {
-            return ((((((end * 0.5f) * value) * value) * value) * value) + start);
+            return end * 0.5f * value * value * value * value + start;
         }
         value -= 2f;
-        return (((-end * 0.5f) * ((((value * value) * value) * value) - 2f)) + start);
+        return -end * 0.5f * (value * value * value * value - 2f) + start;
     }
 
     private float easeInOutQuint(float start, float end, float value)
@@ -1779,40 +1778,40 @@ public class iTween : MonoBehaviour
         end -= start;
         if (value < 1f)
         {
-            return (((((((end * 0.5f) * value) * value) * value) * value) * value) + start);
+            return end * 0.5f * value * value * value * value * value + start;
         }
         value -= 2f;
-        return (((end * 0.5f) * (((((value * value) * value) * value) * value) + 2f)) + start);
+        return end * 0.5f * (value * value * value * value * value + 2f) + start;
     }
 
     private float easeInOutSine(float start, float end, float value)
     {
         end -= start;
-        return (((-end * 0.5f) * (Mathf.Cos(3.141593f * value) - 1f)) + start);
+        return -end * 0.5f * (Mathf.Cos(3.141593f * value) - 1f) + start;
     }
 
     private float easeInQuad(float start, float end, float value)
     {
         end -= start;
-        return (((end * value) * value) + start);
+        return end * value * value + start;
     }
 
     private float easeInQuart(float start, float end, float value)
     {
         end -= start;
-        return (((((end * value) * value) * value) * value) + start);
+        return end * value * value * value * value + start;
     }
 
     private float easeInQuint(float start, float end, float value)
     {
         end -= start;
-        return ((((((end * value) * value) * value) * value) * value) + start);
+        return end * value * value * value * value * value + start;
     }
 
     private float easeInSine(float start, float end, float value)
     {
         end -= start;
-        return (((-end * Mathf.Cos(value * 1.570796f)) + end) + start);
+        return -end * Mathf.Cos(value * 1.570796f) + end + start;
     }
 
     private float easeOutBack(float start, float end, float value)
@@ -1820,7 +1819,7 @@ public class iTween : MonoBehaviour
         float num = 1.70158f;
         end -= start;
         value--;
-        return ((end * (((value * value) * (((num + 1f) * value) + num)) + 1f)) + start);
+        return end * (value * value * ((num + 1f) * value + num) + 1f) + start;
     }
 
     private float easeOutBounce(float start, float end, float value)
@@ -1829,34 +1828,34 @@ public class iTween : MonoBehaviour
         end -= start;
         if (value < 0.3636364f)
         {
-            return ((end * ((7.5625f * value) * value)) + start);
+            return end * (7.5625f * value * value) + start;
         }
         if (value < 0.7272727f)
         {
             value -= 0.5454546f;
-            return ((end * (((7.5625f * value) * value) + 0.75f)) + start);
+            return end * (7.5625f * value * value + 0.75f) + start;
         }
         if (value < 0.90909090909090906)
         {
             value -= 0.8181818f;
-            return ((end * (((7.5625f * value) * value) + 0.9375f)) + start);
+            return end * (7.5625f * value * value + 0.9375f) + start;
         }
         value -= 0.9545454f;
-        return ((end * (((7.5625f * value) * value) + 0.984375f)) + start);
+        return end * (7.5625f * value * value + 0.984375f) + start;
     }
 
     private float easeOutCirc(float start, float end, float value)
     {
         value--;
         end -= start;
-        return ((end * Mathf.Sqrt(1f - (value * value))) + start);
+        return end * Mathf.Sqrt(1f - value * value) + start;
     }
 
     private float easeOutCubic(float start, float end, float value)
     {
         value--;
         end -= start;
-        return ((end * (((value * value) * value) + 1f)) + start);
+        return end * (value * value * value + 1f) + start;
     }
 
     private float easeOutElastic(float start, float end, float value)
@@ -1872,50 +1871,50 @@ public class iTween : MonoBehaviour
         }
         if ((value /= num) == 1f)
         {
-            return (start + end);
+            return start + end;
         }
-        if ((num4 == 0f) || (num4 < Mathf.Abs(end)))
+        if (num4 == 0f || num4 < Mathf.Abs(end))
         {
             num4 = end;
             num3 = num2 * 0.25f;
         }
         else
         {
-            num3 = (num2 / 6.283185f) * Mathf.Asin(end / num4);
+            num3 = num2 / 6.283185f * Mathf.Asin(end / num4);
         }
-        return ((((num4 * Mathf.Pow(2f, -10f * value)) * Mathf.Sin((((value * num) - num3) * 6.283185f) / num2)) + end) + start);
+        return num4 * Mathf.Pow(2f, -10f * value) * Mathf.Sin((value * num - num3) * 6.283185f / num2) + end + start;
     }
 
     private float easeOutExpo(float start, float end, float value)
     {
         end -= start;
-        return ((end * (-Mathf.Pow(2f, -10f * value) + 1f)) + start);
+        return end * (-Mathf.Pow(2f, -10f * value) + 1f) + start;
     }
 
     private float easeOutQuad(float start, float end, float value)
     {
         end -= start;
-        return (((-end * value) * (value - 2f)) + start);
+        return -end * value * (value - 2f) + start;
     }
 
     private float easeOutQuart(float start, float end, float value)
     {
         value--;
         end -= start;
-        return ((-end * ((((value * value) * value) * value) - 1f)) + start);
+        return -end * (value * value * value * value - 1f) + start;
     }
 
     private float easeOutQuint(float start, float end, float value)
     {
         value--;
         end -= start;
-        return ((end * (((((value * value) * value) * value) * value) + 1f)) + start);
+        return end * (value * value * value * value * value + 1f) + start;
     }
 
     private float easeOutSine(float start, float end, float value)
     {
         end -= start;
-        return ((end * Mathf.Sin(value * 1.570796f)) + start);
+        return end * Mathf.Sin(value * 1.570796f) + start;
     }
 
     private void EnableKinematic()
@@ -1985,7 +1984,7 @@ public class iTween : MonoBehaviour
     public static float FloatUpdate(float currentValue, float targetValue, float speed)
     {
         float num = targetValue - currentValue;
-        currentValue += (num * speed) * Time.deltaTime;
+        currentValue += num * speed * Time.deltaTime;
         return currentValue;
     }
 
@@ -2115,7 +2114,7 @@ public class iTween : MonoBehaviour
         if (this.tweenArguments.Contains("speed"))
         {
             float num = Math.Abs((float)(this.floats[0] - this.floats[1]));
-            this.time = num / ((float)this.tweenArguments["speed"]);
+            this.time = num / (float)this.tweenArguments["speed"];
         }
     }
 
@@ -2188,7 +2187,7 @@ public class iTween : MonoBehaviour
         if (this.tweenArguments.Contains("speed"))
         {
             float num2 = Math.Abs(Vector3.Distance(this.vector3s[0], this.vector3s[1]));
-            this.time = num2 / ((float)this.tweenArguments["speed"]);
+            this.time = num2 / (float)this.tweenArguments["speed"];
         }
     }
 
@@ -2201,34 +2200,34 @@ public class iTween : MonoBehaviour
         this.vector3s[0] = this.vector3s[1] = vector;
         if (this.tweenArguments.Contains("amount"))
         {
-            this.vector3s[1] = this.vector3s[0] + ((Vector3)this.tweenArguments["amount"]);
+            this.vector3s[1] = this.vector3s[0] + (Vector3)this.tweenArguments["amount"];
         }
         else
         {
             if (this.tweenArguments.Contains("x"))
             {
-                this.vector3s[1].x = this.vector3s[0].x + ((float)this.tweenArguments["x"]);
+                this.vector3s[1].x = this.vector3s[0].x + (float)this.tweenArguments["x"];
             }
             if (this.tweenArguments.Contains("y"))
             {
-                this.vector3s[1].y = this.vector3s[0].y + ((float)this.tweenArguments["y"]);
+                this.vector3s[1].y = this.vector3s[0].y + (float)this.tweenArguments["y"];
             }
             if (this.tweenArguments.Contains("z"))
             {
-                this.vector3s[1].z = this.vector3s[0].z + ((float)this.tweenArguments["z"]);
+                this.vector3s[1].z = this.vector3s[0].z + (float)this.tweenArguments["z"];
             }
         }
         this.thisTransform.Translate(this.vector3s[1], this.space);
         this.vector3s[5] = this.thisTransform.position;
         this.thisTransform.position = this.vector3s[0];
-        if (this.tweenArguments.Contains("orienttopath") && ((bool)this.tweenArguments["orienttopath"]))
+        if (this.tweenArguments.Contains("orienttopath") && (bool)this.tweenArguments["orienttopath"])
         {
             this.tweenArguments["looktarget"] = this.vector3s[1];
         }
         if (this.tweenArguments.Contains("speed"))
         {
             float num = Math.Abs(Vector3.Distance(this.vector3s[0], this.vector3s[1]));
-            this.time = num / ((float)this.tweenArguments["speed"]);
+            this.time = num / (float)this.tweenArguments["speed"];
         }
     }
 
@@ -2264,7 +2263,7 @@ public class iTween : MonoBehaviour
         }
         if (this.thisTransform.position != vectorArray2[0])
         {
-            if (!this.tweenArguments.Contains("movetopath") || ((bool)this.tweenArguments["movetopath"]))
+            if (!this.tweenArguments.Contains("movetopath") || (bool)this.tweenArguments["movetopath"])
             {
                 flag = true;
                 num2 = 3;
@@ -2306,7 +2305,7 @@ public class iTween : MonoBehaviour
         if (this.tweenArguments.Contains("speed"))
         {
             float num3 = PathLength(this.vector3s);
-            this.time = num3 / ((float)this.tweenArguments["speed"]);
+            this.time = num3 / (float)this.tweenArguments["speed"];
         }
     }
 
@@ -2348,14 +2347,14 @@ public class iTween : MonoBehaviour
                 this.vector3s[1].z = (float)this.tweenArguments["z"];
             }
         }
-        if (this.tweenArguments.Contains("orienttopath") && ((bool)this.tweenArguments["orienttopath"]))
+        if (this.tweenArguments.Contains("orienttopath") && (bool)this.tweenArguments["orienttopath"])
         {
             this.tweenArguments["looktarget"] = this.vector3s[1];
         }
         if (this.tweenArguments.Contains("speed"))
         {
             float num = Math.Abs(Vector3.Distance(this.vector3s[0], this.vector3s[1]));
-            this.time = num / ((float)this.tweenArguments["speed"]);
+            this.time = num / (float)this.tweenArguments["speed"];
         }
     }
 
@@ -2473,7 +2472,7 @@ public class iTween : MonoBehaviour
         if (this.tweenArguments.Contains("speed"))
         {
             float num = Math.Abs(Vector3.Distance(this.vector3s[0], this.vector3s[1]));
-            this.time = num / ((float)this.tweenArguments["speed"]);
+            this.time = num / (float)this.tweenArguments["speed"];
         }
     }
 
@@ -2491,21 +2490,21 @@ public class iTween : MonoBehaviour
         {
             if (this.tweenArguments.Contains("x"))
             {
-                this.vector3s[1].x += 360f * ((float)this.tweenArguments["x"]);
+                this.vector3s[1].x += 360f * (float)this.tweenArguments["x"];
             }
             if (this.tweenArguments.Contains("y"))
             {
-                this.vector3s[1].y += 360f * ((float)this.tweenArguments["y"]);
+                this.vector3s[1].y += 360f * (float)this.tweenArguments["y"];
             }
             if (this.tweenArguments.Contains("z"))
             {
-                this.vector3s[1].z += 360f * ((float)this.tweenArguments["z"]);
+                this.vector3s[1].z += 360f * (float)this.tweenArguments["z"];
             }
         }
         if (this.tweenArguments.Contains("speed"))
         {
             float num = Math.Abs(Vector3.Distance(this.vector3s[0], this.vector3s[1]));
-            this.time = num / ((float)this.tweenArguments["speed"]);
+            this.time = num / (float)this.tweenArguments["speed"];
         }
     }
 
@@ -2551,7 +2550,7 @@ public class iTween : MonoBehaviour
         if (this.tweenArguments.Contains("speed"))
         {
             float num = Math.Abs(Vector3.Distance(this.vector3s[0], this.vector3s[1]));
-            this.time = num / ((float)this.tweenArguments["speed"]);
+            this.time = num / (float)this.tweenArguments["speed"];
         }
     }
 
@@ -2581,7 +2580,7 @@ public class iTween : MonoBehaviour
         if (this.tweenArguments.Contains("speed"))
         {
             float num = Math.Abs(Vector3.Distance(this.vector3s[0], this.vector3s[1]));
-            this.time = num / ((float)this.tweenArguments["speed"]);
+            this.time = num / (float)this.tweenArguments["speed"];
         }
     }
 
@@ -2611,7 +2610,7 @@ public class iTween : MonoBehaviour
         if (this.tweenArguments.Contains("speed"))
         {
             float num = Math.Abs(Vector3.Distance(this.vector3s[0], this.vector3s[1]));
-            this.time = num / ((float)this.tweenArguments["speed"]);
+            this.time = num / (float)this.tweenArguments["speed"];
         }
     }
 
@@ -2649,7 +2648,7 @@ public class iTween : MonoBehaviour
         if (this.tweenArguments.Contains("speed"))
         {
             float num = Math.Abs(Vector3.Distance(this.vector3s[0], this.vector3s[1]));
-            this.time = num / ((float)this.tweenArguments["speed"]);
+            this.time = num / (float)this.tweenArguments["speed"];
         }
     }
 
@@ -2842,7 +2841,7 @@ public class iTween : MonoBehaviour
                                 dictionary.Add("to", 0);
                                 f__switchSmapA = dictionary;
                             }
-                            if (f__switchSmapA.TryGetValue(method, out num2) && (num2 == 0))
+                            if (f__switchSmapA.TryGetValue(method, out num2) && num2 == 0)
                             {
                                 this.GenerateColorToTargets();
                                 this.apply = new ApplyTween(this.ApplyColorToTargets);
@@ -2860,7 +2859,7 @@ public class iTween : MonoBehaviour
                                 dictionary.Add("to", 0);
                                 f__switchSmapB = dictionary;
                             }
-                            if (f__switchSmapB.TryGetValue(method, out num2) && (num2 == 0))
+                            if (f__switchSmapB.TryGetValue(method, out num2) && num2 == 0)
                             {
                                 this.GenerateAudioToTargets();
                                 this.apply = new ApplyTween(this.ApplyAudioToTargets);
@@ -3055,7 +3054,7 @@ public class iTween : MonoBehaviour
                                 dictionary.Add("to", 0);
                                 f__switchSmap11 = dictionary;
                             }
-                            if (f__switchSmap11.TryGetValue(method, out num2) && (num2 == 0))
+                            if (f__switchSmap11.TryGetValue(method, out num2) && num2 == 0)
                             {
                                 this.GenerateLookToTargets();
                                 this.apply = new ApplyTween(this.ApplyLookToTargets);
@@ -3082,7 +3081,7 @@ public class iTween : MonoBehaviour
             Vector3 a = new Vector3(this.vector2s[0].x, this.vector2s[0].y, 0f);
             Vector3 b = new Vector3(this.vector2s[1].x, this.vector2s[1].y, 0f);
             float num = Math.Abs(Vector3.Distance(a, b));
-            this.time = num / ((float)this.tweenArguments["speed"]);
+            this.time = num / (float)this.tweenArguments["speed"];
         }
     }
 
@@ -3094,7 +3093,7 @@ public class iTween : MonoBehaviour
         if (this.tweenArguments.Contains("speed"))
         {
             float num = Math.Abs(Vector3.Distance(this.vector3s[0], this.vector3s[1]));
-            this.time = num / ((float)this.tweenArguments["speed"]);
+            this.time = num / (float)this.tweenArguments["speed"];
         }
     }
 
@@ -3235,12 +3234,12 @@ public class iTween : MonoBehaviour
     public static Hashtable Hash(params object[] args)
     {
         Hashtable hashtable = new Hashtable(args.Length / 2);
-        if ((args.Length % 2) != 0)
+        if (args.Length % 2 != 0)
         {
             UnityEngine.Debug.LogError("Tween Error: Hash requires an even number of arguments!");
             return null;
         }
-        for (int i = 0; i < (args.Length - 1); i += 2)
+        for (int i = 0; i < args.Length - 1; i += 2)
         {
             hashtable.Add(args[i], args[i + 1]);
         }
@@ -3256,17 +3255,17 @@ public class iTween : MonoBehaviour
     {
         int num = pts.Length - 3;
         int index = Mathf.Min(Mathf.FloorToInt(t * num), num - 1);
-        float num3 = (t * num) - index;
+        float num3 = t * num - index;
         Vector3 vector = pts[index];
         Vector3 vector2 = pts[index + 1];
         Vector3 vector3 = pts[index + 2];
         Vector3 vector4 = pts[index + 3];
-        return (Vector3)(0.5f * (((((((-vector + (3f * vector2)) - (3f * vector3)) + vector4) * ((num3 * num3) * num3)) + (((((2f * vector) - (5f * vector2)) + (4f * vector3)) - vector4) * (num3 * num3))) + ((-vector + vector3) * num3)) + (2f * vector2)));
+        return (Vector3)(0.5f * ((-vector + 3f * vector2 - 3f * vector3 + vector4) * (num3 * num3 * num3) + (2f * vector - 5f * vector2 + 4f * vector3 - vector4) * (num3 * num3) + (-vector + vector3) * num3 + 2f * vector2));
     }
 
     private void LateUpdate()
     {
-        if ((this.tweenArguments.Contains("looktarget") && this.isRunning) && (((this.type == "move") || (this.type == "shake")) || (this.type == "punch")))
+        if (this.tweenArguments.Contains("looktarget") && this.isRunning && (this.type == "move" || this.type == "shake" || this.type == "punch"))
         {
             LookUpdate(base.gameObject, this.tweenArguments);
         }
@@ -3358,7 +3357,7 @@ public class iTween : MonoBehaviour
     public static void LookTo(GameObject target, Hashtable args)
     {
         args = CleanArgs(args);
-        if (args.Contains("looktarget") && (args["looktarget"].GetType() == typeof(Transform)))
+        if (args.Contains("looktarget") && args["looktarget"].GetType() == typeof(Transform))
         {
             Transform transform = (Transform)args["looktarget"];
             args["position"] = new Vector3(transform.position.x, transform.position.y, transform.position.z);
@@ -3387,7 +3386,7 @@ public class iTween : MonoBehaviour
         }
         else if (args.Contains("time"))
         {
-            updateTime = ((float)args["time"]) * 0.15f;
+            updateTime = (float)args["time"] * 0.15f;
             updateTime *= Defaults.updateTimePercentage;
         }
         else
@@ -3615,7 +3614,7 @@ public class iTween : MonoBehaviour
     public static void MoveTo(GameObject target, Hashtable args)
     {
         args = CleanArgs(args);
-        if (args.Contains("position") && (args["position"].GetType() == typeof(Transform)))
+        if (args.Contains("position") && args["position"].GetType() == typeof(Transform))
         {
             Transform transform = (Transform)args["position"];
             args["position"] = new Vector3(transform.position.x, transform.position.y, transform.position.z);
@@ -3695,7 +3694,7 @@ public class iTween : MonoBehaviour
         vectorArray[3].x = Mathf.SmoothDamp(vectorArray[0].x, vectorArray[1].x, ref vectorArray[2].x, updateTime);
         vectorArray[3].y = Mathf.SmoothDamp(vectorArray[0].y, vectorArray[1].y, ref vectorArray[2].y, updateTime);
         vectorArray[3].z = Mathf.SmoothDamp(vectorArray[0].z, vectorArray[1].z, ref vectorArray[2].z, updateTime);
-        if (args.Contains("orienttopath") && ((bool)args["orienttopath"]))
+        if (args.Contains("orienttopath") && (bool)args["orienttopath"])
         {
             args["looktarget"] = vectorArray[3];
         }
@@ -3780,7 +3779,7 @@ public class iTween : MonoBehaviour
         int num3 = path.Length * 20;
         for (int j = 1; j <= num3; j++)
         {
-            float t = ((float)j) / ((float)num3);
+            float t = (float)j / (float)num3;
             Vector3 b = Interp(pts, t);
             num += Vector3.Distance(a, b);
             a = b;
@@ -3796,7 +3795,7 @@ public class iTween : MonoBehaviour
         int num2 = path.Length * 20;
         for (int i = 1; i <= num2; i++)
         {
-            float t = ((float)i) / ((float)num2);
+            float t = (float)i / (float)num2;
             Vector3 b = Interp(pts, t);
             num += Vector3.Distance(a, b);
             a = b;
@@ -3950,8 +3949,8 @@ public class iTween : MonoBehaviour
             return 0f;
         }
         float num2 = 0.3f;
-        num = (num2 / 6.283185f) * Mathf.Asin(0f);
-        return ((amplitude * Mathf.Pow(2f, -10f * value)) * Mathf.Sin((((value * 1f) - num) * 6.283185f) / num2));
+        num = num2 / 6.283185f * Mathf.Asin(0f);
+        return amplitude * Mathf.Pow(2f, -10f * value) * Mathf.Sin((value * 1f - num) * 6.283185f / num2);
     }
 
     public static void PunchPosition(GameObject target, Hashtable args)
@@ -4145,7 +4144,7 @@ public class iTween : MonoBehaviour
     {
         foreach (Hashtable hashtable in tweens)
         {
-            if (((GameObject)hashtable["target"]) == base.gameObject)
+            if ((GameObject)hashtable["target"] == base.gameObject)
             {
                 this.tweenArguments = hashtable;
                 break;
@@ -4179,13 +4178,13 @@ public class iTween : MonoBehaviour
         {
             if (this.tweenArguments["namedcolorvalue"].GetType() == typeof(NamedValueColor))
             {
-                this.namedcolorvalue = (NamedValueColor)((int)this.tweenArguments["namedcolorvalue"]);
+                this.namedcolorvalue = (NamedValueColor)(int)this.tweenArguments["namedcolorvalue"];
             }
             else
             {
                 try
                 {
-                    this.namedcolorvalue = (NamedValueColor)((int)Enum.Parse(typeof(NamedValueColor), (string)this.tweenArguments["namedcolorvalue"], true));
+                    this.namedcolorvalue = (NamedValueColor)(int)Enum.Parse(typeof(NamedValueColor), (string)this.tweenArguments["namedcolorvalue"], true);
                 }
                 catch
                 {
@@ -4202,13 +4201,13 @@ public class iTween : MonoBehaviour
         {
             if (this.tweenArguments["looptype"].GetType() == typeof(LoopType))
             {
-                this.loopType = (LoopType)((int)this.tweenArguments["looptype"]);
+                this.loopType = (LoopType)(int)this.tweenArguments["looptype"];
             }
             else
             {
                 try
                 {
-                    this.loopType = (LoopType)((int)Enum.Parse(typeof(LoopType), (string)this.tweenArguments["looptype"], true));
+                    this.loopType = (LoopType)(int)Enum.Parse(typeof(LoopType), (string)this.tweenArguments["looptype"], true);
                 }
                 catch
                 {
@@ -4225,13 +4224,13 @@ public class iTween : MonoBehaviour
         {
             if (this.tweenArguments["easetype"].GetType() == typeof(EaseType))
             {
-                this.easeType = (EaseType)((int)this.tweenArguments["easetype"]);
+                this.easeType = (EaseType)(int)this.tweenArguments["easetype"];
             }
             else
             {
                 try
                 {
-                    this.easeType = (EaseType)((int)Enum.Parse(typeof(EaseType), (string)this.tweenArguments["easetype"], true));
+                    this.easeType = (EaseType)(int)Enum.Parse(typeof(EaseType), (string)this.tweenArguments["easetype"], true);
                 }
                 catch
                 {
@@ -4248,13 +4247,13 @@ public class iTween : MonoBehaviour
         {
             if (this.tweenArguments["space"].GetType() == typeof(Space))
             {
-                this.space = (Space)((int)this.tweenArguments["space"]);
+                this.space = (Space)(int)this.tweenArguments["space"];
             }
             else
             {
                 try
                 {
-                    this.space = (Space)((int)Enum.Parse(typeof(Space), (string)this.tweenArguments["space"], true));
+                    this.space = (Space)(int)Enum.Parse(typeof(Space), (string)this.tweenArguments["space"], true);
                 }
                 catch
                 {
@@ -4386,7 +4385,7 @@ public class iTween : MonoBehaviour
     public static void RotateTo(GameObject target, Hashtable args)
     {
         args = CleanArgs(args);
-        if (args.Contains("rotation") && (args["rotation"].GetType() == typeof(Transform)))
+        if (args.Contains("rotation") && args["rotation"].GetType() == typeof(Transform))
         {
             Transform transform = (Transform)args["rotation"];
             args["position"] = new Vector3(transform.position.x, transform.position.y, transform.position.z);
@@ -4549,7 +4548,7 @@ public class iTween : MonoBehaviour
     public static void ScaleTo(GameObject target, Hashtable args)
     {
         args = CleanArgs(args);
-        if (args.Contains("scale") && (args["scale"].GetType() == typeof(Transform)))
+        if (args.Contains("scale") && args["scale"].GetType() == typeof(Transform))
         {
             Transform transform = (Transform)args["scale"];
             args["position"] = new Vector3(transform.position.x, transform.position.y, transform.position.z);
@@ -4666,8 +4665,8 @@ public class iTween : MonoBehaviour
     private float spring(float start, float end, float value)
     {
         value = Mathf.Clamp01(value);
-        value = ((Mathf.Sin((value * 3.141593f) * (0.2f + (((2.5f * value) * value) * value))) * Mathf.Pow(1f - value, 2.2f)) + value) * (1f + (1.2f * (1f - value)));
-        return (start + ((end - start) * value));
+        value = (Mathf.Sin(value * 3.141593f * (0.2f + 2.5f * value * value * value)) * Mathf.Pow(1f - value, 2.2f) + value) * (1f + 1.2f * (1f - value));
+        return start + (end - start) * value;
     }
 
     public static void Stab(GameObject target, Hashtable args)
@@ -4900,7 +4899,7 @@ public class iTween : MonoBehaviour
         {
             this.audioSource.PlayOneShot(this.audioSource.clip);
         }
-        if ((((this.type == "move") || (this.type == "scale")) || ((this.type == "rotate") || (this.type == "punch"))) || (((this.type == "shake") || (this.type == "curve")) || (this.type == "look")))
+        if (this.type == "move" || this.type == "scale" || this.type == "rotate" || this.type == "punch" || this.type == "shake" || this.type == "curve" || this.type == "look")
         {
             this.EnableKinematic();
         }
@@ -4952,7 +4951,7 @@ public class iTween : MonoBehaviour
         }
         if (this.reverse)
         {
-            this.percentage = 1f - (this.runningTime / this.time);
+            this.percentage = 1f - this.runningTime / this.time;
         }
         else
         {
@@ -4964,7 +4963,7 @@ public class iTween : MonoBehaviour
     public static void ValueTo(GameObject target, Hashtable args)
     {
         args = CleanArgs(args);
-        if ((!args.Contains("onupdate") || !args.Contains("from")) || !args.Contains("to"))
+        if (!args.Contains("onupdate") || !args.Contains("from") || !args.Contains("to"))
         {
             UnityEngine.Debug.LogError("iTween Error: ValueTo() requires an 'onupdate' callback function and a 'from' and 'to' property.  The supplied 'onupdate' callback must accept a single argument that is the same type as the supplied 'from' and 'to' properties!");
         }
@@ -5007,14 +5006,14 @@ public class iTween : MonoBehaviour
     public static Vector2 Vector2Update(Vector2 currentValue, Vector2 targetValue, float speed)
     {
         Vector2 vector = targetValue - currentValue;
-        currentValue += (Vector2)((vector * speed) * Time.deltaTime);
+        currentValue += (Vector2)(vector * speed * Time.deltaTime);
         return currentValue;
     }
 
     public static Vector3 Vector3Update(Vector3 currentValue, Vector3 targetValue, float speed)
     {
         Vector3 vector = targetValue - currentValue;
-        currentValue += (Vector3)((vector * speed) * Time.deltaTime);
+        currentValue += (Vector3)(vector * speed * Time.deltaTime);
         return currentValue;
     }
 
@@ -5034,12 +5033,12 @@ public class iTween : MonoBehaviour
         {
             int num = this.pts.Length - 3;
             int index = Mathf.Min(Mathf.FloorToInt(t * num), num - 1);
-            float num3 = (t * num) - index;
+            float num3 = t * num - index;
             Vector3 vector = this.pts[index];
             Vector3 vector2 = this.pts[index + 1];
             Vector3 vector3 = this.pts[index + 2];
             Vector3 vector4 = this.pts[index + 3];
-            return (Vector3)(0.5f * (((((((-vector + (3f * vector2)) - (3f * vector3)) + vector4) * ((num3 * num3) * num3)) + (((((2f * vector) - (5f * vector2)) + (4f * vector3)) - vector4) * (num3 * num3))) + ((-vector + vector3) * num3)) + (2f * vector2)));
+            return (Vector3)(0.5f * ((-vector + 3f * vector2 - 3f * vector3 + vector4) * (num3 * num3 * num3) + (2f * vector - 5f * vector2 + 4f * vector3 - vector4) * (num3 * num3) + (-vector + vector3) * num3 + 2f * vector2));
         }
     }
 
@@ -5058,7 +5057,7 @@ public class iTween : MonoBehaviour
         public static Space space = Space.Self;
         public static float time = 1f;
         public static Vector3 up = Vector3.up;
-        public static float updateTime = (1f * updateTimePercentage);
+        public static float updateTime = 1f * updateTimePercentage;
         public static float updateTimePercentage = 0.05f;
         public static bool useRealTime = false;
     }

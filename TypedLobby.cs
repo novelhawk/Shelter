@@ -1,5 +1,3 @@
-using System;
-
 public class TypedLobby
 {
     public static readonly TypedLobby Default = new TypedLobby();
@@ -27,7 +25,7 @@ public class TypedLobby
     {
         get
         {
-            return ((this.Type == LobbyType.Default) && string.IsNullOrEmpty(this.Name));
+            return this.Type == LobbyType.Default && string.IsNullOrEmpty(this.Name);
         }
     }
 }

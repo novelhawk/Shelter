@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class RibbonTrail
@@ -92,7 +91,7 @@ public class RibbonTrail
 
     public void ResetElementsPos()
     {
-        if ((this.Head != 99999) && (this.Head != this.Tail))
+        if (this.Head != 99999 && this.Head != this.Tail)
         {
             int head = this.Head;
             while (true)
@@ -125,7 +124,7 @@ public class RibbonTrail
     public void SetTrailLen(float len)
     {
         this.TrailLength = len;
-        this.ElemLength = this.TrailLength / ((float) (this.MaxElements - 1));
+        this.ElemLength = this.TrailLength / (float) (this.MaxElements - 1);
         this.SquaredElemLength = this.ElemLength * this.ElemLength;
     }
 
@@ -161,7 +160,7 @@ public class RibbonTrail
                 Vector3 vector4 = vector3 - element2.Position;
                 Vector3 zero = Vector3.zero;
                 float smoothTime = 0.1f / (num3 / 60f);
-                element2.Position = Vector3.SmoothDamp(element2.Position, element2.Position + ((Vector3) (vector4.normalized * element2.Width)), ref zero, smoothTime);
+                element2.Position = Vector3.SmoothDamp(element2.Position, element2.Position + (Vector3) (vector4.normalized * element2.Width), ref zero, smoothTime);
             }
         }
     }
@@ -201,7 +200,7 @@ public class RibbonTrail
                     element.Position = headPosition;
                     flag = true;
                 }
-                if (((this.Tail + 1) % this.MaxElements) == this.Head)
+                if ((this.Tail + 1) % this.MaxElements == this.Head)
                 {
                     int num3;
                     Element element4 = this.ElementArray[this.Tail];
@@ -235,7 +234,7 @@ public class RibbonTrail
         if (this.IndexDirty)
         {
             VertexPool pool = this.Vertexsegment.Pool;
-            if ((this.Head != 99999) && (this.Head != this.Tail))
+            if (this.Head != 99999 && this.Head != this.Tail)
             {
                 int head = this.Head;
                 int num2 = 0;
@@ -246,13 +245,13 @@ public class RibbonTrail
                     {
                         num3 = 0;
                     }
-                    if ((num3 * 2) >= 65536)
+                    if (num3 * 2 >= 65536)
                     {
                         Debug.LogError("Too many elements!");
                     }
-                    int num4 = this.Vertexsegment.VertStart + (num3 * 2);
-                    int num5 = this.Vertexsegment.VertStart + (head * 2);
-                    int index = this.Vertexsegment.IndexStart + (num2 * 6);
+                    int num4 = this.Vertexsegment.VertStart + num3 * 2;
+                    int num5 = this.Vertexsegment.VertStart + head * 2;
+                    int index = this.Vertexsegment.IndexStart + num2 * 6;
                     pool.Indices[index] = num5;
                     pool.Indices[index + 1] = num5 + 1;
                     pool.Indices[index + 2] = num4;
@@ -277,7 +276,7 @@ public class RibbonTrail
         float num = 0f;
         float num2 = 0f;
         float num3 = this.ElemLength * (this.MaxElements - 2);
-        if ((this.Head != 99999) && (this.Head != this.Tail))
+        if (this.Head != 99999 && this.Head != this.Tail)
         {
             int head = this.Head;
             int index = this.Head;
@@ -289,11 +288,11 @@ public class RibbonTrail
                     index = 0;
                 }
                 Element element = this.ElementArray[index];
-                if ((index * 2) >= 65536)
+                if (index * 2 >= 65536)
                 {
                     Debug.LogError("Too many elements!");
                 }
-                int num6 = this.Vertexsegment.VertStart + (index * 2);
+                int num6 = this.Vertexsegment.VertStart + index * 2;
                 int num7 = index + 1;
                 if (num7 == this.MaxElements)
                 {
@@ -320,11 +319,11 @@ public class RibbonTrail
                 VertexPool pool = this.Vertexsegment.Pool;
                 if (this.StretchType == 0)
                 {
-                    num = (num2 / num3) * Mathf.Abs(this.UVDimensions.y);
+                    num = num2 / num3 * Mathf.Abs(this.UVDimensions.y);
                 }
                 else
                 {
-                    num = (num2 / num3) * Mathf.Abs(this.UVDimensions.x);
+                    num = num2 / num3 * Mathf.Abs(this.UVDimensions.x);
                 }
                 Vector2 zero = Vector2.zero;
                 pool.Vertices[num6] = vector4;

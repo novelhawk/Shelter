@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Collider)), AddComponentMenu("NGUI/Interaction/Button Keys")]
@@ -13,7 +12,7 @@ public class UIButtonKeys : MonoBehaviour
 
     private void OnClick()
     {
-        if (base.enabled && (this.selectOnClick != null))
+        if (base.enabled && this.selectOnClick != null)
         {
             UICamera.selectedObject = this.selectOnClick.gameObject;
         }
@@ -96,7 +95,7 @@ public class UIButtonKeys : MonoBehaviour
 
     private void Start()
     {
-        if (this.startsSelected && ((UICamera.selectedObject == null) || !NGUITools.GetActive(UICamera.selectedObject)))
+        if (this.startsSelected && (UICamera.selectedObject == null || !NGUITools.GetActive(UICamera.selectedObject)))
         {
             UICamera.selectedObject = base.gameObject;
         }

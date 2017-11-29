@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class UIGeometry
@@ -50,7 +49,7 @@ public class UIGeometry
 
     public void WriteToBuffers(BetterList<Vector3> v, BetterList<Vector2> u, BetterList<Color32> c, BetterList<Vector3> n, BetterList<Vector4> t)
     {
-        if ((this.mRtpVerts != null) && (this.mRtpVerts.size > 0))
+        if (this.mRtpVerts != null && this.mRtpVerts.size > 0)
         {
             if (n == null)
             {
@@ -79,7 +78,7 @@ public class UIGeometry
     {
         get
         {
-            return (((this.mRtpVerts != null) && (this.mRtpVerts.size > 0)) && (this.mRtpVerts.size == this.verts.size));
+            return this.mRtpVerts != null && this.mRtpVerts.size > 0 && this.mRtpVerts.size == this.verts.size;
         }
     }
 
@@ -87,7 +86,7 @@ public class UIGeometry
     {
         get
         {
-            return (this.verts.size > 0);
+            return this.verts.size > 0;
         }
     }
 }

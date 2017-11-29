@@ -1,5 +1,4 @@
 using AnimationOrTween;
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Button Play Animation")]
@@ -21,7 +20,7 @@ public class UIButtonPlayAnimation : MonoBehaviour
 
     private void OnActivate(bool isActive)
     {
-        if (base.enabled && (((this.trigger == AnimationOrTween.Trigger.OnActivate) || ((this.trigger == AnimationOrTween.Trigger.OnActivateTrue) && isActive)) || ((this.trigger == AnimationOrTween.Trigger.OnActivateFalse) && !isActive)))
+        if (base.enabled && (this.trigger == AnimationOrTween.Trigger.OnActivate || this.trigger == AnimationOrTween.Trigger.OnActivateTrue && isActive || this.trigger == AnimationOrTween.Trigger.OnActivateFalse && !isActive))
         {
             this.Play(isActive);
         }
@@ -29,7 +28,7 @@ public class UIButtonPlayAnimation : MonoBehaviour
 
     private void OnClick()
     {
-        if (base.enabled && (this.trigger == AnimationOrTween.Trigger.OnClick))
+        if (base.enabled && this.trigger == AnimationOrTween.Trigger.OnClick)
         {
             this.Play(true);
         }
@@ -37,7 +36,7 @@ public class UIButtonPlayAnimation : MonoBehaviour
 
     private void OnDoubleClick()
     {
-        if (base.enabled && (this.trigger == AnimationOrTween.Trigger.OnDoubleClick))
+        if (base.enabled && this.trigger == AnimationOrTween.Trigger.OnDoubleClick)
         {
             this.Play(true);
         }
@@ -55,7 +54,7 @@ public class UIButtonPlayAnimation : MonoBehaviour
     {
         if (base.enabled)
         {
-            if (((this.trigger == AnimationOrTween.Trigger.OnHover) || ((this.trigger == AnimationOrTween.Trigger.OnHoverTrue) && isOver)) || ((this.trigger == AnimationOrTween.Trigger.OnHoverFalse) && !isOver))
+            if (this.trigger == AnimationOrTween.Trigger.OnHover || this.trigger == AnimationOrTween.Trigger.OnHoverTrue && isOver || this.trigger == AnimationOrTween.Trigger.OnHoverFalse && !isOver)
             {
                 this.Play(isOver);
             }
@@ -65,7 +64,7 @@ public class UIButtonPlayAnimation : MonoBehaviour
 
     private void OnPress(bool isPressed)
     {
-        if (base.enabled && (((this.trigger == AnimationOrTween.Trigger.OnPress) || ((this.trigger == AnimationOrTween.Trigger.OnPressTrue) && isPressed)) || ((this.trigger == AnimationOrTween.Trigger.OnPressFalse) && !isPressed)))
+        if (base.enabled && (this.trigger == AnimationOrTween.Trigger.OnPress || this.trigger == AnimationOrTween.Trigger.OnPressTrue && isPressed || this.trigger == AnimationOrTween.Trigger.OnPressFalse && !isPressed))
         {
             this.Play(isPressed);
         }
@@ -73,7 +72,7 @@ public class UIButtonPlayAnimation : MonoBehaviour
 
     private void OnSelect(bool isSelected)
     {
-        if (base.enabled && (((this.trigger == AnimationOrTween.Trigger.OnSelect) || ((this.trigger == AnimationOrTween.Trigger.OnSelectTrue) && isSelected)) || ((this.trigger == AnimationOrTween.Trigger.OnSelectFalse) && !isSelected)))
+        if (base.enabled && (this.trigger == AnimationOrTween.Trigger.OnSelect || this.trigger == AnimationOrTween.Trigger.OnSelectTrue && isSelected || this.trigger == AnimationOrTween.Trigger.OnSelectFalse && !isSelected))
         {
             this.Play(true);
         }
@@ -87,12 +86,12 @@ public class UIButtonPlayAnimation : MonoBehaviour
         }
         if (this.target != null)
         {
-            if (this.clearSelection && (UICamera.selectedObject == base.gameObject))
+            if (this.clearSelection && UICamera.selectedObject == base.gameObject)
             {
                 UICamera.selectedObject = null;
             }
             int num = -(int)this.playDirection;
-            AnimationOrTween.Direction playDirection = !forward ? ((AnimationOrTween.Direction) num) : this.playDirection;
+            AnimationOrTween.Direction playDirection = !forward ? (AnimationOrTween.Direction) num : this.playDirection;
             ActiveAnimation animation = ActiveAnimation.Play(this.target, this.clipName, playDirection, this.ifDisabledOnPlay, this.disableWhenFinished);
             if (animation != null)
             {
@@ -101,7 +100,7 @@ public class UIButtonPlayAnimation : MonoBehaviour
                     animation.Reset();
                 }
                 animation.onFinished = this.onFinished;
-                if ((this.eventReceiver != null) && !string.IsNullOrEmpty(this.callWhenFinished))
+                if (this.eventReceiver != null && !string.IsNullOrEmpty(this.callWhenFinished))
                 {
                     animation.eventReceiver = this.eventReceiver;
                     animation.callWhenFinished = this.callWhenFinished;

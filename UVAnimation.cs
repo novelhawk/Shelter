@@ -1,4 +1,3 @@
-using System;
 using System.IO;
 using UnityEngine;
 
@@ -30,7 +29,7 @@ public class UVAnimation
             this.frames = new Vector2[animation.TotalCount];
             this.UVDimensions = new Vector2[animation.TotalCount];
             int tileCount = animation.TileCount;
-            int num2 = ((animation.TotalCount + tileCount) - 1) / tileCount;
+            int num2 = (animation.TotalCount + tileCount - 1) / tileCount;
             int num3 = 0;
             int width = mainTex.width;
             int height = mainTex.height;
@@ -43,10 +42,10 @@ public class UVAnimation
                         break;
                     }
                     Vector2 zero = Vector2.zero;
-                    zero.x = ((float) animation.Frames[num3].Width) / ((float) width);
-                    zero.y = ((float) animation.Frames[num3].Height) / ((float) height);
-                    this.frames[num3].x = ((float) animation.Frames[num3].X) / ((float) width);
-                    this.frames[num3].y = 1f - (((float) animation.Frames[num3].Y) / ((float) height));
+                    zero.x = (float) animation.Frames[num3].Width / (float) width;
+                    zero.y = (float) animation.Frames[num3].Height / (float) height;
+                    this.frames[num3].x = (float) animation.Frames[num3].X / (float) width;
+                    this.frames[num3].y = 1f - (float) animation.Frames[num3].Y / (float) height;
                     this.UVDimensions[num3] = zero;
                     this.UVDimensions[num3].y = -this.UVDimensions[num3].y;
                     num3++;
@@ -69,8 +68,8 @@ public class UVAnimation
                 {
                     break;
                 }
-                this.frames[index].x = start.x + (cellSize.x * j);
-                this.frames[index].y = start.y - (cellSize.y * i);
+                this.frames[index].x = start.x + cellSize.x * j;
+                this.frames[index].y = start.y - cellSize.y * i;
                 this.UVDimensions[index] = cellSize;
                 this.UVDimensions[index].y = -this.UVDimensions[index].y;
                 index++;
@@ -81,13 +80,13 @@ public class UVAnimation
 
     public bool GetNextFrame(ref Vector2 uv, ref Vector2 dm)
     {
-        if (((this.curFrame + this.stepDir) < this.frames.Length) && ((this.curFrame + this.stepDir) >= 0))
+        if (this.curFrame + this.stepDir < this.frames.Length && this.curFrame + this.stepDir >= 0)
         {
             this.curFrame += this.stepDir;
             uv = this.frames[this.curFrame];
             dm = this.UVDimensions[this.curFrame];
         }
-        else if ((this.stepDir > 0) && this.loopReverse)
+        else if (this.stepDir > 0 && this.loopReverse)
         {
             this.stepDir = -1;
             this.curFrame += this.stepDir;
@@ -96,7 +95,7 @@ public class UVAnimation
         }
         else
         {
-            if (((this.numLoops + 1) > this.loopCycles) && (this.loopCycles != -1))
+            if (this.numLoops + 1 > this.loopCycles && this.loopCycles != -1)
             {
                 return false;
             }

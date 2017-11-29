@@ -1,6 +1,3 @@
-using AnimationOrTween;
-using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public abstract class UITweener : IgnoreTimeScale
@@ -56,20 +53,20 @@ public abstract class UITweener : IgnoreTimeScale
     {
         if (val < 0.363636f)
         {
-            val = (7.5685f * val) * val;
+            val = 7.5685f * val * val;
             return val;
         }
         if (val < 0.727272f)
         {
-            val = ((7.5625f * (val -= 0.545454f)) * val) + 0.75f;
+            val = 7.5625f * (val -= 0.545454f) * val + 0.75f;
             return val;
         }
         if (val < 0.90909f)
         {
-            val = ((7.5625f * (val -= 0.818181f)) * val) + 0.9375f;
+            val = 7.5625f * (val -= 0.818181f) * val + 0.9375f;
             return val;
         }
-        val = ((7.5625f * (val -= 0.9545454f)) * val) + 0.984375f;
+        val = 7.5625f * (val -= 0.9545454f) * val + 0.984375f;
         return val;
     }
 
@@ -92,7 +89,7 @@ public abstract class UITweener : IgnoreTimeScale
     public void Reset()
     {
         this.mStarted = false;
-        this.mFactor = (this.mAmountPerDelta >= 0f) ? 0f : 1f;
+        this.mFactor = this.mAmountPerDelta >= 0f ? 0f : 1f;
         this.Sample(this.mFactor, false);
     }
 
@@ -113,7 +110,7 @@ public abstract class UITweener : IgnoreTimeScale
             if (this.steeperCurves)
             {
                 f = 1f - f;
-                f = 1f - (f * f);
+                f = 1f - f * f;
             }
         }
         else if (this.method == Method.EaseInOut)
@@ -121,11 +118,11 @@ public abstract class UITweener : IgnoreTimeScale
             f -= Mathf.Sin(f * 6.283185f) / 6.283185f;
             if (this.steeperCurves)
             {
-                f = (f * 2f) - 1f;
+                f = f * 2f - 1f;
                 float num2 = Mathf.Sign(f);
                 f = 1f - Mathf.Abs(f);
-                f = 1f - (f * f);
-                f = ((num2 * f) * 0.5f) + 0.5f;
+                f = 1f - f * f;
+                f = num2 * f * 0.5f + 0.5f;
             }
         }
         else if (this.method == Method.BounceIn)
@@ -136,7 +133,7 @@ public abstract class UITweener : IgnoreTimeScale
         {
             f = 1f - this.BounceLogic(1f - f);
         }
-        this.OnUpdate((this.animationCurve == null) ? f : this.animationCurve.Evaluate(f), isFinished);
+        this.OnUpdate(this.animationCurve == null ? f : this.animationCurve.Evaluate(f), isFinished);
     }
 
     private void Start()
@@ -190,7 +187,7 @@ public abstract class UITweener : IgnoreTimeScale
                     this.mAmountPerDelta = -this.mAmountPerDelta;
                 }
             }
-            if ((this.style == Style.Once) && ((this.mFactor > 1f) || (this.mFactor < 0f)))
+            if (this.style == Style.Once && (this.mFactor > 1f || this.mFactor < 0f))
             {
                 this.mFactor = Mathf.Clamp01(this.mFactor);
                 this.Sample(this.mFactor, true);
@@ -198,11 +195,11 @@ public abstract class UITweener : IgnoreTimeScale
                 {
                     this.onFinished(this);
                 }
-                if ((this.eventReceiver != null) && !string.IsNullOrEmpty(this.callWhenFinished))
+                if (this.eventReceiver != null && !string.IsNullOrEmpty(this.callWhenFinished))
                 {
                     this.eventReceiver.SendMessage(this.callWhenFinished, this, SendMessageOptions.DontRequireReceiver);
                 }
-                if (((this.mFactor == 1f) && (this.mAmountPerDelta > 0f)) || ((this.mFactor == 0f) && (this.mAmountPerDelta < 0f)))
+                if (this.mFactor == 1f && this.mAmountPerDelta > 0f || this.mFactor == 0f && this.mAmountPerDelta < 0f)
                 {
                     base.enabled = false;
                 }
@@ -221,7 +218,7 @@ public abstract class UITweener : IgnoreTimeScale
             if (this.mDuration != this.duration)
             {
                 this.mDuration = this.duration;
-                this.mAmountPerDelta = Mathf.Abs((this.duration <= 0f) ? 1000f : (1f / this.duration));
+                this.mAmountPerDelta = Mathf.Abs(this.duration <= 0f ? 1000f : 1f / this.duration);
             }
             return this.mAmountPerDelta;
         }
@@ -231,7 +228,7 @@ public abstract class UITweener : IgnoreTimeScale
     {
         get
         {
-            return ((this.mAmountPerDelta >= 0f) ? AnimationOrTween.Direction.Forward : AnimationOrTween.Direction.Reverse);
+            return this.mAmountPerDelta >= 0f ? AnimationOrTween.Direction.Forward : AnimationOrTween.Direction.Reverse;
         }
     }
 

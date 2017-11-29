@@ -78,7 +78,7 @@ public class Room : RoomInfo
                 Debug.LogWarning("Can't set Room.maxPlayers to: " + value + ". Using max value: 255.");
                 value = 255;
             }
-            if ((value != maxPlayersField) && !PhotonNetwork.offlineMode)
+            if (value != maxPlayersField && !PhotonNetwork.offlineMode)
             {
                 Hashtable gameProperties = new Hashtable();
                 gameProperties.Add((byte) 255, (byte) value);
@@ -112,7 +112,7 @@ public class Room : RoomInfo
             {
                 Debug.LogWarning("Can't set open when not in that room.");
             }
-            if ((value != openField) && !PhotonNetwork.offlineMode)
+            if (value != openField && !PhotonNetwork.offlineMode)
             {
                 Hashtable gameProperties = new Hashtable();
                 gameProperties.Add((byte) 253, value);
@@ -148,7 +148,7 @@ public class Room : RoomInfo
             {
                 Debug.LogWarning("Can't set visible when not in that room.");
             }
-            if ((value != visibleField) && !PhotonNetwork.offlineMode)
+            if (value != visibleField && !PhotonNetwork.offlineMode)
             {
                 Hashtable gameProperties = new Hashtable();
                 gameProperties.Add((byte) 254, value);

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(Camera)), AddComponentMenu("NGUI/Interaction/Draggable Camera")]
@@ -32,7 +31,7 @@ public class UIDraggableCamera : IgnoreTimeScale
 
     private Vector3 CalculateConstrainOffset()
     {
-        if ((this.rootForBounds != null) && (this.rootForBounds.childCount != 0))
+        if (this.rootForBounds != null && this.rootForBounds.childCount != 0)
         {
             Vector3 position = new Vector3(this.mCam.rect.xMin * Screen.width, this.mCam.rect.yMin * Screen.height, 0f);
             Vector3 vector2 = new Vector3(this.mCam.rect.xMax * Screen.width, this.mCam.rect.yMax * Screen.height, 0f);
@@ -47,7 +46,7 @@ public class UIDraggableCamera : IgnoreTimeScale
 
     public bool ConstrainToBounds(bool immediate)
     {
-        if ((this.mTrans != null) && (this.rootForBounds != null))
+        if (this.mTrans != null && this.rootForBounds != null)
         {
             Vector3 vector = this.CalculateConstrainOffset();
             if (vector.magnitude > 0f)
@@ -83,8 +82,8 @@ public class UIDraggableCamera : IgnoreTimeScale
             }
             Vector2 vector = Vector2.Scale(delta, -this.scale);
             this.mTrans.localPosition += (Vector3)vector;
-            this.mMomentum = Vector2.Lerp(this.mMomentum, this.mMomentum + ((Vector2) (vector * (0.01f * this.momentumAmount))), 0.67f);
-            if ((this.dragEffect != UIDragObject.DragEffect.MomentumAndSpring) && this.ConstrainToBounds(true))
+            this.mMomentum = Vector2.Lerp(this.mMomentum, this.mMomentum + (Vector2) (vector * (0.01f * this.momentumAmount)), 0.67f);
+            if (this.dragEffect != UIDragObject.DragEffect.MomentumAndSpring && this.ConstrainToBounds(true))
             {
                 this.mMomentum = Vector2.zero;
                 this.mScroll = 0f;

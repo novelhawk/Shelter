@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Tween/Color")]
@@ -71,7 +70,7 @@ public class TweenColor : UITweener
             if (this.mLight != null)
             {
                 this.mLight.color = value;
-                this.mLight.enabled = ((value.r + value.g) + value.b) > 0.01f;
+                this.mLight.enabled = value.r + value.g + value.b > 0.01f;
             }
         }
     }

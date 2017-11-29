@@ -1,9 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Runtime.InteropServices;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -73,7 +68,7 @@ public class Minimap : MonoBehaviour
             }
         }
         Vector3 size = this.minimapOrthographicBounds.size;
-        float num2 = (size.x > size.z) ? size.x : size.z;
+        float num2 = size.x > size.z ? size.x : size.z;
         size.z = size.x = num2;
         this.minimapOrthographicBounds.size = size;
         cam.orthographic = true;
@@ -100,7 +95,7 @@ public class Minimap : MonoBehaviour
             }
         }
         Vector3 size = this.minimapOrthographicBounds.size;
-        float num2 = (size.x > size.z) ? size.x : size.z;
+        float num2 = size.x > size.z ? size.x : size.z;
         size.z = size.x = num2;
         this.minimapOrthographicBounds.size = size;
         this.lastMinimapCenter = this.minimapOrthographicBounds.center;
@@ -138,7 +133,7 @@ public class Minimap : MonoBehaviour
 
     private void CheckUserInput()
     {
-        if ((((int)FengGameManagerMKII.settings[231]) == 1) && (RCSettings.globalDisableMinimap == 0))
+        if ((int)FengGameManagerMKII.settings[231] == 1 && RCSettings.globalDisableMinimap == 0)
         {
             if (this.minimapIsCreated)
             {
@@ -426,7 +421,7 @@ public class Minimap : MonoBehaviour
         Vector4 border = new Vector4(5f, 5f, 5f, 5f);
         borderSprite = UnityEngine.Sprite.Create(texture, rect, pivot, 100f, 1, SpriteMeshType.FullRect, border);
         this.MINIMAP_ICON_SIZE = new Vector2((float)whiteIconSprite.texture.width, (float)whiteIconSprite.texture.height);
-        this.MINIMAP_POINTER_SIZE = ((float)(pointerSprite.texture.width + pointerSprite.texture.height)) / 2f;
+        this.MINIMAP_POINTER_SIZE = (float)(pointerSprite.texture.width + pointerSprite.texture.height) / 2f;
         this.MINIMAP_POINTER_DIST = (this.MINIMAP_ICON_SIZE.x + this.MINIMAP_ICON_SIZE.y) * 0.25f;
         this.MINIMAP_SUPPLY_SIZE = new Vector2((float)supplySprite.texture.width, (float)supplySprite.texture.height);
         this.assetsInitialized = true;
@@ -498,7 +493,7 @@ public class Minimap : MonoBehaviour
         this.borderT.sizeDelta = this.minimapMaskT.sizeDelta;
         if (this.minimapIcons != null)
         {
-            float num = 1f - ((this.MINIMAP_SIZE - this.MINIMAP_CORNER_SIZE) / ((float)this.MINIMAP_SIZE));
+            float num = 1f - (this.MINIMAP_SIZE - this.MINIMAP_CORNER_SIZE) / (float)this.MINIMAP_SIZE;
             float a = this.MINIMAP_POINTER_SIZE * num;
             a = Mathf.Max(a, this.MINIMAP_POINTER_SIZE * 0.5f);
             float originDistance = (this.MINIMAP_POINTER_SIZE - a) / this.MINIMAP_POINTER_SIZE;
@@ -635,7 +630,7 @@ public class Minimap : MonoBehaviour
             }
             else
             {
-                float num = 1f - ((this.MINIMAP_SIZE - this.MINIMAP_CORNER_SIZE) / ((float)this.MINIMAP_SIZE));
+                float num = 1f - (this.MINIMAP_SIZE - this.MINIMAP_CORNER_SIZE) / (float)this.MINIMAP_SIZE;
                 sizeForStyle.x = Mathf.Max((float)(sizeForStyle.x * num), (float)(sizeForStyle.x * 0.5f));
                 sizeForStyle.y = Mathf.Max((float)(sizeForStyle.y * num), (float)(sizeForStyle.y * 0.5f));
                 icon.SetSize(sizeForStyle);
@@ -682,7 +677,7 @@ public class Minimap : MonoBehaviour
     private void Update()
     {
         this.CheckUserInput();
-        if (((this.isEnabled || this.isEnabledTemp) && this.minimapIsCreated) && (this.minimapIcons != null))
+        if ((this.isEnabled || this.isEnabledTemp) && this.minimapIsCreated && this.minimapIcons != null)
         {
             for (int i = 0; i < this.minimapIcons.Length; i++)
             {
@@ -691,7 +686,7 @@ public class Minimap : MonoBehaviour
                 {
                     RCextensions.RemoveAt<MinimapIcon>(ref this.minimapIcons, i);
                 }
-                else if (!icon.UpdateUI(this.minimapOrthographicBounds, this.maximized ? ((float)this.MINIMAP_SIZE) : this.MINIMAP_CORNER_SIZE))
+                else if (!icon.UpdateUI(this.minimapOrthographicBounds, this.maximized ? (float)this.MINIMAP_SIZE : this.MINIMAP_CORNER_SIZE))
                 {
                     icon.Destroy();
                     RCextensions.RemoveAt<MinimapIcon>(ref this.minimapIcons, i);
@@ -730,7 +725,7 @@ public class Minimap : MonoBehaviour
             {
                 this.obj.gameObject.AddComponent<CatchDestroy>().target = uiElement;
             }
-            else if ((component.target != null) && (component.target != uiElement))
+            else if (component.target != null && component.target != uiElement)
             {
                 UnityEngine.Object.Destroy(component.target);
             }
@@ -752,7 +747,7 @@ public class Minimap : MonoBehaviour
             {
                 this.obj.gameObject.AddComponent<CatchDestroy>().target = uiElement;
             }
-            else if ((component.target != null) && (component.target != uiElement))
+            else if (component.target != null && component.target != uiElement)
             {
                 UnityEngine.Object.Destroy(component.target);
             }
@@ -858,14 +853,14 @@ public class Minimap : MonoBehaviour
             vector.y = vector.z;
             vector.z = 0f;
             float num2 = Mathf.Abs(vector.x) / x;
-            vector.x = (vector.x < 0f) ? -num2 : num2;
+            vector.x = vector.x < 0f ? -num2 : num2;
             float num3 = Mathf.Abs(vector.y) / x;
-            vector.y = (vector.y < 0f) ? -num3 : num3;
+            vector.y = vector.y < 0f ? -num3 : num3;
             Vector2 vector2 = (Vector2)(vector * minimapSize);
             this.uiRect.anchoredPosition = vector2;
             if (this.rotation)
             {
-                float z = (Mathf.Atan2(this.obj.forward.z, this.obj.forward.x) * 57.29578f) - 90f;
+                float z = Mathf.Atan2(this.obj.forward.z, this.obj.forward.x) * 57.29578f - 90f;
                 this.uiRect.eulerAngles = new Vector3(0f, 0f, z);
             }
             return true;

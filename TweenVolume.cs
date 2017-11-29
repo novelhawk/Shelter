@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Tween/Volume")]
@@ -23,7 +22,7 @@ public class TweenVolume : UITweener
 
     protected override void OnUpdate(float factor, bool isFinished)
     {
-        this.volume = (this.from * (1f - factor)) + (this.to * factor);
+        this.volume = this.@from * (1f - factor) + this.to * factor;
         this.mSource.enabled = this.mSource.volume > 0.01f;
     }
 

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class ColorAffector : Affector
@@ -46,10 +45,10 @@ public class ColorAffector : Affector
                     {
                         Color[] array = new Color[this.ColorArr.Length];
                         this.ColorArr.CopyTo(array, 0);
-                        for (int i = 0; i < (array.Length / 2); i++)
+                        for (int i = 0; i < array.Length / 2; i++)
                         {
-                            this.ColorArr[(array.Length - i) - 1] = array[i];
-                            this.ColorArr[i] = array[(array.Length - i) - 1];
+                            this.ColorArr[array.Length - i - 1] = array[i];
+                            this.ColorArr[i] = array[array.Length - i - 1];
                         }
                         this.ElapsedTime = 0f;
                     }
@@ -58,13 +57,13 @@ public class ColorAffector : Affector
             else
             {
                 int index = (int) ((this.ColorArr.Length - 1) * (this.ElapsedTime / this.GradualLen));
-                if (index == (this.ColorArr.Length - 1))
+                if (index == this.ColorArr.Length - 1)
                 {
                     index--;
                 }
                 int num3 = index + 1;
-                float num4 = this.GradualLen / ((float) (this.ColorArr.Length - 1));
-                float t = (this.ElapsedTime - (num4 * index)) / num4;
+                float num4 = this.GradualLen / (float) (this.ColorArr.Length - 1);
+                float t = (this.ElapsedTime - num4 * index) / num4;
                 base.Node.Color = Color.Lerp(this.ColorArr[index], this.ColorArr[num3], t);
             }
         }

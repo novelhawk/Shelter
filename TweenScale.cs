@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Tween/Scale")]
@@ -25,7 +24,7 @@ public class TweenScale : UITweener
 
     protected override void OnUpdate(float factor, bool isFinished)
     {
-        this.cachedTransform.localScale = (Vector3) ((this.from * (1f - factor)) + (this.to * factor));
+        this.cachedTransform.localScale = (Vector3) (this.@from * (1f - factor) + this.to * factor);
         if (this.updateTable)
         {
             if (this.mTable == null)

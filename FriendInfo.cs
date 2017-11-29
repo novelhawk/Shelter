@@ -1,6 +1,3 @@
-using System;
-using System.Runtime.CompilerServices;
-
 public class FriendInfo
 {
     public override string ToString()
@@ -12,7 +9,7 @@ public class FriendInfo
     {
         get
         {
-            return (this.IsOnline && !string.IsNullOrEmpty(this.Room));
+            return this.IsOnline && !string.IsNullOrEmpty(this.Room);
         }
     }
 

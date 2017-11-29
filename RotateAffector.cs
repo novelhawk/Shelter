@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class RotateAffector : Affector
@@ -28,7 +27,7 @@ public class RotateAffector : Affector
         }
         else if (this.Type == RSTYPE.SIMPLE)
         {
-            float num2 = base.Node.RotateAngle + (this.Delta * Time.deltaTime);
+            float num2 = base.Node.RotateAngle + this.Delta * Time.deltaTime;
             base.Node.RotateAngle = num2;
         }
     }

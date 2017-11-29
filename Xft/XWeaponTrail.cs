@@ -1,6 +1,5 @@
 namespace Xft
 {
-    using System;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -125,7 +124,7 @@ namespace Xft
 
         private void OnDrawGizmos()
         {
-            if ((this.PointEnd != null) && (this.PointStart != null))
+            if (this.PointEnd != null && this.PointStart != null)
             {
                 Vector3 vector = this.PointStart.position - this.PointEnd.position;
                 float magnitude = vector.magnitude;
@@ -221,11 +220,11 @@ namespace Xft
         private void UpdateIndices()
         {
             VertexPool pool = this.mVertexSegment.Pool;
-            for (int i = 0; i < (this.Granularity - 1); i++)
+            for (int i = 0; i < this.Granularity - 1; i++)
             {
-                int num2 = this.mVertexSegment.VertStart + (i * 3);
-                int num3 = this.mVertexSegment.VertStart + ((i + 1) * 3);
-                int index = this.mVertexSegment.IndexStart + (i * 12);
+                int num2 = this.mVertexSegment.VertStart + i * 3;
+                int num3 = this.mVertexSegment.VertStart + (i + 1) * 3;
+                int index = this.mVertexSegment.IndexStart + i * 12;
                 pool.Indices[index] = num3;
                 pool.Indices[index + 1] = num3 + 1;
                 pool.Indices[index + 2] = num2;
@@ -247,14 +246,14 @@ namespace Xft
             VertexPool pool = this.mVertexSegment.Pool;
             for (int i = 0; i < this.Granularity; i++)
             {
-                int index = this.mVertexSegment.VertStart + (i * 3);
-                float num3 = ((float) i) / ((float) this.Granularity);
+                int index = this.mVertexSegment.VertStart + i * 3;
+                float num3 = (float) i / (float) this.Granularity;
                 float tl = num3 * this.mFadeT;
                 Vector2 zero = Vector2.zero;
                 Vector3 vector2 = this.mSpline.InterpolateByLen(tl);
                 Vector3 vector3 = this.mSpline.InterpolateNormalByLen(tl);
-                Vector3 vector4 = vector2 + ((Vector3) ((vector3.normalized * this.mTrailWidth) * 0.5f));
-                Vector3 vector5 = vector2 - ((Vector3) ((vector3.normalized * this.mTrailWidth) * 0.5f));
+                Vector3 vector4 = vector2 + (Vector3) (vector3.normalized * this.mTrailWidth * 0.5f);
+                Vector3 vector5 = vector2 - (Vector3) (vector3.normalized * this.mTrailWidth * 0.5f);
                 pool.Vertices[index] = vector4;
                 pool.Colors[index] = this.MyColor;
                 zero.x = 0f;
@@ -296,7 +295,7 @@ namespace Xft
         {
             get
             {
-                return (1f / this.Fps);
+                return 1f / this.Fps;
             }
         }
 

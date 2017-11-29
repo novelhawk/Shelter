@@ -1,6 +1,5 @@
 namespace Xft
 {
-    using System;
     using UnityEngine;
 
     public class SplineControlPoint
@@ -54,7 +53,7 @@ namespace Xft
         {
             get
             {
-                return (this.NextControlPoint != null);
+                return this.NextControlPoint != null;
             }
         }
 

@@ -1,9 +1,4 @@
-using Photon;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class TITAN_SETUP : Photon.MonoBehaviour
@@ -23,7 +18,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
         HeroCostume.init2();
         this.hair_go_ref = new GameObject();
         this.eye.transform.parent = base.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck/head").transform;
-        this.hair_go_ref.transform.position = (Vector3) ((this.eye.transform.position + (Vector3.up * 3.5f)) + (base.transform.forward * 5.2f));
+        this.hair_go_ref.transform.position = (Vector3) (this.eye.transform.position + Vector3.up * 3.5f + base.transform.forward * 5.2f);
         this.hair_go_ref.transform.rotation = this.eye.transform.rotation;
         this.hair_go_ref.transform.RotateAround(this.eye.transform.position, base.transform.right, -20f);
         this.hair_go_ref.transform.localScale = new Vector3(210f, 210f, 210f);
@@ -46,11 +41,11 @@ public class TITAN_SETUP : Photon.MonoBehaviour
             iteratorVariable1.transform.localScale = this.hair_go_ref.transform.localScale;
             iteratorVariable1.renderer.material = CharacterMaterials.materials[this.hair.texture];
             bool mipmap = true;
-            if (((int) FengGameManagerMKII.settings[63]) == 1)
+            if ((int) FengGameManagerMKII.settings[63] == 1)
             {
                 mipmap = false;
             }
-            if ((!hairlink.EndsWith(".jpg") && !hairlink.EndsWith(".png")) && !hairlink.EndsWith(".jpeg"))
+            if (!hairlink.EndsWith(".jpg") && !hairlink.EndsWith(".png") && !hairlink.EndsWith(".jpeg"))
             {
                 if (hairlink.ToLower() == "transparent")
                 {
@@ -96,7 +91,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
         if (id >= 0)
         {
             float num2 = 0.125f;
-            float x = num2 * ((int) (((float) id) / 8f));
+            float x = num2 * (int) ((float) id / 8f);
             float y = -0.25f * (id % 4);
             go.renderer.material.mainTextureOffset = new Vector2(x, y);
         }
@@ -126,7 +121,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
         this.part_hair.renderer.material.color = HeroCostume.costume[UnityEngine.Random.Range(0, HeroCostume.costume.Length - 5)].hair_color;
         int id = UnityEngine.Random.Range(1, 8);
         this.setFacialTexture(this.eye, id);
-        if ((IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER) && base.photonView.isMine)
+        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && base.photonView.isMine)
         {
             object[] parameters = new object[] { this.hairType, id, this.part_hair.renderer.material.color.r, this.part_hair.renderer.material.color.g, this.part_hair.renderer.material.color.b };
             base.photonView.RPC("setHairPRC", PhotonTargets.OthersBuffered, parameters);
@@ -137,7 +132,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
     {
         int num;
         object[] objArray2;
-        if ((((int) FengGameManagerMKII.settings[1]) == 1) && ((IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE) || base.photonView.isMine))
+        if ((int) FengGameManagerMKII.settings[1] == 1 && (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || base.photonView.isMine))
         {
             Color color;
             num = UnityEngine.Random.Range(0, 9);
@@ -146,11 +141,11 @@ public class TITAN_SETUP : Photon.MonoBehaviour
                 num = 9;
             }
             int index = this.skin - 70;
-            if (((int) FengGameManagerMKII.settings[32]) == 1)
+            if ((int) FengGameManagerMKII.settings[32] == 1)
             {
                 index = UnityEngine.Random.Range(16, 20);
             }
-            if (((int) FengGameManagerMKII.settings[index]) >= 0)
+            if ((int) FengGameManagerMKII.settings[index] >= 0)
             {
                 num = (int) FengGameManagerMKII.settings[index];
             }
@@ -161,11 +156,11 @@ public class TITAN_SETUP : Photon.MonoBehaviour
                 eye = 0;
             }
             bool flag2 = false;
-            if ((hairlink.EndsWith(".jpg") || hairlink.EndsWith(".png")) || hairlink.EndsWith(".jpeg"))
+            if (hairlink.EndsWith(".jpg") || hairlink.EndsWith(".png") || hairlink.EndsWith(".jpeg"))
             {
                 flag2 = true;
             }
-            if ((IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER) && base.photonView.isMine)
+            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && base.photonView.isMine)
             {
                 if (flag2)
                 {
@@ -216,7 +211,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
             this.part_hair.renderer.material.color = HeroCostume.costume[UnityEngine.Random.Range(0, HeroCostume.costume.Length - 5)].hair_color;
             int id = UnityEngine.Random.Range(1, 8);
             this.setFacialTexture(this.eye, id);
-            if ((IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER) && base.photonView.isMine)
+            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && base.photonView.isMine)
             {
                 objArray2 = new object[] { this.hairType, id, this.part_hair.renderer.material.color.r, this.part_hair.renderer.material.color.g, this.part_hair.renderer.material.color.b };
                 base.photonView.RPC("setHairPRC", PhotonTargets.OthersBuffered, objArray2);
@@ -247,7 +242,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
     [RPC]
     public void setHairRPC2(int hair, int eye, string hairlink)
     {
-        if (((int) FengGameManagerMKII.settings[1]) == 1)
+        if ((int) FengGameManagerMKII.settings[1] == 1)
         {
             base.StartCoroutine(this.loadskinE(hair, eye, hairlink));
         }
@@ -280,7 +275,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
         }
         this.part_hair = obj2;
         this.setFacialTexture(this.eye, 0);
-        if ((IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER) && base.photonView.isMine)
+        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && base.photonView.isMine)
         {
             object[] parameters = new object[] { this.hairType, 0, this.part_hair.renderer.material.color.r, this.part_hair.renderer.material.color.g, this.part_hair.renderer.material.color.b };
             base.photonView.RPC("setHairPRC", PhotonTargets.OthersBuffered, parameters);

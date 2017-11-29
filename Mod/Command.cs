@@ -1,6 +1,4 @@
-﻿using UnityEngine;
-
-namespace Mod
+﻿namespace Mod
 {
     public abstract class Command
     {

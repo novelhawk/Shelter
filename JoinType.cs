@@ -1,5 +1,3 @@
-using System;
-
 internal enum JoinType
 {
     CreateGame,

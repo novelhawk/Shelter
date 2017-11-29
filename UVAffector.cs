@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class UVAffector : Affector
@@ -25,11 +24,11 @@ public class UVAffector : Affector
         this.ElapsedTime += Time.deltaTime;
         if (this.UVTime <= 0f)
         {
-            num = base.Node.GetLifeTime() / ((float) this.Frames.frames.Length);
+            num = base.Node.GetLifeTime() / (float) this.Frames.frames.Length;
         }
         else
         {
-            num = this.UVTime / ((float) this.Frames.frames.Length);
+            num = this.UVTime / (float) this.Frames.frames.Length;
         }
         if (this.ElapsedTime >= num)
         {

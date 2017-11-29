@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -14,7 +13,7 @@ public class InvDatabase : MonoBehaviour
     public static InvBaseItem FindByID(int id32)
     {
         InvDatabase database = GetDatabase(id32 >> 16);
-        return ((database == null) ? null : database.GetItem(id32 & 65535));
+        return database == null ? null : database.GetItem(id32 & 65535);
     }
 
     public static InvBaseItem FindByName(string exact)
@@ -49,7 +48,7 @@ public class InvDatabase : MonoBehaviour
             InvDatabase database = list[index];
             if (database.items.Contains(item))
             {
-                return ((database.databaseID << 16) | item.id16);
+                return (database.databaseID << 16) | item.id16;
             }
             index++;
         }

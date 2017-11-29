@@ -1,6 +1,5 @@
 namespace Xft
 {
-    using System;
     using System.Collections.Generic;
     using UnityEngine;
 
@@ -81,17 +80,17 @@ namespace Xft
         {
             int count = 0;
             int num2 = 0;
-            if ((this.VertexUsed + vcount) >= this.VertexTotal)
+            if (this.VertexUsed + vcount >= this.VertexTotal)
             {
-                count = ((vcount / 108) + 1) * 108;
+                count = (vcount / 108 + 1) * 108;
             }
-            if ((this.IndexUsed + icount) >= this.IndexTotal)
+            if (this.IndexUsed + icount >= this.IndexTotal)
             {
-                num2 = ((icount / 108) + 1) * 108;
+                num2 = (icount / 108 + 1) * 108;
             }
             this.VertexUsed += vcount;
             this.IndexUsed += icount;
-            if ((count != 0) || (num2 != 0))
+            if (count != 0 || num2 != 0)
             {
                 this.EnlargeArrays(count, num2);
                 this.VertexTotal += count;
@@ -145,7 +144,7 @@ namespace Xft
                 this.Mesh.triangles = this.Indices;
             }
             this.ElapsedTime += Time.deltaTime;
-            if ((this.ElapsedTime > this.BoundsScheduleTime) || this.FirstUpdate)
+            if (this.ElapsedTime > this.BoundsScheduleTime || this.FirstUpdate)
             {
                 this.RecalculateBounds();
                 this.ElapsedTime = 0f;
@@ -186,7 +185,7 @@ namespace Xft
 
             public void ClearIndices()
             {
-                for (int i = this.IndexStart; i < (this.IndexStart + this.IndexCount); i++)
+                for (int i = this.IndexStart; i < this.IndexStart + this.IndexCount; i++)
                 {
                     this.Pool.Indices[i] = 0;
                 }

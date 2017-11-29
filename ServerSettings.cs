@@ -45,7 +45,7 @@ public class ServerSettings : ScriptableObject
     public void UseMyServer(string serverAddress, int serverPort, string application)
     {
         this.HostType = HostingOption.SelfHosted;
-        this.AppID = (application == null) ? "master" : application;
+        this.AppID = application == null ? "master" : application;
         this.ServerAddress = serverAddress;
         this.ServerPort = serverPort;
     }

@@ -1,5 +1,3 @@
-using Photon;
-using System;
 using System.Reflection;
 using UnityEngine;
 
@@ -35,7 +33,7 @@ public class PhotonView : Photon.MonoBehaviour
     {
         if (!this.failedToFindOnSerialize)
         {
-            if ((this.OnSerializeMethodInfo == null) && !NetworkingPeer.GetMethod(this.observed as UnityEngine.MonoBehaviour, PhotonNetworkingMessage.OnPhotonSerializeView.ToString(), out this.OnSerializeMethodInfo))
+            if (this.OnSerializeMethodInfo == null && !NetworkingPeer.GetMethod(this.observed as UnityEngine.MonoBehaviour, PhotonNetworkingMessage.OnPhotonSerializeView.ToString(), out this.OnSerializeMethodInfo))
             {
                 Debug.LogError("The observed monobehaviour (" + this.observed.name + ") of this PhotonView does not implement OnPhotonSerializeView()!");
                 this.failedToFindOnSerialize = true;
@@ -108,7 +106,7 @@ public class PhotonView : Photon.MonoBehaviour
 
     public void RPC(string methodName, PhotonTargets target, params object[] parameters)
     {
-        if (PhotonNetwork.networkingPeer.hasSwitchedMC && (target == PhotonTargets.MasterClient))
+        if (PhotonNetwork.networkingPeer.hasSwitchedMC && target == PhotonTargets.MasterClient)
         {
             PhotonNetwork.RPC(this, methodName, PhotonNetwork.masterClient, parameters);
         }
@@ -120,7 +118,7 @@ public class PhotonView : Photon.MonoBehaviour
 
     public override string ToString()
     {
-        object[] args = new object[] { this.viewID, (base.gameObject == null) ? "GO==null" : base.gameObject.name, !this.isSceneView ? string.Empty : "(scene)", this.prefix };
+        object[] args = new object[] { this.viewID, base.gameObject == null ? "GO==null" : base.gameObject.name, !this.isSceneView ? string.Empty : "(scene)", this.prefix };
         return string.Format("View ({3}){0} on {1} {2}", args);
     }
 
@@ -144,7 +142,7 @@ public class PhotonView : Photon.MonoBehaviour
     {
         get
         {
-            return ((this.ownerId == PhotonPlayer.Self.ID) || (this.isSceneView && PhotonNetwork.isMasterClient));
+            return this.ownerId == PhotonPlayer.Self.ID || this.isSceneView && PhotonNetwork.isMasterClient;
         }
     }
 
@@ -152,7 +150,7 @@ public class PhotonView : Photon.MonoBehaviour
     {
         get
         {
-            return (this.ownerId == 0);
+            return this.ownerId == 0;
         }
     }
 
@@ -176,7 +174,7 @@ public class PhotonView : Photon.MonoBehaviour
     {
         get
         {
-            if ((this.prefixBackup == -1) && (PhotonNetwork.networkingPeer != null))
+            if (this.prefixBackup == -1 && PhotonNetwork.networkingPeer != null)
             {
                 this.prefixBackup = PhotonNetwork.networkingPeer.currentLevelPrefix;
             }
@@ -192,11 +190,11 @@ public class PhotonView : Photon.MonoBehaviour
     {
         get
         {
-            return ((this.ownerId * PhotonNetwork.MAX_VIEW_IDS) + this.subId);
+            return this.ownerId * PhotonNetwork.MAX_VIEW_IDS + this.subId;
         }
         set
         {
-            bool flag = this.didAwake && (this.subId == 0);
+            bool flag = this.didAwake && this.subId == 0;
             this.ownerId = value / PhotonNetwork.MAX_VIEW_IDS;
             this.subId = value % PhotonNetwork.MAX_VIEW_IDS;
             if (flag)

@@ -1,6 +1,5 @@
 using ExitGames.Client.Photon;
 using ExitGames.Client.Photon.Lite;
-using System;
 using System.Collections.Generic;
 
 internal class LoadbalancingPeer : PhotonPeer
@@ -17,7 +16,7 @@ internal class LoadbalancingPeer : PhotonPeer
             base.Listener.DebugReturn(DebugLevel.INFO, "OpAuthenticate()");
         }
         Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>();
-        if ((authValues != null) && (authValues.Secret != null))
+        if (authValues != null && authValues.Secret != null)
         {
             customOpParameters[221] = authValues.Secret;
             return this.OpCustom(230, customOpParameters, true, 0, false);
@@ -32,7 +31,7 @@ internal class LoadbalancingPeer : PhotonPeer
         {
             customOpParameters[225] = userId;
         }
-        if ((authValues != null) && (authValues.AuthType != CustomAuthenticationType.None))
+        if (authValues != null && authValues.AuthType != CustomAuthenticationType.None)
         {
             if (!base.IsEncryptionAvailable)
             {
@@ -96,7 +95,7 @@ internal class LoadbalancingPeer : PhotonPeer
         }
         if (onGameServer)
         {
-            if ((playerProperties != null) && (playerProperties.Count > 0))
+            if (playerProperties != null && playerProperties.Count > 0)
             {
                 customOpParameters[249] = playerProperties;
                 customOpParameters[250] = true;
@@ -127,7 +126,7 @@ internal class LoadbalancingPeer : PhotonPeer
     public virtual bool OpFindFriends(string[] friendsToFind)
     {
         Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>();
-        if ((friendsToFind != null) && (friendsToFind.Length > 0))
+        if (friendsToFind != null && friendsToFind.Length > 0)
         {
             customOpParameters[1] = friendsToFind;
         }
@@ -148,7 +147,7 @@ internal class LoadbalancingPeer : PhotonPeer
             base.Listener.DebugReturn(DebugLevel.INFO, "OpJoinLobby()");
         }
         Dictionary<byte, object> customOpParameters = null;
-        if ((lobby != null) && !lobby.IsDefault)
+        if (lobby != null && !lobby.IsDefault)
         {
             customOpParameters = new Dictionary<byte, object>();
             customOpParameters[213] = lobby.Name;
@@ -174,7 +173,7 @@ internal class LoadbalancingPeer : PhotonPeer
         {
             customOpParameters[248] = target;
         }
-        if ((playerProperties != null) && (playerProperties.Count > 0))
+        if (playerProperties != null && playerProperties.Count > 0)
         {
             customOpParameters[249] = playerProperties;
         }
@@ -212,7 +211,7 @@ internal class LoadbalancingPeer : PhotonPeer
         }
         if (onGameServer)
         {
-            if ((playerProperties != null) && (playerProperties.Count > 0))
+            if (playerProperties != null && playerProperties.Count > 0)
             {
                 customOpParameters[249] = playerProperties;
                 customOpParameters[250] = true;
@@ -306,7 +305,7 @@ internal class LoadbalancingPeer : PhotonPeer
         {
             base.Listener.DebugReturn(DebugLevel.INFO, "OpSetPropertiesOfActor()");
         }
-        if ((actorNr > 0) && (actorProperties != null))
+        if (actorNr > 0 && actorProperties != null)
         {
             Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>();
             customOpParameters.Add(251, actorProperties);

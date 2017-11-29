@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public static class RCextensions
@@ -25,7 +24,7 @@ public static class RCextensions
         while (text.Contains("[") && !flag2)
         {
             int index = text.IndexOf("[");
-            if (text.Length >= (index + 7))
+            if (text.Length >= index + 7)
             {
                 string str = text.Substring(index + 1, 6);
                 text = text.Remove(index, 7).Insert(index, "<color=#" + str);
@@ -71,7 +70,7 @@ public static class RCextensions
         int width = texture.width;
         int height = texture.height;
         int num3 = 0;
-        if ((width < 4) || ((width & (width - 1)) != 0))
+        if (width < 4 || (width & (width - 1)) != 0)
         {
             num3 = 4;
             width = Math.Min(width, 1023);
@@ -80,7 +79,7 @@ public static class RCextensions
                 num3 *= 2;
             }
         }
-        else if ((height < 4) || ((height & (height - 1)) != 0))
+        else if (height < 4 || (height & (height - 1)) != 0)
         {
             num3 = 4;
             height = Math.Min(height, 1023);
@@ -158,12 +157,12 @@ public static class RCextensions
 
     public static bool returnBoolFromObject(object obj)
     {
-        return (((obj != null) && (obj is bool)) && ((bool) obj));
+        return obj != null && obj is bool && (bool) obj;
     }
 
     public static float returnFloatFromObject(object obj)
     {
-        if ((obj != null) && (obj is float))
+        if (obj != null && obj is float)
         {
             return (float) obj;
         }
@@ -172,7 +171,7 @@ public static class RCextensions
 
     public static int returnIntFromObject(object obj)
     {
-        if ((obj != null) && (obj is int))
+        if (obj != null && obj is int)
         {
             return (int) obj;
         }

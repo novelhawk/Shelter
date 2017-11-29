@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class ScaleAffector : Affector
@@ -39,13 +38,13 @@ public class ScaleAffector : Affector
         }
         else if (this.Type == RSTYPE.SIMPLE)
         {
-            float num2 = base.Node.Scale.x + (this.DeltaX * Time.deltaTime);
-            float num3 = base.Node.Scale.y + (this.DeltaY * Time.deltaTime);
-            if ((num2 * base.Node.Scale.x) > 0f)
+            float num2 = base.Node.Scale.x + this.DeltaX * Time.deltaTime;
+            float num3 = base.Node.Scale.y + this.DeltaY * Time.deltaTime;
+            if (num2 * base.Node.Scale.x > 0f)
             {
                 base.Node.Scale.x = num2;
             }
-            if ((num3 * base.Node.Scale.y) > 0f)
+            if (num3 * base.Node.Scale.y > 0f)
             {
                 base.Node.Scale.y = num3;
             }

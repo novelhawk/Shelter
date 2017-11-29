@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class FlareMovement : MonoBehaviour
@@ -19,7 +18,7 @@ public class FlareMovement : MonoBehaviour
     private void Start()
     {
         this.hero = GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().main_object;
-        if (!this.nohint && (this.hero != null))
+        if (!this.nohint && this.hero != null)
         {
             this.hint = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("UI/" + this.color + "FlareHint"));
             if (this.color == "Black")
@@ -62,11 +61,11 @@ public class FlareMovement : MonoBehaviour
         }
         if (this.timer < 4f)
         {
-            base.rigidbody.AddForce((Vector3) (((base.transform.forward + (base.transform.up * 5f)) * Time.deltaTime) * 5f), ForceMode.VelocityChange);
+            base.rigidbody.AddForce((Vector3) ((base.transform.forward + base.transform.up * 5f) * Time.deltaTime * 5f), ForceMode.VelocityChange);
         }
         else
         {
-            base.rigidbody.AddForce((Vector3) ((-base.transform.up * Time.deltaTime) * 7f), ForceMode.Acceleration);
+            base.rigidbody.AddForce((Vector3) (-base.transform.up * Time.deltaTime * 7f), ForceMode.Acceleration);
         }
     }
 }

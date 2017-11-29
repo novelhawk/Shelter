@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class MovementUpdate : MonoBehaviour
@@ -29,7 +28,7 @@ public class MovementUpdate : MonoBehaviour
 
     private void Update()
     {
-        if ((!this.disabled && (Network.peerType != NetworkPeerType.Disconnected)) && (Network.peerType != NetworkPeerType.Connecting))
+        if (!this.disabled && Network.peerType != NetworkPeerType.Disconnected && Network.peerType != NetworkPeerType.Connecting)
         {
             if (base.networkView.isMine)
             {

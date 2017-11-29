@@ -1,7 +1,6 @@
 namespace ExitGames.Client.DemoParticle
 {
     using System;
-    using System.Runtime.CompilerServices;
 
     public class TimeKeeper
     {
@@ -28,7 +27,7 @@ namespace ExitGames.Client.DemoParticle
         {
             get
             {
-                return (this.IsEnabled && (this.shouldExecute || ((Environment.TickCount - this.lastExecutionTime) > this.Interval)));
+                return this.IsEnabled && (this.shouldExecute || Environment.TickCount - this.lastExecutionTime > this.Interval);
             }
             set
             {

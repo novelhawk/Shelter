@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -85,7 +84,7 @@ public class StyledComboBox : StyledItem
                 UnityEngine.Object.DestroyObject(this.root.menuItem.transform.GetChild(i).gameObject);
             }
         }
-        if ((this.itemMenuPrefab != null) && (this.root.menuItem != null))
+        if (this.itemMenuPrefab != null && this.root.menuItem != null)
         {
             StyledItem item = UnityEngine.Object.Instantiate(this.itemMenuPrefab) as StyledItem;
             item.Populate(data);
@@ -151,7 +150,7 @@ public class StyledComboBox : StyledItem
         }
         set
         {
-            if ((value >= 0) && (value <= this.items.Count))
+            if (value >= 0 && value <= this.items.Count)
             {
                 this.selectedIndex = value;
                 this.CreateMenuButton(this.items[this.selectedIndex].GetText().text);
@@ -163,7 +162,7 @@ public class StyledComboBox : StyledItem
     {
         get
         {
-            if ((this.selectedIndex >= 0) && (this.selectedIndex <= this.items.Count))
+            if (this.selectedIndex >= 0 && this.selectedIndex <= this.items.Count)
             {
                 return this.items[this.selectedIndex];
             }

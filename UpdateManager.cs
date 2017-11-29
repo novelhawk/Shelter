@@ -118,7 +118,7 @@ public class UpdateManager : MonoBehaviour
             while (size > 0)
             {
                 DestroyEntry entry = this.mDest.buffer[--size];
-                if (!isPlaying || (entry.time < this.mTime))
+                if (!isPlaying || entry.time < this.mTime)
                 {
                     if (entry.obj != null)
                     {
@@ -128,7 +128,7 @@ public class UpdateManager : MonoBehaviour
                     this.mDest.RemoveAt(size);
                 }
             }
-            if (((this.mOnUpdate.Count == 0) && (this.mOnLate.Count == 0)) && ((this.mOnCoro.Count == 0) && (this.mDest.size == 0)))
+            if (this.mOnUpdate.Count == 0 && this.mOnLate.Count == 0 && this.mOnCoro.Count == 0 && this.mDest.size == 0)
             {
                 NGUITools.Destroy(base.gameObject);
                 return false;
@@ -142,7 +142,7 @@ public class UpdateManager : MonoBehaviour
         if (mInst == null)
         {
             mInst = UnityEngine.Object.FindObjectOfType(typeof(UpdateManager)) as UpdateManager;
-            if ((mInst == null) && Application.isPlaying)
+            if (mInst == null && Application.isPlaying)
             {
                 GameObject target = new GameObject("_UpdateManager");
                 UnityEngine.Object.DontDestroyOnLoad(target);

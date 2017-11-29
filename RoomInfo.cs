@@ -1,6 +1,4 @@
 using ExitGames.Client.Photon;
-using System;
-using System.Runtime.CompilerServices;
 
 public class RoomInfo
 {
@@ -19,7 +17,7 @@ public class RoomInfo
 
     protected internal void CacheProperties(Hashtable propertiesToCache)
     {
-        if (((propertiesToCache != null) && (propertiesToCache.Count != 0)) && !this.customPropertiesField.Equals(propertiesToCache))
+        if (propertiesToCache != null && propertiesToCache.Count != 0 && !this.customPropertiesField.Equals(propertiesToCache))
         {
             if (propertiesToCache.ContainsKey((byte) 251))
             {
@@ -56,7 +54,7 @@ public class RoomInfo
     public override bool Equals(object p)
     {
         Room room = p as Room;
-        return ((room != null) && this.nameField.Equals(room.nameField));
+        return room != null && this.nameField.Equals(room.nameField);
     }
 
     public override int GetHashCode()

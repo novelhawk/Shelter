@@ -1,5 +1,4 @@
 using ExitGames.Client.Photon;
-using System;
 
 public class RoomOptions
 {

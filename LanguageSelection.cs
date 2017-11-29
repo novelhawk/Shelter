@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Language Selection"), RequireComponent(typeof(UIPopupList))]
@@ -24,7 +23,7 @@ public class LanguageSelection : MonoBehaviour
 
     private void UpdateList()
     {
-        if ((Localization.instance != null) && (Localization.instance.languages != null))
+        if (Localization.instance != null && Localization.instance.languages != null)
         {
             this.mList.items.Clear();
             int index = 0;

@@ -19,7 +19,7 @@ public class UIAtlas : MonoBehaviour
 
     public static bool CheckIfRelated(UIAtlas a, UIAtlas b)
     {
-        return (((a != null) && (b != null)) && (((a == b) || a.References(b)) || b.References(a)));
+        return a != null && b != null && (a == b || a.References(b) || b.References(a));
     }
 
     private static int CompareString(string a, string b)
@@ -39,7 +39,7 @@ public class UIAtlas : MonoBehaviour
         while (num < count)
         {
             Sprite sprite = this.sprites[num];
-            if ((sprite != null) && !string.IsNullOrEmpty(sprite.name))
+            if (sprite != null && !string.IsNullOrEmpty(sprite.name))
             {
                 list.Add(sprite.name);
             }
@@ -64,7 +64,7 @@ public class UIAtlas : MonoBehaviour
         while (num < count)
         {
             Sprite sprite = this.sprites[num];
-            if (((sprite != null) && !string.IsNullOrEmpty(sprite.name)) && string.Equals(match, sprite.name, StringComparison.OrdinalIgnoreCase))
+            if (sprite != null && !string.IsNullOrEmpty(sprite.name) && string.Equals(match, sprite.name, StringComparison.OrdinalIgnoreCase))
             {
                 list.Add(sprite.name);
                 return list;
@@ -82,7 +82,7 @@ public class UIAtlas : MonoBehaviour
         while (num4 < num5)
         {
             Sprite sprite2 = this.sprites[num4];
-            if ((sprite2 != null) && !string.IsNullOrEmpty(sprite2.name))
+            if (sprite2 != null && !string.IsNullOrEmpty(sprite2.name))
             {
                 string str = sprite2.name.ToLower();
                 int num6 = 0;
@@ -116,7 +116,7 @@ public class UIAtlas : MonoBehaviour
             while (num < count)
             {
                 Sprite sprite = this.sprites[num];
-                if (!string.IsNullOrEmpty(sprite.name) && (name == sprite.name))
+                if (!string.IsNullOrEmpty(sprite.name) && name == sprite.name)
                 {
                     return sprite;
                 }
@@ -166,7 +166,7 @@ public class UIAtlas : MonoBehaviour
         while (num5 < num6)
         {
             UILabel label = labelArray[num5];
-            if ((label.font != null) && CheckIfRelated(this, label.font.atlas))
+            if (label.font != null && CheckIfRelated(this, label.font.atlas))
             {
                 UIFont font2 = label.font;
                 label.font = null;
@@ -182,14 +182,14 @@ public class UIAtlas : MonoBehaviour
         {
             return false;
         }
-        return ((atlas == this) || ((this.mReplacement != null) && this.mReplacement.References(atlas)));
+        return atlas == this || this.mReplacement != null && this.mReplacement.References(atlas);
     }
 
     public Coordinates coordinates
     {
         get
         {
-            return ((this.mReplacement == null) ? this.mCoordinates : this.mReplacement.coordinates);
+            return this.mReplacement == null ? this.mCoordinates : this.mReplacement.coordinates;
         }
         set
         {
@@ -199,7 +199,7 @@ public class UIAtlas : MonoBehaviour
             }
             else if (this.mCoordinates != value)
             {
-                if ((this.material == null) || (this.material.mainTexture == null))
+                if (this.material == null || this.material.mainTexture == null)
                 {
                     Debug.LogError("Can't switch coordinates until the atlas material has a valid texture");
                 }
@@ -233,7 +233,7 @@ public class UIAtlas : MonoBehaviour
     {
         get
         {
-            return ((this.mReplacement == null) ? this.mPixelSize : this.mReplacement.pixelSize);
+            return this.mReplacement == null ? this.mPixelSize : this.mReplacement.pixelSize;
         }
         set
         {
@@ -264,9 +264,9 @@ public class UIAtlas : MonoBehaviour
             if (this.mPMA == -1)
             {
                 Material spriteMaterial = this.spriteMaterial;
-                this.mPMA = (((spriteMaterial == null) || (spriteMaterial.shader == null)) || !spriteMaterial.shader.name.Contains("Premultiplied")) ? 0 : 1;
+                this.mPMA = spriteMaterial == null || spriteMaterial.shader == null || !spriteMaterial.shader.name.Contains("Premultiplied") ? 0 : 1;
             }
-            return (this.mPMA == 1);
+            return this.mPMA == 1;
         }
     }
 
@@ -285,7 +285,7 @@ public class UIAtlas : MonoBehaviour
             }
             if (this.mReplacement != atlas)
             {
-                if ((atlas != null) && (atlas.replacement == this))
+                if (atlas != null && atlas.replacement == this)
                 {
                     atlas.replacement = null;
                 }
@@ -303,7 +303,7 @@ public class UIAtlas : MonoBehaviour
     {
         get
         {
-            return ((this.mReplacement == null) ? this.sprites : this.mReplacement.spriteList);
+            return this.mReplacement == null ? this.sprites : this.mReplacement.spriteList;
         }
         set
         {
@@ -322,7 +322,7 @@ public class UIAtlas : MonoBehaviour
     {
         get
         {
-            return ((this.mReplacement == null) ? this.material : this.mReplacement.spriteMaterial);
+            return this.mReplacement == null ? this.material : this.mReplacement.spriteMaterial;
         }
         set
         {
@@ -349,7 +349,7 @@ public class UIAtlas : MonoBehaviour
     {
         get
         {
-            return ((this.mReplacement == null) ? ((this.material == null) ? null : this.material.mainTexture) : this.mReplacement.texture);
+            return this.mReplacement == null ? (this.material == null ? null : this.material.mainTexture) : this.mReplacement.texture;
         }
     }
 
@@ -375,7 +375,7 @@ public class UIAtlas : MonoBehaviour
         {
             get
             {
-                return ((((this.paddingLeft != 0f) || (this.paddingRight != 0f)) || (this.paddingTop != 0f)) || (this.paddingBottom != 0f));
+                return this.paddingLeft != 0f || this.paddingRight != 0f || this.paddingTop != 0f || this.paddingBottom != 0f;
             }
         }
     }

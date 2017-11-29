@@ -1,5 +1,3 @@
-using System;
-
 public class RCCondition
 {
     private int operand;
@@ -20,9 +18,9 @@ public class RCCondition
         int operand = this.operand;
         if (operand == 2)
         {
-            return (baseBool == compareBool);
+            return baseBool == compareBool;
         }
-        return ((operand == 5) && (baseBool != compareBool));
+        return operand == 5 && baseBool != compareBool;
     }
 
     public bool checkCondition()
@@ -153,9 +151,9 @@ public class RCCondition
         int operand = this.operand;
         if (operand == 2)
         {
-            return (basePlayer == comparePlayer);
+            return basePlayer == comparePlayer;
         }
-        return ((operand == 5) && (basePlayer != comparePlayer));
+        return operand == 5 && basePlayer != comparePlayer;
     }
 
     private bool stringCompare(string baseString, string compareString)
@@ -226,9 +224,9 @@ public class RCCondition
         int operand = this.operand;
         if (operand == 2)
         {
-            return (baseTitan == compareTitan);
+            return baseTitan == compareTitan;
         }
-        return ((operand == 5) && (baseTitan != compareTitan));
+        return operand == 5 && baseTitan != compareTitan;
     }
 
     public enum castTypes

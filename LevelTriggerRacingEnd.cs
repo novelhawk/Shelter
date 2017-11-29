@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class LevelTriggerRacingEnd : MonoBehaviour
@@ -7,7 +6,7 @@ public class LevelTriggerRacingEnd : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (!this.disable && (other.gameObject.tag == "Player"))
+        if (!this.disable && other.gameObject.tag == "Player")
         {
             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
             {

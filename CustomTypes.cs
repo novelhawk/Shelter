@@ -1,5 +1,4 @@
 using ExitGames.Client.Photon;
-using System;
 using UnityEngine;
 
 internal static class CustomTypes

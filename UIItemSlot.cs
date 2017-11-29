@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -37,7 +36,7 @@ public abstract class UIItemSlot : MonoBehaviour
 
     private void OnDrag(Vector2 delta)
     {
-        if ((mDraggedItem == null) && (this.mItem != null))
+        if (mDraggedItem == null && this.mItem != null)
         {
             UICamera.currentTouch.clickNotification = UICamera.ClickNotification.BasedOnDelta;
             mDraggedItem = this.Replace(null);
@@ -97,7 +96,7 @@ public abstract class UIItemSlot : MonoBehaviour
                         {
                             tooltipText = tooltipText + "%";
                         }
-                        tooltipText = (tooltipText + " " + stat.id) + "[-]";
+                        tooltipText = tooltipText + " " + stat.id + "[-]";
                     }
                     num++;
                 }
@@ -119,19 +118,19 @@ public abstract class UIItemSlot : MonoBehaviour
         if (this.mItem != observedItem)
         {
             this.mItem = observedItem;
-            InvBaseItem item2 = (observedItem == null) ? null : observedItem.baseItem;
+            InvBaseItem item2 = observedItem == null ? null : observedItem.baseItem;
             if (this.label != null)
             {
-                string str = (observedItem == null) ? null : observedItem.name;
+                string str = observedItem == null ? null : observedItem.name;
                 if (string.IsNullOrEmpty(this.mText))
                 {
                     this.mText = this.label.text;
                 }
-                this.label.text = (str == null) ? this.mText : str;
+                this.label.text = str == null ? this.mText : str;
             }
             if (this.icon != null)
             {
-                if ((item2 != null) && (item2.iconAtlas != null))
+                if (item2 != null && item2.iconAtlas != null)
                 {
                     this.icon.atlas = item2.iconAtlas;
                     this.icon.spriteName = item2.iconName;
@@ -145,14 +144,14 @@ public abstract class UIItemSlot : MonoBehaviour
             }
             if (this.background != null)
             {
-                this.background.color = (observedItem == null) ? Color.white : observedItem.color;
+                this.background.color = observedItem == null ? Color.white : observedItem.color;
             }
         }
     }
 
     private void UpdateCursor()
     {
-        if ((mDraggedItem != null) && (mDraggedItem.baseItem != null))
+        if (mDraggedItem != null && mDraggedItem.baseItem != null)
         {
             UICursor.Set(mDraggedItem.baseItem.iconAtlas, mDraggedItem.baseItem.iconName);
         }

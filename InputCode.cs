@@ -1,5 +1,3 @@
-using System;
-
 public class InputCode
 {
     public static int attack0 = 10;

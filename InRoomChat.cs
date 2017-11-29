@@ -1,10 +1,3 @@
-using ExitGames.Client.Photon;
-using Photon;
-using System;
-using System.Collections.Generic;
-using Mod;
-using UnityEngine;
-
 public class InRoomChat : Photon.MonoBehaviour
 {
     public void AddLine(string newLine)

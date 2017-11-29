@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -37,7 +36,7 @@ public class UITextList : MonoBehaviour
         }
         item.text = text;
         this.mParagraphs.Add(item);
-        if ((this.textLabel != null) && (this.textLabel.font != null))
+        if (this.textLabel != null && this.textLabel.font != null)
         {
             item.lines = this.textLabel.font.WrapText(item.text, this.maxWidth / this.textLabel.transform.localScale.y, this.textLabel.maxLineCount, this.textLabel.supportEncoding, this.textLabel.symbolStyle).Split(this.mSeparator);
             this.mTotalLines = 0;
@@ -89,7 +88,7 @@ public class UITextList : MonoBehaviour
     {
         if (this.mSelected && this.supportScrollWheel)
         {
-            val *= (this.style != Style.Chat) ? -10f : 10f;
+            val *= this.style != Style.Chat ? -10f : 10f;
             this.mScroll = Mathf.Max((float) 0f, (float) (this.mScroll + val));
             this.UpdateVisibleText();
         }
@@ -102,19 +101,19 @@ public class UITextList : MonoBehaviour
 
     protected void UpdateVisibleText()
     {
-        if ((this.textLabel != null) && (this.textLabel.font != null))
+        if (this.textLabel != null && this.textLabel.font != null)
         {
             int num = 0;
-            int num2 = (this.maxHeight <= 0f) ? 100000 : Mathf.FloorToInt(this.maxHeight / this.textLabel.cachedTransform.localScale.y);
+            int num2 = this.maxHeight <= 0f ? 100000 : Mathf.FloorToInt(this.maxHeight / this.textLabel.cachedTransform.localScale.y);
             int num3 = Mathf.RoundToInt(this.mScroll);
-            if ((num2 + num3) > this.mTotalLines)
+            if (num2 + num3 > this.mTotalLines)
             {
                 num3 = Mathf.Max(0, this.mTotalLines - num2);
                 this.mScroll = num3;
             }
             if (this.style == Style.Chat)
             {
-                num3 = Mathf.Max(0, (this.mTotalLines - num2) - num3);
+                num3 = Mathf.Max(0, this.mTotalLines - num2 - num3);
             }
             StringBuilder builder = new StringBuilder();
             int num4 = 0;

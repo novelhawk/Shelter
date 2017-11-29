@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [ExecuteInEditMode, AddComponentMenu("NGUI/Examples/Slider Colors"), RequireComponent(typeof(UISlider))]
@@ -16,14 +15,14 @@ public class UISliderColors : MonoBehaviour
 
     private void Update()
     {
-        if ((this.sprite != null) && (this.colors.Length != 0))
+        if (this.sprite != null && this.colors.Length != 0)
         {
             float f = this.mSlider.sliderValue * (this.colors.Length - 1);
             int index = Mathf.FloorToInt(f);
             Color color = this.colors[0];
             if (index >= 0)
             {
-                if ((index + 1) < this.colors.Length)
+                if (index + 1 < this.colors.Length)
                 {
                     float t = f - index;
                     color = Color.Lerp(this.colors[index], this.colors[index + 1], t);

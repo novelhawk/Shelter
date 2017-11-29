@@ -1,5 +1,3 @@
-using System;
-
 public class ActorProperties
 {
     public const byte IsInactive = 254;

@@ -1,9 +1,6 @@
 using ExitGames.Client.Photon;
-using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Mod;
-using Mod.Interface;
 using UnityEngine;
 
 public class PhotonPlayer
@@ -39,7 +36,7 @@ public class PhotonPlayer
     public override bool Equals(object p)
     {
         PhotonPlayer player = p as PhotonPlayer;
-        return ((player != null) && (this.GetHashCode() == player.GetHashCode()));
+        return player != null && this.GetHashCode() == player.GetHashCode();
     }
 
     public static PhotonPlayer Find(int ID)
@@ -81,7 +78,7 @@ public class PhotonPlayer
 
     public PhotonPlayer GetNextFor(int currentPlayerId)
     {
-        if (((PhotonNetwork.networkingPeer == null) || (PhotonNetwork.networkingPeer.mActors == null)) || (PhotonNetwork.networkingPeer.mActors.Count < 2))
+        if (PhotonNetwork.networkingPeer == null || PhotonNetwork.networkingPeer.mActors == null || PhotonNetwork.networkingPeer.mActors.Count < 2)
         {
             return null;
         }
@@ -94,12 +91,12 @@ public class PhotonPlayer
             {
                 num2 = num3;
             }
-            else if ((num3 > currentPlayerId) && (num3 < num))
+            else if (num3 > currentPlayerId && num3 < num)
             {
                 num = num3;
             }
         }
-        return ((num == 2147483647) ? mActors[num2] : mActors[num]);
+        return num == 2147483647 ? mActors[num2] : mActors[num];
     }
 
     public bool Has(string prop)
@@ -109,7 +106,7 @@ public class PhotonPlayer
 
     internal void InternalCacheProperties(Hashtable properties)
     {
-        if (((properties != null) && (properties.Count != 0)) && !this.CustomProperties.Equals(properties))
+        if (properties != null && properties.Count != 0 && !this.CustomProperties.Equals(properties))
         {
             if (properties.ContainsKey((byte)255))
             {
@@ -140,7 +137,7 @@ public class PhotonPlayer
             this.CustomProperties.MergeStringKeys(propertiesToSet);
             this.CustomProperties.StripKeysWithNullValues();
             Hashtable actorProperties = propertiesToSet.StripToStringKeys();
-            if ((this.actorID > 0) && !PhotonNetwork.offlineMode)
+            if (this.actorID > 0 && !PhotonNetwork.offlineMode)
             {
                 PhotonNetwork.networkingPeer.OpSetCustomPropertiesOfActor(this.actorID, actorProperties, true, 0);
             }

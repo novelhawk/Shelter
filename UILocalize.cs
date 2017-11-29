@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [RequireComponent(typeof(UIWidget)), AddComponentMenu("NGUI/UI/Localize")]
@@ -14,7 +13,7 @@ public class UILocalize : MonoBehaviour
         UIWidget component = base.GetComponent<UIWidget>();
         UILabel label = component as UILabel;
         UISprite sprite = component as UISprite;
-        if ((string.IsNullOrEmpty(this.mLanguage) && string.IsNullOrEmpty(this.key)) && (label != null))
+        if (string.IsNullOrEmpty(this.mLanguage) && string.IsNullOrEmpty(this.key) && label != null)
         {
             this.key = label.text;
         }
@@ -22,7 +21,7 @@ public class UILocalize : MonoBehaviour
         if (label != null)
         {
             UIInput input = NGUITools.FindInParents<UIInput>(label.gameObject);
-            if ((input != null) && (input.label == label))
+            if (input != null && input.label == label)
             {
                 input.defaultText = str;
             }
@@ -41,7 +40,7 @@ public class UILocalize : MonoBehaviour
 
     private void OnEnable()
     {
-        if (this.mStarted && (Localization.instance != null))
+        if (this.mStarted && Localization.instance != null)
         {
             this.Localize();
         }

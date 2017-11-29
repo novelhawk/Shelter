@@ -1,5 +1,3 @@
-using System;
-
 public class PhotonMessageInfo
 {
     public PhotonView photonView;
@@ -29,7 +27,7 @@ public class PhotonMessageInfo
     {
         get
         {
-            return (((double) this.timeInt) / 1000.0);
+            return (double) this.timeInt / 1000.0;
         }
     }
 }

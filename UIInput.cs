@@ -1,5 +1,3 @@
-using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/UI/Input (Basic)")]
@@ -46,7 +44,7 @@ public class UIInput : MonoBehaviour
 
                 case '\r':
                 case '\n':
-                    if (((UICamera.current.submitKey0 == KeyCode.Return) || (UICamera.current.submitKey1 == KeyCode.Return)) && (!this.label.multiLine || (!Input.GetKey(KeyCode.LeftControl) && !Input.GetKey(KeyCode.RightControl))))
+                    if ((UICamera.current.submitKey0 == KeyCode.Return || UICamera.current.submitKey1 == KeyCode.Return) && (!this.label.multiLine || !Input.GetKey(KeyCode.LeftControl) && !Input.GetKey(KeyCode.RightControl)))
                     {
                         current = this;
                         if (this.onSubmit != null)
@@ -68,7 +66,7 @@ public class UIInput : MonoBehaviour
                     }
                     if (nextChar != '\0')
                     {
-                        if ((nextChar != '\n') && (nextChar != '\r'))
+                        if (nextChar != '\n' && nextChar != '\r')
                         {
                             this.mText = this.mText + nextChar;
                         }
@@ -158,7 +156,7 @@ public class UIInput : MonoBehaviour
         {
             this.initMain();
         }
-        if ((((this.selected && base.enabled) && NGUITools.GetActive(base.gameObject)) && (Application.platform != RuntimePlatform.Android)) && (Application.platform != RuntimePlatform.IPhonePlayer))
+        if (this.selected && base.enabled && NGUITools.GetActive(base.gameObject) && Application.platform != RuntimePlatform.Android && Application.platform != RuntimePlatform.IPhonePlayer)
         {
             this.Append(input);
         }
@@ -170,11 +168,11 @@ public class UIInput : MonoBehaviour
         {
             this.initMain();
         }
-        if (((this.label != null) && base.enabled) && NGUITools.GetActive(base.gameObject))
+        if (this.label != null && base.enabled && NGUITools.GetActive(base.gameObject))
         {
             if (isSelected)
             {
-                this.mText = (this.useLabelTextAtStart || !(this.label.text == this.mDefaultText)) ? this.label.text : string.Empty;
+                this.mText = this.useLabelTextAtStart || !(this.label.text == this.mDefaultText) ? this.label.text : string.Empty;
                 this.label.color = this.activeColor;
                 if (this.isPassword)
                 {
@@ -225,7 +223,7 @@ public class UIInput : MonoBehaviour
     {
         if (this.selected)
         {
-            if ((this.selectOnTab != null) && Input.GetKeyDown(KeyCode.Tab))
+            if (this.selectOnTab != null && Input.GetKeyDown(KeyCode.Tab))
             {
                 UICamera.selectedObject = this.selectOnTab;
             }
@@ -247,7 +245,7 @@ public class UIInput : MonoBehaviour
         {
             this.initMain();
         }
-        if ((this.maxChars > 0) && (this.mText.Length > this.maxChars))
+        if (this.maxChars > 0 && this.mText.Length > this.maxChars)
         {
             this.mText = this.mText.Substring(0, this.maxChars);
         }
@@ -268,18 +266,18 @@ public class UIInput : MonoBehaviour
             }
             else
             {
-                str = !this.selected ? this.mText : (this.mText + Input.compositionString + this.caratChar);
+                str = !this.selected ? this.mText : this.mText + Input.compositionString + this.caratChar;
             }
             this.label.supportEncoding = false;
             if (!this.label.shrinkToFit)
             {
                 if (this.label.multiLine)
                 {
-                    str = this.label.font.WrapText(str, ((float) this.label.lineWidth) / this.label.cachedTransform.localScale.x, 0, false, UIFont.SymbolStyle.None);
+                    str = this.label.font.WrapText(str, (float) this.label.lineWidth / this.label.cachedTransform.localScale.x, 0, false, UIFont.SymbolStyle.None);
                 }
                 else
                 {
-                    string str2 = this.label.font.GetEndOfLineThatFits(str, ((float) this.label.lineWidth) / this.label.cachedTransform.localScale.x, false, UIFont.SymbolStyle.None);
+                    string str2 = this.label.font.GetEndOfLineThatFits(str, (float) this.label.lineWidth / this.label.cachedTransform.localScale.x, false, UIFont.SymbolStyle.None);
                     if (str2 != str)
                     {
                         str = str2;
@@ -330,11 +328,11 @@ public class UIInput : MonoBehaviour
     {
         get
         {
-            return (UICamera.selectedObject == base.gameObject);
+            return UICamera.selectedObject == base.gameObject;
         }
         set
         {
-            if (!value && (UICamera.selectedObject == base.gameObject))
+            if (!value && UICamera.selectedObject == base.gameObject)
             {
                 UICamera.selectedObject = null;
             }
@@ -369,9 +367,9 @@ public class UIInput : MonoBehaviour
                     value = this.mDefaultText;
                 }
                 this.label.supportEncoding = false;
-                this.label.text = !this.selected ? value : (value + this.caratChar);
+                this.label.text = !this.selected ? value : value + this.caratChar;
                 this.label.showLastPasswordChar = this.selected;
-                this.label.color = (this.selected || (value != this.mDefaultText)) ? this.activeColor : this.mDefaultColor;
+                this.label.color = this.selected || value != this.mDefaultText ? this.activeColor : this.mDefaultColor;
             }
         }
     }

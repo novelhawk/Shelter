@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/UI/Tooltip")]
@@ -43,7 +42,7 @@ public class UITooltip : MonoBehaviour
 
     private void SetText(string tooltipText)
     {
-        if ((this.text != null) && !string.IsNullOrEmpty(tooltipText))
+        if (this.text != null && !string.IsNullOrEmpty(tooltipText))
         {
             this.mTarget = 1f;
             if (this.text != null)
@@ -60,18 +59,18 @@ public class UITooltip : MonoBehaviour
                 this.mSize = (Vector3) this.text.relativeSize;
                 this.mSize.x *= localScale.x;
                 this.mSize.y *= localScale.y;
-                this.mSize.x += (this.background.border.x + this.background.border.z) + ((localPosition.x - this.background.border.x) * 2f);
-                this.mSize.y += (this.background.border.y + this.background.border.w) + ((-localPosition.y - this.background.border.y) * 2f);
+                this.mSize.x += this.background.border.x + this.background.border.z + (localPosition.x - this.background.border.x) * 2f;
+                this.mSize.y += this.background.border.y + this.background.border.w + (-localPosition.y - this.background.border.y) * 2f;
                 this.mSize.z = 1f;
                 transform.localScale = this.mSize;
             }
             if (this.uiCamera != null)
             {
-                this.mPos.x = Mathf.Clamp01(this.mPos.x / ((float) Screen.width));
-                this.mPos.y = Mathf.Clamp01(this.mPos.y / ((float) Screen.height));
+                this.mPos.x = Mathf.Clamp01(this.mPos.x / (float) Screen.width);
+                this.mPos.y = Mathf.Clamp01(this.mPos.y / (float) Screen.height);
                 float num = this.uiCamera.orthographicSize / this.mTrans.parent.lossyScale.y;
-                float num2 = (Screen.height * 0.5f) / num;
-                Vector2 vector10 = new Vector2((num2 * this.mSize.x) / ((float) Screen.width), (num2 * this.mSize.y) / ((float) Screen.height));
+                float num2 = Screen.height * 0.5f / num;
+                Vector2 vector10 = new Vector2(num2 * this.mSize.x / (float) Screen.width, num2 * this.mSize.y / (float) Screen.height);
                 this.mPos.x = Mathf.Min(this.mPos.x, 1f - vector10.x);
                 this.mPos.y = Mathf.Max(this.mPos.y, vector10.y);
                 this.mTrans.position = this.uiCamera.ViewportToWorldPoint(this.mPos);
@@ -82,11 +81,11 @@ public class UITooltip : MonoBehaviour
             }
             else
             {
-                if ((this.mPos.x + this.mSize.x) > Screen.width)
+                if (this.mPos.x + this.mSize.x > Screen.width)
                 {
                     this.mPos.x = Screen.width - this.mSize.x;
                 }
-                if ((this.mPos.y - this.mSize.y) < 0f)
+                if (this.mPos.y - this.mSize.y < 0f)
                 {
                     this.mPos.y = this.mSize.y;
                 }
@@ -135,7 +134,7 @@ public class UITooltip : MonoBehaviour
             {
                 Vector3 vector = (Vector3) (this.mSize * 0.25f);
                 vector.y = -vector.y;
-                Vector3 vector2 = (Vector3) (Vector3.one * (1.5f - (this.mCurrent * 0.5f)));
+                Vector3 vector2 = (Vector3) (Vector3.one * (1.5f - this.mCurrent * 0.5f));
                 Vector3 vector3 = Vector3.Lerp(this.mPos - vector, this.mPos, this.mCurrent);
                 this.mTrans.localPosition = vector3;
                 this.mTrans.localScale = vector2;

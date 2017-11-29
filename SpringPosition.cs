@@ -1,5 +1,3 @@
-using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Tween/Spring Position")]
@@ -57,7 +55,7 @@ public class SpringPosition : IgnoreTimeScale
                 {
                     this.onFinished(this);
                 }
-                if ((this.eventReceiver != null) && !string.IsNullOrEmpty(this.callWhenFinished))
+                if (this.eventReceiver != null && !string.IsNullOrEmpty(this.callWhenFinished))
                 {
                     this.eventReceiver.SendMessage(this.callWhenFinished, this, SendMessageOptions.DontRequireReceiver);
                 }
@@ -80,7 +78,7 @@ public class SpringPosition : IgnoreTimeScale
                 {
                     this.onFinished(this);
                 }
-                if ((this.eventReceiver != null) && !string.IsNullOrEmpty(this.callWhenFinished))
+                if (this.eventReceiver != null && !string.IsNullOrEmpty(this.callWhenFinished))
                 {
                     this.eventReceiver.SendMessage(this.callWhenFinished, this, SendMessageOptions.DontRequireReceiver);
                 }

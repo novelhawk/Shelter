@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.CompilerServices;
 
 public class AuthenticationValues
 {
@@ -24,7 +23,7 @@ public class AuthenticationValues
 
     public override string ToString()
     {
-        return (this.AuthParameters + " s: " + this.Secret);
+        return this.AuthParameters + " s: " + this.Secret;
     }
 
     public object AuthPostData { get; private set; }

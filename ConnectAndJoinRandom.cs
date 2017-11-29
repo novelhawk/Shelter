@@ -1,6 +1,3 @@
-using Photon;
-using System;
-using Mod.Interface;
 using UnityEngine;
 
 public class ConnectAndJoinRandom : Photon.MonoBehaviour
@@ -47,7 +44,7 @@ public class ConnectAndJoinRandom : Photon.MonoBehaviour
 
     public virtual void Update()
     {
-        if ((this.ConnectInUpdate && this.AutoConnect) && !PhotonNetwork.connected)
+        if (this.ConnectInUpdate && this.AutoConnect && !PhotonNetwork.connected)
         {
             Debug.Log("Update() was called by Unity. Scene is loaded. Let's connect to the Photon Master Server. Calling: PhotonNetwork.ConnectUsingSettings();");
             this.ConnectInUpdate = false;

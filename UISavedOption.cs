@@ -36,7 +36,7 @@ public class UISavedOption : MonoBehaviour
 
     private void OnDisable()
     {
-        if ((this.mCheck == null) && (this.mList == null))
+        if (this.mCheck == null && this.mList == null)
         {
             UICheckbox[] componentsInChildren = base.GetComponentsInChildren<UICheckbox>(true);
             int index = 0;
@@ -97,7 +97,7 @@ public class UISavedOption : MonoBehaviour
     {
         get
         {
-            return (!string.IsNullOrEmpty(this.keyName) ? this.keyName : ("NGUI State: " + base.name));
+            return !string.IsNullOrEmpty(this.keyName) ? this.keyName : "NGUI State: " + base.name;
         }
     }
 }

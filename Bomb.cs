@@ -1,9 +1,4 @@
-using Photon;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Bomb : Photon.MonoBehaviour
@@ -76,14 +71,14 @@ public class Bomb : Photon.MonoBehaviour
         foreach (HERO hero in FengGameManagerMKII.instance.getPlayers())
         {
             GameObject gameObject = hero.gameObject;
-            if (((Vector3.Distance(gameObject.transform.position, position) < radius) && !gameObject.GetPhotonView().isMine) && !hero.bombImmune)
+            if (Vector3.Distance(gameObject.transform.position, position) < radius && !gameObject.GetPhotonView().isMine && !hero.bombImmune)
             {
                 PhotonPlayer owner = gameObject.GetPhotonView().owner;
-                if (((RCSettings.teamMode > 0) && (PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.RCteam] != null)) && (owner.CustomProperties[PhotonPlayerProperty.RCteam] != null))
+                if (RCSettings.teamMode > 0 && PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.RCteam] != null && owner.CustomProperties[PhotonPlayerProperty.RCteam] != null)
                 {
                     int num = RCextensions.returnIntFromObject(PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.RCteam]);
                     int num2 = RCextensions.returnIntFromObject(owner.CustomProperties[PhotonPlayerProperty.RCteam]);
-                    if ((num == 0) || (num != num2))
+                    if (num == 0 || num != num2)
                     {
                         gameObject.GetComponent<HERO>().markDie();
                         gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name]) + " " });

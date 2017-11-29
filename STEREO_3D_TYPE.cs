@@ -1,5 +1,3 @@
-using System;
-
 public enum STEREO_3D_TYPE
 {
     MONO,

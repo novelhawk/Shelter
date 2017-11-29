@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
-using Mod;
 using UnityEngine;
 
 public class HeroCostume

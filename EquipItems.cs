@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Examples/Equip Items")]
@@ -8,7 +7,7 @@ public class EquipItems : MonoBehaviour
 
     private void Start()
     {
-        if ((this.itemIDs != null) && (this.itemIDs.Length > 0))
+        if (this.itemIDs != null && this.itemIDs.Length > 0)
         {
             InvEquipment component = base.GetComponent<InvEquipment>();
             if (component == null)

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Xft;
@@ -306,7 +305,7 @@ public class HERO_SETUP : MonoBehaviour
             this.part_hair.renderer.material = CharacterMaterials.materials[this.myCostume.hairInfo.texture];
             this.part_hair.renderer.material.color = this.myCostume.hair_color;
         }
-        if ((this.myCostume.hair_1_mesh.Length > 0) && !this.isDeadBody)
+        if (this.myCostume.hair_1_mesh.Length > 0 && !this.isDeadBody)
         {
             string name = "Character/" + this.myCostume.hair_1_mesh;
             Material material = CharacterMaterials.materials[this.myCostume.hairInfo.texture];
@@ -507,7 +506,7 @@ public class HERO_SETUP : MonoBehaviour
             this.part_chest_2.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine/chest").transform;
             this.part_chest_2.renderer.material = CharacterMaterials.materials[this.myCostume.part_chest_1_object_texture];
         }
-        if ((this.myCostume.part_chest_skinned_cloth_mesh.Length > 0) && !this.isDeadBody)
+        if (this.myCostume.part_chest_skinned_cloth_mesh.Length > 0 && !this.isDeadBody)
         {
             this.part_chest_3 = ClothFactory.GetCape(this.reference, "Character/" + this.myCostume.part_chest_skinned_cloth_mesh, CharacterMaterials.materials[this.myCostume.part_chest_skinned_cloth_texture]);
         }
@@ -643,7 +642,7 @@ public class HERO_SETUP : MonoBehaviour
         {
             go.renderer.material = CharacterMaterials.materials[this.myCostume.face_texture];
             float num = 0.125f;
-            float x = num * ((int) (((float) id) / 8f));
+            float x = num * (int) ((float) id / 8f);
             float y = -0.125f * (id % 8);
             go.renderer.material.mainTextureOffset = new Vector2(x, y);
         }

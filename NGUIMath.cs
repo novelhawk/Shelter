@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public static class NGUIMath
@@ -26,11 +25,11 @@ public static class NGUIMath
             case RuntimePlatform.WindowsWebPlayer:
             case RuntimePlatform.WindowsEditor:
             case RuntimePlatform.XBOX360:
-                if (Mathf.RoundToInt(scale.x) == (Mathf.RoundToInt(scale.x * 0.5f) * 2))
+                if (Mathf.RoundToInt(scale.x) == Mathf.RoundToInt(scale.x * 0.5f) * 2)
                 {
                     pos.x -= 0.5f;
                 }
-                if (Mathf.RoundToInt(scale.y) == (Mathf.RoundToInt(scale.y * 0.5f) * 2))
+                if (Mathf.RoundToInt(scale.y) == Mathf.RoundToInt(scale.y * 0.5f) * 2)
                 {
                     pos.y += 0.5f;
                 }
@@ -104,10 +103,10 @@ public static class NGUIMath
             border.y /= y;
             border.w /= y;
         }
-        float num5 = (num - relativeSize.x) + border.x;
-        float num6 = (num + relativeSize.x) - border.z;
-        float num7 = (num2 - relativeSize.y) + border.y;
-        float num8 = (num2 + relativeSize.y) - border.w;
+        float num5 = num - relativeSize.x + border.x;
+        float num6 = num + relativeSize.x - border.z;
+        float num7 = num2 - relativeSize.y + border.y;
+        float num8 = num2 + relativeSize.y - border.w;
         Vector3 position = new Vector3(num5, num7, 0f);
         position = cachedTransform.TransformPoint(position);
         position = worldToLocalMatrix.MultiplyPoint3x4(position);
@@ -185,17 +184,17 @@ public static class NGUIMath
         Vector2 relativeSize = w.relativeSize;
         Vector2 pivotOffset = w.pivotOffset;
         Vector4 relativePadding = w.relativePadding;
-        float x = (pivotOffset.x * relativeSize.x) - relativePadding.x;
-        float y = (pivotOffset.y * relativeSize.y) + relativePadding.y;
-        float num3 = ((x + relativeSize.x) + relativePadding.x) + relativePadding.z;
-        float num4 = ((y - relativeSize.y) - relativePadding.y) - relativePadding.w;
+        float x = pivotOffset.x * relativeSize.x - relativePadding.x;
+        float y = pivotOffset.y * relativeSize.y + relativePadding.y;
+        float num3 = x + relativeSize.x + relativePadding.x + relativePadding.z;
+        float num4 = y - relativeSize.y - relativePadding.y - relativePadding.w;
         Transform cachedTransform = w.cachedTransform;
         return new Vector3[] { cachedTransform.TransformPoint(x, y, 0f), cachedTransform.TransformPoint(x, num4, 0f), cachedTransform.TransformPoint(num3, num4, 0f), cachedTransform.TransformPoint(num3, y, 0f) };
     }
 
     public static int ClampIndex(int val, int max)
     {
-        return ((val >= 0) ? ((val >= max) ? (max - 1) : val) : 0);
+        return val >= 0 ? (val >= max ? max - 1 : val) : 0;
     }
 
     public static int ColorToInt(Color c)
@@ -204,7 +203,7 @@ public static class NGUIMath
         num |= Mathf.RoundToInt(c.r * 255f) << 24;
         num |= Mathf.RoundToInt(c.g * 255f) << 16;
         num |= Mathf.RoundToInt(c.b * 255f) << 8;
-        return (num | Mathf.RoundToInt(c.a * 255f));
+        return num | Mathf.RoundToInt(c.a * 255f);
     }
 
     public static Vector2 ConstrainRect(Vector2 minRect, Vector2 maxRect, Vector2 minArea, Vector2 maxArea)
@@ -266,12 +265,12 @@ public static class NGUIMath
     public static Rect ConvertToTexCoords(Rect rect, int width, int height)
     {
         Rect rect2 = rect;
-        if ((width != 0f) && (height != 0f))
+        if (width != 0f && height != 0f)
         {
-            rect2.xMin = rect.xMin / ((float)width);
-            rect2.xMax = rect.xMax / ((float)width);
-            rect2.yMin = 1f - (rect.yMax / ((float)height));
-            rect2.yMax = 1f - (rect.yMin / ((float)height));
+            rect2.xMin = rect.xMin / (float)width;
+            rect2.xMax = rect.xMax / (float)width;
+            rect2.yMin = 1f - rect.yMax / (float)height;
+            rect2.yMax = 1f - rect.yMin / (float)height;
         }
         return rect2;
     }
@@ -292,7 +291,7 @@ public static class NGUIMath
         {
             return (char)(48 + num);
         }
-        return (char)((65 + num) - 10);
+        return (char)(65 + num - 10);
     }
 
     private static float DistancePointToLineSegment(Vector2 point, Vector2 a, Vector2 b)
@@ -315,7 +314,7 @@ public static class NGUIMath
             Vector2 vector4 = point - b;
             return vector4.magnitude;
         }
-        Vector2 vector5 = a + ((Vector2)(num2 * (b - a)));
+        Vector2 vector5 = a + (Vector2)(num2 * (b - a));
         Vector2 vector6 = point - vector5;
         return vector6.magnitude;
     }
@@ -328,7 +327,7 @@ public static class NGUIMath
         {
             Vector3 vector = screenPoints[RepeatIndex(i, 4)];
             Vector3 vector2 = screenPoints[RepeatIndex(val, 4)];
-            if (((vector.y > mousePos.y) != (vector2.y > mousePos.y)) && (mousePos.x < ((((vector2.x - vector.x) * (mousePos.y - vector.y)) / (vector2.y - vector.y)) + vector.x)))
+            if (vector.y > mousePos.y != vector2.y > mousePos.y && mousePos.x < (vector2.x - vector.x) * (mousePos.y - vector.y) / (vector2.y - vector.y) + vector.x)
             {
                 flag = !flag;
             }
@@ -344,7 +343,7 @@ public static class NGUIMath
             Vector3 a = screenPoints[j];
             Vector3 b = screenPoints[RepeatIndex(j + 1, 4)];
             float num5 = DistancePointToLineSegment(mousePos, a, b);
-            if ((num5 < num3) || (num3 < 0f))
+            if (num5 < num3 || num3 < 0f)
             {
                 num3 = num5;
             }
@@ -473,7 +472,7 @@ public static class NGUIMath
                     str = str + " ";
                     break;
             }
-            str = str + (((val & (((int)1) << --num)) == 0) ? '0' : '1');
+            str = str + ((val & ((int)1 << --num)) == 0 ? '0' : '1');
         }
         return str;
     }
@@ -491,7 +490,7 @@ public static class NGUIMath
 
     public static float Lerp(float from, float to, float factor)
     {
-        return ((from * (1f - factor)) + (to * factor));
+        return @from * (1f - factor) + to * factor;
     }
 
     public static Rect MakePixelPerfect(Rect rect)
@@ -537,7 +536,7 @@ public static class NGUIMath
         {
             f = maxAngle * Mathf.Sign(f);
         }
-        return (from + f);
+        return @from + f;
     }
 
     public static Vector2 SpringDampen(ref Vector2 velocity, float strength, float deltaTime)
@@ -546,7 +545,7 @@ public static class NGUIMath
         {
             deltaTime = 1f;
         }
-        float num = 1f - (strength * 0.001f);
+        float num = 1f - strength * 0.001f;
         int num2 = Mathf.RoundToInt(deltaTime * 1000f);
         Vector2 zero = Vector2.zero;
         for (int i = 0; i < num2; i++)
@@ -563,7 +562,7 @@ public static class NGUIMath
         {
             deltaTime = 1f;
         }
-        float num = 1f - (strength * 0.001f);
+        float num = 1f - strength * 0.001f;
         int num2 = Mathf.RoundToInt(deltaTime * 1000f);
         Vector3 zero = Vector3.zero;
         for (int i = 0; i < num2; i++)
@@ -622,7 +621,7 @@ public static class NGUIMath
 
     public static float Wrap01(float val)
     {
-        return (val - Mathf.FloorToInt(val));
+        return val - Mathf.FloorToInt(val);
     }
 
     public static float WrapAngle(float angle)

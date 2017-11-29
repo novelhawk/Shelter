@@ -1,4 +1,3 @@
-using Photon;
 using System;
 using UnityEngine;
 
@@ -137,7 +136,7 @@ public class Cannon : Photon.MonoBehaviour
                         foreach (Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
                         {
                             renderer.material = (Material) FengGameManagerMKII.RCassets.Load("transparent");
-                            if ((Convert.ToSingle(strArray[10]) != 1f) || (Convert.ToSingle(strArray[11]) != 1f))
+                            if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
                             {
                                 renderer.material.mainTextureScale = new Vector2(renderer.material.mainTextureScale.x * Convert.ToSingle(strArray[10]), renderer.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));
                             }
@@ -150,7 +149,7 @@ public class Cannon : Photon.MonoBehaviour
                             if (!renderer.name.Contains("Line Renderer"))
                             {
                                 renderer.material = (Material) FengGameManagerMKII.RCassets.Load(strArray[2]);
-                                if ((Convert.ToSingle(strArray[10]) != 1f) || (Convert.ToSingle(strArray[11]) != 1f))
+                                if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
                                 {
                                     renderer.material.mainTextureScale = new Vector2(renderer.material.mainTextureScale.x * Convert.ToSingle(strArray[10]), renderer.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));
                                 }
@@ -200,7 +199,7 @@ public class Cannon : Photon.MonoBehaviour
             for (int i = 0; i < 100; i++)
             {
                 this.myCannonLine.SetPosition(i, position);
-                position += (Vector3) ((vector3 * num) + (((0.5f * vector) * num) * num));
+                position += (Vector3) (vector3 * num + 0.5f * vector * num * num);
                 vector3 += (Vector3) (vector * num);
             }
             float num3 = 30f;
@@ -218,7 +217,7 @@ public class Cannon : Photon.MonoBehaviour
                         this.barrel.Rotate(new Vector3(0f, 0f, Time.deltaTime * num3));
                     }
                 }
-                else if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonBack) && (this.currentRot >= -18f))
+                else if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonBack) && this.currentRot >= -18f)
                 {
                     this.currentRot += Time.deltaTime * -num3;
                     this.barrel.Rotate(new Vector3(0f, 0f, Time.deltaTime * -num3));
@@ -242,7 +241,7 @@ public class Cannon : Photon.MonoBehaviour
                         this.barrel.Rotate(new Vector3(Time.deltaTime * -num3, 0f, 0f));
                     }
                 }
-                else if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonBack) && (this.currentRot <= 40f))
+                else if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonBack) && this.currentRot <= 40f)
                 {
                     this.currentRot += Time.deltaTime * num3;
                     this.barrel.Rotate(new Vector3(Time.deltaTime * num3, 0f, 0f));

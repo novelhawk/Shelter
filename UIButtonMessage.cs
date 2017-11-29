@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Button Message")]
@@ -13,7 +12,7 @@ public class UIButtonMessage : MonoBehaviour
 
     private void OnClick()
     {
-        if (base.enabled && (this.trigger == Trigger.OnClick))
+        if (base.enabled && this.trigger == Trigger.OnClick)
         {
             this.Send();
         }
@@ -21,7 +20,7 @@ public class UIButtonMessage : MonoBehaviour
 
     private void OnDoubleClick()
     {
-        if (base.enabled && (this.trigger == Trigger.OnDoubleClick))
+        if (base.enabled && this.trigger == Trigger.OnDoubleClick)
         {
             this.Send();
         }
@@ -39,7 +38,7 @@ public class UIButtonMessage : MonoBehaviour
     {
         if (base.enabled)
         {
-            if ((isOver && (this.trigger == Trigger.OnMouseOver)) || (!isOver && (this.trigger == Trigger.OnMouseOut)))
+            if (isOver && this.trigger == Trigger.OnMouseOver || !isOver && this.trigger == Trigger.OnMouseOut)
             {
                 this.Send();
             }
@@ -49,7 +48,7 @@ public class UIButtonMessage : MonoBehaviour
 
     private void OnPress(bool isPressed)
     {
-        if (base.enabled && ((isPressed && (this.trigger == Trigger.OnPress)) || (!isPressed && (this.trigger == Trigger.OnRelease))))
+        if (base.enabled && (isPressed && this.trigger == Trigger.OnPress || !isPressed && this.trigger == Trigger.OnRelease))
         {
             this.Send();
         }

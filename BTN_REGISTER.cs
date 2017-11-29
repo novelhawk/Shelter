@@ -25,7 +25,7 @@ public class BTN_REGISTER : MonoBehaviour
         {
             this.invalid = true;
         }
-        return (match.Groups[1].Value + unicode);
+        return match.Groups[1].Value + unicode;
     }
 
     public bool IsValidEmail(string strIn)

@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 public class PBitStream
 {
@@ -27,13 +26,13 @@ public class PBitStream
     public void Add(bool val)
     {
         int num = this.totalBits / 8;
-        if ((num > (this.streamBytes.Count - 1)) || (this.totalBits == 0))
+        if (num > this.streamBytes.Count - 1 || this.totalBits == 0)
         {
             this.streamBytes.Add(0);
         }
         if (val)
         {
-            int currentByteBits = 7 - (this.totalBits % 8);
+            int currentByteBits = 7 - this.totalBits % 8;
             this.streamBytes[num] |= (byte)(1 << currentByteBits);
         }
         this.totalBits++;
@@ -45,14 +44,14 @@ public class PBitStream
         {
             return 0;
         }
-        return (((bitCount - 1) / 8) + 1);
+        return (bitCount - 1) / 8 + 1;
     }
 
     public bool Get(int bitIndex)
     {
         int num = bitIndex / 8;
-        int num2 = 7 - (bitIndex % 8);
-        return ((this.streamBytes[num] & ((byte)(((int)1) << num2))) > 0);
+        int num2 = 7 - bitIndex % 8;
+        return (this.streamBytes[num] & (byte)((int)1 << num2)) > 0;
     }
 
     public bool GetNext()
@@ -69,7 +68,7 @@ public class PBitStream
     public void Set(int bitIndex, bool value)
     {
         int byteIndex = bitIndex / 8;
-        int bitInByIndex = 7 - (bitIndex % 8);
+        int bitInByIndex = 7 - bitIndex % 8;
         this.streamBytes[byteIndex] |= (byte)(1 << bitInByIndex);
     }
 

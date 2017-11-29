@@ -47,7 +47,7 @@ public class InvGameItem
                     while (num5 < num6)
                     {
                         InvStat stat2 = list[num5];
-                        if ((stat2.id == stat.id) && (stat2.modifier == stat.modifier))
+                        if (stat2.id == stat.id && stat2.modifier == stat.modifier)
                         {
                             stat2.amount += num4;
                             flag = true;
@@ -149,7 +149,7 @@ public class InvGameItem
             {
                 return null;
             }
-            return (this.quality.ToString() + " " + this.baseItem.name);
+            return this.quality.ToString() + " " + this.baseItem.name;
         }
     }
 
@@ -208,8 +208,8 @@ public class InvGameItem
                     num = 3f;
                     break;
             }
-            float from = ((float) this.itemLevel) / 50f;
-            return (num * Mathf.Lerp(from, from * from, 0.5f));
+            float from = (float) this.itemLevel / 50f;
+            return num * Mathf.Lerp(@from, @from * @from, 0.5f);
         }
     }
 

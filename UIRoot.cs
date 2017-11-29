@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -67,15 +66,15 @@ public class UIRoot : MonoBehaviour
         height = Mathf.Max(2, height);
         if (this.scalingStyle == Scaling.FixedSize)
         {
-            return (((float) this.manualHeight) / ((float) height));
+            return (float) this.manualHeight / (float) height;
         }
         if (height < this.minimumHeight)
         {
-            return (((float) this.minimumHeight) / ((float) height));
+            return (float) this.minimumHeight / (float) height;
         }
         if (height > this.maximumHeight)
         {
-            return (((float) this.maximumHeight) / ((float) height));
+            return (float) this.maximumHeight / (float) height;
         }
         return 1f;
     }
@@ -83,7 +82,7 @@ public class UIRoot : MonoBehaviour
     public static float GetPixelSizeAdjustment(GameObject go)
     {
         UIRoot root = NGUITools.FindInParents<UIRoot>(go);
-        return ((root == null) ? 1f : root.pixelSizeAdjustment);
+        return root == null ? 1f : root.pixelSizeAdjustment;
     }
 
     private void OnDestroy()
@@ -115,7 +114,7 @@ public class UIRoot : MonoBehaviour
             {
                 float x = 2f / activeHeight;
                 Vector3 localScale = this.mTrans.localScale;
-                if (((Mathf.Abs((float) (localScale.x - x)) > float.Epsilon) || (Mathf.Abs((float) (localScale.y - x)) > float.Epsilon)) || (Mathf.Abs((float) (localScale.z - x)) > float.Epsilon))
+                if (Mathf.Abs((float) (localScale.x - x)) > float.Epsilon || Mathf.Abs((float) (localScale.y - x)) > float.Epsilon || Mathf.Abs((float) (localScale.z - x)) > float.Epsilon)
                 {
                     this.mTrans.localScale = new Vector3(x, x, x);
                 }

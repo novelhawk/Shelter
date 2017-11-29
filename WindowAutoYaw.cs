@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Examples/Window Auto-Yaw")]
@@ -14,7 +13,7 @@ public class WindowAutoYaw : MonoBehaviour
         if (this.uiCamera != null)
         {
             Vector3 vector = this.uiCamera.WorldToViewportPoint(this.mTrans.position);
-            this.mTrans.localRotation = Quaternion.Euler(0f, ((vector.x * 2f) - 1f) * this.yawAmount, 0f);
+            this.mTrans.localRotation = Quaternion.Euler(0f, (vector.x * 2f - 1f) * this.yawAmount, 0f);
         }
     }
 

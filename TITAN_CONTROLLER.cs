@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class TITAN_CONTROLLER : MonoBehaviour
@@ -73,7 +72,7 @@ public class TITAN_CONTROLLER : MonoBehaviour
             {
                 num2 = 0;
             }
-            if ((num2 != 0) || (num != 0))
+            if (num2 != 0 || num != 0)
             {
                 y = this.currentCamera.transform.rotation.eulerAngles.y;
                 num4 = Mathf.Atan2((float) num, (float) num2) * 57.29578f;
@@ -128,7 +127,7 @@ public class TITAN_CONTROLLER : MonoBehaviour
             {
                 num2 = 0;
             }
-            if ((num2 != 0) || (num != 0))
+            if (num2 != 0 || num != 0)
             {
                 y = this.currentCamera.transform.rotation.eulerAngles.y;
                 num4 = Mathf.Atan2((float) num, (float) num2) * 57.29578f;
@@ -192,47 +191,47 @@ public class TITAN_CONTROLLER : MonoBehaviour
             {
                 this.sit = true;
             }
-            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanGrabFront) && (num6 >= 0f))
+            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanGrabFront) && num6 >= 0f)
             {
                 this.grabfrontr = true;
             }
-            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanGrabFront) && (num6 < 0f))
+            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanGrabFront) && num6 < 0f)
             {
                 this.grabfrontl = true;
             }
-            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanGrabBack) && (num6 >= 0f))
+            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanGrabBack) && num6 >= 0f)
             {
                 this.grabbackr = true;
             }
-            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanGrabBack) && (num6 < 0f))
+            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanGrabBack) && num6 < 0f)
             {
                 this.grabbackl = true;
             }
-            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanGrabNape) && (num6 >= 0f))
+            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanGrabNape) && num6 >= 0f)
             {
                 this.grabnaper = true;
             }
-            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanGrabNape) && (num6 < 0f))
+            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanGrabNape) && num6 < 0f)
             {
                 this.grabnapel = true;
             }
-            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanAntiAE) && (num6 >= 0f))
+            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanAntiAE) && num6 >= 0f)
             {
                 this.choptr = true;
             }
-            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanAntiAE) && (num6 < 0f))
+            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanAntiAE) && num6 < 0f)
             {
                 this.choptl = true;
             }
-            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanBite) && (num6 > 7.5f))
+            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanBite) && num6 > 7.5f)
             {
                 this.biter = true;
             }
-            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanBite) && (num6 < -7.5f))
+            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanBite) && num6 < -7.5f)
             {
                 this.bitel = true;
             }
-            if ((FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanBite) && (num6 >= -7.5f)) && (num6 <= 7.5f))
+            if (FengGameManagerMKII.inputRC.isInputTitan(InputCodeRC.titanBite) && num6 >= -7.5f && num6 <= 7.5f)
             {
                 this.bite = true;
             }

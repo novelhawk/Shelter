@@ -47,7 +47,7 @@ public class FengCustomInputs : MonoBehaviour
         {
             for (int i = 0; i < this.DescriptionString.Length; i++)
             {
-                if ((testAxisString == this.joystickString[i]) && ((i != o) || (p == 2)))
+                if (testAxisString == this.joystickString[i] && (i != o || p == 2))
                 {
                     this.inputKey[i] = KeyCode.None;
                     this.inputBool[i] = false;
@@ -66,7 +66,7 @@ public class FengCustomInputs : MonoBehaviour
         {
             for (int i = 0; i < this.DescriptionString.Length; i++)
             {
-                if ((testkey == this.inputKey[i]) && ((i != o) || (p == 2)))
+                if (testkey == this.inputKey[i] && (i != o || p == 2))
                 {
                     this.inputKey[i] = KeyCode.None;
                     this.inputBool[i] = false;
@@ -84,12 +84,12 @@ public class FengCustomInputs : MonoBehaviour
         bool flag = false;
         for (int i = 0; i < this.DescriptionString.Length; i++)
         {
-            if (!this.joystickActive[i] && (this.inputKey[i] == KeyCode.None))
+            if (!this.joystickActive[i] && this.inputKey[i] == KeyCode.None)
             {
                 this.joystickString[i] = "#";
             }
             bool flag2 = this.inputBool[i];
-            if ((Event.current.type == EventType.KeyDown) && this.inputBool[i])
+            if (Event.current.type == EventType.KeyDown && this.inputBool[i])
             {
                 this.inputKey[i] = Event.current.keyCode;
                 this.inputBool[i] = false;
@@ -134,7 +134,7 @@ public class FengCustomInputs : MonoBehaviour
             }
             if (this.mouseAxisOn)
             {
-                if ((Input.GetAxis("MouseUp") == 1f) && this.inputBool[i])
+                if (Input.GetAxis("MouseUp") == 1f && this.inputBool[i])
                 {
                     this.inputKey[i] = KeyCode.None;
                     this.inputBool[i] = false;
@@ -145,7 +145,7 @@ public class FengCustomInputs : MonoBehaviour
                     this.saveInputs();
                     this.checDoubleAxis(this.joystickString[i], i, 1);
                 }
-                if ((Input.GetAxis("MouseDown") == 1f) && this.inputBool[i])
+                if (Input.GetAxis("MouseDown") == 1f && this.inputBool[i])
                 {
                     this.inputKey[i] = KeyCode.None;
                     this.inputBool[i] = false;
@@ -156,7 +156,7 @@ public class FengCustomInputs : MonoBehaviour
                     this.saveInputs();
                     this.checDoubleAxis(this.joystickString[i], i, 1);
                 }
-                if ((Input.GetAxis("MouseLeft") == 1f) && this.inputBool[i])
+                if (Input.GetAxis("MouseLeft") == 1f && this.inputBool[i])
                 {
                     this.inputKey[i] = KeyCode.None;
                     this.inputBool[i] = false;
@@ -168,7 +168,7 @@ public class FengCustomInputs : MonoBehaviour
                     this.saveInputs();
                     this.checDoubleAxis(this.joystickString[i], i, 1);
                 }
-                if ((Input.GetAxis("MouseRight") == 1f) && this.inputBool[i])
+                if (Input.GetAxis("MouseRight") == 1f && this.inputBool[i])
                 {
                     this.inputKey[i] = KeyCode.None;
                     this.inputBool[i] = false;
@@ -182,7 +182,7 @@ public class FengCustomInputs : MonoBehaviour
             }
             if (this.mouseButtonsOn)
             {
-                if ((Input.GetAxis("MouseScrollUp") > 0f) && this.inputBool[i])
+                if (Input.GetAxis("MouseScrollUp") > 0f && this.inputBool[i])
                 {
                     this.inputKey[i] = KeyCode.None;
                     this.inputBool[i] = false;
@@ -194,7 +194,7 @@ public class FengCustomInputs : MonoBehaviour
                     this.saveInputs();
                     this.checDoubleAxis(this.joystickString[i], i, 1);
                 }
-                if ((Input.GetAxis("MouseScrollDown") > 0f) && this.inputBool[i])
+                if (Input.GetAxis("MouseScrollDown") > 0f && this.inputBool[i])
                 {
                     this.inputKey[i] = KeyCode.None;
                     this.inputBool[i] = false;
@@ -207,7 +207,7 @@ public class FengCustomInputs : MonoBehaviour
                     this.checDoubleAxis(this.joystickString[i], i, 1);
                 }
             }
-            if ((Input.GetAxis("JoystickUp") > 0.5f) && this.inputBool[i])
+            if (Input.GetAxis("JoystickUp") > 0.5f && this.inputBool[i])
             {
                 this.inputKey[i] = KeyCode.None;
                 this.inputBool[i] = false;
@@ -218,7 +218,7 @@ public class FengCustomInputs : MonoBehaviour
                 this.saveInputs();
                 this.checDoubleAxis(this.joystickString[i], i, 1);
             }
-            if ((Input.GetAxis("JoystickDown") > 0.5f) && this.inputBool[i])
+            if (Input.GetAxis("JoystickDown") > 0.5f && this.inputBool[i])
             {
                 this.inputKey[i] = KeyCode.None;
                 this.inputBool[i] = false;
@@ -229,7 +229,7 @@ public class FengCustomInputs : MonoBehaviour
                 this.saveInputs();
                 this.checDoubleAxis(this.joystickString[i], i, 1);
             }
-            if ((Input.GetAxis("JoystickLeft") > 0.5f) && this.inputBool[i])
+            if (Input.GetAxis("JoystickLeft") > 0.5f && this.inputBool[i])
             {
                 this.inputKey[i] = KeyCode.None;
                 this.inputBool[i] = false;
@@ -240,7 +240,7 @@ public class FengCustomInputs : MonoBehaviour
                 this.saveInputs();
                 this.checDoubleAxis(this.joystickString[i], i, 1);
             }
-            if ((Input.GetAxis("JoystickRight") > 0.5f) && this.inputBool[i])
+            if (Input.GetAxis("JoystickRight") > 0.5f && this.inputBool[i])
             {
                 this.inputKey[i] = KeyCode.None;
                 this.inputBool[i] = false;
@@ -251,7 +251,7 @@ public class FengCustomInputs : MonoBehaviour
                 this.saveInputs();
                 this.checDoubleAxis(this.joystickString[i], i, 1);
             }
-            if ((Input.GetAxis("Joystick_3a") > 0.8f) && this.inputBool[i])
+            if (Input.GetAxis("Joystick_3a") > 0.8f && this.inputBool[i])
             {
                 this.inputKey[i] = KeyCode.None;
                 this.inputBool[i] = false;
@@ -262,7 +262,7 @@ public class FengCustomInputs : MonoBehaviour
                 this.saveInputs();
                 this.checDoubleAxis(this.joystickString[i], i, 1);
             }
-            if ((Input.GetAxis("Joystick_3b") > 0.8f) && this.inputBool[i])
+            if (Input.GetAxis("Joystick_3b") > 0.8f && this.inputBool[i])
             {
                 this.inputKey[i] = KeyCode.None;
                 this.inputBool[i] = false;
@@ -273,7 +273,7 @@ public class FengCustomInputs : MonoBehaviour
                 this.saveInputs();
                 this.checDoubleAxis(this.joystickString[i], i, 1);
             }
-            if ((Input.GetAxis("Joystick_4a") > 0.8f) && this.inputBool[i])
+            if (Input.GetAxis("Joystick_4a") > 0.8f && this.inputBool[i])
             {
                 this.inputKey[i] = KeyCode.None;
                 this.inputBool[i] = false;
@@ -284,7 +284,7 @@ public class FengCustomInputs : MonoBehaviour
                 this.saveInputs();
                 this.checDoubleAxis(this.joystickString[i], i, 1);
             }
-            if ((Input.GetAxis("Joystick_4b") > 0.8f) && this.inputBool[i])
+            if (Input.GetAxis("Joystick_4b") > 0.8f && this.inputBool[i])
             {
                 this.inputKey[i] = KeyCode.None;
                 this.inputBool[i] = false;
@@ -295,7 +295,7 @@ public class FengCustomInputs : MonoBehaviour
                 this.saveInputs();
                 this.checDoubleAxis(this.joystickString[i], i, 1);
             }
-            if ((Input.GetAxis("Joystick_5b") > 0.8f) && this.inputBool[i])
+            if (Input.GetAxis("Joystick_5b") > 0.8f && this.inputBool[i])
             {
                 this.inputKey[i] = KeyCode.None;
                 this.inputBool[i] = false;
@@ -306,7 +306,7 @@ public class FengCustomInputs : MonoBehaviour
                 this.saveInputs();
                 this.checDoubleAxis(this.joystickString[i], i, 1);
             }
-            if ((Input.GetAxis("Joystick_6b") > 0.8f) && this.inputBool[i])
+            if (Input.GetAxis("Joystick_6b") > 0.8f && this.inputBool[i])
             {
                 this.inputKey[i] = KeyCode.None;
                 this.inputBool[i] = false;
@@ -317,7 +317,7 @@ public class FengCustomInputs : MonoBehaviour
                 this.saveInputs();
                 this.checDoubleAxis(this.joystickString[i], i, 1);
             }
-            if ((Input.GetAxis("Joystick_7a") > 0.8f) && this.inputBool[i])
+            if (Input.GetAxis("Joystick_7a") > 0.8f && this.inputBool[i])
             {
                 this.inputKey[i] = KeyCode.None;
                 this.inputBool[i] = false;
@@ -328,7 +328,7 @@ public class FengCustomInputs : MonoBehaviour
                 this.saveInputs();
                 this.checDoubleAxis(this.joystickString[i], i, 1);
             }
-            if ((Input.GetAxis("Joystick_7b") > 0.8f) && this.inputBool[i])
+            if (Input.GetAxis("Joystick_7b") > 0.8f && this.inputBool[i])
             {
                 this.inputKey[i] = KeyCode.None;
                 this.inputBool[i] = false;
@@ -339,7 +339,7 @@ public class FengCustomInputs : MonoBehaviour
                 this.saveInputs();
                 this.checDoubleAxis(this.joystickString[i], i, 1);
             }
-            if ((Input.GetAxis("Joystick_8a") > 0.8f) && this.inputBool[i])
+            if (Input.GetAxis("Joystick_8a") > 0.8f && this.inputBool[i])
             {
                 this.inputKey[i] = KeyCode.None;
                 this.inputBool[i] = false;
@@ -350,7 +350,7 @@ public class FengCustomInputs : MonoBehaviour
                 this.saveInputs();
                 this.checDoubleAxis(this.joystickString[i], i, 1);
             }
-            if ((Input.GetAxis("Joystick_8b") > 0.8f) && this.inputBool[i])
+            if (Input.GetAxis("Joystick_8b") > 0.8f && this.inputBool[i])
             {
                 this.inputKey[i] = KeyCode.None;
                 this.inputBool[i] = false;
@@ -381,7 +381,7 @@ public class FengCustomInputs : MonoBehaviour
     {
         for (int i = 0; i < this.DescriptionString.Length; i++)
         {
-            if (!Input.GetKey(this.inputKey[i]) && (!this.joystickActive[i] || (Input.GetAxis(this.joystickString[i]) <= 0.95f)))
+            if (!Input.GetKey(this.inputKey[i]) && (!this.joystickActive[i] || Input.GetAxis(this.joystickString[i]) <= 0.95f))
             {
                 this.isInput[i] = false;
             }
@@ -397,7 +397,7 @@ public class FengCustomInputs : MonoBehaviour
             {
                 this.isInputDown[i] = false;
             }
-            if (this.joystickActive[i] && (Input.GetAxis(this.joystickString[i]) > 0.95f))
+            if (this.joystickActive[i] && Input.GetAxis(this.joystickString[i]) > 0.95f)
             {
                 if (!this.tempjoy1[i])
                 {
@@ -409,7 +409,7 @@ public class FengCustomInputs : MonoBehaviour
                     this.tempjoy1[i] = false;
                 }
             }
-            if ((!this.tempjoy1[i] && this.joystickActive[i]) && (Input.GetAxis(this.joystickString[i]) < 0.1f))
+            if (!this.tempjoy1[i] && this.joystickActive[i] && Input.GetAxis(this.joystickString[i]) < 0.1f)
             {
                 this.isInputDown[i] = false;
                 this.tempjoy1[i] = true;
@@ -459,7 +459,7 @@ public class FengCustomInputs : MonoBehaviour
 
     private void OnGUI()
     {
-        if (Time.realtimeSinceStartup > (this.lastInterval + 3f))
+        if (Time.realtimeSinceStartup > this.lastInterval + 3f)
         {
             this.tempbool = false;
         }
@@ -480,7 +480,7 @@ public class FengCustomInputs : MonoBehaviour
         string str3 = string.Empty;
         for (int i = this.DescriptionString.Length - 1; i > -1; i--)
         {
-            str = ((int) this.default_inputKeys[i]) + "*" + str;
+            str = (int) this.default_inputKeys[i] + "*" + str;
             str2 = str2 + "#*";
             str3 = this.default_inputKeys[i].ToString() + "*" + str3;
             PlayerPrefs.SetString("KeyCodes", str);
@@ -497,7 +497,7 @@ public class FengCustomInputs : MonoBehaviour
         string str3 = string.Empty;
         for (int i = this.DescriptionString.Length - 1; i > -1; i--)
         {
-            str = ((int) this.inputKey[i]) + "*" + str;
+            str = (int) this.inputKey[i] + "*" + str;
             str2 = this.joystickString[i] + "*" + str2;
             str3 = this.inputString[i] + "*" + str3;
         }
@@ -509,7 +509,7 @@ public class FengCustomInputs : MonoBehaviour
 
     public void setKeyRC(int i, string setting)
     {
-        if ((setting == "Scroll Up") || (setting == "Scroll Down"))
+        if (setting == "Scroll Up" || setting == "Scroll Down")
         {
             if (setting == "Scroll Up")
             {
@@ -603,7 +603,7 @@ public class FengCustomInputs : MonoBehaviour
             this.setToDefault();
         }
         this.tempLength = PlayerPrefs.GetInt("KeyLength");
-        if (PlayerPrefs.HasKey("KeyCodes") && (this.tempLength == this.DescriptionString.Length))
+        if (PlayerPrefs.HasKey("KeyCodes") && this.tempLength == this.DescriptionString.Length)
         {
             this.loadConfig();
         }

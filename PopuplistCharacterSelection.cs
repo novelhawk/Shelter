@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class PopuplistCharacterSelection : MonoBehaviour
@@ -12,7 +11,7 @@ public class PopuplistCharacterSelection : MonoBehaviour
     {
         HeroStat stat;
         string selection = base.GetComponent<UIPopupList>().selection;
-        if ((!(selection == "Set 1") && !(selection == "Set 2")) && !(selection == "Set 3"))
+        if (!(selection == "Set 1") && !(selection == "Set 2") && !(selection == "Set 3"))
         {
             stat = HeroStat.getInfo(base.GetComponent<UIPopupList>().selection);
         }

@@ -59,9 +59,9 @@ public class BTN_save_snapshot : MonoBehaviour
                     break;
 
                 case 1:
-                    this.r__0 = ((float) Screen.height) / 600f;
+                    this.r__0 = (float) Screen.height / 600f;
                     this.texture__1 = new Texture2D((int) (this.r__0 * this.f__this.targetTexture.transform.localScale.x), (int) (this.r__0 * this.f__this.targetTexture.transform.localScale.y), TextureFormat.RGB24, false);
-                    this.texture__1.ReadPixels(new Rect((Screen.width * 0.5f) - (this.texture__1.width * 0.5f), ((Screen.height * 0.5f) - (this.texture__1.height * 0.5f)) - (this.r__0 * 0f), (float) this.texture__1.width, (float) this.texture__1.height), 0, 0);
+                    this.texture__1.ReadPixels(new Rect(Screen.width * 0.5f - this.texture__1.width * 0.5f, Screen.height * 0.5f - this.texture__1.height * 0.5f - this.r__0 * 0f, (float) this.texture__1.width, (float) this.texture__1.height), 0, 0);
                     this.texture__1.Apply();
                     this.Scurrent = 0;
                     this.SPC = 2;

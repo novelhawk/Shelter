@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -18,7 +17,7 @@ public class PanelMultiJoin : MonoBehaviour
         {
             this.items[num].SetActive(false);
         }
-        num = (10 * (this.currentPage - 1)) + index;
+        num = 10 * (this.currentPage - 1) + index;
         char[] separator = new char[] { "`"[0] };
         string[] strArray = roomName.Split(separator);
         if (strArray[5] != string.Empty)
@@ -91,7 +90,7 @@ public class PanelMultiJoin : MonoBehaviour
         {
             if (PhotonNetwork.GetRoomList().Length > 0)
             {
-                this.totalPage = ((PhotonNetwork.GetRoomList().Length - 1) / 10) + 1;
+                this.totalPage = (PhotonNetwork.GetRoomList().Length - 1) / 10 + 1;
             }
             else
             {
@@ -103,7 +102,7 @@ public class PanelMultiJoin : MonoBehaviour
             this.updateFilterRooms();
             if (this.filterRoom.Count > 0)
             {
-                this.totalPage = ((this.filterRoom.Count - 1) / 10) + 1;
+                this.totalPage = (this.filterRoom.Count - 1) / 10 + 1;
             }
             else
             {
@@ -130,7 +129,7 @@ public class PanelMultiJoin : MonoBehaviour
             {
                 for (index = 0; index < 10; index++)
                 {
-                    int num2 = (10 * (this.currentPage - 1)) + index;
+                    int num2 = 10 * (this.currentPage - 1) + index;
                     if (num2 < PhotonNetwork.GetRoomList().Length)
                     {
                         this.items[index].SetActive(true);
@@ -147,7 +146,7 @@ public class PanelMultiJoin : MonoBehaviour
             {
                 for (index = 0; index < 10; index++)
                 {
-                    int num3 = (10 * (this.currentPage - 1)) + index;
+                    int num3 = 10 * (this.currentPage - 1) + index;
                     if (num3 < this.filterRoom.Count)
                     {
                         RoomInfo room = (RoomInfo) this.filterRoom[num3];

@@ -53,7 +53,7 @@ public class InputManagerRC
     {
         if (this.cannonWheel[code] != 0)
         {
-            return ((Input.GetAxis("Mouse ScrollWheel") * this.cannonWheel[code]) > 0f);
+            return Input.GetAxis("Mouse ScrollWheel") * this.cannonWheel[code] > 0f;
         }
         return Input.GetKey(this.cannonKeys[code]);
     }
@@ -62,7 +62,7 @@ public class InputManagerRC
     {
         if (this.cannonWheel[code] != 0)
         {
-            return ((Input.GetAxis("Mouse ScrollWheel") * this.cannonWheel[code]) > 0f);
+            return Input.GetAxis("Mouse ScrollWheel") * this.cannonWheel[code] > 0f;
         }
         return Input.GetKeyDown(this.cannonKeys[code]);
     }
@@ -71,7 +71,7 @@ public class InputManagerRC
     {
         if (this.horseWheel[code] != 0)
         {
-            return ((Input.GetAxis("Mouse ScrollWheel") * this.horseWheel[code]) > 0f);
+            return Input.GetAxis("Mouse ScrollWheel") * this.horseWheel[code] > 0f;
         }
         return Input.GetKey(this.horseKeys[code]);
     }
@@ -80,7 +80,7 @@ public class InputManagerRC
     {
         if (this.horseWheel[code] != 0)
         {
-            return ((Input.GetAxis("Mouse ScrollWheel") * this.horseWheel[code]) > 0f);
+            return Input.GetAxis("Mouse ScrollWheel") * this.horseWheel[code] > 0f;
         }
         return Input.GetKeyDown(this.horseKeys[code]);
     }
@@ -89,7 +89,7 @@ public class InputManagerRC
     {
         if (this.humanWheel[code] != 0)
         {
-            return ((Input.GetAxis("Mouse ScrollWheel") * this.humanWheel[code]) > 0f);
+            return Input.GetAxis("Mouse ScrollWheel") * this.humanWheel[code] > 0f;
         }
         return Input.GetKey(this.humanKeys[code]);
     }
@@ -98,7 +98,7 @@ public class InputManagerRC
     {
         if (this.humanWheel[code] != 0)
         {
-            return ((Input.GetAxis("Mouse ScrollWheel") * this.humanWheel[code]) > 0f);
+            return Input.GetAxis("Mouse ScrollWheel") * this.humanWheel[code] > 0f;
         }
         return Input.GetKeyDown(this.humanKeys[code]);
     }
@@ -107,7 +107,7 @@ public class InputManagerRC
     {
         if (this.levelWheel[code] != 0)
         {
-            return ((Input.GetAxis("Mouse ScrollWheel") * this.levelWheel[code]) > 0f);
+            return Input.GetAxis("Mouse ScrollWheel") * this.levelWheel[code] > 0f;
         }
         return Input.GetKey(this.levelKeys[code]);
     }
@@ -116,7 +116,7 @@ public class InputManagerRC
     {
         if (this.levelWheel[code] != 0)
         {
-            return ((Input.GetAxis("Mouse ScrollWheel") * this.levelWheel[code]) > 0f);
+            return Input.GetAxis("Mouse ScrollWheel") * this.levelWheel[code] > 0f;
         }
         return Input.GetKeyDown(this.levelKeys[code]);
     }
@@ -125,7 +125,7 @@ public class InputManagerRC
     {
         if (this.titanWheel[code] != 0)
         {
-            return ((Input.GetAxis("Mouse ScrollWheel") * this.titanWheel[code]) > 0f);
+            return Input.GetAxis("Mouse ScrollWheel") * this.titanWheel[code] > 0f;
         }
         return Input.GetKey(this.titanKeys[code]);
     }

@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
@@ -96,7 +95,7 @@ public class CharacterCreateAnimationControl : MonoBehaviour
 
     private void Update()
     {
-        if ((this.currentAnimation != "stand") && (this.currentAnimation != "stand_levi"))
+        if (this.currentAnimation != "stand" && this.currentAnimation != "stand_levi")
         {
             if (base.animation[this.currentAnimation].normalizedTime >= 1f)
             {

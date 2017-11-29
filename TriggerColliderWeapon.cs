@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using UnityEngine;
 
@@ -16,7 +15,7 @@ public class TriggerColliderWeapon : MonoBehaviour
     {
         Transform transform = titan.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck/head");
         Vector3 to = base.transform.position - transform.transform.position;
-        return (Vector3.Angle(-transform.transform.forward, to) < 70f);
+        return Vector3.Angle(-transform.transform.forward, to) < 70f;
     }
 
     public void clearHits()
@@ -63,25 +62,25 @@ public class TriggerColliderWeapon : MonoBehaviour
             {
                 if (LevelInfoManager.GetInfo(FengGameManagerMKII.level).IsPvP)
                 {
-                    float b = 1f - (Vector3.Distance(other.gameObject.transform.position, base.transform.position) * 0.05f);
+                    float b = 1f - Vector3.Distance(other.gameObject.transform.position, base.transform.position) * 0.05f;
                     b = Mathf.Min(1f, b);
                     HitBox component = other.gameObject.GetComponent<HitBox>();
-                    if ((((component != null) && (component.transform.root != null)) && (component.transform.root.GetComponent<HERO>().myTeam != this.myTeam)) && !component.transform.root.GetComponent<HERO>().isInvincible())
+                    if (component != null && component.transform.root != null && component.transform.root.GetComponent<HERO>().myTeam != this.myTeam && !component.transform.root.GetComponent<HERO>().isInvincible())
                     {
                         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
                         {
                             if (!component.transform.root.GetComponent<HERO>().isGrabbed)
                             {
                                 Vector3 vector = component.transform.root.transform.position - base.transform.position;
-                                component.transform.root.GetComponent<HERO>().die((Vector3) (((vector.normalized * b) * 1000f) + (Vector3.up * 50f)), false);
+                                component.transform.root.GetComponent<HERO>().die((Vector3) (vector.normalized * b * 1000f + Vector3.up * 50f), false);
                             }
                         }
-                        else if (((IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER) && !component.transform.root.GetComponent<HERO>().HasDied()) && !component.transform.root.GetComponent<HERO>().isGrabbed)
+                        else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && !component.transform.root.GetComponent<HERO>().HasDied() && !component.transform.root.GetComponent<HERO>().isGrabbed)
                         {
                             component.transform.root.GetComponent<HERO>().markDie();
                             object[] parameters = new object[5];
                             Vector3 vector2 = component.transform.root.position - base.transform.position;
-                            parameters[0] = (Vector3) (((vector2.normalized * b) * 1000f) + (Vector3.up * 50f));
+                            parameters[0] = (Vector3) (vector2.normalized * b * 1000f + Vector3.up * 50f);
                             parameters[1] = false;
                             parameters[2] = base.transform.root.gameObject.GetPhotonView().viewID;
                             parameters[3] = PhotonView.Find(base.transform.root.gameObject.GetPhotonView().viewID).owner.CustomProperties[PhotonPlayerProperty.name];
@@ -94,19 +93,19 @@ public class TriggerColliderWeapon : MonoBehaviour
             else if (other.gameObject.tag == "titanneck")
             {
                 HitBox item = other.gameObject.GetComponent<HitBox>();
-                if (((item != null) && this.checkIfBehind(item.transform.root.gameObject)) && !this.currentHits.Contains(item))
+                if (item != null && this.checkIfBehind(item.transform.root.gameObject) && !this.currentHits.Contains(item))
                 {
                     item.hitPosition = (Vector3) ((base.transform.position + item.transform.position) * 0.5f);
                     this.currentHits.Add(item);
                     this.meatDie.Play();
                     if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
                     {
-                        if ((item.transform.root.GetComponent<TITAN>() != null) && !item.transform.root.GetComponent<TITAN>().hasDie)
+                        if (item.transform.root.GetComponent<TITAN>() != null && !item.transform.root.GetComponent<TITAN>().hasDie)
                         {
                             Vector3 vector3 = this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;
-                            int num2 = (int) ((vector3.magnitude * 10f) * this.scoreMulti);
+                            int num2 = (int) (vector3.magnitude * 10f * this.scoreMulti);
                             num2 = Mathf.Max(10, num2);
-                            if (PlayerPrefs.HasKey("EnableSS") && (PlayerPrefs.GetInt("EnableSS") == 1))
+                            if (PlayerPrefs.HasKey("EnableSS") && PlayerPrefs.GetInt("EnableSS") == 1)
                             {
                                 GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().startSnapShot2(item.transform.position, num2, item.transform.root.gameObject, 0.02f);
                             }
@@ -123,9 +122,9 @@ public class TriggerColliderWeapon : MonoBehaviour
                             if (!item.transform.root.GetComponent<TITAN>().hasDie)
                             {
                                 Vector3 vector4 = this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;
-                                int num3 = (int) ((vector4.magnitude * 10f) * this.scoreMulti);
+                                int num3 = (int) (vector4.magnitude * 10f * this.scoreMulti);
                                 num3 = Mathf.Max(10, num3);
-                                if (PlayerPrefs.HasKey("EnableSS") && (PlayerPrefs.GetInt("EnableSS") == 1))
+                                if (PlayerPrefs.HasKey("EnableSS") && PlayerPrefs.GetInt("EnableSS") == 1)
                                 {
                                     GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().startSnapShot2(item.transform.position, num3, item.transform.root.gameObject, 0.02f);
                                     item.transform.root.GetComponent<TITAN>().asClientLookTarget = false;
@@ -138,7 +137,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                         {
                             base.transform.root.GetComponent<HERO>().useBlade(2147483647);
                             Vector3 vector5 = this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;
-                            int num4 = (int) ((vector5.magnitude * 10f) * this.scoreMulti);
+                            int num4 = (int) (vector5.magnitude * 10f * this.scoreMulti);
                             num4 = Mathf.Max(10, num4);
                             if (!item.transform.root.GetComponent<FEMALE_TITAN>().hasDie)
                             {
@@ -152,7 +151,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                             if (!item.transform.root.GetComponent<COLOSSAL_TITAN>().hasDie)
                             {
                                 Vector3 vector6 = this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;
-                                int num5 = (int) ((vector6.magnitude * 10f) * this.scoreMulti);
+                                int num5 = (int) (vector6.magnitude * 10f * this.scoreMulti);
                                 num5 = Mathf.Max(10, num5);
                                 object[] objArray4 = new object[] { base.transform.root.gameObject.GetPhotonView().viewID, num5 };
                                 item.transform.root.GetComponent<COLOSSAL_TITAN>().photonView.RPC("titanGetHit", item.transform.root.GetComponent<COLOSSAL_TITAN>().photonView.owner, objArray4);
@@ -164,9 +163,9 @@ public class TriggerColliderWeapon : MonoBehaviour
                         if (!item.transform.root.GetComponent<TITAN>().hasDie)
                         {
                             Vector3 vector7 = this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;
-                            int num6 = (int) ((vector7.magnitude * 10f) * this.scoreMulti);
+                            int num6 = (int) (vector7.magnitude * 10f * this.scoreMulti);
                             num6 = Mathf.Max(10, num6);
-                            if (PlayerPrefs.HasKey("EnableSS") && (PlayerPrefs.GetInt("EnableSS") == 1))
+                            if (PlayerPrefs.HasKey("EnableSS") && PlayerPrefs.GetInt("EnableSS") == 1)
                             {
                                 GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().startSnapShot2(item.transform.position, num6, item.transform.root.gameObject, 0.02f);
                             }
@@ -179,9 +178,9 @@ public class TriggerColliderWeapon : MonoBehaviour
                         if (!item.transform.root.GetComponent<FEMALE_TITAN>().hasDie)
                         {
                             Vector3 vector8 = this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;
-                            int num7 = (int) ((vector8.magnitude * 10f) * this.scoreMulti);
+                            int num7 = (int) (vector8.magnitude * 10f * this.scoreMulti);
                             num7 = Mathf.Max(10, num7);
-                            if (PlayerPrefs.HasKey("EnableSS") && (PlayerPrefs.GetInt("EnableSS") == 1))
+                            if (PlayerPrefs.HasKey("EnableSS") && PlayerPrefs.GetInt("EnableSS") == 1)
                             {
                                 GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().startSnapShot2(item.transform.position, num7, null, 0.02f);
                             }
@@ -194,9 +193,9 @@ public class TriggerColliderWeapon : MonoBehaviour
                         if (!item.transform.root.GetComponent<COLOSSAL_TITAN>().hasDie)
                         {
                             Vector3 vector9 = this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;
-                            int num8 = (int) ((vector9.magnitude * 10f) * this.scoreMulti);
+                            int num8 = (int) (vector9.magnitude * 10f * this.scoreMulti);
                             num8 = Mathf.Max(10, num8);
-                            if (PlayerPrefs.HasKey("EnableSS") && (PlayerPrefs.GetInt("EnableSS") == 1))
+                            if (PlayerPrefs.HasKey("EnableSS") && PlayerPrefs.GetInt("EnableSS") == 1)
                             {
                                 GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().startSnapShot2(item.transform.position, num8, null, 0.02f);
                             }
@@ -259,14 +258,14 @@ public class TriggerColliderWeapon : MonoBehaviour
                     }
                 }
             }
-            else if ((other.gameObject.tag == "titanankle") && !this.currentHits.Contains(other.gameObject))
+            else if (other.gameObject.tag == "titanankle" && !this.currentHits.Contains(other.gameObject))
             {
                 this.currentHits.Add(other.gameObject);
                 GameObject obj4 = other.gameObject.transform.root.gameObject;
                 Vector3 vector10 = this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity - obj4.rigidbody.velocity;
-                int num9 = (int) ((vector10.magnitude * 10f) * this.scoreMulti);
+                int num9 = (int) (vector10.magnitude * 10f * this.scoreMulti);
                 num9 = Mathf.Max(10, num9);
-                if ((obj4.GetComponent<TITAN>() != null) && (obj4.GetComponent<TITAN>().abnormalType != AbnormalType.TYPE_CRAWLER))
+                if (obj4.GetComponent<TITAN>() != null && obj4.GetComponent<TITAN>().abnormalType != AbnormalType.TYPE_CRAWLER)
                 {
                     if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
                     {
@@ -298,12 +297,12 @@ public class TriggerColliderWeapon : MonoBehaviour
                     {
                         if (other.gameObject.name == "ankleR")
                         {
-                            if ((obj4.GetComponent<FEMALE_TITAN>() != null) && !obj4.GetComponent<FEMALE_TITAN>().hasDie)
+                            if (obj4.GetComponent<FEMALE_TITAN>() != null && !obj4.GetComponent<FEMALE_TITAN>().hasDie)
                             {
                                 obj4.GetComponent<FEMALE_TITAN>().hitAnkleR(num9);
                             }
                         }
-                        else if ((obj4.GetComponent<FEMALE_TITAN>() != null) && !obj4.GetComponent<FEMALE_TITAN>().hasDie)
+                        else if (obj4.GetComponent<FEMALE_TITAN>() != null && !obj4.GetComponent<FEMALE_TITAN>().hasDie)
                         {
                             obj4.GetComponent<FEMALE_TITAN>().hitAnkleL(num9);
                         }

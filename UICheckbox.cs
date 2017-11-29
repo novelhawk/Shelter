@@ -1,6 +1,3 @@
-using AnimationOrTween;
-using System;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Checkbox")]
@@ -60,7 +57,7 @@ public class UICheckbox : MonoBehaviour
         }
         else if (this.mChecked != state)
         {
-            if ((this.radioButtonRoot != null) && state)
+            if (this.radioButtonRoot != null && state)
             {
                 UICheckbox[] componentsInChildren = this.radioButtonRoot.GetComponentsInChildren<UICheckbox>(true);
                 int index = 0;
@@ -68,7 +65,7 @@ public class UICheckbox : MonoBehaviour
                 while (index < length)
                 {
                     UICheckbox checkbox = componentsInChildren[index];
-                    if ((checkbox != this) && (checkbox.radioButtonRoot == this.radioButtonRoot))
+                    if (checkbox != this && checkbox.radioButtonRoot == this.radioButtonRoot)
                     {
                         checkbox.Set(false);
                     }
@@ -92,7 +89,7 @@ public class UICheckbox : MonoBehaviour
             {
                 this.onStateChange(this.mChecked);
             }
-            if ((this.eventReceiver != null) && !string.IsNullOrEmpty(this.functionName))
+            if (this.eventReceiver != null && !string.IsNullOrEmpty(this.functionName))
             {
                 this.eventReceiver.SendMessage(this.functionName, this.mChecked, SendMessageOptions.DontRequireReceiver);
             }
@@ -123,7 +120,7 @@ public class UICheckbox : MonoBehaviour
         }
         set
         {
-            if (((this.radioButtonRoot == null) || value) || (this.optionCanBeNone || !this.mStarted))
+            if (this.radioButtonRoot == null || value || this.optionCanBeNone || !this.mStarted)
             {
                 this.Set(value);
             }

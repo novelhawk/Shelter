@@ -1,6 +1,4 @@
-using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Popup List"), ExecuteInEditMode]
@@ -60,14 +58,14 @@ public class UIPopupList : MonoBehaviour
     {
         GameObject gameObject = widget.gameObject;
         Transform cachedTransform = widget.cachedTransform;
-        float y = (this.font.size * this.textScale) + (this.mBgBorder * 2f);
+        float y = this.font.size * this.textScale + this.mBgBorder * 2f;
         Vector3 localScale = cachedTransform.localScale;
         cachedTransform.localScale = new Vector3(localScale.x, y, localScale.z);
         TweenScale.Begin(gameObject, 0.15f, localScale).method = UITweener.Method.EaseOut;
         if (placeAbove)
         {
             Vector3 localPosition = cachedTransform.localPosition;
-            cachedTransform.localPosition = new Vector3(localPosition.x, (localPosition.y - localScale.y) + y, localPosition.z);
+            cachedTransform.localPosition = new Vector3(localPosition.x, localPosition.y - localScale.y + y, localPosition.z);
             TweenPosition.Begin(gameObject, 0.15f, localPosition).method = UITweener.Method.EaseOut;
         }
     }
@@ -77,7 +75,7 @@ public class UIPopupList : MonoBehaviour
         if (this.mHighlight != null)
         {
             TweenPosition component = lbl.GetComponent<TweenPosition>();
-            if ((component == null) || !component.enabled)
+            if (component == null || !component.enabled)
             {
                 this.mHighlightedLabel = lbl;
                 UIAtlas.Sprite atlasSprite = this.mHighlight.GetAtlasSprite();
@@ -101,7 +99,7 @@ public class UIPopupList : MonoBehaviour
 
     private void OnClick()
     {
-        if (((this.mChild == null) && (this.atlas != null)) && ((this.font != null) && (this.items.Count > 0)))
+        if (this.mChild == null && this.atlas != null && this.font != null && this.items.Count > 0)
         {
             this.mLabelList.Clear();
             this.handleEvents = true;
@@ -132,7 +130,7 @@ public class UIPopupList : MonoBehaviour
             if (atlasSprite != null)
             {
                 float num = atlasSprite.inner.yMin - atlasSprite.outer.yMin;
-                float num2 = (this.font.size * this.font.pixelSize) * this.textScale;
+                float num2 = this.font.size * this.font.pixelSize * this.textScale;
                 float a = 0f;
                 float y = -this.padding.y;
                 List<UILabel> list = new List<UILabel>();
@@ -144,7 +142,7 @@ public class UIPopupList : MonoBehaviour
                     UILabel item = NGUITools.AddWidget<UILabel>(this.mChild);
                     item.pivot = UIWidget.Pivot.TopLeft;
                     item.font = this.font;
-                    item.text = (!this.isLocalized || (Localization.instance == null)) ? key : Localization.instance.Get(key);
+                    item.text = !this.isLocalized || Localization.instance == null ? key : Localization.instance.Get(key);
                     item.color = this.textColor;
                     item.cachedTransform.localPosition = new Vector3(border.x + this.padding.x, y, -1f);
                     item.MakePixelPerfect();
@@ -168,8 +166,8 @@ public class UIPopupList : MonoBehaviour
                     this.mLabelList.Add(item);
                     num5++;
                 }
-                a = Mathf.Max(a, bounds.size.x - ((border.x + this.padding.x) * 2f));
-                Vector3 vector5 = new Vector3((a * 0.5f) / num2, -0.5f, 0f);
+                a = Mathf.Max(a, bounds.size.x - (border.x + this.padding.x) * 2f);
+                Vector3 vector5 = new Vector3(a * 0.5f / num2, -0.5f, 0f);
                 Vector3 vector6 = new Vector3(a / num2, (num2 + this.padding.y) / num2, 1f);
                 int num7 = 0;
                 int num8 = list.Count;
@@ -185,7 +183,7 @@ public class UIPopupList : MonoBehaviour
                 a += (border.x + this.padding.x) * 2f;
                 y -= border.y;
                 this.mBackground.cachedTransform.localScale = new Vector3(a, -y + border.y, 1f);
-                this.mHighlight.cachedTransform.localScale = new Vector3((a - ((border.x + this.padding.x) * 2f)) + ((atlasSprite.inner.xMin - atlasSprite.outer.xMin) * 2f), num2 + (num * 2f), 1f);
+                this.mHighlight.cachedTransform.localScale = new Vector3(a - (border.x + this.padding.x) * 2f + (atlasSprite.inner.xMin - atlasSprite.outer.xMin) * 2f, num2 + num * 2f, 1f);
                 bool placeAbove = this.position == Position.Above;
                 if (this.position == Position.Auto)
                 {
@@ -211,7 +209,7 @@ public class UIPopupList : MonoBehaviour
                 }
                 if (placeAbove)
                 {
-                    transform.localPosition = new Vector3(bounds.min.x, (bounds.max.y - y) - border.y, bounds.min.z);
+                    transform.localPosition = new Vector3(bounds.min.x, bounds.max.y - y - border.y, bounds.min.z);
                 }
             }
         }
@@ -240,7 +238,7 @@ public class UIPopupList : MonoBehaviour
 
     private void OnKey(KeyCode key)
     {
-        if ((base.enabled && NGUITools.GetActive(base.gameObject)) && this.handleEvents)
+        if (base.enabled && NGUITools.GetActive(base.gameObject) && this.handleEvents)
         {
             int index = this.mLabelList.IndexOf(this.mHighlightedLabel);
             if (key == KeyCode.UpArrow)
@@ -252,7 +250,7 @@ public class UIPopupList : MonoBehaviour
             }
             else if (key == KeyCode.DownArrow)
             {
-                if ((index + 1) < this.mLabelList.Count)
+                if (index + 1 < this.mLabelList.Count)
                 {
                     this.Select(this.mLabelList[++index], false);
                 }
@@ -266,7 +264,7 @@ public class UIPopupList : MonoBehaviour
 
     private void OnLocalize(Localization loc)
     {
-        if (this.isLocalized && (this.textLabel != null))
+        if (this.isLocalized && this.textLabel != null)
         {
             this.textLabel.text = loc.Get(this.mSelectedItem);
         }
@@ -274,7 +272,7 @@ public class UIPopupList : MonoBehaviour
 
     private void OnSelect(bool isSelected)
     {
-        if (!isSelected && (this.mChild != null))
+        if (!isSelected && this.mChild != null)
         {
             this.mLabelList.Clear();
             this.handleEvents = false;
@@ -355,7 +353,7 @@ public class UIPopupList : MonoBehaviour
         get
         {
             UIButtonKeys component = base.GetComponent<UIButtonKeys>();
-            return ((component == null) || !component.enabled);
+            return component == null || !component.enabled;
         }
         set
         {
@@ -371,7 +369,7 @@ public class UIPopupList : MonoBehaviour
     {
         get
         {
-            return (this.mChild != null);
+            return this.mChild != null;
         }
     }
 
@@ -395,7 +393,7 @@ public class UIPopupList : MonoBehaviour
                 {
                     this.onSelectionChange(this.mSelectedItem);
                 }
-                if (((this.eventReceiver != null) && !string.IsNullOrEmpty(this.functionName)) && Application.isPlaying)
+                if (this.eventReceiver != null && !string.IsNullOrEmpty(this.functionName) && Application.isPlaying)
                 {
                     this.eventReceiver.SendMessage(this.functionName, this.mSelectedItem, SendMessageOptions.DontRequireReceiver);
                 }

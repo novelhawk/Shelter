@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [ExecuteInEditMode, AddComponentMenu("NGUI/UI/Anchor")]
@@ -26,7 +25,7 @@ public class UIAnchor : MonoBehaviour
     private void Start()
     {
         this.mRoot = NGUITools.FindInParents<UIRoot>(base.gameObject);
-        this.mNeedsHalfPixelOffset = (((Application.platform == RuntimePlatform.WindowsPlayer) || (Application.platform == RuntimePlatform.XBOX360)) || (Application.platform == RuntimePlatform.WindowsWebPlayer)) || (Application.platform == RuntimePlatform.WindowsEditor);
+        this.mNeedsHalfPixelOffset = Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.XBOX360 || Application.platform == RuntimePlatform.WindowsWebPlayer || Application.platform == RuntimePlatform.WindowsEditor;
         if (this.mNeedsHalfPixelOffset)
         {
             this.mNeedsHalfPixelOffset = SystemInfo.graphicsShaderLevel < 40;
@@ -40,14 +39,14 @@ public class UIAnchor : MonoBehaviour
 
     private void Update()
     {
-        if (((this.mAnim == null) || !this.mAnim.enabled) || !this.mAnim.isPlaying)
+        if (this.mAnim == null || !this.mAnim.enabled || !this.mAnim.isPlaying)
         {
             bool flag = false;
             if (this.panelContainer != null)
             {
                 if (this.panelContainer.clipping == UIDrawCall.Clipping.None)
                 {
-                    float num = (this.mRoot == null) ? 0.5f : ((((float) this.mRoot.activeHeight) / ((float) Screen.height)) * 0.5f);
+                    float num = this.mRoot == null ? 0.5f : (float) this.mRoot.activeHeight / (float) Screen.height * 0.5f;
                     this.mRect.xMin = -Screen.width * num;
                     this.mRect.yMin = -Screen.height * num;
                     this.mRect.xMax = -this.mRect.xMin;
@@ -56,8 +55,8 @@ public class UIAnchor : MonoBehaviour
                 else
                 {
                     Vector4 clipRange = this.panelContainer.clipRange;
-                    this.mRect.x = clipRange.x - (clipRange.z * 0.5f);
-                    this.mRect.y = clipRange.y - (clipRange.w * 0.5f);
+                    this.mRect.x = clipRange.x - clipRange.z * 0.5f;
+                    this.mRect.y = clipRange.y - clipRange.w * 0.5f;
                     this.mRect.width = clipRange.z;
                     this.mRect.height = clipRange.w;
                 }
@@ -91,9 +90,9 @@ public class UIAnchor : MonoBehaviour
             Vector3 position = new Vector3(x, y, 0f);
             if (this.side != Side.Center)
             {
-                if (((this.side != Side.Right) && (this.side != Side.TopRight)) && (this.side != Side.BottomRight))
+                if (this.side != Side.Right && this.side != Side.TopRight && this.side != Side.BottomRight)
                 {
-                    if (((this.side != Side.Top) && (this.side != Side.Center)) && (this.side != Side.Bottom))
+                    if (this.side != Side.Top && this.side != Side.Center && this.side != Side.Bottom)
                     {
                         position.x = this.mRect.xMin;
                     }
@@ -106,9 +105,9 @@ public class UIAnchor : MonoBehaviour
                 {
                     position.x = this.mRect.xMax;
                 }
-                if (((this.side != Side.Top) && (this.side != Side.TopRight)) && (this.side != Side.TopLeft))
+                if (this.side != Side.Top && this.side != Side.TopRight && this.side != Side.TopLeft)
                 {
-                    if (((this.side != Side.Left) && (this.side != Side.Center)) && (this.side != Side.Right))
+                    if (this.side != Side.Left && this.side != Side.Center && this.side != Side.Right)
                     {
                         position.y = this.mRect.yMin;
                     }

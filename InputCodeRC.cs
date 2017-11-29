@@ -1,5 +1,3 @@
-using System;
-
 public class InputCodeRC
 {
     public static int cannonBack = 1;

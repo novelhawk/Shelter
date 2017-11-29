@@ -1,4 +1,3 @@
-using System;
 using System.Collections.Generic;
 using System.Text;
 using UnityEngine;
@@ -71,7 +70,7 @@ public class UIFont : MonoBehaviour
                     num2 /= (float)this.size;
                     if ((lineWidth & 1) == 1)
                     {
-                        num2 += 0.5f / ((float)size);
+                        num2 += 0.5f / (float)size;
                     }
                 }
                 for (int i = indexOffset; i < verts.size; i++)
@@ -92,7 +91,7 @@ public class UIFont : MonoBehaviour
         }
         Vector2 zero = Vector2.zero;
         bool isDynamic = this.isDynamic;
-        if (isDynamic || (((this.mFont != null) && this.mFont.isValid) && !string.IsNullOrEmpty(text)))
+        if (isDynamic || this.mFont != null && this.mFont.isValid && !string.IsNullOrEmpty(text))
         {
             if (encoding)
             {
@@ -111,7 +110,7 @@ public class UIFont : MonoBehaviour
             int previousChar = 0;
             int size = this.size;
             int num7 = size + this.mSpacingY;
-            bool flag2 = (encoding && (symbolStyle != SymbolStyle.None)) && this.hasSymbols;
+            bool flag2 = encoding && symbolStyle != SymbolStyle.None && this.hasSymbols;
             for (int i = 0; i < length; i++)
             {
                 char index = text[i];
@@ -137,7 +136,7 @@ public class UIFont : MonoBehaviour
                         BMGlyph glyph = this.mFont.GetGlyph(index);
                         if (glyph != null)
                         {
-                            num3 += this.mSpacingX + ((previousChar == 0) ? glyph.advance : (glyph.advance + glyph.GetKerning(previousChar)));
+                            num3 += this.mSpacingX + (previousChar == 0 ? glyph.advance : glyph.advance + glyph.GetKerning(previousChar));
                             previousChar = index;
                         }
                     }
@@ -150,11 +149,11 @@ public class UIFont : MonoBehaviour
                 }
                 else if (this.mDynamicFont.GetCharacterInfo(index, out mChar, this.mDynamicFontSize, this.mDynamicFontStyle))
                 {
-                    num3 += this.mSpacingX + ((int)mChar.width);
+                    num3 += this.mSpacingX + (int)mChar.width;
                 }
             }
-            float num9 = (size <= 0) ? 1f : (1f / ((float)size));
-            zero.x = num9 * ((num3 <= num2) ? ((float)num2) : ((float)num3));
+            float num9 = size <= 0 ? 1f : 1f / (float)size;
+            zero.x = num9 * (num3 <= num2 ? (float)num2 : (float)num3);
             zero.y = num9 * (num4 + num7);
         }
         return zero;
@@ -162,17 +161,17 @@ public class UIFont : MonoBehaviour
 
     public static bool CheckIfRelated(UIFont a, UIFont b)
     {
-        if ((a == null) || (b == null))
+        if (a == null || b == null)
         {
             return false;
         }
-        return (((a.isDynamic && b.isDynamic) && (a.dynamicFont.fontNames[0] == b.dynamicFont.fontNames[0])) || (((a == b) || a.References(b)) || b.References(a)));
+        return a.isDynamic && b.isDynamic && a.dynamicFont.fontNames[0] == b.dynamicFont.fontNames[0] || a == b || a.References(b) || b.References(a);
     }
 
     private static void EndLine(ref StringBuilder s)
     {
         int num = s.Length - 1;
-        if ((num > 0) && (s[num] == ' '))
+        if (num > 0 && s[num] == ' ')
         {
             s[num] = '\n';
         }
@@ -197,7 +196,7 @@ public class UIFont : MonoBehaviour
         int num3 = num;
         BMGlyph glyph = null;
         int offset = length;
-        bool flag = (encoding && (symbolStyle != SymbolStyle.None)) && this.hasSymbols;
+        bool flag = encoding && symbolStyle != SymbolStyle.None && this.hasSymbols;
         bool isDynamic = this.isDynamic;
         if (isDynamic)
         {
@@ -205,7 +204,7 @@ public class UIFont : MonoBehaviour
             this.mDynamicFont.RequestCharactersInTexture(text, this.mDynamicFontSize, this.mDynamicFontStyle);
             this.mDynamicFont.textureRebuildCallback = null;
         }
-        while ((offset > 0) && (num3 > 0))
+        while (offset > 0 && num3 > 0)
         {
             char index = text[--offset];
             BMSymbol symbol = !flag ? null : this.MatchSymbol(text, offset, length);
@@ -220,7 +219,7 @@ public class UIFont : MonoBehaviour
                 BMGlyph glyph2 = this.mFont.GetGlyph(index);
                 if (glyph2 != null)
                 {
-                    mSpacingX += glyph2.advance + ((glyph != null) ? glyph.GetKerning(index) : 0);
+                    mSpacingX += glyph2.advance + (glyph != null ? glyph.GetKerning(index) : 0);
                     glyph = glyph2;
                     goto Label_017F;
                 }
@@ -280,7 +279,7 @@ public class UIFont : MonoBehaviour
         while (index < length)
         {
             UILabel label = labelArray[index];
-            if ((label.enabled && NGUITools.GetActive(label.gameObject)) && CheckIfRelated(this, label.font))
+            if (label.enabled && NGUITools.GetActive(label.gameObject) && CheckIfRelated(this, label.font))
             {
                 UIFont font = label.font;
                 label.font = null;
@@ -307,7 +306,7 @@ public class UIFont : MonoBehaviour
             {
                 BMSymbol symbol = this.mSymbols[i];
                 int length = symbol.length;
-                if ((length != 0) && (textLength >= length))
+                if (length != 0 && textLength >= length)
                 {
                     bool flag = true;
                     for (int j = 0; j < length; j++)
@@ -357,7 +356,7 @@ public class UIFont : MonoBehaviour
                 this.mColors.Clear();
                 this.mColors.Add((Color)color);
                 int size = this.size;
-                Vector2 vector = (size <= 0) ? Vector2.one : new Vector2(1f / ((float)size), 1f / ((float)size));
+                Vector2 vector = size <= 0 ? Vector2.one : new Vector2(1f / (float)size, 1f / (float)size);
                 int indexOffset = verts.size;
                 int num3 = 0;
                 int x = 0;
@@ -368,10 +367,10 @@ public class UIFont : MonoBehaviour
                 Vector3 vector3 = Vector3.zero;
                 Vector2 vector4 = Vector2.zero;
                 Vector2 vector5 = Vector2.zero;
-                float num8 = this.uvRect.width / ((float)this.mFont.texWidth);
-                float num9 = this.mUVRect.height / ((float)this.mFont.texHeight);
+                float num8 = this.uvRect.width / (float)this.mFont.texWidth;
+                float num9 = this.mUVRect.height / (float)this.mFont.texHeight;
                 int length = text.Length;
-                bool flag2 = ((encoding && (symbolStyle != SymbolStyle.None)) && this.hasSymbols) && (this.sprite != null);
+                bool flag2 = encoding && symbolStyle != SymbolStyle.None && this.hasSymbols && this.sprite != null;
                 for (int i = 0; i < length; i++)
                 {
                     char index = text[i];
@@ -396,7 +395,7 @@ public class UIFont : MonoBehaviour
                         previousChar = 0;
                         continue;
                     }
-                    if (encoding && (index == '['))
+                    if (encoding && index == '[')
                     {
                         int num12 = NGUITools.ParseSymbol(text, i, this.mColors, premultiply);
                         if (num12 > 0)
@@ -428,15 +427,15 @@ public class UIFont : MonoBehaviour
                             }
                             zero.x = vector.x * (x + glyph.offsetX);
                             zero.y = -vector.y * (num5 + glyph.offsetY);
-                            vector3.x = zero.x + (vector.x * glyph.width);
-                            vector3.y = zero.y - (vector.y * glyph.height);
-                            vector4.x = this.mUVRect.xMin + (num8 * glyph.x);
-                            vector4.y = this.mUVRect.yMax - (num9 * glyph.y);
-                            vector5.x = vector4.x + (num8 * glyph.width);
-                            vector5.y = vector4.y - (num9 * glyph.height);
+                            vector3.x = zero.x + vector.x * glyph.width;
+                            vector3.y = zero.y - vector.y * glyph.height;
+                            vector4.x = this.mUVRect.xMin + num8 * glyph.x;
+                            vector4.y = this.mUVRect.yMax - num9 * glyph.y;
+                            vector5.x = vector4.x + num8 * glyph.width;
+                            vector5.y = vector4.y - num9 * glyph.height;
                             x += this.mSpacingX + glyph.advance;
                             previousChar = index;
-                            if ((glyph.channel == 0) || (glyph.channel == 15))
+                            if (glyph.channel == 0 || glyph.channel == 15)
                             {
                                 for (int j = 0; j < 4; j++)
                                 {
@@ -475,8 +474,8 @@ public class UIFont : MonoBehaviour
                         {
                             zero.x = vector.x * (x + symbol.offsetX);
                             zero.y = -vector.y * (num5 + symbol.offsetY);
-                            vector3.x = zero.x + (vector.x * symbol.width);
-                            vector3.y = zero.y - (vector.y * symbol.height);
+                            vector3.x = zero.x + vector.x * symbol.width;
+                            vector3.y = zero.y - vector.y * symbol.height;
                             Rect uvRect = symbol.uvRect;
                             vector4.x = uvRect.xMin;
                             vector4.y = uvRect.yMax;
@@ -515,14 +514,14 @@ public class UIFont : MonoBehaviour
                     if (this.mDynamicFont.GetCharacterInfo(index, out mChar, this.mDynamicFontSize, this.mDynamicFontStyle))
                     {
                         zero.x = vector.x * (x + mChar.vert.xMin);
-                        zero.y = -vector.y * ((num5 - mChar.vert.yMax) + this.mDynamicFontOffset);
-                        vector3.x = zero.x + (vector.x * mChar.vert.width);
-                        vector3.y = zero.y - (vector.y * mChar.vert.height);
+                        zero.y = -vector.y * (num5 - mChar.vert.yMax + this.mDynamicFontOffset);
+                        vector3.x = zero.x + vector.x * mChar.vert.width;
+                        vector3.y = zero.y - vector.y * mChar.vert.height;
                         vector4.x = mChar.uv.xMin;
                         vector4.y = mChar.uv.yMin;
                         vector5.x = mChar.uv.xMax;
                         vector5.y = mChar.uv.yMax;
-                        x += this.mSpacingX + ((int)mChar.width);
+                        x += this.mSpacingX + (int)mChar.width;
                         for (int num18 = 0; num18 < 4; num18++)
                         {
                             cols.Add(color);
@@ -547,7 +546,7 @@ public class UIFont : MonoBehaviour
                         verts.Add(new Vector3(vector3.x, vector3.y));
                     }
                 }
-                if ((alignment != Alignment.Left) && (indexOffset < verts.size))
+                if (alignment != Alignment.Left && indexOffset < verts.size)
                 {
                     this.Align(verts, indexOffset, alignment, x, lineWidth);
                     indexOffset = verts.size;
@@ -579,7 +578,7 @@ public class UIFont : MonoBehaviour
         {
             return false;
         }
-        return ((font == this) || ((this.mReplacement != null) && this.mReplacement.References(font)));
+        return font == this || this.mReplacement != null && this.mReplacement.References(font);
     }
 
     public void RemoveSymbol(string sequence)
@@ -605,10 +604,10 @@ public class UIFont : MonoBehaviour
     private void Trim()
     {
         Texture texture = this.mAtlas.texture;
-        if ((texture != null) && (this.mSprite != null))
+        if (texture != null && this.mSprite != null)
         {
             Rect rect = NGUIMath.ConvertToPixels(this.mUVRect, this.texture.width, this.texture.height, true);
-            Rect rect2 = (this.mAtlas.coordinates != UIAtlas.Coordinates.TexCoords) ? this.mSprite.outer : NGUIMath.ConvertToPixels(this.mSprite.outer, texture.width, texture.height, true);
+            Rect rect2 = this.mAtlas.coordinates != UIAtlas.Coordinates.TexCoords ? this.mSprite.outer : NGUIMath.ConvertToPixels(this.mSprite.outer, texture.width, texture.height, true);
             int xMin = Mathf.RoundToInt(rect2.xMin - rect.xMin);
             int yMin = Mathf.RoundToInt(rect2.yMin - rect.yMin);
             int xMax = Mathf.RoundToInt(rect2.xMax - rect.xMin);
@@ -670,7 +669,7 @@ public class UIFont : MonoBehaviour
         bool flag = true;
         bool flag2 = maxLineCount != 1;
         int num7 = 1;
-        bool flag3 = (encoding && (symbolStyle != SymbolStyle.None)) && this.hasSymbols;
+        bool flag3 = encoding && symbolStyle != SymbolStyle.None && this.hasSymbols;
         bool isDynamic = this.isDynamic;
         if (isDynamic)
         {
@@ -683,14 +682,14 @@ public class UIFont : MonoBehaviour
             char ch = text[offset];
             if (ch == '\n')
             {
-                if (!flag2 || (num7 == maxLineCount))
+                if (!flag2 || num7 == maxLineCount)
                 {
                     break;
                 }
                 num3 = num;
                 if (startIndex < offset)
                 {
-                    s.Append(text.Substring(startIndex, (offset - startIndex) + 1));
+                    s.Append(text.Substring(startIndex, offset - startIndex + 1));
                 }
                 else
                 {
@@ -702,21 +701,21 @@ public class UIFont : MonoBehaviour
                 previousChar = 0;
                 goto Label_03E7;
             }
-            if (((ch == ' ') && (previousChar != 32)) && (startIndex < offset))
+            if (ch == ' ' && previousChar != 32 && startIndex < offset)
             {
-                s.Append(text.Substring(startIndex, (offset - startIndex) + 1));
+                s.Append(text.Substring(startIndex, offset - startIndex + 1));
                 flag = false;
                 startIndex = offset + 1;
                 previousChar = ch;
             }
-            if ((encoding && (ch == '[')) && ((offset + 2) < length))
+            if (encoding && ch == '[' && offset + 2 < length)
             {
-                if ((text[offset + 1] == '-') && (text[offset + 2] == ']'))
+                if (text[offset + 1] == '-' && text[offset + 2] == ']')
                 {
                     offset += 2;
                     goto Label_03E7;
                 }
-                if ((((offset + 7) < length) && (text[offset + 7] == ']')) && (NGUITools.EncodeColor(NGUITools.ParseColor(text, offset + 1)) == text.Substring(offset + 1, 6).ToUpper()))
+                if (offset + 7 < length && text[offset + 7] == ']' && NGUITools.EncodeColor(NGUITools.ParseColor(text, offset + 1)) == text.Substring(offset + 1, 6).ToUpper())
                 {
                     offset += 7;
                     goto Label_03E7;
@@ -732,12 +731,12 @@ public class UIFont : MonoBehaviour
                 }
                 else
                 {
-                    BMGlyph glyph = (symbol != null) ? null : this.mFont.GetGlyph(ch);
+                    BMGlyph glyph = symbol != null ? null : this.mFont.GetGlyph(ch);
                     if (glyph == null)
                     {
                         goto Label_03E7;
                     }
-                    mSpacingX += (previousChar == 0) ? glyph.advance : (glyph.advance + glyph.GetKerning(previousChar));
+                    mSpacingX += previousChar == 0 ? glyph.advance : glyph.advance + glyph.GetKerning(previousChar);
                 }
             }
             else if (this.mDynamicFont.GetCharacterInfo(ch, out mChar, this.mDynamicFontSize, this.mDynamicFontStyle))
@@ -747,10 +746,10 @@ public class UIFont : MonoBehaviour
             num3 -= mSpacingX;
             if (num3 < 0)
             {
-                if ((flag || !flag2) || (num7 == maxLineCount))
+                if (flag || !flag2 || num7 == maxLineCount)
                 {
                     s.Append(text.Substring(startIndex, Mathf.Max(0, offset - startIndex)));
-                    if (!flag2 || (num7 == maxLineCount))
+                    if (!flag2 || num7 == maxLineCount)
                     {
                         startIndex = offset;
                         break;
@@ -771,7 +770,7 @@ public class UIFont : MonoBehaviour
                     previousChar = 0;
                     goto Label_03C8;
                 }
-                while ((startIndex < length) && (text[startIndex] == ' '))
+                while (startIndex < length && text[startIndex] == ' ')
                 {
                     startIndex++;
                 }
@@ -779,7 +778,7 @@ public class UIFont : MonoBehaviour
                 num3 = num;
                 offset = startIndex - 1;
                 previousChar = 0;
-                if (!flag2 || (num7 == maxLineCount))
+                if (!flag2 || num7 == maxLineCount)
                 {
                     break;
                 }
@@ -789,7 +788,7 @@ public class UIFont : MonoBehaviour
             }
             previousChar = ch;
         Label_03C8:
-            if (!isDynamic && (symbol != null))
+            if (!isDynamic && symbol != null)
             {
                 offset += symbol.length - 1;
                 previousChar = 0;
@@ -808,7 +807,7 @@ public class UIFont : MonoBehaviour
     {
         get
         {
-            return ((this.mReplacement == null) ? this.mAtlas : this.mReplacement.atlas);
+            return this.mReplacement == null ? this.mAtlas : this.mReplacement.atlas;
         }
         set
         {
@@ -840,7 +839,7 @@ public class UIFont : MonoBehaviour
     {
         get
         {
-            return ((this.mReplacement == null) ? this.mFont : this.mReplacement.bmFont);
+            return this.mReplacement == null ? this.mFont : this.mReplacement.bmFont;
         }
     }
 
@@ -848,7 +847,7 @@ public class UIFont : MonoBehaviour
     {
         get
         {
-            return ((this.mReplacement == null) ? this.mDynamicFont : this.mReplacement.dynamicFont);
+            return this.mReplacement == null ? this.mDynamicFont : this.mReplacement.dynamicFont;
         }
         set
         {
@@ -872,7 +871,7 @@ public class UIFont : MonoBehaviour
     {
         get
         {
-            return ((this.mReplacement == null) ? this.mDynamicFontSize : this.mReplacement.dynamicFontSize);
+            return this.mReplacement == null ? this.mDynamicFontSize : this.mReplacement.dynamicFontSize;
         }
         set
         {
@@ -896,7 +895,7 @@ public class UIFont : MonoBehaviour
     {
         get
         {
-            return ((this.mReplacement == null) ? this.mDynamicFontStyle : this.mReplacement.dynamicFontStyle);
+            return this.mReplacement == null ? this.mDynamicFontStyle : this.mReplacement.dynamicFontStyle;
         }
         set
         {
@@ -932,7 +931,7 @@ public class UIFont : MonoBehaviour
     {
         get
         {
-            return ((this.mReplacement == null) ? (this.mSymbols.Count != 0) : this.mReplacement.hasSymbols);
+            return this.mReplacement == null ? this.mSymbols.Count != 0 : this.mReplacement.hasSymbols;
         }
     }
 
@@ -940,7 +939,7 @@ public class UIFont : MonoBehaviour
     {
         get
         {
-            return ((this.mReplacement == null) ? this.mSpacingX : this.mReplacement.horizontalSpacing);
+            return this.mReplacement == null ? this.mSpacingX : this.mReplacement.horizontalSpacing;
         }
         set
         {
@@ -960,7 +959,7 @@ public class UIFont : MonoBehaviour
     {
         get
         {
-            return (this.mDynamicFont != null);
+            return this.mDynamicFont != null;
         }
     }
 
@@ -968,7 +967,7 @@ public class UIFont : MonoBehaviour
     {
         get
         {
-            return ((this.mDynamicFont != null) || this.mFont.isValid);
+            return this.mDynamicFont != null || this.mFont.isValid;
         }
     }
 
@@ -986,7 +985,7 @@ public class UIFont : MonoBehaviour
             }
             if (this.mMat != null)
             {
-                if ((this.mDynamicFont != null) && (this.mMat != this.mDynamicFont.material))
+                if (this.mDynamicFont != null && this.mMat != this.mDynamicFont.material)
                 {
                     this.mMat.mainTexture = this.mDynamicFont.material.mainTexture;
                 }
@@ -1064,9 +1063,9 @@ public class UIFont : MonoBehaviour
             if (this.mPMA == -1)
             {
                 Material material = this.material;
-                this.mPMA = (((material == null) || (material.shader == null)) || !material.shader.name.Contains("Premultiplied")) ? 0 : 1;
+                this.mPMA = material == null || material.shader == null || !material.shader.name.Contains("Premultiplied") ? 0 : 1;
             }
-            return (this.mPMA == 1);
+            return this.mPMA == 1;
         }
     }
 
@@ -1085,7 +1084,7 @@ public class UIFont : MonoBehaviour
             }
             if (this.mReplacement != font)
             {
-                if ((font != null) && (font.replacement == this))
+                if (font != null && font.replacement == this)
                 {
                     font.replacement = null;
                 }
@@ -1103,7 +1102,7 @@ public class UIFont : MonoBehaviour
     {
         get
         {
-            return ((this.mReplacement == null) ? (!this.isDynamic ? this.mFont.charSize : this.mDynamicFontSize) : this.mReplacement.size);
+            return this.mReplacement == null ? (!this.isDynamic ? this.mFont.charSize : this.mDynamicFontSize) : this.mReplacement.size;
         }
     }
 
@@ -1121,7 +1120,7 @@ public class UIFont : MonoBehaviour
             }
             if (this.mSprite == null)
             {
-                if ((this.mAtlas != null) && !string.IsNullOrEmpty(this.mFont.spriteName))
+                if (this.mAtlas != null && !string.IsNullOrEmpty(this.mFont.spriteName))
                 {
                     this.mSprite = this.mAtlas.GetSprite(this.mFont.spriteName);
                     if (this.mSprite == null)
@@ -1150,7 +1149,7 @@ public class UIFont : MonoBehaviour
     {
         get
         {
-            return ((this.mReplacement == null) ? this.mFont.spriteName : this.mReplacement.spriteName);
+            return this.mReplacement == null ? this.mFont.spriteName : this.mReplacement.spriteName;
         }
         set
         {
@@ -1170,7 +1169,7 @@ public class UIFont : MonoBehaviour
     {
         get
         {
-            return ((this.mReplacement == null) ? this.mSymbols : this.mReplacement.symbols);
+            return this.mReplacement == null ? this.mSymbols : this.mReplacement.symbols;
         }
     }
 
@@ -1178,7 +1177,7 @@ public class UIFont : MonoBehaviour
     {
         get
         {
-            return ((this.mReplacement == null) ? ((this.mFont == null) ? 1 : this.mFont.texHeight) : this.mReplacement.texHeight);
+            return this.mReplacement == null ? (this.mFont == null ? 1 : this.mFont.texHeight) : this.mReplacement.texHeight;
         }
     }
 
@@ -1191,7 +1190,7 @@ public class UIFont : MonoBehaviour
                 return this.mReplacement.texture;
             }
             Material material = this.material;
-            return ((material == null) ? null : (material.mainTexture as Texture2D));
+            return material == null ? null : material.mainTexture as Texture2D;
         }
     }
 
@@ -1199,7 +1198,7 @@ public class UIFont : MonoBehaviour
     {
         get
         {
-            return ((this.mReplacement == null) ? ((this.mFont == null) ? 1 : this.mFont.texWidth) : this.mReplacement.texWidth);
+            return this.mReplacement == null ? (this.mFont == null ? 1 : this.mFont.texWidth) : this.mReplacement.texWidth;
         }
     }
 
@@ -1211,7 +1210,7 @@ public class UIFont : MonoBehaviour
             {
                 return this.mReplacement.uvRect;
             }
-            if (((this.mAtlas != null) && (this.mSprite == null)) && (this.sprite != null))
+            if (this.mAtlas != null && this.mSprite == null && this.sprite != null)
             {
                 Texture texture = this.mAtlas.texture;
                 if (texture != null)
@@ -1224,10 +1223,10 @@ public class UIFont : MonoBehaviour
                     if (this.mSprite.hasPadding)
                     {
                         Rect mUVRect = this.mUVRect;
-                        this.mUVRect.xMin = mUVRect.xMin - (this.mSprite.paddingLeft * mUVRect.width);
-                        this.mUVRect.yMin = mUVRect.yMin - (this.mSprite.paddingBottom * mUVRect.height);
-                        this.mUVRect.xMax = mUVRect.xMax + (this.mSprite.paddingRight * mUVRect.width);
-                        this.mUVRect.yMax = mUVRect.yMax + (this.mSprite.paddingTop * mUVRect.height);
+                        this.mUVRect.xMin = mUVRect.xMin - this.mSprite.paddingLeft * mUVRect.width;
+                        this.mUVRect.yMin = mUVRect.yMin - this.mSprite.paddingBottom * mUVRect.height;
+                        this.mUVRect.xMax = mUVRect.xMax + this.mSprite.paddingRight * mUVRect.width;
+                        this.mUVRect.yMax = mUVRect.yMax + this.mSprite.paddingTop * mUVRect.height;
                     }
                     if (this.mSprite.hasPadding)
                     {
@@ -1243,7 +1242,7 @@ public class UIFont : MonoBehaviour
             {
                 this.mReplacement.uvRect = value;
             }
-            else if ((this.sprite == null) && (this.mUVRect != value))
+            else if (this.sprite == null && this.mUVRect != value)
             {
                 this.mUVRect = value;
                 this.MarkAsDirty();
@@ -1255,7 +1254,7 @@ public class UIFont : MonoBehaviour
     {
         get
         {
-            return ((this.mReplacement == null) ? this.mSpacingY : this.mReplacement.verticalSpacing);
+            return this.mReplacement == null ? this.mSpacingY : this.mReplacement.verticalSpacing;
         }
         set
         {

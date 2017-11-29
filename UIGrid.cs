@@ -31,7 +31,7 @@ public class UIGrid : MonoBehaviour
                 for (int i = 0; i < transform.childCount; i++)
                 {
                     Transform child = transform.GetChild(i);
-                    if ((child != null) && (!this.hideInactive || NGUITools.GetActive(child.gameObject)))
+                    if (child != null && (!this.hideInactive || NGUITools.GetActive(child.gameObject)))
                     {
                         list.Add(child);
                     }
@@ -45,8 +45,8 @@ public class UIGrid : MonoBehaviour
                     if (NGUITools.GetActive(transform3.gameObject) || !this.hideInactive)
                     {
                         float z = transform3.localPosition.z;
-                        transform3.localPosition = (this.arrangement != Arrangement.Horizontal) ? new Vector3(this.cellWidth * num2, -this.cellHeight * num, z) : new Vector3(this.cellWidth * num, -this.cellHeight * num2, z);
-                        if ((++num >= this.maxPerLine) && (this.maxPerLine > 0))
+                        transform3.localPosition = this.arrangement != Arrangement.Horizontal ? new Vector3(this.cellWidth * num2, -this.cellHeight * num, z) : new Vector3(this.cellWidth * num, -this.cellHeight * num2, z);
+                        if (++num >= this.maxPerLine && this.maxPerLine > 0)
                         {
                             num = 0;
                             num2++;
@@ -63,8 +63,8 @@ public class UIGrid : MonoBehaviour
                     if (NGUITools.GetActive(transform4.gameObject) || !this.hideInactive)
                     {
                         float num8 = transform4.localPosition.z;
-                        transform4.localPosition = (this.arrangement != Arrangement.Horizontal) ? new Vector3(this.cellWidth * num2, -this.cellHeight * num, num8) : new Vector3(this.cellWidth * num, -this.cellHeight * num2, num8);
-                        if ((++num >= this.maxPerLine) && (this.maxPerLine > 0))
+                        transform4.localPosition = this.arrangement != Arrangement.Horizontal ? new Vector3(this.cellWidth * num2, -this.cellHeight * num, num8) : new Vector3(this.cellWidth * num, -this.cellHeight * num2, num8);
+                        if (++num >= this.maxPerLine && this.maxPerLine > 0)
                         {
                             num = 0;
                             num2++;

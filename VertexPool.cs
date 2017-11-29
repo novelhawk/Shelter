@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class VertexPool
@@ -78,17 +77,17 @@ public class VertexPool
     {
         int count = 0;
         int num2 = 0;
-        if ((this.VertexUsed + vcount) >= this.VertexTotal)
+        if (this.VertexUsed + vcount >= this.VertexTotal)
         {
-            count = ((vcount / 36) + 1) * 36;
+            count = (vcount / 36 + 1) * 36;
         }
-        if ((this.IndexUsed + icount) >= this.IndexTotal)
+        if (this.IndexUsed + icount >= this.IndexTotal)
         {
-            num2 = ((icount / 36) + 1) * 36;
+            num2 = (icount / 36 + 1) * 36;
         }
         this.VertexUsed += vcount;
         this.IndexUsed += icount;
-        if ((count != 0) || (num2 != 0))
+        if (count != 0 || num2 != 0)
         {
             this.EnlargeArrays(count, num2);
             this.VertexTotal += count;
@@ -127,7 +126,7 @@ public class VertexPool
             this.Mesh.triangles = this.Indices;
         }
         this.ElapsedTime += Time.deltaTime;
-        if ((this.ElapsedTime > this.BoundsScheduleTime) || this.FirstUpdate)
+        if (this.ElapsedTime > this.BoundsScheduleTime || this.FirstUpdate)
         {
             this.RecalculateBounds();
             this.ElapsedTime = 0f;

@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Button Offset")]
@@ -14,7 +13,7 @@ public class UIButtonOffset : MonoBehaviour
 
     private void OnDisable()
     {
-        if (this.mStarted && (this.tweenTarget != null))
+        if (this.mStarted && this.tweenTarget != null)
         {
             TweenPosition component = this.tweenTarget.GetComponent<TweenPosition>();
             if (component != null)
@@ -41,7 +40,7 @@ public class UIButtonOffset : MonoBehaviour
             {
                 this.Start();
             }
-            TweenPosition.Begin(this.tweenTarget.gameObject, this.duration, !isOver ? this.mPos : (this.mPos + this.hover)).method = UITweener.Method.EaseInOut;
+            TweenPosition.Begin(this.tweenTarget.gameObject, this.duration, !isOver ? this.mPos : this.mPos + this.hover).method = UITweener.Method.EaseInOut;
             this.mHighlighted = isOver;
         }
     }
@@ -54,7 +53,7 @@ public class UIButtonOffset : MonoBehaviour
             {
                 this.Start();
             }
-            TweenPosition.Begin(this.tweenTarget.gameObject, this.duration, !isPressed ? (!UICamera.IsHighlighted(base.gameObject) ? this.mPos : (this.mPos + this.hover)) : (this.mPos + this.pressed)).method = UITweener.Method.EaseInOut;
+            TweenPosition.Begin(this.tweenTarget.gameObject, this.duration, !isPressed ? (!UICamera.IsHighlighted(base.gameObject) ? this.mPos : this.mPos + this.hover) : this.mPos + this.pressed).method = UITweener.Method.EaseInOut;
         }
     }
 

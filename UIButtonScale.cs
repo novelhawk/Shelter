@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Button Scale")]
@@ -14,7 +13,7 @@ public class UIButtonScale : MonoBehaviour
 
     private void OnDisable()
     {
-        if (this.mStarted && (this.tweenTarget != null))
+        if (this.mStarted && this.tweenTarget != null)
         {
             TweenScale component = this.tweenTarget.GetComponent<TweenScale>();
             if (component != null)

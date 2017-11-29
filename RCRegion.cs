@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class RCRegion
@@ -19,17 +18,17 @@ public class RCRegion
 
     public float GetRandomX()
     {
-        return (this.location.x + UnityEngine.Random.Range((float) (-this.dimX / 2f), (float) (this.dimX / 2f)));
+        return this.location.x + UnityEngine.Random.Range((float) (-this.dimX / 2f), (float) (this.dimX / 2f));
     }
 
     public float GetRandomY()
     {
-        return (this.location.y + UnityEngine.Random.Range((float) (-this.dimY / 2f), (float) (this.dimY / 2f)));
+        return this.location.y + UnityEngine.Random.Range((float) (-this.dimY / 2f), (float) (this.dimY / 2f));
     }
 
     public float GetRandomZ()
     {
-        return (this.location.z + UnityEngine.Random.Range((float) (-this.dimZ / 2f), (float) (this.dimZ / 2f)));
+        return this.location.z + UnityEngine.Random.Range((float) (-this.dimZ / 2f), (float) (this.dimZ / 2f));
     }
 }
 

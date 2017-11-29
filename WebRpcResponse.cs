@@ -1,7 +1,5 @@
 using ExitGames.Client.Photon;
-using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 
 public class WebRpcResponse
 {
@@ -11,7 +9,7 @@ public class WebRpcResponse
         response.Parameters.TryGetValue(209, out obj2);
         this.Name = obj2 as string;
         response.Parameters.TryGetValue(207, out obj2);
-        this.ReturnCode = (obj2 == null) ? -1 : ((byte) obj2);
+        this.ReturnCode = obj2 == null ? -1 : (byte) obj2;
         response.Parameters.TryGetValue(208, out obj2);
         this.Parameters = obj2 as Dictionary<string, object>;
         response.Parameters.TryGetValue(206, out obj2);

@@ -1,5 +1,3 @@
-using System;
-
 public class Affector
 {
     protected EffectNode Node;

@@ -1,5 +1,3 @@
-using System;
-
 public class GameProperties
 {
     public const byte CleanupCacheOnLeave = 249;

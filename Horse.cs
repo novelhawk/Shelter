@@ -1,5 +1,3 @@
-using Photon;
-using System;
 using UnityEngine;
 
 public class Horse : Photon.MonoBehaviour
@@ -28,8 +26,8 @@ public class Horse : Photon.MonoBehaviour
         if (this.myHero != null)
         {
             this.State = "follow";
-            this.setPoint = (this.myHero.transform.position + (Vector3.right * UnityEngine.Random.Range(-6, 6))) + (Vector3.forward * UnityEngine.Random.Range(-6, 6));
-            this.setPoint.y = this.getHeight(this.setPoint + ((Vector3) (Vector3.up * 5f)));
+            this.setPoint = this.myHero.transform.position + Vector3.right * UnityEngine.Random.Range(-6, 6) + Vector3.forward * UnityEngine.Random.Range(-6, 6);
+            this.setPoint.y = this.getHeight(this.setPoint + (Vector3) (Vector3.up * 5f));
             this.awayTimer = 0f;
         }
     }
@@ -37,7 +35,7 @@ public class Horse : Photon.MonoBehaviour
     private float getHeight(Vector3 pt)
     {
         RaycastHit hit;
-        LayerMask mask2 = ((int) 1) << LayerMask.NameToLayer("Ground");
+        LayerMask mask2 = (int) 1 << LayerMask.NameToLayer("Ground");
         if (Physics.Raycast(pt, -Vector3.up, out hit, 1000f, mask2.value))
         {
             return hit.point.y;
@@ -47,15 +45,15 @@ public class Horse : Photon.MonoBehaviour
 
     public bool IsGrounded()
     {
-        LayerMask mask = ((int) 1) << LayerMask.NameToLayer("Ground");
-        LayerMask mask2 = ((int) 1) << LayerMask.NameToLayer("EnemyBox");
+        LayerMask mask = (int) 1 << LayerMask.NameToLayer("Ground");
+        LayerMask mask2 = (int) 1 << LayerMask.NameToLayer("EnemyBox");
         LayerMask mask3 = mask2 | mask;
-        return Physics.Raycast(base.gameObject.transform.position + ((Vector3) (Vector3.up * 0.1f)), -Vector3.up, (float) 0.3f, mask3.value);
+        return Physics.Raycast(base.gameObject.transform.position + (Vector3) (Vector3.up * 0.1f), -Vector3.up, (float) 0.3f, mask3.value);
     }
 
     private void LateUpdate()
     {
-        if ((this.myHero == null) && base.photonView.isMine)
+        if (this.myHero == null && base.photonView.isMine)
         {
             PhotonNetwork.Destroy(base.gameObject);
         }
@@ -66,18 +64,18 @@ public class Horse : Photon.MonoBehaviour
                 this.unmounted();
                 return;
             }
-            this.myHero.transform.position = base.transform.position + ((Vector3) (Vector3.up * 1.68f));
+            this.myHero.transform.position = base.transform.position + (Vector3) (Vector3.up * 1.68f);
             this.myHero.transform.rotation = base.transform.rotation;
             this.myHero.rigidbody.velocity = base.rigidbody.velocity;
             if (this.controller.targetDirection != -874f)
             {
-                base.gameObject.transform.rotation = Quaternion.Lerp(base.gameObject.transform.rotation, Quaternion.Euler(0f, this.controller.targetDirection, 0f), (100f * Time.deltaTime) / (base.rigidbody.velocity.magnitude + 20f));
+                base.gameObject.transform.rotation = Quaternion.Lerp(base.gameObject.transform.rotation, Quaternion.Euler(0f, this.controller.targetDirection, 0f), 100f * Time.deltaTime / (base.rigidbody.velocity.magnitude + 20f));
                 if (this.controller.isWALKDown)
                 {
-                    base.rigidbody.AddForce((Vector3) ((base.transform.forward * this.speed) * 0.6f), ForceMode.Acceleration);
-                    if (base.rigidbody.velocity.magnitude >= (this.speed * 0.6f))
+                    base.rigidbody.AddForce((Vector3) (base.transform.forward * this.speed * 0.6f), ForceMode.Acceleration);
+                    if (base.rigidbody.velocity.magnitude >= this.speed * 0.6f)
                     {
-                        base.rigidbody.AddForce((Vector3) ((-this.speed * 0.6f) * base.rigidbody.velocity.normalized), ForceMode.Acceleration);
+                        base.rigidbody.AddForce((Vector3) (-this.speed * 0.6f * base.rigidbody.velocity.normalized), ForceMode.Acceleration);
                     }
                 }
                 else
@@ -177,13 +175,13 @@ public class Horse : Photon.MonoBehaviour
                 }
             }
             float num = -Mathf.DeltaAngle(FengMath.getHorizontalAngle(base.transform.position, this.setPoint), base.gameObject.transform.rotation.eulerAngles.y - 90f);
-            base.gameObject.transform.rotation = Quaternion.Lerp(base.gameObject.transform.rotation, Quaternion.Euler(0f, base.gameObject.transform.rotation.eulerAngles.y + num, 0f), (200f * Time.deltaTime) / (base.rigidbody.velocity.magnitude + 20f));
+            base.gameObject.transform.rotation = Quaternion.Lerp(base.gameObject.transform.rotation, Quaternion.Euler(0f, base.gameObject.transform.rotation.eulerAngles.y + num, 0f), 200f * Time.deltaTime / (base.rigidbody.velocity.magnitude + 20f));
             if (Vector3.Distance(this.setPoint, base.transform.position) < 20f)
             {
-                base.rigidbody.AddForce((Vector3) ((base.transform.forward * this.speed) * 0.7f), ForceMode.Acceleration);
+                base.rigidbody.AddForce((Vector3) (base.transform.forward * this.speed * 0.7f), ForceMode.Acceleration);
                 if (base.rigidbody.velocity.magnitude >= this.speed)
                 {
-                    base.rigidbody.AddForce((Vector3) ((-this.speed * 0.7f) * base.rigidbody.velocity.normalized), ForceMode.Acceleration);
+                    base.rigidbody.AddForce((Vector3) (-this.speed * 0.7f * base.rigidbody.velocity.normalized), ForceMode.Acceleration);
                 }
             }
             else
@@ -215,17 +213,17 @@ public class Horse : Photon.MonoBehaviour
             if (this.awayTimer > 6f)
             {
                 this.awayTimer = 0f;
-                LayerMask mask2 = ((int) 1) << LayerMask.NameToLayer("Ground");
+                LayerMask mask2 = (int) 1 << LayerMask.NameToLayer("Ground");
                 if (Physics.Linecast(base.transform.position + Vector3.up, this.myHero.transform.position + Vector3.up, mask2.value))
                 {
-                    base.transform.position = new Vector3(this.myHero.transform.position.x, this.getHeight(this.myHero.transform.position + ((Vector3) (Vector3.up * 5f))), this.myHero.transform.position.z);
+                    base.transform.position = new Vector3(this.myHero.transform.position.x, this.getHeight(this.myHero.transform.position + (Vector3) (Vector3.up * 5f)), this.myHero.transform.position.z);
                 }
             }
         }
         else if (this.State == "idle")
         {
             this.toIdleAnimation();
-            if ((this.myHero != null) && (Vector3.Distance(this.myHero.transform.position, base.transform.position) > 20f))
+            if (this.myHero != null && Vector3.Distance(this.myHero.transform.position, base.transform.position) > 20f)
             {
                 this.followed();
             }
@@ -326,19 +324,19 @@ public class Horse : Photon.MonoBehaviour
         }
         else
         {
-            if (base.animation.IsPlaying("horse_idle1") && (base.animation["horse_idle1"].normalizedTime >= 1f))
+            if (base.animation.IsPlaying("horse_idle1") && base.animation["horse_idle1"].normalizedTime >= 1f)
             {
                 this.crossFade("horse_idle0", 0.1f);
             }
-            if (base.animation.IsPlaying("horse_idle2") && (base.animation["horse_idle2"].normalizedTime >= 1f))
+            if (base.animation.IsPlaying("horse_idle2") && base.animation["horse_idle2"].normalizedTime >= 1f)
             {
                 this.crossFade("horse_idle0", 0.1f);
             }
-            if (base.animation.IsPlaying("horse_idle3") && (base.animation["horse_idle3"].normalizedTime >= 1f))
+            if (base.animation.IsPlaying("horse_idle3") && base.animation["horse_idle3"].normalizedTime >= 1f)
             {
                 this.crossFade("horse_idle0", 0.1f);
             }
-            if ((!base.animation.IsPlaying("horse_idle0") && !base.animation.IsPlaying("horse_idle1")) && (!base.animation.IsPlaying("horse_idle2") && !base.animation.IsPlaying("horse_idle3")))
+            if (!base.animation.IsPlaying("horse_idle0") && !base.animation.IsPlaying("horse_idle1") && !base.animation.IsPlaying("horse_idle2") && !base.animation.IsPlaying("horse_idle3"))
             {
                 this.crossFade("horse_idle0", 0.1f);
             }

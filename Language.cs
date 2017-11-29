@@ -1,4 +1,3 @@
-using System;
 using UnityEngine;
 
 public class Language
@@ -243,7 +242,7 @@ public class Language
                 {
                     txt = string.Empty;
                 }
-                else if ((txt != string.Empty) && str5.Contains("@"))
+                else if (txt != string.Empty && str5.Contains("@"))
                 {
                     char[] chArray3 = new char[] { "@"[0] };
                     str3 = str5.Split(chArray3)[0];

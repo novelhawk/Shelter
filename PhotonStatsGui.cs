@@ -1,5 +1,4 @@
 using ExitGames.Client.Photon;
-using System;
 using UnityEngine;
 
 public class PhotonStatsGui : MonoBehaviour
@@ -45,7 +44,7 @@ public class PhotonStatsGui : MonoBehaviour
         GUILayout.EndHorizontal();
         string text = string.Format("Out|In|Sum:\t{0,4} | {1,4} | {2,4}", trafficStatsGameLevel.TotalOutgoingMessageCount, trafficStatsGameLevel.TotalIncomingMessageCount, trafficStatsGameLevel.TotalMessageCount);
         string str2 = string.Format("{0}sec average:", num);
-        string str3 = string.Format("Out|In|Sum:\t{0,4} | {1,4} | {2,4}", ((long) trafficStatsGameLevel.TotalOutgoingMessageCount) / num, ((long) trafficStatsGameLevel.TotalIncomingMessageCount) / num, ((long) trafficStatsGameLevel.TotalMessageCount) / num);
+        string str3 = string.Format("Out|In|Sum:\t{0,4} | {1,4} | {2,4}", (long) trafficStatsGameLevel.TotalOutgoingMessageCount / num, (long) trafficStatsGameLevel.TotalIncomingMessageCount / num, (long) trafficStatsGameLevel.TotalMessageCount / num);
         GUILayout.Label(text, new GUILayoutOption[0]);
         GUILayout.Label(str2, new GUILayoutOption[0]);
         GUILayout.Label(str3, new GUILayoutOption[0]);

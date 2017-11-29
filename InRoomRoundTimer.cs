@@ -1,5 +1,4 @@
 using ExitGames.Client.Photon;
-using System;
 using UnityEngine;
 
 public class InRoomRoundTimer : MonoBehaviour
@@ -13,8 +12,8 @@ public class InRoomRoundTimer : MonoBehaviour
     public void OnGUI()
     {
         double num = PhotonNetwork.time - this.StartTime;
-        double num2 = this.SecondsPerTurn - (num % ((double) this.SecondsPerTurn));
-        int num3 = (int) (num / ((double) this.SecondsPerTurn));
+        double num2 = this.SecondsPerTurn - num % (double) this.SecondsPerTurn;
+        int num3 = (int) (num / (double) this.SecondsPerTurn);
         GUILayout.BeginArea(this.TextPos);
         GUILayout.Label(string.Format("elapsed: {0:0.000}", num), new GUILayoutOption[0]);
         GUILayout.Label(string.Format("remaining: {0:0.000}", num2), new GUILayoutOption[0]);
