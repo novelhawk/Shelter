@@ -344,7 +344,7 @@ public class Horse : Photon.MonoBehaviour
             }
             if (base.animation.IsPlaying("horse_idle0"))
             {
-                int num = UnityEngine.Random.Range(0, 0x2710);
+                int num = UnityEngine.Random.Range(0, 10000);
                 if (num < 10)
                 {
                     this.crossFade("horse_idle1", 0.1f);

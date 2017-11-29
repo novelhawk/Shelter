@@ -28,7 +28,7 @@ public class BTN_choose_titan : MonoBehaviour
             Hashtable hashtable = new Hashtable();
             hashtable.Add(PhotonPlayerProperty.character, id);
             Hashtable propertiesToSet = hashtable;
-            PhotonNetwork.player.SetCustomProperties(propertiesToSet);
+            PhotonPlayer.Self.SetCustomProperties(propertiesToSet);
         }
         else
         {

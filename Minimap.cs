@@ -138,7 +138,7 @@ public class Minimap : MonoBehaviour
 
     private void CheckUserInput()
     {
-        if ((((int)FengGameManagerMKII.settings[0xe7]) == 1) && (RCSettings.globalDisableMinimap == 0))
+        if ((((int)FengGameManagerMKII.settings[231]) == 1) && (RCSettings.globalDisableMinimap == 0))
         {
             if (this.minimapIsCreated)
             {
@@ -223,7 +223,7 @@ public class Minimap : MonoBehaviour
         }
     }
 
-    public void CreateMinimap(Camera cam, int minimapResolution = 0x200, float cornerSize = 0.3f, Preset mapPreset = null)
+    public void CreateMinimap(Camera cam, int minimapResolution = 512, float cornerSize = 0.3f, Preset mapPreset = null)
     {
         this.isEnabled = true;
         this.lastUsedCamera = cam;
@@ -254,7 +254,7 @@ public class Minimap : MonoBehaviour
         }
         cam.nearClipPlane = 0.3f;
         cam.farClipPlane = 1000f;
-        cam.cullingMask = 0x200;
+        cam.cullingMask = 512;
         cam.clearFlags = CameraClearFlags.Color;
         this.MINIMAP_SIZE = minimapResolution;
         this.MINIMAP_CORNER_SIZE = this.MINIMAP_SIZE * cornerSize;
@@ -293,7 +293,7 @@ public class Minimap : MonoBehaviour
         {
             bool flag2 = SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.RGB565);
             RenderTextureFormat format = flag2 ? RenderTextureFormat.RGB565 : RenderTextureFormat.Default;
-            this.minimapRT = new RenderTexture(pixelSize, pixelSize, 0x10, RenderTextureFormat.RGB565);
+            this.minimapRT = new RenderTexture(pixelSize, pixelSize, 16, RenderTextureFormat.RGB565);
             if (!flag2)
             {
                 UnityEngine.Debug.Log(SystemInfo.graphicsDeviceName + " (" + SystemInfo.graphicsDeviceVendor + ") does not support RGB565 format, the minimap will have transparency issues on certain maps");
@@ -567,7 +567,7 @@ public class Minimap : MonoBehaviour
             cam.nearClipPlane = 0.3f;
             cam.farClipPlane = 1000f;
             cam.clearFlags = CameraClearFlags.Color;
-            cam.cullingMask = 0x200;
+            cam.cullingMask = 512;
             this.CreateMinimapRT(cam, this.MINIMAP_SIZE);
             this.ManualSetCameraProperties(cam, centerPosition, orthoSize);
             this.CaptureMinimapRT(cam);

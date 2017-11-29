@@ -28,8 +28,8 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
         }
         SP = this;
         UnityEngine.Object.DontDestroyOnLoad(base.gameObject);
-        this.updateInterval = 0x3e8 / PhotonNetwork.sendRate;
-        this.updateIntervalOnSerialize = 0x3e8 / PhotonNetwork.sendRateOnSerialize;
+        this.updateInterval = 1000 / PhotonNetwork.sendRate;
+        this.updateIntervalOnSerialize = 1000 / PhotonNetwork.sendRateOnSerialize;
         StartFallbackSendAckThread();
     }
 

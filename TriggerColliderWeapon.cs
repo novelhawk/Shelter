@@ -84,7 +84,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                             parameters[0] = (Vector3) (((vector2.normalized * b) * 1000f) + (Vector3.up * 50f));
                             parameters[1] = false;
                             parameters[2] = base.transform.root.gameObject.GetPhotonView().viewID;
-                            parameters[3] = PhotonView.Find(base.transform.root.gameObject.GetPhotonView().viewID).owner.customProperties[PhotonPlayerProperty.name];
+                            parameters[3] = PhotonView.Find(base.transform.root.gameObject.GetPhotonView().viewID).owner.CustomProperties[PhotonPlayerProperty.name];
                             parameters[4] = false;
                             component.transform.root.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, parameters);
                         }
@@ -136,7 +136,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                         }
                         else if (item.transform.root.GetComponent<FEMALE_TITAN>() != null)
                         {
-                            base.transform.root.GetComponent<HERO>().useBlade(0x7fffffff);
+                            base.transform.root.GetComponent<HERO>().useBlade(2147483647);
                             Vector3 vector5 = this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;
                             int num4 = (int) ((vector5.magnitude * 10f) * this.scoreMulti);
                             num4 = Mathf.Max(10, num4);
@@ -148,7 +148,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                         }
                         else if (item.transform.root.GetComponent<COLOSSAL_TITAN>() != null)
                         {
-                            base.transform.root.GetComponent<HERO>().useBlade(0x7fffffff);
+                            base.transform.root.GetComponent<HERO>().useBlade(2147483647);
                             if (!item.transform.root.GetComponent<COLOSSAL_TITAN>().hasDie)
                             {
                                 Vector3 vector6 = this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;
@@ -175,7 +175,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                     }
                     else if (item.transform.root.GetComponent<FEMALE_TITAN>() != null)
                     {
-                        base.transform.root.GetComponent<HERO>().useBlade(0x7fffffff);
+                        base.transform.root.GetComponent<HERO>().useBlade(2147483647);
                         if (!item.transform.root.GetComponent<FEMALE_TITAN>().hasDie)
                         {
                             Vector3 vector8 = this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;
@@ -190,7 +190,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                     }
                     else if (item.transform.root.GetComponent<COLOSSAL_TITAN>() != null)
                     {
-                        base.transform.root.GetComponent<HERO>().useBlade(0x7fffffff);
+                        base.transform.root.GetComponent<HERO>().useBlade(2147483647);
                         if (!item.transform.root.GetComponent<COLOSSAL_TITAN>().hasDie)
                         {
                             Vector3 vector9 = this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;

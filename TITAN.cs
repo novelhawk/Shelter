@@ -18,7 +18,7 @@ public class TITAN : Photon.MonoBehaviour
     private static Dictionary<string, int> f__switchSmap7;
     private Vector3 abnorma_jump_bite_horizon_v;
     public AbnormalType abnormalType;
-    public int activeRad = 0x7fffffff;
+    public int activeRad = 2147483647;
     private float angle;
     public bool asClientLookTarget;
     private string attackAnimation;
@@ -154,7 +154,7 @@ public class TITAN : Photon.MonoBehaviour
             int num;
             if (f__switchSmap6 == null)
             {
-                Dictionary<string, int> dictionary = new Dictionary<string, int>(0x16);
+                Dictionary<string, int> dictionary = new Dictionary<string, int>(22);
                 dictionary.Add("abnormal_getup", 0);
                 dictionary.Add("abnormal_jump", 1);
                 dictionary.Add("combo_1", 2);
@@ -171,12 +171,12 @@ public class TITAN : Photon.MonoBehaviour
                 dictionary.Add("jumper_0", 13);
                 dictionary.Add("crawler_jump_0", 14);
                 dictionary.Add("anti_AE_l", 15);
-                dictionary.Add("anti_AE_r", 0x10);
-                dictionary.Add("anti_AE_low_l", 0x11);
-                dictionary.Add("anti_AE_low_r", 0x12);
-                dictionary.Add("quick_turn_l", 0x13);
+                dictionary.Add("anti_AE_r", 16);
+                dictionary.Add("anti_AE_low_l", 17);
+                dictionary.Add("anti_AE_low_r", 18);
+                dictionary.Add("quick_turn_l", 19);
                 dictionary.Add("quick_turn_r", 20);
-                dictionary.Add("throw", 0x15);
+                dictionary.Add("throw", 21);
                 f__switchSmap6 = dictionary;
             }
             if (f__switchSmap6.TryGetValue(key, out num))
@@ -286,25 +286,25 @@ public class TITAN : Photon.MonoBehaviour
                         this.leftHandAttack = true;
                         break;
 
-                    case 0x10:
+                    case 16:
                         this.attackCheckTimeA = 0.31f;
                         this.attackCheckTimeB = 0.4f;
                         this.leftHandAttack = false;
                         break;
 
-                    case 0x11:
+                    case 17:
                         this.attackCheckTimeA = 0.31f;
                         this.attackCheckTimeB = 0.4f;
                         this.leftHandAttack = true;
                         break;
 
-                    case 0x12:
+                    case 18:
                         this.attackCheckTimeA = 0.31f;
                         this.attackCheckTimeB = 0.4f;
                         this.leftHandAttack = false;
                         break;
 
-                    case 0x13:
+                    case 19:
                         this.attackCheckTimeA = 2f;
                         this.attackCheckTimeB = 2f;
                         this.isAttackMoveByCore = true;
@@ -316,7 +316,7 @@ public class TITAN : Photon.MonoBehaviour
                         this.isAttackMoveByCore = true;
                         break;
 
-                    case 0x15:
+                    case 21:
                         this.isAlarm = true;
                         this.chaseDistance = 99999f;
                         break;
@@ -355,7 +355,7 @@ public class TITAN : Photon.MonoBehaviour
             int num;
             if (fswitchmap6 == null)
             {
-                Dictionary<string, int> dictionary = new Dictionary<string, int>(0x16);
+                Dictionary<string, int> dictionary = new Dictionary<string, int>(22);
                 dictionary.Add("abnormal_getup", 0);
                 dictionary.Add("abnormal_jump", 1);
                 dictionary.Add("combo_1", 2);
@@ -372,12 +372,12 @@ public class TITAN : Photon.MonoBehaviour
                 dictionary.Add("jumper_0", 13);
                 dictionary.Add("crawler_jump_0", 14);
                 dictionary.Add("anti_AE_l", 15);
-                dictionary.Add("anti_AE_r", 0x10);
-                dictionary.Add("anti_AE_low_l", 0x11);
-                dictionary.Add("anti_AE_low_r", 0x12);
-                dictionary.Add("quick_turn_l", 0x13);
+                dictionary.Add("anti_AE_r", 16);
+                dictionary.Add("anti_AE_low_l", 17);
+                dictionary.Add("anti_AE_low_r", 18);
+                dictionary.Add("quick_turn_l", 19);
                 dictionary.Add("quick_turn_r", 20);
-                dictionary.Add("throw", 0x15);
+                dictionary.Add("throw", 21);
                 fswitchmap6 = dictionary;
             }
             if (fswitchmap6.TryGetValue(key, out num))
@@ -487,25 +487,25 @@ public class TITAN : Photon.MonoBehaviour
                         this.leftHandAttack = true;
                         break;
 
-                    case 0x10:
+                    case 16:
                         this.attackCheckTimeA = 0.31f;
                         this.attackCheckTimeB = 0.4f;
                         this.leftHandAttack = false;
                         break;
 
-                    case 0x11:
+                    case 17:
                         this.attackCheckTimeA = 0.31f;
                         this.attackCheckTimeB = 0.4f;
                         this.leftHandAttack = true;
                         break;
 
-                    case 0x12:
+                    case 18:
                         this.attackCheckTimeA = 0.31f;
                         this.attackCheckTimeB = 0.4f;
                         this.leftHandAttack = false;
                         break;
 
-                    case 0x13:
+                    case 19:
                         this.attackCheckTimeA = 2f;
                         this.attackCheckTimeB = 2f;
                         this.isAttackMoveByCore = true;
@@ -517,7 +517,7 @@ public class TITAN : Photon.MonoBehaviour
                         this.isAttackMoveByCore = true;
                         break;
 
-                    case 0x15:
+                    case 21:
                         this.isAlarm = true;
                         this.chaseDistance = 99999f;
                         break;
@@ -584,7 +584,7 @@ public class TITAN : Photon.MonoBehaviour
         collider2.name = "PlayerDetectorRC";
         this.myTitanTrigger = obj2.AddComponent<TitanTrigger>();
         this.myTitanTrigger.isCollide = false;
-        obj2.layer = 0x10;
+        obj2.layer = 16;
         obj2.transform.parent = this.baseTransform.Find("AABB");
         obj2.transform.localPosition = new Vector3(0f, 0f, 0f);
         this.MultiplayerManager = FengGameManagerMKII.instance;
@@ -751,10 +751,10 @@ public class TITAN : Photon.MonoBehaviour
                     this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
                     ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable();
                     propertiesToSet.Add(PhotonPlayerProperty.dead, true);
-                    PhotonNetwork.player.SetCustomProperties(propertiesToSet);
+                    PhotonPlayer.Self.SetCustomProperties(propertiesToSet);
                     propertiesToSet = new ExitGames.Client.Photon.Hashtable();
-                    propertiesToSet.Add(PhotonPlayerProperty.deaths, ((int) PhotonNetwork.player.customProperties[PhotonPlayerProperty.deaths]) + 1);
-                    PhotonNetwork.player.SetCustomProperties(propertiesToSet);
+                    propertiesToSet.Add(PhotonPlayerProperty.deaths, ((int) PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.deaths]) + 1);
+                    PhotonPlayer.Self.SetCustomProperties(propertiesToSet);
                 }
             }
         }
@@ -786,7 +786,7 @@ public class TITAN : Photon.MonoBehaviour
             }
             if (this.nonAI)
             {
-                FengGameManagerMKII.instance.titanGetKill(view.owner, damage, (string) PhotonNetwork.player.customProperties[PhotonPlayerProperty.name]);
+                FengGameManagerMKII.instance.titanGetKill(view.owner, damage, (string) PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name]);
             }
             else
             {
@@ -875,10 +875,10 @@ public class TITAN : Photon.MonoBehaviour
                     this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
                     ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable();
                     propertiesToSet.Add(PhotonPlayerProperty.dead, true);
-                    PhotonNetwork.player.SetCustomProperties(propertiesToSet);
+                    PhotonPlayer.Self.SetCustomProperties(propertiesToSet);
                     propertiesToSet = new ExitGames.Client.Photon.Hashtable();
-                    propertiesToSet.Add(PhotonPlayerProperty.deaths, ((int) PhotonNetwork.player.customProperties[PhotonPlayerProperty.deaths]) + 1);
-                    PhotonNetwork.player.SetCustomProperties(propertiesToSet);
+                    propertiesToSet.Add(PhotonPlayerProperty.deaths, ((int) PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.deaths]) + 1);
+                    PhotonPlayer.Self.SetCustomProperties(propertiesToSet);
                 }
             }
         }
@@ -963,7 +963,7 @@ public class TITAN : Photon.MonoBehaviour
             int num;
             if (f__switchSmap5 == null)
             {
-                Dictionary<string, int> dictionary = new Dictionary<string, int>(0x12);
+                Dictionary<string, int> dictionary = new Dictionary<string, int>(18);
                 dictionary.Add("grab_ground_front_l", 0);
                 dictionary.Add("grab_ground_front_r", 1);
                 dictionary.Add("grab_ground_back_l", 2);
@@ -980,8 +980,8 @@ public class TITAN : Photon.MonoBehaviour
                 dictionary.Add("attack_slap_face", 13);
                 dictionary.Add("attack_stomp", 14);
                 dictionary.Add("attack_bite", 15);
-                dictionary.Add("attack_bite_l", 0x10);
-                dictionary.Add("attack_bite_r", 0x11);
+                dictionary.Add("attack_bite_l", 16);
+                dictionary.Add("attack_bite_r", 17);
                 f__switchSmap5 = dictionary;
             }
             if (f__switchSmap5.TryGetValue(key, out num))
@@ -1052,11 +1052,11 @@ public class TITAN : Photon.MonoBehaviour
                         this.attack("bite");
                         return true;
 
-                    case 0x10:
+                    case 16:
                         this.attack("bite_l");
                         return true;
 
-                    case 0x11:
+                    case 17:
                         this.attack("bite_r");
                         return true;
                 }
@@ -1073,7 +1073,7 @@ public class TITAN : Photon.MonoBehaviour
             int num;
             if (fswitchmap5 == null)
             {
-                Dictionary<string, int> dictionary = new Dictionary<string, int>(0x12);
+                Dictionary<string, int> dictionary = new Dictionary<string, int>(18);
                 dictionary.Add("grab_ground_front_l", 0);
                 dictionary.Add("grab_ground_front_r", 1);
                 dictionary.Add("grab_ground_back_l", 2);
@@ -1090,8 +1090,8 @@ public class TITAN : Photon.MonoBehaviour
                 dictionary.Add("attack_slap_face", 13);
                 dictionary.Add("attack_stomp", 14);
                 dictionary.Add("attack_bite", 15);
-                dictionary.Add("attack_bite_l", 0x10);
-                dictionary.Add("attack_bite_r", 0x11);
+                dictionary.Add("attack_bite_l", 16);
+                dictionary.Add("attack_bite_r", 17);
                 fswitchmap5 = dictionary;
             }
             if (fswitchmap5.TryGetValue(key, out num))
@@ -1162,11 +1162,11 @@ public class TITAN : Photon.MonoBehaviour
                         this.attack2("bite");
                         return true;
 
-                    case 0x10:
+                    case 16:
                         this.attack2("bite_l");
                         return true;
 
-                    case 0x11:
+                    case 17:
                         this.attack2("bite_r");
                         return true;
                 }
@@ -1668,7 +1668,7 @@ public class TITAN : Photon.MonoBehaviour
                     }
                     return new string[] { "attack_abnormal_jump" };
                 }
-                if (((this.myDifficulty > 0) || (UnityEngine.Random.Range(0, 0x3e8) < 3)) && (Mathf.Abs(this.between2) < 60f))
+                if (((this.myDifficulty > 0) || (UnityEngine.Random.Range(0, 1000) < 3)) && (Mathf.Abs(this.between2) < 60f))
                 {
                     strArray = new string[] { "attack_combo" };
                 }
@@ -2545,15 +2545,15 @@ public class TITAN : Photon.MonoBehaviour
 
     public void loadskin()
     {
-        this.skin = 0x56;
+        this.skin = 86;
         this.eye = false;
         if (!(((IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE) || base.photonView.isMine) ? (((int) FengGameManagerMKII.settings[1]) != 1) : true))
         {
             int index = (int) UnityEngine.Random.Range((float) 86f, (float) 90f);
             int num2 = index - 60;
-            if (((int) FengGameManagerMKII.settings[0x20]) == 1)
+            if (((int) FengGameManagerMKII.settings[32]) == 1)
             {
-                num2 = UnityEngine.Random.Range(0x1a, 30);
+                num2 = UnityEngine.Random.Range(26, 30);
             }
             string body = (string) FengGameManagerMKII.settings[index];
             string eye = (string) FengGameManagerMKII.settings[num2];
@@ -2582,7 +2582,7 @@ public class TITAN : Photon.MonoBehaviour
         }
         bool mipmap = true;
         bool iteratorVariable1 = false;
-        if (((int)FengGameManagerMKII.settings[0x3f]) == 1)
+        if (((int)FengGameManagerMKII.settings[63]) == 1)
         {
             mipmap = false;
         }
@@ -2600,7 +2600,7 @@ public class TITAN : Photon.MonoBehaviour
                     {
                         WWW link = new WWW(eye);
                         yield return link;
-                        Texture2D iteratorVariable4 = RCextensions.loadimage(link, mipmap, 0x30d40);
+                        Texture2D iteratorVariable4 = RCextensions.loadimage(link, mipmap, 200000);
                         link.Dispose();
                         if (!FengGameManagerMKII.linkHash[0].ContainsKey(eye))
                         {
@@ -2628,7 +2628,7 @@ public class TITAN : Photon.MonoBehaviour
                 {
                     WWW iteratorVariable5 = new WWW(body);
                     yield return iteratorVariable5;
-                    Texture2D iteratorVariable6 = RCextensions.loadimage(iteratorVariable5, mipmap, 0xf4240);
+                    Texture2D iteratorVariable6 = RCextensions.loadimage(iteratorVariable5, mipmap, 1000000);
                     iteratorVariable5.Dispose();
                     if (!FengGameManagerMKII.linkHash[2].ContainsKey(body))
                     {
@@ -2774,7 +2774,7 @@ public class TITAN : Photon.MonoBehaviour
     [RPC]
     public void moveToRPC(float posX, float posY, float posZ, PhotonMessageInfo info)
     {
-        if (info.sender.isMasterClient)
+        if (info.sender.IsMasterClient)
         {
             base.transform.position = new Vector3(posX, posY, posZ);
         }
@@ -2800,10 +2800,10 @@ public class TITAN : Photon.MonoBehaviour
                 this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
                 ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable();
                 propertiesToSet.Add(PhotonPlayerProperty.dead, true);
-                PhotonNetwork.player.SetCustomProperties(propertiesToSet);
+                PhotonPlayer.Self.SetCustomProperties(propertiesToSet);
                 propertiesToSet = new ExitGames.Client.Photon.Hashtable();
-                propertiesToSet.Add(PhotonPlayerProperty.deaths, ((int) PhotonNetwork.player.customProperties[PhotonPlayerProperty.deaths]) + 1);
-                PhotonNetwork.player.SetCustomProperties(propertiesToSet);
+                propertiesToSet.Add(PhotonPlayerProperty.deaths, ((int) PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.deaths]) + 1);
+                PhotonPlayer.Self.SetCustomProperties(propertiesToSet);
             }
             this.dieAnimation();
         }
@@ -3169,7 +3169,7 @@ public class TITAN : Photon.MonoBehaviour
         else if (type == AbnormalType.TYPE_CRAWLER)
         {
             num = 3;
-            if ((GameObject.Find("Crawler") != null) && (UnityEngine.Random.Range(0, 0x3e8) > 5))
+            if ((GameObject.Find("Crawler") != null) && (UnityEngine.Random.Range(0, 1000) > 5))
             {
                 num = 2;
             }
@@ -3218,7 +3218,7 @@ public class TITAN : Photon.MonoBehaviour
     public void setAbnormalType2(AbnormalType type, bool forceCrawler)
     {
         bool flag = false;
-        if ((RCSettings.spawnMode > 0) || (((((int) FengGameManagerMKII.settings[0x5b]) == 1) && (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)) && PhotonNetwork.isMasterClient))
+        if ((RCSettings.spawnMode > 0) || (((((int) FengGameManagerMKII.settings[91]) == 1) && (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)) && PhotonNetwork.isMasterClient))
         {
             flag = true;
         }
@@ -3280,7 +3280,7 @@ public class TITAN : Photon.MonoBehaviour
         else if (type == AbnormalType.TYPE_CRAWLER)
         {
             num = 3;
-            if ((GameObject.Find("Crawler") != null) && (UnityEngine.Random.Range(0, 0x3e8) > 5))
+            if ((GameObject.Find("Crawler") != null) && (UnityEngine.Random.Range(0, 1000) > 5))
             {
                 num = 2;
             }
@@ -3674,7 +3674,7 @@ public class TITAN : Photon.MonoBehaviour
         this.netDie();
         if (this.nonAI)
         {
-            GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().sendKillInfo(false, string.Empty, true, (string) PhotonNetwork.player.customProperties[PhotonPlayerProperty.name], 0);
+            GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().sendKillInfo(false, string.Empty, true, (string) PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name], 0);
         }
         GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().needChooseSide = true;
         GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().justSuicide = true;
@@ -3730,7 +3730,7 @@ public class TITAN : Photon.MonoBehaviour
                     this.netDie();
                     if (this.nonAI)
                     {
-                        FengGameManagerMKII.instance.titanGetKill(view.owner, speed, (string) PhotonNetwork.player.customProperties[PhotonPlayerProperty.name]);
+                        FengGameManagerMKII.instance.titanGetKill(view.owner, speed, (string) PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name]);
                     }
                     else
                     {
@@ -3796,7 +3796,7 @@ public class TITAN : Photon.MonoBehaviour
         {
             if (!this.nonAI)
             {
-                if ((this.activeRad < 0x7fffffff) && (((this.state == TitanState.idle) || (this.state == TitanState.wander)) || (this.state == TitanState.chase)))
+                if ((this.activeRad < 2147483647) && (((this.state == TitanState.idle) || (this.state == TitanState.wander)) || (this.state == TitanState.chase)))
                 {
                     if (this.checkPoints.Count > 1)
                     {
@@ -4767,7 +4767,7 @@ public class TITAN : Photon.MonoBehaviour
                                 if (this.PVPfromCheckPt.state == CheckPointState.Titan)
                                 {
                                     GameObject chkPtNext;
-                                    if (UnityEngine.Random.Range(0, 100) > 0x30)
+                                    if (UnityEngine.Random.Range(0, 100) > 48)
                                     {
                                         chkPtNext = this.PVPfromCheckPt.chkPtNext;
                                         if ((chkPtNext != null) && ((chkPtNext.GetComponent<PVPcheckPoint>().state != CheckPointState.Titan) || (UnityEngine.Random.Range(0, 100) < 20)))
@@ -4805,7 +4805,7 @@ public class TITAN : Photon.MonoBehaviour
             this.explode();
             if (!this.nonAI)
             {
-                if ((this.activeRad < 0x7fffffff) && (((this.state == TitanState.idle) || (this.state == TitanState.wander)) || (this.state == TitanState.chase)))
+                if ((this.activeRad < 2147483647) && (((this.state == TitanState.idle) || (this.state == TitanState.wander)) || (this.state == TitanState.chase)))
                 {
                     if (this.checkPoints.Count > 1)
                     {
@@ -5770,7 +5770,7 @@ public class TITAN : Photon.MonoBehaviour
                                 if (this.PVPfromCheckPt.state == CheckPointState.Titan)
                                 {
                                     GameObject chkPtNext;
-                                    if (UnityEngine.Random.Range(0, 100) > 0x30)
+                                    if (UnityEngine.Random.Range(0, 100) > 48)
                                     {
                                         chkPtNext = this.PVPfromCheckPt.chkPtNext;
                                         if ((chkPtNext != null) && ((chkPtNext.GetComponent<PVPcheckPoint>().state != CheckPointState.Titan) || (UnityEngine.Random.Range(0, 100) < 20)))

@@ -61,8 +61,4 @@
       <HintPath>D:\Attack on Titan\Assemblies\UnityScript.Lang.dll</HintPath>
     </Reference>
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Mod\Managers\" />
-  </ItemGroup>
 </Project>

@@ -5045,7 +5045,7 @@ public class iTween : MonoBehaviour
 
     public static class Defaults
     {
-        public static int cameraFadeDepth = 0xf423f;
+        public static int cameraFadeDepth = 999999;
         public static Color color = Color.white;
         public static float delay = 0f;
         public static iTween.EaseType easeType = iTween.EaseType.easeOutExpo;

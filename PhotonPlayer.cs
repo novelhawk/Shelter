@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Mod;
+using Mod.Interface;
 using UnityEngine;
 
 public class PhotonPlayer
@@ -17,7 +18,7 @@ public class PhotonPlayer
     {
         this.actorID = -1;
         this.nameField = string.Empty;
-        this.customProperties = new Hashtable();
+        this.CustomProperties = new Hashtable();
         this.isLocal = isLocal;
         this.actorID = actorID;
         this.InternalCacheProperties(properties);
@@ -27,7 +28,7 @@ public class PhotonPlayer
     {
         this.actorID = -1;
         this.nameField = string.Empty;
-        this.customProperties = new Hashtable();
+        this.CustomProperties = new Hashtable();
         this.isLocal = isLocal;
         this.actorID = actorID;
         this.nameField = name;
@@ -85,7 +86,7 @@ public class PhotonPlayer
             return null;
         }
         Dictionary<int, PhotonPlayer> mActors = PhotonNetwork.networkingPeer.mActors;
-        int num = 0x7fffffff;
+        int num = 2147483647;
         int num2 = currentPlayerId;
         foreach (int num3 in mActors.Keys)
         {
@@ -98,25 +99,25 @@ public class PhotonPlayer
                 num = num3;
             }
         }
-        return ((num == 0x7fffffff) ? mActors[num2] : mActors[num]);
+        return ((num == 2147483647) ? mActors[num2] : mActors[num]);
     }
 
     public bool Has(string prop)
     {
-        return customProperties[prop] != null;
+        return CustomProperties[prop] != null;
     }
 
     internal void InternalCacheProperties(Hashtable properties)
     {
-        if (((properties != null) && (properties.Count != 0)) && !this.customProperties.Equals(properties))
+        if (((properties != null) && (properties.Count != 0)) && !this.CustomProperties.Equals(properties))
         {
-            if (properties.ContainsKey((byte)0xff))
+            if (properties.ContainsKey((byte)255))
             {
-                this.nameField = (string)properties[(byte)0xff];
+                this.nameField = (string)properties[(byte)255];
             }
-            this.customProperties.MergeStringKeys(properties);
-            this.customProperties.StripKeysWithNullValues();
-            _hexName = customProperties[PhotonPlayerProperty.name].ToString().HexColor();
+            this.CustomProperties.MergeStringKeys(properties);
+            this.CustomProperties.StripKeysWithNullValues();
+            _hexName = CustomProperties[PhotonPlayerProperty.name].ToString().HexColor();
         }
     }
 
@@ -136,8 +137,8 @@ public class PhotonPlayer
     {
         if (propertiesToSet != null)
         {
-            this.customProperties.MergeStringKeys(propertiesToSet);
-            this.customProperties.StripKeysWithNullValues();
+            this.CustomProperties.MergeStringKeys(propertiesToSet);
+            this.CustomProperties.StripKeysWithNullValues();
             Hashtable actorProperties = propertiesToSet.StripToStringKeys();
             if ((this.actorID > 0) && !PhotonNetwork.offlineMode)
             {
@@ -145,7 +146,7 @@ public class PhotonPlayer
             }
             object[] parameters = new object[] { this, propertiesToSet };
             NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnPhotonPlayerPropertiesChanged, parameters);
-            _hexName = customProperties[PhotonPlayerProperty.name].ToString().HexColor();
+            _hexName = CustomProperties[PhotonPlayerProperty.name].ToString().HexColor();
         }
     }
 
@@ -153,14 +154,14 @@ public class PhotonPlayer
     {
         if (string.IsNullOrEmpty(this.name))
         {
-            return string.Format("#{0:00}{1}", this.ID, !this.isMasterClient ? string.Empty : "(master)");
+            return string.Format("#{0:00}{1}", this.ID, !this.IsMasterClient ? string.Empty : "(master)");
         }
-        return string.Format("'{0}'{1}", this.name, !this.isMasterClient ? string.Empty : "(master)");
+        return string.Format("'{0}'{1}", this.name, !this.IsMasterClient ? string.Empty : "(master)");
     }
 
     public string ToStringFull()
     {
-        return string.Format("#{0:00} '{1}' {2}", this.ID, this.name, this.customProperties.ToStringFull());
+        return string.Format("#{0:00} '{1}' {2}", this.ID, this.name, this.CustomProperties.ToStringFull());
     }
 
     public Hashtable allProperties
@@ -168,13 +169,13 @@ public class PhotonPlayer
         get
         {
             Hashtable target = new Hashtable();
-            target.Merge(this.customProperties);
-            target[(byte)0xff] = this.name;
+            target.Merge(this.CustomProperties);
+            target[(byte)255] = this.name;
             return target;
         }
     }
 
-    public Hashtable customProperties { get; private set; }
+    public Hashtable CustomProperties { get; private set; }
 
     public int ID
     {
@@ -184,13 +185,9 @@ public class PhotonPlayer
         }
     }
 
-    public bool isMasterClient
-    {
-        get
-        {
-            return (PhotonNetwork.networkingPeer.mMasterClient == this);
-        }
-    }
+    public bool IsMasterClient => Equals(PhotonNetwork.networkingPeer.mMasterClient, this);
+
+    public static PhotonPlayer Self => PhotonNetwork.networkingPeer?.mLocalActor;
 
     public string name
     {

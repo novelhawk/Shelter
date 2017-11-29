@@ -35,8 +35,8 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     public static GameObject minusDistanceEnemy;
     public float myDistance;
     public GameObject myHero;
-    public int NapeArmor = 0x2710;
-    public int NapeArmorTotal = 0x2710;
+    public int NapeArmor = 10000;
+    public int NapeArmorTotal = 10000;
     public GameObject neckSteamObject;
     public float size;
     private string state = "idle";
@@ -382,7 +382,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     {
         if (PhotonNetwork.isMasterClient && (((int) FengGameManagerMKII.settings[1]) == 1))
         {
-            base.photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, new object[] { (string) FengGameManagerMKII.settings[0x43] });
+            base.photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, new object[] { (string) FengGameManagerMKII.settings[67] });
         }
     }
 
@@ -394,7 +394,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
         }
         bool mipmap = true;
         bool iteratorVariable1 = false;
-        if (((int)FengGameManagerMKII.settings[0x3f]) == 1)
+        if (((int)FengGameManagerMKII.settings[63]) == 1)
         {
             mipmap = false;
         }
@@ -406,7 +406,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                 {
                     WWW link = new WWW(url);
                     yield return link;
-                    Texture2D iteratorVariable4 = RCextensions.loadimage(link, mipmap, 0xf4240);
+                    Texture2D iteratorVariable4 = RCextensions.loadimage(link, mipmap, 1000000);
                     link.Dispose();
                     if (!FengGameManagerMKII.linkHash[2].ContainsKey(url))
                     {
@@ -566,7 +566,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     public void setSize(float size, PhotonMessageInfo info)
     {
         size = Mathf.Clamp(size, 0.1f, 50f);
-        if (info.sender.isMasterClient)
+        if (info.sender.IsMasterClient)
         {
             Transform transform = base.transform;
             transform.localScale = (Vector3) (transform.localScale * (size * 0.05f));
@@ -633,7 +633,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
             this.findNearestHero();
         }
         base.name = "COLOSSAL_TITAN";
-        this.NapeArmor = 0x3e8;
+        this.NapeArmor = 1000;
         bool flag = false;
         if (LevelInfoManager.GetInfo(FengGameManagerMKII.level).RespawnMode == RespawnMode.NEVER)
         {
@@ -641,11 +641,11 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
         }
         if (IN_GAME_MAIN_CAMERA.difficulty == 0)
         {
-            this.NapeArmor = !flag ? 0x1388 : 0x7d0;
+            this.NapeArmor = !flag ? 5000 : 2000;
         }
         else if (IN_GAME_MAIN_CAMERA.difficulty == 1)
         {
-            this.NapeArmor = !flag ? 0x1f40 : 0xdac;
+            this.NapeArmor = !flag ? 8000 : 3500;
             IEnumerator enumerator = base.animation.GetEnumerator();
             try
             {
@@ -667,7 +667,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
         }
         else if (IN_GAME_MAIN_CAMERA.difficulty == 2)
         {
-            this.NapeArmor = !flag ? 0x2ee0 : 0x1388;
+            this.NapeArmor = !flag ? 12000 : 5000;
             IEnumerator enumerator2 = base.animation.GetEnumerator();
             try
             {
@@ -774,7 +774,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                 }
                 else
                 {
-                    GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().sendKillInfo(false, (string) view.owner.customProperties[PhotonPlayerProperty.name], true, "Colossal Titan's neck", speed);
+                    GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().sendKillInfo(false, (string) view.owner.CustomProperties[PhotonPlayerProperty.name], true, "Colossal Titan's neck", speed);
                     object[] parameters = new object[] { speed };
                     GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().photonView.RPC("netShowDamage", view.owner, parameters);
                 }

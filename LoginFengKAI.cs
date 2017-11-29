@@ -498,7 +498,7 @@ public class LoginFengKAI : MonoBehaviour
                     this.form__0 = new WWWForm();
                     this.form__0.AddField("userid", this.name);
                     this.form__0.AddField("password", this.password);
-                    this.form__0.AddField("version", UIMainReferences.version);
+                    this.form__0.AddField("version", UIMainReferences.Version);
                     this.w__1 = new WWW(this.f__this.CheckUserURL, this.form__0);
                     this.Scurrent = this.w__1;
                     this.SPC = 1;

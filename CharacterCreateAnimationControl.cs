@@ -120,11 +120,11 @@ public class CharacterCreateAnimationControl : MonoBehaviour
             if (this.timeElapsed > this.interval)
             {
                 this.timeElapsed = 0f;
-                if (UnityEngine.Random.Range(1, 0x3e8) < 350)
+                if (UnityEngine.Random.Range(1, 1000) < 350)
                 {
                     this.play("salute");
                 }
-                else if (UnityEngine.Random.Range(1, 0x3e8) < 350)
+                else if (UnityEngine.Random.Range(1, 1000) < 350)
                 {
                     this.play("supply");
                 }

@@ -436,7 +436,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     {
         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
         {
-            string url = (string) FengGameManagerMKII.settings[0x41];
+            string url = (string) FengGameManagerMKII.settings[65];
             if ((((int) FengGameManagerMKII.settings[1]) == 1) && ((url.EndsWith(".jpg") || url.EndsWith(".png")) || url.EndsWith(".jpeg")))
             {
                 base.StartCoroutine(this.loadskinE(url));
@@ -444,7 +444,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
         }
         else if (base.photonView.isMine && (((int) FengGameManagerMKII.settings[1]) == 1))
         {
-            base.photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, new object[] { (string) FengGameManagerMKII.settings[0x41] });
+            base.photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, new object[] { (string) FengGameManagerMKII.settings[65] });
         }
     }
 
@@ -456,7 +456,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
         }
         bool mipmap = true;
         bool iteratorVariable1 = false;
-        if (((int)FengGameManagerMKII.settings[0x3f]) == 1)
+        if (((int)FengGameManagerMKII.settings[63]) == 1)
         {
             mipmap = false;
         }
@@ -466,7 +466,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
             {
                 WWW link = new WWW(url);
                 yield return link;
-                Texture2D iteratorVariable6 = RCextensions.loadimage(link, mipmap, 0xf4240);
+                Texture2D iteratorVariable6 = RCextensions.loadimage(link, mipmap, 1000000);
                 link.Dispose();
                 if (!FengGameManagerMKII.linkHash[2].ContainsKey(url))
                 {
@@ -714,7 +714,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                             this.rockPhase++;
                         }
                     }
-                    if ((this.checkPoints.Count > 0) && (UnityEngine.Random.Range(0, 0xbb8) < (10 - this.checkPoints.Count)))
+                    if ((this.checkPoints.Count > 0) && (UnityEngine.Random.Range(0, 3000) < (10 - this.checkPoints.Count)))
                     {
                         Quaternion quaternion;
                         RaycastHit hit;

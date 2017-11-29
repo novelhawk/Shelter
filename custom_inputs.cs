@@ -174,7 +174,7 @@ public class custom_inputs : MonoBehaviour
             }
             if (this.mouseButtonsOn)
             {
-                int num5 = 0x143;
+                int num5 = 323;
                 for (int k = 0; k < 6; k++)
                 {
                     if ((Input.GetMouseButton(k) && this.inputBool[i]) && (Event.current.keyCode != KeyCode.Escape))
@@ -190,7 +190,7 @@ public class custom_inputs : MonoBehaviour
                     }
                 }
             }
-            for (int j = 350; j < 0x199; j++)
+            for (int j = 350; j < 409; j++)
             {
                 if ((Input.GetKey((KeyCode) j) && this.inputBool[i]) && (Event.current.keyCode != KeyCode.Escape))
                 {
@@ -475,7 +475,7 @@ public class custom_inputs : MonoBehaviour
             }
             if (this.mouseButtonsOn)
             {
-                int num5 = 0x143;
+                int num5 = 323;
                 for (int k = 0; k < 6; k++)
                 {
                     if ((Input.GetMouseButton(k) && this.inputBool2[i]) && (Event.current.keyCode != KeyCode.Escape))
@@ -491,7 +491,7 @@ public class custom_inputs : MonoBehaviour
                     }
                 }
             }
-            for (int j = 350; j < 0x199; j++)
+            for (int j = 350; j < 409; j++)
             {
                 if ((Input.GetKey((KeyCode) j) && this.inputBool2[i]) && (Event.current.keyCode != KeyCode.Escape))
                 {

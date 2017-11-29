@@ -21,33 +21,33 @@ public class RoomInfo
     {
         if (((propertiesToCache != null) && (propertiesToCache.Count != 0)) && !this.customPropertiesField.Equals(propertiesToCache))
         {
-            if (propertiesToCache.ContainsKey((byte) 0xfb))
+            if (propertiesToCache.ContainsKey((byte) 251))
             {
-                this.removedFromList = (bool) propertiesToCache[(byte) 0xfb];
+                this.removedFromList = (bool) propertiesToCache[(byte) 251];
                 if (this.removedFromList)
                 {
                     return;
                 }
             }
-            if (propertiesToCache.ContainsKey((byte) 0xff))
+            if (propertiesToCache.ContainsKey((byte) 255))
             {
-                this.maxPlayersField = (byte) propertiesToCache[(byte) 0xff];
+                this.maxPlayersField = (byte) propertiesToCache[(byte) 255];
             }
-            if (propertiesToCache.ContainsKey((byte) 0xfd))
+            if (propertiesToCache.ContainsKey((byte) 253))
             {
-                this.openField = (bool) propertiesToCache[(byte) 0xfd];
+                this.openField = (bool) propertiesToCache[(byte) 253];
             }
-            if (propertiesToCache.ContainsKey((byte) 0xfe))
+            if (propertiesToCache.ContainsKey((byte) 254))
             {
-                this.visibleField = (bool) propertiesToCache[(byte) 0xfe];
+                this.visibleField = (bool) propertiesToCache[(byte) 254];
             }
-            if (propertiesToCache.ContainsKey((byte) 0xfc))
+            if (propertiesToCache.ContainsKey((byte) 252))
             {
-                this.playerCount = (byte) propertiesToCache[(byte) 0xfc];
+                this.playerCount = (byte) propertiesToCache[(byte) 252];
             }
-            if (propertiesToCache.ContainsKey((byte) 0xf9))
+            if (propertiesToCache.ContainsKey((byte) 249))
             {
-                this.autoCleanUpField = (bool) propertiesToCache[(byte) 0xf9];
+                this.autoCleanUpField = (bool) propertiesToCache[(byte) 249];
             }
             this.customPropertiesField.MergeStringKeys(propertiesToCache);
         }

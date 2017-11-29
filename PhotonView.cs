@@ -144,7 +144,7 @@ public class PhotonView : Photon.MonoBehaviour
     {
         get
         {
-            return ((this.ownerId == PhotonNetwork.player.ID) || (this.isSceneView && PhotonNetwork.isMasterClient));
+            return ((this.ownerId == PhotonPlayer.Self.ID) || (this.isSceneView && PhotonNetwork.isMasterClient));
         }
     }
 

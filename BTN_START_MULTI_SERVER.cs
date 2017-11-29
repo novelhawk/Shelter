@@ -27,7 +27,7 @@ public class BTN_START_MULTI_SERVER : MonoBehaviour
         {
             unencrypted = new SimpleAES().Encrypt(unencrypted);
         }
-        PhotonNetwork.CreateRoom(string.Concat(text, "`", selection, "`", str3, "`", num2, "`", str4, "`", unencrypted, "`", Random.Range(0, 0xc350)), true, true, maxPlayers);
+        PhotonNetwork.CreateRoom(string.Concat(text, "`", selection, "`", str3, "`", num2, "`", str4, "`", unencrypted, "`", Random.Range(0, 50000)), true, true, maxPlayers);
     }
 }
 

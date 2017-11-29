@@ -22,7 +22,7 @@ public class BetterList<T>
 
     private void AllocateMore()
     {
-        T[] array = (this.buffer == null) ? new T[0x20] : new T[Mathf.Max(this.buffer.Length << 1, 0x20)];
+        T[] array = (this.buffer == null) ? new T[32] : new T[Mathf.Max(this.buffer.Length << 1, 32)];
         if ((this.buffer != null) && (this.size > 0))
         {
             this.buffer.CopyTo(array, 0);

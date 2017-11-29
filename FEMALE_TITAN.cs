@@ -68,7 +68,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     public static GameObject minusDistanceEnemy;
     public float myDistance;
     public GameObject myHero;
-    public int NapeArmor = 0x3e8;
+    public int NapeArmor = 1000;
     private bool needFreshCorePosition;
     private string nextAttackAnimation;
     private Vector3 oldCorePosition;
@@ -112,7 +112,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
             int num;
             if (f__switchSmap2 == null)
             {
-                Dictionary<string, int> dictionary = new Dictionary<string, int>(0x11);
+                Dictionary<string, int> dictionary = new Dictionary<string, int>(17);
                 dictionary.Add("combo_1", 0);
                 dictionary.Add("combo_2", 1);
                 dictionary.Add("combo_3", 2);
@@ -129,7 +129,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                 dictionary.Add("sweep_front_left", 13);
                 dictionary.Add("sweep_front_right", 14);
                 dictionary.Add("sweep_head_b_l", 15);
-                dictionary.Add("sweep_head_b_r", 0x10);
+                dictionary.Add("sweep_head_b_r", 16);
                 f__switchSmap2 = dictionary;
             }
             if (f__switchSmap2.TryGetValue(key, out num))
@@ -277,7 +277,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                         this.checkHitCapsuleR = 4f;
                         break;
 
-                    case 0x10:
+                    case 16:
                         this.isAttackMoveByCore = true;
                         this.attackCheckTimeA = 0.4f;
                         this.attackCheckTimeB = 0.51f;
@@ -456,7 +456,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         {
             if (f__switchSmap1 == null)
             {
-                Dictionary<string, int> dictionary = new Dictionary<string, int>(0x11);
+                Dictionary<string, int> dictionary = new Dictionary<string, int>(17);
                 dictionary.Add("grab_bottom_left", 0);
                 dictionary.Add("grab_bottom_right", 1);
                 dictionary.Add("grab_mid_left", 2);
@@ -473,7 +473,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                 dictionary.Add("attack_sweep_front_right", 13);
                 dictionary.Add("attack_sweep_head_b_l", 14);
                 dictionary.Add("attack_sweep_head_b_r", 15);
-                dictionary.Add("turn180", 0x10);
+                dictionary.Add("turn180", 16);
                 f__switchSmap1 = dictionary;
             }
             if (f__switchSmap1.TryGetValue(key, out num5))
@@ -544,7 +544,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                         this.attack("sweep_head_b_r");
                         return true;
 
-                    case 0x10:
+                    case 16:
                         this.turn180();
                         return true;
                 }
@@ -986,7 +986,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                     {
                         this.getDown();
                     }
-                    GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().sendKillInfo(false, (string) view.owner.customProperties[PhotonPlayerProperty.name], true, "Female Titan's ankle", dmg);
+                    GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().sendKillInfo(false, (string) view.owner.CustomProperties[PhotonPlayerProperty.name], true, "Female Titan's ankle", dmg);
                     object[] parameters = new object[] { dmg };
                     GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().photonView.RPC("netShowDamage", view.owner, parameters);
                 }
@@ -1026,7 +1026,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                     {
                         this.getDown();
                     }
-                    GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().sendKillInfo(false, (string) view.owner.customProperties[PhotonPlayerProperty.name], true, "Female Titan's ankle", dmg);
+                    GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().sendKillInfo(false, (string) view.owner.CustomProperties[PhotonPlayerProperty.name], true, "Female Titan's ankle", dmg);
                     object[] parameters = new object[] { dmg };
                     GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().photonView.RPC("netShowDamage", view.owner, parameters);
                 }
@@ -1221,7 +1221,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     {
         if (((int) FengGameManagerMKII.settings[1]) == 1)
         {
-            base.photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, new object[] { (string) FengGameManagerMKII.settings[0x42] });
+            base.photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, new object[] { (string) FengGameManagerMKII.settings[66] });
         }
     }
 
@@ -1233,7 +1233,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         }
         bool mipmap = true;
         bool iteratorVariable1 = false;
-        if (((int)FengGameManagerMKII.settings[0x3f]) == 1)
+        if (((int)FengGameManagerMKII.settings[63]) == 1)
         {
             mipmap = false;
         }
@@ -1243,7 +1243,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
             {
                 WWW link = new WWW(url);
                 yield return link;
-                Texture2D iteratorVariable6 = RCextensions.loadimage(link, mipmap, 0xf4240);
+                Texture2D iteratorVariable6 = RCextensions.loadimage(link, mipmap, 1000000);
                 link.Dispose();
                 if (!FengGameManagerMKII.linkHash[2].ContainsKey(url))
                 {
@@ -1355,7 +1355,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     public void setSize(float size, PhotonMessageInfo info)
     {
         size = Mathf.Clamp(size, 0.2f, 30f);
-        if (info.sender.isMasterClient)
+        if (info.sender.IsMasterClient)
         {
             Transform transform = base.transform;
             transform.localScale = (Vector3) (transform.localScale * (size * 0.25f));
@@ -1427,7 +1427,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
             }
         }
         base.animation["turn180"].speed = 0.5f;
-        this.NapeArmor = 0x3e8;
+        this.NapeArmor = 1000;
         this.AnkleLHP = 50;
         this.AnkleRHP = 50;
         this.AnkleLHPMAX = 50;
@@ -1439,13 +1439,13 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         }
         if (IN_GAME_MAIN_CAMERA.difficulty == 0)
         {
-            this.NapeArmor = !flag ? 0x3e8 : 0x3e8;
+            this.NapeArmor = !flag ? 1000 : 1000;
             this.AnkleLHP = this.AnkleLHPMAX = !flag ? 50 : 50;
             this.AnkleRHP = this.AnkleRHPMAX = !flag ? 50 : 50;
         }
         else if (IN_GAME_MAIN_CAMERA.difficulty == 1)
         {
-            this.NapeArmor = !flag ? 0xbb8 : 0x9c4;
+            this.NapeArmor = !flag ? 3000 : 2500;
             this.AnkleLHP = this.AnkleLHPMAX = !flag ? 200 : 100;
             this.AnkleRHP = this.AnkleRHPMAX = !flag ? 200 : 100;
             IEnumerator enumerator2 = base.animation.GetEnumerator();
@@ -1470,9 +1470,9 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         }
         else if (IN_GAME_MAIN_CAMERA.difficulty == 2)
         {
-            this.NapeArmor = !flag ? 0x1770 : 0xfa0;
-            this.AnkleLHP = this.AnkleLHPMAX = !flag ? 0x3e8 : 200;
-            this.AnkleRHP = this.AnkleRHPMAX = !flag ? 0x3e8 : 200;
+            this.NapeArmor = !flag ? 6000 : 4000;
+            this.AnkleLHP = this.AnkleLHPMAX = !flag ? 1000 : 200;
+            this.AnkleRHP = this.AnkleRHPMAX = !flag ? 1000 : 200;
             IEnumerator enumerator3 = base.animation.GetEnumerator();
             try
             {
@@ -1536,7 +1536,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                 }
                 else
                 {
-                    GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().sendKillInfo(false, (string) view.owner.customProperties[PhotonPlayerProperty.name], true, "Female Titan's neck", speed);
+                    GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().sendKillInfo(false, (string) view.owner.CustomProperties[PhotonPlayerProperty.name], true, "Female Titan's neck", speed);
                     object[] parameters = new object[] { speed };
                     GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().photonView.RPC("netShowDamage", view.owner, parameters);
                 }

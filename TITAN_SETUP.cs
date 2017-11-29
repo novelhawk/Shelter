@@ -46,7 +46,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
             iteratorVariable1.transform.localScale = this.hair_go_ref.transform.localScale;
             iteratorVariable1.renderer.material = CharacterMaterials.materials[this.hair.texture];
             bool mipmap = true;
-            if (((int) FengGameManagerMKII.settings[0x3f]) == 1)
+            if (((int) FengGameManagerMKII.settings[63]) == 1)
             {
                 mipmap = false;
             }
@@ -61,7 +61,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
             {
                 WWW link = new WWW(hairlink);
                 yield return link;
-                Texture2D iteratorVariable4 = RCextensions.loadimage(link, mipmap, 0x30d40);
+                Texture2D iteratorVariable4 = RCextensions.loadimage(link, mipmap, 200000);
                 link.Dispose();
                 if (FengGameManagerMKII.linkHash[0].ContainsKey(hairlink))
                 {
@@ -146,9 +146,9 @@ public class TITAN_SETUP : Photon.MonoBehaviour
                 num = 9;
             }
             int index = this.skin - 70;
-            if (((int) FengGameManagerMKII.settings[0x20]) == 1)
+            if (((int) FengGameManagerMKII.settings[32]) == 1)
             {
-                index = UnityEngine.Random.Range(0x10, 20);
+                index = UnityEngine.Random.Range(16, 20);
             }
             if (((int) FengGameManagerMKII.settings[index]) >= 0)
             {

@@ -16,7 +16,7 @@ public static class PhotonNetwork
     private static bool m_autoCleanUpPlayerObjects = true;
     private static bool m_isMessageQueueRunning = true;
     internal static List<int> manuallyAllocatedViewIds = new List<int>();
-    public static readonly int MAX_VIEW_IDS = 0x3e8;
+    public static readonly int MAX_VIEW_IDS = 1000;
     internal static NetworkingPeer networkingPeer;
     private static Room offlineModeRoom = null;
     public static EventCallback OnEventCall;
@@ -58,7 +58,7 @@ public static class PhotonNetwork
 
     public static int AllocateViewID()
     {
-        int item = AllocateViewID(player.ID);
+        int item = AllocateViewID(PhotonPlayer.Self.ID);
         manuallyAllocatedViewIds.Add(item);
         return item;
     }
@@ -108,7 +108,7 @@ public static class PhotonNetwork
         {
             return false;
         }
-        if (!player.isMasterClient)
+        if (!PhotonPlayer.Self.IsMasterClient)
         {
             Debug.LogError("CloseConnection: Only the masterclient can kick another player.");
             return false;
@@ -121,7 +121,7 @@ public static class PhotonNetwork
         RaiseEventOptions options = new RaiseEventOptions();
         options.TargetActors = new int[] { kickPlayer.ID };
         RaiseEventOptions raiseEventOptions = options;
-        return networkingPeer.OpRaiseEvent(0xcb, null, true, raiseEventOptions);
+        return networkingPeer.OpRaiseEvent(203, null, true, raiseEventOptions);
     }
 
     public static bool ConnectToBestCloudServer(string gameVersion)
@@ -285,7 +285,7 @@ public static class PhotonNetwork
 
     public static void DestroyPlayerObjects(PhotonPlayer targetPlayer)
     {
-        if (player == null)
+        if (PhotonPlayer.Self == null)
         {
             Debug.LogError("DestroyPlayerObjects() failed, cause parameter 'targetPlayer' was null.");
         }
@@ -296,7 +296,7 @@ public static class PhotonNetwork
     {
         if (VerifyCanUseNetwork())
         {
-            if (!player.isMasterClient && (targetPlayerId != player.ID))
+            if (!PhotonPlayer.Self.IsMasterClient && (targetPlayerId != PhotonPlayer.Self.ID))
             {
                 Debug.LogError("DestroyPlayerObjects() failed, cause players can only destroy their own GameObjects. A Master Client can destroy anyone's. This is master: " + isMasterClient);
             }
@@ -392,7 +392,7 @@ public static class PhotonNetwork
             int[] viewIDs = new int[obj2.GetPhotonViewsInChildren().Length];
             for (int i = 0; i < viewIDs.Length; i++)
             {
-                viewIDs[i] = AllocateViewID(player.ID);
+                viewIDs[i] = AllocateViewID(PhotonPlayer.Self.ID);
             }
             Hashtable evData = networkingPeer.SendInstantiate(prefabName, position, rotation, group, viewIDs, data, false);
             return networkingPeer.DoInstantiate2(evData, networkingPeer.mLocalActor, obj2);
@@ -539,7 +539,7 @@ public static class PhotonNetwork
             target.MergeStringKeys(expectedCustomRoomProperties);
             if (expectedMaxPlayers > 0)
             {
-                target[(byte) 0xff] = expectedMaxPlayers;
+                target[(byte) 255] = expectedMaxPlayers;
             }
             return networkingPeer.OpJoinRandomRoom(target, 0, null, matchingType, typedLobby, sqlLobbyFilter);
         }
@@ -661,7 +661,7 @@ public static class PhotonNetwork
 
     public static bool RaiseEvent(byte eventCode, object eventContent, bool sendReliable, RaiseEventOptions options)
     {
-        if (inRoom && (eventCode < 0xff))
+        if (inRoom && (eventCode < 255))
         {
             return networkingPeer.OpRaiseEvent(eventCode, eventContent, sendReliable, options);
         }
@@ -715,7 +715,7 @@ public static class PhotonNetwork
             }
             else
             {
-                if (player == null)
+                if (PhotonPlayer.Self == null)
                 {
                     Debug.LogError("Error; Sending RPC to player null! Aborted \"" + methodName + "\"");
                 }
@@ -778,18 +778,18 @@ public static class PhotonNetwork
         if (customProperties == null)
         {
             customProperties = new Hashtable();
-            foreach (object obj2 in player.customProperties.Keys)
+            foreach (object obj2 in PhotonPlayer.Self.CustomProperties.Keys)
             {
                 customProperties[(string) obj2] = null;
             }
         }
         if ((room != null) && room.isLocalClientInside)
         {
-            player.SetCustomProperties(customProperties);
+            PhotonPlayer.Self.SetCustomProperties(customProperties);
         }
         else
         {
-            player.InternalCacheProperties(customProperties);
+            PhotonPlayer.Self.InternalCacheProperties(customProperties);
         }
     }
 
@@ -1249,7 +1249,7 @@ public static class PhotonNetwork
                     {
                         NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnConnectedToMaster, new object[0]);
                         networkingPeer.ChangeLocalID(1);
-                        networkingPeer.mMasterClient = player;
+                        networkingPeer.mMasterClient = PhotonPlayer.Self;
                     }
                     else
                     {
@@ -1282,17 +1282,8 @@ public static class PhotonNetwork
         }
     }
 
-    public static PhotonPlayer player
-    {
-        get
-        {
-            if (networkingPeer == null)
-            {
-                return null;
-            }
-            return networkingPeer.mLocalActor;
-        }
-    }
+    [Obsolete("Use PhotonPlayer.Self")]
+    public static PhotonPlayer player => PhotonPlayer.Self;
 
     public static PhotonPlayer[] playerList
     {
@@ -1342,11 +1333,11 @@ public static class PhotonNetwork
     {
         get
         {
-            return (0x3e8 / sendInterval);
+            return (1000 / sendInterval);
         }
         set
         {
-            sendInterval = 0x3e8 / value;
+            sendInterval = 1000 / value;
             if (photonMono != null)
             {
                 photonMono.updateInterval = sendInterval;
@@ -1362,7 +1353,7 @@ public static class PhotonNetwork
     {
         get
         {
-            return (0x3e8 / sendIntervalOnSerialize);
+            return (1000 / sendIntervalOnSerialize);
         }
         set
         {
@@ -1371,7 +1362,7 @@ public static class PhotonNetwork
                 Debug.LogError("Error, can not set the OnSerialize SendRate more often then the overall SendRate");
                 value = sendRate;
             }
-            sendIntervalOnSerialize = 0x3e8 / value;
+            sendIntervalOnSerialize = 1000 / value;
             if (photonMono != null)
             {
                 photonMono.updateIntervalOnSerialize = sendIntervalOnSerialize;

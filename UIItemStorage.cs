@@ -11,7 +11,7 @@ public class UIItemStorage : MonoBehaviour
     public int maxRows = 4;
     private List<InvGameItem> mItems = new List<InvGameItem>();
     public int padding = 10;
-    public int spacing = 0x80;
+    public int spacing = 128;
     public GameObject template;
 
     public InvGameItem GetItem(int slot)

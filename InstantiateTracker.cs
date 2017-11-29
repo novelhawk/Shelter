@@ -9,7 +9,7 @@ public class InstantiateTracker
 
     public bool checkObj(string key, PhotonPlayer photonPlayer, int[] viewIDS)
     {
-        if (photonPlayer.isMasterClient || photonPlayer.isLocal)
+        if (photonPlayer.IsMasterClient || photonPlayer.isLocal)
         {
             return true;
         }
@@ -106,7 +106,7 @@ public class InstantiateTracker
                 return false;
 
             case "titan_eren":
-                if (!(RCextensions.returnStringFromObject(photonPlayer.customProperties[PhotonPlayerProperty.character]).ToUpper() != "EREN"))
+                if (!(RCextensions.returnStringFromObject(photonPlayer.CustomProperties[PhotonPlayerProperty.character]).ToUpper() != "EREN"))
                 {
                     if (RCSettings.banEren > 0)
                     {
@@ -130,7 +130,7 @@ public class InstantiateTracker
                 return this.Instantiated(photonPlayer, GameResource.effect);
 
             case "hitmeatbig":
-                if (!(RCextensions.returnStringFromObject(photonPlayer.customProperties[PhotonPlayerProperty.character]).ToUpper() != "EREN"))
+                if (!(RCextensions.returnStringFromObject(photonPlayer.CustomProperties[PhotonPlayerProperty.character]).ToUpper() != "EREN"))
                 {
                     if (RCSettings.banEren > 0)
                     {
@@ -556,7 +556,7 @@ public class InstantiateTracker
                 this.lastClear = Time.time;
             }
             this.count++;
-            return (this.count > 0x23);
+            return (this.count > 35);
         }
 
         public override void reset()

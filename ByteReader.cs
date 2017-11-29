@@ -49,7 +49,7 @@ public class ByteReader
         int length = this.mBuffer.Length;
         while (this.mOffset < length)
         {
-            if (this.mBuffer[this.mOffset] >= 0x20)
+            if (this.mBuffer[this.mOffset] >= 32)
             {
                 break;
             }

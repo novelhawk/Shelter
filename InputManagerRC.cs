@@ -23,8 +23,8 @@ public class InputManagerRC
         this.horseKeys = new KeyCode[7];
         this.titanWheel = new int[15];
         this.titanKeys = new KeyCode[15];
-        this.levelWheel = new int[0x11];
-        this.levelKeys = new KeyCode[0x11];
+        this.levelWheel = new int[17];
+        this.levelKeys = new KeyCode[17];
         this.cannonWheel = new int[7];
         this.cannonKeys = new KeyCode[7];
         for (num = 0; num < this.humanWheel.Length; num++)

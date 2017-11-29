@@ -74,7 +74,7 @@ public class CannonPropRegion : Photon.MonoBehaviour
     [RPC]
     public void SetSize(string settings, PhotonMessageInfo info)
     {
-        if (info.sender.isMasterClient)
+        if (info.sender.IsMasterClient)
         {
             string[] strArray = settings.Split(new char[] { ',' });
             if (strArray.Length > 15)
@@ -137,7 +137,7 @@ public class CannonPropRegion : Photon.MonoBehaviour
 
     public void Start()
     {
-        if (((int) FengGameManagerMKII.settings[0x40]) >= 100)
+        if (((int) FengGameManagerMKII.settings[64]) >= 100)
         {
             base.GetComponent<Collider>().enabled = false;
         }

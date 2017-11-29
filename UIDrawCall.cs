@@ -114,7 +114,7 @@ public class UIDrawCall : MonoBehaviour
             {
                 this.UpdateMaterials();
             }
-            if (verts.size < 0xfde8)
+            if (verts.size < 65000)
             {
                 bool flag;
                 int num2 = (size >> 1) * 3;

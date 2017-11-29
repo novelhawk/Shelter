@@ -21,11 +21,11 @@ public class PickupItemSyncer : Photon.MonoBehaviour
             else
             {
                 PhotonPlayer next = PhotonNetwork.masterClient.GetNext();
-                if ((next == null) || next.Equals(PhotonNetwork.player))
+                if ((next == null) || next.Equals(PhotonPlayer.Self))
                 {
-                    next = PhotonNetwork.player.GetNext();
+                    next = PhotonPlayer.Self.GetNext();
                 }
-                if ((next != null) && !next.Equals(PhotonNetwork.player))
+                if ((next != null) && !next.Equals(PhotonPlayer.Self))
                 {
                     base.photonView.RPC("RequestForPickupTimes", next, new object[0]);
                 }
@@ -40,7 +40,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
 
     public void OnJoinedRoom()
     {
-        Debug.Log(string.Concat(new object[] { "Joined Room. isMasterClient: ", PhotonNetwork.isMasterClient, " id: ", PhotonNetwork.player.ID }));
+        Debug.Log(string.Concat(new object[] { "Joined Room. isMasterClient: ", PhotonNetwork.isMasterClient, " id: ", PhotonPlayer.Self.ID }));
         this.IsWaitingForPickupInit = !PhotonNetwork.isMasterClient;
         if (PhotonNetwork.playerList.Length >= 2)
         {

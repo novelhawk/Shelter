@@ -15,7 +15,7 @@ public class UIFont : MonoBehaviour
     [HideInInspector, SerializeField]
     private float mDynamicFontOffset;
     [SerializeField, HideInInspector]
-    private int mDynamicFontSize = 0x10;
+    private int mDynamicFontSize = 16;
     [SerializeField, HideInInspector]
     private FontStyle mDynamicFontStyle;
     [SerializeField, HideInInspector]
@@ -702,7 +702,7 @@ public class UIFont : MonoBehaviour
                 previousChar = 0;
                 goto Label_03E7;
             }
-            if (((ch == ' ') && (previousChar != 0x20)) && (startIndex < offset))
+            if (((ch == ' ') && (previousChar != 32)) && (startIndex < offset))
             {
                 s.Append(text.Substring(startIndex, (offset - startIndex) + 1));
                 flag = false;
@@ -882,7 +882,7 @@ public class UIFont : MonoBehaviour
             }
             else
             {
-                value = Mathf.Clamp(value, 4, 0x80);
+                value = Mathf.Clamp(value, 4, 128);
                 if (this.mDynamicFontSize != value)
                 {
                     this.mDynamicFontSize = value;

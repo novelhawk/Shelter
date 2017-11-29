@@ -48,9 +48,9 @@ internal static class CustomTypes
 
     internal static void Register()
     {
-        PhotonPeer.RegisterType(typeof(Vector2), 0x57, new SerializeMethod(CustomTypes.SerializeVector2), new DeserializeMethod(CustomTypes.DeserializeVector2));
-        PhotonPeer.RegisterType(typeof(Vector3), 0x56, new SerializeMethod(CustomTypes.SerializeVector3), new DeserializeMethod(CustomTypes.DeserializeVector3));
-        PhotonPeer.RegisterType(typeof(Quaternion), 0x51, new SerializeMethod(CustomTypes.SerializeQuaternion), new DeserializeMethod(CustomTypes.DeserializeQuaternion));
+        PhotonPeer.RegisterType(typeof(Vector2), 87, new SerializeMethod(CustomTypes.SerializeVector2), new DeserializeMethod(CustomTypes.DeserializeVector2));
+        PhotonPeer.RegisterType(typeof(Vector3), 86, new SerializeMethod(CustomTypes.SerializeVector3), new DeserializeMethod(CustomTypes.DeserializeVector3));
+        PhotonPeer.RegisterType(typeof(Quaternion), 81, new SerializeMethod(CustomTypes.SerializeQuaternion), new DeserializeMethod(CustomTypes.DeserializeQuaternion));
         PhotonPeer.RegisterType(typeof(PhotonPlayer), 80, new SerializeMethod(CustomTypes.SerializePhotonPlayer), new DeserializeMethod(CustomTypes.DeserializePhotonPlayer));
     }
 
@@ -66,7 +66,7 @@ internal static class CustomTypes
     private static byte[] SerializeQuaternion(object obj)
     {
         Quaternion quaternion = (Quaternion) obj;
-        byte[] target = new byte[0x10];
+        byte[] target = new byte[16];
         int targetOffset = 0;
         Protocol.Serialize(quaternion.w, target, ref targetOffset);
         Protocol.Serialize(quaternion.x, target, ref targetOffset);

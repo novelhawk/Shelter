@@ -33,7 +33,7 @@ public class PhotonStatsGui : MonoBehaviour
     {
         bool flag = false;
         TrafficStatsGameLevel trafficStatsGameLevel = PhotonNetwork.networkingPeer.TrafficStatsGameLevel;
-        long num = PhotonNetwork.networkingPeer.TrafficStatsElapsedMs / 0x3e8L;
+        long num = PhotonNetwork.networkingPeer.TrafficStatsElapsedMs / 1000L;
         if (num == 0)
         {
             num = 1L;

@@ -102,7 +102,7 @@ public class FengCustomInputs : MonoBehaviour
             }
             if (this.mouseButtonsOn)
             {
-                int num2 = 0x143;
+                int num2 = 323;
                 for (int k = 0; k < 6; k++)
                 {
                     if (Input.GetMouseButton(k) && this.inputBool[i])
@@ -118,7 +118,7 @@ public class FengCustomInputs : MonoBehaviour
                     }
                 }
             }
-            for (int j = 350; j < 0x199; j++)
+            for (int j = 350; j < 409; j++)
             {
                 if (Input.GetKey((KeyCode) j) && this.inputBool[i])
                 {
@@ -553,7 +553,7 @@ public class FengCustomInputs : MonoBehaviour
         this.loadConfig();
         this.saveInputs();
         PlayerPrefs.SetFloat("MouseSensitivity", 0.5f);
-        PlayerPrefs.SetString("version", UIMainReferences.version);
+        PlayerPrefs.SetString("version", UIMainReferences.Version);
         PlayerPrefs.SetInt("invertMouseY", 1);
         PlayerPrefs.SetInt("cameraTilt", 1);
         PlayerPrefs.SetFloat("GameQuality", 0.9f);

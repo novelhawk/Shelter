@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class RibbonTrail
 {
-    public const int CHAIN_EMPTY = 0x1869f;
+    public const int CHAIN_EMPTY = 99999;
     protected UnityEngine.Color Color = UnityEngine.Color.white;
     protected float ElapsedTime;
     public int ElemCount;
@@ -32,8 +32,8 @@ public class RibbonTrail
         this.MaxElements = maxelemnt;
         this.Vertexsegment = segment;
         this.ElementArray = new Element[this.MaxElements];
-        this.Tail = 0x1869f;
-        this.Head = 0x1869f;
+        this.Tail = 99999;
+        this.Head = 99999;
         this.SetTrailLen(len);
         this.UnitWidth = width;
         this.HeadPosition = pos;
@@ -48,7 +48,7 @@ public class RibbonTrail
 
     public void AddElememt(Element dtls)
     {
-        if (this.Head == 0x1869f)
+        if (this.Head == 99999)
         {
             this.Tail = this.MaxElements - 1;
             this.Head = this.Tail;
@@ -92,7 +92,7 @@ public class RibbonTrail
 
     public void ResetElementsPos()
     {
-        if ((this.Head != 0x1869f) && (this.Head != this.Tail))
+        if ((this.Head != 99999) && (this.Head != this.Tail))
         {
             int head = this.Head;
             while (true)
@@ -235,7 +235,7 @@ public class RibbonTrail
         if (this.IndexDirty)
         {
             VertexPool pool = this.Vertexsegment.Pool;
-            if ((this.Head != 0x1869f) && (this.Head != this.Tail))
+            if ((this.Head != 99999) && (this.Head != this.Tail))
             {
                 int head = this.Head;
                 int num2 = 0;
@@ -246,7 +246,7 @@ public class RibbonTrail
                     {
                         num3 = 0;
                     }
-                    if ((num3 * 2) >= 0x10000)
+                    if ((num3 * 2) >= 65536)
                     {
                         Debug.LogError("Too many elements!");
                     }
@@ -277,7 +277,7 @@ public class RibbonTrail
         float num = 0f;
         float num2 = 0f;
         float num3 = this.ElemLength * (this.MaxElements - 2);
-        if ((this.Head != 0x1869f) && (this.Head != this.Tail))
+        if ((this.Head != 99999) && (this.Head != this.Tail))
         {
             int head = this.Head;
             int index = this.Head;
@@ -289,7 +289,7 @@ public class RibbonTrail
                     index = 0;
                 }
                 Element element = this.ElementArray[index];
-                if ((index * 2) >= 0x10000)
+                if ((index * 2) >= 65536)
                 {
                     Debug.LogError("Too many elements!");
                 }

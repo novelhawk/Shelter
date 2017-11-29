@@ -202,8 +202,8 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 Minimap.instance.myCam.farClipPlane = 1000f;
                 Minimap.instance.myCam.enabled = false;
             }
-            minimap.CreateMinimap(Minimap.instance.myCam, 0x200, 0.3f, info.MinimapPreset);
-            if ((((int) FengGameManagerMKII.settings[0xe7]) == 0) || (RCSettings.globalDisableMinimap == 1))
+            minimap.CreateMinimap(Minimap.instance.myCam, 512, 0.3f, info.MinimapPreset);
+            if ((((int) FengGameManagerMKII.settings[231]) == 0) || (RCSettings.globalDisableMinimap == 1))
             {
                 minimap.SetEnabled(false);
             }
@@ -218,11 +218,11 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         }
         if (QualitySettings.GetQualityLevel() > 3)
         {
-            this.snapShotCamera.GetComponent<Camera>().targetTexture = new RenderTexture((int) (Screen.width * 0.8f), (int) (Screen.height * 0.8f), 0x18);
+            this.snapShotCamera.GetComponent<Camera>().targetTexture = new RenderTexture((int) (Screen.width * 0.8f), (int) (Screen.height * 0.8f), 24);
         }
         else
         {
-            this.snapShotCamera.GetComponent<Camera>().targetTexture = new RenderTexture((int) (Screen.width * 0.4f), (int) (Screen.height * 0.4f), 0x18);
+            this.snapShotCamera.GetComponent<Camera>().targetTexture = new RenderTexture((int) (Screen.width * 0.4f), (int) (Screen.height * 0.4f), 24);
         }
     }
 
@@ -234,12 +234,12 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         }
         if (QualitySettings.GetQualityLevel() > 3)
         {
-            this.snapshotRT = new RenderTexture((int) (Screen.width * 0.8f), (int) (Screen.height * 0.8f), 0x18);
+            this.snapshotRT = new RenderTexture((int) (Screen.width * 0.8f), (int) (Screen.height * 0.8f), 24);
             this.snapShotCamera.GetComponent<Camera>().targetTexture = this.snapshotRT;
         }
         else
         {
-            this.snapshotRT = new RenderTexture((int) (Screen.width * 0.4f), (int) (Screen.height * 0.4f), 0x18);
+            this.snapshotRT = new RenderTexture((int) (Screen.width * 0.4f), (int) (Screen.height * 0.4f), 24);
             this.snapShotCamera.GetComponent<Camera>().targetTexture = this.snapshotRT;
         }
     }
@@ -361,21 +361,22 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         this.snapShotCamera.gameObject.GetComponent<Skybox>().material = base.gameObject.GetComponent<Skybox>().material;
     }
 
-    public void setHUDposition()
+    public void setHUDposition() //TODO: Redo it
     {
         GameObject.Find("Flare").transform.localPosition = new Vector3((float) (((int) (-Screen.width * 0.5f)) + 14), (float) ((int) (-Screen.height * 0.5f)), 0f);
-        GameObject obj2 = GameObject.Find("LabelInfoBottomRight");
-        obj2.transform.localPosition = new Vector3((float) ((int) (Screen.width * 0.5f)), (float) ((int) (-Screen.height * 0.5f)), 0f);
-        obj2.GetComponent<UILabel>().text = "Pause : " + GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.pause] + " ";
+        GameObject.Find("LabelInfoBottomRight").transform.localPosition = new Vector3((float) ((int) (Screen.width * 0.5f)), (float) ((int) (-Screen.height * 0.5f)), 0f);
+//        obj2.GetComponent<UILabel>().text = "Pause : " + GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.pause] + " ";
         GameObject.Find("LabelInfoTopCenter").transform.localPosition = new Vector3(0f, (float) ((int) (Screen.height * 0.5f)), 0f);
         GameObject.Find("LabelInfoTopRight").transform.localPosition = new Vector3((float) ((int) (Screen.width * 0.5f)), (float) ((int) (Screen.height * 0.5f)), 0f);
-        GameObject.Find("LabelNetworkStatus").transform.localPosition = new Vector3((float) ((int) (-Screen.width * 0.5f)), (float) ((int) (Screen.height * 0.5f)), 0f);
+        Destroy(GameObject.Find("LabelNetworkStatus"));
+//        GameObject.Find("LabelNetworkStatus").transform.localPosition = new Vector3((float) ((int) (-Screen.width * 0.5f)), (float) ((int) (Screen.height * 0.5f)), 0f); MOD: Removed Connection state top left
         GameObject.Find("LabelInfoTopLeft").transform.localPosition = new Vector3((float) ((int) (-Screen.width * 0.5f)), (float) ((int) ((Screen.height * 0.5f) - 20f)), 0f);
-        GameObject.Find("Chatroom").transform.localPosition = new Vector3((float) ((int) (-Screen.width * 0.5f)), (float) ((int) (-Screen.height * 0.5f)), 0f);
-        if (GameObject.Find("Chatroom") != null)
-        {
-            GameObject.Find("Chatroom").GetComponent<InRoomChat>().setPosition();
-        }
+        Destroy(GameObject.Find("Chatroom"));
+//        GameObject.Find("Chatroom").transform.localPosition = new Vector3((float) ((int) (-Screen.width * 0.5f)), (float) ((int) (-Screen.height * 0.5f)), 0f);
+//        if (GameObject.Find("Chatroom") != null)
+//        {
+//            GameObject.Find("Chatroom").GetComponent<InRoomChat>().setPosition();
+//        }
         if (usingTitan && (gametype != GAMETYPE.SINGLE))
         {
             Vector3 vector = new Vector3(0f, 9999f, 0f);
@@ -412,7 +413,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         }
         if (stereoType == STEREO_3D_TYPE.SIDE_BY_SIDE)
         {
-            base.gameObject.GetComponent<Camera>().aspect = Screen.width / Screen.height;
+            base.gameObject.GetComponent<Camera>().aspect = 1280f / 1080;
         }
         this.createSnapShotRT2();
     }
@@ -684,7 +685,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     public void startSnapShot2(Vector3 p, int dmg, GameObject target, float startTime)
     {
         int num;
-        if (int.TryParse((string) FengGameManagerMKII.settings[0x5f], out num))
+        if (int.TryParse((string) FengGameManagerMKII.settings[95], out num))
         {
             if (dmg >= num)
             {
@@ -1080,7 +1081,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                         Screen.lockCursor = false;
                     }
                     this.verticalRotationOffset = 0f;
-                    if ((((int) FengGameManagerMKII.settings[0xf5]) == 1) || (this.main_object.GetComponent<HERO>() == null))
+                    if ((((int) FengGameManagerMKII.settings[245]) == 1) || (this.main_object.GetComponent<HERO>() == null))
                     {
                         Screen.showCursor = false;
                     }
@@ -1106,17 +1107,17 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 {
                     if (FengGameManagerMKII.inputRC.isInputHumanDown(InputCodeRC.liveCam))
                     {
-                        if (((int) FengGameManagerMKII.settings[0x107]) == 0)
+                        if (((int) FengGameManagerMKII.settings[263]) == 0)
                         {
-                            FengGameManagerMKII.settings[0x107] = 1;
+                            FengGameManagerMKII.settings[263] = 1;
                         }
                         else
                         {
-                            FengGameManagerMKII.settings[0x107] = 0;
+                            FengGameManagerMKII.settings[263] = 0;
                         }
                     }
                     HERO component = this.main_object.GetComponent<HERO>();
-                    if ((((component != null) && (((int) FengGameManagerMKII.settings[0x107]) == 1)) && component.GetComponent<SmoothSyncMovement>().enabled) && component.isPhotonCamera)
+                    if ((((component != null) && (((int) FengGameManagerMKII.settings[263]) == 1)) && component.GetComponent<SmoothSyncMovement>().enabled) && component.isPhotonCamera)
                     {
                         this.CameraMovementLive(component);
                     }
