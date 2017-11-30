@@ -119,7 +119,6 @@ namespace Mod.Interface
         private string roomName = "Room name";
         private string roomCharacter = "LEVI";
         private string roomPassword = string.Empty;
-        private readonly string[] roomMaps = LevelInfoManager.Levels.Select(x => x.Map).ToArray(); // Got a lot of errors by this fucking line.. May aswell change it
         private int roomMapIndex = 1;
         private string roomMaxPlayers = "10";
         private string roomTime = "99999";
@@ -158,11 +157,11 @@ namespace Mod.Interface
             GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Difficulty", label);
             GUI.Label(new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Daylight", label);
             roomCharacter = GUI.TextField(r = new Rect(rect.x + rect.width / 2f + 20, rect.y, rect.width / 2f - 20, 30), roomCharacter, textField);
-            var btn = CustomButton(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomMaps[roomMapIndex], button);
+            var btn = CustomButton(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), LevelInfoManager.Levels[roomMapIndex].Name, button);
             if (btn == 1)
-                roomMapIndex = roomMaps.Length - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
+                roomMapIndex = LevelInfoManager.Levels.Count - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
             else if (btn == -1)
-                roomMapIndex = roomMapIndex == 0 ? roomMaps.Length - 1 : roomMapIndex - 1;
+                roomMapIndex = roomMapIndex == 0 ? LevelInfoManager.Levels.Count - 1 : roomMapIndex - 1;
             roomTime = GUI.TextField(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomTime, textField);
             r = new Rect(r.x, r.y + r.height + 3, r.width, r.height);
             if (GUI.Button(new Rect(r.x, r.y, r.width / 3 - 20, r.height), "Easy", roomDifficultySingle == 0 ? buttonSelected : button))
@@ -186,10 +185,10 @@ namespace Mod.Interface
                 if (IN_GAME_MAIN_CAMERA.cameraMode == CAMERA_TYPE.TPS)
                     Screen.lockCursor = true;
                 Screen.showCursor = false;
-                if (roomMaps[roomMapIndex] == "trainning_0")
-                    IN_GAME_MAIN_CAMERA.difficulty = -1;
-                FengGameManagerMKII.level = roomMaps[roomMapIndex];
-                Application.LoadLevel(LevelInfoManager.GetInfo(roomMaps[roomMapIndex]).Map);
+//                if (LevelInfoManager.Levels[roomMapIndex].Map == "trainning_0") Does not exist in LevelInfoManager
+//                    IN_GAME_MAIN_CAMERA.difficulty = -1;
+                FengGameManagerMKII.level = LevelInfoManager.Levels[roomMapIndex].Name;
+                Application.LoadLevel(LevelInfoManager.Levels[roomMapIndex].Name);
                 Shelter.InterfaceManager.OnJoinedGame();
             }
         }
@@ -207,14 +206,14 @@ namespace Mod.Interface
             GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Difficulty", label);
             GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Daylight", label);
             GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Open", label);
-            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Visible", label);
+            GUI.Label(new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Visible", label);
             roomName = GUI.TextField(r = new Rect(rect.x + rect.width / 2f + 20,  rect.y, rect.width / 2f - 20, 30), roomName, textField);
             roomPassword = GUI.TextField(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomPassword, textField);
-            var btn = CustomButton(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomMaps[roomMapIndex], button);
+            var btn = CustomButton(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), LevelInfoManager.Levels[roomMapIndex].Name, button);
             if (btn == 1)
-                roomMapIndex = roomMaps.Length - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
+                roomMapIndex = LevelInfoManager.Levels.Count - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
             else if (btn == -1)
-                roomMapIndex = roomMapIndex == 0 ? roomMaps.Length - 1 : roomMapIndex - 1;
+                roomMapIndex = roomMapIndex == 0 ? LevelInfoManager.Levels.Count - 1 : roomMapIndex - 1;
             roomMaxPlayers = GUI.TextField(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomMaxPlayers, textField);
             roomTime = GUI.TextField(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomTime, textField);
             r = new Rect(r.x, r.y + r.height + 3, r.width, r.height);
@@ -235,7 +234,7 @@ namespace Mod.Interface
                 roomOpen = !roomOpen;
             if (GUI.Button(new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomVisible.ToString(), button))
                 roomVisible = !roomVisible;
-            if (GUI.Button(new Rect(rect.x + rect.width / 2f - 100f, rect.y + rect.height - 90f, 200f, 70f), "Play", button) && !isRunning)
+            if (GUI.Button(new Rect(rect.x + rect.width / 2f - 100f, rect.y + rect.height - 90f, 200f, 70f), !isRunning ? "Play" : "Connecting", button) && !isRunning) //FIXME: Possible to click while joining the game.
                 StartCoroutine(AwaitConnect());
         }
 
@@ -245,7 +244,7 @@ namespace Mod.Interface
             isRunning = true;
             while (PhotonNetwork.connectionStatesDetailed != PeerStates.JoinedLobby && PhotonNetwork.connectionStatesDetailed != PeerStates.Joined)
                 yield return null;
-            string roomFullName = $"{roomName}`{roomMaps[roomMapIndex]}`{roomDifficulty}`{roomMaxPlayers}`{roomDayLight}`{(roomPassword != string.Empty ? aes.Encrypt(roomPassword) : roomPassword)}`{roomTime}";
+            string roomFullName = $"{roomName}`{LevelInfoManager.Levels[roomMapIndex].Name}`{roomDifficulty}`{roomMaxPlayers}`{roomDayLight}`{(roomPassword != string.Empty ? aes.Encrypt(roomPassword) : roomPassword)}`{roomTime}";
             PhotonNetwork.CreateRoom(roomFullName, roomVisible, roomOpen, roomMaxPlayers.ToInt());
             isRunning = false;
         }
