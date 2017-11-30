@@ -67,8 +67,7 @@ public static class Extensions
             }
             finally
             {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
+                if (enumerator is IDisposable disposable)
                 {
                     disposable.Dispose();
                 }
@@ -94,8 +93,7 @@ public static class Extensions
             }
             finally
             {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
+                if (enumerator is IDisposable disposable)
                 {
                     disposable.Dispose();
                 }
@@ -118,8 +116,7 @@ public static class Extensions
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
+            if (enumerator is IDisposable disposable)
             {
                 disposable.Dispose();
             }
@@ -154,8 +151,7 @@ public static class Extensions
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
+            if (enumerator is IDisposable disposable)
             {
                 disposable.Dispose();
             }

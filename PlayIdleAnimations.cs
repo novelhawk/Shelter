@@ -43,10 +43,9 @@ public class PlayIdleAnimations : MonoBehaviour
             }
             finally
             {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
+                if (enumerator is IDisposable disposable)
                 {
-                	disposable.Dispose();
+                    disposable.Dispose();
                 }
             }
             if (this.mBreaks.Count == 0)

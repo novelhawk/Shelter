@@ -48,8 +48,7 @@ public class XffectCache : MonoBehaviour
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
+            if (enumerator is IDisposable disposable)
                 disposable.Dispose();
         }
     }
@@ -77,8 +76,7 @@ public class XffectCache : MonoBehaviour
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
+            if (enumerator is IDisposable disposable)
                 disposable.Dispose();
         }
         return this.AddObject(name);

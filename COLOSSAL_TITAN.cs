@@ -653,8 +653,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
             }
             finally
             {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
+                if (enumerator is IDisposable disposable)
                 {
                     disposable.Dispose();
                 }
@@ -675,8 +674,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
             }
             finally
             {
-                IDisposable disposable2 = enumerator2 as IDisposable;
-                if (disposable2 != null)
+                if (enumerator2 is IDisposable disposable2)
                 {
                     disposable2.Dispose();
                 }

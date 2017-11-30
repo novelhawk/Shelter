@@ -1402,8 +1402,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
+            if (enumerator is IDisposable disposable)
             {
                 disposable.Dispose();
             }
@@ -1442,8 +1441,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
             }
             finally
             {
-                IDisposable disposable2 = enumerator2 as IDisposable;
-                if (disposable2 != null)
+                if (enumerator2 is IDisposable disposable2)
                 {
                     disposable2.Dispose();
                 }
@@ -1467,8 +1465,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
             }
             finally
             {
-                IDisposable disposable3 = enumerator3 as IDisposable;
-                if (disposable3 != null)
+                if (enumerator3 is IDisposable disposable3)
                 {
                     disposable3.Dispose();
                 }

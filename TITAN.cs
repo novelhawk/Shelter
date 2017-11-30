@@ -3387,10 +3387,9 @@ public class TITAN : Photon.MonoBehaviour
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
+            if (enumerator is IDisposable disposable)
             {
-            	disposable.Dispose();
+                disposable.Dispose();
             }
         }
         Rigidbody rigidbody = base.rigidbody;
@@ -3415,10 +3414,9 @@ public class TITAN : Photon.MonoBehaviour
             }
             finally
             {
-                IDisposable disposable2 = enumerator2 as IDisposable;
-                if (disposable2 != null)
+                if (enumerator2 is IDisposable disposable2)
                 {
-                	disposable2.Dispose();
+                    disposable2.Dispose();
                 }
             }
             if (this.nonAI)
@@ -3445,10 +3443,9 @@ public class TITAN : Photon.MonoBehaviour
             }
             finally
             {
-                IDisposable disposable3 = enumerator3 as IDisposable;
-                if (disposable3 != null)
+                if (enumerator3 is IDisposable disposable3)
                 {
-                	disposable3.Dispose();
+                    disposable3.Dispose();
                 }
             }
             if (this.nonAI)

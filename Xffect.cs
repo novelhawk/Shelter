@@ -25,10 +25,9 @@ public class Xffect : MonoBehaviour
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
+            if (enumerator is IDisposable disposable)
             {
-            	disposable.Dispose();
+                disposable.Dispose();
             }
         }
         base.gameObject.SetActive(true);
@@ -54,10 +53,9 @@ public class Xffect : MonoBehaviour
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
+            if (enumerator is IDisposable disposable)
             {
-            	disposable.Dispose();
+                disposable.Dispose();
             }
         }
         base.gameObject.SetActive(false);
@@ -110,10 +108,9 @@ public class Xffect : MonoBehaviour
             }
             finally
             {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
+                if (enumerator is IDisposable disposable)
                 {
-                	disposable.Dispose();
+                    disposable.Dispose();
                 }
             }
             foreach (EffectLayer layer2 in this.EflList)
@@ -189,10 +186,9 @@ public class Xffect : MonoBehaviour
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
+            if (enumerator is IDisposable disposable)
             {
-            	disposable.Dispose();
+                disposable.Dispose();
             }
         }
         foreach (EffectLayer layer in this.EflList)

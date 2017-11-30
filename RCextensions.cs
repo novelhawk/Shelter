@@ -182,8 +182,7 @@ public static class RCextensions
     {
         if (obj != null)
         {
-            string str = obj as string;
-            if (str != null)
+            if (obj is string str)
             {
                 return str;
             }

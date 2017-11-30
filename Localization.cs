@@ -91,8 +91,7 @@ public class Localization : MonoBehaviour
                             index++;
                         }
                     }
-                    TextAsset asset2 = Resources.Load(value, typeof(TextAsset)) as TextAsset;
-                    if (asset2 != null)
+                    if (Resources.Load(value, typeof(TextAsset)) is TextAsset asset2)
                     {
                         this.Load(asset2);
                         return;

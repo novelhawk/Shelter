@@ -7,32 +7,6 @@ using UnityEngine;
 public class iTween : MonoBehaviour
 {
     public string _name;
-    [CompilerGenerated]
-    private static Dictionary<string, int> f__switchSmap10;
-    [CompilerGenerated]
-    private static Dictionary<string, int> f__switchSmap11;
-    [CompilerGenerated]
-    private static Dictionary<string, int> f__switchSmap12;
-    [CompilerGenerated]
-    private static Dictionary<string, int> f__switchSmap13;
-    [CompilerGenerated]
-    private static Dictionary<string, int> f__switchSmap14;
-    [CompilerGenerated]
-    private static Dictionary<string, int> f__switchSmap8;
-    [CompilerGenerated]
-    private static Dictionary<string, int> f__switchSmap9;
-    [CompilerGenerated]
-    private static Dictionary<string, int> f__switchSmapA;
-    [CompilerGenerated]
-    private static Dictionary<string, int> f__switchSmapB;
-    [CompilerGenerated]
-    private static Dictionary<string, int> f__switchSmapC;
-    [CompilerGenerated]
-    private static Dictionary<string, int> f__switchSmapD;
-    [CompilerGenerated]
-    private static Dictionary<string, int> f__switchSmapE;
-    [CompilerGenerated]
-    private static Dictionary<string, int> f__switchSmapF;
     private ApplyTween apply;
     private AudioSource audioSource;
     private static GameObject cameraFade;
@@ -70,6 +44,14 @@ public class iTween : MonoBehaviour
     private Vector2[] vector2s;
     private Vector3[] vector3s;
     public bool wasPaused;
+
+    private readonly Dictionary<string, int> _dictionary = new Dictionary<string, int>(3)
+    {
+        { "to", 0 },
+        { "by", 1 },
+        { "add", 2 }
+    };
+
 
     private iTween(Hashtable h)
     {
@@ -867,8 +849,7 @@ public class iTween : MonoBehaviour
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
+            if (enumerator is IDisposable disposable)
             {
                 disposable.Dispose();
             }
@@ -898,8 +879,7 @@ public class iTween : MonoBehaviour
         }
         finally
         {
-            IDisposable disposable2 = enumerator2 as IDisposable;
-            if (disposable2 != null)
+            if (enumerator2 is IDisposable disposable2)
             {
                 disposable2.Dispose();
             }
@@ -919,8 +899,7 @@ public class iTween : MonoBehaviour
         }
         finally
         {
-            IDisposable disposable3 = enumerator3 as IDisposable;
-            if (disposable3 != null)
+            if (enumerator3 is IDisposable disposable3)
             {
                 disposable3.Dispose();
             }
@@ -969,8 +948,7 @@ public class iTween : MonoBehaviour
             }
             finally
             {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
+                if (enumerator is IDisposable disposable)
                 {
                     disposable.Dispose();
                 }
@@ -1076,8 +1054,7 @@ public class iTween : MonoBehaviour
             }
             finally
             {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
+                if (enumerator is IDisposable disposable)
                 {
                     disposable.Dispose();
                 }
@@ -1117,8 +1094,7 @@ public class iTween : MonoBehaviour
             }
             finally
             {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
+                if (enumerator is IDisposable disposable)
                 {
                     disposable.Dispose();
                 }
@@ -1239,8 +1215,7 @@ public class iTween : MonoBehaviour
                 }
                 finally
                 {
-                    IDisposable disposable = enumerator as IDisposable;
-                    if (disposable != null)
+                    if (enumerator is IDisposable disposable)
                     {
                         disposable.Dispose();
                     }
@@ -2152,18 +2127,13 @@ public class iTween : MonoBehaviour
             string key = (string)this.tweenArguments["axis"];
             if (key != null)
             {
-                int num;
-                if (f__switchSmap13 == null)
+                var dictionary = new Dictionary<string, int>(3)
                 {
-                    Dictionary<string, int> dictionary = new Dictionary<string, int>(3)
-                    {
-                        { "x", 0 },
-                        { "y", 1 },
-                        { "z", 2 }
-                    };
-                    f__switchSmap13 = dictionary;
-                }
-                if (f__switchSmap13.TryGetValue(key, out num))
+                    { "x", 0 },
+                    { "y", 1 },
+                    { "z", 2 }
+                };
+                if (dictionary.TryGetValue(key, out int num))
                 {
                     switch (num)
                     {
@@ -2763,26 +2733,20 @@ public class iTween : MonoBehaviour
         string type = this.type;
         if (type != null)
         {
-            Dictionary<string, int> dictionary;
-            int num;
-            if (f__switchSmap12 == null)
+            var dictionary = new Dictionary<string, int>(10)
             {
-                dictionary = new Dictionary<string, int>(10)
-                {
-                    { "value", 0 },
-                    { "color", 1 },
-                    { "audio", 2 },
-                    { "move", 3 },
-                    { "scale", 4 },
-                    { "rotate", 5 },
-                    { "shake", 6 },
-                    { "punch", 7 },
-                    { "look", 8 },
-                    { "stab", 9 }
-                };
-                f__switchSmap12 = dictionary;
-            }
-            if (f__switchSmap12.TryGetValue(type, out num))
+                { "value", 0 },
+                { "color", 1 },
+                { "audio", 2 },
+                { "move", 3 },
+                { "scale", 4 },
+                { "rotate", 5 },
+                { "shake", 6 },
+                { "punch", 7 },
+                { "look", 8 },
+                { "stab", 9 }
+            };
+            if (dictionary.TryGetValue(type, out int num))
             {
                 string method;
                 int num2;
@@ -2792,19 +2756,15 @@ public class iTween : MonoBehaviour
                         method = this.method;
                         if (method != null)
                         {
-                            if (f__switchSmap9 == null)
+                            var dictionary1 = new Dictionary<string, int>(5)
                             {
-                                dictionary = new Dictionary<string, int>(5)
-                                {
-                                    { "float", 0 },
-                                    { "vector2", 1 },
-                                    { "vector3", 2 },
-                                    { "color", 3 },
-                                    { "rect", 4 }
-                                };
-                                f__switchSmap9 = dictionary;
-                            }
-                            if (f__switchSmap9.TryGetValue(method, out num2))
+                                { "float", 0 },
+                                { "vector2", 1 },
+                                { "vector3", 2 },
+                                { "color", 3 },
+                                { "rect", 4 }
+                            };
+                            if (dictionary1.TryGetValue(method, out num2))
                             {
                                 switch (num2)
                                 {
@@ -2841,15 +2801,7 @@ public class iTween : MonoBehaviour
                         method = this.method;
                         if (method != null)
                         {
-                            if (f__switchSmapA == null)
-                            {
-                                dictionary = new Dictionary<string, int>(1)
-                                {
-                                    { "to", 0 }
-                                };
-                                f__switchSmapA = dictionary;
-                            }
-                            if (f__switchSmapA.TryGetValue(method, out num2) && num2 == 0)
+                            if (_dictionary.TryGetValue(method, out num2) && num2 == 0)
                             {
                                 this.GenerateColorToTargets();
                                 this.apply = new ApplyTween(this.ApplyColorToTargets);
@@ -2861,15 +2813,11 @@ public class iTween : MonoBehaviour
                         method = this.method;
                         if (method != null)
                         {
-                            if (f__switchSmapB == null)
+                            var dictionary1 = new Dictionary<string, int>(1)
                             {
-                                dictionary = new Dictionary<string, int>(1)
-                                {
-                                    { "to", 0 }
-                                };
-                                f__switchSmapB = dictionary;
-                            }
-                            if (f__switchSmapB.TryGetValue(method, out num2) && num2 == 0)
+                                { "to", 0 }
+                            };
+                            if (dictionary1.TryGetValue(method, out num2) && num2 == 0)
                             {
                                 this.GenerateAudioToTargets();
                                 this.apply = new ApplyTween(this.ApplyAudioToTargets);
@@ -2881,17 +2829,13 @@ public class iTween : MonoBehaviour
                         method = this.method;
                         if (method != null)
                         {
-                            if (f__switchSmapC == null)
-                            {
-                                dictionary = new Dictionary<string, int>(3)
-                                {
-                                    { "to", 0 },
-                                    { "by", 1 },
-                                    { "add", 1 }
-                                };
-                                f__switchSmapC = dictionary;
-                            }
-                            if (f__switchSmapC.TryGetValue(method, out num2))
+//                            var dictionary2 = new Dictionary<string, int>(3)
+//                            {
+//                                { "to", 0 },
+//                                { "by", 1 },
+//                                { "add", 2 } //Changed to 2 from 1
+//                            };
+                            if (_dictionary.TryGetValue(method, out num2))
                             {
                                 if (num2 == 0)
                                 {
@@ -2920,17 +2864,7 @@ public class iTween : MonoBehaviour
                         method = this.method;
                         if (method != null)
                         {
-                            if (f__switchSmapD == null)
-                            {
-                                dictionary = new Dictionary<string, int>(3)
-                                {
-                                    { "to", 0 },
-                                    { "by", 1 },
-                                    { "add", 2 }
-                                };
-                                f__switchSmapD = dictionary;
-                            }
-                            if (f__switchSmapD.TryGetValue(method, out num2))
+                            if (_dictionary.TryGetValue(method, out num2))
                             {
                                 switch (num2)
                                 {
@@ -2957,17 +2891,7 @@ public class iTween : MonoBehaviour
                         method = this.method;
                         if (method != null)
                         {
-                            if (f__switchSmapE == null)
-                            {
-                                dictionary = new Dictionary<string, int>(3)
-                                {
-                                    { "to", 0 },
-                                    { "add", 1 },
-                                    { "by", 2 }
-                                };
-                                f__switchSmapE = dictionary;
-                            }
-                            if (f__switchSmapE.TryGetValue(method, out num2))
+                            if (_dictionary.TryGetValue(method, out num2))
                             {
                                 switch (num2)
                                 {
@@ -2994,17 +2918,13 @@ public class iTween : MonoBehaviour
                         method = this.method;
                         if (method != null)
                         {
-                            if (f__switchSmapF == null)
+                            var dictionary4 = new Dictionary<string, int>(3)
                             {
-                                dictionary = new Dictionary<string, int>(3)
-                                {
-                                    { "position", 0 },
-                                    { "scale", 1 },
-                                    { "rotation", 2 }
-                                };
-                                f__switchSmapF = dictionary;
-                            }
-                            if (f__switchSmapF.TryGetValue(method, out num2))
+                                { "position", 0 },
+                                { "scale", 1 },
+                                { "rotation", 2 }
+                            };
+                            if (dictionary4.TryGetValue(method, out num2))
                             {
                                 switch (num2)
                                 {
@@ -3031,17 +2951,13 @@ public class iTween : MonoBehaviour
                         method = this.method;
                         if (method != null)
                         {
-                            if (f__switchSmap10 == null)
+                            var dictionary7 = new Dictionary<string, int>(3)
                             {
-                                dictionary = new Dictionary<string, int>(3)
-                                {
-                                    { "position", 0 },
-                                    { "rotation", 1 },
-                                    { "scale", 2 }
-                                };
-                                f__switchSmap10 = dictionary;
-                            }
-                            if (f__switchSmap10.TryGetValue(method, out num2))
+                                { "position", 0 },
+                                { "rotation", 1 },
+                                { "scale", 2 }
+                            };
+                            if (dictionary7.TryGetValue(method, out num2))
                             {
                                 switch (num2)
                                 {
@@ -3068,15 +2984,7 @@ public class iTween : MonoBehaviour
                         method = this.method;
                         if (method != null)
                         {
-                            if (f__switchSmap11 == null)
-                            {
-                                dictionary = new Dictionary<string, int>(1)
-                                {
-                                    { "to", 0 }
-                                };
-                                f__switchSmap11 = dictionary;
-                            }
-                            if (f__switchSmap11.TryGetValue(method, out num2) && num2 == 0)
+                            if (_dictionary.TryGetValue(method, out num2) && num2 == 0)
                             {
                                 this.GenerateLookToTargets();
                                 this.apply = new ApplyTween(this.ApplyLookToTargets);
@@ -3332,18 +3240,13 @@ public class iTween : MonoBehaviour
             string key = (string)args["axis"];
             if (key != null)
             {
-                int num;
-                if (f__switchSmap8 == null)
+                var dictionary = new Dictionary<string, int>(3)
                 {
-                    Dictionary<string, int> dictionary = new Dictionary<string, int>(3)
-                    {
-                        { "x", 0 },
-                        { "y", 1 },
-                        { "z", 2 }
-                    };
-                    f__switchSmap8 = dictionary;
-                }
-                if (f__switchSmap8.TryGetValue(key, out num))
+                    { "x", 0 },
+                    { "y", 1 },
+                    { "z", 2 }
+                };
+                if (dictionary.TryGetValue(key, out int num))
                 {
                     switch (num)
                     {
@@ -3448,18 +3351,13 @@ public class iTween : MonoBehaviour
             string key = (string)args["axis"];
             if (key != null)
             {
-                int num2;
-                if (f__switchSmap14 == null)
+                var dictionary = new Dictionary<string, int>(3)
                 {
-                    Dictionary<string, int> dictionary = new Dictionary<string, int>(3)
-                    {
-                        { "x", 0 },
-                        { "y", 1 },
-                        { "z", 2 }
-                    };
-                    f__switchSmap14 = dictionary;
-                }
-                if (f__switchSmap14.TryGetValue(key, out num2))
+                    { "x", 0 },
+                    { "y", 1 },
+                    { "z", 2 }
+                };
+                if (dictionary.TryGetValue(key, out var num2))
                 {
                     switch (num2)
                     {
@@ -3884,8 +3782,7 @@ public class iTween : MonoBehaviour
             }
             finally
             {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
+                if (enumerator is IDisposable disposable)
                 {
                     disposable.Dispose();
                 }
@@ -3939,8 +3836,7 @@ public class iTween : MonoBehaviour
             }
             finally
             {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
+                if (enumerator is IDisposable disposable)
                 {
                     disposable.Dispose();
                 }
@@ -3965,17 +3861,10 @@ public class iTween : MonoBehaviour
 
     private float punch(float amplitude, float value)
     {
-        float num = 9f;
-        if (value == 0f)
-        {
+        if (Math.Abs(value) < 0.00001 || Math.Abs(value - 1f) < 0.00001)
             return 0f;
-        }
-        if (value == 1f)
-        {
-            return 0f;
-        }
         float num2 = 0.3f;
-        num = num2 / 6.283185f * Mathf.Asin(0f);
+        var num = num2 / 6.283185f * Mathf.Asin(0f);
         return amplitude * Mathf.Pow(2f, -10f * value) * Mathf.Sin((value * 1f - num) * 6.283185f / num2);
     }
 
@@ -4109,8 +3998,7 @@ public class iTween : MonoBehaviour
             }
             finally
             {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
+                if (enumerator is IDisposable disposable)
                 {
                     disposable.Dispose();
                 }
@@ -4152,8 +4040,7 @@ public class iTween : MonoBehaviour
             }
             finally
             {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
+                if (enumerator is IDisposable disposable)
                 {
                     disposable.Dispose();
                 }
@@ -4758,8 +4645,7 @@ public class iTween : MonoBehaviour
             }
             finally
             {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
+                if (enumerator is IDisposable disposable)
                 {
                     disposable.Dispose();
                 }
@@ -4800,8 +4686,7 @@ public class iTween : MonoBehaviour
             }
             finally
             {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
+                if (enumerator is IDisposable disposable)
                 {
                     disposable.Dispose();
                 }
@@ -4857,8 +4742,7 @@ public class iTween : MonoBehaviour
             }
             finally
             {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
+                if (enumerator is IDisposable disposable)
                 {
                     disposable.Dispose();
                 }

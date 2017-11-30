@@ -443,8 +443,7 @@ public static class PhotonNetwork
 
     public static void InternalCleanPhotonMonoFromSceneIfStuck()
     {
-        PhotonHandler[] handlerArray = UnityEngine.Object.FindObjectsOfType(typeof(PhotonHandler)) as PhotonHandler[];
-        if (handlerArray != null && handlerArray.Length > 0)
+        if (UnityEngine.Object.FindObjectsOfType(typeof(PhotonHandler)) is PhotonHandler[] handlerArray && handlerArray.Length > 0)
         {
             Debug.Log("Cleaning up hidden PhotonHandler instances in scene. Please save it. This is not an issue.");
             foreach (PhotonHandler handler in handlerArray)

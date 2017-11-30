@@ -861,10 +861,9 @@ public class HERO : Photon.MonoBehaviour
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
+            if (enumerator is IDisposable disposable)
             {
-            	disposable.Dispose();
+                disposable.Dispose();
             }
         }
         this.customAnimationSpeed();
@@ -902,10 +901,9 @@ public class HERO : Photon.MonoBehaviour
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
+            if (enumerator is IDisposable disposable)
             {
-            	disposable.Dispose();
+                disposable.Dispose();
             }
         }
         return string.Empty;
@@ -3335,10 +3333,9 @@ public class HERO : Photon.MonoBehaviour
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
+            if (enumerator is IDisposable disposable)
             {
-            	disposable.Dispose();
+                disposable.Dispose();
             }
         }
         this.playAnimation(this.currentPlayingClipName());
@@ -3761,10 +3758,9 @@ public class HERO : Photon.MonoBehaviour
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
+            if (enumerator is IDisposable disposable)
             {
-            	disposable.Dispose();
+                disposable.Dispose();
             }
         }
     }
@@ -3926,10 +3922,9 @@ public class HERO : Photon.MonoBehaviour
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
+            if (enumerator is IDisposable disposable)
             {
-            	disposable.Dispose();
+                disposable.Dispose();
             }
         }
         if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && base.photonView.isMine)
@@ -3994,10 +3989,9 @@ public class HERO : Photon.MonoBehaviour
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
+            if (enumerator is IDisposable disposable)
             {
-            	disposable.Dispose();
+                disposable.Dispose();
             }
         }
         this.customAnimationSpeed();

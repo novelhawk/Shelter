@@ -24,8 +24,7 @@ public class StyledItemButtonImageText : StyledItem
 
     public override void Populate(object o)
     {
-        Texture2D textured = o as Texture2D;
-        if (textured != null)
+        if (o is Texture2D textured)
         {
             if (this.rawImageCtrl != null)
             {
