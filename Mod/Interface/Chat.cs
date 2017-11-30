@@ -115,6 +115,7 @@ namespace Mod.Interface
 
                         if (Shelter.CommandManager.Execute(cmd, args) != null)
                         {
+                            Notify.New("UNHANDLED ERROR", $"Unexpected error running {cmd.CommandName}!\nPlease report the bug to the developer", 10000);
                             System("Exception thrown on " + cmd.CommandName/*Shelter.Lang.Get("message.commandexecutionerror.text", match.Groups[1].Value)*/);
                             Shelter.Log(/*Shelter.Lang.Get("message.exeptionthrown.text", e.GetType().Name), ErrorType.Warning*/);
 
@@ -159,8 +160,7 @@ namespace Mod.Interface
                     GUI.Label(rect, $"{(chatMessage.LocalOnly ? "" : $"[{chatMessage.Sender.ID}] ")}{chatMessage.Message}", new GUIStyle { alignment = TextAnchor.LowerLeft, normal = { textColor = Color(255, 255, 255) } });
                 rect = new Rect(rect.x, rect.y - 15, rect.width, rect.height);
             }
-            //while (Messages.Count > 30)
-            //    Messages.RemoveAt(30);
+            //TODO: Remove messages after excessive spam
         }
 
 

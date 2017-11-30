@@ -1,6 +1,7 @@
 ﻿using System;
 using Mod.Commands;
 using System.Collections.Generic;
+using Mod.Exceptions;
 
 namespace Mod.Managers
 {
@@ -30,6 +31,10 @@ namespace Mod.Managers
             try
             {
                 command.Execute(commandArgs);
+                return null;
+            }
+            catch (CustomException)
+            {
                 return null;
             }
             catch (Exception e)
