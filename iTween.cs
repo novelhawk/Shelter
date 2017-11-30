@@ -862,17 +862,16 @@ public class iTween : MonoBehaviour
                 if (enumerator2.Current != null)
                 {
                     DictionaryEntry entry2 = (DictionaryEntry)enumerator2.Current;
-                    if (entry2.Value.GetType() == typeof(int))
+                    switch (entry2.Value)
                     {
-                        int num = (int)entry2.Value;
-                        float num2 = num;
-                        args[entry2.Key] = num2;
-                    }
-                    if (entry2.Value.GetType() == typeof(double))
-                    {
-                        double num3 = (double)entry2.Value;
-                        float num4 = (float)num3;
-                        args[entry2.Key] = num4;
+                        case int num:
+                            float num2 = num;
+                            args[entry2.Key] = num2;
+                            break;
+                        case double num3:
+                            float num4 = (float)num3;
+                            args[entry2.Key] = num4;
+                            break;
                     }
                 }
             }
@@ -913,7 +912,7 @@ public class iTween : MonoBehaviour
         float num = 0f;
         float num2 = 360f;
         float num3 = Mathf.Abs((num2 - num) * 0.5f);
-        float num5 = 0f;
+        float num5;
         if (end - start < -num3)
         {
             num5 = (num2 - start + end) * value;
@@ -2829,12 +2828,12 @@ public class iTween : MonoBehaviour
                         method = this.method;
                         if (method != null)
                         {
-//                            var dictionary2 = new Dictionary<string, int>(3)
-//                            {
-//                                { "to", 0 },
-//                                { "by", 1 },
-//                                { "add", 2 } //Changed to 2 from 1
-//                            };
+                            //                            var dictionary2 = new Dictionary<string, int>(3)
+                            //                            {
+                            //                                { "to", 0 },
+                            //                                { "by", 1 },
+                            //                                { "add", 2 } //Changed to 2 from 1
+                            //                            };
                             if (_dictionary.TryGetValue(method, out num2))
                             {
                                 if (num2 == 0)
