@@ -22,12 +22,14 @@ namespace Mod
             }
         }
 
-        public static string CheckHTMLTags(string msg) //TODO: this ChatMessage msg (con la nuova chat)
+        public static ChatMessage CheckHTMLTags(this ChatMessage chatMessage) => new ChatMessage(CheckHTMLTags(chatMessage.Message), chatMessage.Sender);
+
+        public static string CheckHTMLTags(string text)
         {
-            StringBuilder builder = new StringBuilder(msg);
+            StringBuilder builder = new StringBuilder(text);
 
             Stack<Tag> stack = new Stack<Tag>();
-            foreach (Match match in Regex.Matches(msg, @"<([\\\/]?)([^\/]+?)(?:=(.+?))?>"))
+            foreach (Match match in Regex.Matches(text, @"<([\\\/]?)([^\/]+?)(?:=(.+?))?>"))
             {
                 if (!IsValidTag(match.Groups[2].Value))
                 {
@@ -38,7 +40,7 @@ namespace Mod
                 Tag tag = new Tag(
                     match.Value,
                     match.Groups[2].Value,
-                    msg.IndexOf(match.Value, StringComparison.Ordinal),
+                    text.IndexOf(match.Value, StringComparison.Ordinal),
                     match.Value.Length,
                     string.IsNullOrEmpty(match.Groups[1].Value));
 

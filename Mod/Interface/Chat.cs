@@ -26,7 +26,7 @@ namespace Mod.Interface
         public static void SendMessage(object message)
         {
             FengGameManagerMKII.instance.photonView.RPC("Chat", PhotonTargets.Others, message, string.Empty);
-            Messages.Insert(0, new ChatMessage(message, PhotonPlayer.Self));
+            Messages.Insert(0, new ChatMessage(message, PhotonPlayer.Self).CheckHTMLTags());
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Mod.Interface
         /// <param name="message"></param>
         public static void AddMessage(object message)
         {
-            Messages.Insert(0, new ChatMessage(message));
+            Messages.Insert(0, new ChatMessage(message).CheckHTMLTags());
         }
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace Mod.Interface
         /// <param name="message">Message text</param>
         public static void ReceiveMessageFromPlayer(PhotonPlayer sender, object message)
         {
-            Messages.Insert(0, new ChatMessage($"{sender.HexName}: {message}", sender));
+            Messages.Insert(0, new ChatMessage($"{sender.HexName}: {message}", sender).CheckHTMLTags());
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Mod.Interface
         /// <param name="message">Message text</param>
         public static void ReceiveMessage(PhotonPlayer sender, object message)
         {
-            Messages.Insert(0, new ChatMessage($"{message}", sender));
+            Messages.Insert(0, new ChatMessage($"{message}", sender).CheckHTMLTags());
         }
 
         public static void System(object message) // TODO: Add i18n
@@ -181,22 +181,6 @@ namespace Mod.Interface
             Destroy(_mBackground);
             Destroy(_mGreyTexture);
             Destroy(_mWhiteTexture);
-        }
-
-        private struct ChatMessage
-        {
-            public string Message { get; }
-            public PhotonPlayer Sender { get; }
-            public long Time { get; }
-            public bool LocalOnly { get; }
-
-            public ChatMessage(object message, PhotonPlayer sender = null)
-            {
-                Message = message.ToString();
-                Sender = sender;
-                Time = Shelter.Stopwatch.ElapsedMilliseconds;
-                LocalOnly = sender == null;
-            }
         }
     }
 }
