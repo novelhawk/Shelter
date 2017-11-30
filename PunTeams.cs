@@ -5,8 +5,7 @@ using UnityEngine;
 
 public class PunTeams : MonoBehaviour
 {
-    public static Dictionary<Team, List<PhotonPlayer>> PlayersPerTeam;
-    public const string TeamPlayerProp = "team";
+    public static readonly Dictionary<Team, List<PhotonPlayer>> PlayersPerTeam = new Dictionary<Team, List<PhotonPlayer>>();
 
     public void OnJoinedRoom()
     {
@@ -20,20 +19,17 @@ public class PunTeams : MonoBehaviour
 
     public void Start()
     {
-        PlayersPerTeam = new Dictionary<Team, List<PhotonPlayer>>();
+        PlayersPerTeam.Clear(); //Just in case of multiple times called Start() (there was the initializer here)
         IEnumerator enumerator = Enum.GetValues(typeof(Team)).GetEnumerator();
         try
         {
             while (enumerator.MoveNext())
-            {
-                object current = enumerator.Current;
-                PlayersPerTeam[(byte)current] = new List<PhotonPlayer>();
-            }
+                if (enumerator.Current != null)
+                    PlayersPerTeam[(Team)enumerator.Current] = new List<PhotonPlayer>();
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
+            if (enumerator is IDisposable disposable)
             {
             	disposable.Dispose();
             }
@@ -46,22 +42,16 @@ public class PunTeams : MonoBehaviour
         try
         {
             while (enumerator.MoveNext())
-            {
-                object current = enumerator.Current;
-                PlayersPerTeam[(Team) (byte) current].Clear();
-            }
+                if (enumerator.Current != null)
+                    PlayersPerTeam[(Team)enumerator.Current].Clear();
         }
         finally
         {
-            IDisposable disposable = enumerator as IDisposable;
-            if (disposable != null)
-            {
+            if (enumerator is IDisposable disposable)
             	disposable.Dispose();
-            }
         }
-        for (int i = 0; i < PhotonNetwork.playerList.Length; i++)
+        foreach (PhotonPlayer player in PhotonNetwork.playerList)
         {
-            PhotonPlayer player = PhotonNetwork.playerList[i];
             Team team = player.GetTeam();
             PlayersPerTeam[team].Add(player);
         }
@@ -69,9 +59,9 @@ public class PunTeams : MonoBehaviour
 
     public enum Team : byte
     {
-        blue = 2,
-        none = 0,
-        red = 1
+        None,
+        Red,
+        Blue
     }
 }
 

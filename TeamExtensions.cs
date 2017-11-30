@@ -10,7 +10,7 @@ internal static class TeamExtensions
         {
             return (PunTeams.Team) (byte) obj2;
         }
-        return PunTeams.Team.none;
+        return PunTeams.Team.None;
     }
 
     public static void SetTeam(this PhotonPlayer player, PunTeams.Team team)
