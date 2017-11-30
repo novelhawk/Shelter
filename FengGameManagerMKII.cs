@@ -2963,7 +2963,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
         transparencySlider = 1f;
     }
 
-    private void LoadSkin()
+    private void LoadMapCustom()
     {
         GameObject[] objArray;
         int num;
@@ -7593,7 +7593,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
             NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[3], false);
             LevelInfo info = LevelInfoManager.GetInfo(FengGameManagerMKII.level);
             Cache();
-            LoadSkin();
+            LoadMapCustom(); //BUG: Throws on joining customs
             //TODO: Remove SetInterfacePosition
             Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().SetInterfacePosition();
             Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().SetDayLight(IN_GAME_MAIN_CAMERA.dayLight);

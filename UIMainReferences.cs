@@ -51,6 +51,7 @@ public class UIMainReferences : MonoBehaviour
             target.name = "InputManagerController";
             DontDestroyOnLoad(target);
             FengGameManagerMKII.loginstate = 0;
+            StartCoroutine(LoadRCAssets());
             isFirstLaunch = false;
         }
 
