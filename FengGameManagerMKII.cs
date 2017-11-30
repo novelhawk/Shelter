@@ -7584,7 +7584,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
             Screen.lockCursor = true;
             Screen.showCursor = true;
             //TODO: Remove UI_IN_GAME
-            ui = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("UI_IN_GAME"));
+            ui = (GameObject) Instantiate(Resources.Load("UI_IN_GAME"));
             ui.name = "UI_IN_GAME";
             ui.SetActive(true);
             NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[0], true);
@@ -7593,7 +7593,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
             NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[3], false);
             LevelInfo info = LevelInfoManager.GetInfo(FengGameManagerMKII.level);
             Cache();
-            LoadMapCustom(); //BUG: Throws on joining customs
+            LoadMapCustom();
             //TODO: Remove SetInterfacePosition
             Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().SetInterfacePosition();
             Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().SetDayLight(IN_GAME_MAIN_CAMERA.dayLight);
@@ -7605,7 +7605,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                 Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled = true;
                 Camera.main.GetComponent<SpectatorMovement>().disable = true;
                 Camera.main.GetComponent<MouseLook>().disable = true;
-                IN_GAME_MAIN_CAMERA.gamemode = LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode;
+                IN_GAME_MAIN_CAMERA.gamemode = info.Gamemode;
                 SpawnPlayer(IN_GAME_MAIN_CAMERA.singleCharacter.ToUpper());
                 if (IN_GAME_MAIN_CAMERA.cameraMode == CAMERA_TYPE.TPS)
                 {
@@ -7645,7 +7645,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                 }
                 if (needChooseSide)
                 {
-                    ShowHUDInfoTopCenterADD("\n\nPRESS 1 TO ENTER GAME");
+                    Notify.New("Join the game", "Press 1 to join the game", 2500, 50f);
                 }
                 else if ((int) settings[245] == 0)
                 {
@@ -7670,7 +7670,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                     }
                     if (RCextensions.returnIntFromObject(PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.isTitan]) == 2)
                     {
-                        SpawnPlayerTitan(myLastHero, "titanRespawn");
+                        SpawnPlayerTitan(myLastHero);
                     }
                     else
                     {
@@ -7730,7 +7730,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                             SpawnTitanCustom("titanRespawn", num4, info.EnemyNumber, false);
                         }
                     }
-                    else if (info.Gamemode != GAMEMODE.TROST && info.Gamemode == GAMEMODE.PVP_CAPTURE && LevelInfoManager.GetInfo(FengGameManagerMKII.level).Map == "OutSide")
+                    else if (info.Gamemode != GAMEMODE.TROST && info.Gamemode == GAMEMODE.PVP_CAPTURE && info.Map == "OutSide")
                     {
                         GameObject[] objArray3 = GameObject.FindGameObjectsWithTag("titanRespawn");
                         if (objArray3.Length <= 0)
@@ -7745,15 +7745,15 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                 }
                 if (!info.Supply)
                 {
-                    UnityEngine.Object.Destroy(GameObject.Find("aot_supply"));
+                    Destroy(GameObject.Find("aot_supply"));
                 }
                 if (!PhotonNetwork.isMasterClient)
                 {
                     photonView.RPC("RequireStatus", PhotonTargets.MasterClient, new object[0]);
                 }
-                if (LevelInfoManager.GetInfo(FengGameManagerMKII.level).IsLava)
+                if (info.IsLava)
                 {
-                    UnityEngine.Object.Instantiate(Resources.Load("levelBottom"), new Vector3(0f, -29.5f, 0f), Quaternion.Euler(0f, 0f, 0f));
+                    Instantiate(Resources.Load("levelBottom"), new Vector3(0f, -29.5f, 0f), Quaternion.Euler(0f, 0f, 0f));
                     GameObject.Find("aot_supply").transform.position = GameObject.Find("aot_supply_lava_position").transform.position;
                     GameObject.Find("aot_supply").transform.rotation = GameObject.Find("aot_supply_lava_position").transform.rotation;
                 }
@@ -9256,7 +9256,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void respawnHeroInNewRound()
+    public void respawnHeroInNewRound()
     {
         if (!needChooseSide && GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().gameOver)
         {

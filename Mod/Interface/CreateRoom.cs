@@ -114,10 +114,9 @@ namespace Mod.Interface
             GUI.Label(rect, txt, style);
             return 0;
         }
-        //TODO: Remove this temp stuff and do it better
-        #region tmp
+
         private string roomName = "Room name";
-        private string roomCharacter = "LEVI";
+        private string roomCharacter = "LEVI"; //TODO: Character customization
         private string roomPassword = string.Empty;
         private int roomMapIndex = 1;
         private string roomMaxPlayers = "10";
@@ -127,7 +126,6 @@ namespace Mod.Interface
         private DayLight roomDayLight = DayLight.Day;
         private bool roomOpen = true;
         private bool roomVisible = true;
-        #endregion
         protected override void Render()
         {
             Rect rect;

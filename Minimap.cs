@@ -463,15 +463,14 @@ public class Minimap : MonoBehaviour
         this.borderT.sizeDelta = this.minimapMaskT.sizeDelta;
         if (this.minimapIcons != null)
         {
-            for (int i = 0; i < this.minimapIcons.Length; i++)
+            foreach (MinimapIcon icon in minimapIcons)
             {
-                MinimapIcon icon = this.minimapIcons[i];
                 if (icon != null)
                 {
-                    icon.SetSize(this.GetSizeForStyle(icon.style));
+                    icon.SetSize(GetSizeForStyle(icon.style));
                     if (icon.rotation)
                     {
-                        icon.SetPointerSize(this.MINIMAP_POINTER_SIZE, this.MINIMAP_POINTER_DIST);
+                        icon.SetPointerSize(MINIMAP_POINTER_SIZE, MINIMAP_POINTER_DIST);
                     }
                 }
             }
