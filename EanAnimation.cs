@@ -29,7 +29,7 @@ public class EanAnimation
         this.CellHeight = br.ReadUInt16();
         this.Frames = new EanFrame[this.TotalCount];
         long position = fs.Position;
-        fs.Seek((long) this.Offset, SeekOrigin.Begin);
+        fs.Seek(this.Offset, SeekOrigin.Begin);
         for (int i = 0; i < this.TotalCount; i++)
         {
             this.Frames[i].X = br.ReadUInt16();

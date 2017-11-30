@@ -89,7 +89,7 @@ public class UITextList : MonoBehaviour
         if (this.mSelected && this.supportScrollWheel)
         {
             val *= this.style != Style.Chat ? -10f : 10f;
-            this.mScroll = Mathf.Max((float) 0f, (float) (this.mScroll + val));
+            this.mScroll = Mathf.Max(0f, this.mScroll + val);
             this.UpdateVisibleText();
         }
     }

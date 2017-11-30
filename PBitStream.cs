@@ -51,7 +51,7 @@ public class PBitStream
     {
         int num = bitIndex / 8;
         int num2 = 7 - bitIndex % 8;
-        return (this.streamBytes[num] & (byte)((int)1 << num2)) > 0;
+        return (this.streamBytes[num] & (byte)(1 << num2)) > 0;
     }
 
     public bool GetNext()

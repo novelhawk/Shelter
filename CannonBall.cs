@@ -40,7 +40,7 @@ public class CannonBall : Photon.MonoBehaviour
             }
             if (RCSettings.deadlyCannons == 1)
             {
-                foreach (HERO hero in FengGameManagerMKII.instance.getPlayers())
+                foreach (HERO hero in FengGameManagerMKII.instance.GetPlayers())
                 {
                     if (hero != null && Vector3.Distance(hero.transform.position, base.transform.position) <= 20f && !hero.photonView.isMine)
                     {
@@ -54,14 +54,14 @@ public class CannonBall : Photon.MonoBehaviour
                             {
                                 gameObject.GetComponent<HERO>().markDie();
                                 gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name]) + " " });
-                                FengGameManagerMKII.instance.playerKillInfoUpdate(PhotonPlayer.Self, 0);
+                                FengGameManagerMKII.instance.PlayerKillInfoUpdate(PhotonPlayer.Self, 0);
                             }
                         }
                         else
                         {
                             gameObject.GetComponent<HERO>().markDie();
                             gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name]) + " " });
-                            FengGameManagerMKII.instance.playerKillInfoUpdate(PhotonPlayer.Self, 0);
+                            FengGameManagerMKII.instance.PlayerKillInfoUpdate(PhotonPlayer.Self, 0);
                         }
                     }
                 }
@@ -84,12 +84,12 @@ public class CannonBall : Photon.MonoBehaviour
     {
         if (base.photonView.isMine && !this.disabled)
         {
-            LayerMask mask = (int) 1 << LayerMask.NameToLayer("PlayerAttackBox");
-            LayerMask mask2 = (int) 1 << LayerMask.NameToLayer("EnemyBox");
+            LayerMask mask = 1 << LayerMask.NameToLayer("PlayerAttackBox");
+            LayerMask mask2 = 1 << LayerMask.NameToLayer("EnemyBox");
             LayerMask mask3 = mask | mask2;
             if (!this.isCollider)
             {
-                LayerMask mask4 = (int) 1 << LayerMask.NameToLayer("Ground");
+                LayerMask mask4 = 1 << LayerMask.NameToLayer("Ground");
                 mask3 |= mask4;
             }
             Collider[] colliderArray = Physics.OverlapSphere(base.transform.position, 0.6f, mask3.value);
@@ -126,7 +126,7 @@ public class CannonBall : Photon.MonoBehaviour
                             titan.dieHeadBlow(base.transform.position, 0.2f);
                             i = colliderArray.Length;
                         }
-                        else if (UnityEngine.Random.Range((float) 0f, (float) 1f) < 0.5f)
+                        else if (UnityEngine.Random.Range(0f, 1f) < 0.5f)
                         {
                             titan.hitL(base.transform.position, 0.05f);
                         }

@@ -55,7 +55,7 @@ public class Cannon : Photon.MonoBehaviour
                 }
                 else if (!(owner.isLocal || FengGameManagerMKII.instance.restartingMC))
                 {
-                    FengGameManagerMKII.instance.kickPlayerRC(owner, false, "spawning cannon without request.");
+                    FengGameManagerMKII.instance.KickPlayerRC(owner, false, "spawning cannon without request.");
                 }
             }
         }
@@ -70,7 +70,7 @@ public class Cannon : Photon.MonoBehaviour
                 collider.dmg = 0;
             }
             this.myCannonBall = PhotonNetwork.Instantiate("RCAsset/CannonBallObject", this.ballPoint.position, this.firingPoint.rotation, 0);
-            this.myCannonBall.rigidbody.velocity = (Vector3) (this.firingPoint.forward * 300f);
+            this.myCannonBall.rigidbody.velocity = this.firingPoint.forward * 300f;
             this.myCannonBall.GetComponent<CannonBall>().myHero = this.myHero;
             this.myHero.skillCDDuration = 3.5f;
         }
@@ -192,15 +192,15 @@ public class Cannon : Photon.MonoBehaviour
         {
             Vector3 vector = new Vector3(0f, -30f, 0f);
             Vector3 position = this.ballPoint.position;
-            Vector3 vector3 = (Vector3) (this.ballPoint.forward * 300f);
+            Vector3 vector3 = this.ballPoint.forward * 300f;
             float num = 40f / vector3.magnitude;
             this.myCannonLine.SetWidth(0.5f, 40f);
             this.myCannonLine.SetVertexCount(100);
             for (int i = 0; i < 100; i++)
             {
                 this.myCannonLine.SetPosition(i, position);
-                position += (Vector3) (vector3 * num + 0.5f * vector * num * num);
-                vector3 += (Vector3) (vector * num);
+                position += vector3 * num + 0.5f * vector * num * num;
+                vector3 += vector * num;
             }
             float num3 = 30f;
             if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonSlow))

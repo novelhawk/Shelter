@@ -19,8 +19,8 @@ public class EffectController : MonoBehaviour
             {
                 component = this.EffectCache.GetObject(eftname).GetComponent<Xffect>();
                 Vector3 zero = Vector3.zero;
-                zero.x = UnityEngine.Random.Range((float) -2.2f, (float) 2.3f);
-                zero.z = UnityEngine.Random.Range((float) -2.1f, (float) 2.1f);
+                zero.x = UnityEngine.Random.Range(-2.2f, 2.3f);
+                zero.z = UnityEngine.Random.Range(-2.1f, 2.1f);
                 component.SetEmitPosition(zero);
                 component.Active();
             }

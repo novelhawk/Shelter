@@ -112,7 +112,7 @@ public class UICamera : MonoBehaviour
 
     public static UICamera FindCameraForLayer(int layer)
     {
-        int num = (int) 1 << layer;
+        int num = 1 << layer;
         for (int i = 0; i < mList.Count; i++)
         {
             UICamera camera = mList[i];
@@ -575,7 +575,7 @@ public class UICamera : MonoBehaviour
                 currentTouch.delta = touch.position - currentTouch.pos;
             }
             currentTouch.pos = touch.position;
-            hoveredObject = !Raycast((Vector3) currentTouch.pos, ref lastHit) ? fallThrough : lastHit.collider.gameObject;
+            hoveredObject = !Raycast(currentTouch.pos, ref lastHit) ? fallThrough : lastHit.collider.gameObject;
             if (hoveredObject == null)
             {
                 hoveredObject = genericEventHandler;

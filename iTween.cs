@@ -228,7 +228,7 @@ public class iTween : MonoBehaviour
             {
                 lookAhead = Defaults.lookAhead;
             }
-            float num3 = this.ease(0f, 1f, Mathf.Min((float)1f, (float)(this.percentage + lookAhead)));
+            float num3 = this.ease(0f, 1f, Mathf.Min(1f, this.percentage + lookAhead));
             this.tweenArguments["looktarget"] = this.path.Interp(Mathf.Clamp(num3, 0f, 1f));
         }
         this.postUpdate = this.thisTransform.position;
@@ -488,9 +488,9 @@ public class iTween : MonoBehaviour
             this.thisTransform.position = this.vector3s[0];
         }
         float num = 1f - this.percentage;
-        this.vector3s[2].x = UnityEngine.Random.Range((float)(-this.vector3s[1].x * num), (float)(this.vector3s[1].x * num));
-        this.vector3s[2].y = UnityEngine.Random.Range((float)(-this.vector3s[1].y * num), (float)(this.vector3s[1].y * num));
-        this.vector3s[2].z = UnityEngine.Random.Range((float)(-this.vector3s[1].z * num), (float)(this.vector3s[1].z * num));
+        this.vector3s[2].x = UnityEngine.Random.Range(-this.vector3s[1].x * num, this.vector3s[1].x * num);
+        this.vector3s[2].y = UnityEngine.Random.Range(-this.vector3s[1].y * num, this.vector3s[1].y * num);
+        this.vector3s[2].z = UnityEngine.Random.Range(-this.vector3s[1].z * num, this.vector3s[1].z * num);
         if (this.isLocal)
         {
             this.thisTransform.localPosition += this.vector3s[2];
@@ -520,9 +520,9 @@ public class iTween : MonoBehaviour
         }
         this.thisTransform.eulerAngles = this.vector3s[0];
         float num = 1f - this.percentage;
-        this.vector3s[2].x = UnityEngine.Random.Range((float)(-this.vector3s[1].x * num), (float)(this.vector3s[1].x * num));
-        this.vector3s[2].y = UnityEngine.Random.Range((float)(-this.vector3s[1].y * num), (float)(this.vector3s[1].y * num));
-        this.vector3s[2].z = UnityEngine.Random.Range((float)(-this.vector3s[1].z * num), (float)(this.vector3s[1].z * num));
+        this.vector3s[2].x = UnityEngine.Random.Range(-this.vector3s[1].x * num, this.vector3s[1].x * num);
+        this.vector3s[2].y = UnityEngine.Random.Range(-this.vector3s[1].y * num, this.vector3s[1].y * num);
+        this.vector3s[2].z = UnityEngine.Random.Range(-this.vector3s[1].z * num, this.vector3s[1].z * num);
         this.thisTransform.Rotate(this.vector3s[2], this.space);
         this.postUpdate = this.thisTransform.eulerAngles;
         if (this.physics)
@@ -540,9 +540,9 @@ public class iTween : MonoBehaviour
         }
         this.thisTransform.localScale = this.vector3s[0];
         float num = 1f - this.percentage;
-        this.vector3s[2].x = UnityEngine.Random.Range((float)(-this.vector3s[1].x * num), (float)(this.vector3s[1].x * num));
-        this.vector3s[2].y = UnityEngine.Random.Range((float)(-this.vector3s[1].y * num), (float)(this.vector3s[1].y * num));
-        this.vector3s[2].z = UnityEngine.Random.Range((float)(-this.vector3s[1].z * num), (float)(this.vector3s[1].z * num));
+        this.vector3s[2].x = UnityEngine.Random.Range(-this.vector3s[1].x * num, this.vector3s[1].x * num);
+        this.vector3s[2].y = UnityEngine.Random.Range(-this.vector3s[1].y * num, this.vector3s[1].y * num);
+        this.vector3s[2].z = UnityEngine.Random.Range(-this.vector3s[1].z * num, this.vector3s[1].z * num);
         this.thisTransform.localScale += this.vector3s[2];
     }
 
@@ -727,7 +727,7 @@ public class iTween : MonoBehaviour
             return null;
         }
         cameraFade = new GameObject("iTween Camera Fade");
-        cameraFade.transform.position = new Vector3(0.5f, 0.5f, (float)Defaults.cameraFadeDepth);
+        cameraFade.transform.position = new Vector3(0.5f, 0.5f, Defaults.cameraFadeDepth);
         cameraFade.AddComponent<GUITexture>();
         cameraFade.guiTexture.texture = CameraTexture(Color.black);
         cameraFade.guiTexture.color = new Color(0.5f, 0.5f, 0.5f, 0f);
@@ -741,7 +741,7 @@ public class iTween : MonoBehaviour
             return null;
         }
         cameraFade = new GameObject("iTween Camera Fade");
-        cameraFade.transform.position = new Vector3(0.5f, 0.5f, (float)Defaults.cameraFadeDepth);
+        cameraFade.transform.position = new Vector3(0.5f, 0.5f, Defaults.cameraFadeDepth);
         cameraFade.AddComponent<GUITexture>();
         cameraFade.guiTexture.texture = texture;
         cameraFade.guiTexture.color = new Color(0.5f, 0.5f, 0.5f, 0f);
@@ -755,7 +755,7 @@ public class iTween : MonoBehaviour
             return null;
         }
         cameraFade = new GameObject("iTween Camera Fade");
-        cameraFade.transform.position = new Vector3(0.5f, 0.5f, (float)depth);
+        cameraFade.transform.position = new Vector3(0.5f, 0.5f, depth);
         cameraFade.AddComponent<GUITexture>();
         cameraFade.guiTexture.texture = texture;
         cameraFade.guiTexture.color = new Color(0.5f, 0.5f, 0.5f, 0f);
@@ -766,7 +766,7 @@ public class iTween : MonoBehaviour
     {
         if (cameraFade != null)
         {
-            cameraFade.transform.position = new Vector3(cameraFade.transform.position.x, cameraFade.transform.position.y, (float)depth);
+            cameraFade.transform.position = new Vector3(cameraFade.transform.position.x, cameraFade.transform.position.y, depth);
         }
     }
 
@@ -933,7 +933,7 @@ public class iTween : MonoBehaviour
     {
         float num = 0f;
         float num2 = 360f;
-        float num3 = Mathf.Abs((float)((num2 - num) * 0.5f));
+        float num3 = Mathf.Abs((num2 - num) * 0.5f);
         float num5 = 0f;
         if (end - start < -num3)
         {
@@ -1581,7 +1581,7 @@ public class iTween : MonoBehaviour
         int num = path.Length * 20;
         for (int i = 1; i <= num; i++)
         {
-            float t = (float)i / (float)num;
+            float t = i / (float)num;
             Vector3 from = Interp(pts, t);
             if (method == "gizmos")
             {
@@ -2113,7 +2113,7 @@ public class iTween : MonoBehaviour
         this.floats[1] = (float)this.tweenArguments["to"];
         if (this.tweenArguments.Contains("speed"))
         {
-            float num = Math.Abs((float)(this.floats[0] - this.floats[1]));
+            float num = Math.Abs(this.floats[0] - this.floats[1]);
             this.time = num / (float)this.tweenArguments["speed"];
         }
     }
@@ -2155,10 +2155,12 @@ public class iTween : MonoBehaviour
                 int num;
                 if (f__switchSmap13 == null)
                 {
-                    Dictionary<string, int> dictionary = new Dictionary<string, int>(3);
-                    dictionary.Add("x", 0);
-                    dictionary.Add("y", 1);
-                    dictionary.Add("z", 2);
+                    Dictionary<string, int> dictionary = new Dictionary<string, int>(3)
+                    {
+                        { "x", 0 },
+                        { "y", 1 },
+                        { "z", 2 }
+                    };
                     f__switchSmap13 = dictionary;
                 }
                 if (f__switchSmap13.TryGetValue(key, out num))
@@ -2765,17 +2767,19 @@ public class iTween : MonoBehaviour
             int num;
             if (f__switchSmap12 == null)
             {
-                dictionary = new Dictionary<string, int>(10);
-                dictionary.Add("value", 0);
-                dictionary.Add("color", 1);
-                dictionary.Add("audio", 2);
-                dictionary.Add("move", 3);
-                dictionary.Add("scale", 4);
-                dictionary.Add("rotate", 5);
-                dictionary.Add("shake", 6);
-                dictionary.Add("punch", 7);
-                dictionary.Add("look", 8);
-                dictionary.Add("stab", 9);
+                dictionary = new Dictionary<string, int>(10)
+                {
+                    { "value", 0 },
+                    { "color", 1 },
+                    { "audio", 2 },
+                    { "move", 3 },
+                    { "scale", 4 },
+                    { "rotate", 5 },
+                    { "shake", 6 },
+                    { "punch", 7 },
+                    { "look", 8 },
+                    { "stab", 9 }
+                };
                 f__switchSmap12 = dictionary;
             }
             if (f__switchSmap12.TryGetValue(type, out num))
@@ -2790,12 +2794,14 @@ public class iTween : MonoBehaviour
                         {
                             if (f__switchSmap9 == null)
                             {
-                                dictionary = new Dictionary<string, int>(5);
-                                dictionary.Add("float", 0);
-                                dictionary.Add("vector2", 1);
-                                dictionary.Add("vector3", 2);
-                                dictionary.Add("color", 3);
-                                dictionary.Add("rect", 4);
+                                dictionary = new Dictionary<string, int>(5)
+                                {
+                                    { "float", 0 },
+                                    { "vector2", 1 },
+                                    { "vector3", 2 },
+                                    { "color", 3 },
+                                    { "rect", 4 }
+                                };
                                 f__switchSmap9 = dictionary;
                             }
                             if (f__switchSmap9.TryGetValue(method, out num2))
@@ -2837,8 +2843,10 @@ public class iTween : MonoBehaviour
                         {
                             if (f__switchSmapA == null)
                             {
-                                dictionary = new Dictionary<string, int>(1);
-                                dictionary.Add("to", 0);
+                                dictionary = new Dictionary<string, int>(1)
+                                {
+                                    { "to", 0 }
+                                };
                                 f__switchSmapA = dictionary;
                             }
                             if (f__switchSmapA.TryGetValue(method, out num2) && num2 == 0)
@@ -2855,8 +2863,10 @@ public class iTween : MonoBehaviour
                         {
                             if (f__switchSmapB == null)
                             {
-                                dictionary = new Dictionary<string, int>(1);
-                                dictionary.Add("to", 0);
+                                dictionary = new Dictionary<string, int>(1)
+                                {
+                                    { "to", 0 }
+                                };
                                 f__switchSmapB = dictionary;
                             }
                             if (f__switchSmapB.TryGetValue(method, out num2) && num2 == 0)
@@ -2873,10 +2883,12 @@ public class iTween : MonoBehaviour
                         {
                             if (f__switchSmapC == null)
                             {
-                                dictionary = new Dictionary<string, int>(3);
-                                dictionary.Add("to", 0);
-                                dictionary.Add("by", 1);
-                                dictionary.Add("add", 1);
+                                dictionary = new Dictionary<string, int>(3)
+                                {
+                                    { "to", 0 },
+                                    { "by", 1 },
+                                    { "add", 1 }
+                                };
                                 f__switchSmapC = dictionary;
                             }
                             if (f__switchSmapC.TryGetValue(method, out num2))
@@ -2910,10 +2922,12 @@ public class iTween : MonoBehaviour
                         {
                             if (f__switchSmapD == null)
                             {
-                                dictionary = new Dictionary<string, int>(3);
-                                dictionary.Add("to", 0);
-                                dictionary.Add("by", 1);
-                                dictionary.Add("add", 2);
+                                dictionary = new Dictionary<string, int>(3)
+                                {
+                                    { "to", 0 },
+                                    { "by", 1 },
+                                    { "add", 2 }
+                                };
                                 f__switchSmapD = dictionary;
                             }
                             if (f__switchSmapD.TryGetValue(method, out num2))
@@ -2945,10 +2959,12 @@ public class iTween : MonoBehaviour
                         {
                             if (f__switchSmapE == null)
                             {
-                                dictionary = new Dictionary<string, int>(3);
-                                dictionary.Add("to", 0);
-                                dictionary.Add("add", 1);
-                                dictionary.Add("by", 2);
+                                dictionary = new Dictionary<string, int>(3)
+                                {
+                                    { "to", 0 },
+                                    { "add", 1 },
+                                    { "by", 2 }
+                                };
                                 f__switchSmapE = dictionary;
                             }
                             if (f__switchSmapE.TryGetValue(method, out num2))
@@ -2980,10 +2996,12 @@ public class iTween : MonoBehaviour
                         {
                             if (f__switchSmapF == null)
                             {
-                                dictionary = new Dictionary<string, int>(3);
-                                dictionary.Add("position", 0);
-                                dictionary.Add("scale", 1);
-                                dictionary.Add("rotation", 2);
+                                dictionary = new Dictionary<string, int>(3)
+                                {
+                                    { "position", 0 },
+                                    { "scale", 1 },
+                                    { "rotation", 2 }
+                                };
                                 f__switchSmapF = dictionary;
                             }
                             if (f__switchSmapF.TryGetValue(method, out num2))
@@ -3015,10 +3033,12 @@ public class iTween : MonoBehaviour
                         {
                             if (f__switchSmap10 == null)
                             {
-                                dictionary = new Dictionary<string, int>(3);
-                                dictionary.Add("position", 0);
-                                dictionary.Add("rotation", 1);
-                                dictionary.Add("scale", 2);
+                                dictionary = new Dictionary<string, int>(3)
+                                {
+                                    { "position", 0 },
+                                    { "rotation", 1 },
+                                    { "scale", 2 }
+                                };
                                 f__switchSmap10 = dictionary;
                             }
                             if (f__switchSmap10.TryGetValue(method, out num2))
@@ -3050,8 +3070,10 @@ public class iTween : MonoBehaviour
                         {
                             if (f__switchSmap11 == null)
                             {
-                                dictionary = new Dictionary<string, int>(1);
-                                dictionary.Add("to", 0);
+                                dictionary = new Dictionary<string, int>(1)
+                                {
+                                    { "to", 0 }
+                                };
                                 f__switchSmap11 = dictionary;
                             }
                             if (f__switchSmap11.TryGetValue(method, out num2) && num2 == 0)
@@ -3260,7 +3282,7 @@ public class iTween : MonoBehaviour
         Vector3 vector2 = pts[index + 1];
         Vector3 vector3 = pts[index + 2];
         Vector3 vector4 = pts[index + 3];
-        return (Vector3)(0.5f * ((-vector + 3f * vector2 - 3f * vector3 + vector4) * (num3 * num3 * num3) + (2f * vector - 5f * vector2 + 4f * vector3 - vector4) * (num3 * num3) + (-vector + vector3) * num3 + 2f * vector2));
+        return 0.5f * ((-vector + 3f * vector2 - 3f * vector3 + vector4) * (num3 * num3 * num3) + (2f * vector - 5f * vector2 + 4f * vector3 - vector4) * (num3 * num3) + (-vector + vector3) * num3 + 2f * vector2);
     }
 
     private void LateUpdate()
@@ -3313,10 +3335,12 @@ public class iTween : MonoBehaviour
                 int num;
                 if (f__switchSmap8 == null)
                 {
-                    Dictionary<string, int> dictionary = new Dictionary<string, int>(3);
-                    dictionary.Add("x", 0);
-                    dictionary.Add("y", 1);
-                    dictionary.Add("z", 2);
+                    Dictionary<string, int> dictionary = new Dictionary<string, int>(3)
+                    {
+                        { "x", 0 },
+                        { "y", 1 },
+                        { "z", 2 }
+                    };
                     f__switchSmap8 = dictionary;
                 }
                 if (f__switchSmap8.TryGetValue(key, out num))
@@ -3427,10 +3451,12 @@ public class iTween : MonoBehaviour
                 int num2;
                 if (f__switchSmap14 == null)
                 {
-                    Dictionary<string, int> dictionary = new Dictionary<string, int>(3);
-                    dictionary.Add("x", 0);
-                    dictionary.Add("y", 1);
-                    dictionary.Add("z", 2);
+                    Dictionary<string, int> dictionary = new Dictionary<string, int>(3)
+                    {
+                        { "x", 0 },
+                        { "y", 1 },
+                        { "z", 2 }
+                    };
                     f__switchSmap14 = dictionary;
                 }
                 if (f__switchSmap14.TryGetValue(key, out num2))
@@ -3779,7 +3805,7 @@ public class iTween : MonoBehaviour
         int num3 = path.Length * 20;
         for (int j = 1; j <= num3; j++)
         {
-            float t = (float)j / (float)num3;
+            float t = j / (float)num3;
             Vector3 b = Interp(pts, t);
             num += Vector3.Distance(a, b);
             a = b;
@@ -3795,7 +3821,7 @@ public class iTween : MonoBehaviour
         int num2 = path.Length * 20;
         for (int i = 1; i <= num2; i++)
         {
-            float t = (float)i / (float)num2;
+            float t = i / (float)num2;
             Vector3 b = Interp(pts, t);
             num += Vector3.Distance(a, b);
             a = b;
@@ -5006,14 +5032,14 @@ public class iTween : MonoBehaviour
     public static Vector2 Vector2Update(Vector2 currentValue, Vector2 targetValue, float speed)
     {
         Vector2 vector = targetValue - currentValue;
-        currentValue += (Vector2)(vector * speed * Time.deltaTime);
+        currentValue += vector * speed * Time.deltaTime;
         return currentValue;
     }
 
     public static Vector3 Vector3Update(Vector3 currentValue, Vector3 targetValue, float speed)
     {
         Vector3 vector = targetValue - currentValue;
-        currentValue += (Vector3)(vector * speed * Time.deltaTime);
+        currentValue += vector * speed * Time.deltaTime;
         return currentValue;
     }
 
@@ -5038,7 +5064,7 @@ public class iTween : MonoBehaviour
             Vector3 vector2 = this.pts[index + 1];
             Vector3 vector3 = this.pts[index + 2];
             Vector3 vector4 = this.pts[index + 3];
-            return (Vector3)(0.5f * ((-vector + 3f * vector2 - 3f * vector3 + vector4) * (num3 * num3 * num3) + (2f * vector - 5f * vector2 + 4f * vector3 - vector4) * (num3 * num3) + (-vector + vector3) * num3 + 2f * vector2));
+            return 0.5f * ((-vector + 3f * vector2 - 3f * vector3 + vector4) * (num3 * num3 * num3) + (2f * vector - 5f * vector2 + 4f * vector3 - vector4) * (num3 * num3) + (-vector + vector3) * num3 + 2f * vector2);
         }
     }
 

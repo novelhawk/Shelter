@@ -11,7 +11,7 @@ public class LinearForceAffector : Affector
 
     public override void Update()
     {
-        base.Node.Velocity += (Vector3) (this.Force * Time.deltaTime);
+        base.Node.Velocity += this.Force * Time.deltaTime;
     }
 }
 

@@ -45,9 +45,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
     static NetworkingPeer()
     {
-        Dictionary<ConnectionProtocol, int> dictionary = new Dictionary<ConnectionProtocol, int>();
-        dictionary.Add(ConnectionProtocol.Udp, 5058);
-        dictionary.Add(ConnectionProtocol.Tcp, 4533);
+        Dictionary<ConnectionProtocol, int> dictionary = new Dictionary<ConnectionProtocol, int>
+        {
+            { ConnectionProtocol.Udp, 5058 },
+            { ConnectionProtocol.Tcp, 4533 }
+        };
         ProtocolToNameServerPort = dictionary;
     }
 
@@ -1040,8 +1042,10 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         {
             return PhotonPlayer.Self.allProperties;
         }
-        ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
-        hashtable[(byte) 255] = this.PlayerName;
+        ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable
+        {
+            [(byte)255] = this.PlayerName
+        };
         return hashtable;
     }
 
@@ -1378,11 +1382,13 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 return;
 
             case 203:
-                if (sender != null && sender.IsMasterClient && !sender.isLocal)
-                {
-                    PhotonNetwork.LeaveRoom();
-                }
                 break;
+
+//                if (sender != null && sender.IsMasterClient && !sender.isLocal) TODO: Add reconnect
+//                {
+//                    PhotonNetwork.LeaveRoom();
+//                }
+//                break;
 
             case 204:
                 if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
@@ -1448,7 +1454,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                             {
                                 FengGameManagerMKII.noRestart = true;
                                 PhotonNetwork.SetMasterClient(PhotonPlayer.Self);
-                                FengGameManagerMKII.instance.kickPlayerRC(sender, true, "stealing MC.");
+                                FengGameManagerMKII.instance.KickPlayerRC(sender, true, "stealing MC.");
                             }
                             return;
                         }
@@ -1578,22 +1584,22 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                                         PhotonPlayer player2 = sender;
                                         if (pActorProperties.ContainsKey("statACL") && RCextensions.returnIntFromObject(pActorProperties["statACL"]) > 150)
                                         {
-                                            FengGameManagerMKII.instance.kickPlayerRC(sender, true, "excessive stats.");
+                                            FengGameManagerMKII.instance.KickPlayerRC(sender, true, "excessive stats.");
                                             return;
                                         }
                                         if (pActorProperties.ContainsKey("statBLA") && RCextensions.returnIntFromObject(pActorProperties["statBLA"]) > 125)
                                         {
-                                            FengGameManagerMKII.instance.kickPlayerRC(sender, true, "excessive stats.");
+                                            FengGameManagerMKII.instance.KickPlayerRC(sender, true, "excessive stats.");
                                             return;
                                         }
                                         if (pActorProperties.ContainsKey("statGAS") && RCextensions.returnIntFromObject(pActorProperties["statGAS"]) > 150)
                                         {
-                                            FengGameManagerMKII.instance.kickPlayerRC(sender, true, "excessive stats.");
+                                            FengGameManagerMKII.instance.KickPlayerRC(sender, true, "excessive stats.");
                                             return;
                                         }
                                         if (pActorProperties.ContainsKey("statSPD") && RCextensions.returnIntFromObject(pActorProperties["statSPD"]) > 140)
                                         {
-                                            FengGameManagerMKII.instance.kickPlayerRC(sender, true, "excessive stats.");
+                                            FengGameManagerMKII.instance.KickPlayerRC(sender, true, "excessive stats.");
                                             return;
                                         }
                                     }
@@ -2160,9 +2166,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 view.lastOnSerializeDataSent = lastData;
             }
         }
-        ExitGames.Client.Photon.Hashtable data = new ExitGames.Client.Photon.Hashtable();
-        data[(byte) 0] = view.viewID;
-        data[(byte) 1] = lastData;
+        ExitGames.Client.Photon.Hashtable data = new ExitGames.Client.Photon.Hashtable
+        {
+            [(byte)0] = view.viewID,
+            [(byte)1] = lastData
+        };
         if (view.synchronization == ViewSynchronization.ReliableDeltaCompressed)
         {
             bool flag = this.DeltaCompressionWrite(view, data);
@@ -2377,8 +2385,10 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
     public void OpCleanRpcBuffer(PhotonView view)
     {
-        ExitGames.Client.Photon.Hashtable customEventContent = new ExitGames.Client.Photon.Hashtable();
-        customEventContent[(byte) 0] = view.viewID;
+        ExitGames.Client.Photon.Hashtable customEventContent = new ExitGames.Client.Photon.Hashtable
+        {
+            [(byte)0] = view.viewID
+        };
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions {
             CachingOption = EventCaching.RemoveFromRoomCache
         };
@@ -2598,9 +2608,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
     private void RemoveCacheOfLeftPlayers()
     {
-        Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>();
-        customOpParameters[244] = (byte) 0;
-        customOpParameters[247] = (byte) 7;
+        Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>
+        {
+            [244] = (byte)0,
+            [247] = (byte)7
+        };
         this.OpCustom(253, customOpParameters, true, 0);
     }
 
@@ -2728,8 +2740,10 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             {
                 Debug.Log(string.Concat(new object[] { "Sending RPC \"", methodName, "\" to player[", player, "]" }));
             }
-            ExitGames.Client.Photon.Hashtable rpcData = new ExitGames.Client.Photon.Hashtable();
-            rpcData[(byte) 0] = view.viewID;
+            ExitGames.Client.Photon.Hashtable rpcData = new ExitGames.Client.Photon.Hashtable
+            {
+                [(byte)0] = view.viewID
+            };
             if (view.prefix > 0)
             {
                 rpcData[(byte) 1] = (short) view.prefix;
@@ -2775,8 +2789,10 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             {
                 Debug.Log(string.Concat(new object[] { "Sending RPC \"", methodName, "\" to ", target }));
             }
-            ExitGames.Client.Photon.Hashtable customEventContent = new ExitGames.Client.Photon.Hashtable();
-            customEventContent[(byte) 0] = view.viewID;
+            ExitGames.Client.Photon.Hashtable customEventContent = new ExitGames.Client.Photon.Hashtable
+            {
+                [(byte)0] = view.viewID
+            };
             if (view.prefix > 0)
             {
                 customEventContent[(byte) 1] = (short) view.prefix;
@@ -2888,8 +2904,10 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                         {
                             if (!dictionary2.ContainsKey(view.group))
                             {
-                                dictionary2[view.group] = new ExitGames.Client.Photon.Hashtable();
-                                dictionary2[view.group][(byte) 0] = base.ServerTimeInMilliSeconds;
+                                dictionary2[view.group] = new ExitGames.Client.Photon.Hashtable
+                                {
+                                    [(byte)0] = base.ServerTimeInMilliSeconds
+                                };
                                 if (this.currentLevelPrefix >= 0)
                                 {
                                     dictionary2[view.group][(byte) 1] = this.currentLevelPrefix;
@@ -2902,8 +2920,10 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                         {
                             if (!dictionary.ContainsKey(view.group))
                             {
-                                dictionary[view.group] = new ExitGames.Client.Photon.Hashtable();
-                                dictionary[view.group][(byte) 0] = base.ServerTimeInMilliSeconds;
+                                dictionary[view.group] = new ExitGames.Client.Photon.Hashtable
+                                {
+                                    [(byte)0] = base.ServerTimeInMilliSeconds
+                                };
                                 if (this.currentLevelPrefix >= 0)
                                 {
                                     dictionary[view.group][(byte) 1] = this.currentLevelPrefix;
@@ -2931,23 +2951,29 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
     private void SendDestroyOfAll()
     {
-        ExitGames.Client.Photon.Hashtable customEventContent = new ExitGames.Client.Photon.Hashtable();
-        customEventContent[(byte) 0] = -1;
+        ExitGames.Client.Photon.Hashtable customEventContent = new ExitGames.Client.Photon.Hashtable
+        {
+            [(byte)0] = -1
+        };
         this.OpRaiseEvent(207, customEventContent, true, null);
     }
 
     private void SendDestroyOfPlayer(int actorNr)
     {
-        ExitGames.Client.Photon.Hashtable customEventContent = new ExitGames.Client.Photon.Hashtable();
-        customEventContent[(byte) 0] = actorNr;
+        ExitGames.Client.Photon.Hashtable customEventContent = new ExitGames.Client.Photon.Hashtable
+        {
+            [(byte)0] = actorNr
+        };
         this.OpRaiseEvent(207, customEventContent, true, null);
     }
 
     internal ExitGames.Client.Photon.Hashtable SendInstantiate(string prefabName, Vector3 position, Quaternion rotation, int group, int[] viewIDs, object[] data, bool isGlobalObject)
     {
         int num = viewIDs[0];
-        ExitGames.Client.Photon.Hashtable customEventContent = new ExitGames.Client.Photon.Hashtable();
-        customEventContent[(byte) 0] = prefabName;
+        ExitGames.Client.Photon.Hashtable customEventContent = new ExitGames.Client.Photon.Hashtable
+        {
+            [(byte)0] = prefabName
+        };
         if (position != Vector3.zero)
         {
             customEventContent[(byte) 1] = position;
@@ -3020,8 +3046,10 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         else if (this.mLocalActor != null)
         {
             this.mLocalActor.name = this.PlayerName;
-            ExitGames.Client.Photon.Hashtable actorProperties = new ExitGames.Client.Photon.Hashtable();
-            actorProperties[(byte) 255] = this.PlayerName;
+            ExitGames.Client.Photon.Hashtable actorProperties = new ExitGames.Client.Photon.Hashtable
+            {
+                [(byte)255] = this.PlayerName
+            };
             if (this.mLocalActor.ID > 0)
             {
                 base.OpSetPropertiesOfActor(this.mLocalActor.ID, actorProperties, true, 0);
@@ -3032,16 +3060,20 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
     private void ServerCleanInstantiateAndDestroy(int instantiateId, int actorNr)
     {
-        ExitGames.Client.Photon.Hashtable customEventContent = new ExitGames.Client.Photon.Hashtable();
-        customEventContent[(byte) 7] = instantiateId;
+        ExitGames.Client.Photon.Hashtable customEventContent = new ExitGames.Client.Photon.Hashtable
+        {
+            [(byte)7] = instantiateId
+        };
         RaiseEventOptions options = new RaiseEventOptions {
             CachingOption = EventCaching.RemoveFromRoomCache
         };
         options.TargetActors = new int[] { actorNr };
         RaiseEventOptions raiseEventOptions = options;
         this.OpRaiseEvent(202, customEventContent, true, raiseEventOptions);
-        ExitGames.Client.Photon.Hashtable hashtable2 = new ExitGames.Client.Photon.Hashtable();
-        hashtable2[(byte) 0] = instantiateId;
+        ExitGames.Client.Photon.Hashtable hashtable2 = new ExitGames.Client.Photon.Hashtable
+        {
+            [(byte)0] = instantiateId
+        };
         this.OpRaiseEvent(204, hashtable2, true, null);
     }
 
@@ -3108,8 +3140,10 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         }
         if (sync)
         {
-            ExitGames.Client.Photon.Hashtable customEventContent = new ExitGames.Client.Photon.Hashtable();
-            customEventContent.Add((byte) 1, playerId);
+            ExitGames.Client.Photon.Hashtable customEventContent = new ExitGames.Client.Photon.Hashtable
+            {
+                { (byte)1, playerId }
+            };
             if (!this.OpRaiseEvent(208, customEventContent, true, null))
             {
                 return false;
@@ -3231,9 +3265,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
     public bool WebRpc(string uriPath, object parameters)
     {
-        Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>();
-        customOpParameters.Add(209, uriPath);
-        customOpParameters.Add(208, parameters);
+        Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>
+        {
+            { 209, uriPath },
+            { 208, parameters }
+        };
         return this.OpCustom(219, customOpParameters, true);
     }
 

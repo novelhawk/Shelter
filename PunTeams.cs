@@ -27,7 +27,7 @@ public class PunTeams : MonoBehaviour
             while (enumerator.MoveNext())
             {
                 object current = enumerator.Current;
-                PlayersPerTeam[(Team) (byte) current] = new List<PhotonPlayer>();
+                PlayersPerTeam[(byte)current] = new List<PhotonPlayer>();
             }
         }
         finally

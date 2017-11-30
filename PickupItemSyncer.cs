@@ -114,7 +114,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
                 PickupItem item = array[i];
                 if (item.SecondsBeforeRespawn <= 0f)
                 {
-                    list.Add((float) item.ViewID);
+                    list.Add(item.ViewID);
                     list.Add(0f);
                 }
                 else
@@ -123,7 +123,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
                     if (item.TimeOfRespawn > num2)
                     {
                         Debug.Log(string.Concat(new object[] { item.ViewID, " respawn: ", item.TimeOfRespawn, " timeUntilRespawn: ", num4, " (now: ", PhotonNetwork.time, ")" }));
-                        list.Add((float) item.ViewID);
+                        list.Add(item.ViewID);
                         list.Add((float) num4);
                     }
                 }

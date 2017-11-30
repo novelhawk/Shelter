@@ -21,14 +21,16 @@ public class SetColorOnSelection : MonoBehaviour
             int num;
             if (f__switchSmap4 == null)
             {
-                Dictionary<string, int> dictionary = new Dictionary<string, int>(7);
-                dictionary.Add("White", 0);
-                dictionary.Add("Red", 1);
-                dictionary.Add("Green", 2);
-                dictionary.Add("Blue", 3);
-                dictionary.Add("Yellow", 4);
-                dictionary.Add("Cyan", 5);
-                dictionary.Add("Magenta", 6);
+                Dictionary<string, int> dictionary = new Dictionary<string, int>(7)
+                {
+                    { "White", 0 },
+                    { "Red", 1 },
+                    { "Green", 2 },
+                    { "Blue", 3 },
+                    { "Yellow", 4 },
+                    { "Cyan", 5 },
+                    { "Magenta", 6 }
+                };
                 f__switchSmap4 = dictionary;
             }
             if (f__switchSmap4.TryGetValue(key, out num))

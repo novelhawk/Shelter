@@ -51,7 +51,7 @@ public class Sprite
         this.SetColor(color);
         this.SetRotation(Quaternion.identity);
         this.SetScale(1f, 1f);
-        this.SetRotation((float) 0f);
+        this.SetRotation(0f);
     }
 
     public void Reset()
@@ -248,7 +248,7 @@ public class Sprite
         if (this.Type == STYPE.BILLBOARD)
         {
             UnityEngine.Transform transform = this.MainCamera.transform;
-            this.MyTransform.LookAt(this.MyTransform.position + transform.rotation * Vector3.up, (Vector3) (transform.rotation * Vector3.back));
+            this.MyTransform.LookAt(this.MyTransform.position + transform.rotation * Vector3.up, transform.rotation * Vector3.back);
         }
         this.WorldMat.SetTRS(this.MyTransform.position, this.MyTransform.rotation, Vector3.one);
         Matrix4x4 matrixx = this.WorldMat * this.LocalMat;
@@ -265,15 +265,15 @@ public class Sprite
             float magnitude = 0f;
             if (this.UVStretch == 0)
             {
-                zero = (Vector3) ((vector + vector4) / 2f);
-                vector6 = (Vector3) ((vector2 + vector3) / 2f);
+                zero = (vector + vector4) / 2f;
+                vector6 = (vector2 + vector3) / 2f;
                 Vector3 vector7 = vector4 - vector;
                 magnitude = vector7.magnitude;
             }
             else
             {
-                zero = (Vector3) ((vector + vector2) / 2f);
-                vector6 = (Vector3) ((vector4 + vector3) / 2f);
+                zero = (vector + vector2) / 2f;
+                vector6 = (vector4 + vector3) / 2f;
                 Vector3 vector8 = vector2 - vector;
                 magnitude = vector8.magnitude;
             }
@@ -281,11 +281,11 @@ public class Sprite
             Vector3 rhs = this.MainCamera.transform.position - zero;
             Vector3 vector11 = Vector3.Cross(lhs, rhs);
             vector11.Normalize();
-            vector11 = (Vector3) (vector11 * (magnitude * 0.5f));
+            vector11 = vector11 * (magnitude * 0.5f);
             Vector3 vector12 = this.MainCamera.transform.position - vector6;
             Vector3 vector13 = Vector3.Cross(lhs, vector12);
             vector13.Normalize();
-            vector13 = (Vector3) (vector13 * (magnitude * 0.5f));
+            vector13 = vector13 * (magnitude * 0.5f);
             if (this.UVStretch == 0)
             {
                 vector = zero - vector11;
@@ -347,17 +347,17 @@ public class Sprite
         int vertStart = this.Vertexsegment.VertStart;
         if (this.UVDimensions.y > 0f)
         {
-            pool.UVs[vertStart] = this.LowerLeftUV + (Vector2) (Vector2.up * this.UVDimensions.y);
+            pool.UVs[vertStart] = this.LowerLeftUV + Vector2.up * this.UVDimensions.y;
             pool.UVs[vertStart + 1] = this.LowerLeftUV;
-            pool.UVs[vertStart + 2] = this.LowerLeftUV + (Vector2) (Vector2.right * this.UVDimensions.x);
+            pool.UVs[vertStart + 2] = this.LowerLeftUV + Vector2.right * this.UVDimensions.x;
             pool.UVs[vertStart + 3] = this.LowerLeftUV + this.UVDimensions;
         }
         else
         {
             pool.UVs[vertStart] = this.LowerLeftUV;
-            pool.UVs[vertStart + 1] = this.LowerLeftUV + (Vector2) (Vector2.up * this.UVDimensions.y);
+            pool.UVs[vertStart + 1] = this.LowerLeftUV + Vector2.up * this.UVDimensions.y;
             pool.UVs[vertStart + 2] = this.LowerLeftUV + this.UVDimensions;
-            pool.UVs[vertStart + 3] = this.LowerLeftUV + (Vector2) (Vector2.right * this.UVDimensions.x);
+            pool.UVs[vertStart + 3] = this.LowerLeftUV + Vector2.right * this.UVDimensions.x;
         }
         this.Vertexsegment.Pool.UVChanged = true;
     }

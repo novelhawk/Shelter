@@ -29,9 +29,9 @@ public class TriggerColliderWeapon : MonoBehaviour
         Transform transform = titan.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck");
         GameObject obj2 = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("titanNapeMeat"), transform.position, transform.rotation);
         obj2.transform.localScale = titan.localScale;
-        obj2.rigidbody.AddForce((Vector3) (vkill.normalized * 15f), ForceMode.Impulse);
-        obj2.rigidbody.AddForce((Vector3) (-titan.forward * 10f), ForceMode.Impulse);
-        obj2.rigidbody.AddTorque(new Vector3((float) UnityEngine.Random.Range(-100, 100), (float) UnityEngine.Random.Range(-100, 100), (float) UnityEngine.Random.Range(-100, 100)), ForceMode.Impulse);
+        obj2.rigidbody.AddForce(vkill.normalized * 15f, ForceMode.Impulse);
+        obj2.rigidbody.AddForce(-titan.forward * 10f, ForceMode.Impulse);
+        obj2.rigidbody.AddTorque(new Vector3(UnityEngine.Random.Range(-100, 100), UnityEngine.Random.Range(-100, 100), UnityEngine.Random.Range(-100, 100)), ForceMode.Impulse);
     }
 
     private void OnTriggerStay(Collider other)
@@ -72,7 +72,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                             if (!component.transform.root.GetComponent<HERO>().isGrabbed)
                             {
                                 Vector3 vector = component.transform.root.transform.position - base.transform.position;
-                                component.transform.root.GetComponent<HERO>().die((Vector3) (vector.normalized * b * 1000f + Vector3.up * 50f), false);
+                                component.transform.root.GetComponent<HERO>().die(vector.normalized * b * 1000f + Vector3.up * 50f, false);
                             }
                         }
                         else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && !component.transform.root.GetComponent<HERO>().HasDied() && !component.transform.root.GetComponent<HERO>().isGrabbed)
@@ -80,7 +80,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                             component.transform.root.GetComponent<HERO>().markDie();
                             object[] parameters = new object[5];
                             Vector3 vector2 = component.transform.root.position - base.transform.position;
-                            parameters[0] = (Vector3) (vector2.normalized * b * 1000f + Vector3.up * 50f);
+                            parameters[0] = vector2.normalized * b * 1000f + Vector3.up * 50f;
                             parameters[1] = false;
                             parameters[2] = base.transform.root.gameObject.GetPhotonView().viewID;
                             parameters[3] = PhotonView.Find(base.transform.root.gameObject.GetPhotonView().viewID).owner.CustomProperties[PhotonPlayerProperty.name];
@@ -95,7 +95,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                 HitBox item = other.gameObject.GetComponent<HitBox>();
                 if (item != null && this.checkIfBehind(item.transform.root.gameObject) && !this.currentHits.Contains(item))
                 {
-                    item.hitPosition = (Vector3) ((base.transform.position + item.transform.position) * 0.5f);
+                    item.hitPosition = (base.transform.position + item.transform.position) * 0.5f;
                     this.currentHits.Add(item);
                     this.meatDie.Play();
                     if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
@@ -111,8 +111,8 @@ public class TriggerColliderWeapon : MonoBehaviour
                             }
                             item.transform.root.GetComponent<TITAN>().die();
                             this.napeMeat(this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity, item.transform.root);
-                            GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().netShowDamage(num2);
-                            GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().playerKillInfoSingleUpdate(num2);
+                            FengGameManagerMKII.instance.netShowDamage(num2);
+                            FengGameManagerMKII.instance.PlayerKillInfoSingleplayerUpdate(num2);
                         }
                     }
                     else if (!PhotonNetwork.isMasterClient)

@@ -42,14 +42,14 @@ public class TweenTransform : UITweener
             }
             if (this.from != null)
             {
-                this.mTrans.position = (Vector3) (this.@from.position * (1f - factor) + this.to.position * factor);
-                this.mTrans.localScale = (Vector3) (this.@from.localScale * (1f - factor) + this.to.localScale * factor);
+                this.mTrans.position = this.@from.position * (1f - factor) + this.to.position * factor;
+                this.mTrans.localScale = this.@from.localScale * (1f - factor) + this.to.localScale * factor;
                 this.mTrans.rotation = Quaternion.Slerp(this.from.rotation, this.to.rotation, factor);
             }
             else
             {
-                this.mTrans.position = (Vector3) (this.mPos * (1f - factor) + this.to.position * factor);
-                this.mTrans.localScale = (Vector3) (this.mScale * (1f - factor) + this.to.localScale * factor);
+                this.mTrans.position = this.mPos * (1f - factor) + this.to.position * factor;
+                this.mTrans.localScale = this.mScale * (1f - factor) + this.to.localScale * factor;
                 this.mTrans.rotation = Quaternion.Slerp(this.mRot, this.to.rotation, factor);
             }
             if (this.parentWhenFinished && isFinished)

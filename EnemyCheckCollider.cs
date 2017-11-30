@@ -45,15 +45,15 @@ public class EnemyCheckCollider : Photon.MonoBehaviour
                         float num3 = 5f;
                         if (num2 > 0f)
                         {
-                            num3 = Mathf.Max((float) 5f, (float) (num2 - vector.magnitude));
+                            num3 = Mathf.Max(5f, num2 - vector.magnitude);
                         }
                         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
                         {
-                            component.transform.root.GetComponent<HERO>().blowAway((Vector3) (vector.normalized * num3 + Vector3.up * 1f));
+                            component.transform.root.GetComponent<HERO>().blowAway(vector.normalized * num3 + Vector3.up * 1f);
                         }
                         else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
                         {
-                            object[] parameters = new object[] { (Vector3) (vector.normalized * num3 + Vector3.up * 1f) };
+                            object[] parameters = new object[] { vector.normalized * num3 + Vector3.up * 1f };
                             component.transform.root.GetComponent<HERO>().photonView.RPC("blowAway", PhotonTargets.All, parameters);
                         }
                     }
@@ -64,7 +64,7 @@ public class EnemyCheckCollider : Photon.MonoBehaviour
                             if (!component.transform.root.GetComponent<HERO>().isGrabbed)
                             {
                                 Vector3 vector4 = component.transform.root.transform.position - base.transform.position;
-                                component.transform.root.GetComponent<HERO>().die((Vector3) (vector4.normalized * b * 1000f + Vector3.up * 50f), this.isThisBite);
+                                component.transform.root.GetComponent<HERO>().die(vector4.normalized * b * 1000f + Vector3.up * 50f, this.isThisBite);
                             }
                         }
                         else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && !component.transform.root.GetComponent<HERO>().HasDied() && !component.transform.root.GetComponent<HERO>().isGrabbed)
@@ -79,7 +79,7 @@ public class EnemyCheckCollider : Photon.MonoBehaviour
                             }
                             object[] objArray2 = new object[5];
                             Vector3 vector5 = component.transform.root.position - base.transform.position;
-                            objArray2[0] = (Vector3) (vector5.normalized * b * 1000f + Vector3.up * 50f);
+                            objArray2[0] = vector5.normalized * b * 1000f + Vector3.up * 50f;
                             objArray2[1] = this.isThisBite;
                             objArray2[2] = myOwnerViewID;
                             objArray2[3] = titanName;

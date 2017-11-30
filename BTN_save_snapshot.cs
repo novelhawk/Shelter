@@ -16,7 +16,7 @@ public class BTN_save_snapshot : MonoBehaviour
         foreach (GameObject obj2 in this.thingsNeedToHide)
         {
             Transform transform = obj2.transform;
-            transform.position += (Vector3) (Vector3.up * 10000f);
+            transform.position += Vector3.up * 10000f;
         }
         base.StartCoroutine(this.ScreenshotEncode());
         this.info.GetComponent<UILabel>().text = "trying..";
@@ -59,9 +59,9 @@ public class BTN_save_snapshot : MonoBehaviour
                     break;
 
                 case 1:
-                    this.r__0 = (float) Screen.height / 600f;
+                    this.r__0 = Screen.height / 600f;
                     this.texture__1 = new Texture2D((int) (this.r__0 * this.f__this.targetTexture.transform.localScale.x), (int) (this.r__0 * this.f__this.targetTexture.transform.localScale.y), TextureFormat.RGB24, false);
-                    this.texture__1.ReadPixels(new Rect(Screen.width * 0.5f - this.texture__1.width * 0.5f, Screen.height * 0.5f - this.texture__1.height * 0.5f - this.r__0 * 0f, (float) this.texture__1.width, (float) this.texture__1.height), 0, 0);
+                    this.texture__1.ReadPixels(new Rect(Screen.width * 0.5f - this.texture__1.width * 0.5f, Screen.height * 0.5f - this.texture__1.height * 0.5f - this.r__0 * 0f, this.texture__1.width, this.texture__1.height), 0, 0);
                     this.texture__1.Apply();
                     this.Scurrent = 0;
                     this.SPC = 2;
@@ -75,7 +75,7 @@ public class BTN_save_snapshot : MonoBehaviour
                     {
                         this.go__4 = this.Ss_5__2[this.Ss_6__3];
                         Transform transform = this.go__4.transform;
-                        transform.position -= (Vector3) (Vector3.up * 10000f);
+                        transform.position -= Vector3.up * 10000f;
                         this.Ss_6__3++;
                     }
                     string[] textArray1 = new string[] { "aottg_ss-", DateTime.Today.Month.ToString(), "_", DateTime.Today.Day.ToString(), "_", DateTime.Today.Year.ToString(), "-", DateTime.Now.Hour.ToString(), "_", DateTime.Now.Minute.ToString(), "_", DateTime.Now.Second.ToString(), ".png" };

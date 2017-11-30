@@ -43,7 +43,7 @@ public class AttractionForceAffector : Affector
             magnitude = this.Magnitude;
         }
         float num3 = magnitude;
-        base.Node.Velocity += (Vector3) (vector.normalized * num3 * Time.deltaTime);
+        base.Node.Velocity += vector.normalized * num3 * Time.deltaTime;
     }
 }
 

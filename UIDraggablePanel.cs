@@ -63,7 +63,7 @@ public class UIDraggablePanel : IgnoreTimeScale
                 this.mDragStarted = true;
                 this.mDragStartOffset = UICamera.currentTouch.totalDelta;
             }
-            Ray ray = !this.smoothDragStart ? UICamera.currentCamera.ScreenPointToRay((Vector3) UICamera.currentTouch.pos) : UICamera.currentCamera.ScreenPointToRay((Vector3) (UICamera.currentTouch.pos - this.mDragStartOffset));
+            Ray ray = !this.smoothDragStart ? UICamera.currentCamera.ScreenPointToRay(UICamera.currentTouch.pos) : UICamera.currentCamera.ScreenPointToRay(UICamera.currentTouch.pos - this.mDragStartOffset);
             float enter = 0f;
             if (this.mPlane.Raycast(ray, out enter))
             {
@@ -76,15 +76,15 @@ public class UIDraggablePanel : IgnoreTimeScale
                     direction.Scale(this.scale);
                     direction = this.mTrans.TransformDirection(direction);
                 }
-                this.mMomentum = Vector3.Lerp(this.mMomentum, this.mMomentum + (Vector3) (direction * (0.01f * this.momentumAmount)), 0.67f);
+                this.mMomentum = Vector3.Lerp(this.mMomentum, this.mMomentum + direction * (0.01f * this.momentumAmount), 0.67f);
                 if (!this.iOSDragEmulation)
                 {
                     this.MoveAbsolute(direction);
                 }
                 else if (this.mPanel.CalculateConstrainOffset(this.bounds.min, this.bounds.max).magnitude > 0.001f)
                 {
-                    this.MoveAbsolute((Vector3) (direction * 0.5f));
-                    this.mMomentum = (Vector3) (this.mMomentum * 0.5f);
+                    this.MoveAbsolute(direction * 0.5f);
+                    this.mMomentum = this.mMomentum * 0.5f;
                 }
                 else
                 {
@@ -139,7 +139,7 @@ public class UIDraggablePanel : IgnoreTimeScale
             }
             if (this.mShouldMove && !this.mPressed)
             {
-                this.mMomentum -= (Vector3) (this.scale * (this.mScroll * 0.05f));
+                this.mMomentum -= this.scale * (this.mScroll * 0.05f);
                 if (this.mMomentum.magnitude > 0.0001f)
                 {
                     this.mScroll = NGUIMath.SpringLerp(this.mScroll, 0f, 20f, deltaTime);
@@ -240,7 +240,7 @@ public class UIDraggablePanel : IgnoreTimeScale
                     this.mScroll = 0f;
                     this.DisableSpring();
                     this.mLastPos = UICamera.lastHit.point;
-                    this.mPlane = new Plane((Vector3) (this.mTrans.rotation * Vector3.back), this.mLastPos);
+                    this.mPlane = new Plane(this.mTrans.rotation * Vector3.back, this.mLastPos);
                 }
                 else
                 {
@@ -467,8 +467,8 @@ public class UIDraggablePanel : IgnoreTimeScale
             }
             Vector4 clipRange = this.mPanel.clipRange;
             Bounds bounds = this.bounds;
-            float num = clipRange.z != 0f ? clipRange.z * 0.5f : (float) Screen.width;
-            float num2 = clipRange.w != 0f ? clipRange.w * 0.5f : (float) Screen.height;
+            float num = clipRange.z != 0f ? clipRange.z * 0.5f : Screen.width;
+            float num2 = clipRange.w != 0f ? clipRange.w * 0.5f : Screen.height;
             if (!Mathf.Approximately(this.scale.x, 0f))
             {
                 if (bounds.min.x < clipRange.x - num)

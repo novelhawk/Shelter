@@ -62,7 +62,7 @@ public class UISpriteAnimation : MonoBehaviour
         if (this.mActive && this.mSpriteNames.Count > 1 && Application.isPlaying && this.mFPS > 0f)
         {
             this.mDelta += Time.deltaTime;
-            float num = 1f / (float) this.mFPS;
+            float num = 1f / this.mFPS;
             if (num < this.mDelta)
             {
                 this.mDelta = num <= 0f ? 0f : this.mDelta - num;

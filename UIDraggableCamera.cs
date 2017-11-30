@@ -39,7 +39,7 @@ public class UIDraggableCamera : IgnoreTimeScale
             vector2 = this.mCam.ScreenToWorldPoint(vector2);
             Vector2 minRect = new Vector2(this.mBounds.min.x, this.mBounds.min.y);
             Vector2 maxRect = new Vector2(this.mBounds.max.x, this.mBounds.max.y);
-            return (Vector3) NGUIMath.ConstrainRect(minRect, maxRect, position, vector2);
+            return NGUIMath.ConstrainRect(minRect, maxRect, position, vector2);
         }
         return Vector3.zero;
     }
@@ -78,11 +78,11 @@ public class UIDraggableCamera : IgnoreTimeScale
             UICamera.currentTouch.clickNotification = UICamera.ClickNotification.BasedOnDelta;
             if (this.mRoot != null)
             {
-                delta = (Vector2) (delta * this.mRoot.pixelSizeAdjustment);
+                delta = delta * this.mRoot.pixelSizeAdjustment;
             }
             Vector2 vector = Vector2.Scale(delta, -this.scale);
             this.mTrans.localPosition += (Vector3)vector;
-            this.mMomentum = Vector2.Lerp(this.mMomentum, this.mMomentum + (Vector2) (vector * (0.01f * this.momentumAmount)), 0.67f);
+            this.mMomentum = Vector2.Lerp(this.mMomentum, this.mMomentum + vector * (0.01f * this.momentumAmount), 0.67f);
             if (this.dragEffect != UIDragObject.DragEffect.MomentumAndSpring && this.ConstrainToBounds(true))
             {
                 this.mMomentum = Vector2.zero;
@@ -149,7 +149,7 @@ public class UIDraggableCamera : IgnoreTimeScale
         }
         else
         {
-            this.mMomentum += (Vector2) (this.scale * (this.mScroll * 20f));
+            this.mMomentum += this.scale * (this.mScroll * 20f);
             this.mScroll = NGUIMath.SpringLerp(this.mScroll, 0f, 20f, deltaTime);
             if (this.mMomentum.magnitude > 0.01f)
             {

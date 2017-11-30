@@ -35,8 +35,10 @@ public class Room : RoomInfo
 
     public void SetPropertiesListedInLobby(string[] propsListedInLobby)
     {
-        Hashtable gameProperties = new Hashtable();
-        gameProperties[(byte) 250] = propsListedInLobby;
+        Hashtable gameProperties = new Hashtable
+        {
+            [(byte)250] = propsListedInLobby
+        };
         PhotonNetwork.networkingPeer.OpSetPropertiesOfRoom(gameProperties, false, 0);
         propertiesListedInLobby = propsListedInLobby;
     }
@@ -80,8 +82,10 @@ public class Room : RoomInfo
             }
             if (value != maxPlayersField && !PhotonNetwork.offlineMode)
             {
-                Hashtable gameProperties = new Hashtable();
-                gameProperties.Add((byte) 255, (byte) value);
+                Hashtable gameProperties = new Hashtable
+                {
+                    { (byte)255, (byte)value }
+                };
                 PhotonNetwork.networkingPeer.OpSetPropertiesOfRoom(gameProperties, true, 0);
             }
             maxPlayersField = (byte) value;
@@ -114,8 +118,10 @@ public class Room : RoomInfo
             }
             if (value != openField && !PhotonNetwork.offlineMode)
             {
-                Hashtable gameProperties = new Hashtable();
-                gameProperties.Add((byte) 253, value);
+                Hashtable gameProperties = new Hashtable
+                {
+                    { (byte)253, value }
+                };
                 PhotonNetwork.networkingPeer.OpSetPropertiesOfRoom(gameProperties, true, 0);
             }
             openField = value;
@@ -150,8 +156,10 @@ public class Room : RoomInfo
             }
             if (value != visibleField && !PhotonNetwork.offlineMode)
             {
-                Hashtable gameProperties = new Hashtable();
-                gameProperties.Add((byte) 254, value);
+                Hashtable gameProperties = new Hashtable
+                {
+                    { (byte)254, value }
+                };
                 PhotonNetwork.networkingPeer.OpSetPropertiesOfRoom(gameProperties, true, 0);
             }
             visibleField = value;

@@ -8,7 +8,7 @@ public class RCRegionLabel : MonoBehaviour
     {
         if (this.myLabel != null && this.myLabel.GetComponent<UILabel>().isVisible)
         {
-            this.myLabel.transform.LookAt((Vector3) (2f * this.myLabel.transform.position) - Camera.main.transform.position);
+            this.myLabel.transform.LookAt(2f * this.myLabel.transform.position - Camera.main.transform.position);
         }
     }
 }

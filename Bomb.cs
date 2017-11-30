@@ -68,7 +68,7 @@ public class Bomb : Photon.MonoBehaviour
         base.rigidbody.velocity = Vector3.zero;
         Vector3 position = base.transform.position;
         this.myExplosion = PhotonNetwork.Instantiate("RCAsset/BombExplodeMain", position, Quaternion.Euler(0f, 0f, 0f), 0);
-        foreach (HERO hero in FengGameManagerMKII.instance.getPlayers())
+        foreach (HERO hero in FengGameManagerMKII.instance.GetPlayers())
         {
             GameObject gameObject = hero.gameObject;
             if (Vector3.Distance(gameObject.transform.position, position) < radius && !gameObject.GetPhotonView().isMine && !hero.bombImmune)
@@ -82,14 +82,14 @@ public class Bomb : Photon.MonoBehaviour
                     {
                         gameObject.GetComponent<HERO>().markDie();
                         gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name]) + " " });
-                        FengGameManagerMKII.instance.playerKillInfoUpdate(PhotonPlayer.Self, 0);
+                        FengGameManagerMKII.instance.PlayerKillInfoUpdate(PhotonPlayer.Self, 0);
                     }
                 }
                 else
                 {
                     gameObject.GetComponent<HERO>().markDie();
                     gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name]) + " " });
-                    FengGameManagerMKII.instance.playerKillInfoUpdate(PhotonPlayer.Self, 0);
+                    FengGameManagerMKII.instance.PlayerKillInfoUpdate(PhotonPlayer.Self, 0);
                 }
             }
         }

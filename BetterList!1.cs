@@ -52,7 +52,7 @@ public class BetterList<T>
     [DebuggerHidden]
     public IEnumerator<T> GetEnumerator()
     {
-        return new GetEnumeratorc__Iterator9 { f__this = (BetterList<T>)this };
+        return new GetEnumeratorc__Iterator9 { f__this = (this) };
     }
 
     public void Insert(int index, T item)

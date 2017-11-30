@@ -106,9 +106,9 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         this.distanceOffsetMulti = cameraDistance * (200f - base.camera.fieldOfView) / 150f;
         base.transform.position = this.head == null ? this.main_object.transform.position : this.head.transform.position;
         Transform transform = base.transform;
-        transform.position += (Vector3) (Vector3.up * this.heightMulti);
+        transform.position += Vector3.up * this.heightMulti;
         Transform transform2 = base.transform;
-        transform2.position -= (Vector3) (Vector3.up * (0.6f - cameraDistance) * 2f);
+        transform2.position -= Vector3.up * (0.6f - cameraDistance) * 2f;
         if (cameraMode == CAMERA_TYPE.WOW)
         {
             if (Input.GetKey(KeyCode.Mouse1))
@@ -119,25 +119,25 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 base.transform.RotateAround(base.transform.position, base.transform.right, num2);
             }
             Transform transform3 = base.transform;
-            transform3.position -= (Vector3) (base.transform.forward * this.distance * this.distanceMulti * this.distanceOffsetMulti);
+            transform3.position -= base.transform.forward * this.distance * this.distanceMulti * this.distanceOffsetMulti;
         }
         else if (cameraMode == CAMERA_TYPE.ORIGINAL)
         {
             float num3 = 0f;
             if (Input.mousePosition.x < Screen.width * 0.4f)
             {
-                num3 = -((Screen.width * 0.4f - Input.mousePosition.x) / (float) Screen.width * 0.4f) * this.getSensitivityMultiWithDeltaTime() * 150f;
+                num3 = -((Screen.width * 0.4f - Input.mousePosition.x) / Screen.width * 0.4f) * this.getSensitivityMultiWithDeltaTime() * 150f;
                 base.transform.RotateAround(base.transform.position, Vector3.up, num3);
             }
             else if (Input.mousePosition.x > Screen.width * 0.6f)
             {
-                num3 = (Input.mousePosition.x - Screen.width * 0.6f) / (float) Screen.width * 0.4f * this.getSensitivityMultiWithDeltaTime() * 150f;
+                num3 = (Input.mousePosition.x - Screen.width * 0.6f) / Screen.width * 0.4f * this.getSensitivityMultiWithDeltaTime() * 150f;
                 base.transform.RotateAround(base.transform.position, Vector3.up, num3);
             }
-            float x = 140f * (Screen.height * 0.6f - Input.mousePosition.y) / (float) Screen.height * 0.5f;
+            float x = 140f * (Screen.height * 0.6f - Input.mousePosition.y) / Screen.height * 0.5f;
             base.transform.rotation = Quaternion.Euler(x, base.transform.rotation.eulerAngles.y, base.transform.rotation.eulerAngles.z);
             Transform transform4 = base.transform;
-            transform4.position -= (Vector3) (base.transform.forward * this.distance * this.distanceMulti * this.distanceOffsetMulti);
+            transform4.position -= base.transform.forward * this.distance * this.distanceMulti * this.distanceOffsetMulti;
         }
         else if (cameraMode == CAMERA_TYPE.TPS)
         {
@@ -155,12 +155,12 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 base.transform.RotateAround(base.transform.position, base.transform.right, num6);
             }
             Transform transform5 = base.transform;
-            transform5.position -= (Vector3) (base.transform.forward * this.distance * this.distanceMulti * this.distanceOffsetMulti);
+            transform5.position -= base.transform.forward * this.distance * this.distanceMulti * this.distanceOffsetMulti;
         }
         if (cameraDistance < 0.65f)
         {
             Transform transform6 = base.transform;
-            transform6.position += (Vector3) (base.transform.right * Mathf.Max((float) ((0.6f - cameraDistance) * 2f), (float) 0.65f));
+            transform6.position += base.transform.right * Mathf.Max((float)((0.6f - cameraDistance) * 2f), (float)0.65f);
         }
     }
 
@@ -169,20 +169,20 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         float magnitude = hero.rigidbody.velocity.magnitude;
         if (magnitude > 10f)
         {
-            Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, Mathf.Min((float) 100f, (float) (magnitude + 40f)), 0.1f);
+            Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, Mathf.Min(100f, magnitude + 40f), 0.1f);
         }
         else
         {
             Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, 50f, 0.1f);
         }
         float num2 = hero.CameraMultiplier * (200f - Camera.main.fieldOfView) / 150f;
-        base.transform.position = (Vector3) (this.head.transform.position + Vector3.up * this.heightMulti - Vector3.up * (0.6f - cameraDistance) * 2f);
+        base.transform.position = this.head.transform.position + Vector3.up * this.heightMulti - Vector3.up * (0.6f - cameraDistance) * 2f;
         Transform transform = base.transform;
-        transform.position -= (Vector3) (base.transform.forward * this.distance * this.distanceMulti * num2);
+        transform.position -= base.transform.forward * this.distance * this.distanceMulti * num2;
         if (hero.CameraMultiplier < 0.65f)
         {
             Transform transform2 = base.transform;
-            transform2.position += (Vector3) (base.transform.right * Mathf.Max((float) ((0.6f - hero.CameraMultiplier) * 2f), (float) 0.65f));
+            transform2.position += base.transform.right * Mathf.Max((float)((0.6f - hero.CameraMultiplier) * 2f), (float)0.65f);
         }
         base.transform.rotation = Quaternion.Lerp(Camera.main.transform.rotation, hero.GetComponent<SmoothSyncMovement>().correctCameraRot, Time.deltaTime * 5f);
     }
@@ -289,7 +289,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     {
         if (gametype == GAMETYPE.SINGLE)
         {
-            GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().restartGameSingle2();
+            FengGameManagerMKII.instance.RestartSingleplayer();
         }
     }
 
@@ -301,7 +301,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         Texture2D textured = new Texture2D(cam.targetTexture.width, cam.targetTexture.height);
         int num = (int) (cam.targetTexture.width * 0.04f);
         int destX = (int) (cam.targetTexture.width * 0.02f);
-        textured.ReadPixels(new Rect((float) num, (float) num, (float) (cam.targetTexture.width - num), (float) (cam.targetTexture.height - num)), destX, destX);
+        textured.ReadPixels(new Rect(num, num, cam.targetTexture.width - num, cam.targetTexture.height - num), destX, destX);
         textured.Apply();
         RenderTexture.active = active;
         return textured;
@@ -318,7 +318,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         try
         {
             textured.SetPixel(0, 0, Color.white);
-            textured.ReadPixels(new Rect((float) num, (float) num, (float) (cam.targetTexture.width - num), (float) (cam.targetTexture.height - num)), destX, destX);
+            textured.ReadPixels(new Rect(num, num, cam.targetTexture.width - num, cam.targetTexture.height - num), destX, destX);
             textured.Apply();
             RenderTexture.active = active;
         }
@@ -331,7 +331,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         return textured;
     }
 
-    public void setDayLight(DayLight val)
+    public void SetDayLight(DayLight val)
     {
         dayLight = val;
         if (dayLight == DayLight.Night)
@@ -359,16 +359,16 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         this.snapShotCamera.gameObject.GetComponent<Skybox>().material = base.gameObject.GetComponent<Skybox>().material;
     }
 
-    public void setHUDposition() //TODO: Redo it
+    public void SetInterfacePosition() //TODO: Redo it
     {
-        GameObject.Find("Flare").transform.localPosition = new Vector3((float) ((int) (-Screen.width * 0.5f) + 14), (float) (int) (-Screen.height * 0.5f), 0f);
-        GameObject.Find("LabelInfoBottomRight").transform.localPosition = new Vector3((float) (int) (Screen.width * 0.5f), (float) (int) (-Screen.height * 0.5f), 0f);
+        GameObject.Find("Flare").transform.localPosition = new Vector3((int)(-Screen.width * 0.5f) + 14, (int)(-Screen.height * 0.5f), 0f);
+        GameObject.Find("LabelInfoBottomRight").transform.localPosition = new Vector3((int)(Screen.width * 0.5f), (int)(-Screen.height * 0.5f), 0f);
 //        obj2.GetComponent<UILabel>().text = "Pause : " + GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.pause] + " ";
-        GameObject.Find("LabelInfoTopCenter").transform.localPosition = new Vector3(0f, (float) (int) (Screen.height * 0.5f), 0f);
-        GameObject.Find("LabelInfoTopRight").transform.localPosition = new Vector3((float) (int) (Screen.width * 0.5f), (float) (int) (Screen.height * 0.5f), 0f);
+        GameObject.Find("LabelInfoTopCenter").transform.localPosition = new Vector3(0f, (int)(Screen.height * 0.5f), 0f);
+        GameObject.Find("LabelInfoTopRight").transform.localPosition = new Vector3((int)(Screen.width * 0.5f), (int)(Screen.height * 0.5f), 0f);
         Destroy(GameObject.Find("LabelNetworkStatus"));
 //        GameObject.Find("LabelNetworkStatus").transform.localPosition = new Vector3((float) ((int) (-Screen.width * 0.5f)), (float) ((int) (Screen.height * 0.5f)), 0f); MOD: Removed Connection state top left
-        GameObject.Find("LabelInfoTopLeft").transform.localPosition = new Vector3((float) (int) (-Screen.width * 0.5f), (float) (int) (Screen.height * 0.5f - 20f), 0f);
+        GameObject.Find("LabelInfoTopLeft").transform.localPosition = new Vector3((int)(-Screen.width * 0.5f), (int)(Screen.height * 0.5f - 20f), 0f);
         Destroy(GameObject.Find("Chatroom"));
 //        GameObject.Find("Chatroom").transform.localPosition = new Vector3((float) ((int) (-Screen.width * 0.5f)), (float) ((int) (-Screen.height * 0.5f)), 0f);
 //        if (GameObject.Find("Chatroom") != null)
@@ -388,12 +388,12 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             GameObject.Find("skill_cd_petra").transform.localPosition = vector;
             GameObject.Find("skill_cd_sasha").transform.localPosition = vector;
             GameObject.Find("GasUI").transform.localPosition = vector;
-            GameObject.Find("stamina_titan").transform.localPosition = new Vector3(-160f, (float) (int) (-Screen.height * 0.5f + 15f), 0f);
-            GameObject.Find("stamina_titan_bottom").transform.localPosition = new Vector3(-160f, (float) (int) (-Screen.height * 0.5f + 15f), 0f);
+            GameObject.Find("stamina_titan").transform.localPosition = new Vector3(-160f, (int)(-Screen.height * 0.5f + 15f), 0f);
+            GameObject.Find("stamina_titan_bottom").transform.localPosition = new Vector3(-160f, (int)(-Screen.height * 0.5f + 15f), 0f);
         }
         else
         {
-            GameObject.Find("skill_cd_bottom").transform.localPosition = new Vector3(0f, (float) (int) (-Screen.height * 0.5f + 5f), 0f);
+            GameObject.Find("skill_cd_bottom").transform.localPosition = new Vector3(0f, (int)(-Screen.height * 0.5f + 5f), 0f);
             GameObject.Find("GasUI").transform.localPosition = GameObject.Find("skill_cd_bottom").transform.localPosition;
             GameObject.Find("stamina_titan").transform.localPosition = new Vector3(0f, 9999f, 0f);
             GameObject.Find("stamina_titan_bottom").transform.localPosition = new Vector3(0f, 9999f, 0f);
@@ -491,12 +491,12 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             if (this.flip)
             {
                 Transform transform = base.gameObject.transform;
-                transform.position += (Vector3) (Vector3.up * this.R);
+                transform.position += Vector3.up * this.R;
             }
             else
             {
                 Transform transform2 = base.gameObject.transform;
-                transform2.position -= (Vector3) (Vector3.up * this.R);
+                transform2.position -= Vector3.up * this.R;
             }
             this.flip = !this.flip;
             this.R *= this.decay;
@@ -509,51 +509,51 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         RaycastHit hit;
         this.snapShotCamera.transform.position = this.head == null ? this.main_object.transform.position : this.head.transform.position;
         Transform transform = this.snapShotCamera.transform;
-        transform.position += (Vector3) (Vector3.up * this.heightMulti);
+        transform.position += Vector3.up * this.heightMulti;
         Transform transform2 = this.snapShotCamera.transform;
-        transform2.position -= (Vector3) (Vector3.up * 1.1f);
+        transform2.position -= Vector3.up * 1.1f;
         Vector3 worldPosition = vector = this.snapShotCamera.transform.position;
-        Vector3 vector3 = (Vector3) ((worldPosition + this.snapShotTargetPosition) * 0.5f);
+        Vector3 vector3 = (worldPosition + this.snapShotTargetPosition) * 0.5f;
         this.snapShotCamera.transform.position = vector3;
         worldPosition = vector3;
         this.snapShotCamera.transform.LookAt(this.snapShotTargetPosition);
         if (index == 3)
         {
-            this.snapShotCamera.transform.RotateAround(base.transform.position, Vector3.up, UnityEngine.Random.Range((float) -180f, (float) 180f));
+            this.snapShotCamera.transform.RotateAround(base.transform.position, Vector3.up, UnityEngine.Random.Range(-180f, 180f));
         }
         else
         {
-            this.snapShotCamera.transform.RotateAround(base.transform.position, Vector3.up, UnityEngine.Random.Range((float) -20f, (float) 20f));
+            this.snapShotCamera.transform.RotateAround(base.transform.position, Vector3.up, UnityEngine.Random.Range(-20f, 20f));
         }
         this.snapShotCamera.transform.LookAt(worldPosition);
-        this.snapShotCamera.transform.RotateAround(worldPosition, base.transform.right, UnityEngine.Random.Range((float) -20f, (float) 20f));
+        this.snapShotCamera.transform.RotateAround(worldPosition, base.transform.right, UnityEngine.Random.Range(-20f, 20f));
         float num = Vector3.Distance(this.snapShotTargetPosition, vector);
         if (this.snapShotTarget != null && this.snapShotTarget.GetComponent<TITAN>() != null)
         {
             num += (index - 1) * this.snapShotTarget.transform.localScale.x * 10f;
         }
         Transform transform3 = this.snapShotCamera.transform;
-        transform3.position -= (Vector3) (this.snapShotCamera.transform.forward * UnityEngine.Random.Range((float) (num + 3f), (float) (num + 10f)));
+        transform3.position -= this.snapShotCamera.transform.forward * UnityEngine.Random.Range((float)(num + 3f), (float)(num + 10f));
         this.snapShotCamera.transform.LookAt(worldPosition);
-        this.snapShotCamera.transform.RotateAround(worldPosition, base.transform.forward, UnityEngine.Random.Range((float) -30f, (float) 30f));
+        this.snapShotCamera.transform.RotateAround(worldPosition, base.transform.forward, UnityEngine.Random.Range(-30f, 30f));
         Vector3 end = this.head == null ? this.main_object.transform.position : this.head.transform.position;
         Vector3 vector5 = (this.head == null ? this.main_object.transform.position : this.head.transform.position) - this.snapShotCamera.transform.position;
         end -= vector5;
-        LayerMask mask = (int) 1 << LayerMask.NameToLayer("Ground");
-        LayerMask mask2 = (int) 1 << LayerMask.NameToLayer("EnemyBox");
+        LayerMask mask = 1 << LayerMask.NameToLayer("Ground");
+        LayerMask mask2 = 1 << LayerMask.NameToLayer("EnemyBox");
         LayerMask mask3 = mask | mask2;
         if (this.head != null)
         {
-            if (Physics.Linecast(this.head.transform.position, end, out hit, (int) mask))
+            if (Physics.Linecast(this.head.transform.position, end, out hit, mask))
             {
                 this.snapShotCamera.transform.position = hit.point;
             }
-            else if (Physics.Linecast(this.head.transform.position - (Vector3) (vector5 * this.distanceMulti * 3f), end, out hit, (int) mask3))
+            else if (Physics.Linecast(this.head.transform.position - vector5 * this.distanceMulti * 3f, end, out hit, mask3))
             {
                 this.snapShotCamera.transform.position = hit.point;
             }
         }
-        else if (Physics.Linecast(this.main_object.transform.position + Vector3.up, end, out hit, (int) mask3))
+        else if (Physics.Linecast(this.main_object.transform.position + Vector3.up, end, out hit, mask3))
         {
             this.snapShotCamera.transform.position = hit.point;
         }
@@ -637,12 +637,12 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     private void Start()
     {
-        GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().addCamera(this);
+        FengGameManagerMKII.instance.AddCamera(this);
         isPausing = false;
         sensitivityMulti = PlayerPrefs.GetFloat("MouseSensitivity");
         invertY = PlayerPrefs.GetInt("invertMouseY");
         this.inputManager = GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>();
-        this.setDayLight(dayLight);
+        this.SetDayLight(dayLight);
         this.locker = GameObject.Find("locker");
         if (PlayerPrefs.HasKey("cameraTilt"))
         {
@@ -676,7 +676,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         this.snapShotTargetPosition = p;
         this.snapShotTarget = target;
         this.snapShotStartCountDownTime = startTime;
-        this.snapShotInterval = 0.05f + UnityEngine.Random.Range((float) 0f, (float) 0.03f);
+        this.snapShotInterval = 0.05f + UnityEngine.Random.Range(0f, 0.03f);
         this.snapShotDmg = dmg;
     }
 
@@ -692,7 +692,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 this.snapShotTargetPosition = p;
                 this.snapShotTarget = target;
                 this.snapShotStartCountDownTime = startTime;
-                this.snapShotInterval = 0.05f + UnityEngine.Random.Range((float) 0f, (float) 0.03f);
+                this.snapShotInterval = 0.05f + UnityEngine.Random.Range(0f, 0.03f);
                 this.snapShotDmg = dmg;
             }
         }
@@ -703,7 +703,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             this.snapShotTargetPosition = p;
             this.snapShotTarget = target;
             this.snapShotStartCountDownTime = startTime;
-            this.snapShotInterval = 0.05f + UnityEngine.Random.Range((float) 0f, (float) 0.03f);
+            this.snapShotInterval = 0.05f + UnityEngine.Random.Range(0f, 0.03f);
             this.snapShotDmg = dmg;
         }
     }
@@ -786,8 +786,8 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                     {
                         Vector3 position = base.transform.position;
                         position = this.head == null ? this.main_object.transform.position : this.head.transform.position;
-                        position += (Vector3) (Vector3.up * this.heightMulti);
-                        base.transform.position = Vector3.Lerp(base.transform.position, position - (Vector3) (base.transform.forward * 5f), 0.2f);
+                        position += Vector3.up * this.heightMulti;
+                        base.transform.position = Vector3.Lerp(base.transform.position, position - base.transform.forward * 5f, 0.2f);
                     }
                     return;
                 }
@@ -813,7 +813,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             if (this.needSetHUD)
             {
                 this.needSetHUD = false;
-                this.setHUDposition();
+                this.SetInterfacePosition();
             }
             if (this.inputManager.isInputDown[InputCode.fullscreen])
             {
@@ -874,7 +874,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 if (this.gameOver && this.lockAngle && this.main_object != null)
                 {
                     base.transform.rotation = Quaternion.Lerp(base.transform.rotation, this.main_object.transform.rotation, 0.2f);
-                    base.transform.position = Vector3.Lerp(base.transform.position, this.main_object.transform.position - (Vector3) (this.main_object.transform.forward * 5f), 0.2f);
+                    base.transform.position = Vector3.Lerp(base.transform.position, this.main_object.transform.position - this.main_object.transform.forward * 5f, 0.2f);
                 }
                 else
                 {
@@ -887,19 +887,19 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                     Vector3 vector3 = transform.position - (this.head == null ? this.main_object.transform.position : this.head.transform.position);
                     vector3.Normalize();
                     this.lockCameraPosition = this.head == null ? this.main_object.transform.position : this.head.transform.position;
-                    this.lockCameraPosition -= (Vector3) (vector3 * this.distance * this.distanceMulti * this.distanceOffsetMulti);
-                    this.lockCameraPosition += (Vector3) (Vector3.up * 3f * this.heightMulti * this.distanceOffsetMulti);
+                    this.lockCameraPosition -= vector3 * this.distance * this.distanceMulti * this.distanceOffsetMulti;
+                    this.lockCameraPosition += Vector3.up * 3f * this.heightMulti * this.distanceOffsetMulti;
                     base.transform.position = Vector3.Lerp(base.transform.position, this.lockCameraPosition, Time.deltaTime * 4f);
                     if (this.head != null)
                     {
-                        base.transform.LookAt((Vector3) (this.head.transform.position * 0.8f + transform.position * 0.2f));
+                        base.transform.LookAt(this.head.transform.position * 0.8f + transform.position * 0.2f);
                     }
                     else
                     {
-                        base.transform.LookAt((Vector3) (this.main_object.transform.position * 0.8f + transform.position * 0.2f));
+                        base.transform.LookAt(this.main_object.transform.position * 0.8f + transform.position * 0.2f);
                     }
                     base.transform.localEulerAngles = new Vector3(base.transform.eulerAngles.x, base.transform.eulerAngles.y, z);
-                    Vector2 vector7 = base.camera.WorldToScreenPoint(transform.position - (Vector3) (transform.forward * this.lockTarget.transform.localScale.x));
+                    Vector2 vector7 = base.camera.WorldToScreenPoint(transform.position - transform.forward * this.lockTarget.transform.localScale.x);
                     this.locker.transform.localPosition = new Vector3(vector7.x - Screen.width * 0.5f, vector7.y - Screen.height * 0.5f, 0f);
                     if (this.lockTarget.GetComponent<TITAN>() != null && this.lockTarget.GetComponent<TITAN>().hasDie)
                     {
@@ -913,23 +913,23 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 Vector3 end = this.head == null ? this.main_object.transform.position : this.head.transform.position;
                 Vector3 vector9 = (this.head == null ? this.main_object.transform.position : this.head.transform.position) - base.transform.position;
                 Vector3 normalized = vector9.normalized;
-                end -= (Vector3) (this.distance * normalized * this.distanceMulti);
-                LayerMask mask = (int) 1 << LayerMask.NameToLayer("Ground");
-                LayerMask mask2 = (int) 1 << LayerMask.NameToLayer("EnemyBox");
+                end -= this.distance * normalized * this.distanceMulti;
+                LayerMask mask = 1 << LayerMask.NameToLayer("Ground");
+                LayerMask mask2 = 1 << LayerMask.NameToLayer("EnemyBox");
                 LayerMask mask3 = mask | mask2;
                 if (this.head != null)
                 {
-                    if (Physics.Linecast(this.head.transform.position, end, out hit, (int) mask))
+                    if (Physics.Linecast(this.head.transform.position, end, out hit, mask))
                     {
                         base.transform.position = hit.point;
                     }
-                    else if (Physics.Linecast(this.head.transform.position - (Vector3) (normalized * this.distanceMulti * 3f), end, out hit, (int) mask2))
+                    else if (Physics.Linecast(this.head.transform.position - normalized * this.distanceMulti * 3f, end, out hit, mask2))
                     {
                         base.transform.position = hit.point;
                     }
-                    Debug.DrawLine(this.head.transform.position - (Vector3) (normalized * this.distanceMulti * 3f), end, Color.red);
+                    Debug.DrawLine(this.head.transform.position - normalized * this.distanceMulti * 3f, end, Color.red);
                 }
-                else if (Physics.Linecast(this.main_object.transform.position + Vector3.up, end, out hit, (int) mask3))
+                else if (Physics.Linecast(this.main_object.transform.position + Vector3.up, end, out hit, mask3))
                 {
                     base.transform.position = hit.point;
                 }
@@ -1016,8 +1016,8 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                     {
                         Vector3 position = base.transform.position;
                         position = this.head == null ? this.main_object.transform.position : this.head.transform.position;
-                        position += (Vector3) (Vector3.up * this.heightMulti);
-                        base.transform.position = Vector3.Lerp(base.transform.position, position - (Vector3) (base.transform.forward * 5f), 0.2f);
+                        position += Vector3.up * this.heightMulti;
+                        base.transform.position = Vector3.Lerp(base.transform.position, position - base.transform.forward * 5f, 0.2f);
                     }
                     return;
                 }
@@ -1036,7 +1036,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             if (this.needSetHUD)
             {
                 this.needSetHUD = false;
-                this.setHUDposition();
+                this.SetInterfacePosition();
                 Screen.lockCursor = !Screen.lockCursor;
                 Screen.lockCursor = !Screen.lockCursor;
             }
@@ -1122,7 +1122,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                     else if (this.lockAngle)
                     {
                         base.transform.rotation = Quaternion.Lerp(base.transform.rotation, this.main_object.transform.rotation, 0.2f);
-                        base.transform.position = Vector3.Lerp(base.transform.position, this.main_object.transform.position - (Vector3) (this.main_object.transform.forward * 5f), 0.2f);
+                        base.transform.position = Vector3.Lerp(base.transform.position, this.main_object.transform.position - this.main_object.transform.forward * 5f, 0.2f);
                     }
                     else
                     {
@@ -1140,19 +1140,19 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                     Vector3 vector2 = transform.position - (this.head == null ? this.main_object.transform.position : this.head.transform.position);
                     vector2.Normalize();
                     this.lockCameraPosition = this.head == null ? this.main_object.transform.position : this.head.transform.position;
-                    this.lockCameraPosition -= (Vector3) (vector2 * this.distance * this.distanceMulti * this.distanceOffsetMulti);
-                    this.lockCameraPosition += (Vector3) (Vector3.up * 3f * this.heightMulti * this.distanceOffsetMulti);
+                    this.lockCameraPosition -= vector2 * this.distance * this.distanceMulti * this.distanceOffsetMulti;
+                    this.lockCameraPosition += Vector3.up * 3f * this.heightMulti * this.distanceOffsetMulti;
                     base.transform.position = Vector3.Lerp(base.transform.position, this.lockCameraPosition, Time.deltaTime * 4f);
                     if (this.head != null)
                     {
-                        base.transform.LookAt((Vector3) (this.head.transform.position * 0.8f + transform.position * 0.2f));
+                        base.transform.LookAt(this.head.transform.position * 0.8f + transform.position * 0.2f);
                     }
                     else
                     {
-                        base.transform.LookAt((Vector3) (this.main_object.transform.position * 0.8f + transform.position * 0.2f));
+                        base.transform.LookAt(this.main_object.transform.position * 0.8f + transform.position * 0.2f);
                     }
                     base.transform.localEulerAngles = new Vector3(base.transform.eulerAngles.x, base.transform.eulerAngles.y, z);
-                    Vector2 vector3 = base.camera.WorldToScreenPoint(transform.position - (Vector3) (transform.forward * this.lockTarget.transform.localScale.x));
+                    Vector2 vector3 = base.camera.WorldToScreenPoint(transform.position - transform.forward * this.lockTarget.transform.localScale.x);
                     this.locker.transform.localPosition = new Vector3(vector3.x - Screen.width * 0.5f, vector3.y - Screen.height * 0.5f, 0f);
                     if (this.lockTarget.GetComponent<TITAN>() != null && this.lockTarget.GetComponent<TITAN>().hasDie)
                     {
@@ -1166,23 +1166,23 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 Vector3 end = this.head == null ? this.main_object.transform.position : this.head.transform.position;
                 Vector3 vector5 = (this.head == null ? this.main_object.transform.position : this.head.transform.position) - base.transform.position;
                 Vector3 normalized = vector5.normalized;
-                end -= (Vector3) (this.distance * normalized * this.distanceMulti);
-                LayerMask mask = (int) 1 << LayerMask.NameToLayer("Ground");
-                LayerMask mask2 = (int) 1 << LayerMask.NameToLayer("EnemyBox");
+                end -= this.distance * normalized * this.distanceMulti;
+                LayerMask mask = 1 << LayerMask.NameToLayer("Ground");
+                LayerMask mask2 = 1 << LayerMask.NameToLayer("EnemyBox");
                 LayerMask mask3 = mask | mask2;
                 if (this.head != null)
                 {
-                    if (Physics.Linecast(this.head.transform.position, end, out hit, (int) mask))
+                    if (Physics.Linecast(this.head.transform.position, end, out hit, mask))
                     {
                         base.transform.position = hit.point;
                     }
-                    else if (Physics.Linecast(this.head.transform.position - (Vector3) (normalized * this.distanceMulti * 3f), end, out hit, (int) mask2))
+                    else if (Physics.Linecast(this.head.transform.position - normalized * this.distanceMulti * 3f, end, out hit, mask2))
                     {
                         base.transform.position = hit.point;
                     }
-                    Debug.DrawLine(this.head.transform.position - (Vector3) (normalized * this.distanceMulti * 3f), end, Color.red);
+                    Debug.DrawLine(this.head.transform.position - normalized * this.distanceMulti * 3f, end, Color.red);
                 }
-                else if (Physics.Linecast(this.main_object.transform.position + Vector3.up, end, out hit, (int) mask3))
+                else if (Physics.Linecast(this.main_object.transform.position + Vector3.up, end, out hit, mask3))
                 {
                     base.transform.position = hit.point;
                 }

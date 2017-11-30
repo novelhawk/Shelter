@@ -48,7 +48,7 @@ public class UISlider : IgnoreTimeScale
             }
             if (this.mCenter == Vector2.zero)
             {
-                this.mCenter = (Vector2) (this.foreground.localPosition + this.foreground.localScale * 0.5f);
+                this.mCenter = this.foreground.localPosition + this.foreground.localScale * 0.5f;
             }
         }
         else if (this.mCol != null)
@@ -80,7 +80,7 @@ public class UISlider : IgnoreTimeScale
 
     private void OnKey(KeyCode key)
     {
-        float num = this.numberOfSteps <= 1f ? 0.125f : 1f / (float) (this.numberOfSteps - 1);
+        float num = this.numberOfSteps <= 1f ? 0.125f : 1f / (this.numberOfSteps - 1);
         if (this.direction == Direction.Horizontal)
         {
             if (key == KeyCode.LeftArrow)
@@ -134,7 +134,7 @@ public class UISlider : IgnoreTimeScale
         float num3 = this.sliderValue;
         if (force || sliderValue != num3)
         {
-            Vector3 mSize = (Vector3) this.mSize;
+            Vector3 mSize = this.mSize;
             if (this.direction == Direction.Horizontal)
             {
                 mSize.x *= num3;
@@ -222,8 +222,8 @@ public class UISlider : IgnoreTimeScale
         {
             float num;
             UICamera.currentTouch.clickNotification = UICamera.ClickNotification.None;
-            Ray ray = UICamera.currentCamera.ScreenPointToRay((Vector3) UICamera.currentTouch.pos);
-            Plane plane = new Plane((Vector3) (this.mTrans.rotation * Vector3.back), this.mTrans.position);
+            Ray ray = UICamera.currentCamera.ScreenPointToRay(UICamera.currentTouch.pos);
+            Plane plane = new Plane(this.mTrans.rotation * Vector3.back, this.mTrans.position);
             if (plane.Raycast(ray, out num))
             {
                 Vector3 vector = this.mTrans.localPosition + (Vector3) (this.mCenter - this.mSize * 0.5f);
@@ -257,7 +257,7 @@ public class UISlider : IgnoreTimeScale
             float rawValue = this.rawValue;
             if (this.numberOfSteps > 1)
             {
-                rawValue = Mathf.Round(rawValue * (this.numberOfSteps - 1)) / (float) (this.numberOfSteps - 1);
+                rawValue = Mathf.Round(rawValue * (this.numberOfSteps - 1)) / (this.numberOfSteps - 1);
             }
             return rawValue;
         }

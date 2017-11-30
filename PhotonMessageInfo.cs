@@ -27,7 +27,7 @@ public class PhotonMessageInfo
     {
         get
         {
-            return (double) this.timeInt / 1000.0;
+            return this.timeInt / 1000.0;
         }
     }
 }

@@ -56,7 +56,7 @@ public static class NGUIMath
             Vector2 pivotOffset = widget.pivotOffset;
             float num3 = (pivotOffset.x + 0.5f) * relativeSize.x;
             float num4 = (pivotOffset.y - 0.5f) * relativeSize.y;
-            relativeSize = (Vector2)(relativeSize * 0.5f);
+            relativeSize = relativeSize * 0.5f;
             Transform cachedTransform = widget.cachedTransform;
             Vector3 lhs = cachedTransform.TransformPoint(new Vector3(num3 - relativeSize.x, num4 - relativeSize.y, 0f));
             vector2 = Vector3.Max(lhs, vector2);
@@ -89,7 +89,7 @@ public static class NGUIMath
         Transform cachedTransform = sprite.cachedTransform;
         float num = (pivotOffset.x + 0.5f) * relativeSize.x;
         float num2 = (pivotOffset.y - 0.5f) * relativeSize.y;
-        relativeSize = (Vector2)(relativeSize * 0.5f);
+        relativeSize = relativeSize * 0.5f;
         float x = cachedTransform.localScale.x;
         float y = cachedTransform.localScale.y;
         Vector4 border = sprite.border;
@@ -151,7 +151,7 @@ public static class NGUIMath
             Transform cachedTransform = widget.cachedTransform;
             float num3 = (pivotOffset.x + 0.5f) * relativeSize.x;
             float num4 = (pivotOffset.y - 0.5f) * relativeSize.y;
-            relativeSize = (Vector2)(relativeSize * 0.5f);
+            relativeSize = relativeSize * 0.5f;
             Vector3 position = new Vector3(num3 - relativeSize.x, num4 - relativeSize.y, 0f);
             position = cachedTransform.TransformPoint(position);
             position = worldToLocalMatrix.MultiplyPoint3x4(position);
@@ -267,10 +267,10 @@ public static class NGUIMath
         Rect rect2 = rect;
         if (width != 0f && height != 0f)
         {
-            rect2.xMin = rect.xMin / (float)width;
-            rect2.xMax = rect.xMax / (float)width;
-            rect2.yMin = 1f - rect.yMax / (float)height;
-            rect2.yMax = 1f - rect.yMin / (float)height;
+            rect2.xMin = rect.xMin / width;
+            rect2.xMax = rect.xMax / width;
+            rect2.yMin = 1f - rect.yMax / height;
+            rect2.yMax = 1f - rect.yMin / height;
         }
         return rect2;
     }
@@ -314,7 +314,7 @@ public static class NGUIMath
             Vector2 vector4 = point - b;
             return vector4.magnitude;
         }
-        Vector2 vector5 = a + (Vector2)(num2 * (b - a));
+        Vector2 vector5 = a + num2 * (b - a);
         Vector2 vector6 = point - vector5;
         return vector6.magnitude;
     }
@@ -472,7 +472,7 @@ public static class NGUIMath
                     str = str + " ";
                     break;
             }
-            str = str + ((val & ((int)1 << --num)) == 0 ? '0' : '1');
+            str = str + ((val & 1 << --num) == 0 ? '0' : '1');
         }
         return str;
     }
@@ -550,8 +550,8 @@ public static class NGUIMath
         Vector2 zero = Vector2.zero;
         for (int i = 0; i < num2; i++)
         {
-            zero += (Vector2)(velocity * 0.06f);
-            velocity = (Vector2)(velocity * num);
+            zero += velocity * 0.06f;
+            velocity = velocity * num;
         }
         return zero;
     }
@@ -567,8 +567,8 @@ public static class NGUIMath
         Vector3 zero = Vector3.zero;
         for (int i = 0; i < num2; i++)
         {
-            zero += (Vector3)(velocity * 0.06f);
-            velocity = (Vector3)(velocity * num);
+            zero += velocity * 0.06f;
+            velocity = velocity * num;
         }
         return zero;
     }

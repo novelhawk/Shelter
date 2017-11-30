@@ -82,7 +82,7 @@ public class LevelTriggerHint : MonoBehaviour
     {
         if (this.on)
         {
-            GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().ShowHUDInfoCenter(this.content + "\n\n\n\n\n");
+            FengGameManagerMKII.instance.ShowHUDInfoCenter(this.content + "\n\n\n\n\n");
             this.on = false;
         }
     }

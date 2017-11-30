@@ -61,7 +61,7 @@ public class PhotonStream
     {
         if (this.write)
         {
-            this.data.Add((bool) myBool);
+            this.data.Add(myBool);
         }
         else if (this.data.Count > this.currentItem)
         {
@@ -74,7 +74,7 @@ public class PhotonStream
     {
         if (this.write)
         {
-            this.data.Add((char) value);
+            this.data.Add(value);
         }
         else if (this.data.Count > this.currentItem)
         {
@@ -87,7 +87,7 @@ public class PhotonStream
     {
         if (this.write)
         {
-            this.data.Add((short) value);
+            this.data.Add(value);
         }
         else if (this.data.Count > this.currentItem)
         {
@@ -100,7 +100,7 @@ public class PhotonStream
     {
         if (this.write)
         {
-            this.data.Add((int) myInt);
+            this.data.Add(myInt);
         }
         else if (this.data.Count > this.currentItem)
         {
@@ -113,7 +113,7 @@ public class PhotonStream
     {
         if (this.write)
         {
-            this.data.Add((float) obj);
+            this.data.Add(obj);
         }
         else if (this.data.Count > this.currentItem)
         {
@@ -139,7 +139,7 @@ public class PhotonStream
     {
         if (this.write)
         {
-            this.data.Add((Quaternion) obj);
+            this.data.Add(obj);
         }
         else if (this.data.Count > this.currentItem)
         {
@@ -152,7 +152,7 @@ public class PhotonStream
     {
         if (this.write)
         {
-            this.data.Add((Vector2) obj);
+            this.data.Add(obj);
         }
         else if (this.data.Count > this.currentItem)
         {
@@ -165,7 +165,7 @@ public class PhotonStream
     {
         if (this.write)
         {
-            this.data.Add((Vector3) obj);
+            this.data.Add(obj);
         }
         else if (this.data.Count > this.currentItem)
         {

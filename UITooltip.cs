@@ -56,7 +56,7 @@ public class UITooltip : MonoBehaviour
                 Transform transform2 = this.text.transform;
                 Vector3 localPosition = transform2.localPosition;
                 Vector3 localScale = transform2.localScale;
-                this.mSize = (Vector3) this.text.relativeSize;
+                this.mSize = this.text.relativeSize;
                 this.mSize.x *= localScale.x;
                 this.mSize.y *= localScale.y;
                 this.mSize.x += this.background.border.x + this.background.border.z + (localPosition.x - this.background.border.x) * 2f;
@@ -66,11 +66,11 @@ public class UITooltip : MonoBehaviour
             }
             if (this.uiCamera != null)
             {
-                this.mPos.x = Mathf.Clamp01(this.mPos.x / (float) Screen.width);
-                this.mPos.y = Mathf.Clamp01(this.mPos.y / (float) Screen.height);
+                this.mPos.x = Mathf.Clamp01(this.mPos.x / Screen.width);
+                this.mPos.y = Mathf.Clamp01(this.mPos.y / Screen.height);
                 float num = this.uiCamera.orthographicSize / this.mTrans.parent.lossyScale.y;
                 float num2 = Screen.height * 0.5f / num;
-                Vector2 vector10 = new Vector2(num2 * this.mSize.x / (float) Screen.width, num2 * this.mSize.y / (float) Screen.height);
+                Vector2 vector10 = new Vector2(num2 * this.mSize.x / Screen.width, num2 * this.mSize.y / Screen.height);
                 this.mPos.x = Mathf.Min(this.mPos.x, 1f - vector10.x);
                 this.mPos.y = Mathf.Max(this.mPos.y, vector10.y);
                 this.mTrans.position = this.uiCamera.ViewportToWorldPoint(this.mPos);
@@ -125,16 +125,16 @@ public class UITooltip : MonoBehaviour
         if (this.mCurrent != this.mTarget)
         {
             this.mCurrent = Mathf.Lerp(this.mCurrent, this.mTarget, Time.deltaTime * this.appearSpeed);
-            if (Mathf.Abs((float) (this.mCurrent - this.mTarget)) < 0.001f)
+            if (Mathf.Abs(this.mCurrent - this.mTarget) < 0.001f)
             {
                 this.mCurrent = this.mTarget;
             }
             this.SetAlpha(this.mCurrent * this.mCurrent);
             if (this.scalingTransitions)
             {
-                Vector3 vector = (Vector3) (this.mSize * 0.25f);
+                Vector3 vector = this.mSize * 0.25f;
                 vector.y = -vector.y;
-                Vector3 vector2 = (Vector3) (Vector3.one * (1.5f - this.mCurrent * 0.5f));
+                Vector3 vector2 = Vector3.one * (1.5f - this.mCurrent * 0.5f);
                 Vector3 vector3 = Vector3.Lerp(this.mPos - vector, this.mPos, this.mCurrent);
                 this.mTrans.localPosition = vector3;
                 this.mTrans.localScale = vector2;

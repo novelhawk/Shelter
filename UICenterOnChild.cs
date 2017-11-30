@@ -50,7 +50,7 @@ public class UICenterOnChild : MonoBehaviour
             localPosition.x += clipRange.x;
             localPosition.y += clipRange.y;
             localPosition = cachedTransform.parent.TransformPoint(localPosition);
-            Vector3 vector3 = localPosition - (Vector3) (this.mDrag.currentMomentum * (this.mDrag.momentumAmount * 0.1f));
+            Vector3 vector3 = localPosition - this.mDrag.currentMomentum * (this.mDrag.momentumAmount * 0.1f);
             this.mDrag.currentMomentum = Vector3.zero;
             float maxValue = float.MaxValue;
             Transform transform2 = null;

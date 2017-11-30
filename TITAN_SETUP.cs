@@ -18,7 +18,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
         HeroCostume.init2();
         this.hair_go_ref = new GameObject();
         this.eye.transform.parent = base.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck/head").transform;
-        this.hair_go_ref.transform.position = (Vector3) (this.eye.transform.position + Vector3.up * 3.5f + base.transform.forward * 5.2f);
+        this.hair_go_ref.transform.position = this.eye.transform.position + Vector3.up * 3.5f + base.transform.forward * 5.2f;
         this.hair_go_ref.transform.rotation = this.eye.transform.rotation;
         this.hair_go_ref.transform.RotateAround(this.eye.transform.position, base.transform.right, -20f);
         this.hair_go_ref.transform.localScale = new Vector3(210f, 210f, 210f);
@@ -82,7 +82,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
         }
         if (iteratorVariable0)
         {
-            FengGameManagerMKII.instance.unloadAssets();
+            FengGameManagerMKII.instance.UnloadAssets();
         }
     }
 
@@ -91,7 +91,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
         if (id >= 0)
         {
             float num2 = 0.125f;
-            float x = num2 * (int) ((float) id / 8f);
+            float x = num2 * (int)(id / 8f);
             float y = -0.25f * (id % 4);
             go.renderer.material.mainTextureOffset = new Vector2(x, y);
         }

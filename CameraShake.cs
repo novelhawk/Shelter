@@ -19,12 +19,12 @@ public class CameraShake : MonoBehaviour
             if (this.flip)
             {
                 Transform transform = base.gameObject.transform;
-                transform.position += (Vector3) (Vector3.up * this.R);
+                transform.position += Vector3.up * this.R;
             }
             else
             {
                 Transform transform2 = base.gameObject.transform;
-                transform2.position -= (Vector3) (Vector3.up * this.R);
+                transform2.position -= Vector3.up * this.R;
             }
             this.flip = !this.flip;
             this.R *= this.decay;

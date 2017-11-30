@@ -96,8 +96,10 @@ public class HERO_SETUP : MonoBehaviour
         }
         SkinnedMeshRenderer component = go.GetComponent<SkinnedMeshRenderer>();
         List<CombineInstance> list = new List<CombineInstance>();
-        this.materialList = new List<Material>();
-        this.materialList.Add(component.material);
+        this.materialList = new List<Material>
+        {
+            component.material
+        };
         this.boneWeightsList = new List<BoneWeight>();
         Transform[] bones = component.bones;
         SkinnedMeshRenderer renderer2 = go2.GetComponent<SkinnedMeshRenderer>();
@@ -642,7 +644,7 @@ public class HERO_SETUP : MonoBehaviour
         {
             go.renderer.material = CharacterMaterials.materials[this.myCostume.face_texture];
             float num = 0.125f;
-            float x = num * (int) ((float) id / 8f);
+            float x = num * (int)(id / 8f);
             float y = -0.125f * (id % 8);
             go.renderer.material.mainTextureOffset = new Vector2(x, y);
         }

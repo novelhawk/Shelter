@@ -5,8 +5,10 @@ internal static class ScoreExtensions
     public static void AddScore(this PhotonPlayer player, int scoreToAddToCurrent)
     {
         int num = player.GetScore() + scoreToAddToCurrent;
-        Hashtable propertiesToSet = new Hashtable();
-        propertiesToSet["score"] = num;
+        Hashtable propertiesToSet = new Hashtable
+        {
+            ["score"] = num
+        };
         player.SetCustomProperties(propertiesToSet);
     }
 
@@ -22,8 +24,10 @@ internal static class ScoreExtensions
 
     public static void SetScore(this PhotonPlayer player, int newScore)
     {
-        Hashtable propertiesToSet = new Hashtable();
-        propertiesToSet["score"] = newScore;
+        Hashtable propertiesToSet = new Hashtable
+        {
+            ["score"] = newScore
+        };
         player.SetCustomProperties(propertiesToSet);
     }
 }

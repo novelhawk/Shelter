@@ -44,7 +44,7 @@ namespace Mod.Interface
             GUI.DrawTexture(new Rect(rect.x, rect.y, rect.height, rect.width), texture);
         }
 
-        private void Update()
+        protected override void Update()
         {
             rotAngle += Time.deltaTime * 250;
         }

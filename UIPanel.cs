@@ -77,7 +77,7 @@ public class UIPanel : MonoBehaviour
             maxArea.x -= this.clipSoftness.x;
             maxArea.y -= this.clipSoftness.y;
         }
-        return (Vector3) NGUIMath.ConstrainRect(minRect, maxRect, minArea, maxArea);
+        return NGUIMath.ConstrainRect(minRect, maxRect, minArea, maxArea);
     }
 
     public bool ConstrainTargetToBounds(Transform target, bool immediate)
@@ -244,10 +244,10 @@ public class UIPanel : MonoBehaviour
         vector2.x += relativeSize.x;
         vector2.y -= relativeSize.y;
         Transform cachedTransform = w.cachedTransform;
-        Vector3 a = cachedTransform.TransformPoint((Vector3) vector2);
-        Vector3 b = cachedTransform.TransformPoint((Vector3) new Vector2(vector2.x, vector3.y));
-        Vector3 c = cachedTransform.TransformPoint((Vector3) new Vector2(vector3.x, vector2.y));
-        Vector3 d = cachedTransform.TransformPoint((Vector3) vector3);
+        Vector3 a = cachedTransform.TransformPoint(vector2);
+        Vector3 b = cachedTransform.TransformPoint(new Vector2(vector2.x, vector3.y));
+        Vector3 c = cachedTransform.TransformPoint(new Vector2(vector3.x, vector2.y));
+        Vector3 d = cachedTransform.TransformPoint(vector3);
         return this.IsVisible(a, b, c, d);
     }
 
@@ -529,13 +529,13 @@ public class UIPanel : MonoBehaviour
                 Vector2 vector = new Vector2(this.mClipRange.z, this.mClipRange.w);
                 if (vector.x == 0f)
                 {
-                    vector.x = this.mCam != null ? this.mCam.pixelWidth : (float) Screen.width;
+                    vector.x = this.mCam != null ? this.mCam.pixelWidth : Screen.width;
                 }
                 if (vector.y == 0f)
                 {
-                    vector.y = this.mCam != null ? this.mCam.pixelHeight : (float) Screen.height;
+                    vector.y = this.mCam != null ? this.mCam.pixelHeight : Screen.height;
                 }
-                vector = (Vector2) (vector * 0.5f);
+                vector = vector * 0.5f;
                 this.mMin.x = this.mClipRange.x - vector.x;
                 this.mMin.y = this.mClipRange.y - vector.y;
                 this.mMax.x = this.mClipRange.x + vector.x;

@@ -15,22 +15,22 @@ public class MoveByKeys : Photon.MonoBehaviour
         if (Input.GetKey(KeyCode.A))
         {
             Transform transform = base.transform;
-            transform.position += (Vector3) (Vector3.left * (this.speed * Time.deltaTime));
+            transform.position += Vector3.left * (this.speed * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.D))
         {
             Transform transform2 = base.transform;
-            transform2.position += (Vector3) (Vector3.right * (this.speed * Time.deltaTime));
+            transform2.position += Vector3.right * (this.speed * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.W))
         {
             Transform transform3 = base.transform;
-            transform3.position += (Vector3) (Vector3.forward * (this.speed * Time.deltaTime));
+            transform3.position += Vector3.forward * (this.speed * Time.deltaTime);
         }
         if (Input.GetKey(KeyCode.S))
         {
             Transform transform4 = base.transform;
-            transform4.position += (Vector3) (Vector3.back * (this.speed * Time.deltaTime));
+            transform4.position += Vector3.back * (this.speed * Time.deltaTime);
         }
     }
 }

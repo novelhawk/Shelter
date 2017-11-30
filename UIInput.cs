@@ -180,7 +180,7 @@ public class UIInput : MonoBehaviour
                 }
                 Input.imeCompositionMode = IMECompositionMode.On;
                 Transform cachedTransform = this.label.cachedTransform;
-                Vector3 pivotOffset = (Vector3) this.label.pivotOffset;
+                Vector3 pivotOffset = this.label.pivotOffset;
                 pivotOffset.y += this.label.relativeSize.y;
                 pivotOffset = cachedTransform.TransformPoint(pivotOffset);
                 Input.compositionCursorPos = UICamera.currentCamera.WorldToScreenPoint(pivotOffset);
@@ -273,11 +273,11 @@ public class UIInput : MonoBehaviour
             {
                 if (this.label.multiLine)
                 {
-                    str = this.label.font.WrapText(str, (float) this.label.lineWidth / this.label.cachedTransform.localScale.x, 0, false, UIFont.SymbolStyle.None);
+                    str = this.label.font.WrapText(str, this.label.lineWidth / this.label.cachedTransform.localScale.x, 0, false, UIFont.SymbolStyle.None);
                 }
                 else
                 {
-                    string str2 = this.label.font.GetEndOfLineThatFits(str, (float) this.label.lineWidth / this.label.cachedTransform.localScale.x, false, UIFont.SymbolStyle.None);
+                    string str2 = this.label.font.GetEndOfLineThatFits(str, this.label.lineWidth / this.label.cachedTransform.localScale.x, false, UIFont.SymbolStyle.None);
                     if (str2 != str)
                     {
                         str = str2;

@@ -67,7 +67,7 @@ public class EffectNode
         this.OriScaleY = oriScaleY;
         this.Color = oriColor;
         this.ElapsedTime = 0f;
-        this.Velocity = (Vector3) (this.OriDirection * speed);
+        this.Velocity = this.OriDirection * speed;
         this.Acceleration = 0f;
         this.LowerLeftUV = oriLowerUv;
         this.UVDimensions = oriUVDimension;
@@ -80,7 +80,7 @@ public class EffectNode
         {
             this.Ribbon.SetUVCoord(this.LowerLeftUV, this.UVDimensions);
             this.Ribbon.SetColor(oriColor);
-            this.Ribbon.SetHeadPosition(this.ClientTrans.position + this.Position + (Vector3) (this.OriDirection.normalized * this.Owner.TailDistance));
+            this.Ribbon.SetHeadPosition(this.ClientTrans.position + this.Position + this.OriDirection.normalized * this.Owner.TailDistance);
             this.Ribbon.ResetElementsPos();
         }
         if (this.Type == 1)
@@ -96,7 +96,7 @@ public class EffectNode
 
     public void Reset()
     {
-        this.Position = (Vector3) (Vector3.up * 9999f);
+        this.Position = Vector3.up * 9999f;
         this.Velocity = Vector3.zero;
         this.Acceleration = 0f;
         this.ElapsedTime = 0f;
@@ -121,7 +121,7 @@ public class EffectNode
         }
         if (this.Type == 1)
         {
-            this.Sprite.SetRotation((float) this.OriRotateAngle);
+            this.Sprite.SetRotation(this.OriRotateAngle);
             this.Sprite.SetPosition(this.Position);
             this.Sprite.SetColor(UnityEngine.Color.clear);
             this.Sprite.Update(true);
@@ -129,7 +129,7 @@ public class EffectNode
         }
         else if (this.Type == 2)
         {
-            this.Ribbon.SetHeadPosition(this.ClientTrans.position + (Vector3) (this.OriDirection.normalized * this.Owner.TailDistance));
+            this.Ribbon.SetHeadPosition(this.ClientTrans.position + this.OriDirection.normalized * this.Owner.TailDistance);
             this.Ribbon.Reset();
             this.Ribbon.SetColor(UnityEngine.Color.clear);
             this.Ribbon.UpdateVertices(Vector3.zero);
@@ -179,10 +179,10 @@ public class EffectNode
                 disposable.Dispose();
             }
         }
-        this.Position += (Vector3) (this.Velocity * Time.deltaTime);
+        this.Position += this.Velocity * Time.deltaTime;
         if (Mathf.Abs(this.Acceleration) > 0.0001)
         {
-            this.Velocity += (Vector3) (this.Velocity.normalized * this.Acceleration * Time.deltaTime);
+            this.Velocity += this.Velocity.normalized * this.Acceleration * Time.deltaTime;
         }
         if (this.SyncClient)
         {
@@ -244,7 +244,7 @@ public class EffectNode
         {
             this.Sprite.SetUVCoord(this.LowerLeftUV, this.UVDimensions);
         }
-        this.Sprite.SetRotation((float) (this.OriRotateAngle + this.RotateAngle));
+        this.Sprite.SetRotation(this.OriRotateAngle + this.RotateAngle);
         this.Sprite.SetPosition(this.CurWorldPos);
         this.Sprite.Update(false);
     }

@@ -149,7 +149,7 @@ public class UIPopupList : MonoBehaviour
                     if (this.textScale != 1f)
                     {
                         Vector3 localScale = item.cachedTransform.localScale;
-                        item.cachedTransform.localScale = (Vector3) (localScale * this.textScale);
+                        item.cachedTransform.localScale = localScale * this.textScale;
                     }
                     list.Add(item);
                     y -= num2;

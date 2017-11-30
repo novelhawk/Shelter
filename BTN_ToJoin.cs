@@ -18,7 +18,7 @@ public class BTN_ToJoin : MonoBehaviour
         obj3.GetComponent<BoxCollider>().size = size;
         obj3.GetComponent<UIInput>().label.lineWidth = (int) width;
         size = obj3.transform.Find("Background").localScale;
-        size.x *= (float) width / x;
+        size.x *= width / x;
         obj3.transform.Find("Background").localScale = size;
         obj3.transform.Find("Background").position = obj3.GetComponent<UIInput>().label.transform.position;
         return obj3;

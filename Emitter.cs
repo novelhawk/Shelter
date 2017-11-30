@@ -98,13 +98,13 @@ public class Emitter
                 vector2 = node.Position - this.Layer.EmitPoint;
             }
             Vector3 toDirection = Vector3.RotateTowards(vector2, this.Layer.CircleDir, (90 - this.Layer.AngleAroundAxis) * 0.01745329f, 1f);
-            return (Vector3) (Quaternion.FromToRotation(vector2, toDirection) * vector2);
+            return Quaternion.FromToRotation(vector2, toDirection) * vector2;
         }
         if (this.Layer.IsRandomDir)
         {
-            Quaternion quaternion2 = Quaternion.Euler(0f, 0f, (float) this.Layer.AngleAroundAxis);
-            Quaternion quaternion3 = Quaternion.Euler(0f, (float) UnityEngine.Random.Range(0, 360), 0f);
-            return (Vector3) (Quaternion.FromToRotation(Vector3.up, this.Layer.OriVelocityAxis) * quaternion3 * quaternion2 * Vector3.up);
+            Quaternion quaternion2 = Quaternion.Euler(0f, 0f, this.Layer.AngleAroundAxis);
+            Quaternion quaternion3 = Quaternion.Euler(0f, UnityEngine.Random.Range(0, 360), 0f);
+            return Quaternion.FromToRotation(Vector3.up, this.Layer.OriVelocityAxis) * quaternion3 * quaternion2 * Vector3.up;
         }
         return this.Layer.OriVelocityAxis;
     }
@@ -132,9 +132,9 @@ public class Emitter
         if (this.Layer.EmitType == 1)
         {
             Vector3 emitPoint = this.Layer.EmitPoint;
-            float num = UnityEngine.Random.Range((float) (emitPoint.x - this.Layer.BoxSize.x / 2f), (float) (emitPoint.x + this.Layer.BoxSize.x / 2f));
-            float num2 = UnityEngine.Random.Range((float) (emitPoint.y - this.Layer.BoxSize.y / 2f), (float) (emitPoint.y + this.Layer.BoxSize.y / 2f));
-            float num3 = UnityEngine.Random.Range((float) (emitPoint.z - this.Layer.BoxSize.z / 2f), (float) (emitPoint.z + this.Layer.BoxSize.z / 2f));
+            float num = UnityEngine.Random.Range(emitPoint.x - this.Layer.BoxSize.x / 2f, emitPoint.x + this.Layer.BoxSize.x / 2f);
+            float num2 = UnityEngine.Random.Range(emitPoint.y - this.Layer.BoxSize.y / 2f, emitPoint.y + this.Layer.BoxSize.y / 2f);
+            float num3 = UnityEngine.Random.Range(emitPoint.z - this.Layer.BoxSize.z / 2f, emitPoint.z + this.Layer.BoxSize.z / 2f);
             zero.x = num;
             zero.y = num2;
             zero.z = num3;
@@ -158,17 +158,17 @@ public class Emitter
             {
                 zero = this.Layer.ClientTransform.position + this.Layer.EmitPoint;
             }
-            Vector3 vector3 = (Vector3) (Vector3.up * this.Layer.Radius);
-            zero = (Vector3) (Quaternion.Euler((float) UnityEngine.Random.Range(0, 360), (float) UnityEngine.Random.Range(0, 360), (float) UnityEngine.Random.Range(0, 360)) * vector3) + zero;
+            Vector3 vector3 = Vector3.up * this.Layer.Radius;
+            zero = Quaternion.Euler((float)UnityEngine.Random.Range(0, 360), (float)UnityEngine.Random.Range(0, 360), (float)UnityEngine.Random.Range(0, 360)) * vector3 + zero;
         }
         else if (this.Layer.EmitType == 4)
         {
-            Vector3 vector4 = this.Layer.EmitPoint + (Vector3) (this.Layer.ClientTransform.localRotation * Vector3.forward * this.Layer.LineLengthLeft);
-            Vector3 vector5 = this.Layer.EmitPoint + (Vector3) (this.Layer.ClientTransform.localRotation * Vector3.forward * this.Layer.LineLengthRight);
+            Vector3 vector4 = this.Layer.EmitPoint + this.Layer.ClientTransform.localRotation * Vector3.forward * this.Layer.LineLengthLeft;
+            Vector3 vector5 = this.Layer.EmitPoint + this.Layer.ClientTransform.localRotation * Vector3.forward * this.Layer.LineLengthRight;
             Vector3 vector6 = vector5 - vector4;
-            float num4 = (float) (node.Index + 1) / (float) this.Layer.MaxENodes;
+            float num4 = (node.Index + 1) / (float)this.Layer.MaxENodes;
             float num5 = vector6.magnitude * num4;
-            zero = vector4 + (Vector3) (vector6.normalized * num5);
+            zero = vector4 + vector6.normalized * num5;
             if (!this.Layer.SyncClient)
             {
                 zero = this.Layer.ClientTransform.TransformPoint(zero);
@@ -176,10 +176,10 @@ public class Emitter
         }
         else if (this.Layer.EmitType == 3)
         {
-            float num6 = (float) (node.Index + 1) / (float) this.Layer.MaxENodes;
+            float num6 = (node.Index + 1) / (float)this.Layer.MaxENodes;
             float y = 360f * num6;
-            Vector3 vector7 = (Vector3) (Quaternion.Euler(0f, y, 0f) * (Vector3.right * this.Layer.Radius));
-            zero = (Vector3) (Quaternion.FromToRotation(Vector3.up, this.Layer.CircleDir) * vector7);
+            Vector3 vector7 = Quaternion.Euler(0f, y, 0f) * (Vector3.right * this.Layer.Radius);
+            zero = Quaternion.FromToRotation(Vector3.up, this.Layer.CircleDir) * vector7;
             if (!this.Layer.SyncClient)
             {
                 zero = this.Layer.ClientTransform.position + zero + this.Layer.EmitPoint;

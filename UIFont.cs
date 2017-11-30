@@ -53,12 +53,12 @@ public class UIFont : MonoBehaviour
                 float num2 = 0f;
                 if (alignment == Alignment.Right)
                 {
-                    num2 = Mathf.RoundToInt((float)(lineWidth - x));
+                    num2 = Mathf.RoundToInt(lineWidth - x);
                     if (num2 < 0f)
                     {
                         num2 = 0f;
                     }
-                    num2 /= (float)this.size;
+                    num2 /= this.size;
                 }
                 else
                 {
@@ -67,10 +67,10 @@ public class UIFont : MonoBehaviour
                     {
                         num2 = 0f;
                     }
-                    num2 /= (float)this.size;
+                    num2 /= this.size;
                     if ((lineWidth & 1) == 1)
                     {
-                        num2 += 0.5f / (float)size;
+                        num2 += 0.5f / size;
                     }
                 }
                 for (int i = indexOffset; i < verts.size; i++)
@@ -152,8 +152,8 @@ public class UIFont : MonoBehaviour
                     num3 += this.mSpacingX + (int)mChar.width;
                 }
             }
-            float num9 = size <= 0 ? 1f : 1f / (float)size;
-            zero.x = num9 * (num3 <= num2 ? (float)num2 : (float)num3);
+            float num9 = size <= 0 ? 1f : 1f / size;
+            zero.x = num9 * (num3 <= num2 ? num2 : num3);
             zero.y = num9 * (num4 + num7);
         }
         return zero;
@@ -354,9 +354,9 @@ public class UIFont : MonoBehaviour
                     this.mDynamicFont.textureRebuildCallback = null;
                 }
                 this.mColors.Clear();
-                this.mColors.Add((Color)color);
+                this.mColors.Add(color);
                 int size = this.size;
-                Vector2 vector = size <= 0 ? Vector2.one : new Vector2(1f / (float)size, 1f / (float)size);
+                Vector2 vector = size <= 0 ? Vector2.one : new Vector2(1f / size, 1f / size);
                 int indexOffset = verts.size;
                 int num3 = 0;
                 int x = 0;
@@ -367,8 +367,8 @@ public class UIFont : MonoBehaviour
                 Vector3 vector3 = Vector3.zero;
                 Vector2 vector4 = Vector2.zero;
                 Vector2 vector5 = Vector2.zero;
-                float num8 = this.uvRect.width / (float)this.mFont.texWidth;
-                float num9 = this.mUVRect.height / (float)this.mFont.texHeight;
+                float num8 = this.uvRect.width / this.mFont.texWidth;
+                float num9 = this.mUVRect.height / this.mFont.texHeight;
                 int length = text.Length;
                 bool flag2 = encoding && symbolStyle != SymbolStyle.None && this.hasSymbols && this.sprite != null;
                 for (int i = 0; i < length; i++)
@@ -444,8 +444,8 @@ public class UIFont : MonoBehaviour
                             }
                             else
                             {
-                                Color item = (Color)color;
-                                item = (Color)(item * 0.49f);
+                                Color item = color;
+                                item = item * 0.49f;
                                 switch (glyph.channel)
                                 {
                                     case 1:

@@ -10,7 +10,7 @@ public class Spin : MonoBehaviour
     public void ApplyDelta(float delta)
     {
         delta *= 360f;
-        Quaternion quaternion = Quaternion.Euler((Vector3) (this.rotationsPerSecond * delta));
+        Quaternion quaternion = Quaternion.Euler(this.rotationsPerSecond * delta);
         if (this.mRb == null)
         {
             this.mTrans.rotation *= quaternion;

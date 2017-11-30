@@ -58,8 +58,8 @@ public class UIStretch : MonoBehaviour
                 Transform cachedTransform = this.widgetContainer.cachedTransform;
                 Vector3 vector2 = cachedTransform.localScale;
                 Vector3 localPosition = cachedTransform.localPosition;
-                Vector3 relativeSize = (Vector3) this.widgetContainer.relativeSize;
-                Vector3 pivotOffset = (Vector3) this.widgetContainer.pivotOffset;
+                Vector3 relativeSize = this.widgetContainer.relativeSize;
+                Vector3 pivotOffset = this.widgetContainer.pivotOffset;
                 pivotOffset.y--;
                 pivotOffset.x *= this.widgetContainer.relativeSize.x * vector2.x;
                 pivotOffset.y *= this.widgetContainer.relativeSize.y * vector2.y;
@@ -84,7 +84,7 @@ public class UIStretch : MonoBehaviour
             float height = this.mRect.height;
             if (pixelSizeAdjustment != 1f && height > 1f)
             {
-                float num4 = (float) this.mRoot.activeHeight / height;
+                float num4 = this.mRoot.activeHeight / height;
                 width *= num4;
                 height *= num4;
             }

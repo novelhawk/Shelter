@@ -48,7 +48,7 @@ public class RCEvent
                 switch (this.eventType)
                 {
                     case 0:
-                        foreach (TITAN titan in FengGameManagerMKII.instance.getTitans())
+                        foreach (TITAN titan in FengGameManagerMKII.instance.GetTitans())
                         {
                             if (FengGameManagerMKII.titanVariables.ContainsKey(this.foreachVariableName))
                             {

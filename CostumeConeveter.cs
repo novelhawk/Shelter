@@ -45,66 +45,104 @@ public class CostumeConeveter
 
     public static void HeroCostumeToPhotonData(HeroCostume costume, PhotonPlayer player)
     {
-        Hashtable propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.sex, SexToInt(costume.sex));
+        Hashtable propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.sex, SexToInt(costume.sex) }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.costumeId, costume.costumeId);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.costumeId, costume.costumeId }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.heroCostumeId, costume.id);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.heroCostumeId, costume.id }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.cape, costume.cape);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.cape, costume.cape }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.hairInfo, costume.hairInfo.id);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.hairInfo, costume.hairInfo.id }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.eye_texture_id, costume.eye_texture_id);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.eye_texture_id, costume.eye_texture_id }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.beard_texture_id, costume.beard_texture_id);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.beard_texture_id, costume.beard_texture_id }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.glass_texture_id, costume.glass_texture_id);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.glass_texture_id, costume.glass_texture_id }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.skin_color, costume.skin_color);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.skin_color, costume.skin_color }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.hair_color1, costume.hair_color.r);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.hair_color1, costume.hair_color.r }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.hair_color2, costume.hair_color.g);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.hair_color2, costume.hair_color.g }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.hair_color3, costume.hair_color.b);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.hair_color3, costume.hair_color.b }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.division, DivisionToInt(costume.division));
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.division, DivisionToInt(costume.division) }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.statSPD, costume.stat.SPD);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.statSPD, costume.stat.SPD }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.statGAS, costume.stat.GAS);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.statGAS, costume.stat.GAS }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.statBLA, costume.stat.BLA);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.statBLA, costume.stat.BLA }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.statACL, costume.stat.ACL);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.statACL, costume.stat.ACL }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.statSKILL, costume.stat.skillId);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.statSKILL, costume.stat.skillId }
+        };
         player.SetCustomProperties(propertiesToSet);
     }
 
     public static void HeroCostumeToPhotonData2(HeroCostume costume, PhotonPlayer player)
     {
-        Hashtable propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.sex, SexToInt(costume.sex));
+        Hashtable propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.sex, SexToInt(costume.sex) }
+        };
         player.SetCustomProperties(propertiesToSet);
         propertiesToSet = new Hashtable();
         int costumeId = costume.costumeId;
@@ -114,53 +152,85 @@ public class CostumeConeveter
         }
         propertiesToSet.Add(PhotonPlayerProperty.costumeId, costumeId);
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.heroCostumeId, costume.id);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.heroCostumeId, costume.id }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.cape, costume.cape);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.cape, costume.cape }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.hairInfo, costume.hairInfo.id);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.hairInfo, costume.hairInfo.id }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.eye_texture_id, costume.eye_texture_id);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.eye_texture_id, costume.eye_texture_id }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.beard_texture_id, costume.beard_texture_id);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.beard_texture_id, costume.beard_texture_id }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.glass_texture_id, costume.glass_texture_id);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.glass_texture_id, costume.glass_texture_id }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.skin_color, costume.skin_color);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.skin_color, costume.skin_color }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.hair_color1, costume.hair_color.r);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.hair_color1, costume.hair_color.r }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.hair_color2, costume.hair_color.g);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.hair_color2, costume.hair_color.g }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.hair_color3, costume.hair_color.b);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.hair_color3, costume.hair_color.b }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.division, DivisionToInt(costume.division));
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.division, DivisionToInt(costume.division) }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.statSPD, costume.stat.SPD);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.statSPD, costume.stat.SPD }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.statGAS, costume.stat.GAS);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.statGAS, costume.stat.GAS }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.statBLA, costume.stat.BLA);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.statBLA, costume.stat.BLA }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.statACL, costume.stat.ACL);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.statACL, costume.stat.ACL }
+        };
         player.SetCustomProperties(propertiesToSet);
-        propertiesToSet = new Hashtable();
-        propertiesToSet.Add(PhotonPlayerProperty.statSKILL, costume.stat.skillId);
+        propertiesToSet = new Hashtable
+        {
+            { PhotonPlayerProperty.statSKILL, costume.stat.skillId }
+        };
         player.SetCustomProperties(propertiesToSet);
     }
 

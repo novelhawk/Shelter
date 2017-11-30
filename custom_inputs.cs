@@ -128,16 +128,16 @@ public class custom_inputs : MonoBehaviour
         float y = Input.mousePosition.y;
         Vector3 point = GUI.matrix.inverse.MultiplyPoint3x4(new Vector3(x, Screen.height - y, 1f));
         GUI.skin = this.OurSkin;
-        GUI.Box(new Rect(0f, 0f, (float) Screen.width, (float) Screen.height), string.Empty);
-        GUI.Box(new Rect(60f, 60f, (float) (Screen.width - 120), (float) (Screen.height - 120)), string.Empty, "window");
-        GUI.Label(new Rect(this.DescriptionBox_X, top - 10f, (float) this.DescriptionSize, this.buttonHeight), "name", "textfield");
-        GUI.Label(new Rect(this.InputBox1_X, top - 10f, (float) this.DescriptionSize, this.buttonHeight), "input", "textfield");
-        GUI.Label(new Rect(this.InputBox2_X, top - 10f, (float) this.DescriptionSize, this.buttonHeight), "alt input", "textfield");
+        GUI.Box(new Rect(0f, 0f, Screen.width, Screen.height), string.Empty);
+        GUI.Box(new Rect(60f, 60f, Screen.width - 120, Screen.height - 120), string.Empty, "window");
+        GUI.Label(new Rect(this.DescriptionBox_X, top - 10f, this.DescriptionSize, this.buttonHeight), "name", "textfield");
+        GUI.Label(new Rect(this.InputBox1_X, top - 10f, this.DescriptionSize, this.buttonHeight), "input", "textfield");
+        GUI.Label(new Rect(this.InputBox2_X, top - 10f, this.DescriptionSize, this.buttonHeight), "alt input", "textfield");
         for (int i = 0; i < this.DescriptionString.Length; i++)
         {
             top += this.BoxesMargin_Y;
-            GUI.Label(new Rect(this.DescriptionBox_X, top, (float) this.DescriptionSize, this.buttonHeight), this.DescriptionString[i], "box");
-            Rect position = new Rect(this.InputBox1_X, top, (float) this.buttonSize, this.buttonHeight);
+            GUI.Label(new Rect(this.DescriptionBox_X, top, this.DescriptionSize, this.buttonHeight), this.DescriptionString[i], "box");
+            Rect position = new Rect(this.InputBox1_X, top, this.buttonSize, this.buttonHeight);
             GUI.Button(position, this.inputString[i]);
             if (!this.joystickActive[i] && this.inputKey[i] == KeyCode.None)
             {
@@ -153,7 +153,7 @@ public class custom_inputs : MonoBehaviour
                 this.inputBool[i] = true;
                 this.lastInterval = Time.realtimeSinceStartup;
             }
-            if (GUI.Button(new Rect(this.resetbuttonX, this.resetbuttonLocY, (float) this.buttonSize, this.buttonHeight), this.resetbuttonText) && Input.GetMouseButtonUp(0))
+            if (GUI.Button(new Rect(this.resetbuttonX, this.resetbuttonLocY, this.buttonSize, this.buttonHeight), this.resetbuttonText) && Input.GetMouseButtonUp(0))
             {
                 PlayerPrefs.DeleteAll();
                 this.reset2defaults();
@@ -445,7 +445,7 @@ public class custom_inputs : MonoBehaviour
         for (int i = 0; i < this.DescriptionString.Length; i++)
         {
             top += this.BoxesMargin_Y;
-            Rect position = new Rect(this.InputBox2_X, top, (float) this.buttonSize, this.buttonHeight);
+            Rect position = new Rect(this.InputBox2_X, top, this.buttonSize, this.buttonHeight);
             GUI.Button(position, this.inputString2[i]);
             if (!this.joystickActive2[i] && this.inputKey2[i] == KeyCode.None)
             {

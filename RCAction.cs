@@ -108,7 +108,7 @@ public class RCAction
                         }
                         else
                         {
-                            FengGameManagerMKII.intVariables[key] = (int) Math.Pow((double) (int) FengGameManagerMKII.intVariables[key], (double) num2);
+                            FengGameManagerMKII.intVariables[key] = (int) Math.Pow((int)FengGameManagerMKII.intVariables[key], num2);
                         }
                         return;
 
@@ -308,7 +308,7 @@ public class RCAction
                         }
                         else
                         {
-                            FengGameManagerMKII.floatVariables[str9] = (float) Math.Pow((double) (int) FengGameManagerMKII.floatVariables[str9], (double) num4);
+                            FengGameManagerMKII.floatVariables[str9] = (float) Math.Pow((int)FengGameManagerMKII.floatVariables[str9], num4);
                         }
                         return;
 
@@ -405,79 +405,101 @@ public class RCAction
                     }
                     case 4:
                     {
-                        Hashtable propertiesToSet = new Hashtable();
-                        propertiesToSet.Add(PhotonPlayerProperty.kills, this.parameters[1].returnInt(null));
-                        targetPlayer.SetCustomProperties(propertiesToSet);
+                                Hashtable propertiesToSet = new Hashtable
+                                {
+                                    { PhotonPlayerProperty.kills, this.parameters[1].returnInt(null) }
+                                };
+                                targetPlayer.SetCustomProperties(propertiesToSet);
                         return;
                     }
                     case 5:
                     {
-                        Hashtable hashtable2 = new Hashtable();
-                        hashtable2.Add(PhotonPlayerProperty.deaths, this.parameters[1].returnInt(null));
-                        targetPlayer.SetCustomProperties(hashtable2);
+                                Hashtable hashtable2 = new Hashtable
+                                {
+                                    { PhotonPlayerProperty.deaths, this.parameters[1].returnInt(null) }
+                                };
+                                targetPlayer.SetCustomProperties(hashtable2);
                         return;
                     }
                     case 6:
                     {
-                        Hashtable hashtable3 = new Hashtable();
-                        hashtable3.Add(PhotonPlayerProperty.max_dmg, this.parameters[1].returnInt(null));
-                        targetPlayer.SetCustomProperties(hashtable3);
+                                Hashtable hashtable3 = new Hashtable
+                                {
+                                    { PhotonPlayerProperty.max_dmg, this.parameters[1].returnInt(null) }
+                                };
+                                targetPlayer.SetCustomProperties(hashtable3);
                         return;
                     }
                     case 7:
                     {
-                        Hashtable hashtable4 = new Hashtable();
-                        hashtable4.Add(PhotonPlayerProperty.total_dmg, this.parameters[1].returnInt(null));
-                        targetPlayer.SetCustomProperties(hashtable4);
+                                Hashtable hashtable4 = new Hashtable
+                                {
+                                    { PhotonPlayerProperty.total_dmg, this.parameters[1].returnInt(null) }
+                                };
+                                targetPlayer.SetCustomProperties(hashtable4);
                         return;
                     }
                     case 8:
                     {
-                        Hashtable hashtable5 = new Hashtable();
-                        hashtable5.Add(PhotonPlayerProperty.name, this.parameters[1].returnString(null));
-                        targetPlayer.SetCustomProperties(hashtable5);
+                                Hashtable hashtable5 = new Hashtable
+                                {
+                                    { PhotonPlayerProperty.name, this.parameters[1].returnString(null) }
+                                };
+                                targetPlayer.SetCustomProperties(hashtable5);
                         return;
                     }
                     case 9:
                     {
-                        Hashtable hashtable6 = new Hashtable();
-                        hashtable6.Add(PhotonPlayerProperty.guildName, this.parameters[1].returnString(null));
-                        targetPlayer.SetCustomProperties(hashtable6);
+                                Hashtable hashtable6 = new Hashtable
+                                {
+                                    { PhotonPlayerProperty.guildName, this.parameters[1].returnString(null) }
+                                };
+                                targetPlayer.SetCustomProperties(hashtable6);
                         return;
                     }
                     case 10:
                     {
-                        Hashtable hashtable7 = new Hashtable();
-                        hashtable7.Add(PhotonPlayerProperty.RCteam, this.parameters[1].returnInt(null));
-                        targetPlayer.SetCustomProperties(hashtable7);
+                                Hashtable hashtable7 = new Hashtable
+                                {
+                                    { PhotonPlayerProperty.RCteam, this.parameters[1].returnInt(null) }
+                                };
+                                targetPlayer.SetCustomProperties(hashtable7);
                         return;
                     }
                     case 11:
                     {
-                        Hashtable hashtable8 = new Hashtable();
-                        hashtable8.Add(PhotonPlayerProperty.customInt, this.parameters[1].returnInt(null));
-                        targetPlayer.SetCustomProperties(hashtable8);
+                                Hashtable hashtable8 = new Hashtable
+                                {
+                                    { PhotonPlayerProperty.customInt, this.parameters[1].returnInt(null) }
+                                };
+                                targetPlayer.SetCustomProperties(hashtable8);
                         return;
                     }
                     case 12:
                     {
-                        Hashtable hashtable9 = new Hashtable();
-                        hashtable9.Add(PhotonPlayerProperty.customBool, this.parameters[1].returnBool(null));
-                        targetPlayer.SetCustomProperties(hashtable9);
+                                Hashtable hashtable9 = new Hashtable
+                                {
+                                    { PhotonPlayerProperty.customBool, this.parameters[1].returnBool(null) }
+                                };
+                                targetPlayer.SetCustomProperties(hashtable9);
                         return;
                     }
                     case 13:
                     {
-                        Hashtable hashtable10 = new Hashtable();
-                        hashtable10.Add(PhotonPlayerProperty.customString, this.parameters[1].returnString(null));
-                        targetPlayer.SetCustomProperties(hashtable10);
+                                Hashtable hashtable10 = new Hashtable
+                                {
+                                    { PhotonPlayerProperty.customString, this.parameters[1].returnString(null) }
+                                };
+                                targetPlayer.SetCustomProperties(hashtable10);
                         return;
                     }
                     case 14:
                     {
-                        Hashtable hashtable11 = new Hashtable();
-                        hashtable11.Add(PhotonPlayerProperty.RCteam, this.parameters[1].returnFloat(null));
-                        targetPlayer.SetCustomProperties(hashtable11);
+                                Hashtable hashtable11 = new Hashtable
+                                {
+                                    { PhotonPlayerProperty.RCteam, this.parameters[1].returnFloat(null) }
+                                };
+                                targetPlayer.SetCustomProperties(hashtable11);
                         return;
                     }
                 }
@@ -494,11 +516,11 @@ public class RCAction
                         return;
                     }
                     case 1:
-                        FengGameManagerMKII.instance.spawnTitanAction(this.parameters[0].returnInt(null), this.parameters[1].returnFloat(null), this.parameters[2].returnInt(null), this.parameters[3].returnInt(null));
+                        FengGameManagerMKII.instance.SpawnTitanAction(this.parameters[0].returnInt(null), this.parameters[1].returnFloat(null), this.parameters[2].returnInt(null), this.parameters[3].returnInt(null));
                         return;
 
                     case 2:
-                        FengGameManagerMKII.instance.spawnTitanAtAction(this.parameters[0].returnInt(null), this.parameters[1].returnFloat(null), this.parameters[2].returnInt(null), this.parameters[3].returnInt(null), this.parameters[4].returnFloat(null), this.parameters[5].returnFloat(null), this.parameters[6].returnFloat(null));
+                        FengGameManagerMKII.instance.SpawnTitanAtAction(this.parameters[0].returnInt(null), this.parameters[1].returnFloat(null), this.parameters[2].returnInt(null), this.parameters[3].returnInt(null), this.parameters[4].returnFloat(null), this.parameters[5].returnFloat(null), this.parameters[6].returnFloat(null));
                         return;
 
                     case 3:
@@ -537,7 +559,7 @@ public class RCAction
                         return;
 
                     case 1:
-                        FengGameManagerMKII.instance.gameWin2();
+                        FengGameManagerMKII.instance.GameWin();
                         if (this.parameters[0].returnBool(null))
                         {
                             FengGameManagerMKII.intVariables.Clear();
@@ -550,7 +572,7 @@ public class RCAction
                         return;
 
                     case 2:
-                        FengGameManagerMKII.instance.gameLose2();
+                        FengGameManagerMKII.instance.GameLose();
                         if (this.parameters[0].returnBool(null))
                         {
                             FengGameManagerMKII.intVariables.Clear();
@@ -572,7 +594,7 @@ public class RCAction
                             FengGameManagerMKII.playerVariables.Clear();
                             FengGameManagerMKII.titanVariables.Clear();
                         }
-                        FengGameManagerMKII.instance.restartGame2(false);
+                        FengGameManagerMKII.instance.RestartGame(false);
                         return;
                 }
                 break;

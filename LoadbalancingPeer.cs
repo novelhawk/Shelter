@@ -135,8 +135,10 @@ internal class LoadbalancingPeer : PhotonPeer
 
     public virtual bool OpGetRegions(string appId)
     {
-        Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>();
-        customOpParameters[224] = appId;
+        Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>
+        {
+            [224] = appId
+        };
         return this.OpCustom(220, customOpParameters, true, 0, true);
     }
 
@@ -149,9 +151,11 @@ internal class LoadbalancingPeer : PhotonPeer
         Dictionary<byte, object> customOpParameters = null;
         if (lobby != null && !lobby.IsDefault)
         {
-            customOpParameters = new Dictionary<byte, object>();
-            customOpParameters[213] = lobby.Name;
-            customOpParameters[212] = (byte) lobby.Type;
+            customOpParameters = new Dictionary<byte, object>
+            {
+                [213] = lobby.Name,
+                [212] = (byte)lobby.Type
+            };
         }
         return this.OpCustom(229, customOpParameters, true);
     }
@@ -253,8 +257,10 @@ internal class LoadbalancingPeer : PhotonPeer
 
     public virtual bool OpRaiseEvent(byte eventCode, object customEventContent, bool sendReliable, RaiseEventOptions raiseEventOptions)
     {
-        Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>();
-        customOpParameters[244] = eventCode;
+        Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>
+        {
+            [244] = eventCode
+        };
         if (customEventContent != null)
         {
             customOpParameters[245] = customEventContent;
@@ -307,9 +313,11 @@ internal class LoadbalancingPeer : PhotonPeer
         }
         if (actorNr > 0 && actorProperties != null)
         {
-            Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>();
-            customOpParameters.Add(251, actorProperties);
-            customOpParameters.Add(254, actorNr);
+            Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>
+            {
+                { 251, actorProperties },
+                { 254, actorNr }
+            };
             if (broadcast)
             {
                 customOpParameters.Add(250, broadcast);
@@ -329,8 +337,10 @@ internal class LoadbalancingPeer : PhotonPeer
         {
             base.Listener.DebugReturn(DebugLevel.INFO, "OpSetPropertiesOfRoom()");
         }
-        Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>();
-        customOpParameters.Add(251, gameProperties);
+        Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>
+        {
+            { 251, gameProperties }
+        };
         if (broadcast)
         {
             customOpParameters.Add(250, true);
@@ -340,8 +350,10 @@ internal class LoadbalancingPeer : PhotonPeer
 
     protected void OpSetPropertyOfRoom(byte propCode, object value)
     {
-        Hashtable gameProperties = new Hashtable();
-        gameProperties[propCode] = value;
+        Hashtable gameProperties = new Hashtable
+        {
+            [propCode] = value
+        };
         this.OpSetPropertiesOfRoom(gameProperties, true, 0);
     }
 }

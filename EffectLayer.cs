@@ -214,7 +214,7 @@ public class EffectLayer : MonoBehaviour
             {
                 float num = mainTex.width / this.Cols;
                 float num2 = mainTex.height / this.Rows;
-                Vector2 cellSize = new Vector2(num / (float) mainTex.width, num2 / (float) mainTex.height);
+                Vector2 cellSize = new Vector2(num / mainTex.width, num2 / mainTex.height);
                 Vector2 start = new Vector2(0f, 1f);
                 frame.BuildUVAnim(start, cellSize, this.Cols, this.Rows, this.Cols * this.Rows);
                 this.OriLowerLeftUV = start;
@@ -276,7 +276,7 @@ public class EffectLayer : MonoBehaviour
         }
         if (this.LinearForceAffectorEnable)
         {
-            Affector affector5 = new LinearForceAffector((Vector3) (this.LinearForce.normalized * this.LinearMagnitude), node);
+            Affector affector5 = new LinearForceAffector(this.LinearForce.normalized * this.LinearMagnitude, node);
             list.Add(affector5);
         }
         if (this.JetAffectorEnable)

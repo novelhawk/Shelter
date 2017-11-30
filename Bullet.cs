@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Bullet : Photon.MonoBehaviour
 {
-    private Vector3 heightOffSet = (Vector3) (Vector3.up * 0.48f);
+    private Vector3 heightOffSet = Vector3.up * 0.48f;
     private bool isdestroying;
     private float killTime;
     private float killTime2;
@@ -29,7 +29,7 @@ public class Bullet : Photon.MonoBehaviour
         if (obj2 != null && this.master != null && this.master == obj2)
         {
             RaycastHit hit;
-            LayerMask mask = (int) 1 << LayerMask.NameToLayer("PlayerAttackBox");
+            LayerMask mask = 1 << LayerMask.NameToLayer("PlayerAttackBox");
             if (Physics.Raycast(base.transform.position, this.velocity, out hit, 10f, mask.value))
             {
                 Collider collider = hit.collider;
@@ -83,7 +83,7 @@ public class Bullet : Photon.MonoBehaviour
             if (this.phase == 0)
             {
                 Transform transform = base.gameObject.transform;
-                transform.position += (Vector3) (this.velocity * Time.deltaTime * 50f + this.velocity2 * Time.deltaTime);
+                transform.position += this.velocity * Time.deltaTime * 50f + this.velocity2 * Time.deltaTime;
                 this.nodes.Add(new Vector3(base.gameObject.transform.position.x, base.gameObject.transform.position.y, base.gameObject.transform.position.z));
             }
         }
@@ -92,10 +92,10 @@ public class Bullet : Photon.MonoBehaviour
             RaycastHit hit;
             this.checkTitan();
             Transform transform3 = base.gameObject.transform;
-            transform3.position += (Vector3) (this.velocity * Time.deltaTime * 50f + this.velocity2 * Time.deltaTime);
-            LayerMask mask = (int) 1 << LayerMask.NameToLayer("EnemyBox");
-            LayerMask mask2 = (int) 1 << LayerMask.NameToLayer("Ground");
-            LayerMask mask3 = (int) 1 << LayerMask.NameToLayer("NetworkObject");
+            transform3.position += this.velocity * Time.deltaTime * 50f + this.velocity2 * Time.deltaTime;
+            LayerMask mask = 1 << LayerMask.NameToLayer("EnemyBox");
+            LayerMask mask2 = 1 << LayerMask.NameToLayer("Ground");
+            LayerMask mask3 = 1 << LayerMask.NameToLayer("NetworkObject");
             LayerMask mask4 = mask | mask2 | mask3;
             bool flag2 = false;
             bool flag3 = false;
@@ -257,8 +257,10 @@ public class Bullet : Photon.MonoBehaviour
             {
                 this.myRef = hero.GetComponent<HERO>().hookRefR2;
             }
-            this.nodes = new ArrayList();
-            this.nodes.Add(this.myRef.transform.position);
+            this.nodes = new ArrayList
+            {
+                this.myRef.transform.position
+            };
             this.phase = 0;
             this.leviMode = leviMode;
             this.left = isLeft;
@@ -299,8 +301,10 @@ public class Bullet : Photon.MonoBehaviour
     [RPC]
     private void netLaunch(Vector3 newPosition)
     {
-        this.nodes = new ArrayList();
-        this.nodes.Add(newPosition);
+        this.nodes = new ArrayList
+        {
+            newPosition
+        };
     }
 
     [RPC]
@@ -317,7 +321,7 @@ public class Bullet : Photon.MonoBehaviour
             {
                 Vector3 position = (Vector3) this.spiralNodes[i] + vector;
                 float num2 = this.spiralNodes.Count - 1 - this.spiralcount * 0.5f;
-                position = new Vector3(position.x, position.y * ((num2 - i) / num2) + newPosition.y * ((float) i / num2), position.z);
+                position = new Vector3(position.x, position.y * ((num2 - i) / num2) + newPosition.y * (i / num2), position.z);
                 this.lineRenderer.SetPosition(i, position);
             }
             else
@@ -340,7 +344,7 @@ public class Bullet : Photon.MonoBehaviour
     {
         if (FengGameManagerMKII.instance != null)
         {
-            FengGameManagerMKII.instance.removeHook(this);
+            FengGameManagerMKII.instance.RemoveHook(this);
         }
         if (this.myTitan != null)
         {
@@ -377,7 +381,7 @@ public class Bullet : Photon.MonoBehaviour
             this.lineRenderer.SetVertexCount(this.nodes.Count);
             for (int i = 0; i <= this.nodes.Count - 1; i++)
             {
-                this.lineRenderer.SetPosition(i, (Vector3) this.nodes[i] + (Vector3) (vector * Mathf.Pow(0.75f, (float) i)));
+                this.lineRenderer.SetPosition(i, (Vector3) this.nodes[i] + vector * Mathf.Pow(0.75f, (float)i));
             }
             if (this.nodes.Count > 1)
             {
@@ -405,7 +409,7 @@ public class Bullet : Photon.MonoBehaviour
     {
         this.rope = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("rope"));
         this.lineRenderer = this.rope.GetComponent<LineRenderer>();
-        GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().addHook(this);
+        FengGameManagerMKII.instance.AddHook(this);
     }
 
     [RPC]
@@ -457,11 +461,11 @@ public class Bullet : Photon.MonoBehaviour
                 while (index < num3)
                 {
                     int num6 = num3 / 2;
-                    float num7 = Mathf.Abs((int) (index - num6));
-                    float num8 = (num6 - num7) / (float) num6;
+                    float num7 = Mathf.Abs(index - num6);
+                    float num8 = (num6 - num7) / num6;
                     num8 = Mathf.Pow(num8, 0.5f);
                     float max = (num5 + magnitude) * 0.0015f * num8;
-                    this.lineRenderer.SetPosition(index, (Vector3) (new Vector3(UnityEngine.Random.Range(-max, max), UnityEngine.Random.Range(-max, max), UnityEngine.Random.Range(-max, max)) + this.myRef.transform.position + vector * ((float) index / (float) num3) - Vector3.up * num5 * 0.05f * num8 - velocity * 0.001f * num8 * num5));
+                    this.lineRenderer.SetPosition(index, new Vector3(UnityEngine.Random.Range(-max, max), UnityEngine.Random.Range(-max, max), UnityEngine.Random.Range(-max, max)) + this.myRef.transform.position + vector * ((float)index / (float)num3) - Vector3.up * num5 * 0.05f * num8 - velocity * 0.001f * num8 * num5);
                     index++;
                 }
                 this.lineRenderer.SetPosition(num3 - 1, base.transform.position);
@@ -491,7 +495,7 @@ public class Bullet : Photon.MonoBehaviour
                         {
                             Vector3 position = (Vector3) this.spiralNodes[i] + vector4;
                             float num11 = this.spiralNodes.Count - 1 - this.spiralcount * 0.5f;
-                            position = new Vector3(position.x, position.y * ((num11 - i) / num11) + base.gameObject.transform.position.y * ((float) i / num11), position.z);
+                            position = new Vector3(position.x, position.y * ((num11 - i) / num11) + base.gameObject.transform.position.y * (i / num11), position.z);
                             this.lineRenderer.SetPosition(i, position);
                         }
                         else
@@ -504,13 +508,13 @@ public class Bullet : Photon.MonoBehaviour
             else if (this.phase == 4)
             {
                 Transform transform = base.gameObject.transform;
-                transform.position += this.velocity + (Vector3) (this.velocity2 * Time.deltaTime);
+                transform.position += this.velocity + this.velocity2 * Time.deltaTime;
                 this.nodes.Add(new Vector3(base.gameObject.transform.position.x, base.gameObject.transform.position.y, base.gameObject.transform.position.z));
                 Vector3 vector10 = this.myRef.transform.position - (Vector3) this.nodes[0];
                 for (int j = 0; j <= this.nodes.Count - 1; j++)
                 {
                     this.lineRenderer.SetVertexCount(this.nodes.Count);
-                    this.lineRenderer.SetPosition(j, (Vector3) this.nodes[j] + (Vector3) (vector10 * Mathf.Pow(0.5f, (float) j)));
+                    this.lineRenderer.SetPosition(j, (Vector3) this.nodes[j] + vector10 * Mathf.Pow(0.5f, (float)j));
                 }
                 this.killTime2 += Time.deltaTime;
                 if (this.killTime2 > 0.8f)

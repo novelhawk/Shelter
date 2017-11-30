@@ -28,7 +28,7 @@ public class OnClickInstantiate : MonoBehaviour
     {
         if (this.showGui)
         {
-            GUILayout.BeginArea(new Rect((float) (Screen.width - 180), 0f, 180f, 50f));
+            GUILayout.BeginArea(new Rect(Screen.width - 180, 0f, 180f, 50f));
             this.InstantiateType = GUILayout.Toolbar(this.InstantiateType, this.InstantiateTypeNames, new GUILayoutOption[0]);
             GUILayout.EndArea();
         }

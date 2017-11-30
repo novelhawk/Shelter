@@ -44,9 +44,9 @@ public class PlanetMouseOrbit : MonoBehaviour
             this.x += Input.GetAxis("Mouse X") * this.xSpeed * 0.02f;
             this.y -= Input.GetAxis("Mouse Y") * this.ySpeed * 0.02f;
             this.distance += -(Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime) * this.zoomRate * Mathf.Abs(this.distance);
-            this.y = ClampAngle(this.y, (float) this.yMinLimit, (float) this.yMaxLimit);
+            this.y = ClampAngle(this.y, this.yMinLimit, this.yMaxLimit);
             Quaternion quaternion = Quaternion.Euler(this.y, this.x, 0f);
-            Vector3 vector = (Vector3) (quaternion * new Vector3(0f, 0f, -this.distance)) + this.target.position;
+            Vector3 vector = quaternion * new Vector3(0f, 0f, -this.distance) + this.target.position;
             base.transform.rotation = quaternion;
             base.transform.position = vector;
         }

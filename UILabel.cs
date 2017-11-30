@@ -130,7 +130,7 @@ public class UILabel : UIWidget
             if (this.effectStyle != Effect.None)
             {
                 int end = verts.size;
-                float num3 = 1f / (float) this.mFont.size;
+                float num3 = 1f / this.mFont.size;
                 float x = num3 * this.mEffectDistance.x;
                 float y = num3 * this.mEffectDistance.y;
                 this.ApplyShadow(verts, uvs, cols, size, end, x, -y);
@@ -208,11 +208,11 @@ public class UILabel : UIWidget
                     num5++;
                 }
             }
-            this.mProcessedText = this.mFont.WrapText(this.mProcessedText, (float)this.mMaxLineWidth / b, this.mMaxLineCount, false, UIFont.SymbolStyle.None);
+            this.mProcessedText = this.mFont.WrapText(this.mProcessedText, this.mMaxLineWidth / b, this.mMaxLineCount, false, UIFont.SymbolStyle.None);
         }
         else if (this.mMaxLineWidth > 0)
         {
-            this.mProcessedText = this.mFont.WrapText(this.mText, (float)this.mMaxLineWidth / b, !this.mShrinkToFit ? this.mMaxLineCount : 0, this.mEncoding, this.mSymbols);
+            this.mProcessedText = this.mFont.WrapText(this.mText, this.mMaxLineWidth / b, !this.mShrinkToFit ? this.mMaxLineCount : 0, this.mEncoding, this.mSymbols);
         }
         else if (!this.mShrinkToFit && this.mMaxLineCount > 0)
         {
@@ -235,14 +235,14 @@ public class UILabel : UIWidget
             }
             if (this.mMaxLineWidth > 0)
             {
-                float num7 = (float)this.mMaxLineWidth / b;
+                float num7 = this.mMaxLineWidth / b;
                 float a = this.mSize.x * b <= num7 ? b : num7 / this.mSize.x * b;
                 b = Mathf.Min(a, b);
             }
             b = Mathf.Round(b);
             base.cachedTransform.localScale = new Vector3(b, b, 1f);
         }
-        this.mSize.x = Mathf.Max(this.mSize.x, b <= 0f ? 1f : (float)this.lineWidth / b);
+        this.mSize.x = Mathf.Max(this.mSize.x, b <= 0f ? 1f : this.lineWidth / b);
     Label_037C:
         this.mSize.y = Mathf.Max(this.mSize.y, 1f);
     }

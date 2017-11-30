@@ -46,7 +46,7 @@ public class UIAnchor : MonoBehaviour
             {
                 if (this.panelContainer.clipping == UIDrawCall.Clipping.None)
                 {
-                    float num = this.mRoot == null ? 0.5f : (float) this.mRoot.activeHeight / (float) Screen.height * 0.5f;
+                    float num = this.mRoot == null ? 0.5f : this.mRoot.activeHeight / (float)Screen.height * 0.5f;
                     this.mRect.xMin = -Screen.width * num;
                     this.mRect.yMin = -Screen.height * num;
                     this.mRect.xMax = -this.mRect.xMin;
@@ -66,8 +66,8 @@ public class UIAnchor : MonoBehaviour
                 Transform cachedTransform = this.widgetContainer.cachedTransform;
                 Vector3 localScale = cachedTransform.localScale;
                 Vector3 localPosition = cachedTransform.localPosition;
-                Vector3 relativeSize = (Vector3) this.widgetContainer.relativeSize;
-                Vector3 pivotOffset = (Vector3) this.widgetContainer.pivotOffset;
+                Vector3 relativeSize = this.widgetContainer.relativeSize;
+                Vector3 pivotOffset = this.widgetContainer.pivotOffset;
                 pivotOffset.y--;
                 pivotOffset.x *= this.widgetContainer.relativeSize.x * localScale.x;
                 pivotOffset.y *= this.widgetContainer.relativeSize.y * localScale.y;

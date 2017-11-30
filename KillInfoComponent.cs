@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class KillInfoComponent : MonoBehaviour
 {
-    private float alpha = 1f;
+    private float _alpha = 1f;
     private int col;
     public GameObject groupBig;
     public GameObject groupSmall;
@@ -26,12 +26,12 @@ public class KillInfoComponent : MonoBehaviour
     private bool start;
     private float timeElapsed;
 
-    public void destory()
+    public void Destroy()
     {
         this.timeElapsed = this.lifeTime;
     }
 
-    public void moveOn()
+    public void MoveOn()
     {
         this.col++;
         if (this.col > 4)
@@ -42,7 +42,7 @@ public class KillInfoComponent : MonoBehaviour
         this.groupSmall.SetActive(true);
     }
 
-    private void setAlpha(float alpha)
+    private void SetAlpha(float alpha)
     {
         if (this.groupBig.activeInHierarchy)
         {
@@ -66,7 +66,7 @@ public class KillInfoComponent : MonoBehaviour
         }
     }
 
-    public void show(bool isTitan1, string name1, bool isTitan2, string name2, int dmg = 0)
+    public void Show(bool isTitan1, string name1, bool isTitan2, string name2, int dmg = 0)
     {
         this.groupBig.SetActive(true);
         this.groupSmall.SetActive(true);
@@ -131,7 +131,7 @@ public class KillInfoComponent : MonoBehaviour
             this.timeElapsed += Time.deltaTime;
             if (this.timeElapsed < 0.2f)
             {
-                base.transform.localScale = Vector3.Lerp(base.transform.localScale, (Vector3) (Vector3.one * this.maxScale), Time.deltaTime * 10f);
+                base.transform.localScale = Vector3.Lerp(base.transform.localScale, Vector3.one * this.maxScale, Time.deltaTime * 10f);
             }
             else if (this.timeElapsed < 1f)
             {
@@ -140,8 +140,8 @@ public class KillInfoComponent : MonoBehaviour
             if (this.timeElapsed > this.lifeTime)
             {
                 base.transform.position += new Vector3(0f, Time.deltaTime * 0.15f, 0f);
-                this.alpha = 1f - Time.deltaTime * 45f + this.lifeTime - this.timeElapsed;
-                this.setAlpha(this.alpha);
+                this._alpha = 1f - Time.deltaTime * 45f + this.lifeTime - this.timeElapsed;
+                this.SetAlpha(this._alpha);
             }
             else
             {

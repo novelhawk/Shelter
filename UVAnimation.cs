@@ -42,10 +42,10 @@ public class UVAnimation
                         break;
                     }
                     Vector2 zero = Vector2.zero;
-                    zero.x = (float) animation.Frames[num3].Width / (float) width;
-                    zero.y = (float) animation.Frames[num3].Height / (float) height;
-                    this.frames[num3].x = (float) animation.Frames[num3].X / (float) width;
-                    this.frames[num3].y = 1f - (float) animation.Frames[num3].Y / (float) height;
+                    zero.x = animation.Frames[num3].Width / (float)width;
+                    zero.y = animation.Frames[num3].Height / (float)height;
+                    this.frames[num3].x = animation.Frames[num3].X / (float)width;
+                    this.frames[num3].y = 1f - animation.Frames[num3].Y / (float)height;
                     this.UVDimensions[num3] = zero;
                     this.UVDimensions[num3].y = -this.UVDimensions[num3].y;
                     num3++;

@@ -17,8 +17,8 @@ public class AHSSShotGunCollider : MonoBehaviour
     {
         Transform transform = titan.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck/head");
         Vector3 to = base.transform.position - transform.transform.position;
-        Debug.DrawRay(transform.transform.position, (Vector3) (-transform.transform.forward * 10f), Color.white, 5f);
-        Debug.DrawRay(transform.transform.position, (Vector3) (to * 10f), Color.green, 5f);
+        Debug.DrawRay(transform.transform.position, -transform.transform.forward * 10f, Color.white, 5f);
+        Debug.DrawRay(transform.transform.position, to * 10f, Color.green, 5f);
         return Vector3.Angle(-transform.transform.forward, to) < 100f;
     }
 
@@ -52,7 +52,7 @@ public class AHSSShotGunCollider : MonoBehaviour
                             if (!component.transform.root.GetComponent<HERO>().isGrabbed)
                             {
                                 Vector3 vector = component.transform.root.transform.position - base.transform.position;
-                                component.transform.root.GetComponent<HERO>().die((Vector3) (vector.normalized * b * 1000f + Vector3.up * 50f), false);
+                                component.transform.root.GetComponent<HERO>().die(vector.normalized * b * 1000f + Vector3.up * 50f, false);
                             }
                         }
                         else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && !component.transform.root.GetComponent<HERO>().HasDied() && !component.transform.root.GetComponent<HERO>().isGrabbed)
@@ -60,7 +60,7 @@ public class AHSSShotGunCollider : MonoBehaviour
                             component.transform.root.GetComponent<HERO>().markDie();
                             object[] parameters = new object[5];
                             Vector3 vector2 = component.transform.root.position - base.transform.position;
-                            parameters[0] = (Vector3) (vector2.normalized * b * 1000f + Vector3.up * 50f);
+                            parameters[0] = vector2.normalized * b * 1000f + Vector3.up * 50f;
                             parameters[1] = false;
                             parameters[2] = this.viewID;
                             parameters[3] = this.ownerName;
@@ -82,7 +82,7 @@ public class AHSSShotGunCollider : MonoBehaviour
                 HitBox item = other.gameObject.GetComponent<HitBox>();
                 if (item != null && this.checkIfBehind(item.transform.root.gameObject) && !this.currentHits.Contains(item))
                 {
-                    item.hitPosition = (Vector3) ((base.transform.position + item.transform.position) * 0.5f);
+                    item.hitPosition = (base.transform.position + item.transform.position) * 0.5f;
                     this.currentHits.Add(item);
                     if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
                     {
@@ -91,7 +91,7 @@ public class AHSSShotGunCollider : MonoBehaviour
                             Vector3 vector3 = this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;
                             int num2 = (int) (vector3.magnitude * 10f * this.scoreMulti);
                             num2 = Mathf.Max(10, num2);
-                            GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().netShowDamage(num2);
+                            FengGameManagerMKII.instance.netShowDamage(num2);
                             if (num2 > item.transform.root.GetComponent<TITAN>().myLevel * 100f)
                             {
                                 item.transform.root.GetComponent<TITAN>().die();
@@ -99,7 +99,7 @@ public class AHSSShotGunCollider : MonoBehaviour
                                 {
                                     GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().startSnapShot2(item.transform.position, num2, item.transform.root.gameObject, 0.02f);
                                 }
-                                GameObject.Find("MultiplayerManager").GetComponent<FengGameManagerMKII>().playerKillInfoSingleUpdate(num2);
+                                FengGameManagerMKII.instance.PlayerKillInfoSingleplayerUpdate(num2);
                             }
                         }
                     }

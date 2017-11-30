@@ -124,7 +124,7 @@ public class RibbonTrail
     public void SetTrailLen(float len)
     {
         this.TrailLength = len;
-        this.ElemLength = this.TrailLength / (float) (this.MaxElements - 1);
+        this.ElemLength = this.TrailLength / (this.MaxElements - 1);
         this.SquaredElemLength = this.ElemLength * this.ElemLength;
     }
 
@@ -156,11 +156,11 @@ public class RibbonTrail
             float num3 = Vector3.Angle(from, to);
             if (num3 > 60f)
             {
-                Vector3 vector3 = (Vector3) ((element.Position + element3.Position) / 2f);
+                Vector3 vector3 = (element.Position + element3.Position) / 2f;
                 Vector3 vector4 = vector3 - element2.Position;
                 Vector3 zero = Vector3.zero;
                 float smoothTime = 0.1f / (num3 / 60f);
-                element2.Position = Vector3.SmoothDamp(element2.Position, element2.Position + (Vector3) (vector4.normalized * element2.Width), ref zero, smoothTime);
+                element2.Position = Vector3.SmoothDamp(element2.Position, element2.Position + vector4.normalized * element2.Width, ref zero, smoothTime);
             }
         }
     }
@@ -185,7 +185,7 @@ public class RibbonTrail
                 Vector3 vector2 = headPosition - element2.Position;
                 if (vector2.sqrMagnitude >= this.SquaredElemLength)
                 {
-                    Vector3 vector3 = (Vector3) (vector2 * (this.ElemLength / vector2.magnitude));
+                    Vector3 vector3 = vector2 * (this.ElemLength / vector2.magnitude);
                     element.Position = element2.Position + vector3;
                     Element dtls = new Element(headPosition, this.UnitWidth);
                     this.AddElememt(dtls);
@@ -218,7 +218,7 @@ public class RibbonTrail
                     if (magnitude > 1E-06)
                     {
                         float num5 = this.ElemLength - vector2.magnitude;
-                        vector4 = (Vector3) (vector4 * (num5 / magnitude));
+                        vector4 = vector4 * (num5 / magnitude);
                         element4.Position = element5.Position + vector4;
                     }
                 }
@@ -313,7 +313,7 @@ public class RibbonTrail
                 Vector3 rhs = eyePos - element.Position;
                 Vector3 vector3 = Vector3.Cross(vector, rhs);
                 vector3.Normalize();
-                vector3 = (Vector3) (vector3 * (element.Width * 0.5f));
+                vector3 = vector3 * (element.Width * 0.5f);
                 Vector3 vector4 = element.Position - vector3;
                 Vector3 vector5 = element.Position + vector3;
                 VertexPool pool = this.Vertexsegment.Pool;

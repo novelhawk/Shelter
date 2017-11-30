@@ -25,7 +25,7 @@ public class BTN_rotate_character : MonoBehaviour
         this.distance = Mathf.Clamp(this.distance, 0.8f, 3.5f);
         this.camera.transform.position = this.hero.transform.position;
         Transform transform = this.camera.transform;
-        transform.position += (Vector3) (Vector3.up * 1.1f);
+        transform.position += Vector3.up * 1.1f;
         if (this.isRotate)
         {
             float angle = Input.GetAxis("Mouse X") * 2.5f;
@@ -34,7 +34,7 @@ public class BTN_rotate_character : MonoBehaviour
             this.camera.transform.RotateAround(this.camera.transform.position, this.camera.transform.right, num2);
         }
         Transform transform2 = this.camera.transform;
-        transform2.position -= (Vector3) (this.camera.transform.forward * this.distance);
+        transform2.position -= this.camera.transform.forward * this.distance;
     }
 }
 

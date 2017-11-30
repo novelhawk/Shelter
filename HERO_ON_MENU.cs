@@ -34,12 +34,12 @@ public class HERO_ON_MENU : MonoBehaviour
         if (component.myCostume.sex == SEX.FEMALE)
         {
             base.animation.Play("stand");
-            base.animation["stand"].normalizedTime = UnityEngine.Random.Range((float) 0f, (float) 1f);
+            base.animation["stand"].normalizedTime = UnityEngine.Random.Range(0f, 1f);
         }
         else
         {
             base.animation.Play("stand_levi");
-            base.animation["stand_levi"].normalizedTime = UnityEngine.Random.Range((float) 0f, (float) 1f);
+            base.animation["stand_levi"].normalizedTime = UnityEngine.Random.Range(0f, 1f);
         }
         float num = 0.5f;
         base.animation["stand"].speed = num;

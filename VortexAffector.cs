@@ -28,7 +28,7 @@ public class VortexAffector : Affector
         {
             float magnitude;
             float num2 = Vector3.Dot(this.Direction, rhs);
-            rhs -= (Vector3) (num2 * this.Direction);
+            rhs -= num2 * this.Direction;
             Vector3 zero = Vector3.zero;
             if (rhs == Vector3.zero)
             {
@@ -47,7 +47,7 @@ public class VortexAffector : Affector
             {
                 magnitude = this.Magnitude;
             }
-            zero = (Vector3) (zero * (magnitude * Time.deltaTime));
+            zero = zero * (magnitude * Time.deltaTime);
             base.Node.Position += zero;
         }
     }

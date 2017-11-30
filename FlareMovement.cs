@@ -23,11 +23,11 @@ public class FlareMovement : MonoBehaviour
             this.hint = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("UI/" + this.color + "FlareHint"));
             if (this.color == "Black")
             {
-                this.offY = (Vector3) (Vector3.up * 0.4f);
+                this.offY = Vector3.up * 0.4f;
             }
             else
             {
-                this.offY = (Vector3) (Vector3.up * 0.5f);
+                this.offY = Vector3.up * 0.5f;
             }
             this.hint.transform.parent = base.transform.root;
             this.hint.transform.position = this.hero.transform.position + this.offY;
@@ -61,11 +61,11 @@ public class FlareMovement : MonoBehaviour
         }
         if (this.timer < 4f)
         {
-            base.rigidbody.AddForce((Vector3) ((base.transform.forward + base.transform.up * 5f) * Time.deltaTime * 5f), ForceMode.VelocityChange);
+            base.rigidbody.AddForce((base.transform.forward + base.transform.up * 5f) * Time.deltaTime * 5f, ForceMode.VelocityChange);
         }
         else
         {
-            base.rigidbody.AddForce((Vector3) (-base.transform.up * Time.deltaTime * 7f), ForceMode.Acceleration);
+            base.rigidbody.AddForce(-base.transform.up * Time.deltaTime * 7f, ForceMode.Acceleration);
         }
     }
 }

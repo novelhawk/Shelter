@@ -45,7 +45,7 @@ public class RockThrow : Photon.MonoBehaviour
             {
                 if (!hero.GetComponent<HERO>().isGrabbed)
                 {
-                    hero.GetComponent<HERO>().die((Vector3) (this.v.normalized * 1000f + Vector3.up * 50f), false);
+                    hero.GetComponent<HERO>().die(this.v.normalized * 1000f + Vector3.up * 50f, false);
                 }
             }
             else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && !hero.GetComponent<HERO>().HasDied() && !hero.GetComponent<HERO>().isGrabbed)
@@ -59,7 +59,7 @@ public class RockThrow : Photon.MonoBehaviour
                     titanName = base.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().titanName;
                 }
                 Debug.Log("rock hit player " + titanName);
-                object[] parameters = new object[] { (Vector3) (this.v.normalized * 1000f + Vector3.up * 50f), false, myOwnerViewID, titanName, true };
+                object[] parameters = new object[] { this.v.normalized * 1000f + Vector3.up * 50f, false, myOwnerViewID, titanName, true };
                 hero.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, parameters);
             }
         }
@@ -100,7 +100,7 @@ public class RockThrow : Photon.MonoBehaviour
 
     private void Start()
     {
-        this.r = new Vector3(UnityEngine.Random.Range((float) -5f, (float) 5f), UnityEngine.Random.Range((float) -5f, (float) 5f), UnityEngine.Random.Range((float) -5f, (float) 5f));
+        this.r = new Vector3(UnityEngine.Random.Range(-5f, 5f), UnityEngine.Random.Range(-5f, 5f), UnityEngine.Random.Range(-5f, 5f));
     }
 
     private void Update()
@@ -108,16 +108,16 @@ public class RockThrow : Photon.MonoBehaviour
         if (this.launched)
         {
             base.transform.Rotate(this.r);
-            this.v -= (Vector3) (20f * Vector3.up * Time.deltaTime);
+            this.v -= 20f * Vector3.up * Time.deltaTime;
             Transform transform = base.transform;
-            transform.position += (Vector3) (this.v * Time.deltaTime);
+            transform.position += this.v * Time.deltaTime;
             if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.MULTIPLAYER || PhotonNetwork.isMasterClient)
             {
-                LayerMask mask = (int) 1 << LayerMask.NameToLayer("Ground");
-                LayerMask mask2 = (int) 1 << LayerMask.NameToLayer("Players");
-                LayerMask mask3 = (int) 1 << LayerMask.NameToLayer("EnemyAABB");
+                LayerMask mask = 1 << LayerMask.NameToLayer("Ground");
+                LayerMask mask2 = 1 << LayerMask.NameToLayer("Players");
+                LayerMask mask3 = 1 << LayerMask.NameToLayer("EnemyAABB");
                 LayerMask mask4 = mask2 | mask | mask3;
-                foreach (RaycastHit hit in Physics.SphereCastAll(base.transform.position, 2.5f * base.transform.lossyScale.x, base.transform.position - this.oldP, Vector3.Distance(base.transform.position, this.oldP), (int) mask4))
+                foreach (RaycastHit hit in Physics.SphereCastAll(base.transform.position, 2.5f * base.transform.lossyScale.x, base.transform.position - this.oldP, Vector3.Distance(base.transform.position, this.oldP), mask4))
                 {
                     if (LayerMask.LayerToName(hit.collider.gameObject.layer) == "EnemyAABB")
                     {

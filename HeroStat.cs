@@ -101,17 +101,19 @@ public class HeroStat
             stat2.GAS = 100;
             stat2.BLA = 100;
             stat2.ACL = 100;
-            stats = new Dictionary<string, HeroStat>();
-            stats.Add("MIKASA", MIKASA);
-            stats.Add("LEVI", LEVI);
-            stats.Add("ARMIN", ARMIN);
-            stats.Add("MARCO", MARCO);
-            stats.Add("JEAN", JEAN);
-            stats.Add("EREN", EREN);
-            stats.Add("PETRA", PETRA);
-            stats.Add("SASHA", SASHA);
-            stats.Add("CUSTOM_DEFAULT", stat);
-            stats.Add("AHSS", stat2);
+            stats = new Dictionary<string, HeroStat>
+            {
+                { "MIKASA", MIKASA },
+                { "LEVI", LEVI },
+                { "ARMIN", ARMIN },
+                { "MARCO", MARCO },
+                { "JEAN", JEAN },
+                { "EREN", EREN },
+                { "PETRA", PETRA },
+                { "SASHA", SASHA },
+                { "CUSTOM_DEFAULT", stat },
+                { "AHSS", stat2 }
+            };
         }
     }
 }

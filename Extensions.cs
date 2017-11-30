@@ -7,7 +7,7 @@ public static class Extensions
 {
     public static bool AlmostEquals(this float target, float second, float floatDiff)
     {
-        return Mathf.Abs((float) (target - second)) < floatDiff;
+        return Mathf.Abs(target - second) < floatDiff;
     }
 
     public static bool AlmostEquals(this Quaternion target, Quaternion second, float maxAngle)

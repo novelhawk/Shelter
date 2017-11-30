@@ -289,7 +289,7 @@ public abstract class UIWidget : MonoBehaviour
                     this.OnFill(this.mGeom.verts, this.mGeom.uvs, this.mGeom.cols);
                     if (this.mGeom.hasVertices)
                     {
-                        Vector3 vector6 = (Vector3) this.pivotOffset;
+                        Vector3 vector6 = this.pivotOffset;
                         Vector2 vector7 = this.relativeSize;
                         vector6.x *= vector7.x;
                         vector6.y *= vector7.y;

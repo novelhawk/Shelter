@@ -42,7 +42,7 @@ public class UIDragObject : IgnoreTimeScale
             }
             else
             {
-                this.mMomentum += (Vector3) (this.scale * (-this.mScroll * 0.05f));
+                this.mMomentum += this.scale * (-this.mScroll * 0.05f);
                 this.mScroll = NGUIMath.SpringLerp(this.mScroll, 0f, 20f, deltaTime);
                 if (this.mMomentum.magnitude > 0.0001f)
                 {
@@ -82,7 +82,7 @@ public class UIDragObject : IgnoreTimeScale
         if (base.enabled && NGUITools.GetActive(base.gameObject) && this.target != null)
         {
             UICamera.currentTouch.clickNotification = UICamera.ClickNotification.BasedOnDelta;
-            Ray ray = UICamera.currentCamera.ScreenPointToRay((Vector3) UICamera.currentTouch.pos);
+            Ray ray = UICamera.currentCamera.ScreenPointToRay(UICamera.currentTouch.pos);
             float enter = 0f;
             if (this.mPlane.Raycast(ray, out enter))
             {
@@ -97,7 +97,7 @@ public class UIDragObject : IgnoreTimeScale
                 }
                 if (this.dragEffect != DragEffect.None)
                 {
-                    this.mMomentum = Vector3.Lerp(this.mMomentum, this.mMomentum + (Vector3) (direction * (0.01f * this.momentumAmount)), 0.67f);
+                    this.mMomentum = Vector3.Lerp(this.mMomentum, this.mMomentum + direction * (0.01f * this.momentumAmount), 0.67f);
                 }
                 if (this.restrictWithinPanel)
                 {
@@ -142,7 +142,7 @@ public class UIDragObject : IgnoreTimeScale
                 }
                 this.mLastPos = UICamera.lastHit.point;
                 Transform transform = UICamera.currentCamera.transform;
-                this.mPlane = new Plane((Vector3) ((this.mPanel == null ? transform.rotation : this.mPanel.cachedTransform.rotation) * Vector3.back), this.mLastPos);
+                this.mPlane = new Plane((this.mPanel == null ? transform.rotation : this.mPanel.cachedTransform.rotation) * Vector3.back, this.mLastPos);
             }
             else if (this.restrictWithinPanel && this.mPanel.clipping != UIDrawCall.Clipping.None && this.dragEffect == DragEffect.MomentumAndSpring)
             {

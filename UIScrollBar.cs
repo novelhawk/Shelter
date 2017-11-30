@@ -57,7 +57,7 @@ public class UIScrollBar : MonoBehaviour
             this.mScroll = Mathf.Clamp01(this.mScroll);
             Vector4 border = this.mBG.border;
             Vector4 vector2 = this.mFG.border;
-            Vector2 vector3 = new Vector2(Mathf.Max((float) 0f, (float) (this.mBG.cachedTransform.localScale.x - border.x - border.z)), Mathf.Max((float) 0f, (float) (this.mBG.cachedTransform.localScale.y - border.y - border.w)));
+            Vector2 vector3 = new Vector2(Mathf.Max(0f, this.mBG.cachedTransform.localScale.x - border.x - border.z), Mathf.Max(0f, this.mBG.cachedTransform.localScale.y - border.y - border.w));
             float num = !this.mInverted ? this.mScroll : 1f - this.mScroll;
             if (this.mDir == Direction.Horizontal)
             {
@@ -128,8 +128,8 @@ public class UIScrollBar : MonoBehaviour
     {
         float num;
         Transform cachedTransform = this.cachedTransform;
-        Plane plane = new Plane((Vector3) (cachedTransform.rotation * Vector3.back), cachedTransform.position);
-        Ray ray = this.cachedCamera.ScreenPointToRay((Vector3) screenPos);
+        Plane plane = new Plane(cachedTransform.rotation * Vector3.back, cachedTransform.position);
+        Ray ray = this.cachedCamera.ScreenPointToRay(screenPos);
         if (plane.Raycast(ray, out num))
         {
             this.CenterOnPos(cachedTransform.InverseTransformPoint(ray.GetPoint(num)));

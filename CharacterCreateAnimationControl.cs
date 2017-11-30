@@ -25,14 +25,16 @@ public class CharacterCreateAnimationControl : MonoBehaviour
             int num;
             if (f__switchSmap0 == null)
             {
-                Dictionary<string, int> dictionary = new Dictionary<string, int>(7);
-                dictionary.Add("mikasa", 0);
-                dictionary.Add("levi", 1);
-                dictionary.Add("sasha", 2);
-                dictionary.Add("jean", 3);
-                dictionary.Add("marco", 4);
-                dictionary.Add("armin", 5);
-                dictionary.Add("petra", 6);
+                Dictionary<string, int> dictionary = new Dictionary<string, int>(7)
+                {
+                    { "mikasa", 0 },
+                    { "levi", 1 },
+                    { "sasha", 2 },
+                    { "jean", 3 },
+                    { "marco", 4 },
+                    { "armin", 5 },
+                    { "petra", 6 }
+                };
                 f__switchSmap0 = dictionary;
             }
             if (f__switchSmap0.TryGetValue(key, out num))

@@ -67,7 +67,7 @@ public class MaxCamera : MonoBehaviour
         {
             this.xDeg += Input.GetAxis("Mouse X") * this.xSpeed * 0.02f;
             this.yDeg -= Input.GetAxis("Mouse Y") * this.ySpeed * 0.02f;
-            this.yDeg = ClampAngle(this.yDeg, (float) this.yMinLimit, (float) this.yMaxLimit);
+            this.yDeg = ClampAngle(this.yDeg, this.yMinLimit, this.yMaxLimit);
             this.desiredRotation = Quaternion.Euler(this.yDeg, this.xDeg, 0f);
             this.currentRotation = base.transform.rotation;
             this.rotation = Quaternion.Lerp(this.currentRotation, this.desiredRotation, Time.deltaTime * this.zoomDampening);
@@ -76,7 +76,7 @@ public class MaxCamera : MonoBehaviour
         this.desiredDistance -= Input.GetAxis("Mouse ScrollWheel") * Time.deltaTime * this.zoomRate * Mathf.Abs(this.desiredDistance);
         this.desiredDistance = Mathf.Clamp(this.desiredDistance, this.minDistance, this.maxDistance);
         this.currentDistance = Mathf.Lerp(this.currentDistance, this.desiredDistance, Time.deltaTime * this.zoomDampening);
-        this.position = this.target.position - ((Vector3) (this.rotation * Vector3.forward * this.currentDistance) + this.targetOffset);
+        this.position = this.target.position - (this.rotation * Vector3.forward * this.currentDistance + this.targetOffset);
         base.transform.position = this.position;
     }
 

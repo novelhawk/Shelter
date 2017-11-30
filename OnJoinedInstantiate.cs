@@ -21,7 +21,7 @@ public class OnJoinedInstantiate : MonoBehaviour
                 Vector3 insideUnitSphere = UnityEngine.Random.insideUnitSphere;
                 insideUnitSphere.y = 0f;
                 insideUnitSphere = insideUnitSphere.normalized;
-                Vector3 position = up + (Vector3) (this.PositionOffset * insideUnitSphere);
+                Vector3 position = up + this.PositionOffset * insideUnitSphere;
                 PhotonNetwork.Instantiate(obj2.name, position, Quaternion.identity, 0);
             }
         }

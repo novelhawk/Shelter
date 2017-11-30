@@ -1391,9 +1391,9 @@ public static class PhotonNetwork
         {
             if (offlineMode)
             {
-                return (double) Time.time;
+                return Time.time;
             }
-            return (double) networkingPeer.ServerTimeInMilliSeconds / 1000.0;
+            return networkingPeer.ServerTimeInMilliSeconds / 1000.0;
         }
     }
 

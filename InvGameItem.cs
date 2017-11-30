@@ -208,7 +208,7 @@ public class InvGameItem
                     num = 3f;
                     break;
             }
-            float from = (float) this.itemLevel / 50f;
+            float from = this.itemLevel / 50f;
             return num * Mathf.Lerp(@from, @from * @from, 0.5f);
         }
     }

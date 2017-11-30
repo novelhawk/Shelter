@@ -247,13 +247,13 @@ namespace Xft
             for (int i = 0; i < this.Granularity; i++)
             {
                 int index = this.mVertexSegment.VertStart + i * 3;
-                float num3 = (float) i / (float) this.Granularity;
+                float num3 = i / (float)this.Granularity;
                 float tl = num3 * this.mFadeT;
                 Vector2 zero = Vector2.zero;
                 Vector3 vector2 = this.mSpline.InterpolateByLen(tl);
                 Vector3 vector3 = this.mSpline.InterpolateNormalByLen(tl);
-                Vector3 vector4 = vector2 + (Vector3) (vector3.normalized * this.mTrailWidth * 0.5f);
-                Vector3 vector5 = vector2 - (Vector3) (vector3.normalized * this.mTrailWidth * 0.5f);
+                Vector3 vector4 = vector2 + vector3.normalized * this.mTrailWidth * 0.5f;
+                Vector3 vector5 = vector2 - vector3.normalized * this.mTrailWidth * 0.5f;
                 pool.Vertices[index] = vector4;
                 pool.Colors[index] = this.MyColor;
                 zero.x = 0f;
@@ -279,7 +279,7 @@ namespace Xft
         {
             get
             {
-                return (Vector3) ((this.PointStart.position + this.PointEnd.position) / 2f);
+                return (this.PointStart.position + this.PointEnd.position) / 2f;
             }
         }
 
@@ -318,7 +318,7 @@ namespace Xft
             {
                 get
                 {
-                    return (Vector3) ((this.PointStart + this.PointEnd) / 2f);
+                    return (this.PointStart + this.PointEnd) / 2f;
                 }
             }
         }

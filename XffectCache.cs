@@ -34,8 +34,10 @@ public class XffectCache : MonoBehaviour
             while (enumerator.MoveNext())
             {
                 Transform current = (Transform)enumerator.Current;
-                this.ObjectDic[current.name] = new ArrayList();
-                this.ObjectDic[current.name].Add(current);
+                this.ObjectDic[current.name] = new ArrayList
+                {
+                    current
+                };
                 Xffect component = current.GetComponent<Xffect>();
                 if (component != null)
                 {

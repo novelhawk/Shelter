@@ -117,7 +117,7 @@ public static class NGUITools
         int num = CalculateNextDepth(go);
         Bounds bounds = NGUIMath.CalculateRelativeWidgetBounds(go.transform);
         collider2.isTrigger = true;
-        collider2.center = bounds.center + (Vector3) (Vector3.back * (num * 0.25f));
+        collider2.center = bounds.center + Vector3.back * (num * 0.25f);
         collider2.size = new Vector3(bounds.size.x, bounds.size.y, 0f);
         return collider2;
     }
@@ -224,7 +224,7 @@ public static class NGUITools
 
     public static Camera FindCameraForLayer(int layer)
     {
-        int num = (int) 1 << layer;
+        int num = 1 << layer;
         Camera[] cameraArray = FindActive<Camera>();
         int index = 0;
         int length = cameraArray.Length;

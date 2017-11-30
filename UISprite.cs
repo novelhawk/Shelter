@@ -540,7 +540,7 @@ public class UISprite : UIWidget
                 Vector3 localScale = base.cachedTransform.localScale;
                 localScale.x = Mathf.Max(0f, localScale.x);
                 localScale.y = Mathf.Max(0f, localScale.y);
-                Vector2 vector2 = new Vector2(localScale.x / (float)mainTexture.width, localScale.y / (float)mainTexture.height);
+                Vector2 vector2 = new Vector2(localScale.x / mainTexture.width, localScale.y / mainTexture.height);
                 Vector2 vector3 = new Vector2(num2 / vector2.x, num4 / vector2.y);
                 Vector2 vector4 = new Vector2(num3 / vector2.x, num5 / vector2.y);
                 UIWidget.Pivot pivot = base.pivot;
@@ -549,16 +549,16 @@ public class UISprite : UIWidget
                     case UIWidget.Pivot.Right:
                     case UIWidget.Pivot.TopRight:
                     case UIWidget.Pivot.BottomRight:
-                        vectorArray[0].x = Mathf.Min((float)0f, (float)(1f - (vector4.x + vector3.x)));
+                        vectorArray[0].x = Mathf.Min(0f, 1f - (vector4.x + vector3.x));
                         vectorArray[1].x = vectorArray[0].x + vector3.x;
                         vectorArray[2].x = vectorArray[0].x + Mathf.Max(vector3.x, 1f - vector4.x);
-                        vectorArray[3].x = vectorArray[0].x + Mathf.Max((float)(vector3.x + vector4.x), (float)1f);
+                        vectorArray[3].x = vectorArray[0].x + Mathf.Max(vector3.x + vector4.x, 1f);
                         break;
 
                     default:
                         vectorArray[1].x = vector3.x;
                         vectorArray[2].x = Mathf.Max(vector3.x, 1f - vector4.x);
-                        vectorArray[3].x = Mathf.Max((float)(vector3.x + vector4.x), (float)1f);
+                        vectorArray[3].x = Mathf.Max(vector3.x + vector4.x, 1f);
                         break;
                 }
                 switch (pivot)
@@ -566,16 +566,16 @@ public class UISprite : UIWidget
                     case UIWidget.Pivot.Bottom:
                     case UIWidget.Pivot.BottomLeft:
                     case UIWidget.Pivot.BottomRight:
-                        vectorArray[0].y = Mathf.Max((float)0f, (float)(-1f - (vector4.y + vector3.y)));
+                        vectorArray[0].y = Mathf.Max(0f, -1f - (vector4.y + vector3.y));
                         vectorArray[1].y = vectorArray[0].y + vector3.y;
                         vectorArray[2].y = vectorArray[0].y + Mathf.Min(vector3.y, -1f - vector4.y);
-                        vectorArray[3].y = vectorArray[0].y + Mathf.Min((float)(vector3.y + vector4.y), (float)-1f);
+                        vectorArray[3].y = vectorArray[0].y + Mathf.Min(vector3.y + vector4.y, -1f);
                         break;
 
                     default:
                         vectorArray[1].y = vector3.y;
                         vectorArray[2].y = Mathf.Min(vector3.y, -1f - vector4.y);
-                        vectorArray[3].y = Mathf.Min((float)(vector3.y + vector4.y), (float)-1f);
+                        vectorArray[3].y = Mathf.Min(vector3.y + vector4.y, -1f);
                         break;
                 }
                 vectorArray2[0] = new Vector2(this.mOuterUV.xMin, this.mOuterUV.yMax);
@@ -624,16 +624,16 @@ public class UISprite : UIWidget
             }
             Vector2 localScale = base.cachedTransform.localScale;
             float pixelSize = this.atlas.pixelSize;
-            float num2 = Mathf.Abs((float)(mInner.width / localScale.x)) * pixelSize;
-            float num3 = Mathf.Abs((float)(mInner.height / localScale.y)) * pixelSize;
+            float num2 = Mathf.Abs(mInner.width / localScale.x) * pixelSize;
+            float num3 = Mathf.Abs(mInner.height / localScale.y) * pixelSize;
             if (num2 < 0.01f || num3 < 0.01f)
             {
                 Debug.LogWarning("The tiled sprite (" + NGUITools.GetHierarchy(base.gameObject) + ") is too small.\nConsider using a bigger one.");
                 num2 = 0.01f;
                 num3 = 0.01f;
             }
-            Vector2 vector2 = new Vector2(mInner.xMin / (float)mainTexture.width, mInner.yMin / (float)mainTexture.height);
-            Vector2 vector3 = new Vector2(mInner.xMax / (float)mainTexture.width, mInner.yMax / (float)mainTexture.height);
+            Vector2 vector2 = new Vector2(mInner.xMin / mainTexture.width, mInner.yMin / mainTexture.height);
+            Vector2 vector3 = new Vector2(mInner.xMax / mainTexture.width, mInner.yMax / mainTexture.height);
             Vector2 vector4 = vector3;
             Color c = base.color;
             c.a *= base.mPanel.alpha;
@@ -767,7 +767,7 @@ public class UISprite : UIWidget
                 outer = NGUIMath.ConvertToPixels(outer, mainTexture.width, mainTexture.height, true);
                 inner = NGUIMath.ConvertToPixels(inner, mainTexture.width, mainTexture.height, true);
             }
-            return (Vector4)(new Vector4(inner.xMin - outer.xMin, inner.yMin - outer.yMin, outer.xMax - inner.xMax, outer.yMax - inner.yMax) * this.atlas.pixelSize);
+            return new Vector4(inner.xMin - outer.xMin, inner.yMin - outer.yMin, outer.xMax - inner.xMax, outer.yMax - inner.yMax) * this.atlas.pixelSize;
         }
     }
 
