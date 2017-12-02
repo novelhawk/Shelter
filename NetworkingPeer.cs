@@ -5,6 +5,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using UnityEngine;
 
 internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
@@ -834,7 +835,19 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                             {
                                 foreach (MethodInfo info in list)
                                 {
-                                    if (info.Name == str.First().ToString().ToUpper() + str.Substring(1))
+                                    StringBuilder builder = null;
+                                    if (str != null)
+                                    {
+                                        builder = new StringBuilder(str);
+                                        if (builder.Length > 0)
+                                        {
+                                            builder.Insert(0, builder[0].ToString().ToUpper());
+                                            builder.Remove(1, 1);
+                                        }
+                                    }
+
+
+                                    if (info.Name == builder?.ToString())
                                     {
                                         num8++;
                                         ParameterInfo[] methodParameters = info.GetParameters();
