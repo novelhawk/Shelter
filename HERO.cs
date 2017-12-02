@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mod.Exceptions;
 using UnityEngine;
 using Xft;
 
@@ -236,7 +237,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void backToHumanRPC()
+    private void BackToHumanRPC()
     {
         this.titanForm = false;
         this.eren_titan = null;
@@ -244,15 +245,17 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void badGuyReleaseMe()
+    public void BadGuyReleaseMe()
     {
         this.hookBySomeOne = false;
         this.badGuy = null;
     }
 
     [RPC]
-    public void blowAway(Vector3 force)
+    public void BlowAway(Vector3 force, PhotonMessageInfo info = null)
     {
+        if (info != null && !info.sender.isLocal && !info.sender.IsMasterClient) // This allows MC to blowAway need TODO: To check for force valididy
+            throw new NotAllowedException("blowAway", info);
         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || base.photonView.isMine)
         {
             base.rigidbody.AddForce(force, ForceMode.Impulse);
@@ -2110,7 +2113,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void hookFail()
+    public void HookFail()
     {
         this.hookTarget = null;
         this.hookSomeOne = false;
@@ -2183,7 +2186,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void killObject()
+    private void KillObject()
     {
         UnityEngine.Object.Destroy(base.gameObject);
     }
@@ -3283,7 +3286,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void loadskinRPC(int horse, string url)
+    public void LoadskinRPC(int horse, string url)
     {
         if ((int) FengGameManagerMKII.settings[0] == 1)
         {
@@ -3298,7 +3301,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void moveToRPC(float posX, float posY, float posZ, PhotonMessageInfo info)
+    public void MoveToRPC(float posX, float posY, float posZ, PhotonMessageInfo info)
     {
         if (info.sender.IsMasterClient)
         {
@@ -3307,7 +3310,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void net3DMGSMOKE(bool ifON)
+    private void Net3DMGSMOKE(bool ifON)
     {
         if (this.smoke_3dmg != null)
         {
@@ -3316,7 +3319,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netContinueAnimation()
+    private void NetContinueAnimation()
     {
         IEnumerator enumerator = base.animation.GetEnumerator();
         try
@@ -3342,7 +3345,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netCrossFade(string aniName, float time)
+    private void NetCrossFade(string aniName, float time)
     {
         this.currentAnimation = aniName;
         if (base.animation != null)
@@ -3352,7 +3355,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void netDie(Vector3 v, bool isBite, int viewID = -1, string titanName = "", bool killByTitan = true, PhotonMessageInfo info = null)
+    public void NetDie(Vector3 v, bool isBite, int viewID = -1, string titanName = "", bool killByTitan = true, PhotonMessageInfo info = null)
     {
         if (base.photonView.isMine && info != null && IN_GAME_MAIN_CAMERA.gamemode != GAMEMODE.BOSS_FIGHT_CT)
         {
@@ -3489,7 +3492,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netDie2(int viewID = -1, string titanName = "", PhotonMessageInfo info = null)
+    private void NetDie2(int viewID = -1, string titanName = "", PhotonMessageInfo info = null)
     {
         GameObject obj2;
         if (base.photonView.isMine && info != null && IN_GAME_MAIN_CAMERA.gamemode != GAMEMODE.BOSS_FIGHT_CT)
@@ -3726,14 +3729,14 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netGrabbed(int id, bool leftHand)
+    private void NetGrabbed(int id, bool leftHand)
     {
         this.titanWhoGrabMeID = id;
         this.grabbed(PhotonView.Find(id).gameObject, leftHand);
     }
 
     [RPC]
-    private void netlaughAttack()
+    private void NetlaughAttack()
     {
         foreach (GameObject obj2 in GameObject.FindGameObjectsWithTag("titan"))
         {
@@ -3745,7 +3748,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netPauseAnimation()
+    private void NetPauseAnimation()
     {
         IEnumerator enumerator = base.animation.GetEnumerator();
         try
@@ -3766,7 +3769,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netPlayAnimation(string aniName)
+    private void NetPlayAnimation(string aniName)
     {
         this.currentAnimation = aniName;
         if (base.animation != null)
@@ -3776,7 +3779,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netPlayAnimationAt(string aniName, float normalizedTime)
+    private void NetPlayAnimationAt(string aniName, float normalizedTime)
     {
         this.currentAnimation = aniName;
         if (base.animation != null)
@@ -3787,13 +3790,13 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netSetIsGrabbedFalse()
+    private void NetSetIsGrabbedFalse()
     {
         this.state = HERO_STATE.Idle;
     }
 
     [RPC]
-    private void netTauntAttack(float tauntTime, float distance = 100f)
+    private void NetTauntAttack(float tauntTime, float distance = 100f)
     {
         foreach (GameObject obj2 in GameObject.FindGameObjectsWithTag("titan"))
         {
@@ -3805,10 +3808,10 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netUngrabbed()
+    private void NetUngrabbed()
     {
         this.ungrabbed();
-        this.netPlayAnimation(this.standAnimation);
+        this.NetPlayAnimation(this.standAnimation);
         this.falseAttack();
     }
 
@@ -4183,7 +4186,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void setMyTeam(int val)
+    private void SetMyTeam(int val)
     {
         this.myTeam = val;
         this.checkBoxLeft.GetComponent<TriggerColliderWeapon>().myTeam = val;
@@ -4531,7 +4534,7 @@ public class HERO : Photon.MonoBehaviour
 
     public void setTeam(int team)
     {
-        this.setMyTeam(team);
+        this.SetMyTeam(team);
         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && base.photonView.isMine)
         {
             object[] parameters = new object[] { team };
@@ -4558,7 +4561,7 @@ public class HERO : Photon.MonoBehaviour
         }
         else
         {
-            this.setMyTeam(team);
+            this.SetMyTeam(team);
         }
     }
 
@@ -5075,7 +5078,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void showHitDamage()
+    private void ShowHitDamage()
     {
         GameObject target = GameObject.Find("LabelScore");
         if (target != null)
@@ -5388,14 +5391,14 @@ public class HERO : Photon.MonoBehaviour
                                 base.rigidbody.velocity = Vector3.up * 30f;
                                 if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
                                 {
-                                    this.titanWhoGrabMe.GetComponent<TITAN>().grabbedTargetEscape();
+                                    this.titanWhoGrabMe.GetComponent<TITAN>().GrabbedTargetEscape();
                                 }
                                 else
                                 {
                                     base.photonView.RPC("netSetIsGrabbedFalse", PhotonTargets.All, new object[0]);
                                     if (PhotonNetwork.isMasterClient)
                                     {
-                                        this.titanWhoGrabMe.GetComponent<TITAN>().grabbedTargetEscape();
+                                        this.titanWhoGrabMe.GetComponent<TITAN>().GrabbedTargetEscape();
                                     }
                                     else
                                     {
@@ -5423,14 +5426,14 @@ public class HERO : Photon.MonoBehaviour
                                         this.ungrabbed();
                                         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
                                         {
-                                            this.titanWhoGrabMe.GetComponent<TITAN>().grabbedTargetEscape();
+                                            this.titanWhoGrabMe.GetComponent<TITAN>().GrabbedTargetEscape();
                                         }
                                         else
                                         {
                                             base.photonView.RPC("netSetIsGrabbedFalse", PhotonTargets.All, new object[0]);
                                             if (PhotonNetwork.isMasterClient)
                                             {
-                                                this.titanWhoGrabMe.GetComponent<TITAN>().grabbedTargetEscape();
+                                                this.titanWhoGrabMe.GetComponent<TITAN>().GrabbedTargetEscape();
                                             }
                                             else
                                             {
@@ -6061,7 +6064,7 @@ public class HERO : Photon.MonoBehaviour
                                                 }
                                                 else
                                                 {
-                                                    this.netlaughAttack();
+                                                    this.NetlaughAttack();
                                                 }
                                             }
                                             else
@@ -6099,12 +6102,12 @@ public class HERO : Photon.MonoBehaviour
                                             }
                                             else
                                             {
-                                                this.netTauntAttack(5f, 100f);
+                                                this.NetTauntAttack(5f, 100f);
                                             }
                                         }
                                         else
                                         {
-                                            this.netTauntAttack(5f, 100f);
+                                            this.NetTauntAttack(5f, 100f);
                                         }
                                         this.falseAttack();
                                         this.idle();
@@ -6499,14 +6502,14 @@ public class HERO : Photon.MonoBehaviour
                                 this.baseRigidBody.velocity = Vector3.up * 30f;
                                 if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
                                 {
-                                    this.titanWhoGrabMe.GetComponent<TITAN>().grabbedTargetEscape();
+                                    this.titanWhoGrabMe.GetComponent<TITAN>().GrabbedTargetEscape();
                                 }
                                 else
                                 {
                                     base.photonView.RPC("netSetIsGrabbedFalse", PhotonTargets.All, new object[0]);
                                     if (PhotonNetwork.isMasterClient)
                                     {
-                                        this.titanWhoGrabMe.GetComponent<TITAN>().grabbedTargetEscape();
+                                        this.titanWhoGrabMe.GetComponent<TITAN>().GrabbedTargetEscape();
                                     }
                                     else
                                     {
@@ -6538,14 +6541,14 @@ public class HERO : Photon.MonoBehaviour
                                         this.ungrabbed();
                                         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
                                         {
-                                            this.titanWhoGrabMe.GetComponent<TITAN>().grabbedTargetEscape();
+                                            this.titanWhoGrabMe.GetComponent<TITAN>().GrabbedTargetEscape();
                                         }
                                         else
                                         {
                                             base.photonView.RPC("netSetIsGrabbedFalse", PhotonTargets.All, new object[0]);
                                             if (PhotonNetwork.isMasterClient)
                                             {
-                                                this.titanWhoGrabMe.GetComponent<TITAN>().grabbedTargetEscape();
+                                                this.titanWhoGrabMe.GetComponent<TITAN>().GrabbedTargetEscape();
                                             }
                                             else
                                             {
@@ -7181,12 +7184,12 @@ public class HERO : Photon.MonoBehaviour
                                             }
                                             else
                                             {
-                                                this.netTauntAttack(5f, 100f);
+                                                this.NetTauntAttack(5f, 100f);
                                             }
                                         }
                                         else
                                         {
-                                            this.netTauntAttack(5f, 100f);
+                                            this.NetTauntAttack(5f, 100f);
                                         }
                                         this.falseAttack();
                                         this.idle();
@@ -7201,7 +7204,7 @@ public class HERO : Photon.MonoBehaviour
                                             }
                                             else
                                             {
-                                                this.netlaughAttack();
+                                                this.NetlaughAttack();
                                             }
                                         }
                                         else
@@ -7728,7 +7731,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void whoIsMyErenTitan(int id)
+    private void WhoIsMyErenTitan(int id)
     {
         this.eren_titan = PhotonView.Find(id).gameObject;
         this.titanForm = true;

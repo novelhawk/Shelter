@@ -66,7 +66,7 @@ public class RockThrow : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void initRPC(int viewID, Vector3 scale, Vector3 pos, float level)
+    private void InitRPC(int viewID, Vector3 scale, Vector3 pos, float level)
     {
         GameObject gameObject = PhotonView.Find(viewID).gameObject;
         Transform transform = gameObject.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R/hand_R_001");
@@ -88,7 +88,7 @@ public class RockThrow : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void launchRPC(Vector3 v, Vector3 p)
+    private void LaunchRPC(Vector3 v, Vector3 p)
     {
         this.launched = true;
         Vector3 vector = p;

@@ -85,7 +85,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
         float num = 20f;
         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
         {
-            player.GetComponent<HERO>().blowAway(vector.normalized * num + Vector3.up * 1f);
+            player.GetComponent<HERO>().BlowAway(vector.normalized * num + Vector3.up * 1f);
         }
         else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
         {
@@ -213,7 +213,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void changeDoor()
+    private void ChangeDoor()
     {
         this.door_broken.SetActive(true);
         this.door_closed.SetActive(false);
@@ -330,7 +330,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void labelRPC(int health, int maxHealth)
+    public void LabelRPC(int health, int maxHealth)
     {
         if (health < 0)
         {
@@ -428,7 +428,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void loadskinRPC(string url)
+    public void LoadskinRPC(string url)
     {
         if ((int) FengGameManagerMKII.settings[1] == 1 && (url.EndsWith(".jpg") || url.EndsWith(".png") || url.EndsWith(".jpeg")))
         {
@@ -470,13 +470,13 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netCrossFade(string aniName, float time)
+    private void NetCrossFade(string aniName, float time)
     {
         base.animation.CrossFade(aniName, time);
     }
 
     [RPC]
-    public void netDie()
+    public void NetDie()
     {
         if (!this.hasDie)
         {
@@ -485,13 +485,13 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netPlayAnimation(string aniName)
+    private void NetPlayAnimation(string aniName)
     {
         base.animation.Play(aniName);
     }
 
     [RPC]
-    private void netPlayAnimationAt(string aniName, float normalizedTime)
+    private void NetPlayAnimationAt(string aniName, float normalizedTime)
     {
         base.animation.Play(aniName);
         base.animation[aniName].normalizedTime = normalizedTime;
@@ -528,7 +528,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
 
     private void playSound(string sndname)
     {
-        this.playsoundRPC(sndname);
+        this.PlaysoundRPC(sndname);
         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
         {
             if (FengGameManagerMKII.LAN)
@@ -546,19 +546,19 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void playsoundRPC(string sndname)
+    private void PlaysoundRPC(string sndname)
     {
         base.transform.Find(sndname).GetComponent<AudioSource>().Play();
     }
 
     [RPC]
-    private void removeMe()
+    private void RemoveMe()
     {
         UnityEngine.Object.Destroy(base.gameObject);
     }
 
     [RPC]
-    public void setSize(float size, PhotonMessageInfo info)
+    public void SetSize(float size, PhotonMessageInfo info)
     {
         size = Mathf.Clamp(size, 0.1f, 50f);
         if (info.sender.IsMasterClient)
@@ -699,22 +699,22 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void startNeckSteam()
+    private void StartNeckSteam()
     {
         this.neckSteamObject.GetComponent<ParticleSystem>().Stop();
         this.neckSteamObject.GetComponent<ParticleSystem>().Play();
     }
 
     [RPC]
-    private void startSweepSmoke()
+    private void StartSweepSmoke()
     {
         this.sweepSmokeObject.GetComponent<ParticleSystem>().enableEmission = true;
         this.sweepSmokeObject.GetComponent<ParticleSystem>().Play();
     }
 
-    private void steam()
+    private void Steam()
     {
-        this.callTitanHAHA();
+        this.callTitanHAHA(); // Is feng for real?
         this.state = "steam";
         this.actionName = "attack_steam";
         this.attackCheckTime = 0.45f;
@@ -723,14 +723,14 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void stopSweepSmoke()
+    private void StopSweepSmoke()
     {
         this.sweepSmokeObject.GetComponent<ParticleSystem>().enableEmission = false;
         this.sweepSmokeObject.GetComponent<ParticleSystem>().Stop();
     }
 
     [RPC]
-    public void titanGetHit(int viewID, int speed)
+    public void TitanGetHit(int viewID, int speed)
     {
         Transform transform = base.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck");
         PhotonView view = PhotonView.Find(viewID);
@@ -755,13 +755,13 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                     {
                         if (FengGameManagerMKII.LAN)
                         {
-                            this.netDie();
+                            this.NetDie();
                         }
                         else
                         {
                             base.photonView.RPC("netDie", PhotonTargets.OthersBuffered, new object[0]);
-                            this.netDie();
-                            FengGameManagerMKII.instance.titanGetKill(view.owner, speed, base.name, null);
+                            this.NetDie();
+                            FengGameManagerMKII.instance.TitanGetKill(view.owner, speed, base.name, null);
                         }
                     }
                 }
@@ -1019,7 +1019,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
             }
             else if (this.attackPattern == 1)
             {
-                this.steam();
+                this.Steam();
                 this.attackPattern++;
             }
             else if (this.attackPattern == 2)
@@ -1029,7 +1029,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
             }
             else if (this.isSteamNeed || this.hasDie)
             {
-                this.steam();
+                this.Steam();
                 this.isSteamNeed = false;
             }
             else if (this.myHero == null)
@@ -1045,7 +1045,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                 float num3 = this.myHero.transform.position.y - base.transform.position.y;
                 if (this.myDistance < 85f && UnityEngine.Random.Range(0, 100) < 5)
                 {
-                    this.steam();
+                    this.Steam();
                 }
                 else
                 {
@@ -1110,7 +1110,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                                 break;
 
                             case 6:
-                                this.steam();
+                                this.Steam();
                                 break;
                         }
                     }
@@ -1364,7 +1364,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
             }
             else if (this.attackPattern == 1)
             {
-                this.steam();
+                this.Steam();
                 this.attackPattern++;
             }
             else if (this.attackPattern == 2)
@@ -1374,7 +1374,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
             }
             else if (this.isSteamNeed || this.hasDie)
             {
-                this.steam();
+                this.Steam();
                 this.isSteamNeed = false;
             }
             else if (this.myHero == null)
@@ -1390,7 +1390,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                 float num4 = this.myHero.transform.position.y - base.transform.position.y;
                 if (this.myDistance < 85f && UnityEngine.Random.Range(0, 100) < 5)
                 {
-                    this.steam();
+                    this.Steam();
                 }
                 else
                 {
@@ -1455,7 +1455,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                                 break;
 
                             case 6:
-                                this.steam();
+                                this.Steam();
                                 break;
                         }
                     }

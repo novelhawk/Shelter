@@ -545,7 +545,7 @@ public class TITAN : Photon.MonoBehaviour
             }
             else if (this.state == TitanState.idle || this.state == TitanState.turn || this.state == TitanState.chase)
             {
-                this.laugh(0f);
+                this.Laugh(0f);
             }
         }
     }
@@ -676,7 +676,7 @@ public class TITAN : Photon.MonoBehaviour
             return false;
         }
         this.hasDie = true;
-        FengGameManagerMKII.instance.oneTitanDown(string.Empty, false);
+        FengGameManagerMKII.instance.OneTitanDown(string.Empty, false);
         this.dieAnimation();
         return true;
     }
@@ -737,7 +737,7 @@ public class TITAN : Photon.MonoBehaviour
             base.animation[this.hitAnimation].time = 0f;
             base.animation[this.hitAnimation].speed = 0f;
             this.needFreshCorePosition = true;
-            FengGameManagerMKII.instance.oneTitanDown(string.Empty, false);
+            FengGameManagerMKII.instance.OneTitanDown(string.Empty, false);
             if (base.photonView.isMine)
             {
                 if (this.grabbedTarget != null)
@@ -765,7 +765,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void dieBlowRPC(Vector3 attacker, float hitPauseTime)
+    private void DieBlowRPC(Vector3 attacker, float hitPauseTime)
     {
         if (base.photonView.isMine)
         {
@@ -790,11 +790,11 @@ public class TITAN : Photon.MonoBehaviour
             }
             if (this.nonAI)
             {
-                FengGameManagerMKII.instance.titanGetKill(view.owner, damage, (string) PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name], null);
+                FengGameManagerMKII.instance.TitanGetKill(view.owner, damage, (string) PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name], null);
             }
             else
             {
-                FengGameManagerMKII.instance.titanGetKill(view.owner, damage, base.name, null);
+                FengGameManagerMKII.instance.TitanGetKill(view.owner, damage, base.name, null);
             }
         }
         else
@@ -836,7 +836,7 @@ public class TITAN : Photon.MonoBehaviour
             this.playAnimation(this.hitAnimation);
             base.animation[this.hitAnimation].time = 0f;
             base.animation[this.hitAnimation].speed = 0f;
-            FengGameManagerMKII.instance.oneTitanDown(string.Empty, false);
+            FengGameManagerMKII.instance.OneTitanDown(string.Empty, false);
             this.needFreshCorePosition = true;
             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && base.photonView.isMine)
             {
@@ -893,7 +893,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void dieHeadBlowRPC(Vector3 attacker, float hitPauseTime)
+    private void DieHeadBlowRPC(Vector3 attacker, float hitPauseTime)
     {
         if (base.photonView.isMine)
         {
@@ -925,7 +925,7 @@ public class TITAN : Photon.MonoBehaviour
     {
         if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.MULTIPLAYER || !base.photonView.isMine) || !grabTarget.GetComponent<HERO>().isGrabbed)
         {
-            this.grabToRight();
+            this.GrabToRight();
             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && base.photonView.isMine)
             {
                 base.photonView.RPC("grabToRight", PhotonTargets.Others, new object[0]);
@@ -946,7 +946,7 @@ public class TITAN : Photon.MonoBehaviour
     {
         if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.MULTIPLAYER || !base.photonView.isMine) || !grabTarget.GetComponent<HERO>().isGrabbed)
         {
-            this.grabToLeft();
+            this.GrabToLeft();
             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && base.photonView.isMine)
             {
                 base.photonView.RPC("grabToLeft", PhotonTargets.Others, new object[0]);
@@ -1929,13 +1929,13 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void grabbedTargetEscape()
+    public void GrabbedTargetEscape()
     {
         this.grabbedTarget = null;
     }
 
     [RPC]
-    public void grabToLeft()
+    public void GrabToLeft()
     {
         Transform transform = base.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L/hand_L_001");
         this.grabTF.transform.parent = transform;
@@ -1951,7 +1951,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void grabToRight()
+    public void GrabToRight()
     {
         Transform transform = base.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R/hand_R_001");
         this.grabTF.transform.parent = transform;
@@ -2192,7 +2192,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void hitAnkleRPC(int viewID)
+    public void HitAnkleRPC(int viewID)
     {
         if (!this.hasDie && this.state != TitanState.down)
         {
@@ -2221,7 +2221,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void hitEyeRPC(int viewID)
+    public void HitEyeRPC(int viewID)
     {
         if (!this.hasDie)
         {
@@ -2257,7 +2257,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void hitLRPC(Vector3 attacker, float hitPauseTime)
+    private void HitLRPC(Vector3 attacker, float hitPauseTime)
     {
         if (base.photonView.isMine)
         {
@@ -2286,7 +2286,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void hitRRPC(Vector3 attacker, float hitPauseTime)
+    private void HitRRPC(Vector3 attacker, float hitPauseTime)
     {
         if (base.photonView.isMine && !this.hasDie)
         {
@@ -2383,7 +2383,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void labelRPC(int health, int maxHealth)
+    public void LabelRPC(int health, int maxHealth)
     {
         if (health < 0)
         {
@@ -2547,7 +2547,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void laugh(float sbtime = 0f)
+    private void Laugh(float sbtime = 0f)
     {
         if (this.state == TitanState.idle || this.state == TitanState.turn || this.state == TitanState.chase)
         {
@@ -2670,7 +2670,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void loadskinRPC(string body, string eye)
+    public void LoadskinRPC(string body, string eye)
     {
         if ((int) FengGameManagerMKII.settings[1] == 1)
         {
@@ -2786,7 +2786,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void moveToRPC(float posX, float posY, float posZ, PhotonMessageInfo info)
+    public void MoveToRPC(float posX, float posY, float posZ, PhotonMessageInfo info)
     {
         if (info.sender.IsMasterClient)
         {
@@ -2795,13 +2795,13 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netCrossFade(string aniName, float time)
+    private void NetCrossFade(string aniName, float time)
     {
         base.animation.CrossFade(aniName, time);
     }
 
     [RPC]
-    private void netDie()
+    private void NetDie()
     {
         this.asClientLookTarget = false;
         if (!this.hasDie)
@@ -2828,20 +2828,20 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netPlayAnimation(string aniName)
+    private void NetPlayAnimation(string aniName)
     {
         base.animation.Play(aniName);
     }
 
     [RPC]
-    private void netPlayAnimationAt(string aniName, float normalizedTime)
+    private void NetPlayAnimationAt(string aniName, float normalizedTime)
     {
         base.animation.Play(aniName);
         base.animation[aniName].normalizedTime = normalizedTime;
     }
 
     [RPC]
-    private void netSetAbnormalType(int type)
+    private void NetSetAbnormalType(int type)
     {
         if (!this.hasload)
         {
@@ -2947,7 +2947,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netSetLevel(float level, int AI, int skinColor)
+    private void NetSetLevel(float level, int AI, int skinColor)
     {
         this.setLevel2(level, AI, skinColor);
         if (level > 5f)
@@ -3023,7 +3023,7 @@ public class TITAN : Photon.MonoBehaviour
 
     private void playSound(string sndname)
     {
-        this.playsoundRPC(sndname);
+        this.PlaysoundRPC(sndname);
         if (base.photonView.isMine)
         {
             object[] parameters = new object[] { sndname };
@@ -3032,7 +3032,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void playsoundRPC(string sndname)
+    private void PlaysoundRPC(string sndname)
     {
         base.transform.Find(sndname).GetComponent<AudioSource>().Play();
     }
@@ -3229,21 +3229,13 @@ public class TITAN : Photon.MonoBehaviour
         }
         else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
         {
-            this.netSetAbnormalType(num);
+            this.NetSetAbnormalType(num);
         }
     }
 
     public void setAbnormalType2(AbnormalType type, bool forceCrawler)
     {
-        bool flag = false;
-        if (RCSettings.spawnMode > 0 || (int) FengGameManagerMKII.settings[91] == 1 && IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
-        {
-            flag = true;
-        }
-        if (FengGameManagerMKII.level.StartsWith("Custom"))
-        {
-            flag = true;
-        }
+        bool flag = RCSettings.spawnMode > 0 || (int) FengGameManagerMKII.settings[91] == 1 && IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient || FengGameManagerMKII.level.StartsWith("Custom");
         int num = 0;
         float num2 = 0.02f * (IN_GAME_MAIN_CAMERA.difficulty + 1);
         if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.PVP_AHSS)
@@ -3348,12 +3340,12 @@ public class TITAN : Photon.MonoBehaviour
         }
         else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
         {
-            this.netSetAbnormalType(num);
+            this.NetSetAbnormalType(num);
         }
     }
 
     [RPC]
-    private void setIfLookTarget(bool bo)
+    private void SetIfLookTarget(bool bo)
     {
         this.asClientLookTarget = bo;
     }
@@ -3571,7 +3563,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void setMyTarget(int ID)
+    private void SetMyTarget(int ID)
     {
         if (ID == -1)
         {
@@ -3686,7 +3678,7 @@ public class TITAN : Photon.MonoBehaviour
 
     public void suicide()
     {
-        this.netDie();
+        this.NetDie();
         if (this.nonAI)
         {
             FengGameManagerMKII.instance.SendKillInfo(false, string.Empty, true, (string) PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name], 0);
@@ -3714,7 +3706,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void titanGetHit(int viewID, int speed)
+    public void TitanGetHit(int viewID, int speed)
     {
         PhotonView view = PhotonView.Find(viewID);
         if (view != null)
@@ -3742,14 +3734,14 @@ public class TITAN : Photon.MonoBehaviour
                     {
                         this.grabbedTarget.GetPhotonView().RPC("netUngrabbed", PhotonTargets.All, new object[0]);
                     }
-                    this.netDie();
+                    this.NetDie();
                     if (this.nonAI)
                     {
-                        FengGameManagerMKII.instance.titanGetKill(view.owner, speed, (string) PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name], null);
+                        FengGameManagerMKII.instance.TitanGetKill(view.owner, speed, (string) PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name], null);
                     }
                     else
                     {
-                        FengGameManagerMKII.instance.titanGetKill(view.owner, speed, base.name, null);
+                        FengGameManagerMKII.instance.TitanGetKill(view.owner, speed, base.name, null);
                     }
                 }
                 else

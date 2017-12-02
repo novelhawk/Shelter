@@ -26,7 +26,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
     }
 
     [RPC]
-    public IEnumerator loadskinE(int hair, int eye, string hairlink)
+    public IEnumerator LoadskinE(int hair, int eye, string hairlink)
     {
         bool iteratorVariable0 = false;
         UnityEngine.Object.Destroy(this.part_hair);
@@ -178,12 +178,12 @@ public class TITAN_SETUP : Photon.MonoBehaviour
             {
                 if (flag2)
                 {
-                    base.StartCoroutine(this.loadskinE(num, eye, hairlink));
+                    base.StartCoroutine(this.LoadskinE(num, eye, hairlink));
                 }
                 else
                 {
                     color = HeroCostume.costume[UnityEngine.Random.Range(0, HeroCostume.costume.Length - 5)].hair_color;
-                    this.setHairPRC(num, eye, color.r, color.g, color.b);
+                    this.SetHairPRC(num, eye, color.r, color.g, color.b);
                 }
             }
         }
@@ -220,7 +220,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void setHairPRC(int type, int eye_type, float c1, float c2, float c3)
+    private void SetHairPRC(int type, int eye_type, float c1, float c2, float c3)
     {
         UnityEngine.Object.Destroy(this.part_hair);
         this.hair = CostumeHair.hairsM[type];
@@ -240,11 +240,11 @@ public class TITAN_SETUP : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void setHairRPC2(int hair, int eye, string hairlink)
+    public void SetHairRPC2(int hair, int eye, string hairlink)
     {
         if ((int) FengGameManagerMKII.settings[1] == 1)
         {
-            base.StartCoroutine(this.loadskinE(hair, eye, hairlink));
+            base.StartCoroutine(this.LoadskinE(hair, eye, hairlink));
         }
     }
 

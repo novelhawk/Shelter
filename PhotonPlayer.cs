@@ -1,5 +1,6 @@
 using ExitGames.Client.Photon;
 using System.Collections.Generic;
+using System.Linq;
 using Mod;
 using UnityEngine;
 
@@ -41,15 +42,24 @@ public class PhotonPlayer
 
     public static PhotonPlayer Find(int ID)
     {
-        for (int i = 0; i < PhotonNetwork.playerList.Length; i++)
-        {
-            PhotonPlayer player = PhotonNetwork.playerList[i];
-            if (player.ID == ID)
-            {
-                return player;
-            }
-        }
-        return null;
+        return PhotonNetwork.playerList.FirstOrDefault(player => player.ID == ID);
+    }
+
+    public static bool TryParse(string idStr, out PhotonPlayer player)
+    {
+        if (int.TryParse(idStr, out int id))
+            if (TryParse(id, out player))
+                return true;
+        player = null;
+        return false;
+    }
+
+    public static bool TryParse(int id, out PhotonPlayer player)
+    {
+        player = Find(id);
+        if (player == null)
+            return false;
+        return true;
     }
 
     public PhotonPlayer Get(int id)
@@ -147,14 +157,7 @@ public class PhotonPlayer
         }
     }
 
-    public override string ToString()
-    {
-        if (string.IsNullOrEmpty(this.name))
-        {
-            return string.Format("#{0:00}{1}", this.ID, !this.IsMasterClient ? string.Empty : "(master)");
-        }
-        return string.Format("'{0}'{1}", this.name, !this.IsMasterClient ? string.Empty : "(master)");
-    }
+    public override string ToString() => $"{(IsMasterClient ? "[M] " : string.Empty)}{HexName} ({ID})";
 
     public string ToStringFull()
     {
@@ -203,6 +206,28 @@ public class PhotonPlayer
                 this.nameField = value;
             }
         }
+    }
+
+    public static bool operator !=(PhotonPlayer a, PhotonPlayer b)
+    {
+        if (a == null && b == null) // Both null
+            return false;
+        if (a == null || b == null) // One null the other isn't
+            return true;
+        if (a.ID != b.ID) // Same player
+            return true;
+        return false;
+    }
+
+    public static bool operator ==(PhotonPlayer a, PhotonPlayer b)
+    {
+        if (a == null && b == null)
+            return true;
+        if (a == null || b == null)
+            return false;
+        if (a.ID == b.ID)
+            return true;
+        return false;
     }
 }
 

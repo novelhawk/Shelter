@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 {
+    public static IN_GAME_MAIN_CAMERA instance;
     public RotationAxes axes;
     public AudioSource bgmusic;
     public static float cameraDistance = 0.6f;
@@ -637,6 +638,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     private void Start()
     {
+        instance = this;
         FengGameManagerMKII.instance.AddCamera(this);
         isPausing = false;
         sensitivityMulti = PlayerPrefs.GetFloat("MouseSensitivity");

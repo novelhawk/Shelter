@@ -3,6 +3,7 @@ using ExitGames.Client.Photon.Lite;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using UnityEngine;
 
@@ -787,16 +788,15 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 {
                     Debug.Log("Received RPC: " + str);
                 }
-                if (photonView.@group == 0 || this.allowedReceivingGroups.Contains(photonView.group))
+                if (photonView.group == 0 || this.allowedReceivingGroups.Contains(photonView.group))
                 {
                     System.Type[] callParameterTypes = new System.Type[0];
                     if (parameters.Length > 0)
                     {
                         callParameterTypes = new System.Type[parameters.Length];
                         int index = 0;
-                        for (int i = 0; i < parameters.Length; i++)
+                        foreach (object obj2 in parameters)
                         {
-                            object obj2 = parameters[i];
                             if (obj2 == null)
                             {
                                 callParameterTypes[index] = null;
@@ -826,16 +826,15 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                             }
                             if (list == null)
                             {
-                                List<MethodInfo> methods = SupportClass.GetMethods(key, typeof(UnityEngine.RPC));
+                                List<MethodInfo> methods = SupportClass.GetMethods(key, typeof(RPC));
                                 this.monoRPCMethodsCache[key] = methods;
                                 list = methods;
                             }
                             if (list != null)
                             {
-                                for (int j = 0; j < list.Count; j++)
+                                foreach (MethodInfo info in list)
                                 {
-                                    MethodInfo info = list[j];
-                                    if (info.Name == str)
+                                    if (info.Name == str.First().ToString().ToUpper() + str.Substring(1))
                                     {
                                         num8++;
                                         ParameterInfo[] methodParameters = info.GetParameters();

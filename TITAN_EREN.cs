@@ -94,7 +94,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void endMovingRock()
+    private void EndMovingRock()
     {
         this.isROCKMOVE = false;
     }
@@ -367,7 +367,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void hitByFTRPC(int phase)
+    private void HitByFTRPC(int phase)
     {
         if (base.photonView.isMine)
         {
@@ -404,7 +404,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void hitByTitanRPC()
+    private void HitByTitanRPC()
     {
         if (base.photonView.isMine)
         {
@@ -486,7 +486,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void loadskinRPC(string url)
+    public void LoadskinRPC(string url)
     {
         if ((int) FengGameManagerMKII.settings[1] == 1 && (url.EndsWith(".jpg") || url.EndsWith(".png") || url.EndsWith(".jpeg")))
         {
@@ -495,26 +495,26 @@ public class TITAN_EREN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netCrossFade(string aniName, float time)
+    private void NetCrossFade(string aniName, float time)
     {
         base.animation.CrossFade(aniName, time);
     }
 
     [RPC]
-    private void netPlayAnimation(string aniName)
+    private void NetPlayAnimation(string aniName)
     {
         base.animation.Play(aniName);
     }
 
     [RPC]
-    private void netPlayAnimationAt(string aniName, float normalizedTime)
+    private void NetPlayAnimationAt(string aniName, float normalizedTime)
     {
         base.animation.Play(aniName);
         base.animation[aniName].normalizedTime = normalizedTime;
     }
 
     [RPC]
-    private void netTauntAttack(float tauntTime, float distance = 100f)
+    private void NetTauntAttack(float tauntTime, float distance = 100f)
     {
         foreach (GameObject obj2 in GameObject.FindGameObjectsWithTag("titan"))
         {
@@ -560,7 +560,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
 
     private void playSound(string sndname)
     {
-        this.playsoundRPC(sndname);
+        this.PlaysoundRPC(sndname);
         if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE)
         {
             object[] parameters = new object[] { sndname };
@@ -569,20 +569,20 @@ public class TITAN_EREN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void playsoundRPC(string sndname)
+    private void PlaysoundRPC(string sndname)
     {
         base.transform.Find(sndname).GetComponent<AudioSource>().Play();
     }
 
     [RPC]
-    private void removeMe()
+    private void RemoveMe()
     {
         PhotonNetwork.RemoveRPCs(base.photonView);
         UnityEngine.Object.Destroy(base.gameObject);
     }
 
     [RPC]
-    private void rockPlayAnimation(string anim)
+    private void RockPlayAnimation(string anim)
     {
         this.rock.animation.Play(anim);
         this.rock.animation[anim].speed = 1f;
@@ -842,7 +842,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void startMovingRock()
+    private void StartMovingRock()
     {
         this.isROCKMOVE = true;
     }
@@ -1189,12 +1189,12 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                     }
                                     else
                                     {
-                                        this.netTauntAttack(10f, 500f);
+                                        this.NetTauntAttack(10f, 500f);
                                     }
                                 }
                                 else
                                 {
-                                    this.netTauntAttack(10f, 500f);
+                                    this.NetTauntAttack(10f, 500f);
                                 }
                             }
                         }

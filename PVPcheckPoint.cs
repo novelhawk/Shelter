@@ -31,13 +31,13 @@ public class PVPcheckPoint : Photon.MonoBehaviour
     public float titanPtMax = 40f;
 
     [RPC]
-    private void changeHumanPt(float pt)
+    private void ChangeHumanPt(float pt)
     {
         this.humanPt = pt;
     }
 
     [RPC]
-    private void changeState(int num)
+    private void ChangeState(int num)
     {
         if (num == 0)
         {
@@ -54,7 +54,7 @@ public class PVPcheckPoint : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void changeTitanPt(float pt)
+    private void ChangeTitanPt(float pt)
     {
         this.titanPt = pt;
     }
@@ -126,9 +126,8 @@ public class PVPcheckPoint : Photon.MonoBehaviour
 
     private float getHeight(Vector3 pt)
     {
-        RaycastHit hit;
         LayerMask mask2 = 1 << LayerMask.NameToLayer("Ground");
-        if (Physics.Raycast(pt, -Vector3.up, out hit, 1000f, mask2.value))
+        if (Physics.Raycast(pt, -Vector3.up, out var hit, 1000f, mask2.value))
         {
             return hit.point.y;
         }

@@ -238,19 +238,19 @@ public class Horse : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netCrossFade(string aniName, float time)
+    private void NetCrossFade(string aniName, float time)
     {
         base.animation.CrossFade(aniName, time);
     }
 
     [RPC]
-    private void netPlayAnimation(string aniName)
+    private void NetPlayAnimation(string aniName)
     {
         base.animation.Play(aniName);
     }
 
     [RPC]
-    private void netPlayAnimationAt(string aniName, float normalizedTime)
+    private void NetPlayAnimationAt(string aniName, float normalizedTime)
     {
         base.animation.Play(aniName);
         base.animation[aniName].normalizedTime = normalizedTime;
@@ -278,7 +278,7 @@ public class Horse : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void setDust(bool enable)
+    private void SetDust(bool enable)
     {
         if (this.dust.GetComponent<ParticleSystem>().enableEmission)
         {

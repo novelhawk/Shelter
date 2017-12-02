@@ -220,7 +220,7 @@ public class Bullet : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void killObject()
+    private void KillObject()
     {
         UnityEngine.Object.Destroy(this.rope);
         UnityEngine.Object.Destroy(base.gameObject);
@@ -277,7 +277,7 @@ public class Bullet : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void myMasterIs(int id, string launcherRef)
+    private void MyMasterIs(int id, string launcherRef)
     {
         this.master = PhotonView.Find(id).gameObject;
         if (launcherRef == "hookRefL1")
@@ -299,7 +299,7 @@ public class Bullet : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netLaunch(Vector3 newPosition)
+    private void NetLaunch(Vector3 newPosition)
     {
         this.nodes = new ArrayList
         {
@@ -308,7 +308,7 @@ public class Bullet : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netUpdateLeviSpiral(Vector3 newPosition, Vector3 masterPosition, Vector3 masterrotation)
+    private void NetUpdateLeviSpiral(Vector3 newPosition, Vector3 masterPosition, Vector3 masterrotation)
     {
         this.phase = 2;
         this.leviMode = true;
@@ -332,7 +332,7 @@ public class Bullet : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netUpdatePhase1(Vector3 newPosition, Vector3 masterPosition)
+    private void NetUpdatePhase1(Vector3 newPosition, Vector3 masterPosition)
     {
         this.lineRenderer.SetVertexCount(2);
         this.lineRenderer.SetPosition(0, newPosition);
@@ -391,13 +391,13 @@ public class Bullet : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void setPhase(int value)
+    private void SetPhase(int value)
     {
         this.phase = value;
     }
 
     [RPC]
-    private void setVelocityAndLeft(Vector3 value, Vector3 v2, bool l)
+    private void SetVelocityAndLeft(Vector3 value, Vector3 v2, bool l)
     {
         this.velocity = value;
         this.velocity2 = v2;
@@ -413,13 +413,13 @@ public class Bullet : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void tieMeTo(Vector3 p)
+    private void TieMeTo(Vector3 p)
     {
         base.transform.position = p;
     }
 
     [RPC]
-    private void tieMeToOBJ(int id)
+    private void TieMeToOBJ(int id)
     {
         base.transform.parent = PhotonView.Find(id).gameObject.transform;
     }

@@ -615,7 +615,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     {
         if (!grabTarget.GetComponent<HERO>().isGrabbed)
         {
-            grabToRight();
+            GrabToRight();
             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
             {
                 object[] parameters = new object[] { base.photonView.viewID, false };
@@ -636,7 +636,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     {
         if (!grabTarget.GetComponent<HERO>().isGrabbed)
         {
-            grabToLeft();
+            GrabToLeft();
             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
             {
                 object[] parameters = new object[] { base.photonView.viewID, true };
@@ -889,13 +889,13 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void grabbedTargetEscape()
+    public void GrabbedTargetEscape()
     {
         grabbedTarget = null;
     }
 
     [RPC]
-    public void grabToLeft()
+    public void GrabToLeft()
     {
         Transform transform = base.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L/hand_L_001");
         grabTF.transform.parent = transform;
@@ -912,7 +912,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void grabToRight()
+    public void GrabToRight()
     {
         Transform transform = base.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R/hand_R_001");
         grabTF.transform.parent = transform;
@@ -949,7 +949,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void hitAnkleLRPC(int viewID, int dmg)
+    public void HitAnkleLRPC(int viewID, int dmg)
     {
         if (!hasDie && state != "anklehurt")
         {
@@ -989,7 +989,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void hitAnkleRRPC(int viewID, int dmg)
+    public void HitAnkleRRPC(int viewID, int dmg)
     {
         if (!hasDie && state != "anklehurt")
         {
@@ -1025,7 +1025,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void hitEyeRPC(int viewID)
+    public void HitEyeRPC(int viewID)
     {
         if (!hasDie)
         {
@@ -1103,7 +1103,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void labelRPC(int health, int maxHealth)
+    public void LabelRPC(int health, int maxHealth)
     {
         if (health < 0)
         {
@@ -1251,7 +1251,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void loadskinRPC(string url)
+    public void LoadskinRPC(string url)
     {
         if ((int) FengGameManagerMKII.settings[1] == 1 && (url.EndsWith(".jpg") || url.EndsWith(".png") || url.EndsWith(".jpeg")))
         {
@@ -1260,13 +1260,13 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netCrossFade(string aniName, float time)
+    private void NetCrossFade(string aniName, float time)
     {
         base.animation.CrossFade(aniName, time);
     }
 
     [RPC]
-    public void netDie()
+    public void NetDie()
     {
         if (!hasDie)
         {
@@ -1276,13 +1276,13 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void netPlayAnimation(string aniName)
+    private void NetPlayAnimation(string aniName)
     {
         base.animation.Play(aniName);
     }
 
     [RPC]
-    private void netPlayAnimationAt(string aniName, float normalizedTime)
+    private void NetPlayAnimationAt(string aniName, float normalizedTime)
     {
         base.animation.Play(aniName);
         base.animation[aniName].normalizedTime = normalizedTime;
@@ -1319,7 +1319,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
 
     private void playSound(string sndname)
     {
-        playsoundRPC(sndname);
+        PlaysoundRPC(sndname);
         if (Network.peerType == NetworkPeerType.Server)
         {
             object[] parameters = new object[] { sndname };
@@ -1328,13 +1328,13 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void playsoundRPC(string sndname)
+    private void PlaysoundRPC(string sndname)
     {
         base.transform.Find(sndname).GetComponent<AudioSource>().Play();
     }
 
     [RPC]
-    public void setSize(float size, PhotonMessageInfo info)
+    public void SetSize(float size, PhotonMessageInfo info)
     {
         size = Mathf.Clamp(size, 0.2f, 30f);
         if (info.sender.IsMasterClient)
@@ -1482,7 +1482,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void titanGetHit(int viewID, int speed)
+    public void TitanGetHit(int viewID, int speed)
     {
         Transform transform = base.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck");
         PhotonView view = PhotonView.Find(viewID);
@@ -1509,8 +1509,8 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                         {
                             grabbedTarget.GetPhotonView().RPC("netUngrabbed", PhotonTargets.All);
                         }
-                        netDie();
-                        FengGameManagerMKII.instance.titanGetKill(view.owner, speed, base.name, null);
+                        NetDie();
+                        FengGameManagerMKII.instance.TitanGetKill(view.owner, speed, base.name, null);
                     }
                 }
                 else

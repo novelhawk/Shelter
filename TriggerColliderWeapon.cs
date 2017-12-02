@@ -111,7 +111,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                             }
                             item.transform.root.GetComponent<TITAN>().die();
                             this.napeMeat(this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity, item.transform.root);
-                            FengGameManagerMKII.instance.netShowDamage(num2);
+                            FengGameManagerMKII.instance.NetShowDamage(num2);
                             FengGameManagerMKII.instance.PlayerKillInfoSingleplayerUpdate(num2);
                         }
                     }
@@ -169,7 +169,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                             {
                                 GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().startSnapShot2(item.transform.position, num6, item.transform.root.gameObject, 0.02f);
                             }
-                            item.transform.root.GetComponent<TITAN>().titanGetHit(base.transform.root.gameObject.GetPhotonView().viewID, num6);
+                            item.transform.root.GetComponent<TITAN>().TitanGetHit(base.transform.root.gameObject.GetPhotonView().viewID, num6);
                         }
                     }
                     else if (item.transform.root.GetComponent<FEMALE_TITAN>() != null)
@@ -184,7 +184,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                             {
                                 GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().startSnapShot2(item.transform.position, num7, null, 0.02f);
                             }
-                            item.transform.root.GetComponent<FEMALE_TITAN>().titanGetHit(base.transform.root.gameObject.GetPhotonView().viewID, num7);
+                            item.transform.root.GetComponent<FEMALE_TITAN>().TitanGetHit(base.transform.root.gameObject.GetPhotonView().viewID, num7);
                         }
                     }
                     else if (item.transform.root.GetComponent<COLOSSAL_TITAN>() != null)
@@ -199,7 +199,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                             {
                                 GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().startSnapShot2(item.transform.position, num8, null, 0.02f);
                             }
-                            item.transform.root.GetComponent<COLOSSAL_TITAN>().titanGetHit(base.transform.root.gameObject.GetPhotonView().viewID, num8);
+                            item.transform.root.GetComponent<COLOSSAL_TITAN>().TitanGetHit(base.transform.root.gameObject.GetPhotonView().viewID, num8);
                         }
                     }
                     this.showCriticalHitFX();
@@ -230,7 +230,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                         }
                         else if (!gameObject.GetComponent<FEMALE_TITAN>().hasDie)
                         {
-                            gameObject.GetComponent<FEMALE_TITAN>().hitEyeRPC(base.transform.root.gameObject.GetPhotonView().viewID);
+                            gameObject.GetComponent<FEMALE_TITAN>().HitEyeRPC(base.transform.root.gameObject.GetPhotonView().viewID);
                         }
                     }
                     else if (gameObject.GetComponent<TITAN>().abnormalType != AbnormalType.TYPE_CRAWLER)
@@ -252,7 +252,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                         }
                         else if (!gameObject.GetComponent<TITAN>().hasDie)
                         {
-                            gameObject.GetComponent<TITAN>().hitEyeRPC(base.transform.root.gameObject.GetPhotonView().viewID);
+                            gameObject.GetComponent<TITAN>().HitEyeRPC(base.transform.root.gameObject.GetPhotonView().viewID);
                         }
                         this.showCriticalHitFX();
                     }
@@ -319,7 +319,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                         }
                         else if (!obj4.GetComponent<FEMALE_TITAN>().hasDie)
                         {
-                            obj4.GetComponent<FEMALE_TITAN>().hitAnkleRRPC(base.transform.root.gameObject.GetPhotonView().viewID, num9);
+                            obj4.GetComponent<FEMALE_TITAN>().HitAnkleRRPC(base.transform.root.gameObject.GetPhotonView().viewID, num9);
                         }
                     }
                     else if (!PhotonNetwork.isMasterClient)
@@ -332,7 +332,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                     }
                     else if (!obj4.GetComponent<FEMALE_TITAN>().hasDie)
                     {
-                        obj4.GetComponent<FEMALE_TITAN>().hitAnkleLRPC(base.transform.root.gameObject.GetPhotonView().viewID, num9);
+                        obj4.GetComponent<FEMALE_TITAN>().HitAnkleLRPC(base.transform.root.gameObject.GetPhotonView().viewID, num9);
                     }
                     this.showCriticalHitFX();
                 }
