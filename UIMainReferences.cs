@@ -55,6 +55,6 @@ public class UIMainReferences : MonoBehaviour
             isFirstLaunch = false;
         }
 
-        Shelter.InterfaceManager.OnMainMenu();
+        Shelter.OnMainMenu();
     }
 }

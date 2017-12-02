@@ -2,7 +2,7 @@
 
 namespace Mod.Interface
 {
-    public class ProfileManager : Gui
+    public class ProfileChanger : Gui
     {
         private Texture2D _textBackground;
         private GUIStyle _textStyle;
@@ -14,7 +14,7 @@ namespace Mod.Interface
             _textBackground = Texture(196, 196, 196, 150);
             _textStyle = new GUIStyle
             {
-                normal = {background = _textBackground},
+                normal = { background = _textBackground },
                 fontSize = 14,
                 alignment = TextAnchor.MiddleCenter
             };
@@ -23,7 +23,7 @@ namespace Mod.Interface
         private Vector2 pos = new Vector2(0, 0);
         protected override void Render()
         {
-            GUI.DrawTexture(windowRect = new Rect(Screen.width / 2f - width/2, Screen.height / 2f - height/2, width, height), background);
+            GUI.DrawTexture(windowRect = new Rect(Screen.width / 2f - width / 2, Screen.height / 2f - height / 2, width, height), background);
             if (Alpha < 255f)
                 Animation();
 

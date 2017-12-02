@@ -57,19 +57,19 @@ namespace Mod.Interface
             {
                 Enable("CreateRoom");
                 Disable("ServerList");
-                Disable("ProfileManager");
+                Disable("ProfileChanger");
             }
             GUI.Label(rect = new Rect(143, 370, 167, 40), "Server list", IsVisible("ServerList") ? selected : text);
             if (GUI.Button(new Rect(rect.x, rect.y - 10f, rect.width, rect.height), string.Empty, GUIStyle.none))
             {
                 Enable("ServerList");
                 Disable("CreateRoom");
-                Disable("ProfileManager");
+                Disable("ProfileChanger");
             }
-            GUI.Label(rect = new Rect(143, 393, 167, 40), "Profile Manager", IsVisible("ProfileManager") ? selected : text);
+            GUI.Label(rect = new Rect(143, 393, 167, 40), "Profile Manager", IsVisible("ProfileChanger") ? selected : text);
             if (GUI.Button(new Rect(rect.x, rect.y - 10f, rect.width, rect.height), string.Empty, GUIStyle.none))
             {
-                Enable("ProfileManager");
+                Enable("ProfileChanger");
                 Disable("CreateRoom");
                 Disable("ServerList");
             }

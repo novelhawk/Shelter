@@ -18,6 +18,7 @@ namespace Mod.Managers
                 go.AddComponent<Scoreboard>(),
                 go.AddComponent<Chat>(),
                 go.AddComponent<Loading>(),
+                go.AddComponent<ProfileChanger>(),
                 go.AddComponent<ServerList>(),
                 go.AddComponent<CreateRoom>(),
                 go.AddComponent<MainMenu>(),
@@ -53,21 +54,6 @@ namespace Mod.Managers
             foreach (Gui gui in guis)
                 if (gui != null && gui.Visible)
                     gui.Disable();
-        }
-
-        public void OnJoinedGame()
-        {
-            DisableAll();
-            Enable("Chat");
-            Enable("Scoreboard");
-        }
-
-        public void OnMainMenu()
-        {
-            DisableAll();
-            Enable("Background");
-            Enable("Loading");
-            Enable("MainMenu");
         }
     }
 }

@@ -187,7 +187,7 @@ namespace Mod.Interface
 //                    IN_GAME_MAIN_CAMERA.difficulty = -1;
                 FengGameManagerMKII.level = LevelInfoManager.Levels[roomMapIndex].Name;
                 Application.LoadLevel(LevelInfoManager.Levels[roomMapIndex].Name);
-                Shelter.InterfaceManager.OnJoinedGame();
+                Shelter.OnJoinedGame();
             }
         }
 

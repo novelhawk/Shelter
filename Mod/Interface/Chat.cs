@@ -6,6 +6,7 @@ namespace Mod.Interface
 {
     public class Chat : Gui
     {
+        public const string SystemColor = "#04F363";
         private Texture2D _mBackground;
         private Texture2D _mWhiteTexture;
         private Texture2D _mGreyTexture;
@@ -14,7 +15,7 @@ namespace Mod.Interface
         private GUIStyle _mInputStyle;
 
         private static readonly List<ChatMessage> Messages = new List<ChatMessage>();
-        public static string Message { private get; set; } = string.Empty;
+        public static string Message { get; set; } = string.Empty;
 
 
         #region Static methods
@@ -22,17 +23,17 @@ namespace Mod.Interface
         /// <summary>
         /// Send a message to all clients which does not include any username.
         /// </summary>
-        /// <param name="message"></param>
-        public static void SendMessage(object message)
+        /// <param name="message">Message content</param>
+        /// <param name="target">The destinator of the message</param>
+        public static void SendMessage(object message, PhotonTargets target = PhotonTargets.All)
         {
-            FengGameManagerMKII.instance.photonView.RPC("Chat", PhotonTargets.Others, message, string.Empty);
-            Messages.Insert(0, new ChatMessage(message, PhotonPlayer.Self).CheckHTMLTags());
+            FengGameManagerMKII.instance.photonView.RPC("Chat", target, message, string.Empty);
         }
 
         /// <summary>
         /// Sends a player to all players (included this client). Handled by FengGameManager.Chat(string, string);
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="message">Message content</param>
         public static void SendMessageAsPlayer(object message) //TODO: todo
         {
             FengGameManagerMKII.instance.photonView.RPC("Chat", PhotonTargets.All, $"{PhotonPlayer.Self.HexName}: {message}", string.Empty);
@@ -41,7 +42,7 @@ namespace Mod.Interface
         /// <summary>
         /// Write a message in chat which contains: (message). Used by this client to comunicate to the user.
         /// </summary>
-        /// <param name="message"></param>
+        /// <param name="message">Message content</param>
         public static void AddMessage(object message)
         {
             Messages.Insert(0, new ChatMessage(message).CheckHTMLTags());
@@ -51,7 +52,7 @@ namespace Mod.Interface
         /// Write a message in chat which contains: [id] (username): (message). Caused by FengGameManager.Chat("message", "sender name (ignored)");
         /// </summary>
         /// <param name="sender">Sender of the message</param>
-        /// <param name="message">Message text</param>
+        /// <param name="message">Message content</param>
         public static void ReceiveMessageFromPlayer(PhotonPlayer sender, object message)
         {
             Messages.Insert(0, new ChatMessage($"{sender.HexName}: {message}", sender).CheckHTMLTags());
@@ -61,7 +62,7 @@ namespace Mod.Interface
         /// Write a message in chat which contains: [id] (message). Caused by FengGameManager.Chat("message", string.Empty);
         /// </summary>
         /// <param name="sender">Sender of the message</param>
-        /// <param name="message">Message text</param>
+        /// <param name="message">Message content</param>
         public static void ReceiveMessage(PhotonPlayer sender, object message)
         {
             Messages.Insert(0, new ChatMessage($"{message}", sender).CheckHTMLTags());
@@ -69,8 +70,16 @@ namespace Mod.Interface
 
         public static void System(object message) // TODO: Add i18n
         {
-            AddMessage($"<color=#04F363>{message}</color>");
+            AddMessage($"<color={SystemColor}>{message}</color>");
         } 
+
+        /// <summary>
+        /// Clears the list of messages
+        /// </summary>
+        public static void Clear()
+        {
+            Messages.Clear();
+        }
 
         #endregion
 
@@ -103,7 +112,7 @@ namespace Mod.Interface
 
                         if (cmd == null)
                         {
-                            SendMessage("Command not found.");
+                            System("Command not found.");
                             Message = string.Empty;
                             GUI.FocusControl(string.Empty);
                             _mWriting = !_mWriting;

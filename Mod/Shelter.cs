@@ -9,7 +9,7 @@ namespace Mod
 {
     public class Shelter : MonoBehaviour
     {
-        public static Assembly Assembly => Assembly.GetExecutingAssembly();
+        public static readonly Assembly Assembly = Assembly.GetExecutingAssembly();
         public static Stopwatch Stopwatch = Stopwatch.StartNew();
         private static InterfaceManager _interfaceManager;
         private static CommandManager _commandManager;
@@ -17,13 +17,30 @@ namespace Mod
         public void InitComponents()
         {
             _interfaceManager = new InterfaceManager();
-            _commandManager = new CommandManager();
         }
 
         public void Update()
         {
             if (Input.GetKeyDown(KeyCode.I) && Input.GetKey(KeyCode.LeftControl))
                 File.WriteAllLines($"GameObjects{UnityEngine.Random.Range(0, 255)}.txt", FindObjectsOfType(typeof(GameObject)).OrderBy(x => x.GetInstanceID()).Select(x => $"{x.GetInstanceID()} - {x.name}").ToArray());
+        }
+
+        public static void OnMainMenu()
+        {
+            _commandManager?.Dispose();
+            _commandManager = null;
+            _interfaceManager.DisableAll();
+            _interfaceManager.Enable("Background");
+            _interfaceManager.Enable("Loading");
+            _interfaceManager.Enable("MainMenu");
+        }
+
+        public static void OnJoinedGame()
+        {
+            _commandManager = new CommandManager();
+            _interfaceManager.DisableAll();
+            _interfaceManager.Enable("Chat");
+            _interfaceManager.Enable("Scoreboard");
         }
 
         #region Static methods
