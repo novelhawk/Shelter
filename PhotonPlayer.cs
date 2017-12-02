@@ -210,24 +210,12 @@ public class PhotonPlayer
 
     public static bool operator !=(PhotonPlayer a, PhotonPlayer b)
     {
-        if (a == null && b == null) // Both null
-            return false;
-        if (a == null || b == null) // One null the other isn't
-            return true;
-        if (a.ID != b.ID) // Same player
-            return true;
-        return false;
+        return !ReferenceEquals(a, b);
     }
 
     public static bool operator ==(PhotonPlayer a, PhotonPlayer b)
     {
-        if (a == null && b == null)
-            return true;
-        if (a == null || b == null)
-            return false;
-        if (a.ID == b.ID)
-            return true;
-        return false;
+        return ReferenceEquals(a, b);
     }
 }
 
