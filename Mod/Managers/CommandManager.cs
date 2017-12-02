@@ -2,6 +2,7 @@
 using Mod.Commands;
 using System.Collections.Generic;
 using Mod.Exceptions;
+using Mod.Interface;
 
 namespace Mod.Managers
 {
@@ -11,7 +12,25 @@ namespace Mod.Managers
         {
             AddRange(new Command[]
             {
+                new CommandBan(), 
+                new CommandClear(), 
+                new CommandCloth(), 
+                new CommandIgnore(), 
+                new CommandKick(), 
+                new CommandKill(), 
+                new CommandMasterClient(), 
+                new CommandPause(), 
+                new CommandPrivateMessage(), 
+                new CommandProp(), 
+                new CommandReply(), 
+                new CommandResetkd(), 
+                new CommandRestart(), 
                 new CommandRevive(), 
+                new CommandRoom(), 
+                new CommandRules(), 
+                new CommandSpectate(), 
+                new CommandSpectateMode(), 
+                new CommandTeleport(), 
             });
         }
 
@@ -31,6 +50,11 @@ namespace Mod.Managers
             try
             {
                 command.Execute(commandArgs);
+                return null;
+            }
+            catch (ArgumentException)
+            {
+                Chat.System("Errore degli argomenti del comando " + command.CommandName);
                 return null;
             }
             catch (CustomException)

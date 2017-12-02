@@ -21,16 +21,15 @@ namespace Mod.Commands
                 }
                 else
                 {
-                    PhotonPlayer player = PhotonPlayer.Find(args[0].ToInt());
-                    if (player == null)
-                        throw new PlayerNotFoundException(args[0].ToInt());
+                    if (!PhotonPlayer.TryParse(args[0], out PhotonPlayer player))
+                        throw new PlayerNotFoundException(args[0]);
                     FengGameManagerMKII.instance.photonView.RPC("respawnHeroInNewRound", player);
                     Notify.New($"{player.HexName} respawned!", string.Empty, 1300, 35F);
                 }
             }
             else
             {
-                FengGameManagerMKII.instance.respawnHeroInNewRound();
+                FengGameManagerMKII.instance.RespawnHeroInNewRound();
                 Notify.New("Respawn forced!", string.Empty, 1300, 35F);
             }
         }
