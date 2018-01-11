@@ -15,16 +15,6 @@ namespace Mod.Interface
         {
             PhotonNetwork.Disconnect();
             PhotonNetwork.ConnectToMaster(PlayerPrefs.GetString("ShelterServer", "app-eu.exitgamescloud.com"), 5055, FengGameManagerMKII.ApplicationID, UIMainReferences.Version);
-//            TODO: Work in progress
-//            DiscordRpc.EventHandlers handlers = new DiscordRpc.EventHandlers();
-//            DiscordRpc.Initialize("378900623875244042", ref handlers, true, null);
-//            DiscordRpc.RichPresence r = new DiscordRpc.RichPresence();
-//            r.endTimestamp = long.MaxValue;
-//            r.state = "In game";
-//            r.partySize = 1;
-//            r.partyMax = 5;
-//            r.details = "Hellothere11!";
-//            DiscordRpc.UpdatePresence(ref r);
 
             btnNormal = Texture(169, 169, 169, 100);
             btnHover = Texture(169, 169, 169, 255);
@@ -50,31 +40,31 @@ namespace Mod.Interface
 
         protected override void Render()
         {
-            Rect rect;
+            SmartRect rect = new SmartRect();
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(Screen.width / 1920f, Screen.height / 1080f, 1)); // Scale the gui for any resoultion
-            GUI.Label(rect = new Rect(145, 347, 166, 40), "Create", IsVisible("CreateRoom") ? selected : text);
-            if (GUI.Button(new Rect(rect.x, rect.y - 10f, rect.width, rect.height), string.Empty, GUIStyle.none))
+            GUI.Label(rect.Set(145, 347, 166, 40), "Create", IsVisible("CreateRoom") ? selected : text);
+            if (GUI.Button(rect.OY(-10), string.Empty, GUIStyle.none))
             {
                 Enable("CreateRoom");
                 Disable("ServerList");
                 Disable("ProfileChanger");
             }
-            GUI.Label(rect = new Rect(143, 370, 167, 40), "Server list", IsVisible("ServerList") ? selected : text);
-            if (GUI.Button(new Rect(rect.x, rect.y - 10f, rect.width, rect.height), string.Empty, GUIStyle.none))
+            GUI.Label(rect.Set(143, 370, 167, 40), "Server list", IsVisible("ServerList") ? selected : text);
+            if (GUI.Button(rect.OY(-10), string.Empty, GUIStyle.none))
             {
                 Enable("ServerList");
                 Disable("CreateRoom");
                 Disable("ProfileChanger");
             }
-            GUI.Label(rect = new Rect(143, 393, 167, 40), "Profile Manager", IsVisible("ProfileChanger") ? selected : text);
-            if (GUI.Button(new Rect(rect.x, rect.y - 10f, rect.width, rect.height), string.Empty, GUIStyle.none))
+            GUI.Label(rect.Set(143, 393, 167, 40), "Profile Manager", IsVisible("ProfileChanger") ? selected : text);
+            if (GUI.Button(rect.OY(-10), string.Empty, GUIStyle.none))
             {
                 Enable("ProfileChanger");
                 Disable("CreateRoom");
                 Disable("ServerList");
             }
-
             GUI.matrix = Matrix4x4.identity;
+
             GUILayout.BeginArea(new Rect(Screen.width - 250f, 0, 150f, 40f));
             GUILayout.BeginHorizontal();
             if (GUILayout.Button("EU", serverSelect))

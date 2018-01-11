@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Linq;
 using UnityEngine;
 
 namespace Mod.Interface
@@ -90,8 +89,7 @@ namespace Mod.Interface
             bool y = rect.y <= y1 && y1 <= rect.y + rect.height;
             if (x && y)
             {
-                if (GUI.Button(rect, string.Empty, GUIStyle.none))
-                    // Make it runs once at frame (otherwise it increments by 4)
+                if (GUI.Button(rect, string.Empty, GUIStyle.none)) // Make sure it register only once click per frame. TODO: Find alternative
                 {
                     if (Input.GetMouseButtonUp(0))
                     {
@@ -128,54 +126,60 @@ namespace Mod.Interface
         private bool roomVisible = true;
         protected override void Render()
         {
-            Rect rect;
-            GUI.DrawTexture(rect = new Rect(Screen.width / 2f - width/2, Screen.height / 2f - height/2, width, height), background);
+            GUI.DrawTexture(windowRect = new Rect(Screen.width / 2f - width/2, Screen.height / 2f - height/2, width, height), background);
             Animation();
             if (!animDone) return;
 
-            if (GUI.Button(new Rect(rect.x + rect.width / 2f - 150, rect.y + 50, 100, 40), "Online", singleplayer ? button : buttonSelected))
+            if (GUI.Button(new Rect(windowRect.x + windowRect.width / 2f - 150, windowRect.y + 50, 100, 40), "Online", singleplayer ? button : buttonSelected))
                 singleplayer = false;
-            if (GUI.Button(new Rect(rect.x + rect.width / 2f + 50, rect.y + 50, 100, 40), "Offline", !singleplayer ? button : buttonSelected))
+            if (GUI.Button(new Rect(windowRect.x + windowRect.width / 2f + 50, windowRect.y + 50, 100, 40), "Offline", !singleplayer ? button : buttonSelected))
                 singleplayer = true;
 
             if (singleplayer)
-                SingleplayerUI(rect);
+                SingleplayerUI(new Rect(windowRect.x + windowRect.width / 100f * 10, windowRect.y + 120f, windowRect.width - windowRect.width / 100f * 20, windowRect.height - 200f));
             else
-                MultiplayerUI(rect);
+                MultiplayerUI(new Rect(windowRect.x + windowRect.width / 100f * 10, windowRect.y + 120f, windowRect.width - windowRect.width / 100f * 20, windowRect.height - 200f));
         }
 
-        private void SingleplayerUI(Rect rect)
+        private void SingleplayerUI(Rect areaRect)
         {
-            rect = new Rect(rect.x + rect.width / 100f * 10, rect.y + 120f, rect.width - rect.width / 100f * 20, rect.height - 200f);
-            GUI.DrawTexture(new Rect(rect.x + rect.width / 2f - 1, rect.y, 2, 160), hover);
-            Rect r;
-            GUI.Label(r = new Rect(rect.x, rect.y, rect.width / 2f - 20, 30), "Character", label);
-            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Map", label);
-            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Time", label);
-            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Difficulty", label);
-            GUI.Label(new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Daylight", label);
-            roomCharacter = GUI.TextField(r = new Rect(rect.x + rect.width / 2f + 20, rect.y, rect.width / 2f - 20, 30), roomCharacter, textField);
-            var btn = CustomButton(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), LevelInfoManager.Levels[roomMapIndex].Name, button);
-            if (btn == 1)
-                roomMapIndex = LevelInfoManager.Levels.Count - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
-            else if (btn == -1)
-                roomMapIndex = roomMapIndex == 0 ? LevelInfoManager.Levels.Count - 1 : roomMapIndex - 1;
-            roomTime = GUI.TextField(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomTime, textField);
-            r = new Rect(r.x, r.y + r.height + 3, r.width, r.height);
-            if (GUI.Button(new Rect(r.x, r.y, r.width / 3 - 20, r.height), "Easy", roomDifficultySingle == 0 ? buttonSelected : button))
+            GUI.DrawTexture(new Rect(areaRect.x + areaRect.width / 2f - 1, areaRect.y, 2, 160), hover);
+
+            SmartRect rect = new SmartRect(areaRect.x, areaRect.y, areaRect.width / 2f - 20, 30);
+            GUI.Label(rect                    , "Character", label);
+            GUI.Label(rect.OY(rect.Height + 3), "Map", label);
+            GUI.Label(rect.OY(rect.Height + 3), "Time", label);
+            GUI.Label(rect.OY(rect.Height + 3), "Difficulty", label);
+            GUI.Label(rect.OY(rect.Height + 3), "Daylight", label);
+
+            rect = new SmartRect(areaRect.x + areaRect.width / 2f + 20, areaRect.y, areaRect.width / 2f - 20, 30);
+            roomCharacter = GUI.TextField(rect, roomCharacter, textField);
+            switch (CustomButton(rect.OY(rect.Height + 3), LevelInfoManager.Levels[roomMapIndex].Name, button))
+            {
+                case 1:
+                    roomMapIndex = LevelInfoManager.Levels.Count - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
+                    break;
+                case -1:
+                    roomMapIndex = roomMapIndex == 0 ? LevelInfoManager.Levels.Count - 1 : roomMapIndex - 1;
+                    break;
+            }
+            roomTime = GUI.TextField(rect.OY(rect.Height + 3), roomTime, textField);
+            rect.OY(rect.Height + 3);
+            if (GUI.Button(new Rect(rect.X, rect.Y, rect.Width / 3 - 20, rect.Height), "Easy", roomDifficultySingle == 0 ? buttonSelected : button))
                 roomDifficultySingle = 0;
-            if (GUI.Button(new Rect(r.x + r.width / 3 + 10, r.y, r.width / 3 - 20, r.height), "Normal", roomDifficultySingle == 1 ? buttonSelected : button))
+            if (GUI.Button(new Rect(rect.X + rect.Width / 3 + 10, rect.Y, rect.Width / 3 - 20, rect.Height), "Normal", roomDifficultySingle == 1 ? buttonSelected : button))
                 roomDifficultySingle = 1;
-            if (GUI.Button(new Rect(r.x + r.width / 3 * 2 + 20, r.y, r.width / 3 - 20, r.height), "Hard", roomDifficultySingle == 2 ? buttonSelected : button))
+            if (GUI.Button(new Rect(rect.X + rect.Width / 3 * 2 + 20, rect.Y, rect.Width / 3 - 20, rect.Height), "Hard", roomDifficultySingle == 2 ? buttonSelected : button))
                 roomDifficultySingle = 2;
-            r = new Rect(r.x, r.y + r.height + 3, r.width, r.height);
-            if (GUI.Button(new Rect(r.x, r.y, r.width / 3 - 20, r.height), "Day", roomDayLight == DayLight.Day ? buttonSelected : button))
+            rect.OY(rect.Height + 3);
+            if (GUI.Button(new Rect(rect.X, rect.Y, rect.Width / 3 - 20, rect.Height), "Day", roomDayLight == DayLight.Day ? buttonSelected : button))
                 roomDayLight = DayLight.Day;
-            if (GUI.Button(new Rect(r.x + r.width / 3 + 10, r.y, r.width / 3 - 20, r.height), "Dawn", roomDayLight == DayLight.Dawn ? buttonSelected : button))
+            if (GUI.Button(new Rect(rect.X + rect.Width / 3 + 10, rect.Y, rect.Width / 3 - 20, rect.Height), "Dawn", roomDayLight == DayLight.Dawn ? buttonSelected : button))
                 roomDayLight = DayLight.Dawn;
-            if (GUI.Button(new Rect(r.x + r.width / 3 * 2 + 20, r.y, r.width / 3 - 20, r.height), "Night", roomDayLight == DayLight.Night ? buttonSelected : button))
+            if (GUI.Button(new Rect(rect.X + rect.Width / 3 * 2 + 20, rect.Y, rect.Width / 3 - 20, rect.Height), "Night", roomDayLight == DayLight.Night ? buttonSelected : button))
                 roomDayLight = DayLight.Night;
-            if (GUI.Button(new Rect(rect.x + rect.width / 2f - 100f, rect.y + rect.height - 90f, 200f, 70f), "Play", button))
+
+            if (GUI.Button(new Rect(areaRect.x + areaRect.width / 2f - 100f, areaRect.y + areaRect.height - 90f, 200f, 70f), "Play", button))
             {
                 IN_GAME_MAIN_CAMERA.gametype = GAMETYPE.SINGLE;
                 IN_GAME_MAIN_CAMERA.singleCharacter = roomCharacter.ToUpper();
@@ -183,7 +187,7 @@ namespace Mod.Interface
                 if (IN_GAME_MAIN_CAMERA.cameraMode == CAMERA_TYPE.TPS)
                     Screen.lockCursor = true;
                 Screen.showCursor = false;
-//                if (LevelInfoManager.Levels[roomMapIndex].Map == "trainning_0") Does not exist in LevelInfoManager
+//                if (LevelInfoManager.Levels[roomMapIndex].Map == "trainning_0") Does not exist in LevelInfoManager TODO: Check why
 //                    IN_GAME_MAIN_CAMERA.difficulty = -1;
                 FengGameManagerMKII.level = LevelInfoManager.Levels[roomMapIndex].Name;
                 Application.LoadLevel(LevelInfoManager.Levels[roomMapIndex].Name);
@@ -191,48 +195,54 @@ namespace Mod.Interface
             }
         }
 
-        private void MultiplayerUI(Rect rect)
+        private void MultiplayerUI(Rect areaRect)
         {
-            rect = new Rect(rect.x + rect.width / 100f * 10, rect.y + 120f, rect.width - rect.width / 100f * 20, rect.height - 200f);
-            GUI.DrawTexture(new Rect(rect.x + rect.width / 2f - 1, rect.y, 2, 300), hover);
-            Rect r;
-            GUI.Label(r = new Rect(rect.x, rect.y, rect.width / 2f - 20, 30), "Name", label);
-            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Password", label);
-            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Map", label);
-            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Players", label);
-            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Time", label);
-            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Difficulty", label);
-            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Daylight", label);
-            GUI.Label(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Open", label);
-            GUI.Label(new Rect(r.x, r.y + r.height + 3, r.width, r.height), "Visible", label);
-            roomName = GUI.TextField(r = new Rect(rect.x + rect.width / 2f + 20,  rect.y, rect.width / 2f - 20, 30), roomName, textField);
-            roomPassword = GUI.TextField(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomPassword, textField);
-            var btn = CustomButton(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), LevelInfoManager.Levels[roomMapIndex].Name, button);
-            if (btn == 1)
-                roomMapIndex = LevelInfoManager.Levels.Count - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
-            else if (btn == -1)
-                roomMapIndex = roomMapIndex == 0 ? LevelInfoManager.Levels.Count - 1 : roomMapIndex - 1;
-            roomMaxPlayers = GUI.TextField(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomMaxPlayers, textField);
-            roomTime = GUI.TextField(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomTime, textField);
-            r = new Rect(r.x, r.y + r.height + 3, r.width, r.height);
-            if (GUI.Button(new Rect(r.x, r.y, r.width / 3 - 20, r.height), "Easy", roomDifficulty == "easy" ? buttonSelected : button))
+            GUI.DrawTexture(new Rect(areaRect.x + areaRect.width / 2f - 1, areaRect.y, 2, 300), hover);
+
+            SmartRect rect = new SmartRect(areaRect.x, areaRect.y, areaRect.width / 2f - 20, 30);
+            GUI.Label(rect                    , "Name", label);
+            GUI.Label(rect.OY(rect.Height + 3), "Password", label);
+            GUI.Label(rect.OY(rect.Height + 3), "Map", label);
+            GUI.Label(rect.OY(rect.Height + 3), "Players", label);
+            GUI.Label(rect.OY(rect.Height + 3), "Time", label);
+            GUI.Label(rect.OY(rect.Height + 3), "Difficulty", label);
+            GUI.Label(rect.OY(rect.Height + 3), "Daylight", label);
+            GUI.Label(rect.OY(rect.Height + 3), "Open", label);
+            GUI.Label(rect.OY(rect.Height + 3), "Visible", label);
+
+            rect = new SmartRect(areaRect.x + areaRect.width / 2f + 20, areaRect.y, areaRect.width / 2f - 20, 30);
+            roomName = GUI.TextField(rect, roomName, textField);
+            roomPassword = GUI.TextField(rect.OY(rect.Height + 3), roomPassword, textField);
+            switch (CustomButton(rect.OY(rect.Height + 3), LevelInfoManager.Levels[roomMapIndex].Name, button))
+            {
+                case 1:
+                    roomMapIndex = LevelInfoManager.Levels.Count - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
+                    break;
+                case -1:
+                    roomMapIndex = roomMapIndex == 0 ? LevelInfoManager.Levels.Count - 1 : roomMapIndex - 1;
+                    break;
+            }
+            roomMaxPlayers = GUI.TextField(rect = rect.OY(rect.Height + 3), roomMaxPlayers, textField);
+            roomTime = GUI.TextField(rect.OY(rect.Height + 3), roomTime, textField);
+            rect.OY(rect.Height + 3);
+            if (GUI.Button(new Rect(rect.X, rect.Y, rect.Width / 3 - 20, rect.Height), "Easy", roomDifficulty == "easy" ? buttonSelected : button))
                 roomDifficulty = "easy";
-            if (GUI.Button(new Rect(r.x + r.width / 3 + 10, r.y, r.width / 3 - 20, r.height), "Normal", roomDifficulty == "normal" ? buttonSelected : button))
+            if (GUI.Button(new Rect(rect.X + rect.Width / 3 + 10, rect.Y, rect.Width / 3 - 20, rect.Height), "Normal", roomDifficulty == "normal" ? buttonSelected : button))
                 roomDifficulty = "normal";
-            if (GUI.Button(new Rect(r.x + r.width / 3 * 2 + 20, r.y, r.width / 3 - 20, r.height), "Hard", roomDifficulty == "hard" ? buttonSelected : button))
+            if (GUI.Button(new Rect(rect.X + rect.Width / 3 * 2 + 20, rect.Y, rect.Width / 3 - 20, rect.Height), "Hard", roomDifficulty == "hard" ? buttonSelected : button))
                 roomDifficulty = "hard";
-            r = new Rect(r.x, r.y + r.height + 3, r.width, r.height);
-            if (GUI.Button(new Rect(r.x, r.y, r.width / 3 - 20, r.height), "Day", roomDayLight == DayLight.Day ? buttonSelected : button))
+            rect.OY(rect.Height + 3);
+            if (GUI.Button(new Rect(rect.X, rect.Y, rect.Width / 3 - 20, rect.Height), "Day", roomDayLight == DayLight.Day ? buttonSelected : button))
                 roomDayLight = DayLight.Day;
-            if (GUI.Button(new Rect(r.x + r.width / 3 + 10, r.y, r.width / 3 - 20, r.height), "Dawn", roomDayLight == DayLight.Dawn ? buttonSelected : button))
+            if (GUI.Button(new Rect(rect.X + rect.Width / 3 + 10, rect.Y, rect.Width / 3 - 20, rect.Height), "Dawn", roomDayLight == DayLight.Dawn ? buttonSelected : button))
                 roomDayLight = DayLight.Dawn;
-            if (GUI.Button(new Rect(r.x + r.width / 3 * 2 + 20, r.y, r.width / 3 - 20, r.height), "Night", roomDayLight == DayLight.Night ? buttonSelected : button))
+            if (GUI.Button(new Rect(rect.X + rect.Width / 3 * 2 + 20, rect.Y, rect.Width / 3 - 20, rect.Height), "Night", roomDayLight == DayLight.Night ? buttonSelected : button))
                 roomDayLight = DayLight.Night;
-            if (GUI.Button(r = new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomOpen.ToString(), button))
+            if (GUI.Button(rect = rect.OY(rect.Height + 3), roomOpen.ToString(), button))
                 roomOpen = !roomOpen;
-            if (GUI.Button(new Rect(r.x, r.y + r.height + 3, r.width, r.height), roomVisible.ToString(), button))
+            if (GUI.Button(new Rect(rect.X, rect.Y + rect.Height + 3, rect.Width, rect.Height), roomVisible.ToString(), button))
                 roomVisible = !roomVisible;
-            if (GUI.Button(new Rect(rect.x + rect.width / 2f - 100f, rect.y + rect.height - 90f, 200f, 70f), !isRunning ? "Play" : "Connecting", button) && !isRunning) //FIXME: Possible to click while joining the game.
+            if (GUI.Button(new Rect(areaRect.x + areaRect.width / 2f - 100f, areaRect.y + areaRect.height - 90f, 200f, 70f), !isRunning ? "Play" : "Connecting", button) && !isRunning) //FIXME: Possible to click while joining the game.
                 StartCoroutine(AwaitConnect());
         }
 

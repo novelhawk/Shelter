@@ -11,9 +11,9 @@ namespace Mod.Interface
         protected override void Render()
         {
             if (!PhotonNetwork.inRoom) return;
-            Rect rect = new Rect(0, -14, Screen.width * 0.35f, 20);
+            SmartRect rect = new SmartRect(0, -14, Screen.width * 0.35f, 20);
             foreach (var player in PhotonNetwork.playerList.OrderBy(x => x.ID).ToList())
-                GUI.Label(rect = new Rect(0, rect.y + 15, rect.width, rect.height), Entry(player));
+                GUI.Label(rect.OY(15), Entry(player));
         }
 
         private static string Entry(PhotonPlayer player)

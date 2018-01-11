@@ -20,56 +20,12 @@ namespace Mod.Interface
             };
         }
 
-        private Vector2 pos = new Vector2(0, 0);
         protected override void Render()
         {
             GUI.DrawTexture(windowRect = new Rect(Screen.width / 2f - width / 2, Screen.height / 2f - height / 2, width, height), background);
             if (Alpha < 255f)
                 Animation();
 
-            Rect rect;
-            GUI.TextField(rect = new Rect(windowRect.x + 20, windowRect.y + 20, 400, 40), "{PlayerName}", _textStyle);
-            GUI.TextField(rect = new Rect(rect.x, rect.y + 50, rect.width, rect.height), "{Guild}", _textStyle);
-            GUI.TextField(rect = new Rect(rect.x, rect.y + 50, rect.width, rect.height), "{Chatname}", _textStyle);
-            GUI.TextField(rect = new Rect(rect.x, rect.y + 50, rect.width, rect.height), "{Friendname}", _textStyle);
-            // Use GUI.ScrollView()
-            GUILayout.BeginArea(new Rect(rect.x, rect.y + 70, rect.width, windowRect.height - rect.y));
-            pos = GUILayout.BeginScrollView(pos, false, false, GUIStyle.none, GUIStyle.none);
-            GUILayout.TextField("{HERO}", _textStyle, GUILayout.Width(400), GUILayout.Height(40f));
-            GUILayout.Space(10f);
-            GUILayout.TextField("{Sex}", _textStyle, GUILayout.Width(400), GUILayout.Height(40f));
-            GUILayout.Space(10f);
-            GUILayout.TextField("{Uniform}", _textStyle, GUILayout.Width(400), GUILayout.Height(40f));
-            GUILayout.Space(10f);
-            GUILayout.TextField("{HasCape}", _textStyle, GUILayout.Width(400), GUILayout.Height(40f));
-            GUILayout.Space(10f);
-            GUILayout.TextField("{BodyTexture}", _textStyle, GUILayout.Width(400), GUILayout.Height(40f));
-            GUILayout.Space(10f);
-            GUILayout.TextField("{Hair}", _textStyle, GUILayout.Width(400), GUILayout.Height(40f));
-            GUILayout.Space(10f);
-            GUILayout.TextField("{EyeTextureID}", _textStyle, GUILayout.Width(400), GUILayout.Height(40f));
-            GUILayout.Space(10f);
-            GUILayout.TextField("{BeardTextureID}", _textStyle, GUILayout.Width(400), GUILayout.Height(40f));
-            GUILayout.Space(10f);
-            GUILayout.TextField("{SkinColor}", _textStyle, GUILayout.Width(400), GUILayout.Height(40f));
-            GUILayout.Space(10f);
-            GUILayout.TextField("{HairColor}", _textStyle, GUILayout.Width(400), GUILayout.Height(40f));
-            GUILayout.Space(10f);
-            GUILayout.TextField("{Division}", _textStyle, GUILayout.Width(400), GUILayout.Height(40f));
-            GUILayout.Space(10f);
-            GUILayout.TextField("{CostumeID}", _textStyle, GUILayout.Width(400), GUILayout.Height(40f));
-            GUILayout.Space(10f);
-            GUILayout.TextField("{Skill}", _textStyle, GUILayout.Width(400), GUILayout.Height(40f));
-            GUILayout.Space(20f);
-            GUILayout.TextField("{Speed}", _textStyle, GUILayout.Width(400), GUILayout.Height(40f));
-            GUILayout.Space(10f);
-            GUILayout.TextField("{Gas}", _textStyle, GUILayout.Width(400), GUILayout.Height(40f));
-            GUILayout.Space(10f);
-            GUILayout.TextField("{Acceleration}", _textStyle, GUILayout.Width(400), GUILayout.Height(40f));
-            GUILayout.Space(10f);
-            GUILayout.TextField("{BladeDuration}", _textStyle, GUILayout.Width(400), GUILayout.Height(40f));
-            GUILayout.EndScrollView();
-            GUILayout.EndArea();
         }
 
         private float width;

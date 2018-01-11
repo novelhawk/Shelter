@@ -6,7 +6,7 @@ namespace Mod.Interface
 {
     public class Chat : Gui
     {
-        public const string SystemColor = "#04F363";
+        public const string SystemColor = "04F363";
         private Texture2D _mBackground;
         private Texture2D _mWhiteTexture;
         private Texture2D _mGreyTexture;
@@ -16,7 +16,6 @@ namespace Mod.Interface
 
         private static readonly List<ChatMessage> Messages = new List<ChatMessage>();
         public static string Message { get; set; } = string.Empty;
-
 
         #region Static methods
 
@@ -70,7 +69,7 @@ namespace Mod.Interface
 
         public static void System(object message) // TODO: Add i18n
         {
-            AddMessage($"<color={SystemColor}>{message}</color>");
+            AddMessage($"<color=#{SystemColor}>{message}</color>");
         } 
 
         /// <summary>
@@ -88,7 +87,6 @@ namespace Mod.Interface
             _mBackground = Texture(0, 0, 0, 100);
             _mWhiteTexture = Texture(255, 255, 255);
             _mGreyTexture = Texture(136, 136, 136);
-            
         }
 
         protected override void Render()
@@ -100,7 +98,6 @@ namespace Mod.Interface
                 padding = new RectOffset(0, 0, 0, 0),
                 margin = new RectOffset(0, 0, 0, 0)
             };
-            var rect = new Rect(0, Screen.height - Screen.height / 4.2f, Screen.width / 3.5f, Screen.height / 4.2f);
             if (Event.current.type == EventType.KeyDown && (Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter))
             {
                 if (GUI.GetNameOfFocusedControl() == "ChatInput")
@@ -140,16 +137,18 @@ namespace Mod.Interface
                 _mRealScroll = new Vector2(0, 0);
                 _mWriting = !_mWriting;
             }
+
+            SmartRect rect;
             if (_mWriting)
             {
                 GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), _mBackground);
 
                 GUI.SetNextControlName(string.Empty);
-                rect = new Rect(2, Screen.height - 30f - _mScroll.y, Screen.width - 2f, 20);
+                rect = new SmartRect(2, Screen.height - 30f - _mScroll.y, Screen.width - 2f, 20);
                 foreach (ChatMessage chatMessage in Messages)
                 {
-                    rect = new Rect(rect.x, rect.y - 15, rect.width, rect.height);
-                    if (rect.y > Screen.height - 25) continue;
+                    rect.OY(-15);
+                    if (rect.Y > Screen.height - 25) continue;
                     GUI.Label(rect, $"{(chatMessage.LocalOnly? "" : $"[{chatMessage.Sender.ID}] ")}{chatMessage.Message}", new GUIStyle { alignment = TextAnchor.LowerLeft, normal = { textColor = Color(255, 255, 255) } });
                 }
 
@@ -162,12 +161,12 @@ namespace Mod.Interface
 
             GUI.SetNextControlName(string.Empty);
 
-            rect = new Rect(2, Screen.height - 25f, rect.width, 20);
+            rect = new SmartRect(2, Screen.height - 25f, Screen.width / 3.5f, 20);
             foreach (ChatMessage chatMessage in Messages)
             {
                 if (Shelter.Stopwatch.ElapsedMilliseconds - 10000f <= chatMessage.Time)
                     GUI.Label(rect, $"{(chatMessage.LocalOnly ? "" : $"[{chatMessage.Sender.ID}] ")}{chatMessage.Message}", new GUIStyle { alignment = TextAnchor.LowerLeft, normal = { textColor = Color(255, 255, 255) } });
-                rect = new Rect(rect.x, rect.y - 15, rect.width, rect.height);
+                rect.OY(-15);
             }
             //TODO: Remove messages after excessive spam
         }

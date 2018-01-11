@@ -69,14 +69,16 @@ namespace Mod.Interface
         }
         protected override void Render()
         {
-            Rect rect;
-            GUI.DrawTexture(rect = new Rect(Screen.width / 2f - width/2, Screen.height / 2f - height/2, width, height), background);
+            if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.F6)
+                GUI.FocusControl("Search");
+
+            GUI.DrawTexture(windowRect = new Rect(Screen.width / 2f - width/2, Screen.height / 2f - height/2, width, height), background);
             if (Alpha < 255f)
                 Animation();
 
             if (GUI.GetNameOfFocusedControl() != "Search" && string.IsNullOrEmpty(_filter))
-                GUI.Label(new Rect(rect.x, rect.y, rect.width, 33), "Search...", searchStyle);
-            GUILayout.BeginArea(rect);
+                GUI.Label(new Rect(windowRect.x, windowRect.y, windowRect.width, 33), "Search...", searchStyle);
+            GUILayout.BeginArea(windowRect);
             GUI.SetNextControlName("Search");
             _filter = GUILayout.TextField(_filter.Replace("\n", ""), filterStyle);
             _scrollPosition = GUILayout.BeginScrollView(_scrollPosition, false, false, GUIStyle.none, GUIStyle.none);
