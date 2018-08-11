@@ -1,4 +1,4 @@
-public enum HERO_STATE
+public enum HeroState
 {
     Idle,
     Attack,
