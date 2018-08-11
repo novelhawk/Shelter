@@ -367,11 +367,11 @@ public class HERO : Photon.MonoBehaviour
             this.bombSpeed = num3 * 60f + 200f;
             ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
             {
-                { PhotonPlayerProperty.RCBombR, (float)FengGameManagerMKII.settings[246] },
-                { PhotonPlayerProperty.RCBombG, (float)FengGameManagerMKII.settings[247] },
-                { PhotonPlayerProperty.RCBombB, (float)FengGameManagerMKII.settings[248] },
-                { PhotonPlayerProperty.RCBombA, (float)FengGameManagerMKII.settings[249] },
-                { PhotonPlayerProperty.RCBombRadius, this.bombRadius }
+                { PlayerProperty.RCBombR, (float)FengGameManagerMKII.settings[246] },
+                { PlayerProperty.RCBombG, (float)FengGameManagerMKII.settings[247] },
+                { PlayerProperty.RCBombB, (float)FengGameManagerMKII.settings[248] },
+                { PlayerProperty.RCBombA, (float)FengGameManagerMKII.settings[249] },
+                { PlayerProperty.RCBombRadius, this.bombRadius }
             };
             Player.Self.SetCustomProperties(propertiesToSet);
             this.skillId = "bomb";
@@ -1738,7 +1738,7 @@ public class HERO : Photon.MonoBehaviour
                             Vector3 vector12 = this.getGlobaleFacingVector3(num12);
                             float num13 = vector11.magnitude <= 0.95f ? (vector11.magnitude >= 0.25f ? vector11.magnitude : 0f) : 1f;
                             vector12 = vector12 * num13;
-                            vector12 = vector12 * ((float)this.setup.myCostume.stat.ACL / 10f * 2f);
+                            vector12 = vector12 * ((float)this.setup.myCostume.stat.Acceleration / 10f * 2f);
                             if (x == 0f && z == 0f)
                             {
                                 if (this.state == HERO_STATE.Attack)
@@ -3366,7 +3366,7 @@ public class HERO : Photon.MonoBehaviour
             }
             if (!info.sender.isLocal && !info.sender.IsMasterClient)
             {
-                if (info.sender.Properties[PhotonPlayerProperty.name] == null || info.sender.Properties[PhotonPlayerProperty.isTitan] == null)
+                if (info.sender.Properties[PlayerProperty.Name] == null || info.sender.Properties[PlayerProperty.IsTitan] == null)
                 {
                     FengGameManagerMKII.instance.chatRoom.AddLine("<color=#FFCC00>Unusual Kill from ID " + info.sender.ID.ToString() + "</color>");
                 }
@@ -3457,12 +3457,12 @@ public class HERO : Photon.MonoBehaviour
             PhotonNetwork.RemoveRPCs(photonView);
             ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
             {
-                { PhotonPlayerProperty.dead, true }
+                { PlayerProperty.Dead, true }
             };
             Player.Self.SetCustomProperties(propertiesToSet);
             propertiesToSet = new ExitGames.Client.Photon.Hashtable
             {
-                { PhotonPlayerProperty.deaths, RCextensions.returnIntFromObject(Player.Self.Properties[PhotonPlayerProperty.deaths]) + 1 }
+                { PlayerProperty.Deaths, RCextensions.returnIntFromObject(Player.Self.Properties[PlayerProperty.Deaths]) + 1 }
             };
             Player.Self.SetCustomProperties(propertiesToSet);
             object[] parameters = new object[] { !(titanName == string.Empty) ? 1 : 0 };
@@ -3472,17 +3472,17 @@ public class HERO : Photon.MonoBehaviour
                 PhotonView view2 = PhotonView.Find(viewID);
                 if (view2 != null)
                 {
-                    FengGameManagerMKII.instance.SendKillInfo(killByTitan, "[FFC000][" + info.sender.ID.ToString() + "][FFFFFF]" + RCextensions.returnStringFromObject(view2.owner.Properties[PhotonPlayerProperty.name]), false, RCextensions.returnStringFromObject(Player.Self.Properties[PhotonPlayerProperty.name]), 0);
+                    FengGameManagerMKII.instance.SendKillInfo(killByTitan, "[FFC000][" + info.sender.ID.ToString() + "][FFFFFF]" + RCextensions.returnStringFromObject(view2.owner.Properties[PlayerProperty.Name]), false, RCextensions.returnStringFromObject(Player.Self.Properties[PlayerProperty.Name]), 0);
                     propertiesToSet = new ExitGames.Client.Photon.Hashtable
                     {
-                        { PhotonPlayerProperty.kills, RCextensions.returnIntFromObject(view2.owner.Properties[PhotonPlayerProperty.kills]) + 1 }
+                        { PlayerProperty.Kills, RCextensions.returnIntFromObject(view2.owner.Properties[PlayerProperty.Kills]) + 1 }
                     };
                     view2.owner.SetCustomProperties(propertiesToSet);
                 }
             }
             else
             {
-                FengGameManagerMKII.instance.SendKillInfo(!(titanName == string.Empty), "[FFC000][" + info.sender.ID.ToString() + "][FFFFFF]" + titanName, false, RCextensions.returnStringFromObject(Player.Self.Properties[PhotonPlayerProperty.name]), 0);
+                FengGameManagerMKII.instance.SendKillInfo(!(titanName == string.Empty), "[FFC000][" + info.sender.ID.ToString() + "][FFFFFF]" + titanName, false, RCextensions.returnStringFromObject(Player.Self.Properties[PlayerProperty.Name]), 0);
             }
         }
         if (photonView.isMine)
@@ -3504,7 +3504,7 @@ public class HERO : Photon.MonoBehaviour
             }
             if (!info.sender.isLocal && !info.sender.IsMasterClient)
             {
-                if (info.sender.Properties[PhotonPlayerProperty.name] == null || info.sender.Properties[PhotonPlayerProperty.isTitan] == null)
+                if (info.sender.Properties[PlayerProperty.Name] == null || info.sender.Properties[PlayerProperty.IsTitan] == null)
                 {
                     FengGameManagerMKII.instance.chatRoom.AddLine("<color=#FFCC00>Unusual Kill from ID " + info.sender.ID.ToString() + "</color>");
                 }
@@ -3577,12 +3577,12 @@ public class HERO : Photon.MonoBehaviour
             PhotonNetwork.RemoveRPCs(photonView);
             ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
             {
-                { PhotonPlayerProperty.dead, true }
+                { PlayerProperty.Dead, true }
             };
             Player.Self.SetCustomProperties(propertiesToSet);
             propertiesToSet = new ExitGames.Client.Photon.Hashtable
             {
-                { PhotonPlayerProperty.deaths, (int)Player.Self.Properties[PhotonPlayerProperty.deaths] + 1 }
+                { PlayerProperty.Deaths, (int)Player.Self.Properties[PlayerProperty.Deaths] + 1 }
             };
             Player.Self.SetCustomProperties(propertiesToSet);
             if (viewID != -1)
@@ -3590,17 +3590,17 @@ public class HERO : Photon.MonoBehaviour
                 PhotonView view2 = PhotonView.Find(viewID);
                 if (view2 != null)
                 {
-                    FengGameManagerMKII.instance.SendKillInfo(true, "[FFC000][" + info.sender.ID.ToString() + "][FFFFFF]" + RCextensions.returnStringFromObject(view2.owner.Properties[PhotonPlayerProperty.name]), false, RCextensions.returnStringFromObject(Player.Self.Properties[PhotonPlayerProperty.name]), 0);
+                    FengGameManagerMKII.instance.SendKillInfo(true, "[FFC000][" + info.sender.ID.ToString() + "][FFFFFF]" + RCextensions.returnStringFromObject(view2.owner.Properties[PlayerProperty.Name]), false, RCextensions.returnStringFromObject(Player.Self.Properties[PlayerProperty.Name]), 0);
                     propertiesToSet = new ExitGames.Client.Photon.Hashtable
                     {
-                        { PhotonPlayerProperty.kills, RCextensions.returnIntFromObject(view2.owner.Properties[PhotonPlayerProperty.kills]) + 1 }
+                        { PlayerProperty.Kills, RCextensions.returnIntFromObject(view2.owner.Properties[PlayerProperty.Kills]) + 1 }
                     };
                     view2.owner.SetCustomProperties(propertiesToSet);
                 }
             }
             else
             {
-                FengGameManagerMKII.instance.SendKillInfo(true, "[FFC000][" + info.sender.ID.ToString() + "][FFFFFF]" + titanName, false, RCextensions.returnStringFromObject(Player.Self.Properties[PhotonPlayerProperty.name]), 0);
+                FengGameManagerMKII.instance.SendKillInfo(true, "[FFC000][" + info.sender.ID.ToString() + "][FFFFFF]" + titanName, false, RCextensions.returnStringFromObject(Player.Self.Properties[PlayerProperty.Name]), 0);
             }
             object[] parameters = new object[] { !(titanName == string.Empty) ? 1 : 0 };
             FengGameManagerMKII.instance.photonView.RPC("someOneIsDead", PhotonTargets.MasterClient, parameters);
@@ -3685,12 +3685,12 @@ public class HERO : Photon.MonoBehaviour
             PhotonNetwork.RemoveRPCs(photonView);
             ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
             {
-                { PhotonPlayerProperty.dead, true }
+                { PlayerProperty.Dead, true }
             };
             Player.Self.SetCustomProperties(propertiesToSet);
             propertiesToSet = new ExitGames.Client.Photon.Hashtable
             {
-                { PhotonPlayerProperty.deaths, RCextensions.returnIntFromObject(Player.Self.Properties[PhotonPlayerProperty.deaths]) + 1 }
+                { PlayerProperty.Deaths, RCextensions.returnIntFromObject(Player.Self.Properties[PlayerProperty.Deaths]) + 1 }
             };
             Player.Self.SetCustomProperties(propertiesToSet);
             object[] parameters = new object[] { !(titanName == string.Empty) ? 1 : 0 };
@@ -3700,17 +3700,17 @@ public class HERO : Photon.MonoBehaviour
                 PhotonView view = PhotonView.Find(viewID);
                 if (view != null)
                 {
-                    FengGameManagerMKII.instance.SendKillInfo(killByTitan, RCextensions.returnStringFromObject(view.owner.Properties[PhotonPlayerProperty.name]), false, RCextensions.returnStringFromObject(Player.Self.Properties[PhotonPlayerProperty.name]), 0);
+                    FengGameManagerMKII.instance.SendKillInfo(killByTitan, RCextensions.returnStringFromObject(view.owner.Properties[PlayerProperty.Name]), false, RCextensions.returnStringFromObject(Player.Self.Properties[PlayerProperty.Name]), 0);
                     propertiesToSet = new ExitGames.Client.Photon.Hashtable
                     {
-                        { PhotonPlayerProperty.kills, RCextensions.returnIntFromObject(view.owner.Properties[PhotonPlayerProperty.kills]) + 1 }
+                        { PlayerProperty.Kills, RCextensions.returnIntFromObject(view.owner.Properties[PlayerProperty.Kills]) + 1 }
                     };
                     view.owner.SetCustomProperties(propertiesToSet);
                 }
             }
             else
             {
-                FengGameManagerMKII.instance.SendKillInfo(!(titanName == string.Empty), titanName, false, RCextensions.returnStringFromObject(Player.Self.Properties[PhotonPlayerProperty.name]), 0);
+                FengGameManagerMKII.instance.SendKillInfo(!(titanName == string.Empty), titanName, false, RCextensions.returnStringFromObject(Player.Self.Properties[PlayerProperty.Name]), 0);
             }
         }
         if (photonView.isMine)
@@ -4205,9 +4205,9 @@ public class HERO : Photon.MonoBehaviour
             else if (RCSettings.pvpMode == 1)
             {
                 int num = 0;
-                if (photonView.owner.Properties[PhotonPlayerProperty.RCteam] != null)
+                if (photonView.owner.Properties[PlayerProperty.RCTeam] != null)
                 {
-                    num = RCextensions.returnIntFromObject(photonView.owner.Properties[PhotonPlayerProperty.RCteam]);
+                    num = RCextensions.returnIntFromObject(photonView.owner.Properties[PlayerProperty.RCTeam]);
                 }
                 if (val != num)
                 {
@@ -4252,7 +4252,7 @@ public class HERO : Photon.MonoBehaviour
     public void setStat()
     {
         this.skillCDLast = 1.5f;
-        this.skillId = this.setup.myCostume.stat.skillId;
+        this.skillId = this.setup.myCostume.stat.SkillName;
         if (this.skillId == "levi")
         {
             this.skillCDLast = 3.5f;
@@ -4280,7 +4280,7 @@ public class HERO : Photon.MonoBehaviour
                     int num = 0;
                     foreach (Player player in PhotonNetwork.playerList)
                     {
-                        if ((int) player.Properties[PhotonPlayerProperty.isTitan] == 1 && ((string) player.Properties[PhotonPlayerProperty.character]).ToUpper() == "EREN")
+                        if ((int) player.Properties[PlayerProperty.IsTitan] == 1 && ((string) player.Properties[PlayerProperty.Character]).ToUpper() == "EREN")
                         {
                             num++;
                         }
@@ -4307,10 +4307,10 @@ public class HERO : Photon.MonoBehaviour
             this.skillCDLast = 3.5f;
         }
         this.skillCDDuration = this.skillCDLast;
-        this.speed = this.setup.myCostume.stat.SPD / 10f;
-        this.totalGas = this.currentGas = this.setup.myCostume.stat.GAS;
-        this.totalBladeSta = this.currentBladeSta = this.setup.myCostume.stat.BLA;
-        rigidbody.mass = 0.5f - (this.setup.myCostume.stat.ACL - 100) * 0.001f;
+        this.speed = this.setup.myCostume.stat.Speed / 10f;
+        this.totalGas = this.currentGas = this.setup.myCostume.stat.Gas;
+        this.totalBladeSta = this.currentBladeSta = this.setup.myCostume.stat.Blade;
+        rigidbody.mass = 0.5f - (this.setup.myCostume.stat.Acceleration - 100) * 0.001f;
         GameObject.Find("skill_cd_bottom").transform.localPosition = new Vector3(0f, -Screen.height * 0.5f + 5f, 0f);
         this.skillCD = GameObject.Find("skill_cd_" + this.skillId);
         this.skillCD.transform.localPosition = GameObject.Find("skill_cd_bottom").transform.localPosition;
@@ -4392,7 +4392,7 @@ public class HERO : Photon.MonoBehaviour
     public void setStat2()
     {
         this.skillCDLast = 1.5f;
-        this.skillId = this.setup.myCostume.stat.skillId;
+        this.skillId = this.setup.myCostume.stat.SkillName;
         if (this.skillId == "levi")
         {
             this.skillCDLast = 3.5f;
@@ -4425,7 +4425,7 @@ public class HERO : Photon.MonoBehaviour
                     int num = 0;
                     foreach (Player player in PhotonNetwork.playerList)
                     {
-                        if (RCextensions.returnIntFromObject(player.Properties[PhotonPlayerProperty.isTitan]) == 1 && RCextensions.returnStringFromObject(player.Properties[PhotonPlayerProperty.character]).ToUpper() == "EREN")
+                        if (RCextensions.returnIntFromObject(player.Properties[PlayerProperty.IsTitan]) == 1 && RCextensions.returnStringFromObject(player.Properties[PlayerProperty.Character]).ToUpper() == "EREN")
                         {
                             num++;
                         }
@@ -4447,10 +4447,10 @@ public class HERO : Photon.MonoBehaviour
             this.skillCDLast = 3.5f;
         }
         this.bombInit();
-        this.speed = this.setup.myCostume.stat.SPD / 10f;
-        this.totalGas = this.currentGas = this.setup.myCostume.stat.GAS;
-        this.totalBladeSta = this.currentBladeSta = this.setup.myCostume.stat.BLA;
-        this.baseRigidBody.mass = 0.5f - (this.setup.myCostume.stat.ACL - 100) * 0.001f;
+        this.speed = this.setup.myCostume.stat.Speed / 10f;
+        this.totalGas = this.currentGas = this.setup.myCostume.stat.Gas;
+        this.totalBladeSta = this.currentBladeSta = this.setup.myCostume.stat.Blade;
+        this.baseRigidBody.mass = 0.5f - (this.setup.myCostume.stat.Acceleration - 100) * 0.001f;
         GameObject.Find("skill_cd_bottom").transform.localPosition = new Vector3(0f, -Screen.height * 0.5f + 5f, 0f);
         this.skillCD = GameObject.Find("skill_cd_" + this.skillIDHUD);
         this.skillCD.transform.localPosition = GameObject.Find("skill_cd_bottom").transform.localPosition;
@@ -4541,7 +4541,7 @@ public class HERO : Photon.MonoBehaviour
             photonView.RPC("setMyTeam", PhotonTargets.OthersBuffered, parameters);
             ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
             {
-                { PhotonPlayerProperty.team, team }
+                { PlayerProperty.Team, team }
             };
             Player.Self.SetCustomProperties(propertiesToSet);
         }
@@ -4555,7 +4555,7 @@ public class HERO : Photon.MonoBehaviour
             photonView.RPC("setMyTeam", PhotonTargets.AllBuffered, parameters);
             ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
             {
-                { PhotonPlayerProperty.team, team }
+                { PlayerProperty.Team, team }
             };
             Player.Self.SetCustomProperties(propertiesToSet);
         }
@@ -5202,9 +5202,9 @@ public class HERO : Photon.MonoBehaviour
             else
             {
                 bool flag2 = false;
-                if (photonView.owner.Properties[PhotonPlayerProperty.RCteam] != null)
+                if (photonView.owner.Properties[PlayerProperty.RCTeam] != null)
                 {
-                    switch (RCextensions.returnIntFromObject(photonView.owner.Properties[PhotonPlayerProperty.RCteam]))
+                    switch (RCextensions.returnIntFromObject(photonView.owner.Properties[PlayerProperty.RCTeam]))
                     {
                         case 1:
                             flag2 = true;
@@ -5223,7 +5223,7 @@ public class HERO : Photon.MonoBehaviour
                             break;
                     }
                 }
-                if (RCextensions.returnIntFromObject(photonView.owner.Properties[PhotonPlayerProperty.team]) == 2)
+                if (RCextensions.returnIntFromObject(photonView.owner.Properties[PlayerProperty.Team]) == 2)
                 {
                     this.myNetWorkName.GetComponent<UILabel>().text = "[FF0000]AHSS\n[FFFFFF]";
                     if (!flag2 && Minimap.instance != null)
@@ -5236,18 +5236,18 @@ public class HERO : Photon.MonoBehaviour
                     Minimap.instance.TrackGameObjectOnMinimap(gameObject, Color.blue, false, true, Minimap.IconStyle.CIRCLE);
                 }
             }
-            string str = RCextensions.returnStringFromObject(photonView.owner.Properties[PhotonPlayerProperty.guildName]);
+            string str = RCextensions.returnStringFromObject(photonView.owner.Properties[PlayerProperty.Guild]);
             if (str != string.Empty)
             {
                 UILabel component = this.myNetWorkName.GetComponent<UILabel>();
                 string text = component.text;
-                string[] strArray2 = new string[] { text, "[FFFF00]", str, "\n[FFFFFF]", RCextensions.returnStringFromObject(photonView.owner.Properties[PhotonPlayerProperty.name]) };
+                string[] strArray2 = new string[] { text, "[FFFF00]", str, "\n[FFFFFF]", RCextensions.returnStringFromObject(photonView.owner.Properties[PlayerProperty.Name]) };
                 component.text = string.Concat(strArray2);
             }
             else
             {
                 UILabel label2 = this.myNetWorkName.GetComponent<UILabel>();
-                label2.text = label2.text + RCextensions.returnStringFromObject(photonView.owner.Properties[PhotonPlayerProperty.name]);
+                label2.text = label2.text + RCextensions.returnStringFromObject(photonView.owner.Properties[PlayerProperty.Name]);
             }
         }
         else if (Minimap.instance != null)

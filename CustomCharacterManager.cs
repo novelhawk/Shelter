@@ -52,10 +52,10 @@ public class CustomCharacterManager : MonoBehaviour
         if (this.setup.myCostume != null)
         {
             int num = 0;
-            num += this.setup.myCostume.stat.SPD;
-            num += this.setup.myCostume.stat.GAS;
-            num += this.setup.myCostume.stat.BLA;
-            return num + this.setup.myCostume.stat.ACL;
+            num += this.setup.myCostume.stat.Speed;
+            num += this.setup.myCostume.stat.Gas;
+            num += this.setup.myCostume.stat.Blade;
+            return num + this.setup.myCostume.stat.Acceleration;
         }
         return 400;
     }
@@ -116,20 +116,20 @@ public class CustomCharacterManager : MonoBehaviour
         if (init)
         {
             to.stat = new HeroStat();
-            to.stat.ACL = 100;
-            to.stat.SPD = 100;
-            to.stat.GAS = 100;
-            to.stat.BLA = 100;
-            to.stat.skillId = "mikasa";
+            to.stat.Acceleration = 100;
+            to.stat.Speed = 100;
+            to.stat.Gas = 100;
+            to.stat.Blade = 100;
+            to.stat.SkillName = "mikasa";
         }
         else
         {
             to.stat = new HeroStat();
-            to.stat.ACL = from.stat.ACL;
-            to.stat.SPD = from.stat.SPD;
-            to.stat.GAS = from.stat.GAS;
-            to.stat.BLA = from.stat.BLA;
-            to.stat.skillId = from.stat.skillId;
+            to.stat.Acceleration = from.stat.Acceleration;
+            to.stat.Speed = from.stat.Speed;
+            to.stat.Gas = from.stat.Gas;
+            to.stat.Blade = from.stat.Blade;
+            to.stat.SkillName = from.stat.SkillName;
         }
     }
 
@@ -215,7 +215,7 @@ public class CustomCharacterManager : MonoBehaviour
         this.hairB.GetComponent<UISlider>().sliderValue = b;
         for (index = 0; index < this.skillOption.Length; index++)
         {
-            if (this.skillOption[index] == this.setup.myCostume.stat.skillId)
+            if (this.skillOption[index] == this.setup.myCostume.stat.SkillName)
             {
                 this.skillId = index;
                 break;
@@ -235,11 +235,11 @@ public class CustomCharacterManager : MonoBehaviour
         this.labelCape.GetComponent<UILabel>().text = "cape_" + this.capeId.ToString();
         this.labelDivision.GetComponent<UILabel>().text = this.divisionOption[this.divisionId].ToString();
         this.labelPOINT.GetComponent<UILabel>().text = "Points: " + (400 - this.calTotalPoints()).ToString();
-        this.labelSPD.GetComponent<UILabel>().text = "SPD " + this.setup.myCostume.stat.SPD.ToString();
-        this.labelGAS.GetComponent<UILabel>().text = "GAS " + this.setup.myCostume.stat.GAS.ToString();
-        this.labelBLA.GetComponent<UILabel>().text = "BLA " + this.setup.myCostume.stat.BLA.ToString();
-        this.labelACL.GetComponent<UILabel>().text = "ACL " + this.setup.myCostume.stat.ACL.ToString();
-        this.labelSKILL.GetComponent<UILabel>().text = "SKILL " + this.setup.myCostume.stat.skillId.ToString();
+        this.labelSPD.GetComponent<UILabel>().text = "SPD " + this.setup.myCostume.stat.Speed.ToString();
+        this.labelGAS.GetComponent<UILabel>().text = "GAS " + this.setup.myCostume.stat.Gas.ToString();
+        this.labelBLA.GetComponent<UILabel>().text = "BLA " + this.setup.myCostume.stat.Blade.ToString();
+        this.labelACL.GetComponent<UILabel>().text = "ACL " + this.setup.myCostume.stat.Acceleration.ToString();
+        this.labelSKILL.GetComponent<UILabel>().text = "SKILL " + this.setup.myCostume.stat.SkillName.ToString();
     }
 
     public void LoadData()
@@ -278,8 +278,8 @@ public class CustomCharacterManager : MonoBehaviour
         if (type == CreateStat.Skill)
         {
             this.skillId = this.toNext(this.skillId, this.skillOption.Length, 0);
-            this.setup.myCostume.stat.skillId = this.skillOption[this.skillId];
-            this.character.GetComponent<CharacterCreateAnimationControl>().playAttack(this.setup.myCostume.stat.skillId);
+            this.setup.myCostume.stat.SkillName = this.skillOption[this.skillId];
+            this.character.GetComponent<CharacterCreateAnimationControl>().playAttack(this.setup.myCostume.stat.SkillName);
             this.freshLabel();
         }
         else if (this.calTotalPoints() < 400)
@@ -343,8 +343,8 @@ public class CustomCharacterManager : MonoBehaviour
         if (type == CreateStat.Skill)
         {
             this.skillId = this.toPrev(this.skillId, this.skillOption.Length, 0);
-            this.setup.myCostume.stat.skillId = this.skillOption[this.skillId];
-            this.character.GetComponent<CharacterCreateAnimationControl>().playAttack(this.setup.myCostume.stat.skillId);
+            this.setup.myCostume.stat.SkillName = this.skillOption[this.skillId];
+            this.character.GetComponent<CharacterCreateAnimationControl>().playAttack(this.setup.myCostume.stat.SkillName);
             this.freshLabel();
         }
         else
@@ -375,25 +375,25 @@ public class CustomCharacterManager : MonoBehaviour
         switch (type)
         {
             case CreateStat.SPD:
-                this.setup.myCostume.stat.SPD += pt;
+                this.setup.myCostume.stat.Speed += pt;
                 break;
 
             case CreateStat.GAS:
-                this.setup.myCostume.stat.GAS += pt;
+                this.setup.myCostume.stat.Gas += pt;
                 break;
 
             case CreateStat.BLA:
-                this.setup.myCostume.stat.BLA += pt;
+                this.setup.myCostume.stat.Blade += pt;
                 break;
 
             case CreateStat.ACL:
-                this.setup.myCostume.stat.ACL += pt;
+                this.setup.myCostume.stat.Acceleration += pt;
                 break;
         }
-        this.setup.myCostume.stat.SPD = Mathf.Clamp(this.setup.myCostume.stat.SPD, 75, 125);
-        this.setup.myCostume.stat.GAS = Mathf.Clamp(this.setup.myCostume.stat.GAS, 75, 125);
-        this.setup.myCostume.stat.BLA = Mathf.Clamp(this.setup.myCostume.stat.BLA, 75, 125);
-        this.setup.myCostume.stat.ACL = Mathf.Clamp(this.setup.myCostume.stat.ACL, 75, 125);
+        this.setup.myCostume.stat.Speed = Mathf.Clamp(this.setup.myCostume.stat.Speed, 75, 125);
+        this.setup.myCostume.stat.Gas = Mathf.Clamp(this.setup.myCostume.stat.Gas, 75, 125);
+        this.setup.myCostume.stat.Blade = Mathf.Clamp(this.setup.myCostume.stat.Blade, 75, 125);
+        this.setup.myCostume.stat.Acceleration = Mathf.Clamp(this.setup.myCostume.stat.Acceleration, 75, 125);
         this.freshLabel();
     }
 

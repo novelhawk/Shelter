@@ -1,120 +1,60 @@
-using System.Collections.Generic;
-
-public class HeroStat
+public struct HeroStat
 {
-    public int ACL;
-    public static HeroStat ARMIN;
-    public int BLA;
-    public static HeroStat EREN;
-    public int GAS;
-    public static HeroStat[] heroStats;
-    private static bool init;
-    public static HeroStat JEAN;
-    public static HeroStat LEVI;
-    public static HeroStat MARCO;
-    public static HeroStat MIKASA;
-    public string name;
-    public static HeroStat PETRA;
-    public static HeroStat SASHA;
-    public string skillId = "petra";
-    public int SPD;
-    public static Dictionary<string, HeroStat> stats;
+    public string SkillName;
+    public int Speed;
+    public int Gas;
+    public int Blade;
+    public int Acceleration;
 
-    public static HeroStat getInfo(string name)
+    private HeroStat(string skillName, int speed, int gas, int blade, int acceleration)
     {
-        initDATA();
-        return stats[name];
+        Acceleration = acceleration;
+        Blade = blade;
+        Gas = gas;
+        Speed = speed;
+        SkillName = skillName;
     }
 
-    private static void initDATA()
+    public static HeroStat GetInfo(string name)
     {
-        if (!init)
+        switch (name.ToUpper())
         {
-            init = true;
-            MIKASA = new HeroStat();
-            LEVI = new HeroStat();
-            ARMIN = new HeroStat();
-            MARCO = new HeroStat();
-            JEAN = new HeroStat();
-            EREN = new HeroStat();
-            PETRA = new HeroStat();
-            SASHA = new HeroStat();
-            MIKASA.name = "MIKASA";
-            MIKASA.skillId = "mikasa";
-            MIKASA.SPD = 125;
-            MIKASA.GAS = 75;
-            MIKASA.BLA = 75;
-            MIKASA.ACL = 135;
-            LEVI.name = "LEVI";
-            LEVI.skillId = "levi";
-            LEVI.SPD = 95;
-            LEVI.GAS = 100;
-            LEVI.BLA = 100;
-            LEVI.ACL = 150;
-            ARMIN.name = "ARMIN";
-            ARMIN.skillId = "armin";
-            ARMIN.SPD = 75;
-            ARMIN.GAS = 150;
-            ARMIN.BLA = 125;
-            ARMIN.ACL = 85;
-            MARCO.name = "MARCO";
-            MARCO.skillId = "marco";
-            MARCO.SPD = 110;
-            MARCO.GAS = 100;
-            MARCO.BLA = 115;
-            MARCO.ACL = 95;
-            JEAN.name = "JEAN";
-            JEAN.skillId = "jean";
-            JEAN.SPD = 100;
-            JEAN.GAS = 150;
-            JEAN.BLA = 80;
-            JEAN.ACL = 100;
-            EREN.name = "EREN";
-            EREN.skillId = "eren";
-            EREN.SPD = 100;
-            EREN.GAS = 90;
-            EREN.BLA = 90;
-            EREN.ACL = 100;
-            PETRA.name = "PETRA";
-            PETRA.skillId = "petra";
-            PETRA.SPD = 80;
-            PETRA.GAS = 110;
-            PETRA.BLA = 100;
-            PETRA.ACL = 140;
-            SASHA.name = "SASHA";
-            SASHA.skillId = "sasha";
-            SASHA.SPD = 140;
-            SASHA.GAS = 100;
-            SASHA.BLA = 100;
-            SASHA.ACL = 115;
-            HeroStat stat = new HeroStat {
-                skillId = "petra",
-                SPD = 100,
-                GAS = 100,
-                BLA = 100,
-                ACL = 100
-            };
-            HeroStat stat2 = new HeroStat();
-            SASHA.name = "AHSS";
-            stat2.skillId = "sasha";
-            stat2.SPD = 100;
-            stat2.GAS = 100;
-            stat2.BLA = 100;
-            stat2.ACL = 100;
-            stats = new Dictionary<string, HeroStat>
-            {
-                { "MIKASA", MIKASA },
-                { "LEVI", LEVI },
-                { "ARMIN", ARMIN },
-                { "MARCO", MARCO },
-                { "JEAN", JEAN },
-                { "EREN", EREN },
-                { "PETRA", PETRA },
-                { "SASHA", SASHA },
-                { "CUSTOM_DEFAULT", stat },
-                { "AHSS", stat2 }
-            };
+            case "CUSTOM_DEFAULT":
+                return CustomDefault;
+            case "AHSS":
+                return AHSS;
+            
+            case "MIKASA":
+                return Mikasa;
+            case "LEVI":
+                return Levi;
+            case "ARMIN":
+                return Armin;
+            case "MARCO":
+                return Marco;
+            case "JEAN":
+                return Jean;
+            case "EREN":
+                return Eren;
+            case "PETRA":
+                return Petra;
+            case "SASHA":
+                return Sasha;
         }
+
+        return Levi;
     }
+
+    public static HeroStat CustomDefault => new HeroStat("petra", 100, 100, 100, 10);
+    public static HeroStat AHSS => new HeroStat("sasha", 100, 100, 100, 100);
+    
+    public static HeroStat Armin => new HeroStat("armin", 75, 150, 125, 85);
+    public static HeroStat Eren => new HeroStat("eren", 100, 90, 90, 100);
+    public static HeroStat Jean => new HeroStat("jean", 100, 150, 80, 100);
+    public static HeroStat Levi => new HeroStat("levi", 95, 100, 100, 150);
+    public static HeroStat Marco => new HeroStat("marco", 110, 100, 115, 95);
+    public static HeroStat Mikasa => new HeroStat("mikasa", 125, 75, 75, 135);
+    public static HeroStat Petra => new HeroStat("petra", 80, 110, 100, 140);
+    public static HeroStat Sasha => new HeroStat("sasha", 140, 100, 100, 115);
 }
 

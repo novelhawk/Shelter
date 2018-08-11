@@ -20,11 +20,11 @@ namespace Mod.Interface
         {
             object temp;
             string playerName = player.HexName.Trim() == string.Empty ? "Unknown" : (player.HexName ?? "Unknown"), humanType;
-            var type = !FengGameManagerMKII.ignoreList.Contains(player.ID) ? ((temp = player.Properties[PhotonPlayerProperty.dead]) != null ? ((bool)temp ? 4 : (temp = player.Properties[PhotonPlayerProperty.team]) != null ? ((int)temp == 2 ? 2 : ((int)temp == 1 ? 1 : 3)) : 0) : 0) : 5;
-            var kills = (temp = player.Properties[PhotonPlayerProperty.kills]) != null && temp is int ? (int)temp : 0;
-            var deaths = (temp = player.Properties[PhotonPlayerProperty.deaths]) != null && temp is int ? (int)temp : 0;
-            var maxDmg = (temp = player.Properties[PhotonPlayerProperty.max_dmg]) != null && temp is int ? (int)temp : 0;
-            var totDmg = (temp = player.Properties[PhotonPlayerProperty.total_dmg]) != null && temp is int ? (int)temp : 0;
+            var type = !FengGameManagerMKII.ignoreList.Contains(player.ID) ? ((temp = player.Properties[PlayerProperty.Dead]) != null ? ((bool)temp ? 4 : (temp = player.Properties[PlayerProperty.Team]) != null ? ((int)temp == 2 ? 2 : ((int)temp == 1 ? 1 : 3)) : 0) : 0) : 5;
+            var kills = (temp = player.Properties[PlayerProperty.Kills]) != null && temp is int ? (int)temp : 0;
+            var deaths = (temp = player.Properties[PlayerProperty.Deaths]) != null && temp is int ? (int)temp : 0;
+            var maxDmg = (temp = player.Properties[PlayerProperty.MaxDamage]) != null && temp is int ? (int)temp : 0;
+            var totDmg = (temp = player.Properties[PlayerProperty.TotalDamage]) != null && temp is int ? (int)temp : 0;
             var averangeDmg = totDmg > 0 && kills > 0 ? Convert.ToInt32(Math.Floor((decimal)totDmg / kills)) : 0;
 
             switch (type)

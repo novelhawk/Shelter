@@ -407,7 +407,7 @@ public class RCAction
                     {
                                 Hashtable propertiesToSet = new Hashtable
                                 {
-                                    { PhotonPlayerProperty.kills, this.parameters[1].returnInt(null) }
+                                    { PlayerProperty.Kills, this.parameters[1].returnInt(null) }
                                 };
                                 targetPlayer.SetCustomProperties(propertiesToSet);
                         return;
@@ -416,7 +416,7 @@ public class RCAction
                     {
                                 Hashtable hashtable2 = new Hashtable
                                 {
-                                    { PhotonPlayerProperty.deaths, this.parameters[1].returnInt(null) }
+                                    { PlayerProperty.Deaths, this.parameters[1].returnInt(null) }
                                 };
                                 targetPlayer.SetCustomProperties(hashtable2);
                         return;
@@ -425,7 +425,7 @@ public class RCAction
                     {
                                 Hashtable hashtable3 = new Hashtable
                                 {
-                                    { PhotonPlayerProperty.max_dmg, this.parameters[1].returnInt(null) }
+                                    { PlayerProperty.MaxDamage, this.parameters[1].returnInt(null) }
                                 };
                                 targetPlayer.SetCustomProperties(hashtable3);
                         return;
@@ -434,7 +434,7 @@ public class RCAction
                     {
                                 Hashtable hashtable4 = new Hashtable
                                 {
-                                    { PhotonPlayerProperty.total_dmg, this.parameters[1].returnInt(null) }
+                                    { PlayerProperty.TotalDamage, this.parameters[1].returnInt(null) }
                                 };
                                 targetPlayer.SetCustomProperties(hashtable4);
                         return;
@@ -443,7 +443,7 @@ public class RCAction
                     {
                                 Hashtable hashtable5 = new Hashtable
                                 {
-                                    { PhotonPlayerProperty.name, this.parameters[1].returnString(null) }
+                                    { PlayerProperty.Name, this.parameters[1].returnString(null) }
                                 };
                                 targetPlayer.SetCustomProperties(hashtable5);
                         return;
@@ -452,7 +452,7 @@ public class RCAction
                     {
                                 Hashtable hashtable6 = new Hashtable
                                 {
-                                    { PhotonPlayerProperty.guildName, this.parameters[1].returnString(null) }
+                                    { PlayerProperty.Guild, this.parameters[1].returnString(null) }
                                 };
                                 targetPlayer.SetCustomProperties(hashtable6);
                         return;
@@ -461,7 +461,7 @@ public class RCAction
                     {
                                 Hashtable hashtable7 = new Hashtable
                                 {
-                                    { PhotonPlayerProperty.RCteam, this.parameters[1].returnInt(null) }
+                                    { PlayerProperty.RCTeam, this.parameters[1].returnInt(null) }
                                 };
                                 targetPlayer.SetCustomProperties(hashtable7);
                         return;
@@ -470,7 +470,7 @@ public class RCAction
                     {
                                 Hashtable hashtable8 = new Hashtable
                                 {
-                                    { PhotonPlayerProperty.customInt, this.parameters[1].returnInt(null) }
+                                    { PlayerProperty.RCInt, this.parameters[1].returnInt(null) }
                                 };
                                 targetPlayer.SetCustomProperties(hashtable8);
                         return;
@@ -479,7 +479,7 @@ public class RCAction
                     {
                                 Hashtable hashtable9 = new Hashtable
                                 {
-                                    { PhotonPlayerProperty.customBool, this.parameters[1].returnBool(null) }
+                                    { PlayerProperty.RCBool, this.parameters[1].returnBool(null) }
                                 };
                                 targetPlayer.SetCustomProperties(hashtable9);
                         return;
@@ -488,7 +488,7 @@ public class RCAction
                     {
                                 Hashtable hashtable10 = new Hashtable
                                 {
-                                    { PhotonPlayerProperty.customString, this.parameters[1].returnString(null) }
+                                    { PlayerProperty.RCString, this.parameters[1].returnString(null) }
                                 };
                                 targetPlayer.SetCustomProperties(hashtable10);
                         return;
@@ -497,7 +497,7 @@ public class RCAction
                     {
                                 Hashtable hashtable11 = new Hashtable
                                 {
-                                    { PhotonPlayerProperty.RCteam, this.parameters[1].returnFloat(null) }
+                                    { PlayerProperty.RCTeam, this.parameters[1].returnFloat(null) }
                                 };
                                 targetPlayer.SetCustomProperties(hashtable11);
                         return;

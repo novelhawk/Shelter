@@ -26,7 +26,7 @@ public class BTN_choose_titan : MonoBehaviour
             GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().SetInterfacePosition();
             Hashtable hashtable = new Hashtable
             {
-                { PhotonPlayerProperty.character, id }
+                { PlayerProperty.Character, id }
             };
             Hashtable propertiesToSet = hashtable;
             Player.Self.SetCustomProperties(propertiesToSet);

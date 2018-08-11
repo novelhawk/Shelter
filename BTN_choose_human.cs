@@ -9,10 +9,10 @@ public class BTN_choose_human : MonoBehaviour
         int num2 = 0;
         foreach (Player player in PhotonNetwork.playerList)
         {
-            if ((int) player.Properties[PhotonPlayerProperty.isTitan] == 1)
+            if ((int) player.Properties[PlayerProperty.IsTitan] == 1)
             {
                 num++;
-                if ((bool) player.Properties[PhotonPlayerProperty.dead])
+                if ((bool) player.Properties[PlayerProperty.Dead])
                 {
                     num2++;
                 }
@@ -27,10 +27,10 @@ public class BTN_choose_human : MonoBehaviour
         int num2 = 0;
         foreach (Player player in PhotonNetwork.playerList)
         {
-            if (RCextensions.returnIntFromObject(player.Properties[PhotonPlayerProperty.isTitan]) == 1)
+            if (RCextensions.returnIntFromObject(player.Properties[PlayerProperty.IsTitan]) == 1)
             {
                 num++;
-                if (RCextensions.returnBoolFromObject(player.Properties[PhotonPlayerProperty.dead]))
+                if (RCextensions.returnBoolFromObject(player.Properties[PlayerProperty.Dead]))
                 {
                     num2++;
                 }
@@ -83,7 +83,7 @@ public class BTN_choose_human : MonoBehaviour
         GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().SetInterfacePosition();
         Hashtable hashtable = new Hashtable
         {
-            { PhotonPlayerProperty.character, selection }
+            { PlayerProperty.Character, selection }
         };
         Hashtable propertiesToSet = hashtable;
         Player.Self.SetCustomProperties(propertiesToSet);

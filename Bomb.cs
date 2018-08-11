@@ -23,7 +23,7 @@ public class Bomb : Photon.MonoBehaviour
             Player owner = photonView.owner;
             if (RCSettings.teamMode > 0)
             {
-                int num = RCextensions.returnIntFromObject(owner.Properties[PhotonPlayerProperty.RCteam]);
+                int num = RCextensions.returnIntFromObject(owner.Properties[PlayerProperty.RCTeam]);
                 if (num == 1)
                 {
                     GetComponent<ParticleSystem>().startColor = Color.cyan;
@@ -34,17 +34,17 @@ public class Bomb : Photon.MonoBehaviour
                 }
                 else
                 {
-                    num2 = RCextensions.returnFloatFromObject(owner.Properties[PhotonPlayerProperty.RCBombR]);
-                    num3 = RCextensions.returnFloatFromObject(owner.Properties[PhotonPlayerProperty.RCBombG]);
-                    num4 = RCextensions.returnFloatFromObject(owner.Properties[PhotonPlayerProperty.RCBombB]);
+                    num2 = RCextensions.returnFloatFromObject(owner.Properties[PlayerProperty.RCBombR]);
+                    num3 = RCextensions.returnFloatFromObject(owner.Properties[PlayerProperty.RCBombG]);
+                    num4 = RCextensions.returnFloatFromObject(owner.Properties[PlayerProperty.RCBombB]);
                     GetComponent<ParticleSystem>().startColor = new Color(num2, num3, num4, 1f);
                 }
             }
             else
             {
-                num2 = RCextensions.returnFloatFromObject(owner.Properties[PhotonPlayerProperty.RCBombR]);
-                num3 = RCextensions.returnFloatFromObject(owner.Properties[PhotonPlayerProperty.RCBombG]);
-                num4 = RCextensions.returnFloatFromObject(owner.Properties[PhotonPlayerProperty.RCBombB]);
+                num2 = RCextensions.returnFloatFromObject(owner.Properties[PlayerProperty.RCBombR]);
+                num3 = RCextensions.returnFloatFromObject(owner.Properties[PlayerProperty.RCBombG]);
+                num4 = RCextensions.returnFloatFromObject(owner.Properties[PlayerProperty.RCBombB]);
                 GetComponent<ParticleSystem>().startColor = new Color(num2, num3, num4, 1f);
             }
         }
@@ -74,21 +74,21 @@ public class Bomb : Photon.MonoBehaviour
             if (Vector3.Distance(gameObject.transform.position, position) < radius && !gameObject.GetPhotonView().isMine && !hero.bombImmune)
             {
                 Player owner = gameObject.GetPhotonView().owner;
-                if (RCSettings.teamMode > 0 && Player.Self.Properties[PhotonPlayerProperty.RCteam] != null && owner.Properties[PhotonPlayerProperty.RCteam] != null)
+                if (RCSettings.teamMode > 0 && Player.Self.Properties[PlayerProperty.RCTeam] != null && owner.Properties[PlayerProperty.RCTeam] != null)
                 {
-                    int num = RCextensions.returnIntFromObject(Player.Self.Properties[PhotonPlayerProperty.RCteam]);
-                    int num2 = RCextensions.returnIntFromObject(owner.Properties[PhotonPlayerProperty.RCteam]);
+                    int num = RCextensions.returnIntFromObject(Player.Self.Properties[PlayerProperty.RCTeam]);
+                    int num2 = RCextensions.returnIntFromObject(owner.Properties[PlayerProperty.RCTeam]);
                     if (num == 0 || num != num2)
                     {
                         gameObject.GetComponent<HERO>().markDie();
-                        gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(Player.Self.Properties[PhotonPlayerProperty.name]) + " " });
+                        gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(Player.Self.Properties[PlayerProperty.Name]) + " " });
                         FengGameManagerMKII.instance.PlayerKillInfoUpdate(Player.Self, 0);
                     }
                 }
                 else
                 {
                     gameObject.GetComponent<HERO>().markDie();
-                    gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(Player.Self.Properties[PhotonPlayerProperty.name]) + " " });
+                    gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(Player.Self.Properties[PlayerProperty.Name]) + " " });
                     FengGameManagerMKII.instance.PlayerKillInfoUpdate(Player.Self, 0);
                 }
             }

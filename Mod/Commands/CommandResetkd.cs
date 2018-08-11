@@ -12,10 +12,10 @@ namespace Mod.Commands
         {
             Hashtable hashtable = new Hashtable
             {
-                {PhotonPlayerProperty.kills, 0},
-                {PhotonPlayerProperty.deaths, 0},
-                {PhotonPlayerProperty.max_dmg, 0},
-                {PhotonPlayerProperty.total_dmg, 0}
+                {PlayerProperty.Kills, 0},
+                {PlayerProperty.Deaths, 0},
+                {PlayerProperty.MaxDamage, 0},
+                {PlayerProperty.TotalDamage, 0}
             };
 
             if (args.Length > 0 && args[0].EqualsIgnoreCase("all"))

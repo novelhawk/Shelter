@@ -10,7 +10,6 @@ public class Player
     private int actorID;
     public readonly bool isLocal;
     private string nameField;
-    public object TagObject;
     private string _hexName;
 
     protected internal Player(bool isLocal, int actorID, Hashtable properties)
@@ -125,7 +124,7 @@ public class Player
             }
             this.Properties.MergeStringKeys(properties);
             this.Properties.StripKeysWithNullValues();
-            _hexName = Properties[PhotonPlayerProperty.name].ToString().HexColor();
+            _hexName = Properties[PlayerProperty.Name].ToString().HexColor();
         }
     }
 
@@ -154,7 +153,7 @@ public class Player
             }
             object[] parameters = new object[] { this, propertiesToSet };
             NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnPhotonPlayerPropertiesChanged, parameters);
-            _hexName = Properties[PhotonPlayerProperty.name].ToString().HexColor();
+            _hexName = Properties[PlayerProperty.Name].ToString().HexColor();
         }
     }
 

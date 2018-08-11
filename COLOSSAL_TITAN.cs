@@ -26,8 +26,6 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     private bool isSteamNeed;
     public float lagMax;
     public int maxHealth;
-    public static float minusDistance = 99999f;
-    public static GameObject minusDistanceEnemy;
     public float myDistance;
     public GameObject myHero;
     public int NapeArmor = 10000;
@@ -41,7 +39,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
 
     private void attack_sweep(string type = "")
     {
-        this.callTitanHAHA();
+        this.CallTitan();
         this.state = "attack_sweep";
         this.attackAnimation = "sweep" + type;
         this.attackCheckTimeA = 0.4f;
@@ -177,27 +175,28 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
         }
     }
 
-    private void callTitanHAHA()
+    private void CallTitan()
     {
         this.attackCount++;
         int num = 4;
         int num2 = 7;
         if (IN_GAME_MAIN_CAMERA.difficulty != 0)
         {
-            if (IN_GAME_MAIN_CAMERA.difficulty == 1)
+            switch (IN_GAME_MAIN_CAMERA.difficulty)
             {
-                num = 4;
-                num2 = 6;
-            }
-            else if (IN_GAME_MAIN_CAMERA.difficulty == 2)
-            {
-                num = 3;
-                num2 = 5;
+                case 1:
+                    num = 4;
+                    num2 = 6;
+                    break;
+                case 2:
+                    num = 3;
+                    num2 = 5;
+                    break;
             }
         }
         if (this.attackCount % num == 0)
         {
-            this.callTitan(false);
+            this.callTitan();
         }
         if (this.NapeArmor < this.NapeArmorTotal * 0.3)
         {
@@ -571,7 +570,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
 
     private void slap(string type)
     {
-        this.callTitanHAHA();
+        this.CallTitan();
         this.state = "slap";
         this.attackAnimation = type;
         if (type == "r1" || type == "r2")
@@ -714,7 +713,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
 
     private void Steam()
     {
-        this.callTitanHAHA(); // Is feng for real?
+        this.CallTitan(); // Is feng for real?
         this.state = "steam";
         this.actionName = "attack_steam";
         this.attackCheckTime = 0.45f;
@@ -767,7 +766,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                 }
                 else
                 {
-                    FengGameManagerMKII.instance.SendKillInfo(false, (string) view.owner.Properties[PhotonPlayerProperty.name], true, "Colossal Titan's neck", speed);
+                    FengGameManagerMKII.instance.SendKillInfo(false, (string) view.owner.Properties[PlayerProperty.Name], true, "Colossal Titan's neck", speed);
                     object[] parameters = new object[] { speed };
                     FengGameManagerMKII.instance.photonView.RPC("netShowDamage", view.owner, parameters);
                 }

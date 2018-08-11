@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class HeroCostume
 {
+    //TODO: Rewrite
+    
     public string _3dmg_texture = string.Empty;
     public string arm_l_mesh = string.Empty;
     public string arm_r_mesh = string.Empty;
@@ -64,16 +66,16 @@ public class HeroCostume
     public void checkstat()
     {
         int num = 0;
-        num = 0 + this.stat.SPD;
-        num += this.stat.GAS;
-        num += this.stat.BLA;
-        num += this.stat.ACL;
+        num = 0 + this.stat.Speed;
+        num += this.stat.Gas;
+        num += this.stat.Blade;
+        num += this.stat.Acceleration;
         if (num > 400)
         {
-            this.stat.ACL = 100;
-            this.stat.BLA = 100;
-            this.stat.GAS = 100;
-            this.stat.SPD = 100;
+            this.stat.Acceleration = 100;
+            this.stat.Blade = 100;
+            this.stat.Gas = 100;
+            this.stat.Speed = 100;
         }
     }
     
@@ -666,7 +668,7 @@ public class HeroCostume
             costume[38].costumeId = 26;
             for (int i = 0; i < costume.Length; i++)
             {
-                costume[i].stat = HeroStat.getInfo("CUSTOM_DEFAULT");
+                costume[i].stat = HeroStat.CustomDefault;
                 costume[i].id = i;
                 costume[i].setMesh2();
                 costume[i].setTexture();

@@ -65,46 +65,46 @@ public class RCActionHelper
                     switch (this.helperType)
                     {
                         case 0:
-                            return this.nextHelper.returnBool(player.Properties[PhotonPlayerProperty.team]);
+                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.Team]);
 
                         case 1:
-                            return this.nextHelper.returnBool(player.Properties[PhotonPlayerProperty.RCteam]);
+                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.RCTeam]);
 
                         case 2:
-                            return !(bool) player.Properties[PhotonPlayerProperty.dead];
+                            return !(bool) player.Properties[PlayerProperty.Dead];
 
                         case 3:
-                            return this.nextHelper.returnBool(player.Properties[PhotonPlayerProperty.isTitan]);
+                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.IsTitan]);
 
                         case 4:
-                            return this.nextHelper.returnBool(player.Properties[PhotonPlayerProperty.kills]);
+                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.Kills]);
 
                         case 5:
-                            return this.nextHelper.returnBool(player.Properties[PhotonPlayerProperty.deaths]);
+                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.Deaths]);
 
                         case 6:
-                            return this.nextHelper.returnBool(player.Properties[PhotonPlayerProperty.max_dmg]);
+                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.MaxDamage]);
 
                         case 7:
-                            return this.nextHelper.returnBool(player.Properties[PhotonPlayerProperty.total_dmg]);
+                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.TotalDamage]);
 
                         case 8:
-                            return this.nextHelper.returnBool(player.Properties[PhotonPlayerProperty.customInt]);
+                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.RCInt]);
 
                         case 9:
-                            return (bool) player.Properties[PhotonPlayerProperty.customBool];
+                            return (bool) player.Properties[PlayerProperty.RCBool];
 
                         case 10:
-                            return this.nextHelper.returnBool(player.Properties[PhotonPlayerProperty.customString]);
+                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.RCString]);
 
                         case 11:
-                            return this.nextHelper.returnBool(player.Properties[PhotonPlayerProperty.customFloat]);
+                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.RCFloat]);
 
                         case 12:
-                            return this.nextHelper.returnBool(player.Properties[PhotonPlayerProperty.name]);
+                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.Name]);
 
                         case 13:
-                            return this.nextHelper.returnBool(player.Properties[PhotonPlayerProperty.guildName]);
+                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.Guild]);
 
                         case 14:
                         {
@@ -268,46 +268,46 @@ public class RCActionHelper
                     switch (this.helperType)
                     {
                         case 0:
-                            return this.nextHelper.returnFloat(player.Properties[PhotonPlayerProperty.team]);
+                            return this.nextHelper.returnFloat(player.Properties[PlayerProperty.Team]);
 
                         case 1:
-                            return this.nextHelper.returnFloat(player.Properties[PhotonPlayerProperty.RCteam]);
+                            return this.nextHelper.returnFloat(player.Properties[PlayerProperty.RCTeam]);
 
                         case 2:
-                            return this.nextHelper.returnFloat(player.Properties[PhotonPlayerProperty.dead]);
+                            return this.nextHelper.returnFloat(player.Properties[PlayerProperty.Dead]);
 
                         case 3:
-                            return this.nextHelper.returnFloat(player.Properties[PhotonPlayerProperty.isTitan]);
+                            return this.nextHelper.returnFloat(player.Properties[PlayerProperty.IsTitan]);
 
                         case 4:
-                            return this.nextHelper.returnFloat(player.Properties[PhotonPlayerProperty.kills]);
+                            return this.nextHelper.returnFloat(player.Properties[PlayerProperty.Kills]);
 
                         case 5:
-                            return this.nextHelper.returnFloat(player.Properties[PhotonPlayerProperty.deaths]);
+                            return this.nextHelper.returnFloat(player.Properties[PlayerProperty.Deaths]);
 
                         case 6:
-                            return this.nextHelper.returnFloat(player.Properties[PhotonPlayerProperty.max_dmg]);
+                            return this.nextHelper.returnFloat(player.Properties[PlayerProperty.MaxDamage]);
 
                         case 7:
-                            return this.nextHelper.returnFloat(player.Properties[PhotonPlayerProperty.total_dmg]);
+                            return this.nextHelper.returnFloat(player.Properties[PlayerProperty.TotalDamage]);
 
                         case 8:
-                            return this.nextHelper.returnFloat(player.Properties[PhotonPlayerProperty.customInt]);
+                            return this.nextHelper.returnFloat(player.Properties[PlayerProperty.RCInt]);
 
                         case 9:
-                            return this.nextHelper.returnFloat(player.Properties[PhotonPlayerProperty.customBool]);
+                            return this.nextHelper.returnFloat(player.Properties[PlayerProperty.RCBool]);
 
                         case 10:
-                            return this.nextHelper.returnFloat(player.Properties[PhotonPlayerProperty.customString]);
+                            return this.nextHelper.returnFloat(player.Properties[PlayerProperty.RCString]);
 
                         case 11:
-                            return (float) player.Properties[PhotonPlayerProperty.customFloat];
+                            return (float) player.Properties[PlayerProperty.RCFloat];
 
                         case 12:
-                            return this.nextHelper.returnFloat(player.Properties[PhotonPlayerProperty.name]);
+                            return this.nextHelper.returnFloat(player.Properties[PlayerProperty.Name]);
 
                         case 13:
-                            return this.nextHelper.returnFloat(player.Properties[PhotonPlayerProperty.guildName]);
+                            return this.nextHelper.returnFloat(player.Properties[PlayerProperty.Guild]);
 
                         case 14:
                         {
@@ -471,46 +471,46 @@ public class RCActionHelper
                     switch (this.helperType)
                     {
                         case 0:
-                            return (int) player.Properties[PhotonPlayerProperty.team];
+                            return (int) player.Properties[PlayerProperty.Team];
 
                         case 1:
-                            return (int) player.Properties[PhotonPlayerProperty.RCteam];
+                            return (int) player.Properties[PlayerProperty.RCTeam];
 
                         case 2:
-                            return this.nextHelper.returnInt(player.Properties[PhotonPlayerProperty.dead]);
+                            return this.nextHelper.returnInt(player.Properties[PlayerProperty.Dead]);
 
                         case 3:
-                            return (int) player.Properties[PhotonPlayerProperty.isTitan];
+                            return (int) player.Properties[PlayerProperty.IsTitan];
 
                         case 4:
-                            return (int) player.Properties[PhotonPlayerProperty.kills];
+                            return (int) player.Properties[PlayerProperty.Kills];
 
                         case 5:
-                            return (int) player.Properties[PhotonPlayerProperty.deaths];
+                            return (int) player.Properties[PlayerProperty.Deaths];
 
                         case 6:
-                            return (int) player.Properties[PhotonPlayerProperty.max_dmg];
+                            return (int) player.Properties[PlayerProperty.MaxDamage];
 
                         case 7:
-                            return (int) player.Properties[PhotonPlayerProperty.total_dmg];
+                            return (int) player.Properties[PlayerProperty.TotalDamage];
 
                         case 8:
-                            return (int) player.Properties[PhotonPlayerProperty.customInt];
+                            return (int) player.Properties[PlayerProperty.RCInt];
 
                         case 9:
-                            return this.nextHelper.returnInt(player.Properties[PhotonPlayerProperty.customBool]);
+                            return this.nextHelper.returnInt(player.Properties[PlayerProperty.RCBool]);
 
                         case 10:
-                            return this.nextHelper.returnInt(player.Properties[PhotonPlayerProperty.customString]);
+                            return this.nextHelper.returnInt(player.Properties[PlayerProperty.RCString]);
 
                         case 11:
-                            return this.nextHelper.returnInt(player.Properties[PhotonPlayerProperty.customFloat]);
+                            return this.nextHelper.returnInt(player.Properties[PlayerProperty.RCFloat]);
 
                         case 12:
-                            return this.nextHelper.returnInt(player.Properties[PhotonPlayerProperty.name]);
+                            return this.nextHelper.returnInt(player.Properties[PlayerProperty.Name]);
 
                         case 13:
-                            return this.nextHelper.returnInt(player.Properties[PhotonPlayerProperty.guildName]);
+                            return this.nextHelper.returnInt(player.Properties[PlayerProperty.Guild]);
 
                         case 14:
                         {
@@ -695,46 +695,46 @@ public class RCActionHelper
                     switch (this.helperType)
                     {
                         case 0:
-                            return this.nextHelper.returnString(player.Properties[PhotonPlayerProperty.team]);
+                            return this.nextHelper.returnString(player.Properties[PlayerProperty.Team]);
 
                         case 1:
-                            return this.nextHelper.returnString(player.Properties[PhotonPlayerProperty.RCteam]);
+                            return this.nextHelper.returnString(player.Properties[PlayerProperty.RCTeam]);
 
                         case 2:
-                            return this.nextHelper.returnString(player.Properties[PhotonPlayerProperty.dead]);
+                            return this.nextHelper.returnString(player.Properties[PlayerProperty.Dead]);
 
                         case 3:
-                            return this.nextHelper.returnString(player.Properties[PhotonPlayerProperty.isTitan]);
+                            return this.nextHelper.returnString(player.Properties[PlayerProperty.IsTitan]);
 
                         case 4:
-                            return this.nextHelper.returnString(player.Properties[PhotonPlayerProperty.kills]);
+                            return this.nextHelper.returnString(player.Properties[PlayerProperty.Kills]);
 
                         case 5:
-                            return this.nextHelper.returnString(player.Properties[PhotonPlayerProperty.deaths]);
+                            return this.nextHelper.returnString(player.Properties[PlayerProperty.Deaths]);
 
                         case 6:
-                            return this.nextHelper.returnString(player.Properties[PhotonPlayerProperty.max_dmg]);
+                            return this.nextHelper.returnString(player.Properties[PlayerProperty.MaxDamage]);
 
                         case 7:
-                            return this.nextHelper.returnString(player.Properties[PhotonPlayerProperty.total_dmg]);
+                            return this.nextHelper.returnString(player.Properties[PlayerProperty.TotalDamage]);
 
                         case 8:
-                            return this.nextHelper.returnString(player.Properties[PhotonPlayerProperty.customInt]);
+                            return this.nextHelper.returnString(player.Properties[PlayerProperty.RCInt]);
 
                         case 9:
-                            return this.nextHelper.returnString(player.Properties[PhotonPlayerProperty.customBool]);
+                            return this.nextHelper.returnString(player.Properties[PlayerProperty.RCBool]);
 
                         case 10:
-                            return (string) player.Properties[PhotonPlayerProperty.customString];
+                            return (string) player.Properties[PlayerProperty.RCString];
 
                         case 11:
-                            return this.nextHelper.returnString(player.Properties[PhotonPlayerProperty.customFloat]);
+                            return this.nextHelper.returnString(player.Properties[PlayerProperty.RCFloat]);
 
                         case 12:
-                            return (string) player.Properties[PhotonPlayerProperty.name];
+                            return (string) player.Properties[PlayerProperty.Name];
 
                         case 13:
-                            return (string) player.Properties[PhotonPlayerProperty.guildName];
+                            return (string) player.Properties[PlayerProperty.Guild];
 
                         case 14:
                         {

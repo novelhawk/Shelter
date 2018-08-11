@@ -751,12 +751,12 @@ public class TITAN : Photon.MonoBehaviour
                     this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
                     ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
                     {
-                        { PhotonPlayerProperty.dead, true }
+                        { PlayerProperty.Dead, true }
                     };
                     Player.Self.SetCustomProperties(propertiesToSet);
                     propertiesToSet = new ExitGames.Client.Photon.Hashtable
                     {
-                        { PhotonPlayerProperty.deaths, (int)Player.Self.Properties[PhotonPlayerProperty.deaths] + 1 }
+                        { PlayerProperty.Deaths, (int)Player.Self.Properties[PlayerProperty.Deaths] + 1 }
                     };
                     Player.Self.SetCustomProperties(propertiesToSet);
                 }
@@ -790,7 +790,7 @@ public class TITAN : Photon.MonoBehaviour
             }
             if (this.nonAI)
             {
-                FengGameManagerMKII.instance.TitanGetKill(view.owner, damage, (string) Player.Self.Properties[PhotonPlayerProperty.name], null);
+                FengGameManagerMKII.instance.TitanGetKill(view.owner, damage, (string) Player.Self.Properties[PlayerProperty.Name], null);
             }
             else
             {
@@ -879,12 +879,12 @@ public class TITAN : Photon.MonoBehaviour
                     this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
                     ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
                     {
-                        { PhotonPlayerProperty.dead, true }
+                        { PlayerProperty.Dead, true }
                     };
                     Player.Self.SetCustomProperties(propertiesToSet);
                     propertiesToSet = new ExitGames.Client.Photon.Hashtable
                     {
-                        { PhotonPlayerProperty.deaths, (int)Player.Self.Properties[PhotonPlayerProperty.deaths] + 1 }
+                        { PlayerProperty.Deaths, (int)Player.Self.Properties[PlayerProperty.Deaths] + 1 }
                     };
                     Player.Self.SetCustomProperties(propertiesToSet);
                 }
@@ -2814,12 +2814,12 @@ public class TITAN : Photon.MonoBehaviour
                 this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
                 ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
                 {
-                    { PhotonPlayerProperty.dead, true }
+                    { PlayerProperty.Dead, true }
                 };
                 Player.Self.SetCustomProperties(propertiesToSet);
                 propertiesToSet = new ExitGames.Client.Photon.Hashtable
                 {
-                    { PhotonPlayerProperty.deaths, (int)Player.Self.Properties[PhotonPlayerProperty.deaths] + 1 }
+                    { PlayerProperty.Deaths, (int)Player.Self.Properties[PlayerProperty.Deaths] + 1 }
                 };
                 Player.Self.SetCustomProperties(propertiesToSet);
             }
@@ -3681,7 +3681,7 @@ public class TITAN : Photon.MonoBehaviour
         this.NetDie();
         if (this.nonAI)
         {
-            FengGameManagerMKII.instance.SendKillInfo(false, string.Empty, true, (string) Player.Self.Properties[PhotonPlayerProperty.name], 0);
+            FengGameManagerMKII.instance.SendKillInfo(false, string.Empty, true, (string) Player.Self.Properties[PlayerProperty.Name], 0);
         }
         FengGameManagerMKII.instance.needChooseSide = true;
         FengGameManagerMKII.instance.justSuicide = true;
@@ -3737,7 +3737,7 @@ public class TITAN : Photon.MonoBehaviour
                     this.NetDie();
                     if (this.nonAI)
                     {
-                        FengGameManagerMKII.instance.TitanGetKill(view.owner, speed, (string) Player.Self.Properties[PhotonPlayerProperty.name], null);
+                        FengGameManagerMKII.instance.TitanGetKill(view.owner, speed, (string) Player.Self.Properties[PlayerProperty.Name], null);
                     }
                     else
                     {
