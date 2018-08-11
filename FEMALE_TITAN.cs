@@ -613,7 +613,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
 
     private void eatSet(GameObject grabTarget)
     {
-        if (!grabTarget.GetComponent<HERO>().isGrabbed)
+        if (!grabTarget.GetComponent<HERO>().IsGrabbed)
         {
             GrabToRight();
             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
@@ -634,7 +634,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
 
     private void eatSetL(GameObject grabTarget)
     {
-        if (!grabTarget.GetComponent<HERO>().isGrabbed)
+        if (!grabTarget.GetComponent<HERO>().IsGrabbed)
         {
             GrabToLeft();
             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)

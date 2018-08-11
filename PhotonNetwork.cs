@@ -1315,7 +1315,7 @@ public static class PhotonNetwork
         }
     }
 
-    public static Room room
+    public static Room room //TODO: Make it into a custom class/struct with all infos
     {
         get
         {

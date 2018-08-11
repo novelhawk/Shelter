@@ -9,7 +9,7 @@ using Xft;
 
 public class HERO : Photon.MonoBehaviour
 {
-    private HERO_STATE _state;
+    private HeroState _state;
     private bool almostSingleHook;
     private string attackAnimation;
     private int attackLoop;
@@ -271,7 +271,7 @@ public class HERO : Photon.MonoBehaviour
         {
             float z = 0f;
             this.needLean = false;
-            if (!this.useGun && this.state == HERO_STATE.Attack && this.attackAnimation != "attack3_1" && this.attackAnimation != "attack3_2")
+            if (!this.useGun && this.State == HeroState.Attack && this.attackAnimation != "attack3_1" && this.attackAnimation != "attack3_2")
             {
                 float y = rigidbody.velocity.y;
                 float x = rigidbody.velocity.x;
@@ -307,14 +307,14 @@ public class HERO : Photon.MonoBehaviour
                 if (this.needLean)
                 {
                     float a = 0f;
-                    if (!this.useGun && this.state != HERO_STATE.Attack)
+                    if (!this.useGun && this.State != HeroState.Attack)
                     {
                         a = this.currentSpeed * 0.1f;
                         a = Mathf.Min(a, 20f);
                     }
                     this.targetRotation = Quaternion.Euler(-a, this.facingDirection, z);
                 }
-                else if (this.state != HERO_STATE.Attack)
+                else if (this.State != HeroState.Attack)
                 {
                     this.targetRotation = Quaternion.Euler(0f, this.facingDirection, 0f);
                 }
@@ -615,7 +615,7 @@ public class HERO : Photon.MonoBehaviour
     {
         if (!this.useGun || this.grounded || LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode != GAMEMODE.PVP_AHSS)
         {
-            this.state = HERO_STATE.ChangeBlade;
+            this.State = HeroState.ChangeBlade;
             this.throwedBlades = false;
             if (this.useGun)
             {
@@ -951,7 +951,7 @@ public class HERO : Photon.MonoBehaviour
             this.dashTime = 0.5f;
             this.crossFade("dash", 0.1f);
             animation["dash"].time = 0.1f;
-            this.state = HERO_STATE.AirDodge;
+            this.State = HeroState.AirDodge;
             this.falseAttack();
             rigidbody.AddForce(this.dashV * 40f, ForceMode.VelocityChange);
         }
@@ -1036,7 +1036,7 @@ public class HERO : Photon.MonoBehaviour
         }
         else
         {
-            this.state = HERO_STATE.GroundDodge;
+            this.State = HeroState.GroundDodge;
             if (!offTheWall)
             {
                 float num;
@@ -1086,7 +1086,7 @@ public class HERO : Photon.MonoBehaviour
     {
         if (!FengGameManagerMKII.inputRC.isInputHorse(InputCodeRC.horseMount) || this.myHorse == null || this.isMounted || Vector3.Distance(this.myHorse.transform.position, transform.position) >= 15f)
         {
-            this.state = HERO_STATE.GroundDodge;
+            this.State = HeroState.GroundDodge;
             if (!offTheWall)
             {
                 float num;
@@ -1244,7 +1244,7 @@ public class HERO : Photon.MonoBehaviour
                 {
                     this.baseRigidBody.rotation = Quaternion.Lerp(gameObject.transform.rotation, this.targetRotation, Time.deltaTime * 6f);
                 }
-                if (this.state == HERO_STATE.Grab)
+                if (this.State == HeroState.Grab)
                 {
                     this.baseRigidBody.AddForce(-this.baseRigidBody.velocity, ForceMode.VelocityChange);
                 }
@@ -1418,7 +1418,7 @@ public class HERO : Photon.MonoBehaviour
                     {
                         Vector3 vector7;
                         Vector3 zero = Vector3.zero;
-                        if (this.state == HERO_STATE.Attack)
+                        if (this.State == HeroState.Attack)
                         {
                             if (this.attackAnimation == "attack5")
                             {
@@ -1449,19 +1449,19 @@ public class HERO : Photon.MonoBehaviour
                         }
                         if (this.justGrounded)
                         {
-                            if (this.state != HERO_STATE.Attack || this.attackAnimation != "attack3_1" && this.attackAnimation != "attack5" && this.attackAnimation != "special_petra")
+                            if (this.State != HeroState.Attack || this.attackAnimation != "attack3_1" && this.attackAnimation != "attack5" && this.attackAnimation != "special_petra")
                             {
-                                if (this.state != HERO_STATE.Attack && x == 0f && z == 0f && this.bulletLeft == null && this.bulletRight == null && this.state != HERO_STATE.FillGas)
+                                if (this.State != HeroState.Attack && x == 0f && z == 0f && this.bulletLeft == null && this.bulletRight == null && this.State != HeroState.FillGas)
                                 {
-                                    this.state = HERO_STATE.Land;
+                                    this.State = HeroState.Land;
                                     this.crossFade("dash_land", 0.01f);
                                 }
                                 else
                                 {
                                     this.buttonAttackRelease = true;
-                                    if (this.state != HERO_STATE.Attack && this.baseRigidBody.velocity.x * this.baseRigidBody.velocity.x + this.baseRigidBody.velocity.z * this.baseRigidBody.velocity.z > this.speed * this.speed * 1.5f && this.state != HERO_STATE.FillGas)
+                                    if (this.State != HeroState.Attack && this.baseRigidBody.velocity.x * this.baseRigidBody.velocity.x + this.baseRigidBody.velocity.z * this.baseRigidBody.velocity.z > this.speed * this.speed * 1.5f && this.State != HeroState.FillGas)
                                     {
-                                        this.state = HERO_STATE.Slide;
+                                        this.State = HeroState.Slide;
                                         this.crossFade("slide", 0.05f);
                                         this.facingDirection = Mathf.Atan2(this.baseRigidBody.velocity.x, this.baseRigidBody.velocity.z) * 57.29578f;
                                         this.targetRotation = Quaternion.Euler(0f, this.facingDirection, 0f);
@@ -1472,7 +1472,7 @@ public class HERO : Photon.MonoBehaviour
                             this.justGrounded = false;
                             zero = this.baseRigidBody.velocity;
                         }
-                        if (this.state == HERO_STATE.Attack && this.attackAnimation == "attack3_1" && this.baseAnimation[this.attackAnimation].normalizedTime >= 1f)
+                        if (this.State == HeroState.Attack && this.attackAnimation == "attack3_1" && this.baseAnimation[this.attackAnimation].normalizedTime >= 1f)
                         {
                             this.playAnimation("attack3_2");
                             this.resetAnimationSpeed();
@@ -1481,7 +1481,7 @@ public class HERO : Photon.MonoBehaviour
                             zero = vector7;
                             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(0.2f, 0.3f, 0.95f);
                         }
-                        if (this.state == HERO_STATE.GroundDodge)
+                        if (this.State == HeroState.GroundDodge)
                         {
                             if (this.baseAnimation["dodge"].normalizedTime >= 0.2f && this.baseAnimation["dodge"].normalizedTime < 0.8f)
                             {
@@ -1492,7 +1492,7 @@ public class HERO : Photon.MonoBehaviour
                                 zero = this.baseRigidBody.velocity * 0.9f;
                             }
                         }
-                        else if (this.state == HERO_STATE.Idle)
+                        else if (this.State == HeroState.Idle)
                         {
                             Vector3 vector8 = new Vector3(x, 0f, z);
                             float resultAngle = this.getGlobalFacingDirection(x, z);
@@ -1520,7 +1520,7 @@ public class HERO : Photon.MonoBehaviour
                             }
                             else
                             {
-                                if (!(this.baseAnimation.IsPlaying(this.standAnimation) || this.state == HERO_STATE.Land || this.baseAnimation.IsPlaying("jump") || this.baseAnimation.IsPlaying("horse_geton") || this.baseAnimation.IsPlaying("grabbed")))
+                                if (!(this.baseAnimation.IsPlaying(this.standAnimation) || this.State == HeroState.Land || this.baseAnimation.IsPlaying("jump") || this.baseAnimation.IsPlaying("horse_geton") || this.baseAnimation.IsPlaying("grabbed")))
                                 {
                                     this.crossFade(this.standAnimation, 0.1f);
                                     zero = zero * 0f;
@@ -1533,11 +1533,11 @@ public class HERO : Photon.MonoBehaviour
                                 this.targetRotation = Quaternion.Euler(0f, this.facingDirection, 0f);
                             }
                         }
-                        else if (this.state == HERO_STATE.Land)
+                        else if (this.State == HeroState.Land)
                         {
                             zero = this.baseRigidBody.velocity * 0.96f;
                         }
-                        else if (this.state == HERO_STATE.Slide)
+                        else if (this.State == HeroState.Slide)
                         {
                             zero = this.baseRigidBody.velocity * 0.99f;
                             if (this.currentSpeed < this.speed * 1.2f)
@@ -1565,7 +1565,7 @@ public class HERO : Photon.MonoBehaviour
                             vector7 = this.myHorse.transform.position - this.baseTransform.position;
                             force += num9 * vector7.normalized;
                         }
-                        if (!(this.state == HERO_STATE.Attack && this.useGun))
+                        if (!(this.State == HeroState.Attack && this.useGun))
                         {
                             this.baseRigidBody.AddForce(force, ForceMode.VelocityChange);
                             this.baseRigidBody.rotation = Quaternion.Lerp(gameObject.transform.rotation, Quaternion.Euler(0f, this.facingDirection, 0f), Time.deltaTime * 10f);
@@ -1585,7 +1585,7 @@ public class HERO : Photon.MonoBehaviour
                             this.crossFade("horse_idle", 0.1f);
                             this.myHorse.GetComponent<Horse>().mounted();
                         }
-                        if (!(this.state != HERO_STATE.Idle || this.baseAnimation.IsPlaying("dash") || this.baseAnimation.IsPlaying("wallrun") || this.baseAnimation.IsPlaying("toRoof") || this.baseAnimation.IsPlaying("horse_geton") || this.baseAnimation.IsPlaying("horse_getoff") || this.baseAnimation.IsPlaying("air_release") || this.isMounted || this.baseAnimation.IsPlaying("air_hook_l_just") && this.baseAnimation["air_hook_l_just"].normalizedTime < 1f || this.baseAnimation.IsPlaying("air_hook_r_just") && this.baseAnimation["air_hook_r_just"].normalizedTime < 1f ? this.baseAnimation["dash"].normalizedTime < 0.99f : false))
+                        if (!(this.State != HeroState.Idle || this.baseAnimation.IsPlaying("dash") || this.baseAnimation.IsPlaying("wallrun") || this.baseAnimation.IsPlaying("toRoof") || this.baseAnimation.IsPlaying("horse_geton") || this.baseAnimation.IsPlaying("horse_getoff") || this.baseAnimation.IsPlaying("air_release") || this.isMounted || this.baseAnimation.IsPlaying("air_hook_l_just") && this.baseAnimation["air_hook_l_just"].normalizedTime < 1f || this.baseAnimation.IsPlaying("air_hook_r_just") && this.baseAnimation["air_hook_r_just"].normalizedTime < 1f ? this.baseAnimation["dash"].normalizedTime < 0.99f : false))
                         {
                             if (!this.isLeftHandHooked && !this.isRightHandHooked && (this.baseAnimation.IsPlaying("air_hook_l") || this.baseAnimation.IsPlaying("air_hook_r") || this.baseAnimation.IsPlaying("air_hook")) && this.baseRigidBody.velocity.y > 20f)
                             {
@@ -1680,7 +1680,7 @@ public class HERO : Photon.MonoBehaviour
                                 }
                             }
                         }
-                        if (this.state == HERO_STATE.Idle && this.baseAnimation.IsPlaying("air_release") && this.baseAnimation["air_release"].normalizedTime >= 1f)
+                        if (this.State == HeroState.Idle && this.baseAnimation.IsPlaying("air_release") && this.baseAnimation["air_release"].normalizedTime >= 1f)
                         {
                             this.crossFade("air_rise", 0.2f);
                         }
@@ -1709,7 +1709,7 @@ public class HERO : Photon.MonoBehaviour
                                 this.playAnimation("air_rise");
                             }
                         }
-                        else if (!(this.state != HERO_STATE.Idle || !this.isPressDirectionTowardsHero(x, z) || this.inputManager.isInput[InputCode.jump] || this.inputManager.isInput[InputCode.leftRope] || this.inputManager.isInput[InputCode.rightRope] || this.inputManager.isInput[InputCode.bothRope] || !this.IsFrontGrounded() || this.baseAnimation.IsPlaying("wallrun") || this.baseAnimation.IsPlaying("dodge")))
+                        else if (!(this.State != HeroState.Idle || !this.isPressDirectionTowardsHero(x, z) || this.inputManager.isInput[InputCode.jump] || this.inputManager.isInput[InputCode.leftRope] || this.inputManager.isInput[InputCode.rightRope] || this.inputManager.isInput[InputCode.bothRope] || !this.IsFrontGrounded() || this.baseAnimation.IsPlaying("wallrun") || this.baseAnimation.IsPlaying("dodge")))
                         {
                             this.crossFade("wallrun", 0.1f);
                             this.wallRunTime = 0f;
@@ -1743,7 +1743,7 @@ public class HERO : Photon.MonoBehaviour
                             vector12 = vector12 * ((float)this.setup.myCostume.stat.Acceleration / 10f * 2f);
                             if (x == 0f && z == 0f)
                             {
-                                if (this.state == HERO_STATE.Attack)
+                                if (this.State == HeroState.Attack)
                                 {
                                     vector12 = vector12 * 0f;
                                 }
@@ -1848,7 +1848,7 @@ public class HERO : Photon.MonoBehaviour
                         this.spinning = true;
                         this.baseRigidBody.velocity = vector18 * num20;
                     }
-                    if (this.state == HERO_STATE.Attack && (this.attackAnimation == "attack5" || this.attackAnimation == "special_petra") && this.baseAnimation[this.attackAnimation].normalizedTime > 0.4f && !this.attackMove)
+                    if (this.State == HeroState.Attack && (this.attackAnimation == "attack5" || this.attackAnimation == "special_petra") && this.baseAnimation[this.attackAnimation].normalizedTime > 0.4f && !this.attackMove)
                     {
                         this.attackMove = true;
                         if (this.launchPointRight.magnitude > 0f)
@@ -1959,8 +1959,8 @@ public class HERO : Photon.MonoBehaviour
             Vector3 vector2 = this.bulletRight.transform.position - transform.position;
             str = str + (int) (Mathf.Atan2(vector2.x, vector2.z) * 57.29578f);
         }
-        str = str + "\nfacingDirection:" + (int) this.facingDirection + "\nActual facingDirection:" + (int) transform.rotation.eulerAngles.y + "\nState:" + this.state + "\n\n\n\n\n";
-        if (this.state == HERO_STATE.Attack)
+        str = str + "\nfacingDirection:" + (int) this.facingDirection + "\nActual facingDirection:" + (int) transform.rotation.eulerAngles.y + "\nState:" + this.State + "\n\n\n\n\n";
+        if (this.State == HeroState.Attack)
         {
             this.targetRotation = Quaternion.Euler(0f, this.facingDirection, 0f);
         }
@@ -1995,7 +1995,7 @@ public class HERO : Photon.MonoBehaviour
 
     private float getLeanAngle(Vector3 p, bool left)
     {
-        if (!this.useGun && this.state == HERO_STATE.Attack)
+        if (!this.useGun && this.State == HeroState.Attack)
         {
             return 0f;
         }
@@ -2009,7 +2009,7 @@ public class HERO : Photon.MonoBehaviour
         float target = Mathf.Atan2(rigidbody.velocity.x, rigidbody.velocity.z) * 57.29578f;
         float num6 = Mathf.DeltaAngle(current, target);
         a += Mathf.Abs(num6 * 0.5f);
-        if (this.state != HERO_STATE.Attack)
+        if (this.State != HeroState.Attack)
         {
             a = Mathf.Min(a, 80f);
         }
@@ -2055,7 +2055,7 @@ public class HERO : Photon.MonoBehaviour
     {
         if ((animation.IsPlaying(this.standAnimation) || animation.IsPlaying("run") || animation.IsPlaying("run_sasha")) && (this.currentBladeSta != this.totalBladeSta || this.currentBladeNum != this.totalBladeNum || this.currentGas != this.totalGas || this.leftBulletLeft != this.bulletMAX || this.rightBulletLeft != this.bulletMAX))
         {
-            this.state = HERO_STATE.FillGas;
+            this.State = HeroState.FillGas;
             this.crossFade("supply", 0.1f);
         }
     }
@@ -2066,7 +2066,7 @@ public class HERO : Photon.MonoBehaviour
         {
             this.unmounted();
         }
-        this.state = HERO_STATE.Grab;
+        this.State = HeroState.Grab;
         GetComponent<CapsuleCollider>().isTrigger = true;
         this.falseAttack();
         this.titanWhoGrabMe = titan;
@@ -2141,11 +2141,11 @@ public class HERO : Photon.MonoBehaviour
 
     private void idle()
     {
-        if (this.state == HERO_STATE.Attack)
+        if (this.State == HeroState.Attack)
         {
             this.falseAttack();
         }
-        this.state = HERO_STATE.Idle;
+        this.State = HeroState.Idle;
         this.crossFade(this.standAnimation, 0.1f);
     }
 
@@ -2259,7 +2259,7 @@ public class HERO : Photon.MonoBehaviour
                 }
                 GameObject.Find("MainCamera").transform.rotation = Quaternion.Lerp(GameObject.Find("MainCamera").transform.rotation, quaternion3, Time.deltaTime * 2f);
             }
-            if (this.state == HERO_STATE.Grab && this.titanWhoGrabMe != null)
+            if (this.State == HeroState.Grab && this.titanWhoGrabMe != null)
             {
                 if (this.titanWhoGrabMe.GetComponent<TITAN>() != null)
                 {
@@ -2381,7 +2381,7 @@ public class HERO : Photon.MonoBehaviour
                 }
                 this.maincamera.transform.rotation = Quaternion.Lerp(this.maincamera.transform.rotation, quaternion2, Time.deltaTime * 2f);
             }
-            if (this.state == HERO_STATE.Grab && this.titanWhoGrabMe != null)
+            if (this.State == HeroState.Grab && this.titanWhoGrabMe != null)
             {
                 if (this.titanWhoGrabMe.GetComponent<TITAN>() != null)
                 {
@@ -2436,7 +2436,7 @@ public class HERO : Photon.MonoBehaviour
         {
             this.unmounted();
         }
-        if (this.state != HERO_STATE.Attack)
+        if (this.State != HeroState.Attack)
         {
             this.idle();
         }
@@ -3299,7 +3299,7 @@ public class HERO : Photon.MonoBehaviour
     public void markDie()
     {
         this.hasDied = true;
-        this.state = HERO_STATE.Die;
+        this.State = HeroState.Die;
     }
 
     [RPC]
@@ -3790,7 +3790,7 @@ public class HERO : Photon.MonoBehaviour
     [RPC]
     private void NetSetIsGrabbedFalse()
     {
-        this.state = HERO_STATE.Idle;
+        this.State = HeroState.Idle;
     }
 
     [RPC]
@@ -4034,12 +4034,12 @@ public class HERO : Photon.MonoBehaviour
                 rigidbody.AddForce(Vector3.up * Mathf.Min((float)(this.launchForce.magnitude * 0.2f), (float)10f), ForceMode.Impulse);
             }
             rigidbody.AddForce(this.launchForce * num * 0.1f, ForceMode.Impulse);
-            if (this.state != HERO_STATE.Grab)
+            if (this.State != HeroState.Grab)
             {
                 this.dashTime = 1f;
                 this.crossFade("dash", 0.05f);
                 animation["dash"].time = 0.1f;
-                this.state = HERO_STATE.AirDodge;
+                this.State = HeroState.AirDodge;
                 this.falseAttack();
                 this.facingDirection = Mathf.Atan2(this.launchForce.x, this.launchForce.z) * 57.29578f;
                 Quaternion quaternion = Quaternion.Euler(0f, this.facingDirection, 0f);
@@ -4058,7 +4058,7 @@ public class HERO : Photon.MonoBehaviour
 
     private void salute()
     {
-        this.state = HERO_STATE.Salute;
+        this.State = HeroState.Salute;
         this.crossFade("salute", 0.1f);
     }
 
@@ -4074,7 +4074,7 @@ public class HERO : Photon.MonoBehaviour
                 {
                     Vector3 vector2 = (this.bulletLeft.transform.position + this.bulletRight.transform.position) * 0.5f - transform.position;
                     this.facingDirection = Mathf.Atan2(vector2.x, vector2.z) * 57.29578f;
-                    if (this.useGun && this.state != HERO_STATE.Attack)
+                    if (this.useGun && this.State != HeroState.Attack)
                     {
                         float current = -Mathf.Atan2(rigidbody.velocity.z, rigidbody.velocity.x) * 57.29578f;
                         float target = -Mathf.Atan2(vector2.z, vector2.x) * 57.29578f;
@@ -4127,7 +4127,7 @@ public class HERO : Photon.MonoBehaviour
                 zero = this.bulletLeft.transform.position - transform.position;
             }
             this.facingDirection = Mathf.Atan2(zero.x, zero.z) * 57.29578f;
-            if (this.state != HERO_STATE.Attack)
+            if (this.State != HeroState.Attack)
             {
                 float num6 = -Mathf.Atan2(rigidbody.velocity.z, rigidbody.velocity.x) * 57.29578f;
                 float num7 = -Mathf.Atan2(zero.z, zero.x) * 57.29578f;
@@ -5329,7 +5329,7 @@ public class HERO : Photon.MonoBehaviour
         {
             this.currentBladeSta = 0f;
         }
-        if (this.state == HERO_STATE.Attack)
+        if (this.State == HeroState.Attack)
         {
             this.falseAttack();
         }
@@ -5341,7 +5341,7 @@ public class HERO : Photon.MonoBehaviour
         this.targetRotation = Quaternion.Euler(0f, 0f, 0f);
         transform.parent = null;
         GetComponent<CapsuleCollider>().isTrigger = false;
-        this.state = HERO_STATE.Idle;
+        this.State = HeroState.Idle;
     }
 
     private void unmounted()
@@ -5367,11 +5367,11 @@ public class HERO : Photon.MonoBehaviour
                 }
                 if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine)
                 {
-                    if (this.state == HERO_STATE.Grab && !this.useGun)
+                    if (this.State == HeroState.Grab && !this.useGun)
                     {
                         if (this.skillId == "jean")
                         {
-                            if (this.state != HERO_STATE.Attack && (this.inputManager.isInputDown[InputCode.attack0] || this.inputManager.isInputDown[InputCode.attack1]) && this.escapeTimes > 0 && !animation.IsPlaying("grabbed_jean"))
+                            if (this.State != HeroState.Attack && (this.inputManager.isInputDown[InputCode.attack0] || this.inputManager.isInputDown[InputCode.attack1]) && this.escapeTimes > 0 && !animation.IsPlaying("grabbed_jean"))
                             {
                                 this.playAnimation("grabbed_jean");
                                 animation["grabbed_jean"].time = 0f;
@@ -5445,7 +5445,7 @@ public class HERO : Photon.MonoBehaviour
                     else if (!this.titanForm)
                     {
                         this.bufferUpdate();
-                        if (!this.grounded && this.state != HERO_STATE.AirDodge)
+                        if (!this.grounded && this.State != HeroState.AirDodge)
                         {
                             this.checkDashDoubleTap();
                             if (this.dashD)
@@ -5473,7 +5473,7 @@ public class HERO : Photon.MonoBehaviour
                                 return;
                             }
                         }
-                        if (this.grounded && (this.state == HERO_STATE.Idle || this.state == HERO_STATE.Slide))
+                        if (this.grounded && (this.State == HeroState.Idle || this.State == HeroState.Slide))
                         {
                             if (this.inputManager.isInputDown[InputCode.jump] && !animation.IsPlaying("jump") && !animation.IsPlaying("horse_geton"))
                             {
@@ -5487,7 +5487,7 @@ public class HERO : Photon.MonoBehaviour
                                 return;
                             }
                         }
-                        if (this.state == HERO_STATE.Idle)
+                        if (this.State == HeroState.Idle)
                         {
                             if (this.inputManager.isInputDown[InputCode.flare1])
                             {
@@ -5758,7 +5758,7 @@ public class HERO : Photon.MonoBehaviour
                                     this.playAnimation(this.attackAnimation);
                                     animation[this.attackAnimation].time = 0f;
                                     this.buttonAttackRelease = false;
-                                    this.state = HERO_STATE.Attack;
+                                    this.State = HeroState.Attack;
                                     if (!this.grounded && !(this.attackAnimation == "attack3_1") && !(this.attackAnimation == "attack5") && !(this.attackAnimation == "special_petra"))
                                     {
                                         this.attackReleased = false;
@@ -5895,7 +5895,7 @@ public class HERO : Photon.MonoBehaviour
                                 }
                                 if (flag3)
                                 {
-                                    this.state = HERO_STATE.Attack;
+                                    this.State = HeroState.Attack;
                                     this.crossFade(this.attackAnimation, 0.05f);
                                     this.gunDummy.transform.position = transform.position;
                                     this.gunDummy.transform.rotation = transform.rotation;
@@ -5910,7 +5910,7 @@ public class HERO : Photon.MonoBehaviour
                                 }
                             }
                         }
-                        else if (this.state == HERO_STATE.Attack)
+                        else if (this.State == HeroState.Attack)
                         {
                             if (!this.useGun)
                             {
@@ -6170,7 +6170,7 @@ public class HERO : Photon.MonoBehaviour
                                 }
                             }
                         }
-                        else if (this.state == HERO_STATE.ChangeBlade)
+                        else if (this.State == HeroState.ChangeBlade)
                         {
                             if (this.useGun)
                             {
@@ -6264,14 +6264,14 @@ public class HERO : Photon.MonoBehaviour
                                 }
                             }
                         }
-                        else if (this.state == HERO_STATE.Salute)
+                        else if (this.State == HeroState.Salute)
                         {
                             if (animation["salute"].normalizedTime >= 1f)
                             {
                                 this.idle();
                             }
                         }
-                        else if (this.state == HERO_STATE.GroundDodge)
+                        else if (this.State == HeroState.GroundDodge)
                         {
                             if (animation.IsPlaying("dodge"))
                             {
@@ -6285,14 +6285,14 @@ public class HERO : Photon.MonoBehaviour
                                 }
                             }
                         }
-                        else if (this.state == HERO_STATE.Land)
+                        else if (this.State == HeroState.Land)
                         {
                             if (animation.IsPlaying("dash_land") && animation["dash_land"].normalizedTime >= 1f)
                             {
                                 this.idle();
                             }
                         }
-                        else if (this.state == HERO_STATE.FillGas)
+                        else if (this.State == HeroState.FillGas)
                         {
                             if (animation.IsPlaying("supply") && animation["supply"].normalizedTime >= 1f)
                             {
@@ -6317,14 +6317,14 @@ public class HERO : Photon.MonoBehaviour
                                 this.idle();
                             }
                         }
-                        else if (this.state == HERO_STATE.Slide)
+                        else if (this.State == HeroState.Slide)
                         {
                             if (!this.grounded)
                             {
                                 this.idle();
                             }
                         }
-                        else if (this.state == HERO_STATE.AirDodge)
+                        else if (this.State == HeroState.AirDodge)
                         {
                             if (this.dashTime > 0f)
                             {
@@ -6340,7 +6340,7 @@ public class HERO : Photon.MonoBehaviour
                                 this.idle();
                             }
                         }
-                        if (this.inputManager.isInput[InputCode.leftRope] && !animation.IsPlaying("attack3_1") && !animation.IsPlaying("attack5") && !animation.IsPlaying("special_petra") && this.state != HERO_STATE.ChangeBlade && this.state != HERO_STATE.Grab)
+                        if (this.inputManager.isInput[InputCode.leftRope] && !animation.IsPlaying("attack3_1") && !animation.IsPlaying("attack5") && !animation.IsPlaying("special_petra") && this.State != HeroState.ChangeBlade && this.State != HeroState.Grab)
                         {
                             if (this.bulletLeft != null)
                             {
@@ -6364,7 +6364,7 @@ public class HERO : Photon.MonoBehaviour
                         {
                             this.QHold = false;
                         }
-                        if (this.inputManager.isInput[InputCode.rightRope] && (!animation.IsPlaying("attack3_1") && !animation.IsPlaying("attack5") && !animation.IsPlaying("special_petra") || this.state == HERO_STATE.Idle))
+                        if (this.inputManager.isInput[InputCode.rightRope] && (!animation.IsPlaying("attack3_1") && !animation.IsPlaying("attack5") && !animation.IsPlaying("special_petra") || this.State == HeroState.Idle))
                         {
                             if (this.bulletRight != null)
                             {
@@ -6388,7 +6388,7 @@ public class HERO : Photon.MonoBehaviour
                         {
                             this.EHold = false;
                         }
-                        if (this.inputManager.isInput[InputCode.bothRope] && (!animation.IsPlaying("attack3_1") && !animation.IsPlaying("attack5") && !animation.IsPlaying("special_petra") || this.state == HERO_STATE.Idle))
+                        if (this.inputManager.isInput[InputCode.bothRope] && (!animation.IsPlaying("attack3_1") && !animation.IsPlaying("attack5") && !animation.IsPlaying("special_petra") || this.State == HeroState.Idle))
                         {
                             this.QHold = true;
                             this.EHold = true;
@@ -6478,11 +6478,11 @@ public class HERO : Photon.MonoBehaviour
                             this.myCannonRegion.photonView.RPC("RequestControlRPC", PhotonTargets.MasterClient, new object[] { photonView.viewID });
                         }
                     }
-                    if (this.state == HERO_STATE.Grab && !this.useGun)
+                    if (this.State == HeroState.Grab && !this.useGun)
                     {
                         if (this.skillId == "jean")
                         {
-                            if (this.state != HERO_STATE.Attack && (this.inputManager.isInputDown[InputCode.attack0] || this.inputManager.isInputDown[InputCode.attack1]) && this.escapeTimes > 0 && !this.baseAnimation.IsPlaying("grabbed_jean"))
+                            if (this.State != HeroState.Attack && (this.inputManager.isInputDown[InputCode.attack0] || this.inputManager.isInputDown[InputCode.attack1]) && this.escapeTimes > 0 && !this.baseAnimation.IsPlaying("grabbed_jean"))
                             {
                                 this.playAnimation("grabbed_jean");
                                 this.baseAnimation["grabbed_jean"].time = 0f;
@@ -6560,7 +6560,7 @@ public class HERO : Photon.MonoBehaviour
                         Boolean ReflectorVariable0;
                         this.bufferUpdate();
                         this.updateExt();
-                        if (!this.grounded && this.state != HERO_STATE.AirDodge)
+                        if (!this.grounded && this.State != HeroState.AirDodge)
                         {
                             if ((int) FengGameManagerMKII.settings[181] == 1)
                             {
@@ -6595,7 +6595,7 @@ public class HERO : Photon.MonoBehaviour
                                 return;
                             }
                         }
-                        if (this.grounded && (this.state == HERO_STATE.Idle || this.state == HERO_STATE.Slide))
+                        if (this.grounded && (this.State == HeroState.Idle || this.State == HeroState.Slide))
                         {
                             if (!(!this.inputManager.isInputDown[InputCode.jump] || this.baseAnimation.IsPlaying("jump") || this.baseAnimation.IsPlaying("horse_geton")))
                             {
@@ -6613,7 +6613,7 @@ public class HERO : Photon.MonoBehaviour
                                 return;
                             }
                         }
-                        if (this.state == HERO_STATE.Idle)
+                        if (this.State == HeroState.Idle)
                         {
                             if (this.inputManager.isInputDown[InputCode.flare1])
                             {
@@ -6882,7 +6882,7 @@ public class HERO : Photon.MonoBehaviour
                                     this.playAnimation(this.attackAnimation);
                                     this.baseAnimation[this.attackAnimation].time = 0f;
                                     this.buttonAttackRelease = false;
-                                    this.state = HERO_STATE.Attack;
+                                    this.State = HeroState.Attack;
                                     if (this.grounded || this.attackAnimation == "attack3_1" || this.attackAnimation == "attack5" || this.attackAnimation == "special_petra")
                                     {
                                         this.attackReleased = true;
@@ -7019,7 +7019,7 @@ public class HERO : Photon.MonoBehaviour
                                 }
                                 if (flag4)
                                 {
-                                    this.state = HERO_STATE.Attack;
+                                    this.State = HeroState.Attack;
                                     this.crossFade(this.attackAnimation, 0.05f);
                                     this.gunDummy.transform.position = this.baseTransform.position;
                                     this.gunDummy.transform.rotation = this.baseTransform.rotation;
@@ -7034,7 +7034,7 @@ public class HERO : Photon.MonoBehaviour
                                 }
                             }
                         }
-                        else if (this.state == HERO_STATE.Attack)
+                        else if (this.State == HeroState.Attack)
                         {
                             if (!this.useGun)
                             {
@@ -7286,7 +7286,7 @@ public class HERO : Photon.MonoBehaviour
                                 }
                             }
                         }
-                        else if (this.state == HERO_STATE.ChangeBlade)
+                        else if (this.State == HeroState.ChangeBlade)
                         {
                             if (this.useGun)
                             {
@@ -7380,14 +7380,14 @@ public class HERO : Photon.MonoBehaviour
                                 }
                             }
                         }
-                        else if (this.state == HERO_STATE.Salute)
+                        else if (this.State == HeroState.Salute)
                         {
                             if (this.baseAnimation["salute"].normalizedTime >= 1f)
                             {
                                 this.idle();
                             }
                         }
-                        else if (this.state == HERO_STATE.GroundDodge)
+                        else if (this.State == HeroState.GroundDodge)
                         {
                             if (this.baseAnimation.IsPlaying("dodge"))
                             {
@@ -7401,14 +7401,14 @@ public class HERO : Photon.MonoBehaviour
                                 }
                             }
                         }
-                        else if (this.state == HERO_STATE.Land)
+                        else if (this.State == HeroState.Land)
                         {
                             if (this.baseAnimation.IsPlaying("dash_land") && this.baseAnimation["dash_land"].normalizedTime >= 1f)
                             {
                                 this.idle();
                             }
                         }
-                        else if (this.state == HERO_STATE.FillGas)
+                        else if (this.State == HeroState.FillGas)
                         {
                             if (this.baseAnimation.IsPlaying("supply") && this.baseAnimation["supply"].normalizedTime >= 1f)
                             {
@@ -7433,14 +7433,14 @@ public class HERO : Photon.MonoBehaviour
                                 this.idle();
                             }
                         }
-                        else if (this.state == HERO_STATE.Slide)
+                        else if (this.State == HeroState.Slide)
                         {
                             if (!this.grounded)
                             {
                                 this.idle();
                             }
                         }
-                        else if (this.state == HERO_STATE.AirDodge)
+                        else if (this.State == HeroState.AirDodge)
                         {
                             if (this.dashTime > 0f)
                             {
@@ -7464,7 +7464,7 @@ public class HERO : Photon.MonoBehaviour
                         {
                             ReflectorVariable0 = false;
                         }
-                        if (!(ReflectorVariable0 ? (this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.state == HERO_STATE.Grab ? this.state != HERO_STATE.Idle : false) : true))
+                        if (!(ReflectorVariable0 ? (this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.State == HeroState.Grab ? this.State != HeroState.Idle : false) : true))
                         {
                             if (this.bulletLeft != null)
                             {
@@ -7496,7 +7496,7 @@ public class HERO : Photon.MonoBehaviour
                         {
                             ReflectorVariable1 = false;
                         }
-                        if (!(ReflectorVariable1 ? (this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.state == HERO_STATE.Grab ? this.state != HERO_STATE.Idle : false) : true))
+                        if (!(ReflectorVariable1 ? (this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.State == HeroState.Grab ? this.State != HeroState.Idle : false) : true))
                         {
                             if (this.bulletRight != null)
                             {
@@ -7528,7 +7528,7 @@ public class HERO : Photon.MonoBehaviour
                         {
                             ReflectorVariable2 = false;
                         }
-                        if (!(ReflectorVariable2 ? (this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.state == HERO_STATE.Grab ? this.state != HERO_STATE.Idle : false) : true))
+                        if (!(ReflectorVariable2 ? (this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.State == HeroState.Grab ? this.State != HeroState.Idle : false) : true))
                         {
                             this.QHold = true;
                             this.EHold = true;
@@ -7729,23 +7729,13 @@ public class HERO : Photon.MonoBehaviour
         this.titanForm = true;
     }
 
-    public bool isGrabbed
+    public bool IsGrabbed => this.State == HeroState.Grab;
+    private HeroState State
     {
-        get
-        {
-            return this.state == HERO_STATE.Grab;
-        }
-    }
-
-    private HERO_STATE state
-    {
-        get
-        {
-            return this._state;
-        }
+        get => this._state;
         set
         {
-            if (this._state == HERO_STATE.AirDodge || this._state == HERO_STATE.GroundDodge)
+            if (this._state == HeroState.AirDodge || this._state == HeroState.GroundDodge)
             {
                 this.dashTime = 0f;
             }

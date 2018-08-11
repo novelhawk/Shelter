@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Mod.Interface;
 using UnityEngine;
 
 namespace Mod
@@ -10,7 +11,7 @@ namespace Mod
     public class Shelter : MonoBehaviour
     {
         public static readonly Assembly Assembly = Assembly.GetExecutingAssembly();
-        public static Stopwatch Stopwatch = Stopwatch.StartNew();
+        public static readonly Stopwatch Stopwatch = Stopwatch.StartNew();
         private static InterfaceManager _interfaceManager;
         private static CommandManager _commandManager;
 
@@ -37,6 +38,7 @@ namespace Mod
 
         public static void OnJoinedGame()
         {
+            Chat.System("Joined " + PhotonNetwork.room.name.Split('`')[0].HexColor());
             _commandManager = new CommandManager();
             _interfaceManager.DisableAll();
             _interfaceManager.Enable("Chat");

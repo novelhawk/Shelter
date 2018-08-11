@@ -61,13 +61,13 @@ public class EnemyCheckCollider : Photon.MonoBehaviour
                     {
                         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
                         {
-                            if (!component.transform.root.GetComponent<HERO>().isGrabbed)
+                            if (!component.transform.root.GetComponent<HERO>().IsGrabbed)
                             {
                                 Vector3 vector4 = component.transform.root.transform.position - transform.position;
                                 component.transform.root.GetComponent<HERO>().die(vector4.normalized * b * 1000f + Vector3.up * 50f, this.isThisBite);
                             }
                         }
-                        else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && !component.transform.root.GetComponent<HERO>().HasDied() && !component.transform.root.GetComponent<HERO>().isGrabbed)
+                        else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && !component.transform.root.GetComponent<HERO>().HasDied() && !component.transform.root.GetComponent<HERO>().IsGrabbed)
                         {
                             component.transform.root.GetComponent<HERO>().markDie();
                             int myOwnerViewID = -1;

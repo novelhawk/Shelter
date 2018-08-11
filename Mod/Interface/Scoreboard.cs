@@ -21,15 +21,15 @@ namespace Mod.Interface
             string playerName = player.Properties.Name.Trim() == string.Empty ? "Unknown" : player.HexName, humanType;
             int type;
             if (FengGameManagerMKII.ignoreList.Contains(player.ID))
-                type = 5;
-            else if (player.Properties.Alive == false)
                 type = 4;
-            else if (player.Properties.IsAHSS == true)
-                type = 2;
-            else if (player.Properties.PlayerType == PlayerType.Titan)
+            else if (player.Properties.Alive == false)
                 type = 3;
-            else
+            else if (player.Properties.IsAHSS == true)
                 type = 1;
+            else if (player.Properties.PlayerType == PlayerType.Titan)
+                type = 2;
+            else
+                type = 0;
             
 
             switch (type)

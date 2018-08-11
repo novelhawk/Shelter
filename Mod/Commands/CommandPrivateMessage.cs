@@ -1,5 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 using Mod.Exceptions;
+using Mod.Interface;
 
 namespace Mod.Commands
 {
@@ -14,8 +15,9 @@ namespace Mod.Commands
                 throw new CommandArgumentException(CommandName, "/pm [id] [msg]");
             if (!Player.TryParse(args[0], out Player player))
                 throw new PlayerNotFoundException(args[0]);
-//            player.SendPrivateMessage(Regex.Match(GUIChat.Message, @"[\\\/][a-zA-Z]*[' '][0-9]*[' '](.*)").Groups[1].Value); TODO: Add private message and reply
-//            FengGameManagerMKII.instance.reply = player;
+            
+            player.SendPrivateMessage(Regex.Match(Chat.Message, @"[\\\/]\w+\s\d+\s(.*)").Groups[1].Value); //TODO: Add private message and reply
+            CommandReply.replyTo = player.ID;
         }
     }
 }

@@ -2,6 +2,7 @@ using ExitGames.Client.Photon;
 using System.Collections.Generic;
 using System.Linq;
 using Mod;
+using Mod.Interface;
 using UnityEngine;
 
 public class Player
@@ -40,6 +41,12 @@ public class Player
         return player != null && this.GetHashCode() == player.GetHashCode();
     }
 
+    public void SendPrivateMessage(string message)
+    {
+        Chat.ReceivePrivateMessage(Self, message);
+        FengGameManagerMKII.instance.photonView.RPC("Chat", this, $"<color=#1068D4>PM<color=#108CD4>></color></color> <color=#{Chat.SystemColor}>{HexName}: {message}</color>", string.Empty);
+    }
+    
     public static Player Find(int ID)
     {
         return PhotonNetwork.playerList.FirstOrDefault(player => player.ID == ID);

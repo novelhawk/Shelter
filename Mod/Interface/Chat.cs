@@ -6,7 +6,7 @@ namespace Mod.Interface
 {
     public class Chat : Gui
     {
-        private const string SystemColor = "04F363";
+        public const string SystemColor = "04F363";
         private Texture2D _mBackground;
         private Texture2D _mWhiteTexture;
         private Texture2D _mGreyTexture;
@@ -57,6 +57,11 @@ namespace Mod.Interface
             Messages.Insert(0, new ChatMessage($"{sender.HexName}: {message}", sender).CheckHTMLTags());
         }
 
+        public static void ReceivePrivateMessage(Player sender, object message)
+        {
+            Messages.Insert(0, new ChatMessage($"<color=#1068D4>PM<color=#108CD4>></color></color> <color=#{SystemColor}>{sender.HexName}: {message}</color>", sender).CheckHTMLTags());
+        }
+
         /// <summary>
         /// Write a message in chat which contains: [id] (message). Caused by FengGameManager.Chat("message", string.Empty);
         /// </summary>
@@ -67,7 +72,7 @@ namespace Mod.Interface
             Messages.Insert(0, new ChatMessage($"{message}", sender).CheckHTMLTags());
         }
 
-        public static void System(object message) // TODO: Add i18n
+        public static void System(object message)
         {
             AddMessage($"<color=#{SystemColor}>{message}</color>");
         } 
@@ -111,10 +116,6 @@ namespace Mod.Interface
                                 obj.GetComponent<TITAN>().photonView.RPC("netDie", PhotonTargets.All);
                             }
                         }
-
-
-
-
 
                         Match match = Regex.Match(Message, @"[\\\/](\w+)(?:\s+(.*))?.*?");
                         Command cmd = Shelter.CommandManager.GetCommand(match.Groups[1].Value); //Core.CommandManager.FirstOrDefault(cmds => cmds.Commands.FirstOrDefault(x => x.EqualsIgnoreCase(match.Groups[1].Value)) != null);

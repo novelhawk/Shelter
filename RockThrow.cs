@@ -43,12 +43,12 @@ public class RockThrow : Photon.MonoBehaviour
         {
             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
             {
-                if (!hero.GetComponent<HERO>().isGrabbed)
+                if (!hero.GetComponent<HERO>().IsGrabbed)
                 {
                     hero.GetComponent<HERO>().die(this.v.normalized * 1000f + Vector3.up * 50f, false);
                 }
             }
-            else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && !hero.GetComponent<HERO>().HasDied() && !hero.GetComponent<HERO>().isGrabbed)
+            else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && !hero.GetComponent<HERO>().HasDied() && !hero.GetComponent<HERO>().IsGrabbed)
             {
                 hero.GetComponent<HERO>().markDie();
                 int myOwnerViewID = -1;

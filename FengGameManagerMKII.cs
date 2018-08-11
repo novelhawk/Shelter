@@ -403,7 +403,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
     [RPC]
     private void RestartGameByClient(PhotonMessageInfo info)
     {
-        throw new NotAllowedException(nameof(RestartGameByClient, info));
+        throw new NotAllowedException(nameof(RestartGameByClient), info);
     }
 
     [RPC]
@@ -903,9 +903,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
     [RPC]
     private void ChatPM(string sender, string content, PhotonMessageInfo info) //TODO: Customize PMs message
     {
-        content = sender + ":" + content;
-        content = "<color=#FFC000>FROM [" + Convert.ToString(info.sender.ID) + "]</color> " + content;
-        Mod.Interface.Chat.System(content);
+        Mod.Interface.Chat.ReceivePrivateMessage(info.sender, $"<color=#1068D4>PM</color><color=#108CD4>></color> <color=#{Mod.Interface.Chat.SystemColor}>{info.sender.HexName}: {content}</color>");
     }
 
     #endregion
@@ -4216,11 +4214,9 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
     public void OnJoinedRoom()
     {
         Shelter.OnJoinedGame();
-        Mod.Interface.Chat.System("Joined " + PhotonNetwork.room.name.Split('`')[0]);
         maxPlayers = PhotonNetwork.room.maxPlayers;
         playerList = string.Empty;
-        char[] separator = { "`"[0] };
-        print("OnJoinedRoom " + PhotonNetwork.room.name + "    >>>>   " + LevelInfoManager.GetInfo(PhotonNetwork.room.name.Split(separator)[1]).Map);
+        print("OnJoinedRoom " + PhotonNetwork.room.name + "    >>>>   " + LevelInfoManager.GetInfo(PhotonNetwork.room.name.Split('`')[1]).Map);
         gameTimesUp = false;
         char[] chArray3 = { "`"[0] };
         string[] strArray = PhotonNetwork.room.name.Split(chArray3);
