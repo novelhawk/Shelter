@@ -46,6 +46,13 @@ public class PhotonView : Photon.MonoBehaviour
         }
     }
 
+    public static bool TryParse(int viewID, out PhotonView view)
+    {
+        if ((view = Find(viewID)) != null)
+            return true;
+        return false;
+    }
+    
     public static PhotonView Find(int viewID)
     {
         return PhotonNetwork.networkingPeer.GetPhotonView(viewID);

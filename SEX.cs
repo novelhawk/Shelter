@@ -1,6 +1,6 @@
-public enum SEX
+public enum Sex
 {
-    MALE,
-    FEMALE
+    Female,
+    Male
 }
 

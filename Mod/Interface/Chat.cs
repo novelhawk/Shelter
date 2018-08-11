@@ -6,7 +6,7 @@ namespace Mod.Interface
 {
     public class Chat : Gui
     {
-        public const string SystemColor = "04F363";
+        private const string SystemColor = "04F363";
         private Texture2D _mBackground;
         private Texture2D _mWhiteTexture;
         private Texture2D _mGreyTexture;

@@ -149,7 +149,7 @@ public class InvGameItem
             {
                 return null;
             }
-            return this.quality.ToString() + " " + this.baseItem.name;
+            return this.quality + " " + this.baseItem.name;
         }
     }
 

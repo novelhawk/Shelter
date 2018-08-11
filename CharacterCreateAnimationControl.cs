@@ -83,7 +83,7 @@ public class CharacterCreateAnimationControl : MonoBehaviour
 
     public void toStand()
     {
-        if (this.setup.myCostume.sex == SEX.FEMALE)
+        if (this.setup.myCostume.sex == Sex.Female)
         {
             this.currentAnimation = "stand";
         }

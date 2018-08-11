@@ -905,13 +905,13 @@ public class custom_inputs : MonoBehaviour
         {
             str = (int) this.default_inputKeys[i] + "*" + str;
             str2 = str2 + "#*";
-            str3 = this.default_inputKeys[i].ToString() + "*" + str3;
+            str3 = this.default_inputKeys[i] + "*" + str3;
             PlayerPrefs.SetString("KeyCodes", str);
             PlayerPrefs.SetString("Joystick_input", str2);
             PlayerPrefs.SetString("Names_input", str3);
             str4 = (int) this.alt_default_inputKeys[i] + "*" + str4;
             str5 = str5 + "#*";
-            str6 = this.alt_default_inputKeys[i].ToString() + "*" + str6;
+            str6 = this.alt_default_inputKeys[i] + "*" + str6;
             PlayerPrefs.SetString("KeyCodes2", str4);
             PlayerPrefs.SetString("Joystick_input2", str5);
             PlayerPrefs.SetString("Names_input2", str6);

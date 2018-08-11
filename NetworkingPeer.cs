@@ -592,7 +592,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 {
                     if (view != null)
                     {
-                        str2 = str2 + view.ToString() + ", ";
+                        str2 = str2 + view + ", ";
                     }
                 }
             }
@@ -714,7 +714,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 {
                     if (view != null)
                     {
-                        str2 = str2 + view.ToString() + ", ";
+                        str2 = str2 + view + ", ";
                     }
                 }
             }
@@ -1053,7 +1053,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     {
         if (Player.Self != null)
         {
-            return Player.Self.allProperties;
+            return Player.Self.AllProperties;
         }
         ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable
         {
@@ -1993,7 +1993,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                         goto Label_0955;
 
                     default:
-                        Debug.LogWarning(string.Format("OperationResponse unhandled: {0}", operationResponse.ToString()));
+                        Debug.LogWarning(string.Format("OperationResponse unhandled: {0}", operationResponse));
                         goto Label_0955;
                 }
             //break;

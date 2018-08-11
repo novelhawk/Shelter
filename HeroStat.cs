@@ -6,7 +6,7 @@ public struct HeroStat
     public int Blade;
     public int Acceleration;
 
-    private HeroStat(string skillName, int speed, int gas, int blade, int acceleration)
+    public HeroStat(string skillName, int speed, int gas, int blade, int acceleration)
     {
         Acceleration = acceleration;
         Blade = blade;

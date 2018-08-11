@@ -10,7 +10,7 @@ public class CustomCharacterManager : MonoBehaviour
     public HeroCostume currentCostume;
     private string currentSlot = "Set 1";
     private int divisionId;
-    private DIVISION[] divisionOption;
+    private Division[] divisionOption;
     private int eyeId;
     private int[] eyeOption;
     private int faceId;
@@ -41,7 +41,7 @@ public class CustomCharacterManager : MonoBehaviour
     private int presetId;
     private HERO_SETUP setup;
     private int sexId;
-    private SEX[] sexOption;
+    private Sex[] sexOption;
     private int skillId;
     private string[] skillOption;
     private int skinId;
@@ -226,25 +226,25 @@ public class CustomCharacterManager : MonoBehaviour
     private void freshLabel()
     {
         this.labelSex.GetComponent<UILabel>().text = this.sexOption[this.sexId].ToString();
-        this.labelEye.GetComponent<UILabel>().text = "eye_" + this.eyeId.ToString();
-        this.labelFace.GetComponent<UILabel>().text = "face_" + this.faceId.ToString();
-        this.labelGlass.GetComponent<UILabel>().text = "glass_" + this.glassId.ToString();
-        this.labelHair.GetComponent<UILabel>().text = "hair_" + this.hairId.ToString();
-        this.labelSkin.GetComponent<UILabel>().text = "skin_" + this.skinId.ToString();
-        this.labelCostume.GetComponent<UILabel>().text = "costume_" + this.costumeId.ToString();
-        this.labelCape.GetComponent<UILabel>().text = "cape_" + this.capeId.ToString();
+        this.labelEye.GetComponent<UILabel>().text = "eye_" + this.eyeId;
+        this.labelFace.GetComponent<UILabel>().text = "face_" + this.faceId;
+        this.labelGlass.GetComponent<UILabel>().text = "glass_" + this.glassId;
+        this.labelHair.GetComponent<UILabel>().text = "hair_" + this.hairId;
+        this.labelSkin.GetComponent<UILabel>().text = "skin_" + this.skinId;
+        this.labelCostume.GetComponent<UILabel>().text = "costume_" + this.costumeId;
+        this.labelCape.GetComponent<UILabel>().text = "cape_" + this.capeId;
         this.labelDivision.GetComponent<UILabel>().text = this.divisionOption[this.divisionId].ToString();
-        this.labelPOINT.GetComponent<UILabel>().text = "Points: " + (400 - this.calTotalPoints()).ToString();
-        this.labelSPD.GetComponent<UILabel>().text = "SPD " + this.setup.myCostume.stat.Speed.ToString();
-        this.labelGAS.GetComponent<UILabel>().text = "GAS " + this.setup.myCostume.stat.Gas.ToString();
-        this.labelBLA.GetComponent<UILabel>().text = "BLA " + this.setup.myCostume.stat.Blade.ToString();
-        this.labelACL.GetComponent<UILabel>().text = "ACL " + this.setup.myCostume.stat.Acceleration.ToString();
-        this.labelSKILL.GetComponent<UILabel>().text = "SKILL " + this.setup.myCostume.stat.SkillName.ToString();
+        this.labelPOINT.GetComponent<UILabel>().text = "Points: " + (400 - this.calTotalPoints());
+        this.labelSPD.GetComponent<UILabel>().text = "SPD " + this.setup.myCostume.stat.Speed;
+        this.labelGAS.GetComponent<UILabel>().text = "GAS " + this.setup.myCostume.stat.Gas;
+        this.labelBLA.GetComponent<UILabel>().text = "BLA " + this.setup.myCostume.stat.Blade;
+        this.labelACL.GetComponent<UILabel>().text = "ACL " + this.setup.myCostume.stat.Acceleration;
+        this.labelSKILL.GetComponent<UILabel>().text = "SKILL " + this.setup.myCostume.stat.SkillName;
     }
 
     public void LoadData()
     {
-        HeroCostume from = CostumeConeveter.LocalDataToHeroCostume(this.currentSlot);
+        HeroCostume from = CostumeConverter.LocalDataToHeroCostume(this.currentSlot);
         if (from != null)
         {
             this.copyCostume(from, this.setup.myCostume, false);
@@ -355,7 +355,7 @@ public class CustomCharacterManager : MonoBehaviour
 
     public void SaveData()
     {
-        CostumeConeveter.HeroCostumeToLocalData(this.setup.myCostume, this.currentSlot);
+        CostumeConverter.HeroCostumeToLocalData(this.setup.myCostume, this.currentSlot);
     }
 
     private void setHairColor()
@@ -408,8 +408,8 @@ public class CustomCharacterManager : MonoBehaviour
         this.copyCostume(HeroCostume.costume[2], this.setup.myCostume, false);
         this.setup.myCostume.setMesh2();
         this.setup.setCharacterComponent();
-        SEX[] sexArray1 = new SEX[2];
-        sexArray1[1] = SEX.FEMALE;
+        Sex[] sexArray1 = new Sex[2];
+        sexArray1[1] = Sex.Female;
         this.sexOption = sexArray1;
         this.eyeOption = new int[28];
         for (num = 0; num < 28; num++)
@@ -441,10 +441,10 @@ public class CustomCharacterManager : MonoBehaviour
         {
             this.capeOption[num] = num;
         }
-        DIVISION[] divisionArray1 = new DIVISION[4];
-        divisionArray1[1] = DIVISION.TheGarrison;
-        divisionArray1[2] = DIVISION.TheMilitaryPolice;
-        divisionArray1[3] = DIVISION.TheSurveryCorps;
+        Division[] divisionArray1 = new Division[4];
+        divisionArray1[1] = Division.TheGarrison;
+        divisionArray1[2] = Division.TheMilitaryPolice;
+        divisionArray1[3] = Division.TheSurveryCorps;
         this.divisionOption = divisionArray1;
         this.skillOption = new string[] { "mikasa", "levi", "sasha", "jean", "marco", "armin", "petra" };
         this.CostumeDataToMyID();
@@ -666,11 +666,11 @@ public class CustomCharacterManager : MonoBehaviour
             case CreatePart.Costume:
                 if (this.setup.myCostume.uniform_type == UNIFORM_TYPE.CasualAHSS)
                 {
-                    if (this.setup.myCostume.sex == SEX.FEMALE)
+                    if (this.setup.myCostume.sex == Sex.Female)
                     {
                         this.costumeId = 26;
                     }
-                    else if (this.setup.myCostume.sex == SEX.MALE)
+                    else if (this.setup.myCostume.sex == Sex.Male)
                     {
                         this.costumeId = 25;
                     }

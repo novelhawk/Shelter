@@ -1,8 +1,8 @@
-public enum DIVISION
+public enum Division
 {
-    TraineesSquad,
-    TheSurveryCorps,
     TheGarrison,
-    TheMilitaryPolice
+    TheMilitaryPolice,
+    TheSurveryCorps,
+    TraineesSquad
 }
 

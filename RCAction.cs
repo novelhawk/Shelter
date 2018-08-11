@@ -10,6 +10,7 @@ public class RCAction
 
     public RCAction(int category, int type, RCEvent next, RCActionHelper[] helpers)
     {
+        return;
         this.actionClass = category;
         this.actionType = type;
         this.nextEvent = next;
@@ -18,11 +19,12 @@ public class RCAction
 
     public void callException(string str)
     {
-        FengGameManagerMKII.instance.chatRoom.AddLine(str);
+        return;
     }
 
     public void doAction()
     {
+        return;
         switch (this.actionClass)
         {
             case 0:
@@ -599,73 +601,6 @@ public class RCAction
                 }
                 break;
         }
-    }
-
-    public enum actionClasses
-    {
-        typeVoid,
-        typeVariableInt,
-        typeVariableBool,
-        typeVariableString,
-        typeVariableFloat,
-        typeVariablePlayer,
-        typeVariableTitan,
-        typePlayer,
-        typeTitan,
-        typeGame
-    }
-
-    public enum gameTypes
-    {
-        printMessage,
-        winGame,
-        loseGame,
-        restartGame
-    }
-
-    public enum playerTypes
-    {
-        killPlayer,
-        spawnPlayer,
-        spawnPlayerAt,
-        movePlayer,
-        setKills,
-        setDeaths,
-        setMaxDmg,
-        setTotalDmg,
-        setName,
-        setGuildName,
-        setTeam,
-        setCustomInt,
-        setCustomBool,
-        setCustomString,
-        setCustomFloat
-    }
-
-    public enum titanTypes
-    {
-        killTitan,
-        spawnTitan,
-        spawnTitanAt,
-        setHealth,
-        moveTitan
-    }
-
-    public enum varTypes
-    {
-        set,
-        add,
-        subtract,
-        multiply,
-        divide,
-        modulo,
-        power,
-        concat,
-        append,
-        remove,
-        replace,
-        toOpposite,
-        setRandom
     }
 }
 

@@ -4,6 +4,7 @@ public class PopuplistCharacterSelection : MonoBehaviour
 {
     //TODO: Use Unity's UI intead
     
+    // Progress bars (kinda)
     public GameObject ACL;
     public GameObject BLA;
     public GameObject GAS;
@@ -20,7 +21,7 @@ public class PopuplistCharacterSelection : MonoBehaviour
         }
         else
         {
-            HeroCostume costume = CostumeConeveter.LocalDataToHeroCostume(selection.ToUpper());
+            HeroCostume costume = CostumeConverter.LocalDataToHeroCostume(selection.ToUpper());
             if (costume == null)
                 stat = new HeroStat();
             else

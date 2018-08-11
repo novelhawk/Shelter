@@ -968,7 +968,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                     {
                         getDown();
                     }
-                    FengGameManagerMKII.instance.SendKillInfo(false, (string) view.owner.Properties[PlayerProperty.Name], true, "Female Titan's ankle", dmg);
+                    FengGameManagerMKII.instance.SendKillInfo(false, view.owner.Properties.Name, true, "Female Titan's ankle", dmg);
                     object[] parameters = new object[] { dmg };
                     FengGameManagerMKII.instance.photonView.RPC("netShowDamage", view.owner, parameters);
                 }
@@ -1008,7 +1008,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                     {
                         getDown();
                     }
-                    FengGameManagerMKII.instance.SendKillInfo(false, (string) view.owner.Properties[PlayerProperty.Name], true, "Female Titan's ankle", dmg);
+                    FengGameManagerMKII.instance.SendKillInfo(false, view.owner.Properties.Name, true, "Female Titan's ankle", dmg);
                     object[] parameters = new object[] { dmg };
                     FengGameManagerMKII.instance.photonView.RPC("netShowDamage", view.owner, parameters);
                 }
@@ -1515,7 +1515,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                 }
                 else
                 {
-                    FengGameManagerMKII.instance.SendKillInfo(false, (string) view.owner.Properties[PlayerProperty.Name], true, "Female Titan's neck", speed);
+                    FengGameManagerMKII.instance.SendKillInfo(false, view.owner.Properties.Name, true, "Female Titan's neck", speed);
                     FengGameManagerMKII.instance.photonView.RPC("netShowDamage", view.owner, speed);
                 }
                 healthTime = 0.2f;

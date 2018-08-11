@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mod;
 using Mod.Exceptions;
+using Mod.Interface;
 using UnityEngine;
 using Xft;
 
@@ -1957,7 +1959,7 @@ public class HERO : Photon.MonoBehaviour
             Vector3 vector2 = this.bulletRight.transform.position - transform.position;
             str = str + (int) (Mathf.Atan2(vector2.x, vector2.z) * 57.29578f);
         }
-        str = str + "\nfacingDirection:" + (int) this.facingDirection + "\nActual facingDirection:" + (int) transform.rotation.eulerAngles.y + "\nState:" + this.state.ToString() + "\n\n\n\n\n";
+        str = str + "\nfacingDirection:" + (int) this.facingDirection + "\nActual facingDirection:" + (int) transform.rotation.eulerAngles.y + "\nState:" + this.state + "\n\n\n\n\n";
         if (this.state == HERO_STATE.Attack)
         {
             this.targetRotation = Quaternion.Euler(0f, this.facingDirection, 0f);
@@ -3366,28 +3368,28 @@ public class HERO : Photon.MonoBehaviour
             }
             if (!info.sender.isLocal && !info.sender.IsMasterClient)
             {
-                if (info.sender.Properties[PlayerProperty.Name] == null || info.sender.Properties[PlayerProperty.IsTitan] == null)
+                if (info.sender.Properties.Name == null || info.sender.Properties.PlayerType == PlayerType.Unknown)
                 {
-                    FengGameManagerMKII.instance.chatRoom.AddLine("<color=#FFCC00>Unusual Kill from ID " + info.sender.ID.ToString() + "</color>");
+                    Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                 }
                 else if (viewID < 0)
                 {
                     if (titanName == "")
                     {
-                        FengGameManagerMKII.instance.chatRoom.AddLine("<color=#FFCC00>Unusual Kill from ID " + info.sender.ID.ToString() + " (possibly valid).</color>");
+                        Chat.System("Unusual Kill from ID " + info.sender.ID + " (possibly valid).");
                     }
                     else
                     {
-                        FengGameManagerMKII.instance.chatRoom.AddLine("<color=#FFCC00>Unusual Kill from ID " + info.sender.ID.ToString() + "</color>");
+                        Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                     }
                 }
                 else if (PhotonView.Find(viewID) == null)
                 {
-                    FengGameManagerMKII.instance.chatRoom.AddLine("<color=#FFCC00>Unusual Kill from ID " + info.sender.ID.ToString() + "</color>");
+                    Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                 }
                 else if (PhotonView.Find(viewID).owner.ID != info.sender.ID)
                 {
-                    FengGameManagerMKII.instance.chatRoom.AddLine("<color=#FFCC00>Unusual Kill from ID " + info.sender.ID.ToString() + "</color>");
+                    Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                 }
             }
         }
@@ -3457,12 +3459,8 @@ public class HERO : Photon.MonoBehaviour
             PhotonNetwork.RemoveRPCs(photonView);
             ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
             {
-                { PlayerProperty.Dead, true }
-            };
-            Player.Self.SetCustomProperties(propertiesToSet);
-            propertiesToSet = new ExitGames.Client.Photon.Hashtable
-            {
-                { PlayerProperty.Deaths, RCextensions.returnIntFromObject(Player.Self.Properties[PlayerProperty.Deaths]) + 1 }
+                { PlayerProperty.Dead, true },
+                { PlayerProperty.Deaths, Player.Self.Properties.Deaths + 1 }
             };
             Player.Self.SetCustomProperties(propertiesToSet);
             object[] parameters = new object[] { !(titanName == string.Empty) ? 1 : 0 };
@@ -3472,17 +3470,17 @@ public class HERO : Photon.MonoBehaviour
                 PhotonView view2 = PhotonView.Find(viewID);
                 if (view2 != null)
                 {
-                    FengGameManagerMKII.instance.SendKillInfo(killByTitan, "[FFC000][" + info.sender.ID.ToString() + "][FFFFFF]" + RCextensions.returnStringFromObject(view2.owner.Properties[PlayerProperty.Name]), false, RCextensions.returnStringFromObject(Player.Self.Properties[PlayerProperty.Name]), 0);
+                    FengGameManagerMKII.instance.SendKillInfo(killByTitan, "[FFC000][" + info.sender.ID + "][FFFFFF]" + view2.owner.Properties.Name, false, Player.Self.Properties.Name, 0);
                     propertiesToSet = new ExitGames.Client.Photon.Hashtable
                     {
-                        { PlayerProperty.Kills, RCextensions.returnIntFromObject(view2.owner.Properties[PlayerProperty.Kills]) + 1 }
+                        { PlayerProperty.Kills, view2.owner.Properties.Kills + 1 }
                     };
                     view2.owner.SetCustomProperties(propertiesToSet);
                 }
             }
             else
             {
-                FengGameManagerMKII.instance.SendKillInfo(!(titanName == string.Empty), "[FFC000][" + info.sender.ID.ToString() + "][FFFFFF]" + titanName, false, RCextensions.returnStringFromObject(Player.Self.Properties[PlayerProperty.Name]), 0);
+                FengGameManagerMKII.instance.SendKillInfo(!(titanName == string.Empty), "[FFC000][" + info.sender.ID + "][FFFFFF]" + titanName, false, Player.Self.Properties.Name, 0);
             }
         }
         if (photonView.isMine)
@@ -3504,28 +3502,28 @@ public class HERO : Photon.MonoBehaviour
             }
             if (!info.sender.isLocal && !info.sender.IsMasterClient)
             {
-                if (info.sender.Properties[PlayerProperty.Name] == null || info.sender.Properties[PlayerProperty.IsTitan] == null)
+                if (info.sender.Properties.Name == null || info.sender.Properties.PlayerType == PlayerType.Unknown)
                 {
-                    FengGameManagerMKII.instance.chatRoom.AddLine("<color=#FFCC00>Unusual Kill from ID " + info.sender.ID.ToString() + "</color>");
+                    Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                 }
                 else if (viewID < 0)
                 {
                     if (titanName == "")
                     {
-                        FengGameManagerMKII.instance.chatRoom.AddLine("<color=#FFCC00>Unusual Kill from ID " + info.sender.ID.ToString() + " (possibly valid).</color>");
+                        Chat.System("Unusual Kill from ID " + info.sender.ID + " (possibly valid).");
                     }
                     else if (RCSettings.bombMode == 0 && RCSettings.deadlyCannons == 0)
                     {
-                        FengGameManagerMKII.instance.chatRoom.AddLine("<color=#FFCC00>Unusual Kill from ID " + info.sender.ID.ToString() + "</color>");
+                        Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                     }
                 }
                 else if (PhotonView.Find(viewID) == null)
                 {
-                    FengGameManagerMKII.instance.chatRoom.AddLine("<color=#FFCC00>Unusual Kill from ID " + info.sender.ID.ToString() + "</color>");
+                    Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                 }
                 else if (PhotonView.Find(viewID).owner.ID != info.sender.ID)
                 {
-                    FengGameManagerMKII.instance.chatRoom.AddLine("<color=#FFCC00>Unusual Kill from ID " + info.sender.ID.ToString() + "</color>");
+                    Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                 }
             }
         }
@@ -3582,7 +3580,7 @@ public class HERO : Photon.MonoBehaviour
             Player.Self.SetCustomProperties(propertiesToSet);
             propertiesToSet = new ExitGames.Client.Photon.Hashtable
             {
-                { PlayerProperty.Deaths, (int)Player.Self.Properties[PlayerProperty.Deaths] + 1 }
+                { PlayerProperty.Deaths, (int)Player.Self.Properties.Deaths + 1 }
             };
             Player.Self.SetCustomProperties(propertiesToSet);
             if (viewID != -1)
@@ -3590,17 +3588,17 @@ public class HERO : Photon.MonoBehaviour
                 PhotonView view2 = PhotonView.Find(viewID);
                 if (view2 != null)
                 {
-                    FengGameManagerMKII.instance.SendKillInfo(true, "[FFC000][" + info.sender.ID.ToString() + "][FFFFFF]" + RCextensions.returnStringFromObject(view2.owner.Properties[PlayerProperty.Name]), false, RCextensions.returnStringFromObject(Player.Self.Properties[PlayerProperty.Name]), 0);
+                    FengGameManagerMKII.instance.SendKillInfo(true, "[FFC000][" + info.sender.ID + "][FFFFFF]" + view2.owner.Properties.Name, false, Player.Self.Properties.Name, 0);
                     propertiesToSet = new ExitGames.Client.Photon.Hashtable
                     {
-                        { PlayerProperty.Kills, RCextensions.returnIntFromObject(view2.owner.Properties[PlayerProperty.Kills]) + 1 }
+                        { PlayerProperty.Kills, view2.owner.Properties.Kills + 1 }
                     };
                     view2.owner.SetCustomProperties(propertiesToSet);
                 }
             }
             else
             {
-                FengGameManagerMKII.instance.SendKillInfo(true, "[FFC000][" + info.sender.ID.ToString() + "][FFFFFF]" + titanName, false, RCextensions.returnStringFromObject(Player.Self.Properties[PlayerProperty.Name]), 0);
+                FengGameManagerMKII.instance.SendKillInfo(true, "[FFC000][" + info.sender.ID + "][FFFFFF]" + titanName, false, Player.Self.Properties.Name, 0);
             }
             object[] parameters = new object[] { !(titanName == string.Empty) ? 1 : 0 };
             FengGameManagerMKII.instance.photonView.RPC("someOneIsDead", PhotonTargets.MasterClient, parameters);
@@ -3690,7 +3688,7 @@ public class HERO : Photon.MonoBehaviour
             Player.Self.SetCustomProperties(propertiesToSet);
             propertiesToSet = new ExitGames.Client.Photon.Hashtable
             {
-                { PlayerProperty.Deaths, RCextensions.returnIntFromObject(Player.Self.Properties[PlayerProperty.Deaths]) + 1 }
+                { PlayerProperty.Deaths, Player.Self.Properties.Deaths + 1 }
             };
             Player.Self.SetCustomProperties(propertiesToSet);
             object[] parameters = new object[] { !(titanName == string.Empty) ? 1 : 0 };
@@ -3700,17 +3698,17 @@ public class HERO : Photon.MonoBehaviour
                 PhotonView view = PhotonView.Find(viewID);
                 if (view != null)
                 {
-                    FengGameManagerMKII.instance.SendKillInfo(killByTitan, RCextensions.returnStringFromObject(view.owner.Properties[PlayerProperty.Name]), false, RCextensions.returnStringFromObject(Player.Self.Properties[PlayerProperty.Name]), 0);
+                    FengGameManagerMKII.instance.SendKillInfo(killByTitan, view.owner.Properties.Name, false, Player.Self.Properties.Name, 0);
                     propertiesToSet = new ExitGames.Client.Photon.Hashtable
                     {
-                        { PlayerProperty.Kills, RCextensions.returnIntFromObject(view.owner.Properties[PlayerProperty.Kills]) + 1 }
+                        { PlayerProperty.Kills, view.owner.Properties.Kills + 1 }
                     };
                     view.owner.SetCustomProperties(propertiesToSet);
                 }
             }
             else
             {
-                FengGameManagerMKII.instance.SendKillInfo(!(titanName == string.Empty), titanName, false, RCextensions.returnStringFromObject(Player.Self.Properties[PlayerProperty.Name]), 0);
+                FengGameManagerMKII.instance.SendKillInfo(!(titanName == string.Empty), titanName, false, Player.Self.Properties.Name, 0);
             }
         }
         if (photonView.isMine)
@@ -4204,15 +4202,9 @@ public class HERO : Photon.MonoBehaviour
             }
             else if (RCSettings.pvpMode == 1)
             {
-                int num = 0;
-                if (photonView.owner.Properties[PlayerProperty.RCTeam] != null)
+                if (photonView.owner.Properties.RCTeam.HasValue && val != photonView.owner.Properties.RCTeam)
                 {
-                    num = RCextensions.returnIntFromObject(photonView.owner.Properties[PlayerProperty.RCTeam]);
-                }
-                if (val != num)
-                {
-                    objArray = new object[] { num };
-                    photonView.RPC("setMyTeam", PhotonTargets.AllBuffered, objArray);
+                    photonView.RPC("setMyTeam", PhotonTargets.AllBuffered, photonView.owner.Properties.RCTeam);
                 }
             }
             else if (RCSettings.pvpMode == 2 && val != photonView.owner.ID)
@@ -4280,7 +4272,7 @@ public class HERO : Photon.MonoBehaviour
                     int num = 0;
                     foreach (Player player in PhotonNetwork.playerList)
                     {
-                        if ((int) player.Properties[PlayerProperty.IsTitan] == 1 && ((string) player.Properties[PlayerProperty.Character]).ToUpper() == "EREN")
+                        if (player.Properties.PlayerType == PlayerType.Human && player.Properties.Character.ToUpper() == "EREN")
                         {
                             num++;
                         }
@@ -4377,7 +4369,7 @@ public class HERO : Photon.MonoBehaviour
                 this.skillCD.transform.localPosition = Vector3.up * 5000f;
             }
         }
-        else if (this.setup.myCostume.sex == SEX.FEMALE)
+        else if (this.setup.myCostume.sex == Sex.Female)
         {
             this.standAnimation = "stand";
             this.setTeam(1);
@@ -4425,7 +4417,7 @@ public class HERO : Photon.MonoBehaviour
                     int num = 0;
                     foreach (Player player in PhotonNetwork.playerList)
                     {
-                        if (RCextensions.returnIntFromObject(player.Properties[PlayerProperty.IsTitan]) == 1 && RCextensions.returnStringFromObject(player.Properties[PlayerProperty.Character]).ToUpper() == "EREN")
+                        if (player.Properties.PlayerType == PlayerType.Human && player.Properties.Character.ToUpper() == "EREN")
                         {
                             num++;
                         }
@@ -4520,7 +4512,7 @@ public class HERO : Photon.MonoBehaviour
                 }
             }
         }
-        else if (this.setup.myCostume.sex == SEX.FEMALE)
+        else if (this.setup.myCostume.sex == Sex.Female)
         {
             this.standAnimation = "stand";
             this.setTeam2(1);
@@ -5202,9 +5194,9 @@ public class HERO : Photon.MonoBehaviour
             else
             {
                 bool flag2 = false;
-                if (photonView.owner.Properties[PlayerProperty.RCTeam] != null)
+                if (photonView.owner.Properties.RCTeam != null)
                 {
-                    switch (RCextensions.returnIntFromObject(photonView.owner.Properties[PlayerProperty.RCTeam]))
+                    switch (photonView.owner.Properties.RCTeam)
                     {
                         case 1:
                             flag2 = true;
@@ -5223,7 +5215,7 @@ public class HERO : Photon.MonoBehaviour
                             break;
                     }
                 }
-                if (RCextensions.returnIntFromObject(photonView.owner.Properties[PlayerProperty.Team]) == 2)
+                if (photonView.owner.Properties.IsAHSS == true)
                 {
                     this.myNetWorkName.GetComponent<UILabel>().text = "[FF0000]AHSS\n[FFFFFF]";
                     if (!flag2 && Minimap.instance != null)
@@ -5236,18 +5228,18 @@ public class HERO : Photon.MonoBehaviour
                     Minimap.instance.TrackGameObjectOnMinimap(gameObject, Color.blue, false, true, Minimap.IconStyle.CIRCLE);
                 }
             }
-            string str = RCextensions.returnStringFromObject(photonView.owner.Properties[PlayerProperty.Guild]);
+            string str = photonView.owner.Properties.Guild;
             if (str != string.Empty)
             {
                 UILabel component = this.myNetWorkName.GetComponent<UILabel>();
                 string text = component.text;
-                string[] strArray2 = new string[] { text, "[FFFF00]", str, "\n[FFFFFF]", RCextensions.returnStringFromObject(photonView.owner.Properties[PlayerProperty.Name]) };
+                string[] strArray2 = new string[] { text, "[FFFF00]", str, "\n[FFFFFF]", photonView.owner.Properties.Name };
                 component.text = string.Concat(strArray2);
             }
             else
             {
                 UILabel label2 = this.myNetWorkName.GetComponent<UILabel>();
-                label2.text = label2.text + RCextensions.returnStringFromObject(photonView.owner.Properties[PlayerProperty.Name]);
+                label2.text = label2.text + photonView.owner.Properties.Name;
             }
         }
         else if (Minimap.instance != null)
@@ -5266,7 +5258,7 @@ public class HERO : Photon.MonoBehaviour
             }
             this.setup.init();
             this.setup.myCostume = new HeroCostume();
-            this.setup.myCostume = CostumeConeveter.PhotonDataToHeroCostume2(photonView.owner);
+            this.setup.myCostume = CostumeConverter.PhotonDataToHeroCostume(photonView.owner);
             this.setup.setCharacterComponent();
             Destroy(this.checkBoxLeft);
             Destroy(this.checkBoxRight);

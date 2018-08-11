@@ -1,42 +1,15 @@
+using System.Linq;
 using ExitGames.Client.Photon;
+using Mod;
 using UnityEngine;
 
 public class BTN_choose_human : MonoBehaviour
 {
-    public bool isPlayerAllDead()
+    private static bool IsEveryoneDead()
     {
-        int num = 0;
-        int num2 = 0;
-        foreach (Player player in PhotonNetwork.playerList)
-        {
-            if ((int) player.Properties[PlayerProperty.IsTitan] == 1)
-            {
-                num++;
-                if ((bool) player.Properties[PlayerProperty.Dead])
-                {
-                    num2++;
-                }
-            }
-        }
-        return num == num2;
-    }
-
-    public bool isPlayerAllDead2()
-    {
-        int num = 0;
-        int num2 = 0;
-        foreach (Player player in PhotonNetwork.playerList)
-        {
-            if (RCextensions.returnIntFromObject(player.Properties[PlayerProperty.IsTitan]) == 1)
-            {
-                num++;
-                if (RCextensions.returnBoolFromObject(player.Properties[PlayerProperty.Dead]))
-                {
-                    num2++;
-                }
-            }
-        }
-        return num == num2;
+        if (PhotonNetwork.playerList.Any(player => player.Properties.Alive != null && player.Properties.Alive.Value && player.Properties.PlayerType == PlayerType.Human))
+            return false;
+        return true;
     }
 
     private void OnClick()
@@ -50,7 +23,7 @@ public class BTN_choose_human : MonoBehaviour
         }
         if (!PhotonNetwork.isMasterClient && FengGameManagerMKII.instance.roundTime > 60f)
         {
-            if (!this.isPlayerAllDead2())
+            if (!IsEveryoneDead())
             {
                 FengGameManagerMKII.instance.SpawnPlayerAfterGameEnd(selection);
             }
@@ -62,7 +35,7 @@ public class BTN_choose_human : MonoBehaviour
         }
         else if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.BOSS_FIGHT_CT || IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.TROST || IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.PVP_CAPTURE)
         {
-            if (this.isPlayerAllDead2())
+            if (IsEveryoneDead())
             {
                 FengGameManagerMKII.instance.SpawnPlayerAfterGameEnd(selection);
                 FengGameManagerMKII.instance.photonView.RPC("restartGameByClient", PhotonTargets.MasterClient, new object[0]);

@@ -83,7 +83,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                             parameters[0] = vector2.normalized * b * 1000f + Vector3.up * 50f;
                             parameters[1] = false;
                             parameters[2] = transform.root.gameObject.GetPhotonView().viewID;
-                            parameters[3] = PhotonView.Find(transform.root.gameObject.GetPhotonView().viewID).owner.Properties[PlayerProperty.Name];
+                            parameters[3] = PhotonView.Find(transform.root.gameObject.GetPhotonView().viewID).owner.Properties.Name;
                             parameters[4] = false;
                             component.transform.root.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, parameters);
                         }

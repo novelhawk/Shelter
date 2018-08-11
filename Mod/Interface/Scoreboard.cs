@@ -6,7 +6,7 @@ namespace Mod.Interface
 {
     public class Scoreboard : Gui
     {
-        private const string EntryLayout = "<color=#672A42>[<b><color=#DC3052>{0}</color></b>] {10}{1}{2} <b><color=#6E8EEB>{3}</color></b>{9}  <color=#31A5E4>{4}</color>|<color=#31A5E4>{5}</color>|<color=#31A5E4>{6}</color>|<color=#31A5E4>{6}</color>|<color=#31A5E4>{7}</color></color>";
+        private const string EntryLayout = "<color=#672A42>[<b><color=#DC3052>{0}</color></b>] {10}{1}{2} <b><color=#6E8EEB>{3}</color></b>{9}  <color=#31A5E4>{4}</color>|<color=#31A5E4>{5}</color>|<color=#31A5E4>{6}</color>|<color=#31A5E4>{6}</color>|<color=#31A5E4>{7}</color>|<color=#31A5E4>{8}</color></color>";
 
         protected override void Render()
         {
@@ -18,30 +18,35 @@ namespace Mod.Interface
 
         private static string Entry(Player player)
         {
-            object temp;
-            string playerName = player.HexName.Trim() == string.Empty ? "Unknown" : (player.HexName ?? "Unknown"), humanType;
-            var type = !FengGameManagerMKII.ignoreList.Contains(player.ID) ? ((temp = player.Properties[PlayerProperty.Dead]) != null ? ((bool)temp ? 4 : (temp = player.Properties[PlayerProperty.Team]) != null ? ((int)temp == 2 ? 2 : ((int)temp == 1 ? 1 : 3)) : 0) : 0) : 5;
-            var kills = (temp = player.Properties[PlayerProperty.Kills]) != null && temp is int ? (int)temp : 0;
-            var deaths = (temp = player.Properties[PlayerProperty.Deaths]) != null && temp is int ? (int)temp : 0;
-            var maxDmg = (temp = player.Properties[PlayerProperty.MaxDamage]) != null && temp is int ? (int)temp : 0;
-            var totDmg = (temp = player.Properties[PlayerProperty.TotalDamage]) != null && temp is int ? (int)temp : 0;
-            var averangeDmg = totDmg > 0 && kills > 0 ? Convert.ToInt32(Math.Floor((decimal)totDmg / kills)) : 0;
+            string playerName = player.Properties.Name.Trim() == string.Empty ? "Unknown" : player.HexName, humanType;
+            int type;
+            if (FengGameManagerMKII.ignoreList.Contains(player.ID))
+                type = 5;
+            else if (player.Properties.Alive == false)
+                type = 4;
+            else if (player.Properties.IsAHSS == true)
+                type = 2;
+            else if (player.Properties.PlayerType == PlayerType.Titan)
+                type = 3;
+            else
+                type = 1;
+            
 
             switch (type)
             {
-                case 1:
+                case 0:
                     humanType = string.Empty;
                     break;
-                case 2:
+                case 1:
                     humanType = "[<b><color=#C42057>A</color></b>]";
                     break;
-                case 3:
+                case 2:
                     humanType = "[<b><color=#FD5079>T</color></b>]";
                     break;
-                case 4:
+                case 3:
                     humanType = "[<b><color=#FF3A3A>DEAD</color></b>]";
                     break;
-                case 5:
+                case 4:
                     humanType = "[<b><color=#890000>IGNORED</color></b>]";
                     break;
                 default:
@@ -66,15 +71,17 @@ namespace Mod.Interface
             else if (player.Has("RCteam"))
                 mod = "|<b><color=#00FF11>RC</color></b>| ";
 
+            int averangeDmg = player.Properties.Kills > 0 ? (int) Math.Floor((decimal)player.Properties.TotalDamage / player.Properties.Kills) : 0;
+            
             return string.Format(EntryLayout,
                 player.ID, 
                 mod,
                 humanType,
                 playerName,
-                kills,
-                deaths,
-                maxDmg,
-                totDmg,
+                player.Properties.Kills,
+                player.Properties.Deaths,
+                player.Properties.MaxDamage,
+                player.Properties.TotalDamage,
                 averangeDmg,
                 player.name != string.Empty ? " | " + player.name : "",
                 player.IsMasterClient ? "|<b><color=#8DFF00>MC</color></b>| " : ""

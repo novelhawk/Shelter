@@ -26,10 +26,10 @@ public static class PlayerProperty
     public const string BeardTextureId = "beard_texture_id";
     public const string HasCape = "cape";
     public const string BodyTexture = "body_texture";
-    public const string CostumeId = "costumeId";
-    public const string HeroCostumeId = "heroCostumeId";
-    public const string EyeTextureId = "eye_texture_id";
-    public const string GlassTextureId = "glass_texture_id";
+    public const string CostumeID = "costumeId";
+    public const string HeroCostumeID = "heroCostumeId";
+    public const string EyeTextureID = "eye_texture_id";
+    public const string GlassTextureID = "glass_texture_id";
     public const string HairColorR = "hair_color1";
     public const string HairColorG = "hair_color2";
     public const string HairColorB = "hair_color3";

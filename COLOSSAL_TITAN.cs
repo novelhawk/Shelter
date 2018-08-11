@@ -766,9 +766,8 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                 }
                 else
                 {
-                    FengGameManagerMKII.instance.SendKillInfo(false, (string) view.owner.Properties[PlayerProperty.Name], true, "Colossal Titan's neck", speed);
-                    object[] parameters = new object[] { speed };
-                    FengGameManagerMKII.instance.photonView.RPC("netShowDamage", view.owner, parameters);
+                    FengGameManagerMKII.instance.SendKillInfo(false, view.owner.Properties.Name, true, "Colossal Titan's neck", speed);
+                    FengGameManagerMKII.instance.photonView.RPC("netShowDamage", view.owner, speed);
                 }
                 this.healthTime = 0.2f;
             }

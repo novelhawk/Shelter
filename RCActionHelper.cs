@@ -1,4 +1,5 @@
 using System;
+using Mod;
 
 public class RCActionHelper
 {
@@ -9,6 +10,7 @@ public class RCActionHelper
 
     public RCActionHelper(int sentClass, int sentType, object options)
     {
+        return;
         this.helperClass = sentClass;
         this.helperType = sentType;
         this.parameters = options;
@@ -16,11 +18,12 @@ public class RCActionHelper
 
     public void callException(string str)
     {
-        FengGameManagerMKII.instance.chatRoom.AddLine(str);
+        return;
     }
 
     public bool returnBool(object sentObject)
     {
+        return false; // TODO: Dunno what this is for
         object parameters = sentObject;
         if (this.parameters != null)
         {
@@ -65,22 +68,22 @@ public class RCActionHelper
                     switch (this.helperType)
                     {
                         case 0:
-                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.Team]);
+                            return this.nextHelper.returnBool(player.Properties.Team);
 
                         case 1:
-                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.RCTeam]);
+                            return this.nextHelper.returnBool(player.Properties.RCTeam);
 
                         case 2:
-                            return !(bool) player.Properties[PlayerProperty.Dead];
+                            return player.Properties.Alive ?? false;
 
                         case 3:
-                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.IsTitan]);
+                            return this.nextHelper.returnBool(player.Properties.PlayerType == PlayerType.Titan);
 
                         case 4:
-                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.Kills]);
+                            return this.nextHelper.returnBool(player.Properties.Kills);
 
                         case 5:
-                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.Deaths]);
+                            return this.nextHelper.returnBool(player.Properties.Deaths);
 
                         case 6:
                             return this.nextHelper.returnBool(player.Properties[PlayerProperty.MaxDamage]);
@@ -101,7 +104,7 @@ public class RCActionHelper
                             return this.nextHelper.returnBool(player.Properties[PlayerProperty.RCFloat]);
 
                         case 12:
-                            return this.nextHelper.returnBool(player.Properties[PlayerProperty.Name]);
+                            return this.nextHelper.returnBool(player.Properties.Name);
 
                         case 13:
                             return this.nextHelper.returnBool(player.Properties[PlayerProperty.Guild]);
@@ -280,10 +283,10 @@ public class RCActionHelper
                             return this.nextHelper.returnFloat(player.Properties[PlayerProperty.IsTitan]);
 
                         case 4:
-                            return this.nextHelper.returnFloat(player.Properties[PlayerProperty.Kills]);
+                            return this.nextHelper.returnFloat(player.Properties.Kills);
 
                         case 5:
-                            return this.nextHelper.returnFloat(player.Properties[PlayerProperty.Deaths]);
+                            return this.nextHelper.returnFloat(player.Properties.Deaths);
 
                         case 6:
                             return this.nextHelper.returnFloat(player.Properties[PlayerProperty.MaxDamage]);
@@ -304,7 +307,7 @@ public class RCActionHelper
                             return (float) player.Properties[PlayerProperty.RCFloat];
 
                         case 12:
-                            return this.nextHelper.returnFloat(player.Properties[PlayerProperty.Name]);
+                            return this.nextHelper.returnFloat(player.Properties.Name);
 
                         case 13:
                             return this.nextHelper.returnFloat(player.Properties[PlayerProperty.Guild]);
@@ -483,10 +486,10 @@ public class RCActionHelper
                             return (int) player.Properties[PlayerProperty.IsTitan];
 
                         case 4:
-                            return (int) player.Properties[PlayerProperty.Kills];
+                            return player.Properties.Kills;
 
                         case 5:
-                            return (int) player.Properties[PlayerProperty.Deaths];
+                            return player.Properties.Deaths;
 
                         case 6:
                             return (int) player.Properties[PlayerProperty.MaxDamage];
@@ -507,7 +510,7 @@ public class RCActionHelper
                             return this.nextHelper.returnInt(player.Properties[PlayerProperty.RCFloat]);
 
                         case 12:
-                            return this.nextHelper.returnInt(player.Properties[PlayerProperty.Name]);
+                            return this.nextHelper.returnInt(player.Properties.Name);
 
                         case 13:
                             return this.nextHelper.returnInt(player.Properties[PlayerProperty.Guild]);
@@ -707,10 +710,10 @@ public class RCActionHelper
                             return this.nextHelper.returnString(player.Properties[PlayerProperty.IsTitan]);
 
                         case 4:
-                            return this.nextHelper.returnString(player.Properties[PlayerProperty.Kills]);
+                            return this.nextHelper.returnString(player.Properties.Kills);
 
                         case 5:
-                            return this.nextHelper.returnString(player.Properties[PlayerProperty.Deaths]);
+                            return this.nextHelper.returnString(player.Properties.Deaths);
 
                         case 6:
                             return this.nextHelper.returnString(player.Properties[PlayerProperty.MaxDamage]);
@@ -731,7 +734,7 @@ public class RCActionHelper
                             return this.nextHelper.returnString(player.Properties[PlayerProperty.RCFloat]);
 
                         case 12:
-                            return (string) player.Properties[PlayerProperty.Name];
+                            return player.Properties.Name;
 
                         case 13:
                             return (string) player.Properties[PlayerProperty.Guild];

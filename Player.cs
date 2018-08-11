@@ -56,10 +56,9 @@ public class Player
 
     public static bool TryParse(int id, out Player player)
     {
-        player = Find(id);
-        if (player == null)
-            return false;
-        return true;
+        if ((player = Find(id)) != null)
+            return true;
+        return false;
     }
 
     public Player Get(int id)
@@ -67,46 +66,29 @@ public class Player
         return Find(id);
     }
 
-    public override int GetHashCode()
-    {
-        return this.ID;
-    }
-
-    public Player GetNext()
-    {
-        return this.GetNextFor(this.ID);
-    }
-
-    public Player GetNextFor(Player currentPlayer)
-    {
-        if (currentPlayer == null)
-        {
-            return null;
-        }
-        return this.GetNextFor(currentPlayer.ID);
-    }
-
-    public Player GetNextFor(int currentPlayerId)
+    public override int GetHashCode() => ID;
+    
+    public Player GetNext() => GetNextFor(this.ID);
+    private static Player GetNextFor(int currentPlayerId)
     {
         if (PhotonNetwork.networkingPeer == null || PhotonNetwork.networkingPeer.mActors == null || PhotonNetwork.networkingPeer.mActors.Count < 2)
-        {
             return null;
-        }
+        
         Dictionary<int, Player> mActors = PhotonNetwork.networkingPeer.mActors;
-        int num = 2147483647;
-        int num2 = currentPlayerId;
-        foreach (int num3 in mActors.Keys)
+        int returnId = 2147483647;
+        int playerId = currentPlayerId;
+        foreach (int id in mActors.Keys)
         {
-            if (num3 < num2)
+            if (id < playerId)
             {
-                num2 = num3;
+                playerId = id;
             }
-            else if (num3 > currentPlayerId && num3 < num)
+            else if (id > currentPlayerId && id < returnId)
             {
-                num = num3;
+                returnId = id;
             }
         }
-        return num == 2147483647 ? mActors[num2] : mActors[num];
+        return returnId == 2147483647 ? mActors[playerId] : mActors[returnId];
     }
 
     public bool Has(string prop)
@@ -124,7 +106,7 @@ public class Player
             }
             this.Properties.MergeStringKeys(properties);
             this.Properties.StripKeysWithNullValues();
-            _hexName = Properties[PlayerProperty.Name].ToString().HexColor();
+            _hexName = Properties.Name.HexColor();
         }
     }
 
@@ -153,18 +135,13 @@ public class Player
             }
             object[] parameters = new object[] { this, propertiesToSet };
             NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnPhotonPlayerPropertiesChanged, parameters);
-            _hexName = Properties[PlayerProperty.Name].ToString().HexColor();
+            _hexName = Properties.Name.HexColor();
         }
     }
 
     public override string ToString() => $"{(IsMasterClient ? "[M] " : string.Empty)}{HexName} ({ID})";
 
-    public string ToStringFull()
-    {
-        return string.Format("#{0:00} '{1}' {2}", this.ID, this.name, this.Properties.ToStringFull());
-    }
-
-    public Hashtable allProperties
+    public Hashtable AllProperties
     {
         get
         {
@@ -175,24 +152,13 @@ public class Player
         }
     }
 
-    public int ID
-    {
-        get
-        {
-            return this.actorID;
-        }
-    }
-
+    public int ID => this.actorID;
     public bool IsMasterClient => Equals(PhotonNetwork.networkingPeer.mMasterClient, this);
-
     public static Player Self => PhotonNetwork.networkingPeer?.mLocalActor;
 
-    public string name
+    public string name // Friend name? 
     {
-        get
-        {
-            return this.nameField;
-        }
+        get => this.nameField;
         set
         {
             if (!this.isLocal)

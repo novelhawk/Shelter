@@ -64,8 +64,8 @@ public class PhotonStatsGui : MonoBehaviour
         string str5 = string.Empty;
         if (this.trafficStatsOn)
         {
-            str4 = "Incoming: " + PhotonNetwork.networkingPeer.TrafficStatsIncoming.ToString();
-            str5 = "Outgoing: " + PhotonNetwork.networkingPeer.TrafficStatsOutgoing.ToString();
+            str4 = "Incoming: " + PhotonNetwork.networkingPeer.TrafficStatsIncoming;
+            str5 = "Outgoing: " + PhotonNetwork.networkingPeer.TrafficStatsOutgoing;
             GUILayout.Label(str4, new GUILayoutOption[0]);
             GUILayout.Label(str5, new GUILayoutOption[0]);
         }

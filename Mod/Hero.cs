@@ -3,7 +3,7 @@
     public struct Hero
     {
         public string Name { get; set; }
-        public SEX Sex { get; set; }
+        public Sex Sex { get; set; }
         public UNIFORM_TYPE Uniform { get; set; }
         public string PartChestObjectMesh { get; set; }
         public string PartChestObjectTexture { get; set; }
@@ -15,7 +15,7 @@
         public int GlassTextureID { get; set; }
         public int SkinColor { get; set; }
         public int HairColor { get; set; }
-        public DIVISION Division { get; set; }
+        public Division Division { get; set; }
         public int CostumeId { get; set; }
         public string Skill { get; set; }
         public int Speed { get; set; }

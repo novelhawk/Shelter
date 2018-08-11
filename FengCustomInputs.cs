@@ -482,7 +482,7 @@ public class FengCustomInputs : MonoBehaviour
         {
             str = (int) this.default_inputKeys[i] + "*" + str;
             str2 = str2 + "#*";
-            str3 = this.default_inputKeys[i].ToString() + "*" + str3;
+            str3 = this.default_inputKeys[i] + "*" + str3;
             PlayerPrefs.SetString("KeyCodes", str);
             PlayerPrefs.SetString("Joystick_input", str2);
             PlayerPrefs.SetString("Names_input", str3);

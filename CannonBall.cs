@@ -29,7 +29,7 @@ public class CannonBall : Photon.MonoBehaviour
         }
     }
 
-    public void destroyMe()
+    private void destroyMe()
     {
         if (!this.disabled)
         {
@@ -46,21 +46,19 @@ public class CannonBall : Photon.MonoBehaviour
                     {
                         GameObject gameObject = hero.gameObject;
                         Player owner = gameObject.GetPhotonView().owner;
-                        if (RCSettings.teamMode > 0 && Player.Self.Properties[PlayerProperty.RCTeam] != null && owner.Properties[PlayerProperty.RCTeam] != null)
+                        if (RCSettings.teamMode > 0)
                         {
-                            int num2 = RCextensions.returnIntFromObject(Player.Self.Properties[PlayerProperty.RCTeam]);
-                            int num3 = RCextensions.returnIntFromObject(owner.Properties[PlayerProperty.RCTeam]);
-                            if (num2 == 0 || num2 != num3)
+                            if (Player.Self.Properties.RCTeam == 0 || Player.Self.Properties.RCTeam != owner.Properties.RCTeam)
                             {
                                 gameObject.GetComponent<HERO>().markDie();
-                                gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(Player.Self.Properties[PlayerProperty.Name]) + " " });
+                                gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
                                 FengGameManagerMKII.instance.PlayerKillInfoUpdate(Player.Self, 0);
                             }
                         }
                         else
                         {
                             gameObject.GetComponent<HERO>().markDie();
-                            gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(Player.Self.Properties[PlayerProperty.Name]) + " " });
+                            gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
                             FengGameManagerMKII.instance.PlayerKillInfoUpdate(Player.Self, 0);
                         }
                     }
@@ -68,11 +66,11 @@ public class CannonBall : Photon.MonoBehaviour
             }
             if (this.myTitanTriggers != null)
             {
-                for (int i = 0; i < this.myTitanTriggers.Count; i++)
+                foreach (var triggers in this.myTitanTriggers)
                 {
-                    if (this.myTitanTriggers[i] != null)
+                    if (triggers != null)
                     {
-                        this.myTitanTriggers[i].isCollide = false;
+                        triggers.isCollide = false;
                     }
                 }
             }

@@ -11,6 +11,7 @@ public class RCEvent
 
     public RCEvent(RCCondition sentCondition, List<RCAction> sentTrueActions, int sentClass, int sentType)
     {
+        return;
         this.condition = sentCondition;
         this.trueActions = sentTrueActions;
         this.eventClass = sentClass;
@@ -19,6 +20,7 @@ public class RCEvent
 
     public void checkEvent()
     {
+        return;
         int num2;
         switch (this.eventClass)
         {
@@ -32,10 +34,7 @@ public class RCEvent
             case 1:
                 if (!this.condition.checkCondition())
                 {
-                    if (this.elseAction != null)
-                    {
-                        this.elseAction.doAction();
-                    }
+                    elseAction?.doAction();
                     break;
                 }
                 for (num2 = 0; num2 < this.trueActions.Count; num2++)
@@ -99,21 +98,8 @@ public class RCEvent
 
     public void setElse(RCAction sentElse)
     {
+        return;
         this.elseAction = sentElse;
-    }
-
-    public enum foreachType
-    {
-        titan,
-        player
-    }
-
-    public enum loopType
-    {
-        noLoop,
-        ifLoop,
-        foreachLoop,
-        whileLoop
     }
 }
 

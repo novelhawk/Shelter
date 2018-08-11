@@ -104,7 +104,7 @@ public class InstantiateTracker
                 return false;
 
             case "titan_eren":
-                if (!(RCextensions.returnStringFromObject(player.Properties[PlayerProperty.Character]).ToUpper() != "EREN"))
+                if (!(player.Properties.Character.ToUpper() != "EREN"))
                 {
                     if (RCSettings.banEren > 0)
                     {
@@ -128,7 +128,7 @@ public class InstantiateTracker
                 return this.Instantiated(player, GameResource.effect);
 
             case "hitmeatbig":
-                if (!(RCextensions.returnStringFromObject(player.Properties[PlayerProperty.Character]).ToUpper() != "EREN"))
+                if (!(player.Properties.Character.ToUpper() != "EREN"))
                 {
                     if (RCSettings.banEren > 0)
                     {
@@ -260,7 +260,7 @@ public class InstantiateTracker
                 global::Player player = owner;
                 if (player != null && PhotonNetwork.isMasterClient)
                 {
-                    FengGameManagerMKII.instance.KickPlayerRC(player, true, "spamming instantiate (" + type.ToString() + ").");
+                    FengGameManagerMKII.instance.KickPlayerRC(player, true, "spamming instantiate (" + type + ").");
                 }
                 RCextensions.RemoveAt<Player>(ref this.players, num);
                 return false;

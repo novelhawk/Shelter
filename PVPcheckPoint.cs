@@ -1,4 +1,5 @@
 using System.Collections;
+using Mod.Interface;
 using UnityEngine;
 
 public class PVPcheckPoint : Photon.MonoBehaviour
@@ -76,7 +77,7 @@ public class PVPcheckPoint : Photon.MonoBehaviour
                     if (FengGameManagerMKII.instance.checkpoint != gameObject)
                     {
                         FengGameManagerMKII.instance.checkpoint = gameObject;
-                        GameObject.Find("Chatroom").GetComponent<InRoomChat>().AddLine("<color=#A8FF24>Respawn point changed to point" + this.id + "</color>");
+                        Chat.System("<color=#A8FF24>Respawn point changed to point" + this.id + "</color>");
                     }
                     break;
                 }
@@ -92,7 +93,7 @@ public class PVPcheckPoint : Photon.MonoBehaviour
                     if (FengGameManagerMKII.instance.checkpoint != gameObject)
                     {
                         FengGameManagerMKII.instance.checkpoint = gameObject;
-                        GameObject.Find("Chatroom").GetComponent<InRoomChat>().AddLine("<color=#A8FF24>Respawn point changed to point" + this.id + "</color>");
+                        Chat.System("<color=#A8FF24>Respawn point changed to point" + this.id + "</color>");
                     }
                     break;
                 }

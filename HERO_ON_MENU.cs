@@ -31,7 +31,7 @@ public class HERO_ON_MENU : MonoBehaviour
         {
             this.cameraOffset = GameObject.Find("MainCamera_Mono").transform.position - this.cameraPref.position;
         }
-        if (component.myCostume.sex == SEX.FEMALE)
+        if (component.myCostume.sex == Sex.Female)
         {
             animation.Play("stand");
             animation["stand"].normalizedTime = Random.Range(0f, 1f);

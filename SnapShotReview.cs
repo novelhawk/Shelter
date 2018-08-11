@@ -19,7 +19,7 @@ public class SnapShotReview : MonoBehaviour
         }
         else
         {
-            this.page.text = (SnapShotSaves.getCurrentIndex() + 1).ToString() + "/" + SnapShotSaves.getLength().ToString();
+            this.page.text = (SnapShotSaves.getCurrentIndex() + 1) + "/" + SnapShotSaves.getLength();
         }
         if (SnapShotSaves.getCurrentDMG() > 0)
         {

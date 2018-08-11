@@ -85,7 +85,7 @@ namespace ExitGames.Client.Photon
             {
                 if (ReportDebugOfLevel(DebugLevel.ERROR))
                 {
-                    Listener.DebugReturn(DebugLevel.ERROR, "Connect() failed: " + exception.ToString());
+                    Listener.DebugReturn(DebugLevel.ERROR, "Connect() failed: " + exception);
                 }
                 HandleException(StatusCode.SecurityExceptionOnConnect);
                 return;
@@ -94,7 +94,7 @@ namespace ExitGames.Client.Photon
             {
                 if (ReportDebugOfLevel(DebugLevel.ERROR))
                 {
-                    Listener.DebugReturn(DebugLevel.ERROR, "Connect() failed: " + exception2.ToString());
+                    Listener.DebugReturn(DebugLevel.ERROR, "Connect() failed: " + exception2);
                 }
                 HandleException(StatusCode.ExceptionOnConnect);
                 return;

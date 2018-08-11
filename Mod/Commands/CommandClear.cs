@@ -13,7 +13,7 @@ namespace Mod.Commands
                 Chat.Clear();
             for (int i = 0; i < 30; i++)
                 Chat.SendMessage(string.Empty, PhotonTargets.Others);
-            Chat.SendMessage($"<color={Chat.SystemColor}>Chat has been cleaned up by {Player.Self.HexName}</color>");
+            Chat.System($"Chat has been cleaned up by {Player.Self.HexName}");
         }
     }
 }

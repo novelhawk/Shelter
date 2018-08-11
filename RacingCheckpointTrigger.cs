@@ -1,3 +1,4 @@
+using Mod.Interface;
 using UnityEngine;
 
 public class RacingCheckpointTrigger : MonoBehaviour
@@ -10,7 +11,7 @@ public class RacingCheckpointTrigger : MonoBehaviour
             gameObject = gameObject.transform.root.gameObject;
             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && gameObject.GetPhotonView() != null && gameObject.GetPhotonView().isMine && gameObject.GetComponent<HERO>() != null)
             {
-                FengGameManagerMKII.instance.chatRoom.AddLine("<color=#00ff00>Checkpoint set.</color>");
+                Chat.System("<color=#00ff00>Checkpoint set.</color>");
                 gameObject.GetComponent<HERO>().fillGas();
                 FengGameManagerMKII.instance.racingSpawnPoint = this.gameObject.transform.position;
                 FengGameManagerMKII.instance.racingSpawnPointSet = true;
