@@ -16,15 +16,15 @@ namespace Mod.Interface
                 GUI.Label(rect.OY(15), Entry(player));
         }
 
-        private static string Entry(PhotonPlayer player)
+        private static string Entry(Player player)
         {
             object temp;
             string playerName = player.HexName.Trim() == string.Empty ? "Unknown" : (player.HexName ?? "Unknown"), humanType;
-            var type = !FengGameManagerMKII.ignoreList.Contains(player.ID) ? ((temp = player.CustomProperties[PhotonPlayerProperty.dead]) != null ? ((bool)temp ? 4 : (temp = player.CustomProperties[PhotonPlayerProperty.team]) != null ? ((int)temp == 2 ? 2 : ((int)temp == 1 ? 1 : 3)) : 0) : 0) : 5;
-            var kills = (temp = player.CustomProperties[PhotonPlayerProperty.kills]) != null && temp is int ? (int)temp : 0;
-            var deaths = (temp = player.CustomProperties[PhotonPlayerProperty.deaths]) != null && temp is int ? (int)temp : 0;
-            var maxDmg = (temp = player.CustomProperties[PhotonPlayerProperty.max_dmg]) != null && temp is int ? (int)temp : 0;
-            var totDmg = (temp = player.CustomProperties[PhotonPlayerProperty.total_dmg]) != null && temp is int ? (int)temp : 0;
+            var type = !FengGameManagerMKII.ignoreList.Contains(player.ID) ? ((temp = player.Properties[PhotonPlayerProperty.dead]) != null ? ((bool)temp ? 4 : (temp = player.Properties[PhotonPlayerProperty.team]) != null ? ((int)temp == 2 ? 2 : ((int)temp == 1 ? 1 : 3)) : 0) : 0) : 5;
+            var kills = (temp = player.Properties[PhotonPlayerProperty.kills]) != null && temp is int ? (int)temp : 0;
+            var deaths = (temp = player.Properties[PhotonPlayerProperty.deaths]) != null && temp is int ? (int)temp : 0;
+            var maxDmg = (temp = player.Properties[PhotonPlayerProperty.max_dmg]) != null && temp is int ? (int)temp : 0;
+            var totDmg = (temp = player.Properties[PhotonPlayerProperty.total_dmg]) != null && temp is int ? (int)temp : 0;
             var averangeDmg = totDmg > 0 && kills > 0 ? Convert.ToInt32(Math.Floor((decimal)totDmg / kills)) : 0;
 
             switch (type)

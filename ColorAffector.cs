@@ -29,7 +29,7 @@ public class ColorAffector : Affector
         this.ElapsedTime += Time.deltaTime;
         if (this.IsNodeLife)
         {
-            this.GradualLen = base.Node.GetLifeTime();
+            this.GradualLen = Node.GetLifeTime();
         }
         if (this.GradualLen > 0f)
         {
@@ -64,7 +64,7 @@ public class ColorAffector : Affector
                 int num3 = index + 1;
                 float num4 = this.GradualLen / (this.ColorArr.Length - 1);
                 float t = (this.ElapsedTime - num4 * index) / num4;
-                base.Node.Color = Color.Lerp(this.ColorArr[index], this.ColorArr[num3], t);
+                Node.Color = Color.Lerp(this.ColorArr[index], this.ColorArr[num3], t);
             }
         }
     }

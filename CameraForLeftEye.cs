@@ -14,7 +14,7 @@ public class CameraForLeftEye : MonoBehaviour
 
     private void Start()
     {
-        this.camera = base.GetComponent<Camera>();
+        this.camera = GetComponent<Camera>();
         this.cameraRightEye = this.rightEye.GetComponent<Camera>();
     }
 }

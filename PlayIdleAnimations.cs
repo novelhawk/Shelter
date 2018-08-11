@@ -14,11 +14,11 @@ public class PlayIdleAnimations : MonoBehaviour
 
     private void Start()
     {
-        this.mAnim = base.GetComponentInChildren<Animation>();
+        this.mAnim = GetComponentInChildren<Animation>();
         if (this.mAnim == null)
         {
-            Debug.LogWarning(NGUITools.GetHierarchy(base.gameObject) + " has no Animation component");
-            UnityEngine.Object.Destroy(this);
+            Debug.LogWarning(NGUITools.GetHierarchy(gameObject) + " has no Animation component");
+            Destroy(this);
         }
         else
         {
@@ -50,7 +50,7 @@ public class PlayIdleAnimations : MonoBehaviour
             }
             if (this.mBreaks.Count == 0)
             {
-                UnityEngine.Object.Destroy(this);
+                Destroy(this);
             }
         }
     }

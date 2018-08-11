@@ -25,7 +25,7 @@ public class SupportLogging : MonoBehaviour
 
     public void OnApplicationQuit()
     {
-        base.CancelInvoke();
+        CancelInvoke();
     }
 
     public void OnConnectedToPhoton()
@@ -68,7 +68,7 @@ public class SupportLogging : MonoBehaviour
     {
         if (this.LogTrafficStats)
         {
-            base.InvokeRepeating("LogStats", 10f, 10f);
+            InvokeRepeating("LogStats", 10f, 10f);
         }
     }
 }

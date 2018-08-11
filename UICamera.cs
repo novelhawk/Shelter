@@ -679,7 +679,7 @@ public class UICamera : MonoBehaviour
     private void Start()
     {
         mList.Add(this);
-        mList.Sort(new Comparison<UICamera>(UICamera.CompareFunc));
+        mList.Sort(new Comparison<UICamera>(CompareFunc));
     }
 
     private void Update()
@@ -750,7 +750,7 @@ public class UICamera : MonoBehaviour
         {
             if (this.mCam == null)
             {
-                this.mCam = base.camera;
+                this.mCam = camera;
             }
             return this.mCam;
         }
@@ -903,7 +903,7 @@ public class UICamera : MonoBehaviour
 
     public class MouseOrTouch
     {
-        public UICamera.ClickNotification clickNotification = UICamera.ClickNotification.Always;
+        public ClickNotification clickNotification = ClickNotification.Always;
         public float clickTime;
         public GameObject current;
         public Vector2 delta;

@@ -12,7 +12,7 @@ public class UIButtonKeys : MonoBehaviour
 
     private void OnClick()
     {
-        if (base.enabled && this.selectOnClick != null)
+        if (enabled && this.selectOnClick != null)
         {
             UICamera.selectedObject = this.selectOnClick.gameObject;
         }
@@ -20,7 +20,7 @@ public class UIButtonKeys : MonoBehaviour
 
     private void OnKey(KeyCode key)
     {
-        if (base.enabled && NGUITools.GetActive(base.gameObject))
+        if (enabled && NGUITools.GetActive(gameObject))
         {
             switch (key)
             {
@@ -97,7 +97,7 @@ public class UIButtonKeys : MonoBehaviour
     {
         if (this.startsSelected && (UICamera.selectedObject == null || !NGUITools.GetActive(UICamera.selectedObject)))
         {
-            UICamera.selectedObject = base.gameObject;
+            UICamera.selectedObject = gameObject;
         }
     }
 }

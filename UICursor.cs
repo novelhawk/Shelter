@@ -38,14 +38,14 @@ public class UICursor : MonoBehaviour
 
     private void Start()
     {
-        this.mTrans = base.transform;
-        this.mSprite = base.GetComponentInChildren<UISprite>();
+        this.mTrans = transform;
+        this.mSprite = GetComponentInChildren<UISprite>();
         this.mAtlas = this.mSprite.atlas;
         this.mSpriteName = this.mSprite.spriteName;
         this.mSprite.depth = 100;
         if (this.uiCamera == null)
         {
-            this.uiCamera = NGUITools.FindCameraForLayer(base.gameObject.layer);
+            this.uiCamera = NGUITools.FindCameraForLayer(gameObject.layer);
         }
     }
 

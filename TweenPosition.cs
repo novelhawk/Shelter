@@ -31,7 +31,7 @@ public class TweenPosition : UITweener
         {
             if (this.mTrans == null)
             {
-                this.mTrans = base.transform;
+                this.mTrans = transform;
             }
             return this.mTrans;
         }

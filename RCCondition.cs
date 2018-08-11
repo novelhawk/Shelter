@@ -146,7 +146,7 @@ public class RCCondition
         return false;
     }
 
-    private bool playerCompare(PhotonPlayer basePlayer, PhotonPlayer comparePlayer)
+    private bool playerCompare(Player basePlayer, Player comparePlayer)
     {
         int operand = this.operand;
         if (operand == 2)

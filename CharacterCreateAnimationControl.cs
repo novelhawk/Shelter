@@ -14,7 +14,7 @@ public class CharacterCreateAnimationControl : MonoBehaviour
     private void play(string id)
     {
         this.currentAnimation = id;
-        base.animation.Play(id);
+        animation.Play(id);
     }
 
     public void playAttack(string id)
@@ -71,12 +71,12 @@ public class CharacterCreateAnimationControl : MonoBehaviour
                 }
             }
         }
-        base.animation.Play(this.currentAnimation);
+        animation.Play(this.currentAnimation);
     }
 
     private void Start()
     {
-        this.setup = base.gameObject.GetComponent<HERO_SETUP>();
+        this.setup = gameObject.GetComponent<HERO_SETUP>();
         this.currentAnimation = "stand_levi";
         this.play(this.currentAnimation);
     }
@@ -91,7 +91,7 @@ public class CharacterCreateAnimationControl : MonoBehaviour
         {
             this.currentAnimation = "stand_levi";
         }
-        base.animation.CrossFade(this.currentAnimation, 0.1f);
+        animation.CrossFade(this.currentAnimation, 0.1f);
         this.timeElapsed = 0f;
     }
 
@@ -99,7 +99,7 @@ public class CharacterCreateAnimationControl : MonoBehaviour
     {
         if (this.currentAnimation != "stand" && this.currentAnimation != "stand_levi")
         {
-            if (base.animation[this.currentAnimation].normalizedTime >= 1f)
+            if (animation[this.currentAnimation].normalizedTime >= 1f)
             {
                 if (this.currentAnimation == "attack3_1")
                 {
@@ -121,11 +121,11 @@ public class CharacterCreateAnimationControl : MonoBehaviour
             if (this.timeElapsed > this.interval)
             {
                 this.timeElapsed = 0f;
-                if (UnityEngine.Random.Range(1, 1000) < 350)
+                if (Random.Range(1, 1000) < 350)
                 {
                     this.play("salute");
                 }
-                else if (UnityEngine.Random.Range(1, 1000) < 350)
+                else if (Random.Range(1, 1000) < 350)
                 {
                     this.play("supply");
                 }

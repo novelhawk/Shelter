@@ -105,12 +105,12 @@ public class UIPopupList : MonoBehaviour
             this.handleEvents = true;
             if (this.mPanel == null)
             {
-                this.mPanel = UIPanel.Find(base.transform, true);
+                this.mPanel = UIPanel.Find(this.transform, true);
             }
-            Transform child = base.transform;
+            Transform child = this.transform;
             Bounds bounds = NGUIMath.CalculateRelativeWidgetBounds(child.parent, child);
             this.mChild = new GameObject("Drop-down List");
-            this.mChild.layer = base.gameObject.layer;
+            this.mChild.layer = gameObject.layer;
             Transform transform = this.mChild.transform;
             transform.parent = child.parent;
             transform.localPosition = bounds.min;
@@ -187,7 +187,7 @@ public class UIPopupList : MonoBehaviour
                 bool placeAbove = this.position == Position.Above;
                 if (this.position == Position.Auto)
                 {
-                    UICamera camera = UICamera.FindCameraForLayer(base.gameObject.layer);
+                    UICamera camera = UICamera.FindCameraForLayer(gameObject.layer);
                     if (camera != null)
                     {
                         placeAbove = camera.cachedCamera.WorldToViewportPoint(child.position).y < 0.5f;
@@ -238,7 +238,7 @@ public class UIPopupList : MonoBehaviour
 
     private void OnKey(KeyCode key)
     {
-        if (base.enabled && NGUITools.GetActive(base.gameObject) && this.handleEvents)
+        if (enabled && NGUITools.GetActive(gameObject) && this.handleEvents)
         {
             int index = this.mLabelList.IndexOf(this.mHighlightedLabel);
             if (key == KeyCode.UpArrow)
@@ -297,11 +297,11 @@ public class UIPopupList : MonoBehaviour
                     colliderArray[num3].enabled = false;
                     num3++;
                 }
-                UnityEngine.Object.Destroy(this.mChild, 0.15f);
+                Destroy(this.mChild, 0.15f);
             }
             else
             {
-                UnityEngine.Object.Destroy(this.mChild);
+                Destroy(this.mChild);
             }
             this.mBackground = null;
             this.mHighlight = null;
@@ -314,7 +314,7 @@ public class UIPopupList : MonoBehaviour
         this.Highlight(lbl, instant);
         UIEventListener component = lbl.gameObject.GetComponent<UIEventListener>();
         this.selection = component.parameter as string;
-        UIButtonSound[] components = base.GetComponents<UIButtonSound>();
+        UIButtonSound[] components = GetComponents<UIButtonSound>();
         int index = 0;
         int length = components.Length;
         while (index < length)
@@ -352,12 +352,12 @@ public class UIPopupList : MonoBehaviour
     {
         get
         {
-            UIButtonKeys component = base.GetComponent<UIButtonKeys>();
+            UIButtonKeys component = GetComponent<UIButtonKeys>();
             return component == null || !component.enabled;
         }
         set
         {
-            UIButtonKeys component = base.GetComponent<UIButtonKeys>();
+            UIButtonKeys component = GetComponent<UIButtonKeys>();
             if (component != null)
             {
                 component.enabled = !value;

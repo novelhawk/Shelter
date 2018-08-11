@@ -31,7 +31,7 @@ public class UITable : MonoBehaviour
     {
         if (this.mStarted)
         {
-            Transform target = base.transform;
+            Transform target = transform;
             this.mChildren.Clear();
             List<Transform> children = this.children;
             if (children.Count > 0)
@@ -134,8 +134,8 @@ public class UITable : MonoBehaviour
         this.mStarted = true;
         if (this.keepWithinPanel)
         {
-            this.mPanel = NGUITools.FindInParents<UIPanel>(base.gameObject);
-            this.mDrag = NGUITools.FindInParents<UIDraggablePanel>(base.gameObject);
+            this.mPanel = NGUITools.FindInParents<UIPanel>(gameObject);
+            this.mDrag = NGUITools.FindInParents<UIDraggablePanel>(gameObject);
         }
         this.Reposition();
     }
@@ -146,7 +146,7 @@ public class UITable : MonoBehaviour
         {
             if (this.mChildren.Count == 0)
             {
-                Transform transform = base.transform;
+                Transform transform = this.transform;
                 this.mChildren.Clear();
                 for (int i = 0; i < transform.childCount; i++)
                 {
@@ -158,7 +158,7 @@ public class UITable : MonoBehaviour
                 }
                 if (this.sorted)
                 {
-                    this.mChildren.Sort(new Comparison<Transform>(UITable.SortByName));
+                    this.mChildren.Sort(new Comparison<Transform>(SortByName));
                 }
             }
             return this.mChildren;

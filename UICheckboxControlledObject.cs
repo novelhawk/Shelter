@@ -21,7 +21,7 @@ public class UICheckboxControlledObject : MonoBehaviour
 
     private void OnEnable()
     {
-        UICheckbox component = base.GetComponent<UICheckbox>();
+        UICheckbox component = GetComponent<UICheckbox>();
         if (component != null)
         {
             this.OnActivate(component.isChecked);

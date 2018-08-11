@@ -14,12 +14,12 @@ public class InvAttachmentPoint : MonoBehaviour
             this.mPrefab = prefab;
             if (this.mChild != null)
             {
-                Object.Destroy(this.mChild);
+                Destroy(this.mChild);
             }
             if (this.mPrefab != null)
             {
-                Transform transform = base.transform;
-                this.mChild = Object.Instantiate(this.mPrefab, transform.position, transform.rotation) as GameObject;
+                Transform transform = this.transform;
+                this.mChild = Instantiate(this.mPrefab, transform.position, transform.rotation) as GameObject;
                 Transform transform2 = this.mChild.transform;
                 transform2.parent = transform;
                 transform2.localPosition = Vector3.zero;

@@ -5,7 +5,7 @@ using UnityEngine;
 public class PickupItem : Photon.MonoBehaviour, IPunObservable
 {
     public static HashSet<PickupItem> DisabledPickupItems = new HashSet<PickupItem>();
-    public UnityEngine.MonoBehaviour OnPickedUpCall;
+    public MonoBehaviour OnPickedUpCall;
     public bool PickupIsMine;
     public bool PickupOnTrigger;
     public float SecondsBeforeRespawn = 2f;
@@ -16,7 +16,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
     {
         if (this.PickupIsMine)
         {
-            base.photonView.RPC("PunRespawn", PhotonTargets.AllViaServer, new object[0]);
+            photonView.RPC("PunRespawn", PhotonTargets.AllViaServer, new object[0]);
         }
     }
 
@@ -25,7 +25,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
         if (this.PickupIsMine)
         {
             object[] parameters = new object[] { newPosition };
-            base.photonView.RPC("PunRespawn", PhotonTargets.AllViaServer, parameters);
+            photonView.RPC("PunRespawn", PhotonTargets.AllViaServer, parameters);
         }
     }
 
@@ -33,12 +33,12 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
     {
         if (stream.isWriting && this.SecondsBeforeRespawn <= 0f)
         {
-            stream.SendNext(base.gameObject.transform.position);
+            stream.SendNext(gameObject.transform.position);
         }
         else
         {
             Vector3 vector = (Vector3) stream.ReceiveNext();
-            base.gameObject.transform.position = vector;
+            gameObject.transform.position = vector;
         }
     }
 
@@ -53,13 +53,13 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
 
     internal void PickedUp(float timeUntilRespawn)
     {
-        base.gameObject.SetActive(false);
+        gameObject.SetActive(false);
         DisabledPickupItems.Add(this);
         this.TimeOfRespawn = 0.0;
         if (timeUntilRespawn > 0f)
         {
             this.TimeOfRespawn = PhotonNetwork.time + timeUntilRespawn;
-            base.Invoke("PunRespawn", timeUntilRespawn);
+            Invoke("PunRespawn", timeUntilRespawn);
         }
     }
 
@@ -68,7 +68,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
         if (!this.SentPickup)
         {
             this.SentPickup = true;
-            base.photonView.RPC("PunPickup", PhotonTargets.AllViaServer, new object[0]);
+            photonView.RPC("PunPickup", PhotonTargets.AllViaServer, new object[0]);
         }
     }
 
@@ -79,9 +79,9 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
         {
             this.SentPickup = false;
         }
-        if (!base.gameObject.GetActive())
+        if (!gameObject.GetActive())
         {
-            Debug.Log(string.Concat(new object[] { "Ignored PU RPC, cause item is inactive. ", base.gameObject, " SecondsBeforeRespawn: ", this.SecondsBeforeRespawn, " TimeOfRespawn: ", this.TimeOfRespawn, " respawn in future: ", this.TimeOfRespawn > PhotonNetwork.time }));
+            Debug.Log(string.Concat(new object[] { "Ignored PU RPC, cause item is inactive. ", gameObject, " SecondsBeforeRespawn: ", this.SecondsBeforeRespawn, " TimeOfRespawn: ", this.TimeOfRespawn, " respawn in future: ", this.TimeOfRespawn > PhotonNetwork.time }));
         }
         else
         {
@@ -112,9 +112,9 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
         DisabledPickupItems.Remove(this);
         this.TimeOfRespawn = 0.0;
         this.PickupIsMine = false;
-        if (base.gameObject != null)
+        if (gameObject != null)
         {
-            base.gameObject.SetActive(true);
+            gameObject.SetActive(true);
         }
     }
 
@@ -123,14 +123,14 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
     {
         Debug.Log("PunRespawn with Position.");
         this.PunRespawn();
-        base.gameObject.transform.position = pos;
+        gameObject.transform.position = pos;
     }
 
     public int ViewID
     {
         get
         {
-            return base.photonView.viewID;
+            return photonView.viewID;
         }
     }
 }

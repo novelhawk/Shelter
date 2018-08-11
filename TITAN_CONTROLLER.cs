@@ -34,7 +34,7 @@ public class TITAN_CONTROLLER : MonoBehaviour
         this.currentCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
         {
-            base.enabled = false;
+            enabled = false;
         }
     }
 

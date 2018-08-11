@@ -21,33 +21,33 @@ public class PingMonoEditor : PhotonPing
 
     public override bool Done()
     {
-        if (!base.GotResult && this.sock != null)
+        if (!GotResult && this.sock != null)
         {
             if (this.sock.Available <= 0)
             {
                 return false;
             }
-            int num = this.sock.Receive(base.PingBytes, SocketFlags.None);
-            if (base.PingBytes[base.PingBytes.Length - 1] != base.PingId || num != base.PingLength)
+            int num = this.sock.Receive(PingBytes, SocketFlags.None);
+            if (PingBytes[PingBytes.Length - 1] != PingId || num != PingLength)
             {
                 Debug.Log("ReplyMatch is false! ");
             }
-            base.Successful = num == base.PingBytes.Length && base.PingBytes[base.PingBytes.Length - 1] == base.PingId;
-            base.GotResult = true;
+            Successful = num == PingBytes.Length && PingBytes[PingBytes.Length - 1] == PingId;
+            GotResult = true;
         }
         return true;
     }
 
     public override bool StartPing(string ip)
     {
-        base.Init();
+        Init();
         try
         {
             this.sock.ReceiveTimeout = 5000;
             this.sock.Connect(ip, 5055);
-            base.PingBytes[base.PingBytes.Length - 1] = base.PingId;
-            this.sock.Send(base.PingBytes);
-            base.PingBytes[base.PingBytes.Length - 1] = (byte) (base.PingId - 1);
+            PingBytes[PingBytes.Length - 1] = PingId;
+            this.sock.Send(PingBytes);
+            PingBytes[PingBytes.Length - 1] = (byte) (PingId - 1);
         }
         catch (Exception exception)
         {

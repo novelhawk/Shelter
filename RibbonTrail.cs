@@ -3,7 +3,7 @@ using UnityEngine;
 public class RibbonTrail
 {
     public const int CHAIN_EMPTY = 99999;
-    protected UnityEngine.Color Color = UnityEngine.Color.white;
+    protected Color Color = Color.white;
     protected float ElapsedTime;
     public int ElemCount;
     public Element[] ElementArray;
@@ -111,7 +111,7 @@ public class RibbonTrail
         }
     }
 
-    public void SetColor(UnityEngine.Color color)
+    public void SetColor(Color color)
     {
         this.Color = color;
     }

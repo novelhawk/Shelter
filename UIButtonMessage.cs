@@ -12,7 +12,7 @@ public class UIButtonMessage : MonoBehaviour
 
     private void OnClick()
     {
-        if (base.enabled && this.trigger == Trigger.OnClick)
+        if (enabled && this.trigger == Trigger.OnClick)
         {
             this.Send();
         }
@@ -20,7 +20,7 @@ public class UIButtonMessage : MonoBehaviour
 
     private void OnDoubleClick()
     {
-        if (base.enabled && this.trigger == Trigger.OnDoubleClick)
+        if (enabled && this.trigger == Trigger.OnDoubleClick)
         {
             this.Send();
         }
@@ -30,13 +30,13 @@ public class UIButtonMessage : MonoBehaviour
     {
         if (this.mStarted && this.mHighlighted)
         {
-            this.OnHover(UICamera.IsHighlighted(base.gameObject));
+            this.OnHover(UICamera.IsHighlighted(gameObject));
         }
     }
 
     private void OnHover(bool isOver)
     {
-        if (base.enabled)
+        if (enabled)
         {
             if (isOver && this.trigger == Trigger.OnMouseOver || !isOver && this.trigger == Trigger.OnMouseOut)
             {
@@ -48,7 +48,7 @@ public class UIButtonMessage : MonoBehaviour
 
     private void OnPress(bool isPressed)
     {
-        if (base.enabled && (isPressed && this.trigger == Trigger.OnPress || !isPressed && this.trigger == Trigger.OnRelease))
+        if (enabled && (isPressed && this.trigger == Trigger.OnPress || !isPressed && this.trigger == Trigger.OnRelease))
         {
             this.Send();
         }
@@ -60,7 +60,7 @@ public class UIButtonMessage : MonoBehaviour
         {
             if (this.target == null)
             {
-                this.target = base.gameObject;
+                this.target = gameObject;
             }
             if (this.includeChildren)
             {
@@ -70,13 +70,13 @@ public class UIButtonMessage : MonoBehaviour
                 while (index < length)
                 {
                     Transform transform = componentsInChildren[index];
-                    transform.gameObject.SendMessage(this.functionName, base.gameObject, SendMessageOptions.DontRequireReceiver);
+                    transform.gameObject.SendMessage(this.functionName, gameObject, SendMessageOptions.DontRequireReceiver);
                     index++;
                 }
             }
             else
             {
-                this.target.SendMessage(this.functionName, base.gameObject, SendMessageOptions.DontRequireReceiver);
+                this.target.SendMessage(this.functionName, gameObject, SendMessageOptions.DontRequireReceiver);
             }
         }
     }

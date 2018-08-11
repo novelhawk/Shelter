@@ -27,7 +27,7 @@ namespace Mod.Commands
             }
             else
             {
-                if (!PhotonPlayer.TryParse(args[0], out PhotonPlayer player))
+                if (!Player.TryParse(args[0], out Player player))
                     throw new PlayerNotFoundException(args[0]);
                 FengGameManagerMKII.instance.KickPlayerRC(player, true, string.Empty);
                 Chat.System($"{player} has been banned");

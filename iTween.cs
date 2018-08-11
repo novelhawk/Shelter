@@ -93,45 +93,45 @@ public class iTween : MonoBehaviour
             this.colors[i, 2].b = this.ease(this.colors[i, 0].b, this.colors[i, 1].b, this.percentage);
             this.colors[i, 2].a = this.ease(this.colors[i, 0].a, this.colors[i, 1].a, this.percentage);
         }
-        if (base.GetComponent<GUITexture>() != null)
+        if (GetComponent<GUITexture>() != null)
         {
-            base.guiTexture.color = this.colors[0, 2];
+            guiTexture.color = this.colors[0, 2];
         }
-        else if (base.GetComponent<GUIText>() != null)
+        else if (GetComponent<GUIText>() != null)
         {
-            base.guiText.material.color = this.colors[0, 2];
+            guiText.material.color = this.colors[0, 2];
         }
-        else if (base.renderer != null)
+        else if (renderer != null)
         {
             for (int j = 0; j < this.colors.GetLength(0); j++)
             {
-                base.renderer.materials[j].SetColor(this.namedcolorvalue.ToString(), this.colors[j, 2]);
+                renderer.materials[j].SetColor(this.namedcolorvalue.ToString(), this.colors[j, 2]);
             }
         }
-        else if (base.light != null)
+        else if (light != null)
         {
-            base.light.color = this.colors[0, 2];
+            light.color = this.colors[0, 2];
         }
         if (this.percentage == 1f)
         {
-            if (base.GetComponent<GUITexture>() != null)
+            if (GetComponent<GUITexture>() != null)
             {
-                base.guiTexture.color = this.colors[0, 1];
+                guiTexture.color = this.colors[0, 1];
             }
-            else if (base.GetComponent<GUIText>() != null)
+            else if (GetComponent<GUIText>() != null)
             {
-                base.guiText.material.color = this.colors[0, 1];
+                guiText.material.color = this.colors[0, 1];
             }
-            else if (base.renderer != null)
+            else if (renderer != null)
             {
                 for (int k = 0; k < this.colors.GetLength(0); k++)
                 {
-                    base.renderer.materials[k].SetColor(this.namedcolorvalue.ToString(), this.colors[k, 1]);
+                    renderer.materials[k].SetColor(this.namedcolorvalue.ToString(), this.colors[k, 1]);
                 }
             }
-            else if (base.light != null)
+            else if (light != null)
             {
-                base.light.color = this.colors[0, 1];
+                light.color = this.colors[0, 1];
             }
         }
     }
@@ -183,7 +183,7 @@ public class iTween : MonoBehaviour
         if (this.physics)
         {
             this.thisTransform.position = this.preUpdate;
-            base.rigidbody.MovePosition(this.postUpdate);
+            rigidbody.MovePosition(this.postUpdate);
         }
     }
 
@@ -217,7 +217,7 @@ public class iTween : MonoBehaviour
         if (this.physics)
         {
             this.thisTransform.position = this.preUpdate;
-            base.rigidbody.MovePosition(this.postUpdate);
+            rigidbody.MovePosition(this.postUpdate);
         }
     }
 
@@ -250,7 +250,7 @@ public class iTween : MonoBehaviour
         if (this.physics)
         {
             this.thisTransform.position = this.preUpdate;
-            base.rigidbody.MovePosition(this.postUpdate);
+            rigidbody.MovePosition(this.postUpdate);
         }
     }
 
@@ -297,7 +297,7 @@ public class iTween : MonoBehaviour
         if (this.physics)
         {
             this.thisTransform.position = this.preUpdate;
-            base.rigidbody.MovePosition(this.postUpdate);
+            rigidbody.MovePosition(this.postUpdate);
         }
     }
 
@@ -334,7 +334,7 @@ public class iTween : MonoBehaviour
         if (this.physics)
         {
             this.thisTransform.eulerAngles = this.preUpdate;
-            base.rigidbody.MoveRotation(Quaternion.Euler(this.postUpdate));
+            rigidbody.MoveRotation(Quaternion.Euler(this.postUpdate));
         }
     }
 
@@ -392,7 +392,7 @@ public class iTween : MonoBehaviour
         if (this.physics)
         {
             this.thisTransform.eulerAngles = this.preUpdate;
-            base.rigidbody.MoveRotation(Quaternion.Euler(this.postUpdate));
+            rigidbody.MoveRotation(Quaternion.Euler(this.postUpdate));
         }
     }
 
@@ -425,7 +425,7 @@ public class iTween : MonoBehaviour
         if (this.physics)
         {
             this.thisTransform.eulerAngles = this.preUpdate;
-            base.rigidbody.MoveRotation(Quaternion.Euler(this.postUpdate));
+            rigidbody.MoveRotation(Quaternion.Euler(this.postUpdate));
         }
     }
 
@@ -489,7 +489,7 @@ public class iTween : MonoBehaviour
         if (this.physics)
         {
             this.thisTransform.position = this.preUpdate;
-            base.rigidbody.MovePosition(this.postUpdate);
+            rigidbody.MovePosition(this.postUpdate);
         }
     }
 
@@ -510,7 +510,7 @@ public class iTween : MonoBehaviour
         if (this.physics)
         {
             this.thisTransform.eulerAngles = this.preUpdate;
-            base.rigidbody.MoveRotation(Quaternion.Euler(this.postUpdate));
+            rigidbody.MoveRotation(Quaternion.Euler(this.postUpdate));
         }
     }
 
@@ -571,7 +571,7 @@ public class iTween : MonoBehaviour
         }
         else
         {
-            UnityEngine.Debug.LogError("iTween Error: AudioFrom requires an AudioSource.");
+            Debug.LogError("iTween Error: AudioFrom requires an AudioSource.");
             return;
         }
         vector.x = vector2.x = audio.volume;
@@ -646,7 +646,7 @@ public class iTween : MonoBehaviour
         }
         else
         {
-            UnityEngine.Debug.LogError("iTween Error: AudioUpdate requires an AudioSource.");
+            Debug.LogError("iTween Error: AudioUpdate requires an AudioSource.");
             return;
         }
         vectorArray[0] = vectorArray[1] = new Vector2(audio.volume, audio.pitch);
@@ -672,7 +672,7 @@ public class iTween : MonoBehaviour
 
     private void Awake()
     {
-        this.thisTransform = base.transform;
+        this.thisTransform = transform;
         this.RetrieveArgs();
         this.lastRealTime = Time.realtimeSinceStartup;
     }
@@ -688,7 +688,7 @@ public class iTween : MonoBehaviour
             }
             else
             {
-                gameObject = base.gameObject;
+                gameObject = this.gameObject;
             }
             if (this.tweenArguments[callbackType].GetType() == typeof(string))
             {
@@ -696,8 +696,8 @@ public class iTween : MonoBehaviour
             }
             else
             {
-                UnityEngine.Debug.LogError("iTween Error: Callback method references must be passed as a String!");
-                UnityEngine.Object.Destroy(this);
+                Debug.LogError("iTween Error: Callback method references must be passed as a String!");
+                Destroy(this);
             }
         }
     }
@@ -756,7 +756,7 @@ public class iTween : MonoBehaviour
     {
         if (cameraFade != null)
         {
-            UnityEngine.Object.Destroy(cameraFade);
+            Destroy(cameraFade);
         }
     }
 
@@ -768,7 +768,7 @@ public class iTween : MonoBehaviour
         }
         else
         {
-            UnityEngine.Debug.LogError("iTween Error: You must first add a camera fade object with CameraFadeAdd() before atttempting to use camera fading.");
+            Debug.LogError("iTween Error: You must first add a camera fade object with CameraFadeAdd() before atttempting to use camera fading.");
         }
     }
 
@@ -781,7 +781,7 @@ public class iTween : MonoBehaviour
         }
         else
         {
-            UnityEngine.Debug.LogError("iTween Error: You must first add a camera fade object with CameraFadeAdd() before atttempting to use camera fading.");
+            Debug.LogError("iTween Error: You must first add a camera fade object with CameraFadeAdd() before atttempting to use camera fading.");
         }
     }
 
@@ -801,7 +801,7 @@ public class iTween : MonoBehaviour
         }
         else
         {
-            UnityEngine.Debug.LogError("iTween Error: You must first add a camera fade object with CameraFadeAdd() before atttempting to use camera fading.");
+            Debug.LogError("iTween Error: You must first add a camera fade object with CameraFadeAdd() before atttempting to use camera fading.");
         }
     }
 
@@ -814,7 +814,7 @@ public class iTween : MonoBehaviour
         }
         else
         {
-            UnityEngine.Debug.LogError("iTween Error: You must first add a camera fade object with CameraFadeAdd() before atttempting to use camera fading.");
+            Debug.LogError("iTween Error: You must first add a camera fade object with CameraFadeAdd() before atttempting to use camera fading.");
         }
     }
 
@@ -1177,7 +1177,7 @@ public class iTween : MonoBehaviour
 
     private void ConflictCheck()
     {
-        foreach (iTween tween in base.GetComponents<iTween>())
+        foreach (iTween tween in GetComponents<iTween>())
         {
             if (tween.type == "value")
             {
@@ -1276,7 +1276,7 @@ public class iTween : MonoBehaviour
                 break;
             }
         }
-        UnityEngine.Object.Destroy(this);
+        Destroy(this);
     }
 
     public static void DrawLine(Transform[] line)
@@ -1416,7 +1416,7 @@ public class iTween : MonoBehaviour
             }
             else if (method == "handles")
             {
-                UnityEngine.Debug.LogError("iTween Error: Drawing a line with Handles is temporarily disabled because of compatability issues with Unity 2.6!");
+                Debug.LogError("iTween Error: Drawing a line with Handles is temporarily disabled because of compatability issues with Unity 2.6!");
             }
         }
     }
@@ -1563,7 +1563,7 @@ public class iTween : MonoBehaviour
             }
             else if (method == "handles")
             {
-                UnityEngine.Debug.LogError("iTween Error: Drawing a path with Handles is temporarily disabled because of compatability issues with Unity 2.6!");
+                Debug.LogError("iTween Error: Drawing a path with Handles is temporarily disabled because of compatability issues with Unity 2.6!");
             }
             to = from;
         }
@@ -1969,13 +1969,13 @@ public class iTween : MonoBehaviour
         {
             this.audioSource = (AudioSource)this.tweenArguments["audiosource"];
         }
-        else if (base.GetComponent<AudioSource>() != null)
+        else if (GetComponent<AudioSource>() != null)
         {
-            this.audioSource = base.audio;
+            this.audioSource = audio;
         }
         else
         {
-            UnityEngine.Debug.LogError("iTween Error: AudioTo requires an AudioSource.");
+            Debug.LogError("iTween Error: AudioTo requires an AudioSource.");
             this.Dispose();
         }
         this.vector2s[0] = this.vector2s[1] = new Vector2(this.audioSource.volume, this.audioSource.pitch);
@@ -1998,29 +1998,29 @@ public class iTween : MonoBehaviour
 
     private void GenerateColorToTargets()
     {
-        if (base.GetComponent<GUITexture>() != null)
+        if (GetComponent<GUITexture>() != null)
         {
             this.colors = new Color[1, 3];
-            this.colors[0, 0] = this.colors[0, 1] = base.guiTexture.color;
+            this.colors[0, 0] = this.colors[0, 1] = guiTexture.color;
         }
-        else if (base.GetComponent<GUIText>() != null)
+        else if (GetComponent<GUIText>() != null)
         {
             this.colors = new Color[1, 3];
-            this.colors[0, 0] = this.colors[0, 1] = base.guiText.material.color;
+            this.colors[0, 0] = this.colors[0, 1] = guiText.material.color;
         }
-        else if (base.renderer != null)
+        else if (renderer != null)
         {
-            this.colors = new Color[base.renderer.materials.Length, 3];
-            for (int i = 0; i < base.renderer.materials.Length; i++)
+            this.colors = new Color[renderer.materials.Length, 3];
+            for (int i = 0; i < renderer.materials.Length; i++)
             {
-                this.colors[i, 0] = base.renderer.materials[i].GetColor(this.namedcolorvalue.ToString());
-                this.colors[i, 1] = base.renderer.materials[i].GetColor(this.namedcolorvalue.ToString());
+                this.colors[i, 0] = renderer.materials[i].GetColor(this.namedcolorvalue.ToString());
+                this.colors[i, 1] = renderer.materials[i].GetColor(this.namedcolorvalue.ToString());
             }
         }
-        else if (base.light != null)
+        else if (light != null)
         {
             this.colors = new Color[1, 3];
-            this.colors[0, 0] = this.colors[0, 1] = base.light.color;
+            this.colors[0, 0] = this.colors[0, 1] = light.color;
         }
         else
         {
@@ -2116,7 +2116,7 @@ public class iTween : MonoBehaviour
         }
         else
         {
-            UnityEngine.Debug.LogError("iTween Error: LookTo needs a 'looktarget' property!");
+            Debug.LogError("iTween Error: LookTo needs a 'looktarget' property!");
             this.Dispose();
         }
         this.vector3s[1] = this.thisTransform.eulerAngles;
@@ -2212,7 +2212,7 @@ public class iTween : MonoBehaviour
             Vector3[] sourceArray = (Vector3[])this.tweenArguments["path"];
             if (sourceArray.Length == 1)
             {
-                UnityEngine.Debug.LogError("iTween Error: Attempting a path movement with MoveTo requires an array of more than 1 entry!");
+                Debug.LogError("iTween Error: Attempting a path movement with MoveTo requires an array of more than 1 entry!");
                 this.Dispose();
             }
             vectorArray2 = new Vector3[sourceArray.Length];
@@ -2223,7 +2223,7 @@ public class iTween : MonoBehaviour
             Transform[] transformArray = (Transform[])this.tweenArguments["path"];
             if (transformArray.Length == 1)
             {
-                UnityEngine.Debug.LogError("iTween Error: Attempting a path movement with MoveTo requires an array of more than 1 entry!");
+                Debug.LogError("iTween Error: Attempting a path movement with MoveTo requires an array of more than 1 entry!");
                 this.Dispose();
             }
             vectorArray2 = new Vector3[transformArray.Length];
@@ -2705,14 +2705,14 @@ public class iTween : MonoBehaviour
         {
             this.audioSource = (AudioSource)this.tweenArguments["audiosource"];
         }
-        else if (base.GetComponent<AudioSource>() != null)
+        else if (GetComponent<AudioSource>() != null)
         {
-            this.audioSource = base.audio;
+            this.audioSource = audio;
         }
         else
         {
-            base.gameObject.AddComponent<AudioSource>();
-            this.audioSource = base.audio;
+            gameObject.AddComponent<AudioSource>();
+            this.audioSource = audio;
             this.audioSource.playOnAwake = false;
         }
         this.audioSource.clip = (AudioClip)this.tweenArguments["audioclip"];
@@ -3165,7 +3165,7 @@ public class iTween : MonoBehaviour
         Hashtable hashtable = new Hashtable(args.Length / 2);
         if (args.Length % 2 != 0)
         {
-            UnityEngine.Debug.LogError("Tween Error: Hash requires an even number of arguments!");
+            Debug.LogError("Tween Error: Hash requires an even number of arguments!");
             return null;
         }
         for (int i = 0; i < args.Length - 1; i += 2)
@@ -3196,7 +3196,7 @@ public class iTween : MonoBehaviour
     {
         if (this.tweenArguments.Contains("looktarget") && this.isRunning && (this.type == "move" || this.type == "shake" || this.type == "punch"))
         {
-            LookUpdate(base.gameObject, this.tweenArguments);
+            LookUpdate(gameObject, this.tweenArguments);
         }
     }
 
@@ -3335,7 +3335,7 @@ public class iTween : MonoBehaviour
         }
         else
         {
-            UnityEngine.Debug.LogError("iTween Error: LookUpdate needs a 'looktarget' property!");
+            Debug.LogError("iTween Error: LookUpdate needs a 'looktarget' property!");
             return;
         }
         vectorArray[1] = target.transform.eulerAngles;
@@ -4049,14 +4049,14 @@ public class iTween : MonoBehaviour
 
     private void ResumeDelay()
     {
-        base.StartCoroutine("TweenDelay");
+        StartCoroutine("TweenDelay");
     }
 
     private void RetrieveArgs()
     {
         foreach (Hashtable hashtable in tweens)
         {
-            if ((GameObject)hashtable["target"] == base.gameObject)
+            if ((GameObject)hashtable["target"] == gameObject)
             {
                 this.tweenArguments = hashtable;
                 break;
@@ -4074,7 +4074,7 @@ public class iTween : MonoBehaviour
         {
             this.time = Defaults.time;
         }
-        if (base.rigidbody != null)
+        if (rigidbody != null)
         {
             this.physics = true;
         }
@@ -4100,7 +4100,7 @@ public class iTween : MonoBehaviour
                 }
                 catch
                 {
-                    UnityEngine.Debug.LogWarning("iTween: Unsupported namedcolorvalue supplied! Default will be used.");
+                    Debug.LogWarning("iTween: Unsupported namedcolorvalue supplied! Default will be used.");
                     this.namedcolorvalue = NamedValueColor._Color;
                 }
             }
@@ -4123,7 +4123,7 @@ public class iTween : MonoBehaviour
                 }
                 catch
                 {
-                    UnityEngine.Debug.LogWarning("iTween: Unsupported loopType supplied! Default will be used.");
+                    Debug.LogWarning("iTween: Unsupported loopType supplied! Default will be used.");
                     this.loopType = LoopType.none;
                 }
             }
@@ -4146,7 +4146,7 @@ public class iTween : MonoBehaviour
                 }
                 catch
                 {
-                    UnityEngine.Debug.LogWarning("iTween: Unsupported easeType supplied! Default will be used.");
+                    Debug.LogWarning("iTween: Unsupported easeType supplied! Default will be used.");
                     this.easeType = Defaults.easeType;
                 }
             }
@@ -4169,7 +4169,7 @@ public class iTween : MonoBehaviour
                 }
                 catch
                 {
-                    UnityEngine.Debug.LogWarning("iTween: Unsupported space supplied! Default will be used.");
+                    Debug.LogWarning("iTween: Unsupported space supplied! Default will be used.");
                     this.space = Defaults.space;
                 }
             }
@@ -4785,13 +4785,13 @@ public class iTween : MonoBehaviour
                 this.percentage = 0f;
                 this.runningTime = 0f;
                 this.apply();
-                base.StartCoroutine("TweenRestart");
+                StartCoroutine("TweenRestart");
                 break;
 
             case LoopType.pingPong:
                 this.reverse = !this.reverse;
                 this.runningTime = 0f;
-                base.StartCoroutine("TweenRestart");
+                StartCoroutine("TweenRestart");
                 break;
         }
     }
@@ -4874,7 +4874,7 @@ public class iTween : MonoBehaviour
         args = CleanArgs(args);
         if (!args.Contains("onupdate") || !args.Contains("from") || !args.Contains("to"))
         {
-            UnityEngine.Debug.LogError("iTween Error: ValueTo() requires an 'onupdate' callback function and a 'from' and 'to' property.  The supplied 'onupdate' callback must accept a single argument that is the same type as the supplied 'from' and 'to' properties!");
+            Debug.LogError("iTween Error: ValueTo() requires an 'onupdate' callback function and a 'from' and 'to' property.  The supplied 'onupdate' callback must accept a single argument that is the same type as the supplied 'from' and 'to' properties!");
         }
         else
         {
@@ -4901,7 +4901,7 @@ public class iTween : MonoBehaviour
             }
             else
             {
-                UnityEngine.Debug.LogError("iTween Error: ValueTo() only works with interpolating Vector3s, Vector2s, floats, ints, Rects and Colors!");
+                Debug.LogError("iTween Error: ValueTo() only works with interpolating Vector3s, Vector2s, floats, ints, Rects and Colors!");
                 return;
             }
             if (!args.Contains("easetype"))
@@ -4956,12 +4956,12 @@ public class iTween : MonoBehaviour
         public static int cameraFadeDepth = 999999;
         public static Color color = Color.white;
         public static float delay = 0f;
-        public static iTween.EaseType easeType = iTween.EaseType.easeOutExpo;
+        public static EaseType easeType = EaseType.easeOutExpo;
         public static bool isLocal = false;
         public static float lookAhead = 0.05f;
         public static float lookSpeed = 3f;
-        public static iTween.LoopType loopType = iTween.LoopType.none;
-        public static iTween.NamedValueColor namedColorValue = iTween.NamedValueColor._Color;
+        public static LoopType loopType = LoopType.none;
+        public static NamedValueColor namedColorValue = NamedValueColor._Color;
         public static bool orientToPath = false;
         public static Space space = Space.Self;
         public static float time = 1f;

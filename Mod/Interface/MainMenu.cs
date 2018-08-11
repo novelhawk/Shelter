@@ -15,6 +15,7 @@ namespace Mod.Interface
         {
             PhotonNetwork.Disconnect();
             PhotonNetwork.ConnectToMaster(PlayerPrefs.GetString("ShelterServer", "app-eu.exitgamescloud.com"), 5055, FengGameManagerMKII.ApplicationID, UIMainReferences.Version);
+//            PhotonNetwork.ConnectToMaster("127.0.0.1", 5055, FengGameManagerMKII.ApplicationID, UIMainReferences.Version);
 
             btnNormal = Texture(169, 169, 169, 100);
             btnHover = Texture(169, 169, 169, 255);

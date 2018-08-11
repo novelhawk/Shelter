@@ -10,7 +10,7 @@ public class UICenterOnChild : MonoBehaviour
 
     private void OnDragFinished()
     {
-        if (base.enabled)
+        if (enabled)
         {
             this.Recenter();
         }
@@ -25,11 +25,11 @@ public class UICenterOnChild : MonoBehaviour
     {
         if (this.mDrag == null)
         {
-            this.mDrag = NGUITools.FindInParents<UIDraggablePanel>(base.gameObject);
+            this.mDrag = NGUITools.FindInParents<UIDraggablePanel>(gameObject);
             if (this.mDrag == null)
             {
-                Debug.LogWarning(string.Concat(new object[] { base.GetType(), " requires ", typeof(UIDraggablePanel), " on a parent object in order to work" }), this);
-                base.enabled = false;
+                Debug.LogWarning(string.Concat(new object[] { GetType(), " requires ", typeof(UIDraggablePanel), " on a parent object in order to work" }), this);
+                enabled = false;
                 return;
             }
             this.mDrag.onDragFinished = new UIDraggablePanel.OnDragFinished(this.OnDragFinished);
@@ -54,7 +54,7 @@ public class UICenterOnChild : MonoBehaviour
             this.mDrag.currentMomentum = Vector3.zero;
             float maxValue = float.MaxValue;
             Transform transform2 = null;
-            Transform transform = base.transform;
+            Transform transform = this.transform;
             int index = 0;
             int childCount = transform.childCount;
             while (index < childCount)

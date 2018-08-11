@@ -25,7 +25,7 @@ public class ChatInput : MonoBehaviour
 
     private void Start()
     {
-        this.mInput = base.GetComponent<UIInput>();
+        this.mInput = GetComponent<UIInput>();
         if (this.fillWithDummyData && this.textList != null)
         {
             for (int i = 0; i < 30; i++)

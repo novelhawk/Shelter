@@ -19,11 +19,11 @@ public class CheckBoxCamera : MonoBehaviour
         {
             if (this.camera.ToString().ToUpper() == PlayerPrefs.GetString("cameraType").ToUpper())
             {
-                base.GetComponent<UICheckbox>().isChecked = true;
+                GetComponent<UICheckbox>().isChecked = true;
             }
             else
             {
-                base.GetComponent<UICheckbox>().isChecked = false;
+                GetComponent<UICheckbox>().isChecked = false;
             }
         }
     }

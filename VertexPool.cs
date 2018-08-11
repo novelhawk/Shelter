@@ -12,8 +12,8 @@ public class VertexPool
     protected int IndexUsed;
     public bool IndiceChanged;
     public int[] Indices;
-    public UnityEngine.Material Material;
-    public UnityEngine.Mesh Mesh;
+    public Material Material;
+    public Mesh Mesh;
     public bool UVChanged;
     public Vector2[] UVs;
     public bool VertChanged;
@@ -22,7 +22,7 @@ public class VertexPool
     protected int VertexUsed = 0;
     public Vector3[] Vertices;
 
-    public VertexPool(UnityEngine.Mesh mesh, UnityEngine.Material material)
+    public VertexPool(Mesh mesh, Material material)
     {
         this.Mesh = mesh;
         this.Material = material;
@@ -68,7 +68,7 @@ public class VertexPool
         this.VertChanged = true;
     }
 
-    public UnityEngine.Material GetMaterial()
+    public Material GetMaterial()
     {
         return this.Material;
     }

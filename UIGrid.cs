@@ -22,7 +22,7 @@ public class UIGrid : MonoBehaviour
         }
         else
         {
-            Transform transform = base.transform;
+            Transform transform = this.transform;
             int num = 0;
             int num2 = 0;
             if (this.sorted)
@@ -36,7 +36,7 @@ public class UIGrid : MonoBehaviour
                         list.Add(child);
                     }
                 }
-                list.Sort(new Comparison<Transform>(UIGrid.SortByName));
+                list.Sort(new Comparison<Transform>(SortByName));
                 int num4 = 0;
                 int count = list.Count;
                 while (num4 < count)
@@ -72,7 +72,7 @@ public class UIGrid : MonoBehaviour
                     }
                 }
             }
-            UIDraggablePanel panel = NGUITools.FindInParents<UIDraggablePanel>(base.gameObject);
+            UIDraggablePanel panel = NGUITools.FindInParents<UIDraggablePanel>(gameObject);
             if (panel != null)
             {
                 panel.UpdateScrollbars(true);

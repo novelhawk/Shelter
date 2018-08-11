@@ -35,14 +35,14 @@ public class UIDraggablePanel : IgnoreTimeScale
 
     private void Awake()
     {
-        this.mTrans = base.transform;
-        this.mPanel = base.GetComponent<UIPanel>();
+        this.mTrans = transform;
+        this.mPanel = GetComponent<UIPanel>();
         this.mPanel.onChange = (UIPanel.OnChangeDelegate) Delegate.Combine(this.mPanel.onChange, new UIPanel.OnChangeDelegate(this.OnPanelChange));
     }
 
     public void DisableSpring()
     {
-        SpringPanel component = base.GetComponent<SpringPanel>();
+        SpringPanel component = GetComponent<SpringPanel>();
         if (component != null)
         {
             component.enabled = false;
@@ -51,7 +51,7 @@ public class UIDraggablePanel : IgnoreTimeScale
 
     public void Drag()
     {
-        if (base.enabled && NGUITools.GetActive(base.gameObject) && this.mShouldMove)
+        if (enabled && NGUITools.GetActive(gameObject) && this.mShouldMove)
         {
             if (this.mDragID == -10)
             {
@@ -108,7 +108,7 @@ public class UIDraggablePanel : IgnoreTimeScale
         }
         if (Application.isPlaying)
         {
-            float deltaTime = base.UpdateRealTimeDelta();
+            float deltaTime = UpdateRealTimeDelta();
             if (this.showScrollBars != ShowCondition.Always)
             {
                 bool shouldMoveVertically = false;
@@ -223,7 +223,7 @@ public class UIDraggablePanel : IgnoreTimeScale
             this.mDragStarted = false;
             this.mDragStartOffset = Vector2.zero;
         }
-        if (base.enabled && NGUITools.GetActive(base.gameObject))
+        if (enabled && NGUITools.GetActive(gameObject))
         {
             if (!pressed && this.mDragID == UICamera.currentTouchID)
             {
@@ -286,7 +286,7 @@ public class UIDraggablePanel : IgnoreTimeScale
 
     public void Scroll(float delta)
     {
-        if (base.enabled && NGUITools.GetActive(base.gameObject) && this.scrollWheelFactor != 0f)
+        if (enabled && NGUITools.GetActive(gameObject) && this.scrollWheelFactor != 0f)
         {
             this.DisableSpring();
             this.mShouldMove = this.shouldMove;
@@ -463,7 +463,7 @@ public class UIDraggablePanel : IgnoreTimeScale
             }
             if (this.mPanel == null)
             {
-                this.mPanel = base.GetComponent<UIPanel>();
+                this.mPanel = GetComponent<UIPanel>();
             }
             Vector4 clipRange = this.mPanel.clipRange;
             Bounds bounds = this.bounds;

@@ -11,10 +11,10 @@ public class TweenAlpha : UITweener
 
     private void Awake()
     {
-        this.mPanel = base.GetComponent<UIPanel>();
+        this.mPanel = GetComponent<UIPanel>();
         if (this.mPanel == null)
         {
-            this.mWidget = base.GetComponentInChildren<UIWidget>();
+            this.mWidget = GetComponentInChildren<UIWidget>();
         }
     }
 

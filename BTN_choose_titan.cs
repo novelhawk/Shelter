@@ -29,7 +29,7 @@ public class BTN_choose_titan : MonoBehaviour
                 { PhotonPlayerProperty.character, id }
             };
             Hashtable propertiesToSet = hashtable;
-            PhotonPlayer.Self.SetCustomProperties(propertiesToSet);
+            Player.Self.SetCustomProperties(propertiesToSet);
         }
         else
         {
@@ -38,7 +38,7 @@ public class BTN_choose_titan : MonoBehaviour
                 FengGameManagerMKII.instance.checkpoint = GameObject.Find("PVPchkPtT");
             }
             string selection = GameObject.Find("PopupListCharacterTITAN").GetComponent<UIPopupList>().selection;
-            NGUITools.SetActive(base.transform.parent.gameObject, false);
+            NGUITools.SetActive(transform.parent.gameObject, false);
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[0], true);
             if (!PhotonNetwork.isMasterClient && FengGameManagerMKII.instance.roundTime > 60f || FengGameManagerMKII.instance.justSuicide)
             {
@@ -62,7 +62,7 @@ public class BTN_choose_titan : MonoBehaviour
     {
         if (!LevelInfoManager.GetInfo(FengGameManagerMKII.level).PlayerTitansAllowed)
         {
-            base.gameObject.GetComponent<UIButton>().isEnabled = false;
+            gameObject.GetComponent<UIButton>().isEnabled = false;
         }
     }
 }

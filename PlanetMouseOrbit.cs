@@ -32,7 +32,7 @@ public class PlanetMouseOrbit : MonoBehaviour
 
     public void Start()
     {
-        Vector3 eulerAngles = base.transform.eulerAngles;
+        Vector3 eulerAngles = transform.eulerAngles;
         this.x = eulerAngles.y;
         this.y = eulerAngles.x;
     }
@@ -47,8 +47,8 @@ public class PlanetMouseOrbit : MonoBehaviour
             this.y = ClampAngle(this.y, this.yMinLimit, this.yMaxLimit);
             Quaternion quaternion = Quaternion.Euler(this.y, this.x, 0f);
             Vector3 vector = quaternion * new Vector3(0f, 0f, -this.distance) + this.target.position;
-            base.transform.rotation = quaternion;
-            base.transform.position = vector;
+            transform.rotation = quaternion;
+            transform.position = vector;
         }
     }
 }

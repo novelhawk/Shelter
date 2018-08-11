@@ -38,7 +38,7 @@ public class UIInput : MonoBehaviour
                     if (this.mText.Length > 0)
                     {
                         this.mText = this.mText.Substring(0, this.mText.Length - 1);
-                        base.SendMessage("OnInputChanged", this, SendMessageOptions.DontRequireReceiver);
+                        SendMessage("OnInputChanged", this, SendMessageOptions.DontRequireReceiver);
                     }
                     break;
 
@@ -53,7 +53,7 @@ public class UIInput : MonoBehaviour
                         }
                         if (this.eventReceiver == null)
                         {
-                            this.eventReceiver = base.gameObject;
+                            this.eventReceiver = gameObject;
                         }
                         this.eventReceiver.SendMessage(this.functionName, this.mText, SendMessageOptions.DontRequireReceiver);
                         current = null;
@@ -74,7 +74,7 @@ public class UIInput : MonoBehaviour
                         {
                             this.mText = this.mText + "\n";
                         }
-                        base.SendMessage("OnInputChanged", this, SendMessageOptions.DontRequireReceiver);
+                        SendMessage("OnInputChanged", this, SendMessageOptions.DontRequireReceiver);
                     }
                     break;
 
@@ -88,7 +88,7 @@ public class UIInput : MonoBehaviour
                         if (nextChar != '\0')
                         {
                             this.mText = this.mText + nextChar;
-                            base.SendMessage("OnInputChanged", this, SendMessageOptions.DontRequireReceiver);
+                            SendMessage("OnInputChanged", this, SendMessageOptions.DontRequireReceiver);
                         }
                     }
                     break;
@@ -112,7 +112,7 @@ public class UIInput : MonoBehaviour
             this.mDoInit = false;
             if (this.label == null)
             {
-                this.label = base.GetComponentInChildren<UILabel>();
+                this.label = GetComponentInChildren<UILabel>();
             }
             if (this.label != null)
             {
@@ -129,14 +129,14 @@ public class UIInput : MonoBehaviour
             }
             else
             {
-                base.enabled = false;
+                enabled = false;
             }
         }
     }
 
     private void OnDisable()
     {
-        if (UICamera.IsHighlighted(base.gameObject))
+        if (UICamera.IsHighlighted(gameObject))
         {
             this.OnSelect(false);
         }
@@ -144,7 +144,7 @@ public class UIInput : MonoBehaviour
 
     private void OnEnable()
     {
-        if (UICamera.IsHighlighted(base.gameObject))
+        if (UICamera.IsHighlighted(gameObject))
         {
             this.OnSelect(true);
         }
@@ -156,7 +156,7 @@ public class UIInput : MonoBehaviour
         {
             this.initMain();
         }
-        if (this.selected && base.enabled && NGUITools.GetActive(base.gameObject) && Application.platform != RuntimePlatform.Android && Application.platform != RuntimePlatform.IPhonePlayer)
+        if (this.selected && enabled && NGUITools.GetActive(gameObject) && Application.platform != RuntimePlatform.Android && Application.platform != RuntimePlatform.IPhonePlayer)
         {
             this.Append(input);
         }
@@ -168,7 +168,7 @@ public class UIInput : MonoBehaviour
         {
             this.initMain();
         }
-        if (this.label != null && base.enabled && NGUITools.GetActive(base.gameObject))
+        if (this.label != null && enabled && NGUITools.GetActive(gameObject))
         {
             if (isSelected)
             {
@@ -328,17 +328,17 @@ public class UIInput : MonoBehaviour
     {
         get
         {
-            return UICamera.selectedObject == base.gameObject;
+            return UICamera.selectedObject == gameObject;
         }
         set
         {
-            if (!value && UICamera.selectedObject == base.gameObject)
+            if (!value && UICamera.selectedObject == gameObject)
             {
                 UICamera.selectedObject = null;
             }
             else if (value)
             {
-                UICamera.selectedObject = base.gameObject;
+                UICamera.selectedObject = gameObject;
             }
         }
     }

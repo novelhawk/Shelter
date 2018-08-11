@@ -15,9 +15,9 @@ public class LanguageSelection : MonoBehaviour
 
     private void Start()
     {
-        this.mList = base.GetComponent<UIPopupList>();
+        this.mList = GetComponent<UIPopupList>();
         this.UpdateList();
-        this.mList.eventReceiver = base.gameObject;
+        this.mList.eventReceiver = gameObject;
         this.mList.functionName = "OnLanguageSelection";
     }
 

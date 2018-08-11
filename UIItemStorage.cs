@@ -39,7 +39,7 @@ public class UIItemStorage : MonoBehaviour
             {
                 for (int j = 0; j < this.maxColumns; j++)
                 {
-                    GameObject obj2 = NGUITools.AddChild(base.gameObject, this.template);
+                    GameObject obj2 = NGUITools.AddChild(gameObject, this.template);
                     obj2.transform.localPosition = new Vector3(this.padding + (j + 0.5f) * this.spacing, -this.padding - (i + 0.5f) * this.spacing, 0f);
                     UIStorageSlot component = obj2.GetComponent<UIStorageSlot>();
                     if (component != null)

@@ -12,7 +12,7 @@ namespace Mod.Commands
         {
             if (args.Length < 1)
                 throw new CommandArgumentException(CommandName, "/tp [id]");
-            if (!PhotonPlayer.TryParse(args[0], out PhotonPlayer player))
+            if (!Player.TryParse(args[0], out Player player))
                 throw new PlayerNotFoundException(args[0]);
             if (player.isLocal)
                 throw new TargetCannotBeLocalException("Non puoi teletrasportarti da te stesso.");

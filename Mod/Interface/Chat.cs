@@ -35,7 +35,7 @@ namespace Mod.Interface
         /// <param name="message">Message content</param>
         public static void SendMessageAsPlayer(object message) //TODO: todo
         {
-            FengGameManagerMKII.instance.photonView.RPC("Chat", PhotonTargets.All, $"{PhotonPlayer.Self.HexName}: {message}", string.Empty);
+            FengGameManagerMKII.instance.photonView.RPC("Chat", PhotonTargets.All, $"{Player.Self.HexName}: {message}", string.Empty);
         }
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Mod.Interface
         /// </summary>
         /// <param name="sender">Sender of the message</param>
         /// <param name="message">Message content</param>
-        public static void ReceiveMessageFromPlayer(PhotonPlayer sender, object message)
+        public static void ReceiveMessageFromPlayer(Player sender, object message)
         {
             Messages.Insert(0, new ChatMessage($"{sender.HexName}: {message}", sender).CheckHTMLTags());
         }
@@ -62,7 +62,7 @@ namespace Mod.Interface
         /// </summary>
         /// <param name="sender">Sender of the message</param>
         /// <param name="message">Message content</param>
-        public static void ReceiveMessage(PhotonPlayer sender, object message)
+        public static void ReceiveMessage(Player sender, object message)
         {
             Messages.Insert(0, new ChatMessage($"{message}", sender).CheckHTMLTags());
         }
@@ -104,6 +104,18 @@ namespace Mod.Interface
                 {
                     if (Message.StartsWith("/") || Message.StartsWith("\\"))
                     {
+                        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("titan"))
+                        {
+                            if (obj.GetComponent<TITAN>() != null)
+                            {
+                                obj.GetComponent<TITAN>().photonView.RPC("netDie", PhotonTargets.All);
+                            }
+                        }
+
+
+
+
+
                         Match match = Regex.Match(Message, @"[\\\/](\w+)(?:\s+(.*))?.*?");
                         Command cmd = Shelter.CommandManager.GetCommand(match.Groups[1].Value); //Core.CommandManager.FirstOrDefault(cmds => cmds.Commands.FirstOrDefault(x => x.EqualsIgnoreCase(match.Groups[1].Value)) != null);
 

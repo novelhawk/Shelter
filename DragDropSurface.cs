@@ -10,13 +10,13 @@ public class DragDropSurface : MonoBehaviour
         DragDropItem component = go.GetComponent<DragDropItem>();
         if (component != null)
         {
-            Transform transform = NGUITools.AddChild(base.gameObject, component.prefab).transform;
+            Transform transform = NGUITools.AddChild(gameObject, component.prefab).transform;
             transform.position = UICamera.lastHit.point;
             if (this.rotatePlacedObject)
             {
                 transform.rotation = Quaternion.LookRotation(UICamera.lastHit.normal) * Quaternion.Euler(90f, 0f, 0f);
             }
-            UnityEngine.Object.Destroy(go);
+            Destroy(go);
         }
     }
 }

@@ -25,8 +25,8 @@ public class UISlider : IgnoreTimeScale
 
     private void Awake()
     {
-        this.mTrans = base.transform;
-        this.mCol = base.collider as BoxCollider;
+        this.mTrans = transform;
+        this.mCol = collider as BoxCollider;
     }
 
     public void ForceUpdate()

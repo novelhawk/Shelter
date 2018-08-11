@@ -7,12 +7,12 @@ public class UIInputValidator : MonoBehaviour
 
     private void Start()
     {
-        base.GetComponent<UIInput>().validator = new UIInput.Validator(this.Validate);
+        GetComponent<UIInput>().validator = new UIInput.Validator(this.Validate);
     }
 
     private char Validate(string text, char ch)
     {
-        if (this.logic == Validation.None || !base.enabled)
+        if (this.logic == Validation.None || !enabled)
         {
             return ch;
         }

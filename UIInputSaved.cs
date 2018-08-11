@@ -7,7 +7,7 @@ public class UIInputSaved : UIInput
 
     private void Awake()
     {
-        base.onSubmit = new UIInput.OnSubmit(this.SaveToPlayerPrefs);
+        onSubmit = new OnSubmit(this.SaveToPlayerPrefs);
         if (!string.IsNullOrEmpty(this.playerPrefsField) && PlayerPrefs.HasKey(this.playerPrefsField))
         {
             this.text = PlayerPrefs.GetString(this.playerPrefsField);

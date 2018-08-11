@@ -57,7 +57,7 @@ public class HERO_SETUP : MonoBehaviour
 
     private void Awake()
     {
-        this.part_head.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head").transform;
+        this.part_head.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head").transform;
         this.mount_3dmg = new GameObject();
         this.mount_3dmg_gas_l = new GameObject();
         this.mount_3dmg_gas_r = new GameObject();
@@ -65,27 +65,27 @@ public class HERO_SETUP : MonoBehaviour
         this.mount_3dmg_gun_mag_r = new GameObject();
         this.mount_weapon_l = new GameObject();
         this.mount_weapon_r = new GameObject();
-        this.mount_3dmg.transform.position = base.transform.position;
-        this.mount_3dmg.transform.rotation = Quaternion.Euler(270f, base.transform.rotation.eulerAngles.y, 0f);
-        this.mount_3dmg.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine/chest").transform;
-        this.mount_3dmg_gas_l.transform.position = base.transform.position;
-        this.mount_3dmg_gas_l.transform.rotation = Quaternion.Euler(270f, base.transform.rotation.eulerAngles.y, 0f);
-        this.mount_3dmg_gas_l.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine").transform;
-        this.mount_3dmg_gas_r.transform.position = base.transform.position;
-        this.mount_3dmg_gas_r.transform.rotation = Quaternion.Euler(270f, base.transform.rotation.eulerAngles.y, 0f);
-        this.mount_3dmg_gas_r.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine").transform;
-        this.mount_3dmg_gun_mag_l.transform.position = base.transform.position;
-        this.mount_3dmg_gun_mag_l.transform.rotation = Quaternion.Euler(270f, base.transform.rotation.eulerAngles.y, 0f);
-        this.mount_3dmg_gun_mag_l.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/thigh_L").transform;
-        this.mount_3dmg_gun_mag_r.transform.position = base.transform.position;
-        this.mount_3dmg_gun_mag_r.transform.rotation = Quaternion.Euler(270f, base.transform.rotation.eulerAngles.y, 0f);
-        this.mount_3dmg_gun_mag_r.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/thigh_R").transform;
-        this.mount_weapon_l.transform.position = base.transform.position;
-        this.mount_weapon_l.transform.rotation = Quaternion.Euler(270f, base.transform.rotation.eulerAngles.y, 0f);
-        this.mount_weapon_l.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L").transform;
-        this.mount_weapon_r.transform.position = base.transform.position;
-        this.mount_weapon_r.transform.rotation = Quaternion.Euler(270f, base.transform.rotation.eulerAngles.y, 0f);
-        this.mount_weapon_r.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R").transform;
+        this.mount_3dmg.transform.position = transform.position;
+        this.mount_3dmg.transform.rotation = Quaternion.Euler(270f, transform.rotation.eulerAngles.y, 0f);
+        this.mount_3dmg.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest").transform;
+        this.mount_3dmg_gas_l.transform.position = transform.position;
+        this.mount_3dmg_gas_l.transform.rotation = Quaternion.Euler(270f, transform.rotation.eulerAngles.y, 0f);
+        this.mount_3dmg_gas_l.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine").transform;
+        this.mount_3dmg_gas_r.transform.position = transform.position;
+        this.mount_3dmg_gas_r.transform.rotation = Quaternion.Euler(270f, transform.rotation.eulerAngles.y, 0f);
+        this.mount_3dmg_gas_r.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine").transform;
+        this.mount_3dmg_gun_mag_l.transform.position = transform.position;
+        this.mount_3dmg_gun_mag_l.transform.rotation = Quaternion.Euler(270f, transform.rotation.eulerAngles.y, 0f);
+        this.mount_3dmg_gun_mag_l.transform.parent = transform.Find("Amarture/Controller_Body/hip/thigh_L").transform;
+        this.mount_3dmg_gun_mag_r.transform.position = transform.position;
+        this.mount_3dmg_gun_mag_r.transform.rotation = Quaternion.Euler(270f, transform.rotation.eulerAngles.y, 0f);
+        this.mount_3dmg_gun_mag_r.transform.parent = transform.Find("Amarture/Controller_Body/hip/thigh_R").transform;
+        this.mount_weapon_l.transform.position = transform.position;
+        this.mount_weapon_l.transform.rotation = Quaternion.Euler(270f, transform.rotation.eulerAngles.y, 0f);
+        this.mount_weapon_l.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L").transform;
+        this.mount_weapon_r.transform.position = transform.position;
+        this.mount_weapon_r.transform.rotation = Quaternion.Euler(270f, transform.rotation.eulerAngles.y, 0f);
+        this.mount_weapon_r.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R").transform;
     }
 
     private void combineSMR(GameObject go, GameObject go2)
@@ -123,7 +123,7 @@ public class HERO_SETUP : MonoBehaviour
         Label_00DA:
             this.materialList.Add(renderer2.material);
         }
-        UnityEngine.Object.Destroy(renderer2.gameObject);
+        Destroy(renderer2.gameObject);
         component.sharedMesh = new Mesh();
         component.sharedMesh.CombineMeshes(list.ToArray(), true, false);
         component.bones = bones;
@@ -133,7 +133,7 @@ public class HERO_SETUP : MonoBehaviour
         {
             if (bones[j] != null)
             {
-                list2.Add(bones[j].worldToLocalMatrix * base.transform.localToWorldMatrix);
+                list2.Add(bones[j].worldToLocalMatrix * transform.localToWorldMatrix);
             }
         }
         component.sharedMesh.bindposes = list2.ToArray();
@@ -141,15 +141,15 @@ public class HERO_SETUP : MonoBehaviour
 
     public void create3DMG()
     {
-        UnityEngine.Object.Destroy(this.part_3dmg);
-        UnityEngine.Object.Destroy(this.part_3dmg_belt);
-        UnityEngine.Object.Destroy(this.part_3dmg_gas_l);
-        UnityEngine.Object.Destroy(this.part_3dmg_gas_r);
-        UnityEngine.Object.Destroy(this.part_blade_l);
-        UnityEngine.Object.Destroy(this.part_blade_r);
+        Destroy(this.part_3dmg);
+        Destroy(this.part_3dmg_belt);
+        Destroy(this.part_3dmg_gas_l);
+        Destroy(this.part_3dmg_gas_r);
+        Destroy(this.part_blade_l);
+        Destroy(this.part_blade_r);
         if (this.myCostume.mesh_3dmg.Length > 0)
         {
-            this.part_3dmg = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("Character/" + this.myCostume.mesh_3dmg));
+            this.part_3dmg = (GameObject) Instantiate(Resources.Load("Character/" + this.myCostume.mesh_3dmg));
             this.part_3dmg.transform.position = this.mount_3dmg.transform.position;
             this.part_3dmg.transform.rotation = this.mount_3dmg.transform.rotation;
             this.part_3dmg.transform.parent = this.mount_3dmg.transform.parent;
@@ -162,7 +162,7 @@ public class HERO_SETUP : MonoBehaviour
         }
         if (this.myCostume.mesh_3dmg_gas_l.Length > 0)
         {
-            this.part_3dmg_gas_l = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("Character/" + this.myCostume.mesh_3dmg_gas_l));
+            this.part_3dmg_gas_l = (GameObject) Instantiate(Resources.Load("Character/" + this.myCostume.mesh_3dmg_gas_l));
             if (this.myCostume.uniform_type != UNIFORM_TYPE.CasualAHSS)
             {
                 this.part_3dmg_gas_l.transform.position = this.mount_3dmg_gas_l.transform.position;
@@ -179,7 +179,7 @@ public class HERO_SETUP : MonoBehaviour
         }
         if (this.myCostume.mesh_3dmg_gas_r.Length > 0)
         {
-            this.part_3dmg_gas_r = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("Character/" + this.myCostume.mesh_3dmg_gas_r));
+            this.part_3dmg_gas_r = (GameObject) Instantiate(Resources.Load("Character/" + this.myCostume.mesh_3dmg_gas_r));
             if (this.myCostume.uniform_type != UNIFORM_TYPE.CasualAHSS)
             {
                 this.part_3dmg_gas_r.transform.position = this.mount_3dmg_gas_r.transform.position;
@@ -196,7 +196,7 @@ public class HERO_SETUP : MonoBehaviour
         }
         if (this.myCostume.weapon_l_mesh.Length > 0)
         {
-            this.part_blade_l = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("Character/" + this.myCostume.weapon_l_mesh));
+            this.part_blade_l = (GameObject) Instantiate(Resources.Load("Character/" + this.myCostume.weapon_l_mesh));
             this.part_blade_l.transform.position = this.mount_weapon_l.transform.position;
             this.part_blade_l.transform.rotation = this.mount_weapon_l.transform.rotation;
             this.part_blade_l.transform.parent = this.mount_weapon_l.transform.parent;
@@ -205,16 +205,16 @@ public class HERO_SETUP : MonoBehaviour
             {
                 this.part_blade_l.transform.Find("X-WeaponTrailA").GetComponent<XWeaponTrail>().Deactivate();
                 this.part_blade_l.transform.Find("X-WeaponTrailB").GetComponent<XWeaponTrail>().Deactivate();
-                if (base.gameObject.GetComponent<HERO>() != null)
+                if (gameObject.GetComponent<HERO>() != null)
                 {
-                    base.gameObject.GetComponent<HERO>().leftbladetrail = this.part_blade_l.transform.Find("X-WeaponTrailA").GetComponent<XWeaponTrail>();
-                    base.gameObject.GetComponent<HERO>().leftbladetrail2 = this.part_blade_l.transform.Find("X-WeaponTrailB").GetComponent<XWeaponTrail>();
+                    gameObject.GetComponent<HERO>().leftbladetrail = this.part_blade_l.transform.Find("X-WeaponTrailA").GetComponent<XWeaponTrail>();
+                    gameObject.GetComponent<HERO>().leftbladetrail2 = this.part_blade_l.transform.Find("X-WeaponTrailB").GetComponent<XWeaponTrail>();
                 }
             }
         }
         if (this.myCostume.weapon_r_mesh.Length > 0)
         {
-            this.part_blade_r = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("Character/" + this.myCostume.weapon_r_mesh));
+            this.part_blade_r = (GameObject) Instantiate(Resources.Load("Character/" + this.myCostume.weapon_r_mesh));
             this.part_blade_r.transform.position = this.mount_weapon_r.transform.position;
             this.part_blade_r.transform.rotation = this.mount_weapon_r.transform.rotation;
             this.part_blade_r.transform.parent = this.mount_weapon_r.transform.parent;
@@ -223,10 +223,10 @@ public class HERO_SETUP : MonoBehaviour
             {
                 this.part_blade_r.transform.Find("X-WeaponTrailA").GetComponent<XWeaponTrail>().Deactivate();
                 this.part_blade_r.transform.Find("X-WeaponTrailB").GetComponent<XWeaponTrail>().Deactivate();
-                if (base.gameObject.GetComponent<HERO>() != null)
+                if (gameObject.GetComponent<HERO>() != null)
                 {
-                    base.gameObject.GetComponent<HERO>().rightbladetrail = this.part_blade_r.transform.Find("X-WeaponTrailA").GetComponent<XWeaponTrail>();
-                    base.gameObject.GetComponent<HERO>().rightbladetrail2 = this.part_blade_r.transform.Find("X-WeaponTrailB").GetComponent<XWeaponTrail>();
+                    gameObject.GetComponent<HERO>().rightbladetrail = this.part_blade_r.transform.Find("X-WeaponTrailA").GetComponent<XWeaponTrail>();
+                    gameObject.GetComponent<HERO>().rightbladetrail2 = this.part_blade_r.transform.Find("X-WeaponTrailB").GetComponent<XWeaponTrail>();
                 }
             }
         }
@@ -234,7 +234,7 @@ public class HERO_SETUP : MonoBehaviour
 
     public void createCape()
     {
-        UnityEngine.Object.Destroy(this.part_cape);
+        Destroy(this.part_cape);
         if (this.myCostume.cape_mesh.Length > 0)
         {
             this.part_cape = this.GenerateCloth(this.reference, "Character/" + this.myCostume.cape_mesh);
@@ -256,30 +256,30 @@ public class HERO_SETUP : MonoBehaviour
 
     public void createFace()
     {
-        this.part_face = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("Character/character_face"));
+        this.part_face = (GameObject) Instantiate(Resources.Load("Character/character_face"));
         this.part_face.transform.position = this.part_head.transform.position;
         this.part_face.transform.rotation = this.part_head.transform.rotation;
-        this.part_face.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head").transform;
+        this.part_face.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head").transform;
     }
 
     public void createGlass()
     {
-        this.part_glass = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("Character/glass"));
+        this.part_glass = (GameObject) Instantiate(Resources.Load("Character/glass"));
         this.part_glass.transform.position = this.part_head.transform.position;
         this.part_glass.transform.rotation = this.part_head.transform.rotation;
-        this.part_glass.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head").transform;
+        this.part_glass.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head").transform;
     }
 
     public void createHair()
     {
-        UnityEngine.Object.Destroy(this.part_hair);
-        UnityEngine.Object.Destroy(this.part_hair_1);
+        Destroy(this.part_hair);
+        Destroy(this.part_hair_1);
         if (this.myCostume.hair_mesh != string.Empty)
         {
-            this.part_hair = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("Character/" + this.myCostume.hair_mesh));
+            this.part_hair = (GameObject) Instantiate(Resources.Load("Character/" + this.myCostume.hair_mesh));
             this.part_hair.transform.position = this.part_head.transform.position;
             this.part_hair.transform.rotation = this.part_head.transform.rotation;
-            this.part_hair.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head").transform;
+            this.part_hair.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head").transform;
             this.part_hair.renderer.material = CharacterMaterials.materials[this.myCostume.hairInfo.texture];
             this.part_hair.renderer.material.color = this.myCostume.hair_color;
         }
@@ -293,17 +293,17 @@ public class HERO_SETUP : MonoBehaviour
 
     public void createHair2()
     {
-        UnityEngine.Object.Destroy(this.part_hair);
+        Destroy(this.part_hair);
         if (!this.isDeadBody)
         {
             ClothFactory.DisposeObject(this.part_hair_1);
         }
         if (this.myCostume.hair_mesh != string.Empty)
         {
-            this.part_hair = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("Character/" + this.myCostume.hair_mesh));
+            this.part_hair = (GameObject) Instantiate(Resources.Load("Character/" + this.myCostume.hair_mesh));
             this.part_hair.transform.position = this.part_head.transform.position;
             this.part_hair.transform.rotation = this.part_head.transform.rotation;
-            this.part_hair.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head").transform;
+            this.part_hair.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head").transform;
             this.part_hair.renderer.material = CharacterMaterials.materials[this.myCostume.hairInfo.texture];
             this.part_hair.renderer.material.color = this.myCostume.hair_color;
         }
@@ -317,18 +317,18 @@ public class HERO_SETUP : MonoBehaviour
 
     public void createHead()
     {
-        UnityEngine.Object.Destroy(this.part_eye);
-        UnityEngine.Object.Destroy(this.part_face);
-        UnityEngine.Object.Destroy(this.part_glass);
-        UnityEngine.Object.Destroy(this.part_hair);
-        UnityEngine.Object.Destroy(this.part_hair_1);
+        Destroy(this.part_eye);
+        Destroy(this.part_face);
+        Destroy(this.part_glass);
+        Destroy(this.part_hair);
+        Destroy(this.part_hair_1);
         this.createHair2();
         if (this.myCostume.eye_mesh.Length > 0)
         {
-            this.part_eye = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("Character/" + this.myCostume.eye_mesh));
+            this.part_eye = (GameObject) Instantiate(Resources.Load("Character/" + this.myCostume.eye_mesh));
             this.part_eye.transform.position = this.part_head.transform.position;
             this.part_eye.transform.rotation = this.part_head.transform.rotation;
-            this.part_eye.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head").transform;
+            this.part_eye.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head").transform;
             this.setFacialTexture(this.part_eye, this.myCostume.eye_texture_id);
         }
         if (this.myCostume.beard_texture_id >= 0)
@@ -347,10 +347,10 @@ public class HERO_SETUP : MonoBehaviour
 
     public void createHead2()
     {
-        UnityEngine.Object.Destroy(this.part_eye);
-        UnityEngine.Object.Destroy(this.part_face);
-        UnityEngine.Object.Destroy(this.part_glass);
-        UnityEngine.Object.Destroy(this.part_hair);
+        Destroy(this.part_eye);
+        Destroy(this.part_face);
+        Destroy(this.part_glass);
+        Destroy(this.part_hair);
         if (!this.isDeadBody)
         {
             ClothFactory.DisposeObject(this.part_hair_1);
@@ -358,10 +358,10 @@ public class HERO_SETUP : MonoBehaviour
         this.createHair2();
         if (this.myCostume.eye_mesh.Length > 0)
         {
-            this.part_eye = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("Character/" + this.myCostume.eye_mesh));
+            this.part_eye = (GameObject) Instantiate(Resources.Load("Character/" + this.myCostume.eye_mesh));
             this.part_eye.transform.position = this.part_head.transform.position;
             this.part_eye.transform.rotation = this.part_head.transform.rotation;
-            this.part_eye.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head").transform;
+            this.part_eye.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head").transform;
             this.setFacialTexture(this.part_eye, this.myCostume.eye_texture_id);
         }
         if (this.myCostume.beard_texture_id >= 0)
@@ -380,13 +380,13 @@ public class HERO_SETUP : MonoBehaviour
 
     public void createLeftArm()
     {
-        UnityEngine.Object.Destroy(this.part_arm_l);
+        Destroy(this.part_arm_l);
         if (this.myCostume.arm_l_mesh.Length > 0)
         {
             this.part_arm_l = this.GenerateCloth(this.reference, "Character/" + this.myCostume.arm_l_mesh);
             this.part_arm_l.renderer.material = CharacterMaterials.materials[this.myCostume.body_texture];
         }
-        UnityEngine.Object.Destroy(this.part_hand_l);
+        Destroy(this.part_hand_l);
         if (this.myCostume.hand_l_mesh.Length > 0)
         {
             this.part_hand_l = this.GenerateCloth(this.reference, "Character/" + this.myCostume.hand_l_mesh);
@@ -401,13 +401,13 @@ public class HERO_SETUP : MonoBehaviour
 
     public void createRightArm()
     {
-        UnityEngine.Object.Destroy(this.part_arm_r);
+        Destroy(this.part_arm_r);
         if (this.myCostume.arm_r_mesh.Length > 0)
         {
             this.part_arm_r = this.GenerateCloth(this.reference, "Character/" + this.myCostume.arm_r_mesh);
             this.part_arm_r.renderer.material = CharacterMaterials.materials[this.myCostume.body_texture];
         }
-        UnityEngine.Object.Destroy(this.part_hand_r);
+        Destroy(this.part_hand_r);
         if (this.myCostume.hand_r_mesh.Length > 0)
         {
             this.part_hand_r = this.GenerateCloth(this.reference, "Character/" + this.myCostume.hand_r_mesh);
@@ -417,30 +417,30 @@ public class HERO_SETUP : MonoBehaviour
 
     public void createUpperBody()
     {
-        UnityEngine.Object.Destroy(this.part_upper_body);
-        UnityEngine.Object.Destroy(this.part_brand_1);
-        UnityEngine.Object.Destroy(this.part_brand_2);
-        UnityEngine.Object.Destroy(this.part_brand_3);
-        UnityEngine.Object.Destroy(this.part_brand_4);
-        UnityEngine.Object.Destroy(this.part_chest_1);
-        UnityEngine.Object.Destroy(this.part_chest_2);
-        UnityEngine.Object.Destroy(this.part_chest_3);
+        Destroy(this.part_upper_body);
+        Destroy(this.part_brand_1);
+        Destroy(this.part_brand_2);
+        Destroy(this.part_brand_3);
+        Destroy(this.part_brand_4);
+        Destroy(this.part_chest_1);
+        Destroy(this.part_chest_2);
+        Destroy(this.part_chest_3);
         this.createCape2();
         if (this.myCostume.part_chest_object_mesh.Length > 0)
         {
-            this.part_chest_1 = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("Character/" + this.myCostume.part_chest_object_mesh));
+            this.part_chest_1 = (GameObject) Instantiate(Resources.Load("Character/" + this.myCostume.part_chest_object_mesh));
             this.part_chest_1.transform.position = this.chest_info.transform.position;
             this.part_chest_1.transform.rotation = this.chest_info.transform.rotation;
-            this.part_chest_1.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine/chest").transform;
+            this.part_chest_1.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest").transform;
             this.part_chest_1.renderer.material = CharacterMaterials.materials[this.myCostume.part_chest_object_texture];
         }
         if (this.myCostume.part_chest_1_object_mesh.Length > 0)
         {
-            this.part_chest_2 = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("Character/" + this.myCostume.part_chest_1_object_mesh));
+            this.part_chest_2 = (GameObject) Instantiate(Resources.Load("Character/" + this.myCostume.part_chest_1_object_mesh));
             this.part_chest_2.transform.position = this.chest_info.transform.position;
             this.part_chest_2.transform.rotation = this.chest_info.transform.rotation;
-            this.part_chest_2.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine/chest").transform;
-            this.part_chest_2.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine/chest").transform;
+            this.part_chest_2.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest").transform;
+            this.part_chest_2.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest").transform;
             this.part_chest_2.renderer.material = CharacterMaterials.materials[this.myCostume.part_chest_1_object_texture];
         }
         if (this.myCostume.part_chest_skinned_cloth_mesh.Length > 0)
@@ -479,13 +479,13 @@ public class HERO_SETUP : MonoBehaviour
 
     public void createUpperBody2()
     {
-        UnityEngine.Object.Destroy(this.part_upper_body);
-        UnityEngine.Object.Destroy(this.part_brand_1);
-        UnityEngine.Object.Destroy(this.part_brand_2);
-        UnityEngine.Object.Destroy(this.part_brand_3);
-        UnityEngine.Object.Destroy(this.part_brand_4);
-        UnityEngine.Object.Destroy(this.part_chest_1);
-        UnityEngine.Object.Destroy(this.part_chest_2);
+        Destroy(this.part_upper_body);
+        Destroy(this.part_brand_1);
+        Destroy(this.part_brand_2);
+        Destroy(this.part_brand_3);
+        Destroy(this.part_brand_4);
+        Destroy(this.part_chest_1);
+        Destroy(this.part_chest_2);
         if (!this.isDeadBody)
         {
             ClothFactory.DisposeObject(this.part_chest_3);
@@ -493,19 +493,19 @@ public class HERO_SETUP : MonoBehaviour
         this.createCape2();
         if (this.myCostume.part_chest_object_mesh.Length > 0)
         {
-            this.part_chest_1 = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("Character/" + this.myCostume.part_chest_object_mesh));
+            this.part_chest_1 = (GameObject) Instantiate(Resources.Load("Character/" + this.myCostume.part_chest_object_mesh));
             this.part_chest_1.transform.position = this.chest_info.transform.position;
             this.part_chest_1.transform.rotation = this.chest_info.transform.rotation;
-            this.part_chest_1.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine/chest").transform;
+            this.part_chest_1.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest").transform;
             this.part_chest_1.renderer.material = CharacterMaterials.materials[this.myCostume.part_chest_object_texture];
         }
         if (this.myCostume.part_chest_1_object_mesh.Length > 0)
         {
-            this.part_chest_2 = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("Character/" + this.myCostume.part_chest_1_object_mesh));
+            this.part_chest_2 = (GameObject) Instantiate(Resources.Load("Character/" + this.myCostume.part_chest_1_object_mesh));
             this.part_chest_2.transform.position = this.chest_info.transform.position;
             this.part_chest_2.transform.rotation = this.chest_info.transform.rotation;
-            this.part_chest_2.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine/chest").transform;
-            this.part_chest_2.transform.parent = base.transform.Find("Amarture/Controller_Body/hip/spine/chest").transform;
+            this.part_chest_2.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest").transform;
+            this.part_chest_2.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest").transform;
             this.part_chest_2.renderer.material = CharacterMaterials.materials[this.myCostume.part_chest_1_object_texture];
         }
         if (this.myCostume.part_chest_skinned_cloth_mesh.Length > 0 && !this.isDeadBody)
@@ -543,62 +543,62 @@ public class HERO_SETUP : MonoBehaviour
 
     public void deleteCharacterComponent()
     {
-        UnityEngine.Object.Destroy(this.part_eye);
-        UnityEngine.Object.Destroy(this.part_face);
-        UnityEngine.Object.Destroy(this.part_glass);
-        UnityEngine.Object.Destroy(this.part_hair);
-        UnityEngine.Object.Destroy(this.part_hair_1);
-        UnityEngine.Object.Destroy(this.part_upper_body);
-        UnityEngine.Object.Destroy(this.part_arm_l);
-        UnityEngine.Object.Destroy(this.part_arm_r);
-        UnityEngine.Object.Destroy(this.part_hair_2);
-        UnityEngine.Object.Destroy(this.part_cape);
-        UnityEngine.Object.Destroy(this.part_brand_1);
-        UnityEngine.Object.Destroy(this.part_brand_2);
-        UnityEngine.Object.Destroy(this.part_brand_3);
-        UnityEngine.Object.Destroy(this.part_brand_4);
-        UnityEngine.Object.Destroy(this.part_chest_1);
-        UnityEngine.Object.Destroy(this.part_chest_2);
-        UnityEngine.Object.Destroy(this.part_chest_3);
-        UnityEngine.Object.Destroy(this.part_3dmg);
-        UnityEngine.Object.Destroy(this.part_3dmg_belt);
-        UnityEngine.Object.Destroy(this.part_3dmg_gas_l);
-        UnityEngine.Object.Destroy(this.part_3dmg_gas_r);
-        UnityEngine.Object.Destroy(this.part_blade_l);
-        UnityEngine.Object.Destroy(this.part_blade_r);
+        Destroy(this.part_eye);
+        Destroy(this.part_face);
+        Destroy(this.part_glass);
+        Destroy(this.part_hair);
+        Destroy(this.part_hair_1);
+        Destroy(this.part_upper_body);
+        Destroy(this.part_arm_l);
+        Destroy(this.part_arm_r);
+        Destroy(this.part_hair_2);
+        Destroy(this.part_cape);
+        Destroy(this.part_brand_1);
+        Destroy(this.part_brand_2);
+        Destroy(this.part_brand_3);
+        Destroy(this.part_brand_4);
+        Destroy(this.part_chest_1);
+        Destroy(this.part_chest_2);
+        Destroy(this.part_chest_3);
+        Destroy(this.part_3dmg);
+        Destroy(this.part_3dmg_belt);
+        Destroy(this.part_3dmg_gas_l);
+        Destroy(this.part_3dmg_gas_r);
+        Destroy(this.part_blade_l);
+        Destroy(this.part_blade_r);
     }
 
     public void deleteCharacterComponent2()
     {
-        UnityEngine.Object.Destroy(this.part_eye);
-        UnityEngine.Object.Destroy(this.part_face);
-        UnityEngine.Object.Destroy(this.part_glass);
-        UnityEngine.Object.Destroy(this.part_hair);
+        Destroy(this.part_eye);
+        Destroy(this.part_face);
+        Destroy(this.part_glass);
+        Destroy(this.part_hair);
         if (!this.isDeadBody)
         {
             ClothFactory.DisposeObject(this.part_hair_1);
         }
-        UnityEngine.Object.Destroy(this.part_upper_body);
-        UnityEngine.Object.Destroy(this.part_arm_l);
-        UnityEngine.Object.Destroy(this.part_arm_r);
+        Destroy(this.part_upper_body);
+        Destroy(this.part_arm_l);
+        Destroy(this.part_arm_r);
         if (!this.isDeadBody)
         {
             ClothFactory.DisposeObject(this.part_hair_2);
             ClothFactory.DisposeObject(this.part_cape);
         }
-        UnityEngine.Object.Destroy(this.part_brand_1);
-        UnityEngine.Object.Destroy(this.part_brand_2);
-        UnityEngine.Object.Destroy(this.part_brand_3);
-        UnityEngine.Object.Destroy(this.part_brand_4);
-        UnityEngine.Object.Destroy(this.part_chest_1);
-        UnityEngine.Object.Destroy(this.part_chest_2);
-        UnityEngine.Object.Destroy(this.part_chest_3);
-        UnityEngine.Object.Destroy(this.part_3dmg);
-        UnityEngine.Object.Destroy(this.part_3dmg_belt);
-        UnityEngine.Object.Destroy(this.part_3dmg_gas_l);
-        UnityEngine.Object.Destroy(this.part_3dmg_gas_r);
-        UnityEngine.Object.Destroy(this.part_blade_l);
-        UnityEngine.Object.Destroy(this.part_blade_r);
+        Destroy(this.part_brand_1);
+        Destroy(this.part_brand_2);
+        Destroy(this.part_brand_3);
+        Destroy(this.part_brand_4);
+        Destroy(this.part_chest_1);
+        Destroy(this.part_chest_2);
+        Destroy(this.part_chest_3);
+        Destroy(this.part_3dmg);
+        Destroy(this.part_3dmg_belt);
+        Destroy(this.part_3dmg_gas_l);
+        Destroy(this.part_3dmg_gas_r);
+        Destroy(this.part_blade_l);
+        Destroy(this.part_blade_r);
     }
 
     private GameObject GenerateCloth(GameObject go, string res)
@@ -609,7 +609,7 @@ public class HERO_SETUP : MonoBehaviour
         }
         SkinnedMeshRenderer component = go.GetComponent<SkinnedMeshRenderer>();
         Transform[] bones = component.bones;
-        SkinnedMeshRenderer renderer2 = ((GameObject) UnityEngine.Object.Instantiate(Resources.Load(res))).GetComponent<SkinnedMeshRenderer>();
+        SkinnedMeshRenderer renderer2 = ((GameObject) Instantiate(Resources.Load(res))).GetComponent<SkinnedMeshRenderer>();
         renderer2.gameObject.transform.parent = component.gameObject.transform.parent;
         renderer2.transform.localPosition = Vector3.zero;
         renderer2.transform.localScale = Vector3.one;

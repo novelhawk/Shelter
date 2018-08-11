@@ -109,13 +109,13 @@ public class UITooltip : MonoBehaviour
 
     private void Start()
     {
-        this.mTrans = base.transform;
-        this.mWidgets = base.GetComponentsInChildren<UIWidget>();
+        this.mTrans = transform;
+        this.mWidgets = GetComponentsInChildren<UIWidget>();
         this.mPos = this.mTrans.localPosition;
         this.mSize = this.mTrans.localScale;
         if (this.uiCamera == null)
         {
-            this.uiCamera = NGUITools.FindCameraForLayer(base.gameObject.layer);
+            this.uiCamera = NGUITools.FindCameraForLayer(gameObject.layer);
         }
         this.SetAlpha(0f);
     }

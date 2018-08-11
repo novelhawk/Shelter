@@ -22,7 +22,7 @@ public class LagRotation : MonoBehaviour
 
     private void Start()
     {
-        this.mTrans = base.transform;
+        this.mTrans = transform;
         this.mRelative = this.mTrans.localRotation;
         this.mAbsolute = this.mTrans.rotation;
         if (this.ignoreTimeScale)

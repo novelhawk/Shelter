@@ -31,7 +31,7 @@ public class NGUIDebug : MonoBehaviour
             {
                 GameObject target = new GameObject("_NGUI Debug");
                 mInstance = target.AddComponent<NGUIDebug>();
-                UnityEngine.Object.DontDestroyOnLoad(target);
+                DontDestroyOnLoad(target);
             }
         }
         else

@@ -12,18 +12,18 @@ public class SmoothSyncMovement3 : Photon.MonoBehaviour
         this.SmoothingDelay = 10f;
         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
         {
-            base.enabled = false;
+            enabled = false;
         }
-        this.correctPlayerPos = base.transform.position;
-        this.correctPlayerRot = base.transform.rotation;
+        this.correctPlayerPos = transform.position;
+        this.correctPlayerRot = transform.rotation;
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.isWriting)
         {
-            stream.SendNext(base.transform.position);
-            stream.SendNext(base.transform.rotation);
+            stream.SendNext(transform.position);
+            stream.SendNext(transform.rotation);
         }
         else
         {
@@ -34,10 +34,10 @@ public class SmoothSyncMovement3 : Photon.MonoBehaviour
 
     public void Update()
     {
-        if (!this.disabled && !base.photonView.isMine)
+        if (!this.disabled && !photonView.isMine)
         {
-            base.transform.position = Vector3.Lerp(base.transform.position, this.correctPlayerPos, Time.deltaTime * this.SmoothingDelay);
-            base.transform.rotation = Quaternion.Lerp(base.transform.rotation, this.correctPlayerRot, Time.deltaTime * this.SmoothingDelay);
+            transform.position = Vector3.Lerp(transform.position, this.correctPlayerPos, Time.deltaTime * this.SmoothingDelay);
+            transform.rotation = Quaternion.Lerp(transform.rotation, this.correctPlayerRot, Time.deltaTime * this.SmoothingDelay);
         }
     }
 }

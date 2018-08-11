@@ -8,7 +8,7 @@ public class CatchDestroy : MonoBehaviour
     {
         if (this.target != null)
         {
-            UnityEngine.Object.Destroy(this.target);
+            Destroy(this.target);
         }
     }
 }

@@ -7,7 +7,7 @@ public class EffectController : MonoBehaviour
 
     protected Vector3 GetFaceDirection()
     {
-        return base.transform.TransformDirection(Vector3.forward);
+        return transform.TransformDirection(Vector3.forward);
     }
 
     private void OnEffect(string eftname)
@@ -19,8 +19,8 @@ public class EffectController : MonoBehaviour
             {
                 component = this.EffectCache.GetObject(eftname).GetComponent<Xffect>();
                 Vector3 zero = Vector3.zero;
-                zero.x = UnityEngine.Random.Range(-2.2f, 2.3f);
-                zero.z = UnityEngine.Random.Range(-2.1f, 2.1f);
+                zero.x = Random.Range(-2.2f, 2.3f);
+                zero.z = Random.Range(-2.1f, 2.1f);
                 component.SetEmitPosition(zero);
                 component.Active();
             }

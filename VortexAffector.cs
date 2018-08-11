@@ -23,7 +23,7 @@ public class VortexAffector : Affector
 
     public override void Update()
     {
-        Vector3 rhs = base.Node.GetLocalPosition() - base.Node.Owner.EmitPoint;
+        Vector3 rhs = Node.GetLocalPosition() - Node.Owner.EmitPoint;
         if (rhs.magnitude != 0f)
         {
             float magnitude;
@@ -38,7 +38,7 @@ public class VortexAffector : Affector
             {
                 zero = Vector3.Cross(this.Direction, rhs).normalized;
             }
-            float elapsedTime = base.Node.GetElapsedTime();
+            float elapsedTime = Node.GetElapsedTime();
             if (this.UseCurve)
             {
                 magnitude = this.VortexCurve.Evaluate(elapsedTime);
@@ -48,7 +48,7 @@ public class VortexAffector : Affector
                 magnitude = this.Magnitude;
             }
             zero = zero * (magnitude * Time.deltaTime);
-            base.Node.Position += zero;
+            Node.Position += zero;
         }
     }
 }

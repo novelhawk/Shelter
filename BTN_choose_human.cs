@@ -7,12 +7,12 @@ public class BTN_choose_human : MonoBehaviour
     {
         int num = 0;
         int num2 = 0;
-        foreach (PhotonPlayer player in PhotonNetwork.playerList)
+        foreach (Player player in PhotonNetwork.playerList)
         {
-            if ((int) player.CustomProperties[PhotonPlayerProperty.isTitan] == 1)
+            if ((int) player.Properties[PhotonPlayerProperty.isTitan] == 1)
             {
                 num++;
-                if ((bool) player.CustomProperties[PhotonPlayerProperty.dead])
+                if ((bool) player.Properties[PhotonPlayerProperty.dead])
                 {
                     num2++;
                 }
@@ -25,12 +25,12 @@ public class BTN_choose_human : MonoBehaviour
     {
         int num = 0;
         int num2 = 0;
-        foreach (PhotonPlayer player in PhotonNetwork.playerList)
+        foreach (Player player in PhotonNetwork.playerList)
         {
-            if (RCextensions.returnIntFromObject(player.CustomProperties[PhotonPlayerProperty.isTitan]) == 1)
+            if (RCextensions.returnIntFromObject(player.Properties[PhotonPlayerProperty.isTitan]) == 1)
             {
                 num++;
-                if (RCextensions.returnBoolFromObject(player.CustomProperties[PhotonPlayerProperty.dead]))
+                if (RCextensions.returnBoolFromObject(player.Properties[PhotonPlayerProperty.dead]))
                 {
                     num2++;
                 }
@@ -86,7 +86,7 @@ public class BTN_choose_human : MonoBehaviour
             { PhotonPlayerProperty.character, selection }
         };
         Hashtable propertiesToSet = hashtable;
-        PhotonPlayer.Self.SetCustomProperties(propertiesToSet);
+        Player.Self.SetCustomProperties(propertiesToSet);
     }
 }
 

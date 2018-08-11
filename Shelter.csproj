@@ -2,7 +2,7 @@
   <PropertyGroup>
     <TargetFramework>net35</TargetFramework>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <OutputPath>C:\Users\utente\Desktop\AoTTG_Data\Managed\</OutputPath>
+    <OutputPath>D:\Attack on Titan\Launcher\AoTTG_Data\Managed\</OutputPath>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AssemblyName>Assembly-CSharp</AssemblyName>
     <OutputType>Library</OutputType>
@@ -22,7 +22,6 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <DefineConstants>RELEASE</DefineConstants>
   </PropertyGroup>
-  
   <ItemGroup>
     <None Remove="Mod\Resources\Background.png" />
     <None Remove="Mod\Resources\Loading.png" />
@@ -31,7 +30,6 @@
     <EmbeddedResource Include="Mod\Resources\Background.png" />
     <EmbeddedResource Include="Mod\Resources\Loading.png" />
   </ItemGroup>
-
   <ItemGroup>
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>D:\Attack on Titan\Assemblies\Assembly-CSharp-firstpass.dll</HintPath>

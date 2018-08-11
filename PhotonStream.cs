@@ -44,7 +44,7 @@ public class PhotonStream
         }
     }
 
-    public void Serialize(ref PhotonPlayer obj)
+    public void Serialize(ref Player obj)
     {
         if (this.write)
         {
@@ -52,7 +52,7 @@ public class PhotonStream
         }
         else if (this.data.Count > this.currentItem)
         {
-            obj = (PhotonPlayer) this.data[this.currentItem];
+            obj = (Player) this.data[this.currentItem];
             this.currentItem = (byte) (this.currentItem + 1);
         }
     }

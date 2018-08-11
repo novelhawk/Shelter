@@ -22,7 +22,7 @@ public class SpinWithMouse : MonoBehaviour
 
     private void Start()
     {
-        this.mTrans = base.transform;
+        this.mTrans = transform;
     }
 }
 

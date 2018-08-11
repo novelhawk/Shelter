@@ -16,11 +16,11 @@ public class DownloadTexture : MonoBehaviour
     {
         if (this.mMat != null)
         {
-            UnityEngine.Object.Destroy(this.mMat);
+            Destroy(this.mMat);
         }
         if (this.mTex != null)
         {
-            UnityEngine.Object.Destroy(this.mTex);
+            Destroy(this.mTex);
         }
     }
 

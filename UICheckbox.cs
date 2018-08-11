@@ -21,7 +21,7 @@ public class UICheckbox : MonoBehaviour
 
     private void Awake()
     {
-        this.mTrans = base.transform;
+        this.mTrans = transform;
         if (this.checkSprite != null)
         {
             this.checkSprite.alpha = !this.startsChecked ? 0f : 1f;
@@ -38,7 +38,7 @@ public class UICheckbox : MonoBehaviour
 
     private void OnClick()
     {
-        if (base.enabled)
+        if (enabled)
         {
             this.isChecked = !this.isChecked;
         }
@@ -105,7 +105,7 @@ public class UICheckbox : MonoBehaviour
     {
         if (this.eventReceiver == null)
         {
-            this.eventReceiver = base.gameObject;
+            this.eventReceiver = gameObject;
         }
         this.mChecked = !this.startsChecked;
         this.mStarted = true;

@@ -18,7 +18,7 @@ public class OnJoinedInstantiate : MonoBehaviour
                 {
                     up = this.SpawnPosition.position;
                 }
-                Vector3 insideUnitSphere = UnityEngine.Random.insideUnitSphere;
+                Vector3 insideUnitSphere = Random.insideUnitSphere;
                 insideUnitSphere.y = 0f;
                 insideUnitSphere = insideUnitSphere.normalized;
                 Vector3 position = up + this.PositionOffset * insideUnitSphere;

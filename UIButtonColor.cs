@@ -15,7 +15,7 @@ public class UIButtonColor : MonoBehaviour
     {
         if (this.tweenTarget == null)
         {
-            this.tweenTarget = base.gameObject;
+            this.tweenTarget = gameObject;
         }
         UIWidget component = this.tweenTarget.GetComponent<UIWidget>();
         if (component != null)
@@ -38,8 +38,8 @@ public class UIButtonColor : MonoBehaviour
                 }
                 else
                 {
-                    Debug.LogWarning(NGUITools.GetHierarchy(base.gameObject) + " has nothing for UIButtonColor to color", this);
-                    base.enabled = false;
+                    Debug.LogWarning(NGUITools.GetHierarchy(gameObject) + " has nothing for UIButtonColor to color", this);
+                    enabled = false;
                 }
             }
         }
@@ -63,13 +63,13 @@ public class UIButtonColor : MonoBehaviour
     {
         if (this.mStarted && this.mHighlighted)
         {
-            this.OnHover(UICamera.IsHighlighted(base.gameObject));
+            this.OnHover(UICamera.IsHighlighted(gameObject));
         }
     }
 
     public virtual void OnHover(bool isOver)
     {
-        if (base.enabled)
+        if (enabled)
         {
             if (!this.mStarted)
             {
@@ -82,13 +82,13 @@ public class UIButtonColor : MonoBehaviour
 
     public virtual void OnPress(bool isPressed)
     {
-        if (base.enabled)
+        if (enabled)
         {
             if (!this.mStarted)
             {
                 this.Start();
             }
-            TweenColor.Begin(this.tweenTarget, this.duration, !isPressed ? (!UICamera.IsHighlighted(base.gameObject) ? this.mColor : this.hover) : this.pressed);
+            TweenColor.Begin(this.tweenTarget, this.duration, !isPressed ? (!UICamera.IsHighlighted(gameObject) ? this.mColor : this.hover) : this.pressed);
         }
     }
 

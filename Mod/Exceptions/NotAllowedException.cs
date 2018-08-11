@@ -7,16 +7,18 @@ namespace Mod.Exceptions
     [Serializable]
     public class NotAllowedException : CustomException
     {
-        public NotAllowedException(string eventId, PhotonPlayer sender)
+        public NotAllowedException(string eventId, Player sender)
         {
-            Chat.SendMessage($"NotAllowedExeption from {sender} on calling Event({eventId})"); // Temp global
-            Chat.SendMessage("Ignore is temporaly disabled");
+            Chat.System($"NotAllowedExeption from {sender} on calling Event({eventId})");
+            if (!FengGameManagerMKII.ignoreList.Contains(sender.ID))
+                FengGameManagerMKII.ignoreList.Add(sender.ID);
         }
 
         public NotAllowedException(string rpc, PhotonMessageInfo info)
         {
-            Chat.SendMessage($"NotAllowedExeption from {info.sender} on calling RPC({rpc})"); // Temp global
-            Chat.SendMessage("Ignore is temporaly disabled");
+            Chat.System($"NotAllowedExeption from {info.sender} on calling RPC({rpc})");
+            if (!FengGameManagerMKII.ignoreList.Contains(info.sender.ID))
+                FengGameManagerMKII.ignoreList.Add(info.sender.ID);
         }
     }
 }

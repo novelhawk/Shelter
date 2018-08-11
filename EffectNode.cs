@@ -7,7 +7,7 @@ public class EffectNode
     public float Acceleration;
     protected ArrayList AffectorList;
     public Transform ClientTrans;
-    public UnityEngine.Color Color;
+    public Color Color;
     protected Vector3 CurDirection;
     protected Vector3 CurWorldPos;
     protected float ElapsedTime;
@@ -40,7 +40,7 @@ public class EffectNode
         this.UVDimensions = Vector2.one;
         this.Scale = Vector2.one;
         this.RotateAngle = 0f;
-        this.Color = UnityEngine.Color.white;
+        this.Color = Color.white;
     }
 
     public float GetElapsedTime()
@@ -58,7 +58,7 @@ public class EffectNode
         return this.Position;
     }
 
-    public void Init(Vector3 oriDir, float speed, float life, int oriRot, float oriScaleX, float oriScaleY, UnityEngine.Color oriColor, Vector2 oriLowerUv, Vector2 oriUVDimension)
+    public void Init(Vector3 oriDir, float speed, float life, int oriRot, float oriScaleX, float oriScaleY, Color oriColor, Vector2 oriLowerUv, Vector2 oriUVDimension)
     {
         this.OriDirection = oriDir;
         this.LifeTime = life;
@@ -122,7 +122,7 @@ public class EffectNode
         {
             this.Sprite.SetRotation(this.OriRotateAngle);
             this.Sprite.SetPosition(this.Position);
-            this.Sprite.SetColor(UnityEngine.Color.clear);
+            this.Sprite.SetColor(Color.clear);
             this.Sprite.Update(true);
             this.Scale = Vector2.one;
         }
@@ -130,7 +130,7 @@ public class EffectNode
         {
             this.Ribbon.SetHeadPosition(this.ClientTrans.position + this.OriDirection.normalized * this.Owner.TailDistance);
             this.Ribbon.Reset();
-            this.Ribbon.SetColor(UnityEngine.Color.clear);
+            this.Ribbon.SetColor(Color.clear);
             this.Ribbon.UpdateVertices(Vector3.zero);
         }
     }

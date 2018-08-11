@@ -13,7 +13,7 @@ public class Xffect : MonoBehaviour
 
     public void Active()
     {
-        IEnumerator enumerator = base.transform.GetEnumerator();
+        IEnumerator enumerator = transform.GetEnumerator();
         try
         {
             while (enumerator.MoveNext())
@@ -30,7 +30,7 @@ public class Xffect : MonoBehaviour
                 disposable.Dispose();
             }
         }
-        base.gameObject.SetActive(true);
+        gameObject.SetActive(true);
         this.ElapsedTime = 0f;
     }
 
@@ -41,7 +41,7 @@ public class Xffect : MonoBehaviour
 
     public void DeActive()
     {
-        IEnumerator enumerator = base.transform.GetEnumerator();
+        IEnumerator enumerator = transform.GetEnumerator();
         try
         {
             while (enumerator.MoveNext())
@@ -58,14 +58,14 @@ public class Xffect : MonoBehaviour
                 disposable.Dispose();
             }
         }
-        base.gameObject.SetActive(false);
+        gameObject.SetActive(false);
     }
 
     public void Initialize()
     {
         if (this.EflList.Count <= 0)
         {
-            IEnumerator enumerator = base.transform.GetEnumerator();
+            IEnumerator enumerator = transform.GetEnumerator();
             try
             {
                 while (enumerator.MoveNext())
@@ -80,7 +80,7 @@ public class Xffect : MonoBehaviour
                             MeshRenderer renderer;
                             Material material = component.Material;
                             this.EflList.Add(component);
-                            Transform transform2 = base.transform.Find("mesh " + material.name);
+                            Transform transform2 = transform.Find("mesh " + material.name);
                             if (transform2 != null)
                             {
                                 filter = (MeshFilter) transform2.GetComponent(typeof(MeshFilter));
@@ -91,7 +91,7 @@ public class Xffect : MonoBehaviour
                             if (!this.MatDic.ContainsKey(material.name))
                             {
                                 GameObject obj2 = new GameObject("mesh " + material.name) {
-                                    transform = { parent = base.transform }
+                                    transform = { parent = transform }
                                 };
                                 obj2.AddComponent("MeshFilter");
                                 obj2.AddComponent("MeshRenderer");
@@ -167,10 +167,10 @@ public class Xffect : MonoBehaviour
 
     private void Start()
     {
-        base.transform.position = Vector3.zero;
-        base.transform.rotation = Quaternion.identity;
-        base.transform.localScale = Vector3.one;
-        IEnumerator enumerator = base.transform.GetEnumerator();
+        transform.position = Vector3.zero;
+        transform.rotation = Quaternion.identity;
+        transform.localScale = Vector3.one;
+        IEnumerator enumerator = transform.GetEnumerator();
         try
         {
             while (enumerator.MoveNext())

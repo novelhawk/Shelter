@@ -9,8 +9,8 @@ namespace Mod.Commands
 
         public override void Execute(string[] args)
         {
-            if (!PhotonPlayer.TryParse(args[0], out PhotonPlayer player))
-                player = PhotonPlayer.Self;
+            if (!Player.TryParse(args[0], out Player player))
+                player = Player.Self;
             PhotonNetwork.SetMasterClient(player);
             Chat.System($"{player} is now MasterClient.");
         }

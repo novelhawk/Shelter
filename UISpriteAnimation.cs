@@ -20,7 +20,7 @@ public class UISpriteAnimation : MonoBehaviour
     {
         if (this.mSprite == null)
         {
-            this.mSprite = base.GetComponent<UISprite>();
+            this.mSprite = GetComponent<UISprite>();
         }
         this.mSpriteNames.Clear();
         if (this.mSprite != null && this.mSprite.atlas != null)

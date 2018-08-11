@@ -20,15 +20,15 @@ public class RotateAffector : Affector
 
     public override void Update()
     {
-        float elapsedTime = base.Node.GetElapsedTime();
+        float elapsedTime = Node.GetElapsedTime();
         if (this.Type == RSTYPE.CURVE)
         {
-            base.Node.RotateAngle = (int) this.RotateCurve.Evaluate(elapsedTime);
+            Node.RotateAngle = (int) this.RotateCurve.Evaluate(elapsedTime);
         }
         else if (this.Type == RSTYPE.SIMPLE)
         {
-            float num2 = base.Node.RotateAngle + this.Delta * Time.deltaTime;
-            base.Node.RotateAngle = num2;
+            float num2 = Node.RotateAngle + this.Delta * Time.deltaTime;
+            Node.RotateAngle = num2;
         }
     }
 }

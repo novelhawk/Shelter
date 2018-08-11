@@ -18,17 +18,17 @@ public class RCRegion
 
     public float GetRandomX()
     {
-        return this.location.x + UnityEngine.Random.Range(-this.dimX / 2f, this.dimX / 2f);
+        return this.location.x + Random.Range(-this.dimX / 2f, this.dimX / 2f);
     }
 
     public float GetRandomY()
     {
-        return this.location.y + UnityEngine.Random.Range(-this.dimY / 2f, this.dimY / 2f);
+        return this.location.y + Random.Range(-this.dimY / 2f, this.dimY / 2f);
     }
 
     public float GetRandomZ()
     {
-        return this.location.z + UnityEngine.Random.Range(-this.dimZ / 2f, this.dimZ / 2f);
+        return this.location.z + Random.Range(-this.dimZ / 2f, this.dimZ / 2f);
     }
 }
 

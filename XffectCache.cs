@@ -5,36 +5,35 @@ using UnityEngine;
 
 public class XffectCache : MonoBehaviour
 {
-    private readonly Dictionary<string, ArrayList> ObjectDic = new Dictionary<string, ArrayList>();
+    private readonly Dictionary<string, ArrayList> _objects = new Dictionary<string, ArrayList>();
 
-    protected Transform AddObject(string name)
+    private Transform AddObject(string objectName)
     {
-        Transform original = base.transform.Find(name);
+        Transform original = transform.Find(objectName);
         if (original == null)
-        {
-            Debug.Log("object:" + name + "doesn't exist!");
-            return null;
-        }
-        Transform transform2 = UnityEngine.Object.Instantiate(original, Vector3.zero, Quaternion.identity) as Transform;
-        this.ObjectDic[name].Add(transform2);
-        transform2.gameObject.SetActive(false);
-        Xffect component = transform2.GetComponent<Xffect>();
+            throw new NullReferenceException(nameof(original) + " is null @ " + nameof(XffectCache));
+        
+        Transform obj = Instantiate(original, Vector3.zero, Quaternion.identity) as Transform;
+        if (obj == null)
+            throw new NullReferenceException(nameof(obj) + " is null @ " + nameof(XffectCache));
+        obj.gameObject.SetActive(false);
+        _objects[objectName].Add(obj);
+        
+        Xffect component = obj.GetComponent<Xffect>();
         if (component != null)
-        {
             component.Initialize();
-        }
-        return transform2;
+        return obj;
     }
 
     private void Awake()
     {
-        IEnumerator enumerator = base.transform.GetEnumerator();
+        IEnumerator enumerator = transform.GetEnumerator();
         try
         {
             while (enumerator.MoveNext())
             {
                 Transform current = (Transform)enumerator.Current;
-                this.ObjectDic[current.name] = new ArrayList
+                this._objects[current.name] = new ArrayList
                 {
                     current
                 };
@@ -55,7 +54,7 @@ public class XffectCache : MonoBehaviour
 
     public Transform GetObject(string name)
     {
-        ArrayList list = this.ObjectDic[name];
+        ArrayList list = this._objects[name];
         if (list == null)
         {
             Debug.LogError(name + ": cache doesnt exist!");
@@ -84,7 +83,7 @@ public class XffectCache : MonoBehaviour
 
     public ArrayList GetObjectCache(string name)
     {
-        ArrayList list = this.ObjectDic[name];
+        ArrayList list = this._objects[name];
         if (list == null)
         {
             Debug.LogError(name + ": cache doesnt exist!");

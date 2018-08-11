@@ -12,9 +12,9 @@ namespace Mod.Commands
         {
             if (args.Length < 1)
                 throw new CommandArgumentException(CommandName, "/prop [id]");
-            if (!PhotonPlayer.TryParse(args[0], out PhotonPlayer player))
+            if (!Player.TryParse(args[0], out Player player))
                 throw new PlayerNotFoundException();
-            var list = player.CustomProperties.Keys.Where(prop => !PhotonPlayer.Self.CustomProperties.Keys.Contains(prop)).Select(prop => prop.ToString()).ToList();
+            var list = player.Properties.Keys.Where(prop => !Player.Self.Properties.Keys.Contains(prop)).Select(prop => prop.ToString()).ToList();
             foreach (var str in list)
                 if (str != "sender")
                     Chat.SendMessage(str);

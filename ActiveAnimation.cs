@@ -9,20 +9,20 @@ public class ActiveAnimation : IgnoreTimeScale
     public string callWhenFinished;
     public GameObject eventReceiver;
     private Animation mAnim;
-    private AnimationOrTween.Direction mDisableDirection;
-    private AnimationOrTween.Direction mLastDirection;
+    private Direction mDisableDirection;
+    private Direction mLastDirection;
     private bool mNotify;
     public OnFinished onFinished;
 
-    private void Play(string clipName, AnimationOrTween.Direction playDirection)
+    private void Play(string clipName, Direction playDirection)
     {
         if (this.mAnim != null)
         {
-            base.enabled = true;
+            enabled = true;
             this.mAnim.enabled = false;
-            if (playDirection == AnimationOrTween.Direction.Toggle)
+            if (playDirection == Direction.Toggle)
             {
-                playDirection = this.mLastDirection == AnimationOrTween.Direction.Forward ? AnimationOrTween.Direction.Reverse : AnimationOrTween.Direction.Forward;
+                playDirection = this.mLastDirection == Direction.Forward ? Direction.Reverse : Direction.Forward;
             }
             if (string.IsNullOrEmpty(clipName))
             {
@@ -45,11 +45,11 @@ public class ActiveAnimation : IgnoreTimeScale
                     {
                         float num = Mathf.Abs(current.speed);
                         current.speed = num * (float) playDirection;
-                        if (playDirection == AnimationOrTween.Direction.Reverse && current.time == 0f)
+                        if (playDirection == Direction.Reverse && current.time == 0f)
                         {
                             current.time = current.length;
                         }
-                        else if (playDirection == AnimationOrTween.Direction.Forward && current.time == current.length)
+                        else if (playDirection == Direction.Forward && current.time == current.length)
                         {
                             current.time = 0f;
                         }
@@ -69,17 +69,17 @@ public class ActiveAnimation : IgnoreTimeScale
         }
     }
 
-    public static ActiveAnimation Play(Animation anim, AnimationOrTween.Direction playDirection)
+    public static ActiveAnimation Play(Animation anim, Direction playDirection)
     {
         return Play(anim, null, playDirection, EnableCondition.DoNothing, DisableCondition.DoNotDisable);
     }
 
-    public static ActiveAnimation Play(Animation anim, string clipName, AnimationOrTween.Direction playDirection)
+    public static ActiveAnimation Play(Animation anim, string clipName, Direction playDirection)
     {
         return Play(anim, clipName, playDirection, EnableCondition.DoNothing, DisableCondition.DoNotDisable);
     }
 
-    public static ActiveAnimation Play(Animation anim, string clipName, AnimationOrTween.Direction playDirection, EnableCondition enableBeforePlay, DisableCondition disableCondition)
+    public static ActiveAnimation Play(Animation anim, string clipName, Direction playDirection, EnableCondition enableBeforePlay, DisableCondition disableCondition)
     {
         if (!NGUITools.GetActive(anim.gameObject))
         {
@@ -103,7 +103,7 @@ public class ActiveAnimation : IgnoreTimeScale
             component = anim.gameObject.AddComponent<ActiveAnimation>();
         }
         component.mAnim = anim;
-        component.mDisableDirection = (AnimationOrTween.Direction) disableCondition;
+        component.mDisableDirection = (Direction) disableCondition;
         component.eventReceiver = null;
         component.callWhenFinished = null;
         component.onFinished = null;
@@ -121,11 +121,11 @@ public class ActiveAnimation : IgnoreTimeScale
                 while (enumerator.MoveNext())
                 {
                     AnimationState current = (AnimationState) enumerator.Current;
-                    if (this.mLastDirection == AnimationOrTween.Direction.Reverse)
+                    if (this.mLastDirection == Direction.Reverse)
                     {
                         current.time = current.length;
                     }
-                    else if (this.mLastDirection == AnimationOrTween.Direction.Forward)
+                    else if (this.mLastDirection == Direction.Forward)
                     {
                         current.time = 0f;
                     }
@@ -143,7 +143,7 @@ public class ActiveAnimation : IgnoreTimeScale
 
     private void Update()
     {
-        float num = base.UpdateRealTimeDelta();
+        float num = UpdateRealTimeDelta();
         if (num != 0f)
         {
             if (this.mAnim != null)
@@ -191,7 +191,7 @@ public class ActiveAnimation : IgnoreTimeScale
                 this.mAnim.Sample();
                 if (!flag)
                 {
-                    base.enabled = false;
+                    enabled = false;
                     if (this.mNotify)
                     {
                         this.mNotify = false;
@@ -203,16 +203,16 @@ public class ActiveAnimation : IgnoreTimeScale
                         {
                             this.eventReceiver.SendMessage(this.callWhenFinished, this, SendMessageOptions.DontRequireReceiver);
                         }
-                        if (this.mDisableDirection != AnimationOrTween.Direction.Toggle && this.mLastDirection == this.mDisableDirection)
+                        if (this.mDisableDirection != Direction.Toggle && this.mLastDirection == this.mDisableDirection)
                         {
-                            NGUITools.SetActive(base.gameObject, false);
+                            NGUITools.SetActive(gameObject, false);
                         }
                     }
                 }
             }
             else
             {
-                base.enabled = false;
+                enabled = false;
             }
         }
     }
@@ -231,7 +231,7 @@ public class ActiveAnimation : IgnoreTimeScale
                         AnimationState current = (AnimationState) enumerator.Current;
                         if (this.mAnim.IsPlaying(current.name))
                         {
-                            if (this.mLastDirection == AnimationOrTween.Direction.Forward)
+                            if (this.mLastDirection == Direction.Forward)
                             {
                                 if (current.time < current.length)
                                 {
@@ -240,7 +240,7 @@ public class ActiveAnimation : IgnoreTimeScale
                             }
                             else
                             {
-                                if (this.mLastDirection != AnimationOrTween.Direction.Reverse)
+                                if (this.mLastDirection != Direction.Reverse)
                                 {
                                     return true;
                                 }

@@ -25,13 +25,13 @@ public class LagPosition : MonoBehaviour
 
     private void OnEnable()
     {
-        this.mTrans = base.transform;
+        this.mTrans = transform;
         this.mAbsolute = this.mTrans.position;
     }
 
     private void Start()
     {
-        this.mTrans = base.transform;
+        this.mTrans = transform;
         this.mRelative = this.mTrans.localPosition;
         if (this.ignoreTimeScale)
         {

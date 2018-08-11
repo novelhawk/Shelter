@@ -328,7 +328,7 @@ public class RCAction
             case 5:
             {
                 string str10 = this.parameters[0].returnString(null);
-                PhotonPlayer player = this.parameters[1].returnPlayer(null);
+                Player player = this.parameters[1].returnPlayer(null);
                 if (this.actionType == 0)
                 {
                     if (!FengGameManagerMKII.playerVariables.ContainsKey(str10))
@@ -363,7 +363,7 @@ public class RCAction
             }
             case 7:
             {
-                PhotonPlayer targetPlayer = this.parameters[0].returnPlayer(null);
+                Player targetPlayer = this.parameters[0].returnPlayer(null);
                 switch (this.actionType)
                 {
                     case 0:

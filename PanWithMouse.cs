@@ -11,13 +11,13 @@ public class PanWithMouse : IgnoreTimeScale
 
     private void Start()
     {
-        this.mTrans = base.transform;
+        this.mTrans = transform;
         this.mStart = this.mTrans.localRotation;
     }
 
     private void Update()
     {
-        float num = base.UpdateRealTimeDelta();
+        float num = UpdateRealTimeDelta();
         Vector3 mousePosition = Input.mousePosition;
         float num2 = Screen.width * 0.5f;
         float num3 = Screen.height * 0.5f;

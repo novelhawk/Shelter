@@ -9,7 +9,7 @@ public class SupportLogger : MonoBehaviour
         if (GameObject.Find("PunSupportLogger") == null)
         {
             GameObject target = new GameObject("PunSupportLogger");
-            UnityEngine.Object.DontDestroyOnLoad(target);
+            DontDestroyOnLoad(target);
             target.AddComponent<SupportLogging>().LogTrafficStats = this.LogTrafficStats;
         }
     }

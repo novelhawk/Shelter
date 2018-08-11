@@ -29,7 +29,7 @@ public class Emitter
 
     protected int EmitByRate()
     {
-        int num = UnityEngine.Random.Range(0, 100);
+        int num = Random.Range(0, 100);
         if (num >= 0 && num > this.Layer.ChanceToEmit)
         {
             return 0;
@@ -103,7 +103,7 @@ public class Emitter
         if (this.Layer.IsRandomDir)
         {
             Quaternion quaternion2 = Quaternion.Euler(0f, 0f, this.Layer.AngleAroundAxis);
-            Quaternion quaternion3 = Quaternion.Euler(0f, UnityEngine.Random.Range(0, 360), 0f);
+            Quaternion quaternion3 = Quaternion.Euler(0f, Random.Range(0, 360), 0f);
             return Quaternion.FromToRotation(Vector3.up, this.Layer.OriVelocityAxis) * quaternion3 * quaternion2 * Vector3.up;
         }
         return this.Layer.OriVelocityAxis;
@@ -132,9 +132,9 @@ public class Emitter
         if (this.Layer.EmitType == 1)
         {
             Vector3 emitPoint = this.Layer.EmitPoint;
-            float num = UnityEngine.Random.Range(emitPoint.x - this.Layer.BoxSize.x / 2f, emitPoint.x + this.Layer.BoxSize.x / 2f);
-            float num2 = UnityEngine.Random.Range(emitPoint.y - this.Layer.BoxSize.y / 2f, emitPoint.y + this.Layer.BoxSize.y / 2f);
-            float num3 = UnityEngine.Random.Range(emitPoint.z - this.Layer.BoxSize.z / 2f, emitPoint.z + this.Layer.BoxSize.z / 2f);
+            float num = Random.Range(emitPoint.x - this.Layer.BoxSize.x / 2f, emitPoint.x + this.Layer.BoxSize.x / 2f);
+            float num2 = Random.Range(emitPoint.y - this.Layer.BoxSize.y / 2f, emitPoint.y + this.Layer.BoxSize.y / 2f);
+            float num3 = Random.Range(emitPoint.z - this.Layer.BoxSize.z / 2f, emitPoint.z + this.Layer.BoxSize.z / 2f);
             zero.x = num;
             zero.y = num2;
             zero.z = num3;
@@ -159,7 +159,7 @@ public class Emitter
                 zero = this.Layer.ClientTransform.position + this.Layer.EmitPoint;
             }
             Vector3 vector3 = Vector3.up * this.Layer.Radius;
-            zero = Quaternion.Euler((float)UnityEngine.Random.Range(0, 360), (float)UnityEngine.Random.Range(0, 360), (float)UnityEngine.Random.Range(0, 360)) * vector3 + zero;
+            zero = Quaternion.Euler((float)Random.Range(0, 360), (float)Random.Range(0, 360), (float)Random.Range(0, 360)) * vector3 + zero;
         }
         else if (this.Layer.EmitType == 4)
         {

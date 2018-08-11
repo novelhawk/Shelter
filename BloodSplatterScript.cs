@@ -18,11 +18,11 @@ public class BloodSplatterScript : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         {
             this.bloodRotation.Rotate(0f, this.bloodLocalRotationYOffset, 0f);
-            Transform transform1 = UnityEngine.Object.Instantiate(this.bloodPrefab, this.bloodPosition.position, this.bloodRotation.rotation) as Transform;
+            Transform transform1 = Instantiate(this.bloodPrefab, this.bloodPosition.position, this.bloodRotation.rotation) as Transform;
             this.bloodInstances = GameObject.FindGameObjectsWithTag("blood");
             if (this.bloodInstances.Length >= this.maxAmountBloodPrefabs)
             {
-                UnityEngine.Object.Destroy(this.bloodInstances[0]);
+                Destroy(this.bloodInstances[0]);
             }
         }
     }

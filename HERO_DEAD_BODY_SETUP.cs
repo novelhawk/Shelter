@@ -27,9 +27,9 @@ public class HERO_DEAD_BODY_SETUP : MonoBehaviour
 
     public void init(string aniname, float time, BODY_PARTS part)
     {
-        base.animation.Play(aniname);
-        base.animation[aniname].normalizedTime = time;
-        base.animation[aniname].speed = 0f;
+        animation.Play(aniname);
+        animation[aniname].normalizedTime = time;
+        animation[aniname].speed = 0f;
         switch (part)
         {
             case BODY_PARTS.UPPER:
@@ -41,14 +41,14 @@ public class HERO_DEAD_BODY_SETUP : MonoBehaviour
                 this.col_shin_l.GetComponent<CapsuleCollider>().enabled = false;
                 this.col_thigh_r.GetComponent<CapsuleCollider>().enabled = false;
                 this.col_shin_r.GetComponent<CapsuleCollider>().enabled = false;
-                UnityEngine.Object.Destroy(this.leg);
-                UnityEngine.Object.Destroy(this.hand_l);
-                UnityEngine.Object.Destroy(this.hand_r);
-                UnityEngine.Object.Destroy(this.blood_lower);
-                UnityEngine.Object.Destroy(this.blood_arm_l);
-                UnityEngine.Object.Destroy(this.blood_arm_r);
-                base.gameObject.GetComponent<HERO_SETUP>().createHead2();
-                base.gameObject.GetComponent<HERO_SETUP>().createUpperBody2();
+                Destroy(this.leg);
+                Destroy(this.hand_l);
+                Destroy(this.hand_r);
+                Destroy(this.blood_lower);
+                Destroy(this.blood_arm_l);
+                Destroy(this.blood_arm_r);
+                gameObject.GetComponent<HERO_SETUP>().createHead2();
+                gameObject.GetComponent<HERO_SETUP>().createUpperBody2();
                 break;
 
             case BODY_PARTS.ARM_L:
@@ -60,16 +60,16 @@ public class HERO_DEAD_BODY_SETUP : MonoBehaviour
                 this.col_shin_r.GetComponent<CapsuleCollider>().enabled = false;
                 this.col_head.GetComponent<CapsuleCollider>().enabled = false;
                 this.col_chest.GetComponent<BoxCollider>().enabled = false;
-                UnityEngine.Object.Destroy(this.head);
-                UnityEngine.Object.Destroy(this.chest);
-                UnityEngine.Object.Destroy(this.leg);
-                UnityEngine.Object.Destroy(this.hand_r);
-                UnityEngine.Object.Destroy(this.blood_lower);
-                UnityEngine.Object.Destroy(this.blood_upper);
-                UnityEngine.Object.Destroy(this.blood_upper1);
-                UnityEngine.Object.Destroy(this.blood_upper2);
-                UnityEngine.Object.Destroy(this.blood_arm_r);
-                base.gameObject.GetComponent<HERO_SETUP>().createLeftArm();
+                Destroy(this.head);
+                Destroy(this.chest);
+                Destroy(this.leg);
+                Destroy(this.hand_r);
+                Destroy(this.blood_lower);
+                Destroy(this.blood_upper);
+                Destroy(this.blood_upper1);
+                Destroy(this.blood_upper2);
+                Destroy(this.blood_arm_r);
+                gameObject.GetComponent<HERO_SETUP>().createLeftArm();
                 break;
 
             case BODY_PARTS.ARM_R:
@@ -81,16 +81,16 @@ public class HERO_DEAD_BODY_SETUP : MonoBehaviour
                 this.col_shin_r.GetComponent<CapsuleCollider>().enabled = false;
                 this.col_head.GetComponent<CapsuleCollider>().enabled = false;
                 this.col_chest.GetComponent<BoxCollider>().enabled = false;
-                UnityEngine.Object.Destroy(this.head);
-                UnityEngine.Object.Destroy(this.chest);
-                UnityEngine.Object.Destroy(this.leg);
-                UnityEngine.Object.Destroy(this.hand_l);
-                UnityEngine.Object.Destroy(this.blood_lower);
-                UnityEngine.Object.Destroy(this.blood_upper);
-                UnityEngine.Object.Destroy(this.blood_upper1);
-                UnityEngine.Object.Destroy(this.blood_upper2);
-                UnityEngine.Object.Destroy(this.blood_arm_l);
-                base.gameObject.GetComponent<HERO_SETUP>().createRightArm();
+                Destroy(this.head);
+                Destroy(this.chest);
+                Destroy(this.leg);
+                Destroy(this.hand_l);
+                Destroy(this.blood_lower);
+                Destroy(this.blood_upper);
+                Destroy(this.blood_upper1);
+                Destroy(this.blood_upper2);
+                Destroy(this.blood_arm_l);
+                gameObject.GetComponent<HERO_SETUP>().createRightArm();
                 break;
 
             case BODY_PARTS.LOWER:
@@ -100,16 +100,16 @@ public class HERO_DEAD_BODY_SETUP : MonoBehaviour
                 this.col_lower_arm_r.GetComponent<CapsuleCollider>().enabled = false;
                 this.col_head.GetComponent<CapsuleCollider>().enabled = false;
                 this.col_chest.GetComponent<BoxCollider>().enabled = false;
-                UnityEngine.Object.Destroy(this.head);
-                UnityEngine.Object.Destroy(this.chest);
-                UnityEngine.Object.Destroy(this.hand_l);
-                UnityEngine.Object.Destroy(this.hand_r);
-                UnityEngine.Object.Destroy(this.blood_upper);
-                UnityEngine.Object.Destroy(this.blood_upper1);
-                UnityEngine.Object.Destroy(this.blood_upper2);
-                UnityEngine.Object.Destroy(this.blood_arm_l);
-                UnityEngine.Object.Destroy(this.blood_arm_r);
-                base.gameObject.GetComponent<HERO_SETUP>().createLowerBody();
+                Destroy(this.head);
+                Destroy(this.chest);
+                Destroy(this.hand_l);
+                Destroy(this.hand_r);
+                Destroy(this.blood_upper);
+                Destroy(this.blood_upper1);
+                Destroy(this.blood_upper2);
+                Destroy(this.blood_arm_l);
+                Destroy(this.blood_arm_r);
+                gameObject.GetComponent<HERO_SETUP>().createLowerBody();
                 break;
         }
     }
@@ -123,8 +123,8 @@ public class HERO_DEAD_BODY_SETUP : MonoBehaviour
         this.lifetime -= Time.deltaTime;
         if (this.lifetime <= 0f)
         {
-            base.gameObject.GetComponent<HERO_SETUP>().deleteCharacterComponent2();
-            UnityEngine.Object.Destroy(base.gameObject);
+            gameObject.GetComponent<HERO_SETUP>().deleteCharacterComponent2();
+            Destroy(gameObject);
         }
     }
 }

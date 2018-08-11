@@ -55,7 +55,7 @@ public class Minimap : MonoBehaviour
 
     private void AutomaticSetCameraProperties(Camera cam)
     {
-        Renderer[] rendererArray = UnityEngine.Object.FindObjectsOfType<Renderer>();
+        Renderer[] rendererArray = FindObjectsOfType<Renderer>();
         if (rendererArray.Length > 0)
         {
             this.minimapOrthographicBounds = new Bounds(rendererArray[0].transform.position, Vector3.zero);
@@ -85,7 +85,7 @@ public class Minimap : MonoBehaviour
 
     private void AutomaticSetOrthoBounds()
     {
-        Renderer[] rendererArray = UnityEngine.Object.FindObjectsOfType<Renderer>();
+        Renderer[] rendererArray = FindObjectsOfType<Renderer>();
         if (rendererArray.Length > 0)
         {
             this.minimapOrthographicBounds = new Bounds(rendererArray[0].transform.position, Vector3.zero);
@@ -279,7 +279,7 @@ public class Minimap : MonoBehaviour
         cam.clearFlags = CameraClearFlags.Skybox;
         this.CreateUnityUIRT(minimapResolution);
         this.minimapIsCreated = true;
-        base.StartCoroutine(this.HackRoutine());
+        StartCoroutine(this.HackRoutine());
     }
 
     private void CreateMinimapRT(Camera cam, int pixelSize)
@@ -291,7 +291,7 @@ public class Minimap : MonoBehaviour
             this.minimapRT = new RenderTexture(pixelSize, pixelSize, 16, RenderTextureFormat.RGB565);
             if (!flag2)
             {
-                UnityEngine.Debug.Log(SystemInfo.graphicsDeviceName + " (" + SystemInfo.graphicsDeviceVendor + ") does not support RGB565 format, the minimap will have transparency issues on certain maps");
+                Debug.Log(SystemInfo.graphicsDeviceName + " (" + SystemInfo.graphicsDeviceVendor + ") does not support RGB565 format, the minimap will have transparency issues on certain maps");
             }
         }
         cam.targetTexture = this.minimapRT;
@@ -518,7 +518,7 @@ public class Minimap : MonoBehaviour
 
     public static void OnScreenResolutionChanged()
     {
-        if (Minimap.instance != null)
+        if (instance != null)
         {
             Minimap instance = Minimap.instance;
             instance.StartCoroutine(instance.ScreenResolutionChangedRoutine());
@@ -710,10 +710,10 @@ public class Minimap : MonoBehaviour
         private Transform obj;
         private RectTransform pointerRect;
         public readonly bool rotation;
-        public readonly Minimap.IconStyle style;
+        public readonly IconStyle style;
         private RectTransform uiRect;
 
-        public MinimapIcon(GameObject trackedObject, GameObject uiElement, Minimap.IconStyle style)
+        public MinimapIcon(GameObject trackedObject, GameObject uiElement, IconStyle style)
         {
             this.rotation = false;
             this.style = style;
@@ -726,7 +726,7 @@ public class Minimap : MonoBehaviour
             }
             else if (component.target != null && component.target != uiElement)
             {
-                UnityEngine.Object.Destroy(component.target);
+                Object.Destroy(component.target);
             }
             else
             {
@@ -734,7 +734,7 @@ public class Minimap : MonoBehaviour
             }
         }
 
-        public MinimapIcon(GameObject trackedObject, GameObject uiElement, GameObject uiPointer, Minimap.IconStyle style)
+        public MinimapIcon(GameObject trackedObject, GameObject uiElement, GameObject uiPointer, IconStyle style)
         {
             this.rotation = true;
             this.style = style;
@@ -748,7 +748,7 @@ public class Minimap : MonoBehaviour
             }
             else if (component.target != null && component.target != uiElement)
             {
-                UnityEngine.Object.Destroy(component.target);
+                Object.Destroy(component.target);
             }
             else
             {
@@ -756,9 +756,9 @@ public class Minimap : MonoBehaviour
             }
         }
 
-        public static Minimap.MinimapIcon Create(RectTransform parent, GameObject trackedObject, Minimap.IconStyle style)
+        public static MinimapIcon Create(RectTransform parent, GameObject trackedObject, IconStyle style)
         {
-            UnityEngine.Sprite spriteForStyle = Minimap.GetSpriteForStyle(style);
+            UnityEngine.Sprite spriteForStyle = GetSpriteForStyle(style);
             GameObject uiElement = new GameObject("MinimapIcon");
             RectTransform transform = uiElement.AddComponent<RectTransform>();
             transform.anchorMin = transform.anchorMax = new Vector3(0.5f, 0.5f);
@@ -767,12 +767,12 @@ public class Minimap : MonoBehaviour
             image.sprite = spriteForStyle;
             image.type = Image.Type.Simple;
             uiElement.transform.SetParent(parent, false);
-            return new Minimap.MinimapIcon(trackedObject, uiElement, style);
+            return new MinimapIcon(trackedObject, uiElement, style);
         }
 
-        public static Minimap.MinimapIcon CreateWithRotation(RectTransform parent, GameObject trackedObject, Minimap.IconStyle style, float pointerDist)
+        public static MinimapIcon CreateWithRotation(RectTransform parent, GameObject trackedObject, IconStyle style, float pointerDist)
         {
-            UnityEngine.Sprite spriteForStyle = Minimap.GetSpriteForStyle(style);
+            UnityEngine.Sprite spriteForStyle = GetSpriteForStyle(style);
             GameObject uiElement = new GameObject("MinimapIcon");
             RectTransform transform = uiElement.AddComponent<RectTransform>();
             transform.anchorMin = transform.anchorMax = new Vector3(0.5f, 0.5f);
@@ -784,20 +784,20 @@ public class Minimap : MonoBehaviour
             GameObject uiPointer = new GameObject("IconPointer");
             RectTransform transform2 = uiPointer.AddComponent<RectTransform>();
             transform2.anchorMin = transform2.anchorMax = transform.anchorMin;
-            transform2.sizeDelta = new Vector2(Minimap.pointerSprite.texture.width, Minimap.pointerSprite.texture.height);
+            transform2.sizeDelta = new Vector2(pointerSprite.texture.width, pointerSprite.texture.height);
             Image image2 = uiPointer.AddComponent<Image>();
-            image2.sprite = Minimap.pointerSprite;
+            image2.sprite = pointerSprite;
             image2.type = Image.Type.Simple;
             uiPointer.transform.SetParent(transform, false);
             transform2.anchoredPosition = new Vector2(0f, pointerDist);
-            return new Minimap.MinimapIcon(trackedObject, uiElement, uiPointer, style);
+            return new MinimapIcon(trackedObject, uiElement, uiPointer, style);
         }
 
         public void Destroy()
         {
             if (this.uiRect != null)
             {
-                UnityEngine.Object.Destroy(this.uiRect.gameObject);
+                Object.Destroy(this.uiRect.gameObject);
             }
         }
 

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/UI/Texture"), ExecuteInEditMode]
@@ -18,11 +19,11 @@ public class UITexture : UIWidget
         Texture mainTexture = this.mainTexture;
         if (mainTexture != null)
         {
-            Vector3 localScale = base.cachedTransform.localScale;
+            Vector3 localScale = cachedTransform.localScale;
             localScale.x = mainTexture.width * this.uvRect.width;
             localScale.y = mainTexture.height * this.uvRect.height;
             localScale.z = 1f;
-            base.cachedTransform.localScale = localScale;
+            cachedTransform.localScale = localScale;
         }
         base.MakePixelPerfect();
     }
@@ -32,10 +33,10 @@ public class UITexture : UIWidget
         NGUITools.Destroy(this.mDynamicMat);
     }
 
-    public override void OnFill(BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols)
+    public override void OnFill(List<Vector3> verts, List<Vector2> uvs, List<Color32> cols)
     {
-        Color c = base.color;
-        c.a *= base.mPanel.alpha;
+        Color c = color;
+        c.a *= mPanel.alpha;
         Color32 item = !this.premultipliedAlpha ? c : NGUITools.ApplyPMA(c);
         verts.Add(new Vector3(1f, 0f, 0f));
         verts.Add(new Vector3(1f, -1f, 0f));
@@ -75,23 +76,23 @@ public class UITexture : UIWidget
         }
         set
         {
-            if (base.mPanel != null && base.mMat != null)
+            if (mPanel != null && mMat != null)
             {
-                base.mPanel.RemoveWidget(this);
+                mPanel.RemoveWidget(this);
             }
-            if (base.mMat == null)
+            if (mMat == null)
             {
                 this.mDynamicMat = new Material(this.shader);
                 this.mDynamicMat.hideFlags = HideFlags.DontSave;
-                base.mMat = this.mDynamicMat;
+                mMat = this.mDynamicMat;
             }
-            base.mPanel = null;
-            base.mTex = value;
+            mPanel = null;
+            mTex = value;
             this.mTexture = value;
-            base.mMat.mainTexture = value;
-            if (base.enabled)
+            mMat.mainTexture = value;
+            if (enabled)
             {
-                base.CreatePanel();
+                CreatePanel();
             }
         }
     }
@@ -100,7 +101,7 @@ public class UITexture : UIWidget
     {
         get
         {
-            if (!this.mCreatingMat && base.mMat == null)
+            if (!this.mCreatingMat && mMat == null)
             {
                 this.mCreatingMat = true;
                 if (this.mainTexture != null)
@@ -117,7 +118,7 @@ public class UITexture : UIWidget
                 }
                 this.mCreatingMat = false;
             }
-            return base.mMat;
+            return mMat;
         }
         set
         {

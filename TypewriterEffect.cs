@@ -13,7 +13,7 @@ public class TypewriterEffect : MonoBehaviour
     {
         if (this.mLabel == null)
         {
-            this.mLabel = base.GetComponent<UILabel>();
+            this.mLabel = GetComponent<UILabel>();
             this.mLabel.supportEncoding = false;
             this.mLabel.symbolStyle = UIFont.SymbolStyle.None;
             this.mText = this.mLabel.font.WrapText(this.mLabel.text, this.mLabel.lineWidth / this.mLabel.cachedTransform.localScale.x, this.mLabel.maxLineCount, false, UIFont.SymbolStyle.None);
@@ -39,7 +39,7 @@ public class TypewriterEffect : MonoBehaviour
         }
         else
         {
-            UnityEngine.Object.Destroy(this);
+            Destroy(this);
         }
     }
 }

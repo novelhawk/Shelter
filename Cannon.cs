@@ -19,30 +19,30 @@ public class Cannon : Photon.MonoBehaviour
 
     public void Awake()
     {
-        if (base.photonView != null)
+        if (photonView != null)
         {
-            base.photonView.observed = this;
-            this.barrel = base.transform.Find("Barrel");
-            this.correctPlayerPos = base.transform.position;
-            this.correctPlayerRot = base.transform.rotation;
+            photonView.observed = this;
+            this.barrel = transform.Find("Barrel");
+            this.correctPlayerPos = transform.position;
+            this.correctPlayerRot = transform.rotation;
             this.correctBarrelRot = this.barrel.rotation;
-            if (base.photonView.isMine)
+            if (photonView.isMine)
             {
                 this.firingPoint = this.barrel.Find("FiringPoint");
                 this.ballPoint = this.barrel.Find("BallPoint");
                 this.myCannonLine = this.ballPoint.GetComponent<LineRenderer>();
-                if (base.gameObject.name.Contains("CannonGround"))
+                if (gameObject.name.Contains("CannonGround"))
                 {
                     this.isCannonGround = true;
                 }
             }
             if (PhotonNetwork.isMasterClient)
             {
-                PhotonPlayer owner = base.photonView.owner;
+                Player owner = photonView.owner;
                 if (FengGameManagerMKII.instance.allowedToCannon.ContainsKey(owner.ID))
                 {
                     this.settings = FengGameManagerMKII.instance.allowedToCannon[owner.ID].settings;
-                    base.photonView.RPC("SetSize", PhotonTargets.All, new object[] { this.settings });
+                    photonView.RPC("SetSize", PhotonTargets.All, new object[] { this.settings });
                     int viewID = FengGameManagerMKII.instance.allowedToCannon[owner.ID].viewID;
                     FengGameManagerMKII.instance.allowedToCannon.Remove(owner.ID);
                     CannonPropRegion component = PhotonView.Find(viewID).gameObject.GetComponent<CannonPropRegion>();
@@ -101,8 +101,8 @@ public class Cannon : Photon.MonoBehaviour
     {
         if (stream.isWriting)
         {
-            stream.SendNext(base.transform.position);
-            stream.SendNext(base.transform.rotation);
+            stream.SendNext(transform.position);
+            stream.SendNext(transform.rotation);
             stream.SendNext(this.barrel.rotation);
         }
         else
@@ -123,7 +123,7 @@ public class Cannon : Photon.MonoBehaviour
             {
                 float a = 1f;
                 GameObject gameObject = null;
-                gameObject = base.gameObject;
+                gameObject = this.gameObject;
                 if (strArray[2] != "default")
                 {
                     if (strArray[2].StartsWith("transparent"))
@@ -182,10 +182,10 @@ public class Cannon : Photon.MonoBehaviour
 
     public void Update()
     {
-        if (!base.photonView.isMine)
+        if (!photonView.isMine)
         {
-            base.transform.position = Vector3.Lerp(base.transform.position, this.correctPlayerPos, Time.deltaTime * this.SmoothingDelay);
-            base.transform.rotation = Quaternion.Lerp(base.transform.rotation, this.correctPlayerRot, Time.deltaTime * this.SmoothingDelay);
+            transform.position = Vector3.Lerp(transform.position, this.correctPlayerPos, Time.deltaTime * this.SmoothingDelay);
+            transform.rotation = Quaternion.Lerp(transform.rotation, this.correctPlayerRot, Time.deltaTime * this.SmoothingDelay);
             this.barrel.rotation = Quaternion.Lerp(this.barrel.rotation, this.correctBarrelRot, Time.deltaTime * this.SmoothingDelay);
         }
         else
@@ -224,11 +224,11 @@ public class Cannon : Photon.MonoBehaviour
                 }
                 if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonLeft))
                 {
-                    base.transform.Rotate(new Vector3(0f, Time.deltaTime * -num3, 0f));
+                    transform.Rotate(new Vector3(0f, Time.deltaTime * -num3, 0f));
                 }
                 else if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonRight))
                 {
-                    base.transform.Rotate(new Vector3(0f, Time.deltaTime * num3, 0f));
+                    transform.Rotate(new Vector3(0f, Time.deltaTime * num3, 0f));
                 }
             }
             else
@@ -248,11 +248,11 @@ public class Cannon : Photon.MonoBehaviour
                 }
                 if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonLeft))
                 {
-                    base.transform.Rotate(new Vector3(0f, Time.deltaTime * -num3, 0f));
+                    transform.Rotate(new Vector3(0f, Time.deltaTime * -num3, 0f));
                 }
                 else if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonRight))
                 {
-                    base.transform.Rotate(new Vector3(0f, Time.deltaTime * num3, 0f));
+                    transform.Rotate(new Vector3(0f, Time.deltaTime * num3, 0f));
                 }
             }
             if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonFire))
@@ -271,7 +271,7 @@ public class Cannon : Photon.MonoBehaviour
                     this.myHero.skillCDLast = this.myHero.skillCDLastCannon;
                     this.myHero.skillCDDuration = this.myHero.skillCDLast;
                 }
-                PhotonNetwork.Destroy(base.gameObject);
+                PhotonNetwork.Destroy(gameObject);
             }
         }
     }

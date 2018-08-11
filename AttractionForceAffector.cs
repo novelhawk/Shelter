@@ -25,15 +25,15 @@ public class AttractionForceAffector : Affector
     {
         Vector3 vector;
         float magnitude;
-        if (base.Node.SyncClient)
+        if (Node.SyncClient)
         {
-            vector = this.Position - base.Node.GetLocalPosition();
+            vector = this.Position - Node.GetLocalPosition();
         }
         else
         {
-            vector = base.Node.ClientTrans.position + this.Position - base.Node.GetLocalPosition();
+            vector = Node.ClientTrans.position + this.Position - Node.GetLocalPosition();
         }
-        float elapsedTime = base.Node.GetElapsedTime();
+        float elapsedTime = Node.GetElapsedTime();
         if (this.UseCurve)
         {
             magnitude = this.AttractionCurve.Evaluate(elapsedTime);
@@ -43,7 +43,7 @@ public class AttractionForceAffector : Affector
             magnitude = this.Magnitude;
         }
         float num3 = magnitude;
-        base.Node.Velocity += vector.normalized * num3 * Time.deltaTime;
+        Node.Velocity += vector.normalized * num3 * Time.deltaTime;
     }
 }
 

@@ -16,18 +16,18 @@ public class UIStretch : MonoBehaviour
 
     private void Awake()
     {
-        this.mAnim = base.animation;
+        this.mAnim = animation;
         this.mRect = new Rect();
-        this.mTrans = base.transform;
+        this.mTrans = transform;
     }
 
     private void Start()
     {
         if (this.uiCamera == null)
         {
-            this.uiCamera = NGUITools.FindCameraForLayer(base.gameObject.layer);
+            this.uiCamera = NGUITools.FindCameraForLayer(gameObject.layer);
         }
-        this.mRoot = NGUITools.FindInParents<UIRoot>(base.gameObject);
+        this.mRoot = NGUITools.FindInParents<UIRoot>(gameObject);
     }
 
     private void Update()

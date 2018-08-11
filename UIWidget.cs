@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
@@ -38,16 +39,16 @@ public abstract class UIWidget : MonoBehaviour
 
     protected virtual void Awake()
     {
-        this.mGo = base.gameObject;
+        this.mGo = gameObject;
         this.mPlayMode = Application.isPlaying;
     }
 
     public void CheckLayer()
     {
-        if (this.mPanel != null && this.mPanel.gameObject.layer != base.gameObject.layer)
+        if (this.mPanel != null && this.mPanel.gameObject.layer != gameObject.layer)
         {
             Debug.LogWarning("You can't place widgets on a layer different than the UIPanel that manages them.\nIf you want to move widgets to a different layer, parent them to a new panel instead.", this);
-            base.gameObject.layer = this.mPanel.gameObject.layer;
+            gameObject.layer = this.mPanel.gameObject.layer;
         }
     }
 
@@ -72,7 +73,7 @@ public abstract class UIWidget : MonoBehaviour
 
     public void CreatePanel()
     {
-        if (this.mPanel == null && base.enabled && NGUITools.GetActive(base.gameObject) && this.material != null)
+        if (this.mPanel == null && enabled && NGUITools.GetActive(gameObject) && this.material != null)
         {
             this.mPanel = UIPanel.Find(this.cachedTransform);
             if (this.mPanel != null)
@@ -117,7 +118,7 @@ public abstract class UIWidget : MonoBehaviour
     public virtual void MarkAsChanged()
     {
         this.mChanged = true;
-        if (this.mPanel != null && base.enabled && NGUITools.GetActive(base.gameObject) && !Application.isPlaying && this.material != null)
+        if (this.mPanel != null && enabled && NGUITools.GetActive(gameObject) && !Application.isPlaying && this.material != null)
         {
             this.mPanel.AddWidget(this);
             this.CheckLayer();
@@ -162,7 +163,7 @@ public abstract class UIWidget : MonoBehaviour
         this.mPanel = null;
     }
 
-    public virtual void OnFill(BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols)
+    public virtual void OnFill(List<Vector3> verts, List<Vector2> uvs, List<Color32> cols)
     {
     }
 
@@ -188,9 +189,9 @@ public abstract class UIWidget : MonoBehaviour
         }
     }
 
-    public static BetterList<UIWidget> Raycast(GameObject root, Vector2 mousePos)
+    public static List<UIWidget> Raycast(GameObject root, Vector2 mousePos)
     {
-        BetterList<UIWidget> list = new BetterList<UIWidget>();
+        List<UIWidget> list = new List<UIWidget>();
         UICamera camera = UICamera.FindCameraForLayer(root.layer);
         if (camera != null)
         {
@@ -286,8 +287,8 @@ public abstract class UIWidget : MonoBehaviour
                 if (this.isVisible)
                 {
                     this.mGeom.Clear();
-                    this.OnFill(this.mGeom.verts, this.mGeom.uvs, this.mGeom.cols);
-                    if (this.mGeom.hasVertices)
+                    this.OnFill(this.mGeom._vertices, this.mGeom._uvs, this.mGeom._colors);
+                    if (this.mGeom.HasVertices)
                     {
                         Vector3 vector6 = this.pivotOffset;
                         Vector2 vector7 = this.relativeSize;
@@ -298,11 +299,11 @@ public abstract class UIWidget : MonoBehaviour
                             this.mLocalToPanel = p.worldToLocal * this.cachedTransform.localToWorldMatrix;
                         }
                         this.mGeom.ApplyOffset(vector6);
-                        this.mGeom.ApplyTransform(this.mLocalToPanel, p.generateNormals);
+                        this.mGeom.ApplyTransform(this.mLocalToPanel);
                     }
                     return true;
                 }
-                if (this.mGeom.hasVertices)
+                if (this.mGeom.HasVertices)
                 {
                     this.mGeom.Clear();
                     return true;
@@ -312,7 +313,7 @@ public abstract class UIWidget : MonoBehaviour
         return false;
     }
 
-    public void WriteToBuffers(BetterList<Vector3> v, BetterList<Vector2> u, BetterList<Color32> c, BetterList<Vector3> n, BetterList<Vector4> t)
+    public void WriteToBuffers(List<Vector3> v, List<Vector2> u, List<Color32> c, List<Vector3> n, List<Vector4> t)
     {
         this.mGeom.WriteToBuffers(v, u, c, n, t);
     }
@@ -345,7 +346,7 @@ public abstract class UIWidget : MonoBehaviour
         {
             if (this.mGo == null)
             {
-                this.mGo = base.gameObject;
+                this.mGo = gameObject;
             }
             return this.mGo;
         }
@@ -357,7 +358,7 @@ public abstract class UIWidget : MonoBehaviour
         {
             if (this.mTrans == null)
             {
-                this.mTrans = base.transform;
+                this.mTrans = transform;
             }
             return this.mTrans;
         }
@@ -445,7 +446,7 @@ public abstract class UIWidget : MonoBehaviour
                     }
                     this.mPanel = null;
                     this.mMat.mainTexture = this.mTex;
-                    if (base.enabled)
+                    if (enabled)
                     {
                         this.CreatePanel();
                     }
@@ -468,7 +469,7 @@ public abstract class UIWidget : MonoBehaviour
                 if (material != null)
                 {
                     material.mainTexture = value;
-                    if (base.enabled)
+                    if (enabled)
                     {
                         this.CreatePanel();
                     }

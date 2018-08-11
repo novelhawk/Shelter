@@ -1,17 +1,17 @@
 public class PhotonMessageInfo
 {
     public PhotonView photonView;
-    public PhotonPlayer sender;
+    public Player sender;
     private int timeInt;
 
     public PhotonMessageInfo()
     {
-        this.sender = PhotonPlayer.Self;
+        this.sender = Player.Self;
         this.timeInt = (int) (PhotonNetwork.time * 1000.0);
         this.photonView = null;
     }
 
-    public PhotonMessageInfo(PhotonPlayer player, int timestamp, PhotonView view)
+    public PhotonMessageInfo(Player player, int timestamp, PhotonView view)
     {
         this.sender = player;
         this.timeInt = timestamp;

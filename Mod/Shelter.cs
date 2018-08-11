@@ -22,7 +22,7 @@ namespace Mod
         public void Update()
         {
             if (Input.GetKeyDown(KeyCode.I) && Input.GetKey(KeyCode.LeftControl))
-                File.WriteAllLines($"GameObjects{UnityEngine.Random.Range(0, 255)}.txt", FindObjectsOfType(typeof(GameObject)).OrderBy(x => x.GetInstanceID()).Select(x => $"{x.GetInstanceID()} - {x.name}").ToArray());
+                File.WriteAllLines($"GameObjects{Random.Range(0, 255)}.txt", FindObjectsOfType(typeof(GameObject)).OrderBy(x => x.GetInstanceID()).Select(x => $"{x.GetInstanceID()} - {x.name}").ToArray());
         }
 
         public static void OnMainMenu()

@@ -26,9 +26,9 @@ public class WindowAutoYaw : MonoBehaviour
     {
         if (this.uiCamera == null)
         {
-            this.uiCamera = NGUITools.FindCameraForLayer(base.gameObject.layer);
+            this.uiCamera = NGUITools.FindCameraForLayer(gameObject.layer);
         }
-        this.mTrans = base.transform;
+        this.mTrans = transform;
         UpdateManager.AddCoroutine(this, this.updateOrder, new UpdateManager.OnUpdate(this.CoroutineUpdate));
     }
 }

@@ -18,14 +18,14 @@ public class PickupItemSyncer : Photon.MonoBehaviour
             }
             else
             {
-                PhotonPlayer next = PhotonNetwork.masterClient.GetNext();
-                if (next == null || next.Equals(PhotonPlayer.Self))
+                Player next = PhotonNetwork.masterClient.GetNext();
+                if (next == null || next.Equals(Player.Self))
                 {
-                    next = PhotonPlayer.Self.GetNext();
+                    next = Player.Self.GetNext();
                 }
-                if (next != null && !next.Equals(PhotonPlayer.Self))
+                if (next != null && !next.Equals(Player.Self))
                 {
-                    base.photonView.RPC("RequestForPickupTimes", next, new object[0]);
+                    photonView.RPC("RequestForPickupTimes", next, new object[0]);
                 }
                 else
                 {
@@ -38,15 +38,15 @@ public class PickupItemSyncer : Photon.MonoBehaviour
 
     public void OnJoinedRoom()
     {
-        Debug.Log(string.Concat(new object[] { "Joined Room. isMasterClient: ", PhotonNetwork.isMasterClient, " id: ", PhotonPlayer.Self.ID }));
+        Debug.Log(string.Concat(new object[] { "Joined Room. isMasterClient: ", PhotonNetwork.isMasterClient, " id: ", Player.Self.ID }));
         this.IsWaitingForPickupInit = !PhotonNetwork.isMasterClient;
         if (PhotonNetwork.playerList.Length >= 2)
         {
-            base.Invoke("AskForPickupItemSpawnTimes", 2f);
+            Invoke("AskForPickupItemSpawnTimes", 2f);
         }
     }
 
-    public void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
+    public void OnPhotonPlayerConnected(Player newPlayer)
     {
         if (PhotonNetwork.isMasterClient)
         {
@@ -96,7 +96,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
         }
     }
 
-    private void SendPickedUpItems(PhotonPlayer targtePlayer)
+    private void SendPickedUpItems(Player targtePlayer)
     {
         if (targtePlayer == null)
         {
@@ -130,7 +130,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
             }
             Debug.Log(string.Concat(new object[] { "Sent count: ", list.Count, " now: ", time }));
             object[] parameters = new object[] { PhotonNetwork.time, list.ToArray() };
-            base.photonView.RPC("PickupItemInit", targtePlayer, parameters);
+            photonView.RPC("PickupItemInit", targtePlayer, parameters);
         }
     }
 }

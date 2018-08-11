@@ -1,72 +1,70 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class UIGeometry
 {
-    public BetterList<Color32> cols = new BetterList<Color32>();
+    private readonly List<Vector3> _rtpVertices = new List<Vector3>();
+    public readonly List<Color32> _colors = new List<Color32>();
+    public readonly List<Vector2> _uvs = new List<Vector2>();
+    public readonly List<Vector3> _vertices = new List<Vector3>();
     private Vector3 mRtpNormal;
     private Vector4 mRtpTan;
-    private BetterList<Vector3> mRtpVerts = new BetterList<Vector3>();
-    public BetterList<Vector2> uvs = new BetterList<Vector2>();
-    public BetterList<Vector3> verts = new BetterList<Vector3>();
 
     public void ApplyOffset(Vector3 pivotOffset)
     {
-        for (int i = 0; i < this.verts.size; i++)
+        for (int i = 0; i < _vertices.Count; i++)
         {
-            this.verts.buffer[i] += pivotOffset;
+            this._vertices[i] += pivotOffset;
         }
     }
 
-    public void ApplyTransform(Matrix4x4 widgetToPanel, bool normals)
+    public void ApplyTransform(Matrix4x4 matrix)
     {
-        if (this.verts.size > 0)
+        if (this._vertices.Count > 0)
         {
-            this.mRtpVerts.Clear();
-            int num = 0;
-            int size = this.verts.size;
-            while (num < size)
+            this._rtpVertices.Clear();
+            foreach (var vertex in _vertices)
             {
-                this.mRtpVerts.Add(widgetToPanel.MultiplyPoint3x4(this.verts[num]));
-                num++;
+                _rtpVertices.Add(matrix.MultiplyPoint3x4(vertex));
             }
-            this.mRtpNormal = widgetToPanel.MultiplyVector(Vector3.back).normalized;
-            Vector3 normalized = widgetToPanel.MultiplyVector(Vector3.right).normalized;
+            mRtpNormal = matrix.MultiplyVector(Vector3.back).normalized;
+            Vector3 normalized = matrix.MultiplyVector(Vector3.right).normalized;
             this.mRtpTan = new Vector4(normalized.x, normalized.y, normalized.z, -1f);
         }
         else
         {
-            this.mRtpVerts.Clear();
+            this._rtpVertices.Clear();
         }
     }
 
     public void Clear()
     {
-        this.verts.Clear();
-        this.uvs.Clear();
-        this.cols.Clear();
-        this.mRtpVerts.Clear();
+        this._vertices.Clear();
+        this._uvs.Clear();
+        this._colors.Clear();
+        this._rtpVertices.Clear();
     }
 
-    public void WriteToBuffers(BetterList<Vector3> v, BetterList<Vector2> u, BetterList<Color32> c, BetterList<Vector3> n, BetterList<Vector4> t)
+    public void WriteToBuffers(List<Vector3> v, List<Vector2> u, List<Color32> c, List<Vector3> n, List<Vector4> t)
     {
-        if (this.mRtpVerts != null && this.mRtpVerts.size > 0)
+        if (this._rtpVertices != null && this._rtpVertices.Count > 0)
         {
             if (n == null)
             {
-                for (int i = 0; i < this.mRtpVerts.size; i++)
+                for (int i = 0; i < this._rtpVertices.Count; i++)
                 {
-                    v.Add(this.mRtpVerts.buffer[i]);
-                    u.Add(this.uvs.buffer[i]);
-                    c.Add(this.cols.buffer[i]);
+                    v.Add(this._rtpVertices[i]);
+                    u.Add(this._uvs[i]);
+                    c.Add(this._colors[i]);
                 }
             }
             else
             {
-                for (int j = 0; j < this.mRtpVerts.size; j++)
+                for (int j = 0; j < this._rtpVertices.Count; j++)
                 {
-                    v.Add(this.mRtpVerts.buffer[j]);
-                    u.Add(this.uvs.buffer[j]);
-                    c.Add(this.cols.buffer[j]);
+                    v.Add(this._rtpVertices[j]);
+                    u.Add(this._uvs[j]);
+                    c.Add(this._colors[j]);
                     n.Add(this.mRtpNormal);
                     t.Add(this.mRtpTan);
                 }
@@ -74,20 +72,6 @@ public class UIGeometry
         }
     }
 
-    public bool hasTransformed
-    {
-        get
-        {
-            return this.mRtpVerts != null && this.mRtpVerts.size > 0 && this.mRtpVerts.size == this.verts.size;
-        }
-    }
-
-    public bool hasVertices
-    {
-        get
-        {
-            return this.verts.size > 0;
-        }
-    }
+    public bool HasVertices => _vertices.Count > 0;
 }
 

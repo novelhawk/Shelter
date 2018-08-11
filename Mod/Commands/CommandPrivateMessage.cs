@@ -12,7 +12,7 @@ namespace Mod.Commands
         {
             if (args.Length < 2)
                 throw new CommandArgumentException(CommandName, "/pm [id] [msg]");
-            if (!PhotonPlayer.TryParse(args[0], out PhotonPlayer player))
+            if (!Player.TryParse(args[0], out Player player))
                 throw new PlayerNotFoundException(args[0]);
 //            player.SendPrivateMessage(Regex.Match(GUIChat.Message, @"[\\\/][a-zA-Z]*[' '][0-9]*[' '](.*)").Groups[1].Value); TODO: Add private message and reply
 //            FengGameManagerMKII.instance.reply = player;

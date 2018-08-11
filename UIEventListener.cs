@@ -30,7 +30,7 @@ public class UIEventListener : MonoBehaviour
     {
         if (this.onClick != null)
         {
-            this.onClick(base.gameObject);
+            this.onClick(gameObject);
         }
     }
 
@@ -38,7 +38,7 @@ public class UIEventListener : MonoBehaviour
     {
         if (this.onDoubleClick != null)
         {
-            this.onDoubleClick(base.gameObject);
+            this.onDoubleClick(gameObject);
         }
     }
 
@@ -46,7 +46,7 @@ public class UIEventListener : MonoBehaviour
     {
         if (this.onDrag != null)
         {
-            this.onDrag(base.gameObject, delta);
+            this.onDrag(gameObject, delta);
         }
     }
 
@@ -54,7 +54,7 @@ public class UIEventListener : MonoBehaviour
     {
         if (this.onDrop != null)
         {
-            this.onDrop(base.gameObject, go);
+            this.onDrop(gameObject, go);
         }
     }
 
@@ -62,7 +62,7 @@ public class UIEventListener : MonoBehaviour
     {
         if (this.onHover != null)
         {
-            this.onHover(base.gameObject, isOver);
+            this.onHover(gameObject, isOver);
         }
     }
 
@@ -70,7 +70,7 @@ public class UIEventListener : MonoBehaviour
     {
         if (this.onInput != null)
         {
-            this.onInput(base.gameObject, text);
+            this.onInput(gameObject, text);
         }
     }
 
@@ -78,7 +78,7 @@ public class UIEventListener : MonoBehaviour
     {
         if (this.onKey != null)
         {
-            this.onKey(base.gameObject, key);
+            this.onKey(gameObject, key);
         }
     }
 
@@ -86,7 +86,7 @@ public class UIEventListener : MonoBehaviour
     {
         if (this.onPress != null)
         {
-            this.onPress(base.gameObject, isPressed);
+            this.onPress(gameObject, isPressed);
         }
     }
 
@@ -94,7 +94,7 @@ public class UIEventListener : MonoBehaviour
     {
         if (this.onScroll != null)
         {
-            this.onScroll(base.gameObject, delta);
+            this.onScroll(gameObject, delta);
         }
     }
 
@@ -102,7 +102,7 @@ public class UIEventListener : MonoBehaviour
     {
         if (this.onSelect != null)
         {
-            this.onSelect(base.gameObject, selected);
+            this.onSelect(gameObject, selected);
         }
     }
 
@@ -110,7 +110,7 @@ public class UIEventListener : MonoBehaviour
     {
         if (this.onSubmit != null)
         {
-            this.onSubmit(base.gameObject);
+            this.onSubmit(gameObject);
         }
     }
 

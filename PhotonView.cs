@@ -33,7 +33,7 @@ public class PhotonView : Photon.MonoBehaviour
     {
         if (!this.failedToFindOnSerialize)
         {
-            if (this.OnSerializeMethodInfo == null && !NetworkingPeer.GetMethod(this.observed as UnityEngine.MonoBehaviour, PhotonNetworkingMessage.OnPhotonSerializeView.ToString(), out this.OnSerializeMethodInfo))
+            if (this.OnSerializeMethodInfo == null && !NetworkingPeer.GetMethod(this.observed as MonoBehaviour, PhotonNetworkingMessage.OnPhotonSerializeView.ToString(), out this.OnSerializeMethodInfo))
             {
                 Debug.LogError("The observed monobehaviour (" + this.observed.name + ") of this PhotonView does not implement OnPhotonSerializeView()!");
                 this.failedToFindOnSerialize = true;
@@ -76,7 +76,7 @@ public class PhotonView : Photon.MonoBehaviour
         {
             if (this.instantiationId > 0)
             {
-                Debug.LogError(string.Concat(new object[] { "OnDestroy() seems to be called without PhotonNetwork.Destroy()?! GameObject: ", base.gameObject, " Application.isLoadingLevel: ", Application.isLoadingLevel }));
+                Debug.LogError(string.Concat(new object[] { "OnDestroy() seems to be called without PhotonNetwork.Destroy()?! GameObject: ", gameObject, " Application.isLoadingLevel: ", Application.isLoadingLevel }));
             }
             else if (this.viewID <= 0)
             {
@@ -91,7 +91,7 @@ public class PhotonView : Photon.MonoBehaviour
         {
             bool flag;
             GameObject obj2 = PhotonNetwork.networkingPeer.instantiatedObjects[this.instantiationId];
-            if (flag = obj2 == base.gameObject)
+            if (flag = obj2 == gameObject)
             {
                 object[] args = new object[] { this, this.instantiationId, !Application.isLoadingLevel ? string.Empty : "Loading new scene caused this.", flag, this.destroyedByPhotonNetworkOrQuit };
                 Debug.LogWarning(string.Format("OnDestroy for PhotonView {0} but GO is still in instantiatedObjects. instantiationId: {1}. Use PhotonNetwork.Destroy(). {2} Identical with this: {3} PN.Destroyed called for this PV: {4}", args));
@@ -99,7 +99,7 @@ public class PhotonView : Photon.MonoBehaviour
         }
     }
 
-    public void RPC(string methodName, PhotonPlayer targetPlayer, params object[] parameters)
+    public void RPC(string methodName, Player targetPlayer, params object[] parameters)
     {
         PhotonNetwork.RPC(this, methodName, targetPlayer, parameters);
     }
@@ -118,7 +118,7 @@ public class PhotonView : Photon.MonoBehaviour
 
     public override string ToString()
     {
-        object[] args = new object[] { this.viewID, base.gameObject == null ? "GO==null" : base.gameObject.name, !this.isSceneView ? string.Empty : "(scene)", this.prefix };
+        object[] args = new object[] { this.viewID, gameObject == null ? "GO==null" : gameObject.name, !this.isSceneView ? string.Empty : "(scene)", this.prefix };
         return string.Format("View ({3}){0} on {1} {2}", args);
     }
 
@@ -142,7 +142,7 @@ public class PhotonView : Photon.MonoBehaviour
     {
         get
         {
-            return this.ownerId == PhotonPlayer.Self.ID || this.isSceneView && PhotonNetwork.isMasterClient;
+            return this.ownerId == Player.Self.ID || this.isSceneView && PhotonNetwork.isMasterClient;
         }
     }
 
@@ -154,11 +154,11 @@ public class PhotonView : Photon.MonoBehaviour
         }
     }
 
-    public PhotonPlayer owner
+    public Player owner
     {
         get
         {
-            return PhotonPlayer.Find(this.ownerId);
+            return Player.Find(this.ownerId);
         }
     }
 

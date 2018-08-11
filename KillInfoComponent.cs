@@ -120,8 +120,8 @@ public class KillInfoComponent : MonoBehaviour
     private void Start()
     {
         this.start = true;
-        base.transform.localScale = new Vector3(0.85f, 0.85f, 0.85f);
-        base.transform.localPosition = new Vector3(0f, -100f + Screen.height * 0.5f, 0f);
+        transform.localScale = new Vector3(0.85f, 0.85f, 0.85f);
+        transform.localPosition = new Vector3(0f, -100f + Screen.height * 0.5f, 0f);
     }
 
     private void Update()
@@ -131,26 +131,26 @@ public class KillInfoComponent : MonoBehaviour
             this.timeElapsed += Time.deltaTime;
             if (this.timeElapsed < 0.2f)
             {
-                base.transform.localScale = Vector3.Lerp(base.transform.localScale, Vector3.one * this.maxScale, Time.deltaTime * 10f);
+                transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one * this.maxScale, Time.deltaTime * 10f);
             }
             else if (this.timeElapsed < 1f)
             {
-                base.transform.localScale = Vector3.Lerp(base.transform.localScale, Vector3.one, Time.deltaTime * 10f);
+                transform.localScale = Vector3.Lerp(transform.localScale, Vector3.one, Time.deltaTime * 10f);
             }
             if (this.timeElapsed > this.lifeTime)
             {
-                base.transform.position += new Vector3(0f, Time.deltaTime * 0.15f, 0f);
+                transform.position += new Vector3(0f, Time.deltaTime * 0.15f, 0f);
                 this._alpha = 1f - Time.deltaTime * 45f + this.lifeTime - this.timeElapsed;
                 this.SetAlpha(this._alpha);
             }
             else
             {
                 float num = (int) (100f - Screen.height * 0.5f) + this.col * this.offset;
-                base.transform.localPosition = Vector3.Lerp(base.transform.localPosition, new Vector3(0f, -num, 0f), Time.deltaTime * 10f);
+                transform.localPosition = Vector3.Lerp(transform.localPosition, new Vector3(0f, -num, 0f), Time.deltaTime * 10f);
             }
             if (this.timeElapsed > this.lifeTime + 0.5f)
             {
-                UnityEngine.Object.Destroy(base.gameObject);
+                UnityEngine.Object.Destroy(gameObject);
             }
         }
     }

@@ -10,10 +10,10 @@ public class PopuplistCharacterSelection : MonoBehaviour
     private void onCharacterChange()
     {
         HeroStat stat;
-        string selection = base.GetComponent<UIPopupList>().selection;
+        string selection = GetComponent<UIPopupList>().selection;
         if (!(selection == "Set 1") && !(selection == "Set 2") && !(selection == "Set 3"))
         {
-            stat = HeroStat.getInfo(base.GetComponent<UIPopupList>().selection);
+            stat = HeroStat.getInfo(GetComponent<UIPopupList>().selection);
         }
         else
         {

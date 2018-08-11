@@ -37,7 +37,7 @@ namespace Xft
             }
             else
             {
-                base.gameObject.SetActive(true);
+                gameObject.SetActive(true);
                 if (this.mMeshObj != null)
                 {
                     this.mMeshObj.SetActive(true);
@@ -61,7 +61,7 @@ namespace Xft
 
         public void Deactivate()
         {
-            base.gameObject.SetActive(false);
+            gameObject.SetActive(false);
             if (this.mMeshObj != null)
             {
                 this.mMeshObj.SetActive(false);
@@ -83,8 +83,8 @@ namespace Xft
 
         private void InitMeshObj()
         {
-            this.mMeshObj = new GameObject("_XWeaponTrailMesh: " + base.gameObject.name);
-            this.mMeshObj.layer = base.gameObject.layer;
+            this.mMeshObj = new GameObject("_XWeaponTrailMesh: " + gameObject.name);
+            this.mMeshObj.layer = gameObject.layer;
             this.mMeshObj.SetActive(true);
             MeshFilter filter = this.mMeshObj.AddComponent<MeshFilter>();
             MeshRenderer renderer = this.mMeshObj.AddComponent<MeshRenderer>();

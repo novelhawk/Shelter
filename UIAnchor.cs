@@ -18,13 +18,13 @@ public class UIAnchor : MonoBehaviour
 
     private void Awake()
     {
-        this.mTrans = base.transform;
-        this.mAnim = base.animation;
+        this.mTrans = transform;
+        this.mAnim = animation;
     }
 
     private void Start()
     {
-        this.mRoot = NGUITools.FindInParents<UIRoot>(base.gameObject);
+        this.mRoot = NGUITools.FindInParents<UIRoot>(gameObject);
         this.mNeedsHalfPixelOffset = Application.platform == RuntimePlatform.WindowsPlayer || Application.platform == RuntimePlatform.XBOX360 || Application.platform == RuntimePlatform.WindowsWebPlayer || Application.platform == RuntimePlatform.WindowsEditor;
         if (this.mNeedsHalfPixelOffset)
         {
@@ -32,7 +32,7 @@ public class UIAnchor : MonoBehaviour
         }
         if (this.uiCamera == null)
         {
-            this.uiCamera = NGUITools.FindCameraForLayer(base.gameObject.layer);
+            this.uiCamera = NGUITools.FindCameraForLayer(gameObject.layer);
         }
         this.Update();
     }
@@ -164,7 +164,7 @@ public class UIAnchor : MonoBehaviour
             }
             if (this.runOnlyOnce && Application.isPlaying)
             {
-                UnityEngine.Object.Destroy(this);
+                Destroy(this);
             }
         }
     }

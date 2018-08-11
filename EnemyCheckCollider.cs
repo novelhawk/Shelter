@@ -21,26 +21,26 @@ public class EnemyCheckCollider : Photon.MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if ((IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.MULTIPLAYER || base.transform.root.gameObject.GetPhotonView().isMine) && this.active_me)
+        if ((IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.MULTIPLAYER || transform.root.gameObject.GetPhotonView().isMine) && this.active_me)
         {
             if (other.gameObject.tag == "playerHitbox")
             {
-                float b = 1f - Vector3.Distance(other.gameObject.transform.position, base.transform.position) * 0.05f;
+                float b = 1f - Vector3.Distance(other.gameObject.transform.position, transform.position) * 0.05f;
                 b = Mathf.Min(1f, b);
                 HitBox component = other.gameObject.GetComponent<HitBox>();
                 if (component != null && component.transform.root != null)
                 {
                     if (this.dmg == 0)
                     {
-                        Vector3 vector = component.transform.root.transform.position - base.transform.position;
+                        Vector3 vector = component.transform.root.transform.position - transform.position;
                         float num2 = 0f;
-                        if (base.gameObject.GetComponent<SphereCollider>() != null)
+                        if (gameObject.GetComponent<SphereCollider>() != null)
                         {
-                            num2 = base.transform.localScale.x * base.gameObject.GetComponent<SphereCollider>().radius;
+                            num2 = transform.localScale.x * gameObject.GetComponent<SphereCollider>().radius;
                         }
-                        if (base.gameObject.GetComponent<CapsuleCollider>() != null)
+                        if (gameObject.GetComponent<CapsuleCollider>() != null)
                         {
-                            num2 = base.transform.localScale.x * base.gameObject.GetComponent<CapsuleCollider>().height;
+                            num2 = transform.localScale.x * gameObject.GetComponent<CapsuleCollider>().height;
                         }
                         float num3 = 5f;
                         if (num2 > 0f)
@@ -63,7 +63,7 @@ public class EnemyCheckCollider : Photon.MonoBehaviour
                         {
                             if (!component.transform.root.GetComponent<HERO>().isGrabbed)
                             {
-                                Vector3 vector4 = component.transform.root.transform.position - base.transform.position;
+                                Vector3 vector4 = component.transform.root.transform.position - transform.position;
                                 component.transform.root.GetComponent<HERO>().die(vector4.normalized * b * 1000f + Vector3.up * 50f, this.isThisBite);
                             }
                         }
@@ -72,13 +72,13 @@ public class EnemyCheckCollider : Photon.MonoBehaviour
                             component.transform.root.GetComponent<HERO>().markDie();
                             int myOwnerViewID = -1;
                             string titanName = string.Empty;
-                            if (base.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>() != null)
+                            if (transform.root.gameObject.GetComponent<EnemyfxIDcontainer>() != null)
                             {
-                                myOwnerViewID = base.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().myOwnerViewID;
-                                titanName = base.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().titanName;
+                                myOwnerViewID = transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().myOwnerViewID;
+                                titanName = transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().titanName;
                             }
                             object[] objArray2 = new object[5];
-                            Vector3 vector5 = component.transform.root.position - base.transform.position;
+                            Vector3 vector5 = component.transform.root.position - transform.position;
                             objArray2[0] = vector5.normalized * b * 1000f + Vector3.up * 50f;
                             objArray2[1] = this.isThisBite;
                             objArray2[2] = myOwnerViewID;

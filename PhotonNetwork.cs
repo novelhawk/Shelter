@@ -57,7 +57,7 @@ public static class PhotonNetwork
 
     public static int AllocateViewID()
     {
-        int item = AllocateViewID(PhotonPlayer.Self.ID);
+        int item = AllocateViewID(Player.Self.ID);
         manuallyAllocatedViewIds.Add(item);
         return item;
     }
@@ -101,13 +101,13 @@ public static class PhotonNetwork
         throw new Exception(string.Format("AllocateViewID() failed. Room (user {0}) is out of subIds, as all room viewIDs are used.", ownerId));
     }
 
-    public static bool CloseConnection(PhotonPlayer kickPlayer)
+    public static bool CloseConnection(Player kickPlayer)
     {
         if (!VerifyCanUseNetwork())
         {
             return false;
         }
-        if (!PhotonPlayer.Self.IsMasterClient)
+        if (!Player.Self.IsMasterClient)
         {
             Debug.LogError("CloseConnection: Only the masterclient can kick another player.");
             return false;
@@ -282,9 +282,9 @@ public static class PhotonNetwork
         }
     }
 
-    public static void DestroyPlayerObjects(PhotonPlayer targetPlayer)
+    public static void DestroyPlayerObjects(Player targetPlayer)
     {
-        if (PhotonPlayer.Self == null)
+        if (Player.Self == null)
         {
             Debug.LogError("DestroyPlayerObjects() failed, cause parameter 'targetPlayer' was null.");
         }
@@ -295,7 +295,7 @@ public static class PhotonNetwork
     {
         if (VerifyCanUseNetwork())
         {
-            if (!PhotonPlayer.Self.IsMasterClient && targetPlayerId != PhotonPlayer.Self.ID)
+            if (!Player.Self.IsMasterClient && targetPlayerId != Player.Self.ID)
             {
                 Debug.LogError("DestroyPlayerObjects() failed, cause players can only destroy their own GameObjects. A Master Client can destroy anyone's. This is master: " + isMasterClient);
             }
@@ -391,7 +391,7 @@ public static class PhotonNetwork
             int[] viewIDs = new int[obj2.GetPhotonViewsInChildren().Length];
             for (int i = 0; i < viewIDs.Length; i++)
             {
-                viewIDs[i] = AllocateViewID(PhotonPlayer.Self.ID);
+                viewIDs[i] = AllocateViewID(Player.Self.ID);
             }
             Hashtable evData = networkingPeer.SendInstantiate(prefabName, position, rotation, group, viewIDs, data, false);
             return networkingPeer.DoInstantiate2(evData, networkingPeer.mLocalActor, obj2);
@@ -672,7 +672,7 @@ public static class PhotonNetwork
         throw new NotImplementedException("not available at the moment");
     }
 
-    public static void RemoveRPCs(PhotonPlayer targetPlayer)
+    public static void RemoveRPCs(Player targetPlayer)
     {
         if (VerifyCanUseNetwork())
         {
@@ -703,7 +703,7 @@ public static class PhotonNetwork
         }
     }
 
-    internal static void RPC(PhotonView view, string methodName, PhotonPlayer targetPlayer, params object[] parameters)
+    internal static void RPC(PhotonView view, string methodName, Player targetPlayer, params object[] parameters)
     {
         if (VerifyCanUseNetwork())
         {
@@ -713,7 +713,7 @@ public static class PhotonNetwork
             }
             else
             {
-                if (PhotonPlayer.Self == null)
+                if (Player.Self == null)
                 {
                     Debug.LogError("Error; Sending RPC to player null! Aborted \"" + methodName + "\"");
                 }
@@ -766,7 +766,7 @@ public static class PhotonNetwork
         }
     }
 
-    public static bool SetMasterClient(PhotonPlayer masterClientPlayer)
+    public static bool SetMasterClient(Player masterClientPlayer)
     {
         return networkingPeer.SetMasterClient(masterClientPlayer.ID, true);
     }
@@ -776,18 +776,18 @@ public static class PhotonNetwork
         if (customProperties == null)
         {
             customProperties = new Hashtable();
-            foreach (object obj2 in PhotonPlayer.Self.CustomProperties.Keys)
+            foreach (object obj2 in Player.Self.Properties.Keys)
             {
                 customProperties[(string) obj2] = null;
             }
         }
         if (room != null && room.isLocalClientInside)
         {
-            PhotonPlayer.Self.SetCustomProperties(customProperties);
+            Player.Self.SetCustomProperties(customProperties);
         }
         else
         {
-            PhotonPlayer.Self.InternalCacheProperties(customProperties);
+            Player.Self.InternalCacheProperties(customProperties);
         }
     }
 
@@ -1161,7 +1161,7 @@ public static class PhotonNetwork
         }
     }
 
-    public static PhotonPlayer masterClient
+    public static Player masterClient
     {
         get
         {
@@ -1247,7 +1247,7 @@ public static class PhotonNetwork
                     {
                         NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnConnectedToMaster, new object[0]);
                         networkingPeer.ChangeLocalID(1);
-                        networkingPeer.mMasterClient = PhotonPlayer.Self;
+                        networkingPeer.mMasterClient = Player.Self;
                     }
                     else
                     {
@@ -1260,13 +1260,13 @@ public static class PhotonNetwork
         }
     }
 
-    public static PhotonPlayer[] otherPlayers
+    public static Player[] otherPlayers
     {
         get
         {
             if (networkingPeer == null)
             {
-                return new PhotonPlayer[0];
+                return new Player[0];
             }
             return networkingPeer.mOtherPlayerListCopy;
         }
@@ -1281,15 +1281,15 @@ public static class PhotonNetwork
     }
 
     [Obsolete("Use PhotonPlayer.Self")]
-    public static PhotonPlayer player => PhotonPlayer.Self;
+    public static Player player => Player.Self;
 
-    public static PhotonPlayer[] playerList
+    public static Player[] playerList
     {
         get
         {
             if (networkingPeer == null)
             {
-                return new PhotonPlayer[0];
+                return new Player[0];
             }
             return networkingPeer.mPlayerListCopy;
         }

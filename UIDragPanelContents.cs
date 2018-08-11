@@ -25,7 +25,7 @@ public class UIDragPanelContents : MonoBehaviour
 
     private void OnDrag(Vector2 delta)
     {
-        if (base.enabled && NGUITools.GetActive(base.gameObject) && this.draggablePanel != null)
+        if (enabled && NGUITools.GetActive(gameObject) && this.draggablePanel != null)
         {
             this.draggablePanel.Drag();
         }
@@ -33,7 +33,7 @@ public class UIDragPanelContents : MonoBehaviour
 
     private void OnPress(bool pressed)
     {
-        if (base.enabled && NGUITools.GetActive(base.gameObject) && this.draggablePanel != null)
+        if (enabled && NGUITools.GetActive(gameObject) && this.draggablePanel != null)
         {
             this.draggablePanel.Press(pressed);
         }
@@ -41,7 +41,7 @@ public class UIDragPanelContents : MonoBehaviour
 
     private void OnScroll(float delta)
     {
-        if (base.enabled && NGUITools.GetActive(base.gameObject) && this.draggablePanel != null)
+        if (enabled && NGUITools.GetActive(gameObject) && this.draggablePanel != null)
         {
             this.draggablePanel.Scroll(delta);
         }
@@ -51,7 +51,7 @@ public class UIDragPanelContents : MonoBehaviour
     {
         if (this.draggablePanel == null)
         {
-            this.draggablePanel = NGUITools.FindInParents<UIDraggablePanel>(base.gameObject);
+            this.draggablePanel = NGUITools.FindInParents<UIDraggablePanel>(gameObject);
         }
     }
 }

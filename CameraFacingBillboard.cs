@@ -38,9 +38,9 @@ public class CameraFacingBillboard : MonoBehaviour
 
     private void Update()
     {
-        Vector3 worldPosition = base.transform.position + this.referenceCamera.transform.rotation * (!this.reverseFace ? Vector3.back : Vector3.forward);
+        Vector3 worldPosition = transform.position + this.referenceCamera.transform.rotation * (!this.reverseFace ? Vector3.back : Vector3.forward);
         Vector3 worldUp = this.referenceCamera.transform.rotation * this.GetAxis(this.axis);
-        base.transform.LookAt(worldPosition, worldUp);
+        transform.LookAt(worldPosition, worldUp);
     }
 
     public enum Axis

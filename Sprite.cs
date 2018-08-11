@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Sprite
 {
-    public UnityEngine.Color Color;
+    public Color Color;
     protected bool ColorChanged = false;
     protected float ElapsedTime;
     protected float Fps;
@@ -45,7 +45,7 @@ public class Sprite
         this.ResetSegment();
     }
 
-    public void Init(UnityEngine.Color color, Vector2 lowerLeftUV, Vector2 uvDimensions)
+    public void Init(Color color, Vector2 lowerLeftUV, Vector2 uvDimensions)
     {
         this.SetUVCoord(lowerLeftUV, uvDimensions);
         this.SetColor(color);
@@ -57,7 +57,7 @@ public class Sprite
     public void Reset()
     {
         this.MyTransform.Reset();
-        this.SetColor(UnityEngine.Color.white);
+        this.SetColor(Color.white);
         this.SetUVCoord(Vector2.zero, Vector2.zero);
         this.ScaleVector = Vector3.one;
         this.Rotation = Quaternion.identity;
@@ -84,10 +84,10 @@ public class Sprite
         pool.Vertices[vertStart + 1] = Vector3.zero;
         pool.Vertices[vertStart + 2] = Vector3.zero;
         pool.Vertices[vertStart + 3] = Vector3.zero;
-        pool.Colors[vertStart] = UnityEngine.Color.white;
-        pool.Colors[vertStart + 1] = UnityEngine.Color.white;
-        pool.Colors[vertStart + 2] = UnityEngine.Color.white;
-        pool.Colors[vertStart + 3] = UnityEngine.Color.white;
+        pool.Colors[vertStart] = Color.white;
+        pool.Colors[vertStart + 1] = Color.white;
+        pool.Colors[vertStart + 2] = Color.white;
+        pool.Colors[vertStart + 3] = Color.white;
         pool.UVs[vertStart] = Vector2.zero;
         pool.UVs[vertStart + 1] = Vector2.zero;
         pool.UVs[vertStart + 2] = Vector2.zero;
@@ -98,7 +98,7 @@ public class Sprite
         pool.UVChanged = true;
     }
 
-    public void SetColor(UnityEngine.Color c)
+    public void SetColor(Color c)
     {
         this.Color = c;
         this.ColorChanged = true;
@@ -247,7 +247,7 @@ public class Sprite
         this.LocalMat.SetTRS(Vector3.zero, this.Rotation, this.ScaleVector);
         if (this.Type == STYPE.BILLBOARD)
         {
-            UnityEngine.Transform transform = this.MainCamera.transform;
+            Transform transform = this.MainCamera.transform;
             this.MyTransform.LookAt(this.MyTransform.position + transform.rotation * Vector3.up, transform.rotation * Vector3.back);
         }
         this.WorldMat.SetTRS(this.MyTransform.position, this.MyTransform.rotation, Vector3.one);

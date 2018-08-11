@@ -21,20 +21,20 @@ public class PickupItemSimple : Photon.MonoBehaviour
         if (!this.SentPickup)
         {
             this.SentPickup = true;
-            base.photonView.RPC("PunPickupSimple", PhotonTargets.AllViaServer, new object[0]);
+            photonView.RPC("PunPickupSimple", PhotonTargets.AllViaServer, new object[0]);
         }
     }
 
     [RPC]
     public void PunPickupSimple(PhotonMessageInfo msgInfo)
     {
-        if (!this.SentPickup || !msgInfo.sender.isLocal || !base.gameObject.GetActive())
+        if (!this.SentPickup || !msgInfo.sender.isLocal || !gameObject.GetActive())
         {
         }
         this.SentPickup = false;
-        if (!base.gameObject.GetActive())
+        if (!gameObject.GetActive())
         {
-            Debug.Log("Ignored PU RPC, cause item is inactive. " + base.gameObject);
+            Debug.Log("Ignored PU RPC, cause item is inactive. " + gameObject);
         }
         else
         {
@@ -42,17 +42,17 @@ public class PickupItemSimple : Photon.MonoBehaviour
             float time = this.SecondsBeforeRespawn - (float) num;
             if (time > 0f)
             {
-                base.gameObject.SetActive(false);
-                base.Invoke("RespawnAfter", time);
+                gameObject.SetActive(false);
+                Invoke("RespawnAfter", time);
             }
         }
     }
 
     public void RespawnAfter()
     {
-        if (base.gameObject != null)
+        if (gameObject != null)
         {
-            base.gameObject.SetActive(true);
+            gameObject.SetActive(true);
         }
     }
 }

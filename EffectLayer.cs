@@ -52,7 +52,7 @@ public class EffectLayer : MonoBehaviour
     public float LineLengthRight = 1f;
     public int LoopCircles = -1;
     protected Camera MainCamera;
-    public UnityEngine.Material Material;
+    public Material Material;
     public int MaxENodes = 1;
     public float MaxFps = 60f;
     public int MaxRibbonElements = 6;
@@ -138,10 +138,10 @@ public class EffectLayer : MonoBehaviour
                 }
                 else
                 {
-                    life = UnityEngine.Random.Range(this.NodeLifeMin, this.NodeLifeMax);
+                    life = Random.Range(this.NodeLifeMin, this.NodeLifeMax);
                 }
                 Vector3 emitRotation = this.emitter.GetEmitRotation(node);
-                node.Init(emitRotation.normalized, this.OriSpeed, life, UnityEngine.Random.Range(this.OriRotationMin, this.OriRotationMax), UnityEngine.Random.Range(this.OriScaleXMin, this.OriScaleXMax), UnityEngine.Random.Range(this.OriScaleYMin, this.OriScaleYMax), this.Color1, this.OriLowerLeftUV, this.OriUVDimensions);
+                node.Init(emitRotation.normalized, this.OriSpeed, life, Random.Range(this.OriRotationMin, this.OriRotationMax), Random.Range(this.OriScaleXMin, this.OriScaleXMax), Random.Range(this.OriScaleYMin, this.OriScaleYMax), this.Color1, this.OriLowerLeftUV, this.OriUVDimensions);
             }
         }
     }

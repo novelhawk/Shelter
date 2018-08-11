@@ -43,7 +43,7 @@ public class UIFont : MonoBehaviour
         this.MarkAsDirty();
     }
 
-    private void Align(BetterList<Vector3> verts, int indexOffset, Alignment alignment, int x, int lineWidth)
+    private void Align(List<Vector3> verts, int indexOffset, Alignment alignment, int x, int lineWidth)
     {
         if (alignment != Alignment.Left)
         {
@@ -73,11 +73,11 @@ public class UIFont : MonoBehaviour
                         num2 += 0.5f / size;
                     }
                 }
-                for (int i = indexOffset; i < verts.size; i++)
+                for (int i = indexOffset; i < verts.Count; i++)
                 {
-                    Vector3 vector = verts.buffer[i];
+                    Vector3 vector = verts[i];
                     vector.x += num2;
-                    verts.buffer[i] = vector;
+                    verts[i] = vector;
                 }
             }
         }
@@ -332,7 +332,7 @@ public class UIFont : MonoBehaviour
         this.MarkAsDirty();
     }
 
-    public void Print(string text, Color32 color, BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols, bool encoding, SymbolStyle symbolStyle, Alignment alignment, int lineWidth, bool premultiply)
+    public void Print(string text, Color32 color, List<Vector3> verts, List<Vector2> uvs, List<Color32> cols, bool encoding, SymbolStyle symbolStyle, Alignment alignment, int lineWidth, bool premultiply)
     {
         if (this.mReplacement != null)
         {
@@ -357,7 +357,7 @@ public class UIFont : MonoBehaviour
                 this.mColors.Add(color);
                 int size = this.size;
                 Vector2 vector = size <= 0 ? Vector2.one : new Vector2(1f / size, 1f / size);
-                int indexOffset = verts.size;
+                int indexOffset = verts.Count;
                 int num3 = 0;
                 int x = 0;
                 int num5 = 0;
@@ -383,7 +383,7 @@ public class UIFont : MonoBehaviour
                         if (alignment != Alignment.Left)
                         {
                             this.Align(verts, indexOffset, alignment, x, lineWidth);
-                            indexOffset = verts.size;
+                            indexOffset = verts.Count;
                         }
                         x = 0;
                         num5 += num7;
@@ -546,10 +546,9 @@ public class UIFont : MonoBehaviour
                         verts.Add(new Vector3(vector3.x, vector3.y));
                     }
                 }
-                if (alignment != Alignment.Left && indexOffset < verts.size)
+                if (alignment != Alignment.Left && indexOffset < verts.Count)
                 {
                     this.Align(verts, indexOffset, alignment, x, lineWidth);
-                    indexOffset = verts.size;
                 }
             }
         }
@@ -563,7 +562,7 @@ public class UIFont : MonoBehaviour
             this.mDynamicFont.RequestCharactersInTexture("j", this.mDynamicFontSize, this.mDynamicFontStyle);
             this.mDynamicFont.GetCharacterInfo('j', out info, this.mDynamicFontSize, this.mDynamicFontStyle);
             float objB = this.mDynamicFontSize + info.vert.yMax;
-            if (!object.Equals(this.mDynamicFontOffset, objB))
+            if (!Equals(this.mDynamicFontOffset, objB))
             {
                 this.mDynamicFontOffset = objB;
                 return true;
@@ -1125,7 +1124,7 @@ public class UIFont : MonoBehaviour
                     this.mSprite = this.mAtlas.GetSprite(this.mFont.spriteName);
                     if (this.mSprite == null)
                     {
-                        this.mSprite = this.mAtlas.GetSprite(base.name);
+                        this.mSprite = this.mAtlas.GetSprite(name);
                     }
                     this.mSpriteSet = true;
                     if (this.mSprite == null)

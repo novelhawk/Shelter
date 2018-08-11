@@ -11,9 +11,9 @@ internal class LoadbalancingPeer : PhotonPeer
     public virtual bool OpAuthenticate(string appId, string appVersion, string userId, AuthenticationValues authValues, string regionCode)
     {
         bool flag;
-        if (base.DebugOut >= DebugLevel.INFO)
+        if (DebugOut >= DebugLevel.INFO)
         {
-            base.Listener.DebugReturn(DebugLevel.INFO, "OpAuthenticate()");
+            Listener.DebugReturn(DebugLevel.INFO, "OpAuthenticate()");
         }
         Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>();
         if (authValues != null && authValues.Secret != null)
@@ -33,9 +33,9 @@ internal class LoadbalancingPeer : PhotonPeer
         }
         if (authValues != null && authValues.AuthType != CustomAuthenticationType.None)
         {
-            if (!base.IsEncryptionAvailable)
+            if (!IsEncryptionAvailable)
             {
-                base.Listener.DebugReturn(DebugLevel.ERROR, "OpAuthenticate() failed. When you want Custom Authentication encryption is mandatory.");
+                Listener.DebugReturn(DebugLevel.ERROR, "OpAuthenticate() failed. When you want Custom Authentication encryption is mandatory.");
                 return false;
             }
             customOpParameters[217] = (byte) authValues.AuthType;
@@ -52,18 +52,18 @@ internal class LoadbalancingPeer : PhotonPeer
                 customOpParameters[214] = authValues.AuthPostData;
             }
         }
-        if (!(flag = this.OpCustom(230, customOpParameters, true, 0, base.IsEncryptionAvailable)))
+        if (!(flag = this.OpCustom(230, customOpParameters, true, 0, IsEncryptionAvailable)))
         {
-            base.Listener.DebugReturn(DebugLevel.ERROR, "Error calling OpAuthenticate! Did not work. Check log output, CustomAuthenticationValues and if you're connected.");
+            Listener.DebugReturn(DebugLevel.ERROR, "Error calling OpAuthenticate! Did not work. Check log output, CustomAuthenticationValues and if you're connected.");
         }
         return flag;
     }
 
     public virtual bool OpChangeGroups(byte[] groupsToRemove, byte[] groupsToAdd)
     {
-        if (base.DebugOut >= DebugLevel.ALL)
+        if (DebugOut >= DebugLevel.ALL)
         {
-            base.Listener.DebugReturn(DebugLevel.ALL, "OpChangeGroups()");
+            Listener.DebugReturn(DebugLevel.ALL, "OpChangeGroups()");
         }
         Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>();
         if (groupsToRemove != null)
@@ -79,9 +79,9 @@ internal class LoadbalancingPeer : PhotonPeer
 
     public virtual bool OpCreateRoom(string roomName, RoomOptions roomOptions, TypedLobby lobby, Hashtable playerProperties, bool onGameServer)
     {
-        if (base.DebugOut >= DebugLevel.INFO)
+        if (DebugOut >= DebugLevel.INFO)
         {
-            base.Listener.DebugReturn(DebugLevel.INFO, "OpCreateRoom()");
+            Listener.DebugReturn(DebugLevel.INFO, "OpCreateRoom()");
         }
         Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>();
         if (!string.IsNullOrEmpty(roomName))
@@ -144,9 +144,9 @@ internal class LoadbalancingPeer : PhotonPeer
 
     public virtual bool OpJoinLobby(TypedLobby lobby)
     {
-        if (base.DebugOut >= DebugLevel.INFO)
+        if (DebugOut >= DebugLevel.INFO)
         {
-            base.Listener.DebugReturn(DebugLevel.INFO, "OpJoinLobby()");
+            Listener.DebugReturn(DebugLevel.INFO, "OpJoinLobby()");
         }
         Dictionary<byte, object> customOpParameters = null;
         if (lobby != null && !lobby.IsDefault)
@@ -162,9 +162,9 @@ internal class LoadbalancingPeer : PhotonPeer
 
     public virtual bool OpJoinRandomRoom(Hashtable expectedCustomRoomProperties, byte expectedMaxPlayers, Hashtable playerProperties, MatchmakingMode matchingType, TypedLobby typedLobby, string sqlLobbyFilter)
     {
-        if (base.DebugOut >= DebugLevel.INFO)
+        if (DebugOut >= DebugLevel.INFO)
         {
-            base.Listener.DebugReturn(DebugLevel.INFO, "OpJoinRandomRoom()");
+            Listener.DebugReturn(DebugLevel.INFO, "OpJoinRandomRoom()");
         }
         Hashtable target = new Hashtable();
         target.MergeStringKeys(expectedCustomRoomProperties);
@@ -248,9 +248,9 @@ internal class LoadbalancingPeer : PhotonPeer
 
     public virtual bool OpLeaveLobby()
     {
-        if (base.DebugOut >= DebugLevel.INFO)
+        if (DebugOut >= DebugLevel.INFO)
         {
-            base.Listener.DebugReturn(DebugLevel.INFO, "OpLeaveLobby()");
+            Listener.DebugReturn(DebugLevel.INFO, "OpLeaveLobby()");
         }
         return this.OpCustom(228, null, true);
     }
@@ -307,9 +307,9 @@ internal class LoadbalancingPeer : PhotonPeer
 
     protected bool OpSetPropertiesOfActor(int actorNr, Hashtable actorProperties, bool broadcast, byte channelId)
     {
-        if (base.DebugOut >= DebugLevel.INFO)
+        if (DebugOut >= DebugLevel.INFO)
         {
-            base.Listener.DebugReturn(DebugLevel.INFO, "OpSetPropertiesOfActor()");
+            Listener.DebugReturn(DebugLevel.INFO, "OpSetPropertiesOfActor()");
         }
         if (actorNr > 0 && actorProperties != null)
         {
@@ -324,18 +324,18 @@ internal class LoadbalancingPeer : PhotonPeer
             }
             return this.OpCustom(252, customOpParameters, broadcast, channelId);
         }
-        if (base.DebugOut >= DebugLevel.INFO)
+        if (DebugOut >= DebugLevel.INFO)
         {
-            base.Listener.DebugReturn(DebugLevel.INFO, "OpSetPropertiesOfActor not sent. ActorNr must be > 0 and actorProperties != null.");
+            Listener.DebugReturn(DebugLevel.INFO, "OpSetPropertiesOfActor not sent. ActorNr must be > 0 and actorProperties != null.");
         }
         return false;
     }
 
     public bool OpSetPropertiesOfRoom(Hashtable gameProperties, bool broadcast, byte channelId)
     {
-        if (base.DebugOut >= DebugLevel.INFO)
+        if (DebugOut >= DebugLevel.INFO)
         {
-            base.Listener.DebugReturn(DebugLevel.INFO, "OpSetPropertiesOfRoom()");
+            Listener.DebugReturn(DebugLevel.INFO, "OpSetPropertiesOfRoom()");
         }
         Dictionary<byte, object> customOpParameters = new Dictionary<byte, object>
         {

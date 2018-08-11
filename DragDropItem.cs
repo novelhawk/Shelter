@@ -11,7 +11,7 @@ public class DragDropItem : MonoBehaviour
 
     private void Awake()
     {
-        this.mTrans = base.transform;
+        this.mTrans = transform;
     }
 
     private void Drop()
@@ -30,12 +30,12 @@ public class DragDropItem : MonoBehaviour
             this.mTrans.parent = this.mParent;
         }
         this.UpdateTable();
-        NGUITools.MarkParentAsChanged(base.gameObject);
+        NGUITools.MarkParentAsChanged(gameObject);
     }
 
     private void OnDrag(Vector2 delta)
     {
-        if (base.enabled && UICamera.currentTouchID > -2)
+        if (enabled && UICamera.currentTouchID > -2)
         {
             if (!this.mIsDragging)
             {
@@ -45,7 +45,7 @@ public class DragDropItem : MonoBehaviour
                 Vector3 localPosition = this.mTrans.localPosition;
                 localPosition.z = 0f;
                 this.mTrans.localPosition = localPosition;
-                NGUITools.MarkParentAsChanged(base.gameObject);
+                NGUITools.MarkParentAsChanged(gameObject);
             }
             else
             {
@@ -56,7 +56,7 @@ public class DragDropItem : MonoBehaviour
 
     private void OnPress(bool isPressed)
     {
-        if (base.enabled)
+        if (enabled)
         {
             if (isPressed)
             {
@@ -72,7 +72,7 @@ public class DragDropItem : MonoBehaviour
                 UICamera.current.stickyPress = false;
             }
             this.mIsDragging = false;
-            Collider collider = base.collider;
+            Collider collider = this.collider;
             if (collider != null)
             {
                 collider.enabled = !isPressed;
@@ -86,7 +86,7 @@ public class DragDropItem : MonoBehaviour
 
     private void UpdateTable()
     {
-        UITable table = NGUITools.FindInParents<UITable>(base.gameObject);
+        UITable table = NGUITools.FindInParents<UITable>(gameObject);
         if (table != null)
         {
             table.repositionNow = true;

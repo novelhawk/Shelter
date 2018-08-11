@@ -29,7 +29,7 @@ public class TweenScale : UITweener
         {
             if (this.mTable == null)
             {
-                this.mTable = NGUITools.FindInParents<UITable>(base.gameObject);
+                this.mTable = NGUITools.FindInParents<UITable>(gameObject);
                 if (this.mTable == null)
                 {
                     this.updateTable = false;
@@ -46,7 +46,7 @@ public class TweenScale : UITweener
         {
             if (this.mTrans == null)
             {
-                this.mTrans = base.transform;
+                this.mTrans = transform;
             }
             return this.mTrans;
         }

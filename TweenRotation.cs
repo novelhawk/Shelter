@@ -31,7 +31,7 @@ public class TweenRotation : UITweener
         {
             if (this.mTrans == null)
             {
-                this.mTrans = base.transform;
+                this.mTrans = transform;
             }
             return this.mTrans;
         }

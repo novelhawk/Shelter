@@ -35,15 +35,15 @@ public class UIButton : UIButtonColor
 
     public void UpdateColor(bool shouldBeEnabled, bool immediate)
     {
-        if (base.tweenTarget != null)
+        if (tweenTarget != null)
         {
-            if (!base.mStarted)
+            if (!mStarted)
             {
-                base.mStarted = true;
-                base.Init();
+                mStarted = true;
+                Init();
             }
-            Color color = !shouldBeEnabled ? this.disabledColor : base.defaultColor;
-            TweenColor color2 = TweenColor.Begin(base.tweenTarget, 0.15f, color);
+            Color color = !shouldBeEnabled ? this.disabledColor : defaultColor;
+            TweenColor color2 = TweenColor.Begin(tweenTarget, 0.15f, color);
             if (immediate)
             {
                 color2.color = color;
@@ -56,12 +56,12 @@ public class UIButton : UIButtonColor
     {
         get
         {
-            Collider collider = base.collider;
+            Collider collider = this.collider;
             return collider != null && collider.enabled;
         }
         set
         {
-            Collider collider = base.collider;
+            Collider collider = this.collider;
             if (collider != null && collider.enabled != value)
             {
                 collider.enabled = value;

@@ -23,7 +23,7 @@ public class LookAtTarget : MonoBehaviour
 
     private void Start()
     {
-        this.mTrans = base.transform;
+        this.mTrans = transform;
     }
 }
 

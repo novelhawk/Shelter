@@ -31,8 +31,8 @@ public class Spin : MonoBehaviour
 
     private void Start()
     {
-        this.mTrans = base.transform;
-        this.mRb = base.rigidbody;
+        this.mTrans = transform;
+        this.mRb = rigidbody;
     }
 
     private void Update()

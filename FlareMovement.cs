@@ -11,7 +11,7 @@ public class FlareMovement : MonoBehaviour
 
     public void dontShowHint()
     {
-        UnityEngine.Object.Destroy(this.hint);
+        Destroy(this.hint);
         this.nohint = true;
     }
 
@@ -20,7 +20,7 @@ public class FlareMovement : MonoBehaviour
         this.hero = GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().main_object;
         if (!this.nohint && this.hero != null)
         {
-            this.hint = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("UI/" + this.color + "FlareHint"));
+            this.hint = (GameObject) Instantiate(Resources.Load("UI/" + this.color + "FlareHint"));
             if (this.color == "Black")
             {
                 this.offY = Vector3.up * 0.4f;
@@ -29,9 +29,9 @@ public class FlareMovement : MonoBehaviour
             {
                 this.offY = Vector3.up * 0.5f;
             }
-            this.hint.transform.parent = base.transform.root;
+            this.hint.transform.parent = transform.root;
             this.hint.transform.position = this.hero.transform.position + this.offY;
-            Vector3 vector = base.transform.position - this.hint.transform.position;
+            Vector3 vector = transform.position - this.hint.transform.position;
             float num = Mathf.Atan2(-vector.z, vector.x) * 57.29578f;
             this.hint.transform.rotation = Quaternion.Euler(-90f, num + 180f, 0f);
             this.hint.transform.localScale = Vector3.zero;
@@ -50,22 +50,22 @@ public class FlareMovement : MonoBehaviour
             if (this.timer < 3f)
             {
                 this.hint.transform.position = this.hero.transform.position + this.offY;
-                Vector3 vector = base.transform.position - this.hint.transform.position;
+                Vector3 vector = transform.position - this.hint.transform.position;
                 float num = Mathf.Atan2(-vector.z, vector.x) * 57.29578f;
                 this.hint.transform.rotation = Quaternion.Euler(-90f, num + 180f, 0f);
             }
             else if (this.hint != null)
             {
-                UnityEngine.Object.Destroy(this.hint);
+                Destroy(this.hint);
             }
         }
         if (this.timer < 4f)
         {
-            base.rigidbody.AddForce((base.transform.forward + base.transform.up * 5f) * Time.deltaTime * 5f, ForceMode.VelocityChange);
+            rigidbody.AddForce((transform.forward + transform.up * 5f) * Time.deltaTime * 5f, ForceMode.VelocityChange);
         }
         else
         {
-            base.rigidbody.AddForce(-base.transform.up * Time.deltaTime * 7f, ForceMode.Acceleration);
+            rigidbody.AddForce(-transform.up * Time.deltaTime * 7f, ForceMode.Acceleration);
         }
     }
 }

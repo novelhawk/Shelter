@@ -67,6 +67,7 @@ namespace Mod.Interface
                 Alpha = Mathf.Clamp(Alpha, 0, 255);
             }
         }
+
         protected override void Render()
         {
             if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.F6)

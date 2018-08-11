@@ -9,7 +9,7 @@ public class supplyCheck : MonoBehaviour
     {
         if (Minimap.instance != null)
         {
-            Minimap.instance.TrackGameObjectOnMinimap(base.gameObject, Color.white, false, true, Minimap.IconStyle.SUPPLY);
+            Minimap.instance.TrackGameObjectOnMinimap(gameObject, Color.white, false, true, Minimap.IconStyle.SUPPLY);
         }
     }
 
@@ -25,12 +25,12 @@ public class supplyCheck : MonoBehaviour
                 {
                     if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
                     {
-                        if (Vector3.Distance(obj2.transform.position, base.transform.position) < 1.5f)
+                        if (Vector3.Distance(obj2.transform.position, transform.position) < 1.5f)
                         {
                             obj2.GetComponent<HERO>().getSupply();
                         }
                     }
-                    else if (obj2.GetPhotonView().isMine && Vector3.Distance(obj2.transform.position, base.transform.position) < 1.5f)
+                    else if (obj2.GetPhotonView().isMine && Vector3.Distance(obj2.transform.position, transform.position) < 1.5f)
                     {
                         obj2.GetComponent<HERO>().getSupply();
                     }

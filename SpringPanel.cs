@@ -31,14 +31,14 @@ public class SpringPanel : IgnoreTimeScale
 
     private void Start()
     {
-        this.mPanel = base.GetComponent<UIPanel>();
-        this.mDrag = base.GetComponent<UIDraggablePanel>();
-        this.mTrans = base.transform;
+        this.mPanel = GetComponent<UIPanel>();
+        this.mDrag = GetComponent<UIDraggablePanel>();
+        this.mTrans = transform;
     }
 
     private void Update()
     {
-        float deltaTime = base.UpdateRealTimeDelta();
+        float deltaTime = UpdateRealTimeDelta();
         if (this.mThreshold == 0f)
         {
             Vector3 vector = this.target - this.mTrans.localPosition;
@@ -50,7 +50,7 @@ public class SpringPanel : IgnoreTimeScale
         if (this.mThreshold >= Vector3.Magnitude(target - this.target))
         {
             target = this.target;
-            base.enabled = false;
+            enabled = false;
             flag = true;
         }
         this.mTrans.localPosition = target;

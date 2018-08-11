@@ -18,7 +18,7 @@ public class UICheckboxControlledComponent : MonoBehaviour
 
     private void OnActivateDelegate(bool isActive)
     {
-        if (base.enabled && this.target != null)
+        if (enabled && this.target != null)
         {
             this.target.enabled = !this.inverse ? isActive : !isActive;
         }
@@ -26,7 +26,7 @@ public class UICheckboxControlledComponent : MonoBehaviour
 
     private void Start()
     {
-        UICheckbox component = base.GetComponent<UICheckbox>();
+        UICheckbox component = GetComponent<UICheckbox>();
         if (component != null)
         {
             this.mUsingDelegates = true;

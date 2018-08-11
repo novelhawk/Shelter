@@ -13,7 +13,7 @@ public class SetColorOnSelection : MonoBehaviour
     {
         if (this.mWidget == null)
         {
-            this.mWidget = base.GetComponent<UIWidget>();
+            this.mWidget = GetComponent<UIWidget>();
         }
         string key = val;
         if (key != null)

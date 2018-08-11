@@ -4,29 +4,30 @@ using System.Linq;
 using Mod;
 using UnityEngine;
 
-public class PhotonPlayer
+public class Player
 {
+    public PlayerProperties Properties { get; }
     private int actorID;
     public readonly bool isLocal;
     private string nameField;
     public object TagObject;
     private string _hexName;
 
-    protected internal PhotonPlayer(bool isLocal, int actorID, Hashtable properties)
+    protected internal Player(bool isLocal, int actorID, Hashtable properties)
     {
         this.actorID = -1;
         this.nameField = string.Empty;
-        this.CustomProperties = new Hashtable();
+        this.Properties = new PlayerProperties();
         this.isLocal = isLocal;
         this.actorID = actorID;
         this.InternalCacheProperties(properties);
     }
 
-    public PhotonPlayer(bool isLocal, int actorID, string name)
+    public Player(bool isLocal, int actorID, string name)
     {
         this.actorID = -1;
         this.nameField = string.Empty;
-        this.CustomProperties = new Hashtable();
+        this.Properties = new PlayerProperties();
         this.isLocal = isLocal;
         this.actorID = actorID;
         this.nameField = name;
@@ -36,16 +37,16 @@ public class PhotonPlayer
 
     public override bool Equals(object p)
     {
-        PhotonPlayer player = p as PhotonPlayer;
+        Player player = p as Player;
         return player != null && this.GetHashCode() == player.GetHashCode();
     }
 
-    public static PhotonPlayer Find(int ID)
+    public static Player Find(int ID)
     {
         return PhotonNetwork.playerList.FirstOrDefault(player => player.ID == ID);
     }
 
-    public static bool TryParse(string idStr, out PhotonPlayer player)
+    public static bool TryParse(string idStr, out Player player)
     {
         if (int.TryParse(idStr, out int id))
             if (TryParse(id, out player))
@@ -54,7 +55,7 @@ public class PhotonPlayer
         return false;
     }
 
-    public static bool TryParse(int id, out PhotonPlayer player)
+    public static bool TryParse(int id, out Player player)
     {
         player = Find(id);
         if (player == null)
@@ -62,7 +63,7 @@ public class PhotonPlayer
         return true;
     }
 
-    public PhotonPlayer Get(int id)
+    public Player Get(int id)
     {
         return Find(id);
     }
@@ -72,12 +73,12 @@ public class PhotonPlayer
         return this.ID;
     }
 
-    public PhotonPlayer GetNext()
+    public Player GetNext()
     {
         return this.GetNextFor(this.ID);
     }
 
-    public PhotonPlayer GetNextFor(PhotonPlayer currentPlayer)
+    public Player GetNextFor(Player currentPlayer)
     {
         if (currentPlayer == null)
         {
@@ -86,13 +87,13 @@ public class PhotonPlayer
         return this.GetNextFor(currentPlayer.ID);
     }
 
-    public PhotonPlayer GetNextFor(int currentPlayerId)
+    public Player GetNextFor(int currentPlayerId)
     {
         if (PhotonNetwork.networkingPeer == null || PhotonNetwork.networkingPeer.mActors == null || PhotonNetwork.networkingPeer.mActors.Count < 2)
         {
             return null;
         }
-        Dictionary<int, PhotonPlayer> mActors = PhotonNetwork.networkingPeer.mActors;
+        Dictionary<int, Player> mActors = PhotonNetwork.networkingPeer.mActors;
         int num = 2147483647;
         int num2 = currentPlayerId;
         foreach (int num3 in mActors.Keys)
@@ -111,20 +112,20 @@ public class PhotonPlayer
 
     public bool Has(string prop)
     {
-        return CustomProperties[prop] != null;
+        return Properties[prop] != null;
     }
 
     internal void InternalCacheProperties(Hashtable properties)
     {
-        if (properties != null && properties.Count != 0 && !this.CustomProperties.Equals(properties))
+        if (properties != null && properties.Count != 0 && !this.Properties.Equals(properties))
         {
             if (properties.ContainsKey((byte)255))
             {
                 this.nameField = (string)properties[(byte)255];
             }
-            this.CustomProperties.MergeStringKeys(properties);
-            this.CustomProperties.StripKeysWithNullValues();
-            _hexName = CustomProperties[PhotonPlayerProperty.name].ToString().HexColor();
+            this.Properties.MergeStringKeys(properties);
+            this.Properties.StripKeysWithNullValues();
+            _hexName = Properties[PhotonPlayerProperty.name].ToString().HexColor();
         }
     }
 
@@ -144,8 +145,8 @@ public class PhotonPlayer
     {
         if (propertiesToSet != null)
         {
-            this.CustomProperties.MergeStringKeys(propertiesToSet);
-            this.CustomProperties.StripKeysWithNullValues();
+            this.Properties.MergeStringKeys(propertiesToSet);
+            this.Properties.StripKeysWithNullValues();
             Hashtable actorProperties = propertiesToSet.StripToStringKeys();
             if (this.actorID > 0 && !PhotonNetwork.offlineMode)
             {
@@ -153,7 +154,7 @@ public class PhotonPlayer
             }
             object[] parameters = new object[] { this, propertiesToSet };
             NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnPhotonPlayerPropertiesChanged, parameters);
-            _hexName = CustomProperties[PhotonPlayerProperty.name].ToString().HexColor();
+            _hexName = Properties[PhotonPlayerProperty.name].ToString().HexColor();
         }
     }
 
@@ -161,7 +162,7 @@ public class PhotonPlayer
 
     public string ToStringFull()
     {
-        return string.Format("#{0:00} '{1}' {2}", this.ID, this.name, this.CustomProperties.ToStringFull());
+        return string.Format("#{0:00} '{1}' {2}", this.ID, this.name, this.Properties.ToStringFull());
     }
 
     public Hashtable allProperties
@@ -169,13 +170,11 @@ public class PhotonPlayer
         get
         {
             Hashtable target = new Hashtable();
-            target.Merge(this.CustomProperties);
+            target.Merge(this.Properties);
             target[(byte)255] = this.name;
             return target;
         }
     }
-
-    public Hashtable CustomProperties { get; private set; }
 
     public int ID
     {
@@ -187,7 +186,7 @@ public class PhotonPlayer
 
     public bool IsMasterClient => Equals(PhotonNetwork.networkingPeer.mMasterClient, this);
 
-    public static PhotonPlayer Self => PhotonNetwork.networkingPeer?.mLocalActor;
+    public static Player Self => PhotonNetwork.networkingPeer?.mLocalActor;
 
     public string name
     {
@@ -208,12 +207,12 @@ public class PhotonPlayer
         }
     }
 
-    public static bool operator !=(PhotonPlayer a, PhotonPlayer b)
+    public static bool operator !=(Player a, Player b)
     {
         return !ReferenceEquals(a, b);
     }
 
-    public static bool operator ==(PhotonPlayer a, PhotonPlayer b)
+    public static bool operator ==(Player a, Player b)
     {
         return ReferenceEquals(a, b);
     }

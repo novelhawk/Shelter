@@ -24,7 +24,7 @@ public class UVAffector : Affector
         this.ElapsedTime += Time.deltaTime;
         if (this.UVTime <= 0f)
         {
-            num = base.Node.GetLifeTime() / this.Frames.frames.Length;
+            num = Node.GetLifeTime() / this.Frames.frames.Length;
         }
         else
         {
@@ -35,8 +35,8 @@ public class UVAffector : Affector
             Vector2 zero = Vector2.zero;
             Vector2 dm = Vector2.zero;
             this.Frames.GetNextFrame(ref zero, ref dm);
-            base.Node.LowerLeftUV = zero;
-            base.Node.UVDimensions = dm;
+            Node.LowerLeftUV = zero;
+            Node.UVDimensions = dm;
             this.ElapsedTime -= num;
         }
     }

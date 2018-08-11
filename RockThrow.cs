@@ -12,28 +12,28 @@ public class RockThrow : Photon.MonoBehaviour
         GameObject obj2;
         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
         {
-            obj2 = PhotonNetwork.Instantiate("FX/boom6", base.transform.position, base.transform.rotation, 0);
-            if (base.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>() != null)
+            obj2 = PhotonNetwork.Instantiate("FX/boom6", transform.position, transform.rotation, 0);
+            if (transform.root.gameObject.GetComponent<EnemyfxIDcontainer>() != null)
             {
-                obj2.GetComponent<EnemyfxIDcontainer>().myOwnerViewID = base.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().myOwnerViewID;
-                obj2.GetComponent<EnemyfxIDcontainer>().titanName = base.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().titanName;
+                obj2.GetComponent<EnemyfxIDcontainer>().myOwnerViewID = transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().myOwnerViewID;
+                obj2.GetComponent<EnemyfxIDcontainer>().titanName = transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().titanName;
             }
         }
         else
         {
-            obj2 = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("FX/boom6"), base.transform.position, base.transform.rotation);
+            obj2 = (GameObject) Instantiate(Resources.Load("FX/boom6"), transform.position, transform.rotation);
         }
-        obj2.transform.localScale = base.transform.localScale;
+        obj2.transform.localScale = transform.localScale;
         float b = 1f - Vector3.Distance(GameObject.Find("MainCamera").transform.position, obj2.transform.position) * 0.05f;
         b = Mathf.Min(1f, b);
         GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().startShake(b, b, 0.95f);
         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
         {
-            UnityEngine.Object.Destroy(base.gameObject);
+            Destroy(gameObject);
         }
         else
         {
-            PhotonNetwork.Destroy(base.photonView);
+            PhotonNetwork.Destroy(photonView);
         }
     }
 
@@ -53,10 +53,10 @@ public class RockThrow : Photon.MonoBehaviour
                 hero.GetComponent<HERO>().markDie();
                 int myOwnerViewID = -1;
                 string titanName = string.Empty;
-                if (base.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>() != null)
+                if (transform.root.gameObject.GetComponent<EnemyfxIDcontainer>() != null)
                 {
-                    myOwnerViewID = base.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().myOwnerViewID;
-                    titanName = base.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().titanName;
+                    myOwnerViewID = transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().myOwnerViewID;
+                    titanName = transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().titanName;
                 }
                 Debug.Log("rock hit player " + titanName);
                 object[] parameters = new object[] { this.v.normalized * 1000f + Vector3.up * 50f, false, myOwnerViewID, titanName, true };
@@ -70,20 +70,20 @@ public class RockThrow : Photon.MonoBehaviour
     {
         GameObject gameObject = PhotonView.Find(viewID).gameObject;
         Transform transform = gameObject.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R/hand_R_001");
-        base.transform.localScale = gameObject.transform.localScale;
-        base.transform.parent = transform;
-        base.transform.localPosition = pos;
+        this.transform.localScale = gameObject.transform.localScale;
+        this.transform.parent = transform;
+        this.transform.localPosition = pos;
     }
 
     public void launch(Vector3 v1)
     {
         this.launched = true;
-        this.oldP = base.transform.position;
+        this.oldP = transform.position;
         this.v = v1;
         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
         {
             object[] parameters = new object[] { this.v, this.oldP };
-            base.photonView.RPC("launchRPC", PhotonTargets.Others, parameters);
+            photonView.RPC("launchRPC", PhotonTargets.Others, parameters);
         }
     }
 
@@ -92,24 +92,24 @@ public class RockThrow : Photon.MonoBehaviour
     {
         this.launched = true;
         Vector3 vector = p;
-        base.transform.position = vector;
+        transform.position = vector;
         this.oldP = vector;
-        base.transform.parent = null;
+        transform.parent = null;
         this.launch(v);
     }
 
     private void Start()
     {
-        this.r = new Vector3(UnityEngine.Random.Range(-5f, 5f), UnityEngine.Random.Range(-5f, 5f), UnityEngine.Random.Range(-5f, 5f));
+        this.r = new Vector3(Random.Range(-5f, 5f), Random.Range(-5f, 5f), Random.Range(-5f, 5f));
     }
 
     private void Update()
     {
         if (this.launched)
         {
-            base.transform.Rotate(this.r);
+            this.transform.Rotate(this.r);
             this.v -= 20f * Vector3.up * Time.deltaTime;
-            Transform transform = base.transform;
+            Transform transform = this.transform;
             transform.position += this.v * Time.deltaTime;
             if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.MULTIPLAYER || PhotonNetwork.isMasterClient)
             {
@@ -117,7 +117,7 @@ public class RockThrow : Photon.MonoBehaviour
                 LayerMask mask2 = 1 << LayerMask.NameToLayer("Players");
                 LayerMask mask3 = 1 << LayerMask.NameToLayer("EnemyAABB");
                 LayerMask mask4 = mask2 | mask | mask3;
-                foreach (RaycastHit hit in Physics.SphereCastAll(base.transform.position, 2.5f * base.transform.lossyScale.x, base.transform.position - this.oldP, Vector3.Distance(base.transform.position, this.oldP), mask4))
+                foreach (RaycastHit hit in Physics.SphereCastAll(this.transform.position, 2.5f * this.transform.lossyScale.x, this.transform.position - this.oldP, Vector3.Distance(this.transform.position, this.oldP), mask4))
                 {
                     if (LayerMask.LayerToName(hit.collider.gameObject.layer) == "EnemyAABB")
                     {
@@ -125,16 +125,16 @@ public class RockThrow : Photon.MonoBehaviour
                         if (gameObject.GetComponent<TITAN>() != null && !gameObject.GetComponent<TITAN>().hasDie)
                         {
                             gameObject.GetComponent<TITAN>().hitAnkle();
-                            Vector3 position = base.transform.position;
+                            Vector3 position = this.transform.position;
                             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
                             {
                                 gameObject.GetComponent<TITAN>().hitAnkle();
                             }
                             else
                             {
-                                if (base.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>() != null && PhotonView.Find(base.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().myOwnerViewID) != null)
+                                if (this.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>() != null && PhotonView.Find(this.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().myOwnerViewID) != null)
                                 {
-                                    Vector3 vector3 = PhotonView.Find(base.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().myOwnerViewID).transform.position;
+                                    Vector3 vector3 = PhotonView.Find(this.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().myOwnerViewID).transform.position;
                                 }
                                 gameObject.GetComponent<HERO>().photonView.RPC("hitAnkleRPC", PhotonTargets.All, new object[0]);
                             }
@@ -161,7 +161,7 @@ public class RockThrow : Photon.MonoBehaviour
                         this.explore();
                     }
                 }
-                this.oldP = base.transform.position;
+                this.oldP = this.transform.position;
             }
         }
     }

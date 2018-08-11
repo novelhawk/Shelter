@@ -47,9 +47,9 @@ public static class RCextensions
         return text;
     }
 
-    public static bool isLowestID(this PhotonPlayer player)
+    public static bool isLowestID(this Player player)
     {
-        foreach (PhotonPlayer player2 in PhotonNetwork.playerList)
+        foreach (Player player2 in PhotonNetwork.playerList)
         {
             if (player2.ID < player.ID)
             {

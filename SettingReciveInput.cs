@@ -7,7 +7,7 @@ public class SettingReciveInput : MonoBehaviour
     private void OnClick()
     {
         GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().startListening(this.id);
-        base.transform.Find("Label").gameObject.GetComponent<UILabel>().text = "*wait for input";
+        transform.Find("Label").gameObject.GetComponent<UILabel>().text = "*wait for input";
     }
 
     private void Start()

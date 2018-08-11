@@ -12,13 +12,13 @@ public class TweenColor : UITweener
 
     private void Awake()
     {
-        this.mWidget = base.GetComponentInChildren<UIWidget>();
-        Renderer renderer = base.renderer;
+        this.mWidget = GetComponentInChildren<UIWidget>();
+        Renderer renderer = this.renderer;
         if (renderer != null)
         {
             this.mMat = renderer.material;
         }
-        this.mLight = base.light;
+        this.mLight = light;
     }
 
     public static TweenColor Begin(GameObject go, float duration, Color color)

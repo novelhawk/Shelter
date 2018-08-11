@@ -12,7 +12,7 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
     internal static CloudRegionCode BestRegionCodeCurrently = CloudRegionCode.none;
     private int nextSendTickCount;
     private int nextSendTickCountOnSerialize;
-    public static System.Type PingImplementation;
+    public static Type PingImplementation;
     private const string PlayerPrefsKey = "PUNCloudBestRegion";
     private static bool sendThreadShouldRun;
     public static PhotonHandler SP;
@@ -23,10 +23,10 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
     {
         if (SP != null && SP != this && SP.gameObject != null)
         {
-            UnityEngine.Object.DestroyImmediate(SP.gameObject);
+            DestroyImmediate(SP.gameObject);
         }
         SP = this;
-        UnityEngine.Object.DontDestroyOnLoad(base.gameObject);
+        DontDestroyOnLoad(gameObject);
         this.updateInterval = 1000 / PhotonNetwork.sendRate;
         this.updateIntervalOnSerialize = 1000 / PhotonNetwork.sendRateOnSerialize;
         StartFallbackSendAckThread();
@@ -112,7 +112,7 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
         if (!sendThreadShouldRun)
         {
             sendThreadShouldRun = true;
-            SupportClass.CallInBackground(new Func<bool>(PhotonHandler.FallbackSendAckThread));
+            SupportClass.CallInBackground(new Func<bool>(FallbackSendAckThread));
         }
     }
 
@@ -198,7 +198,7 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
             switch (num)
             {
                 case 0:
-                    PhotonHandler.BestRegionCodeCurrently = CloudRegionCode.none;
+                    BestRegionCodeCurrently = CloudRegionCode.none;
                     break;
 
                 case 1:
@@ -234,7 +234,7 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
                 while (this.Ss_89__1.MoveNext())
                 {
                     this.region__2 = this.Ss_89__1.Current;
-                    PhotonHandler.SP.StartCoroutine(this.pingManager__0.PingSocket(this.region__2));
+                    SP.StartCoroutine(this.pingManager__0.PingSocket(this.region__2));
                 }
             }
             finally
@@ -249,8 +249,8 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
                 goto Label_0268;
             }
             this.best__3 = this.pingManager__0.BestRegion;
-            PhotonHandler.BestRegionCodeCurrently = this.best__3.Code;
-            PhotonHandler.BestRegionCodeInPreferences = this.best__3.Code;
+            BestRegionCodeCurrently = this.best__3.Code;
+            BestRegionCodeInPreferences = this.best__3.Code;
             UnityEngine.Debug.Log(string.Concat(new object[] { "Found best region: ", this.best__3.Code, " ping: ", this.best__3.Ping, ". Calling ConnectToRegionMaster() is: ", this.connectToBest }));
             if (this.connectToBest)
             {

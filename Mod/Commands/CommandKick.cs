@@ -10,7 +10,7 @@ namespace Mod.Commands
         {
             if (args.Length < 1)
                 throw new CommandArgumentException(CommandName, "/kick [list/id]");
-            if (!PhotonPlayer.TryParse(args[0], out PhotonPlayer player))
+            if (!Player.TryParse(args[0], out Player player))
                     throw new PlayerNotFoundException();
             FengGameManagerMKII.instance.KickPlayerRC(player, false, string.Empty);
             Chat.System("Il player è stato kickato");

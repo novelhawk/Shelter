@@ -13,7 +13,7 @@ public class UIImageButton : MonoBehaviour
     {
         if (this.target == null)
         {
-            this.target = base.GetComponentInChildren<UISprite>();
+            this.target = GetComponentInChildren<UISprite>();
         }
     }
 
@@ -50,7 +50,7 @@ public class UIImageButton : MonoBehaviour
         {
             if (this.isEnabled)
             {
-                this.target.spriteName = !UICamera.IsHighlighted(base.gameObject) ? this.normalSprite : this.hoverSprite;
+                this.target.spriteName = !UICamera.IsHighlighted(gameObject) ? this.normalSprite : this.hoverSprite;
             }
             else
             {
@@ -64,12 +64,12 @@ public class UIImageButton : MonoBehaviour
     {
         get
         {
-            Collider collider = base.collider;
+            Collider collider = this.collider;
             return collider != null && collider.enabled;
         }
         set
         {
-            Collider collider = base.collider;
+            Collider collider = this.collider;
             if (collider != null && collider.enabled != value)
             {
                 collider.enabled = value;

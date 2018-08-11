@@ -13,10 +13,10 @@ public class JetAffector : Affector
 
     public override void Update()
     {
-        if (Mathf.Abs(base.Node.Acceleration) < 1E-06)
+        if (Mathf.Abs(Node.Acceleration) < 1E-06)
         {
-            float num = UnityEngine.Random.Range(this.MinAcceleration, this.MaxAcceleration);
-            base.Node.Acceleration = num;
+            float num = Random.Range(this.MinAcceleration, this.MaxAcceleration);
+            Node.Acceleration = num;
         }
     }
 }

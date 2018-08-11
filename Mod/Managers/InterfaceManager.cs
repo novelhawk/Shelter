@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 using Mod.Interface;
+using Object = UnityEngine.Object;
 
 namespace Mod.Managers
 {
@@ -34,6 +36,16 @@ namespace Mod.Managers
                 return true;
             return false;
         }
+
+        public void Enable(Type gui)
+        {
+            Enable(gui.Name);
+        }
+
+        public void Disable(Type gui)
+        {
+            Disable(gui.Name);
+        }   
 
         public void Enable(string name)
         {

@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace ExitGames.Client.Photon
 {
     using System;
@@ -13,13 +15,14 @@ namespace ExitGames.Client.Photon
 
         public SocketUdp(PeerBase npeer) : base(npeer)
         {
+            Application.Quit();
             this.syncer = new object();
-            if (base.ReportDebugOfLevel(DebugLevel.ALL))
+            if (ReportDebugOfLevel(DebugLevel.ALL))
             {
-                base.Listener.DebugReturn(DebugLevel.ALL, "CSharpSocket: UDP, Unity3d.");
+                Listener.DebugReturn(DebugLevel.ALL, "CSharpSocket: UDP, Unity3d.");
             }
-            base.Protocol = ConnectionProtocol.Udp;
-            base.PollReceive = false;
+            Protocol = ConnectionProtocol.Udp;
+            PollReceive = false;
         }
 
         public override bool Connect()
@@ -31,7 +34,7 @@ namespace ExitGames.Client.Photon
                 {
                     return false;
                 }
-                base.State = PhotonSocketState.Connecting;
+                State = PhotonSocketState.Connecting;
                 new Thread(new ThreadStart(this.DnsAndConnect)) { Name = "photon dns thread", IsBackground = true }.Start();
                 return true;
             }
@@ -39,11 +42,11 @@ namespace ExitGames.Client.Photon
 
         public override bool Disconnect()
         {
-            if (base.ReportDebugOfLevel(DebugLevel.INFO))
+            if (ReportDebugOfLevel(DebugLevel.INFO))
             {
-                base.EnqueueDebugReturn(DebugLevel.INFO, "CSharpSocket.Disconnect()");
+                EnqueueDebugReturn(DebugLevel.INFO, "CSharpSocket.Disconnect()");
             }
-            base.State = PhotonSocketState.Disconnecting;
+            State = PhotonSocketState.Disconnecting;
             object syncer = this.syncer;
             lock (syncer)
             {
@@ -56,11 +59,11 @@ namespace ExitGames.Client.Photon
                     }
                     catch (Exception exception)
                     {
-                        base.EnqueueDebugReturn(DebugLevel.INFO, "Exception in Disconnect(): " + exception);
+                        EnqueueDebugReturn(DebugLevel.INFO, "Exception in Disconnect(): " + exception);
                     }
                 }
             }
-            base.State = PhotonSocketState.Disconnected;
+            State = PhotonSocketState.Disconnected;
             return true;
         }
 
@@ -72,27 +75,28 @@ namespace ExitGames.Client.Photon
                 lock (syncer)
                 {
                     this.sock = new Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp);
-                    IPAddress ipAddress = IPhotonSocket.GetIpAddress(base.ServerAddress);
-                    this.sock.Connect(ipAddress, base.ServerPort);
-                    base.State = PhotonSocketState.Connected;
+                    IPAddress ipAddress = GetIpAddress(ServerAddress);
+                    this.sock.Connect(ipAddress, ServerPort);
+                    Debug.Log("Connecting to " + ServerAddress + ":" + ServerPort);
+                    State = PhotonSocketState.Connected;
                 }
             }
             catch (SecurityException exception)
             {
-                if (base.ReportDebugOfLevel(DebugLevel.ERROR))
+                if (ReportDebugOfLevel(DebugLevel.ERROR))
                 {
-                    base.Listener.DebugReturn(DebugLevel.ERROR, "Connect() failed: " + exception.ToString());
+                    Listener.DebugReturn(DebugLevel.ERROR, "Connect() failed: " + exception.ToString());
                 }
-                base.HandleException(StatusCode.SecurityExceptionOnConnect);
+                HandleException(StatusCode.SecurityExceptionOnConnect);
                 return;
             }
             catch (Exception exception2)
             {
-                if (base.ReportDebugOfLevel(DebugLevel.ERROR))
+                if (ReportDebugOfLevel(DebugLevel.ERROR))
                 {
-                    base.Listener.DebugReturn(DebugLevel.ERROR, "Connect() failed: " + exception2.ToString());
+                    Listener.DebugReturn(DebugLevel.ERROR, "Connect() failed: " + exception2.ToString());
                 }
-                base.HandleException(StatusCode.ExceptionOnConnect);
+                HandleException(StatusCode.ExceptionOnConnect);
                 return;
             }
             new Thread(new ThreadStart(this.ReceiveLoop)) { Name = "photon receive thread", IsBackground = true }.Start();
@@ -106,24 +110,24 @@ namespace ExitGames.Client.Photon
 
         public void ReceiveLoop()
         {
-            byte[] buffer = new byte[base.MTU];
-            while (base.State == PhotonSocketState.Connected)
+            byte[] buffer = new byte[MTU];
+            while (State == PhotonSocketState.Connected)
             {
                 try
                 {
                     int length = this.sock.Receive(buffer);
-                    base.HandleReceivedDatagram(buffer, length, true);
+                    HandleReceivedDatagram(buffer, length, true);
                     continue;
                 }
                 catch (Exception exception)
                 {
-                    if (base.State != PhotonSocketState.Disconnecting && base.State != PhotonSocketState.Disconnected)
+                    if (State != PhotonSocketState.Disconnecting && State != PhotonSocketState.Disconnected)
                     {
-                        if (base.ReportDebugOfLevel(DebugLevel.ERROR))
+                        if (ReportDebugOfLevel(DebugLevel.ERROR))
                         {
-                            base.EnqueueDebugReturn(DebugLevel.ERROR, string.Concat(new object[] { "Receive issue. State: ", base.State, " Exception: ", exception }));
+                            EnqueueDebugReturn(DebugLevel.ERROR, string.Concat(new object[] { "Receive issue. State: ", State, " Exception: ", exception }));
                         }
-                        base.HandleException(StatusCode.ExceptionOnReceive);
+                        HandleException(StatusCode.ExceptionOnReceive);
                     }
                     continue;
                 }

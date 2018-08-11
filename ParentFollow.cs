@@ -8,7 +8,7 @@ public class ParentFollow : MonoBehaviour
 
     private void Awake()
     {
-        this.bTransform = base.transform;
+        this.bTransform = transform;
         this.isActiveInScene = true;
     }
 

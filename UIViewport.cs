@@ -30,7 +30,7 @@ public class UIViewport : MonoBehaviour
 
     private void Start()
     {
-        this.mCam = base.camera;
+        this.mCam = camera;
         if (this.sourceCamera == null)
         {
             this.sourceCamera = Camera.main;

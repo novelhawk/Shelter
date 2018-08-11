@@ -28,7 +28,7 @@ public static class ClothFactory
             }
             else
             {
-                UnityEngine.Object.Destroy(cachedObject);
+                Object.Destroy(cachedObject);
             }
         }
     }
@@ -40,7 +40,7 @@ public static class ClothFactory
             go.AddComponent<SkinnedMeshRenderer>();
         }
         Transform[] bones = go.GetComponent<SkinnedMeshRenderer>().bones;
-        SkinnedMeshRenderer component = ((GameObject) UnityEngine.Object.Instantiate(Resources.Load(res))).GetComponent<SkinnedMeshRenderer>();
+        SkinnedMeshRenderer component = ((GameObject) Object.Instantiate(Resources.Load(res))).GetComponent<SkinnedMeshRenderer>();
         component.transform.localScale = Vector3.one;
         component.bones = bones;
         component.quality = SkinQuality.Bone4;
@@ -101,7 +101,7 @@ public static class ClothFactory
             num += clothCache[pair.Key].Count;
         }
         int num2 = 0;
-        foreach (Cloth cloth in UnityEngine.Object.FindObjectsOfType<Cloth>())
+        foreach (Cloth cloth in Object.FindObjectsOfType<Cloth>())
         {
             if (cloth.enabled)
             {

@@ -15,7 +15,7 @@ public class UIRoot : MonoBehaviour
 
     private void Awake()
     {
-        this.mTrans = base.transform;
+        this.mTrans = transform;
         mRoots.Add(this);
         if (this.automatic)
         {
@@ -92,7 +92,7 @@ public class UIRoot : MonoBehaviour
 
     private void Start()
     {
-        UIOrthoCamera componentInChildren = base.GetComponentInChildren<UIOrthoCamera>();
+        UIOrthoCamera componentInChildren = GetComponentInChildren<UIOrthoCamera>();
         if (componentInChildren != null)
         {
             Debug.LogWarning("UIRoot should not be active at the same time as UIOrthoCamera. Disabling UIOrthoCamera.", componentInChildren);

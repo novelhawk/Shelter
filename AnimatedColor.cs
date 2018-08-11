@@ -8,7 +8,7 @@ public class AnimatedColor : MonoBehaviour
 
     private void Awake()
     {
-        this.mWidget = base.GetComponent<UIWidget>();
+        this.mWidget = GetComponent<UIWidget>();
     }
 
     private void Update()

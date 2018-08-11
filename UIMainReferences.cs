@@ -47,7 +47,7 @@ public class UIMainReferences : MonoBehaviour
             DontDestroyOnLoad(go);
             shelter.InitComponents();
 
-            GameObject target = (GameObject)UnityEngine.Object.Instantiate(Resources.Load("InputManagerController"));
+            GameObject target = (GameObject)Instantiate(Resources.Load("InputManagerController"));
             target.name = "InputManagerController";
             DontDestroyOnLoad(target);
             FengGameManagerMKII.loginstate = 0;

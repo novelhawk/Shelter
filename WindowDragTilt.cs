@@ -15,7 +15,7 @@ public class WindowDragTilt : MonoBehaviour
         if (this.mInit)
         {
             this.mInit = false;
-            this.mTrans = base.transform;
+            this.mTrans = transform;
             this.mLastPos = this.mTrans.position;
         }
         Vector3 vector = this.mTrans.position - this.mLastPos;

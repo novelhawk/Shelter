@@ -15,15 +15,15 @@ public class CannonBall : Photon.MonoBehaviour
 
     private void Awake()
     {
-        if (base.photonView != null)
+        if (photonView != null)
         {
-            base.photonView.observed = this;
-            this.correctPos = base.transform.position;
+            photonView.observed = this;
+            this.correctPos = transform.position;
             this.correctVelocity = Vector3.zero;
-            base.GetComponent<SphereCollider>().enabled = false;
-            if (base.photonView.isMine)
+            GetComponent<SphereCollider>().enabled = false;
+            if (photonView.isMine)
             {
-                base.StartCoroutine(this.WaitAndDestroy(10f));
+                StartCoroutine(this.WaitAndDestroy(10f));
                 this.myTitanTriggers = new List<TitanTrigger>();
             }
         }
@@ -34,7 +34,7 @@ public class CannonBall : Photon.MonoBehaviour
         if (!this.disabled)
         {
             this.disabled = true;
-            foreach (EnemyCheckCollider collider in PhotonNetwork.Instantiate("FX/boom4", base.transform.position, base.transform.rotation, 0).GetComponentsInChildren<EnemyCheckCollider>())
+            foreach (EnemyCheckCollider collider in PhotonNetwork.Instantiate("FX/boom4", transform.position, transform.rotation, 0).GetComponentsInChildren<EnemyCheckCollider>())
             {
                 collider.dmg = 0;
             }
@@ -42,26 +42,26 @@ public class CannonBall : Photon.MonoBehaviour
             {
                 foreach (HERO hero in FengGameManagerMKII.instance.GetPlayers())
                 {
-                    if (hero != null && Vector3.Distance(hero.transform.position, base.transform.position) <= 20f && !hero.photonView.isMine)
+                    if (hero != null && Vector3.Distance(hero.transform.position, transform.position) <= 20f && !hero.photonView.isMine)
                     {
                         GameObject gameObject = hero.gameObject;
-                        PhotonPlayer owner = gameObject.GetPhotonView().owner;
-                        if (RCSettings.teamMode > 0 && PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.RCteam] != null && owner.CustomProperties[PhotonPlayerProperty.RCteam] != null)
+                        Player owner = gameObject.GetPhotonView().owner;
+                        if (RCSettings.teamMode > 0 && Player.Self.Properties[PhotonPlayerProperty.RCteam] != null && owner.Properties[PhotonPlayerProperty.RCteam] != null)
                         {
-                            int num2 = RCextensions.returnIntFromObject(PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.RCteam]);
-                            int num3 = RCextensions.returnIntFromObject(owner.CustomProperties[PhotonPlayerProperty.RCteam]);
+                            int num2 = RCextensions.returnIntFromObject(Player.Self.Properties[PhotonPlayerProperty.RCteam]);
+                            int num3 = RCextensions.returnIntFromObject(owner.Properties[PhotonPlayerProperty.RCteam]);
                             if (num2 == 0 || num2 != num3)
                             {
                                 gameObject.GetComponent<HERO>().markDie();
-                                gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name]) + " " });
-                                FengGameManagerMKII.instance.PlayerKillInfoUpdate(PhotonPlayer.Self, 0);
+                                gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(Player.Self.Properties[PhotonPlayerProperty.name]) + " " });
+                                FengGameManagerMKII.instance.PlayerKillInfoUpdate(Player.Self, 0);
                             }
                         }
                         else
                         {
                             gameObject.GetComponent<HERO>().markDie();
-                            gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name]) + " " });
-                            FengGameManagerMKII.instance.PlayerKillInfoUpdate(PhotonPlayer.Self, 0);
+                            gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(Player.Self.Properties[PhotonPlayerProperty.name]) + " " });
+                            FengGameManagerMKII.instance.PlayerKillInfoUpdate(Player.Self, 0);
                         }
                     }
                 }
@@ -76,13 +76,13 @@ public class CannonBall : Photon.MonoBehaviour
                     }
                 }
             }
-            PhotonNetwork.Destroy(base.gameObject);
+            PhotonNetwork.Destroy(this.gameObject);
         }
     }
 
     public void FixedUpdate()
     {
-        if (base.photonView.isMine && !this.disabled)
+        if (photonView.isMine && !this.disabled)
         {
             LayerMask mask = 1 << LayerMask.NameToLayer("PlayerAttackBox");
             LayerMask mask2 = 1 << LayerMask.NameToLayer("EnemyBox");
@@ -92,7 +92,7 @@ public class CannonBall : Photon.MonoBehaviour
                 LayerMask mask4 = 1 << LayerMask.NameToLayer("Ground");
                 mask3 |= mask4;
             }
-            Collider[] colliderArray = Physics.OverlapSphere(base.transform.position, 0.6f, mask3.value);
+            Collider[] colliderArray = Physics.OverlapSphere(transform.position, 0.6f, mask3.value);
             bool flag2 = false;
             for (int i = 0; i < colliderArray.Length; i++)
             {
@@ -116,23 +116,23 @@ public class CannonBall : Photon.MonoBehaviour
                             if (gameObject.name == "head")
                             {
                                 titan.photonView.RPC("DieByCannon", titan.photonView.owner, new object[] { this.myHero.photonView.viewID });
-                                titan.dieBlow(base.transform.position, 0.2f);
+                                titan.dieBlow(transform.position, 0.2f);
                                 i = colliderArray.Length;
                             }
                         }
                         else if (gameObject.name == "head")
                         {
                             titan.photonView.RPC("DieByCannon", titan.photonView.owner, new object[] { this.myHero.photonView.viewID });
-                            titan.dieHeadBlow(base.transform.position, 0.2f);
+                            titan.dieHeadBlow(transform.position, 0.2f);
                             i = colliderArray.Length;
                         }
-                        else if (UnityEngine.Random.Range(0f, 1f) < 0.5f)
+                        else if (Random.Range(0f, 1f) < 0.5f)
                         {
-                            titan.hitL(base.transform.position, 0.05f);
+                            titan.hitL(transform.position, 0.05f);
                         }
                         else
                         {
-                            titan.hitR(base.transform.position, 0.05f);
+                            titan.hitR(transform.position, 0.05f);
                         }
                         this.destroyMe();
                     }
@@ -145,14 +145,14 @@ public class CannonBall : Photon.MonoBehaviour
             if (!(this.isCollider || flag2))
             {
                 this.isCollider = true;
-                base.GetComponent<SphereCollider>().enabled = true;
+                GetComponent<SphereCollider>().enabled = true;
             }
         }
     }
 
     public void OnCollisionEnter(Collision myCollision)
     {
-        if (base.photonView.isMine)
+        if (photonView.isMine)
         {
             this.destroyMe();
         }
@@ -162,8 +162,8 @@ public class CannonBall : Photon.MonoBehaviour
     {
         if (stream.isWriting)
         {
-            stream.SendNext(base.transform.position);
-            stream.SendNext(base.rigidbody.velocity);
+            stream.SendNext(transform.position);
+            stream.SendNext(rigidbody.velocity);
         }
         else
         {
@@ -174,10 +174,10 @@ public class CannonBall : Photon.MonoBehaviour
 
     public void Update()
     {
-        if (!base.photonView.isMine)
+        if (!photonView.isMine)
         {
-            base.transform.position = Vector3.Lerp(base.transform.position, this.correctPos, Time.deltaTime * this.SmoothingDelay);
-            base.rigidbody.velocity = this.correctVelocity;
+            transform.position = Vector3.Lerp(transform.position, this.correctPos, Time.deltaTime * this.SmoothingDelay);
+            rigidbody.velocity = this.correctVelocity;
         }
     }
 

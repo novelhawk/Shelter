@@ -54,14 +54,14 @@ public class CannonPropRegion : Photon.MonoBehaviour
     [RPC]
     public void RequestControlRPC(int viewID, PhotonMessageInfo info)
     {
-        if (!(!base.photonView.isMine || !PhotonNetwork.isMasterClient || this.disabled))
+        if (!(!photonView.isMine || !PhotonNetwork.isMasterClient || this.disabled))
         {
             HERO component = PhotonView.Find(viewID).gameObject.GetComponent<HERO>();
             if (component != null && component.photonView.owner == info.sender && !FengGameManagerMKII.instance.allowedToCannon.ContainsKey(info.sender.ID))
             {
                 this.disabled = true;
-                base.StartCoroutine(this.WaitAndEnable());
-                FengGameManagerMKII.instance.allowedToCannon.Add(info.sender.ID, new CannonValues(base.photonView.viewID, this.settings));
+                StartCoroutine(this.WaitAndEnable());
+                FengGameManagerMKII.instance.allowedToCannon.Add(info.sender.ID, new CannonValues(photonView.viewID, this.settings));
                 component.photonView.RPC("SpawnCannonRPC", info.sender, new object[] { this.settings });
             }
         }
@@ -77,7 +77,7 @@ public class CannonPropRegion : Photon.MonoBehaviour
             {
                 float a = 1f;
                 GameObject gameObject = null;
-                gameObject = base.gameObject;
+                gameObject = this.gameObject;
                 if (strArray[2] != "default")
                 {
                     if (strArray[2].StartsWith("transparent"))
@@ -135,7 +135,7 @@ public class CannonPropRegion : Photon.MonoBehaviour
     {
         if ((int) FengGameManagerMKII.settings[64] >= 100)
         {
-            base.GetComponent<Collider>().enabled = false;
+            GetComponent<Collider>().enabled = false;
         }
     }
 

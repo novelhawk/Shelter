@@ -58,22 +58,22 @@ public class UITextList : MonoBehaviour
     {
         if (this.textLabel == null)
         {
-            this.textLabel = base.GetComponentInChildren<UILabel>();
+            this.textLabel = GetComponentInChildren<UILabel>();
         }
         if (this.textLabel != null)
         {
             this.textLabel.lineWidth = 0;
         }
-        Collider collider = base.collider;
+        Collider collider = this.collider;
         if (collider != null)
         {
             if (this.maxHeight <= 0f)
             {
-                this.maxHeight = collider.bounds.size.y / base.transform.lossyScale.y;
+                this.maxHeight = collider.bounds.size.y / transform.lossyScale.y;
             }
             if (this.maxWidth <= 0f)
             {
-                this.maxWidth = collider.bounds.size.x / base.transform.lossyScale.x;
+                this.maxWidth = collider.bounds.size.x / transform.lossyScale.x;
             }
         }
     }

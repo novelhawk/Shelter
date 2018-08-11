@@ -18,12 +18,12 @@ public class CameraShake : MonoBehaviour
             this.duration -= Time.deltaTime;
             if (this.flip)
             {
-                Transform transform = base.gameObject.transform;
+                Transform transform = gameObject.transform;
                 transform.position += Vector3.up * this.R;
             }
             else
             {
-                Transform transform2 = base.gameObject.transform;
+                Transform transform2 = gameObject.transform;
                 transform2.position -= Vector3.up * this.R;
             }
             this.flip = !this.flip;

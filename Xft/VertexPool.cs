@@ -15,8 +15,8 @@ namespace Xft
         protected int IndexUsed;
         public bool IndiceChanged;
         public int[] Indices;
-        public UnityEngine.Material Material;
-        public UnityEngine.Mesh Mesh;
+        public Material Material;
+        public Mesh Mesh;
         protected List<VertexSegment> SegmentList = new List<VertexSegment>();
         public bool UV2Changed;
         public bool UVChanged;
@@ -28,7 +28,7 @@ namespace Xft
         protected int VertexUsed = 0;
         public Vector3[] Vertices;
 
-        public VertexPool(UnityEngine.Mesh mesh, UnityEngine.Material material)
+        public VertexPool(Mesh mesh, Material material)
         {
             this.Mesh = mesh;
             this.Material = material;
@@ -66,7 +66,7 @@ namespace Xft
             this.UV2Changed = true;
         }
 
-        public UnityEngine.Material GetMaterial()
+        public Material GetMaterial()
         {
             return this.Material;
         }

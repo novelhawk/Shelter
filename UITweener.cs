@@ -83,7 +83,7 @@ public abstract class UITweener : IgnoreTimeScale
         {
             this.mAmountPerDelta = -this.mAmountPerDelta;
         }
-        base.enabled = true;
+        enabled = true;
     }
 
     public void Reset()
@@ -151,13 +151,13 @@ public abstract class UITweener : IgnoreTimeScale
         {
             this.mAmountPerDelta = Mathf.Abs(this.amountPerDelta);
         }
-        base.enabled = true;
+        enabled = true;
     }
 
     private void Update()
     {
-        float num = !this.ignoreTimeScale ? Time.deltaTime : base.UpdateRealTimeDelta();
-        float num2 = !this.ignoreTimeScale ? Time.time : base.realTime;
+        float num = !this.ignoreTimeScale ? Time.deltaTime : UpdateRealTimeDelta();
+        float num2 = !this.ignoreTimeScale ? Time.time : realTime;
         if (!this.mStarted)
         {
             this.mStarted = true;
@@ -201,7 +201,7 @@ public abstract class UITweener : IgnoreTimeScale
                 }
                 if (this.mFactor == 1f && this.mAmountPerDelta > 0f || this.mFactor == 0f && this.mAmountPerDelta < 0f)
                 {
-                    base.enabled = false;
+                    enabled = false;
                 }
             }
             else

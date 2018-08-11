@@ -7,9 +7,9 @@ public class UISoundVolume : MonoBehaviour
 
     private void Awake()
     {
-        this.mSlider = base.GetComponent<UISlider>();
+        this.mSlider = GetComponent<UISlider>();
         this.mSlider.sliderValue = NGUITools.soundVolume;
-        this.mSlider.eventReceiver = base.gameObject;
+        this.mSlider.eventReceiver = gameObject;
     }
 
     private void OnSliderChange(float val)

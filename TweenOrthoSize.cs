@@ -31,7 +31,7 @@ public class TweenOrthoSize : UITweener
         {
             if (this.mCam == null)
             {
-                this.mCam = base.camera;
+                this.mCam = camera;
             }
             return this.mCam;
         }

@@ -47,15 +47,15 @@ internal static class CustomTypes
 
     internal static void Register()
     {
-        PhotonPeer.RegisterType(typeof(Vector2), 87, new SerializeMethod(CustomTypes.SerializeVector2), new DeserializeMethod(CustomTypes.DeserializeVector2));
-        PhotonPeer.RegisterType(typeof(Vector3), 86, new SerializeMethod(CustomTypes.SerializeVector3), new DeserializeMethod(CustomTypes.DeserializeVector3));
-        PhotonPeer.RegisterType(typeof(Quaternion), 81, new SerializeMethod(CustomTypes.SerializeQuaternion), new DeserializeMethod(CustomTypes.DeserializeQuaternion));
-        PhotonPeer.RegisterType(typeof(PhotonPlayer), 80, new SerializeMethod(CustomTypes.SerializePhotonPlayer), new DeserializeMethod(CustomTypes.DeserializePhotonPlayer));
+        PhotonPeer.RegisterType(typeof(Vector2), 87, new SerializeMethod(SerializeVector2), new DeserializeMethod(DeserializeVector2));
+        PhotonPeer.RegisterType(typeof(Vector3), 86, new SerializeMethod(SerializeVector3), new DeserializeMethod(DeserializeVector3));
+        PhotonPeer.RegisterType(typeof(Quaternion), 81, new SerializeMethod(SerializeQuaternion), new DeserializeMethod(DeserializeQuaternion));
+        PhotonPeer.RegisterType(typeof(Player), 80, new SerializeMethod(SerializePhotonPlayer), new DeserializeMethod(DeserializePhotonPlayer));
     }
 
     private static byte[] SerializePhotonPlayer(object customobject)
     {
-        int iD = ((PhotonPlayer) customobject).ID;
+        int iD = ((Player) customobject).ID;
         byte[] target = new byte[4];
         int targetOffset = 0;
         Protocol.Serialize(iD, target, ref targetOffset);

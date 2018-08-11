@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode, AddComponentMenu("NGUI/UI/Sprite")]
@@ -84,7 +85,7 @@ public class UISprite : UIWidget
         return true;
     }
 
-    protected  void FilledFill(BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols) //unsafe
+    protected  void FilledFill(List<Vector3> verts, List<Vector2> uvs, List<Color32> cols) //unsafe
     {
         float x = 0f;
         float y = 0f;
@@ -135,8 +136,8 @@ public class UISprite : UIWidget
         uv[1] = new Vector2(xMax, yMin);
         uv[2] = new Vector2(xMin, yMin);
         uv[3] = new Vector2(xMin, yMax);
-        Color c = base.color;
-        c.a *= base.mPanel.alpha;
+        Color c = color;
+        c.a *= mPanel.alpha;
         Color32 item = !this.atlas.premultipliedAlpha ? c : NGUITools.ApplyPMA(c);
         if (this.fillDirection == FillDirection.Radial90)
         {
@@ -365,36 +366,36 @@ public class UISprite : UIWidget
             {
                 case Type.Sliced:
                     {
-                        Vector3 localPosition = base.cachedTransform.localPosition;
+                        Vector3 localPosition = cachedTransform.localPosition;
                         localPosition.x = Mathf.RoundToInt(localPosition.x);
                         localPosition.y = Mathf.RoundToInt(localPosition.y);
                         localPosition.z = Mathf.RoundToInt(localPosition.z);
-                        base.cachedTransform.localPosition = localPosition;
-                        Vector3 localScale = base.cachedTransform.localScale;
+                        cachedTransform.localPosition = localPosition;
+                        Vector3 localScale = cachedTransform.localScale;
                         localScale.x = Mathf.RoundToInt(localScale.x * 0.5f) << 1;
                         localScale.y = Mathf.RoundToInt(localScale.y * 0.5f) << 1;
                         localScale.z = 1f;
-                        base.cachedTransform.localScale = localScale;
+                        cachedTransform.localScale = localScale;
                         break;
                     }
                 case Type.Tiled:
                     {
-                        Vector3 vector3 = base.cachedTransform.localPosition;
+                        Vector3 vector3 = cachedTransform.localPosition;
                         vector3.x = Mathf.RoundToInt(vector3.x);
                         vector3.y = Mathf.RoundToInt(vector3.y);
                         vector3.z = Mathf.RoundToInt(vector3.z);
-                        base.cachedTransform.localPosition = vector3;
-                        Vector3 vector4 = base.cachedTransform.localScale;
+                        cachedTransform.localPosition = vector3;
+                        Vector3 vector4 = cachedTransform.localScale;
                         vector4.x = Mathf.RoundToInt(vector4.x);
                         vector4.y = Mathf.RoundToInt(vector4.y);
                         vector4.z = 1f;
-                        base.cachedTransform.localScale = vector4;
+                        cachedTransform.localScale = vector4;
                         break;
                     }
                 default:
                     {
                         Texture mainTexture = this.mainTexture;
-                        Vector3 vector5 = base.cachedTransform.localScale;
+                        Vector3 vector5 = cachedTransform.localScale;
                         if (mainTexture != null)
                         {
                             Rect rect = NGUIMath.ConvertToPixels(this.outerUV, mainTexture.width, mainTexture.height, true);
@@ -402,30 +403,30 @@ public class UISprite : UIWidget
                             vector5.x = Mathf.RoundToInt(rect.width * pixelSize) * Mathf.Sign(vector5.x);
                             vector5.y = Mathf.RoundToInt(rect.height * pixelSize) * Mathf.Sign(vector5.y);
                             vector5.z = 1f;
-                            base.cachedTransform.localScale = vector5;
+                            cachedTransform.localScale = vector5;
                         }
                         int num2 = Mathf.RoundToInt(Mathf.Abs(vector5.x) * (1f + this.mSprite.paddingLeft + this.mSprite.paddingRight));
                         int num3 = Mathf.RoundToInt(Mathf.Abs(vector5.y) * (1f + this.mSprite.paddingTop + this.mSprite.paddingBottom));
-                        Vector3 vector6 = base.cachedTransform.localPosition;
+                        Vector3 vector6 = cachedTransform.localPosition;
                         vector6.x = Mathf.CeilToInt(vector6.x * 4f) >> 2;
                         vector6.y = Mathf.CeilToInt(vector6.y * 4f) >> 2;
                         vector6.z = Mathf.RoundToInt(vector6.z);
-                        if (num2 % 2 == 1 && (base.pivot == UIWidget.Pivot.Top || base.pivot == UIWidget.Pivot.Center || base.pivot == UIWidget.Pivot.Bottom))
+                        if (num2 % 2 == 1 && (pivot == Pivot.Top || pivot == Pivot.Center || pivot == Pivot.Bottom))
                         {
                             vector6.x += 0.5f;
                         }
-                        if (num3 % 2 == 1 && (base.pivot == UIWidget.Pivot.Left || base.pivot == UIWidget.Pivot.Center || base.pivot == UIWidget.Pivot.Right))
+                        if (num3 % 2 == 1 && (pivot == Pivot.Left || pivot == Pivot.Center || pivot == Pivot.Right))
                         {
                             vector6.y += 0.5f;
                         }
-                        base.cachedTransform.localPosition = vector6;
+                        cachedTransform.localPosition = vector6;
                         break;
                     }
             }
         }
     }
 
-    public override void OnFill(BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols)
+    public override void OnFill(List<Vector3> verts, List<Vector2> uvs, List<Color32> cols)
     {
         switch (this.type)
         {
@@ -473,7 +474,7 @@ public class UISprite : UIWidget
 
     protected void SetAtlasSprite(UIAtlas.Sprite sp)
     {
-        base.mChanged = true;
+        mChanged = true;
         this.mSpriteSet = true;
         if (sp != null)
         {
@@ -487,7 +488,7 @@ public class UISprite : UIWidget
         }
     }
 
-    protected void SimpleFill(BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols)
+    protected void SimpleFill(List<Vector3> verts, List<Vector2> uvs, List<Color32> cols)
     {
         Vector2 item = new Vector2(this.mOuterUV.xMin, this.mOuterUV.yMin);
         Vector2 vector2 = new Vector2(this.mOuterUV.xMax, this.mOuterUV.yMax);
@@ -499,8 +500,8 @@ public class UISprite : UIWidget
         uvs.Add(new Vector2(vector2.x, item.y));
         uvs.Add(item);
         uvs.Add(new Vector2(item.x, vector2.y));
-        Color c = base.color;
-        c.a *= base.mPanel.alpha;
+        Color c = color;
+        c.a *= mPanel.alpha;
         Color32 color2 = !this.atlas.premultipliedAlpha ? c : NGUITools.ApplyPMA(c);
         cols.Add(color2);
         cols.Add(color2);
@@ -508,7 +509,7 @@ public class UISprite : UIWidget
         cols.Add(color2);
     }
 
-    protected void SlicedFill(BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols)
+    protected void SlicedFill(List<Vector3> verts, List<Vector2> uvs, List<Color32> cols)
     {
         if (this.mOuterUV == this.mInnerUV)
         {
@@ -537,18 +538,18 @@ public class UISprite : UIWidget
                 float num3 = (this.mOuterUV.xMax - this.mInnerUV.xMax) * pixelSize;
                 float num4 = (this.mInnerUV.yMax - this.mOuterUV.yMax) * pixelSize;
                 float num5 = (this.mOuterUV.yMin - this.mInnerUV.yMin) * pixelSize;
-                Vector3 localScale = base.cachedTransform.localScale;
+                Vector3 localScale = cachedTransform.localScale;
                 localScale.x = Mathf.Max(0f, localScale.x);
                 localScale.y = Mathf.Max(0f, localScale.y);
                 Vector2 vector2 = new Vector2(localScale.x / mainTexture.width, localScale.y / mainTexture.height);
                 Vector2 vector3 = new Vector2(num2 / vector2.x, num4 / vector2.y);
                 Vector2 vector4 = new Vector2(num3 / vector2.x, num5 / vector2.y);
-                UIWidget.Pivot pivot = base.pivot;
+                Pivot pivot = this.pivot;
                 switch (pivot)
                 {
-                    case UIWidget.Pivot.Right:
-                    case UIWidget.Pivot.TopRight:
-                    case UIWidget.Pivot.BottomRight:
+                    case Pivot.Right:
+                    case Pivot.TopRight:
+                    case Pivot.BottomRight:
                         vectorArray[0].x = Mathf.Min(0f, 1f - (vector4.x + vector3.x));
                         vectorArray[1].x = vectorArray[0].x + vector3.x;
                         vectorArray[2].x = vectorArray[0].x + Mathf.Max(vector3.x, 1f - vector4.x);
@@ -563,9 +564,9 @@ public class UISprite : UIWidget
                 }
                 switch (pivot)
                 {
-                    case UIWidget.Pivot.Bottom:
-                    case UIWidget.Pivot.BottomLeft:
-                    case UIWidget.Pivot.BottomRight:
+                    case Pivot.Bottom:
+                    case Pivot.BottomLeft:
+                    case Pivot.BottomRight:
                         vectorArray[0].y = Mathf.Max(0f, -1f - (vector4.y + vector3.y));
                         vectorArray[1].y = vectorArray[0].y + vector3.y;
                         vectorArray[2].y = vectorArray[0].y + Mathf.Min(vector3.y, -1f - vector4.y);
@@ -583,8 +584,8 @@ public class UISprite : UIWidget
                 vectorArray2[2] = new Vector2(this.mInnerUV.xMax, this.mInnerUV.yMin);
                 vectorArray2[3] = new Vector2(this.mOuterUV.xMax, this.mOuterUV.yMin);
             }
-            Color c = base.color;
-            c.a *= base.mPanel.alpha;
+            Color c = color;
+            c.a *= mPanel.alpha;
             Color32 item = !this.atlas.premultipliedAlpha ? c : NGUITools.ApplyPMA(c);
             for (int i = 0; i < 3; i++)
             {
@@ -612,7 +613,7 @@ public class UISprite : UIWidget
         }
     }
 
-    protected void TiledFill(BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols)
+    protected void TiledFill(List<Vector3> verts, List<Vector2> uvs, List<Color32> cols)
     {
         Texture mainTexture = this.material.mainTexture;
         if (mainTexture != null)
@@ -622,21 +623,21 @@ public class UISprite : UIWidget
             {
                 mInner = NGUIMath.ConvertToPixels(mInner, mainTexture.width, mainTexture.height, true);
             }
-            Vector2 localScale = base.cachedTransform.localScale;
+            Vector2 localScale = cachedTransform.localScale;
             float pixelSize = this.atlas.pixelSize;
             float num2 = Mathf.Abs(mInner.width / localScale.x) * pixelSize;
             float num3 = Mathf.Abs(mInner.height / localScale.y) * pixelSize;
             if (num2 < 0.01f || num3 < 0.01f)
             {
-                Debug.LogWarning("The tiled sprite (" + NGUITools.GetHierarchy(base.gameObject) + ") is too small.\nConsider using a bigger one.");
+                Debug.LogWarning("The tiled sprite (" + NGUITools.GetHierarchy(gameObject) + ") is too small.\nConsider using a bigger one.");
                 num2 = 0.01f;
                 num3 = 0.01f;
             }
             Vector2 vector2 = new Vector2(mInner.xMin / mainTexture.width, mInner.yMin / mainTexture.height);
             Vector2 vector3 = new Vector2(mInner.xMax / mainTexture.width, mInner.yMax / mainTexture.height);
             Vector2 vector4 = vector3;
-            Color c = base.color;
-            c.a *= base.mPanel.alpha;
+            Color c = color;
+            c.a *= mPanel.alpha;
             Color32 item = !this.atlas.premultipliedAlpha ? c : NGUITools.ApplyPMA(c);
             for (float i = 0f; i < 1f; i += num3)
             {
@@ -677,11 +678,11 @@ public class UISprite : UIWidget
     public override void Update()
     {
         base.Update();
-        if (base.mChanged || !this.mSpriteSet)
+        if (mChanged || !this.mSpriteSet)
         {
             this.mSpriteSet = true;
             this.mSprite = null;
-            base.mChanged = true;
+            mChanged = true;
             this.UpdateUVs(true);
         }
         else
@@ -692,10 +693,10 @@ public class UISprite : UIWidget
 
     public virtual void UpdateUVs(bool force)
     {
-        if ((this.type == Type.Sliced || this.type == Type.Tiled) && base.cachedTransform.localScale != this.mScale)
+        if ((this.type == Type.Sliced || this.type == Type.Tiled) && cachedTransform.localScale != this.mScale)
         {
-            this.mScale = base.cachedTransform.localScale;
-            base.mChanged = true;
+            this.mScale = cachedTransform.localScale;
+            mChanged = true;
         }
         if (this.isValid && force)
         {
@@ -739,7 +740,7 @@ public class UISprite : UIWidget
                     string mSpriteName = this.mSpriteName;
                     this.mSpriteName = string.Empty;
                     this.spriteName = mSpriteName;
-                    base.mChanged = true;
+                    mChanged = true;
                     this.UpdateUVs(true);
                 }
             }
@@ -783,7 +784,7 @@ public class UISprite : UIWidget
             if (this.mFillAmount != num)
             {
                 this.mFillAmount = num;
-                base.mChanged = true;
+                mChanged = true;
             }
         }
     }
@@ -815,7 +816,7 @@ public class UISprite : UIWidget
             if (this.mFillDirection != value)
             {
                 this.mFillDirection = value;
-                base.mChanged = true;
+                mChanged = true;
             }
         }
     }
@@ -840,7 +841,7 @@ public class UISprite : UIWidget
             if (this.mInvert != value)
             {
                 this.mInvert = value;
-                base.mChanged = true;
+                mChanged = true;
             }
         }
     }
@@ -915,7 +916,7 @@ public class UISprite : UIWidget
                 {
                     this.mSpriteName = string.Empty;
                     this.mSprite = null;
-                    base.mChanged = true;
+                    mChanged = true;
                     this.mSpriteSet = false;
                 }
             }
@@ -923,7 +924,7 @@ public class UISprite : UIWidget
             {
                 this.mSpriteName = value;
                 this.mSprite = null;
-                base.mChanged = true;
+                mChanged = true;
                 this.mSpriteSet = false;
                 if (this.isValid)
                 {

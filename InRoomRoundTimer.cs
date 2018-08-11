@@ -37,7 +37,7 @@ public class InRoomRoundTimer : MonoBehaviour
         }
     }
 
-    public void OnMasterClientSwitched(PhotonPlayer newMasterClient)
+    public void OnMasterClientSwitched(Player newMasterClient)
     {
         if (!PhotonNetwork.room.customProperties.ContainsKey("st"))
         {

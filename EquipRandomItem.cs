@@ -13,10 +13,10 @@ public class EquipRandomItem : MonoBehaviour
             List<InvBaseItem> items = InvDatabase.list[0].items;
             if (items.Count != 0)
             {
-                int id = UnityEngine.Random.Range(0, items.Count);
+                int id = Random.Range(0, items.Count);
                 InvBaseItem bi = items[id];
                 InvGameItem item = new InvGameItem(id, bi) {
-                    quality = (InvGameItem.Quality) UnityEngine.Random.Range(0, 12),
+                    quality = (InvGameItem.Quality) Random.Range(0, 12),
                     itemLevel = NGUITools.RandomRange(bi.minItemLevel, bi.maxItemLevel)
                 };
                 this.equipment.Equip(item);

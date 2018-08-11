@@ -15,7 +15,7 @@ public class Localization : MonoBehaviour
         if (mInstance == null)
         {
             mInstance = this;
-            UnityEngine.Object.DontDestroyOnLoad(base.gameObject);
+            DontDestroyOnLoad(gameObject);
             this.currentLanguage = PlayerPrefs.GetString("Language", this.startingLanguage);
             if (string.IsNullOrEmpty(this.mLanguage) && this.languages != null && this.languages.Length > 0)
             {
@@ -24,7 +24,7 @@ public class Localization : MonoBehaviour
         }
         else
         {
-            UnityEngine.Object.Destroy(base.gameObject);
+            Destroy(gameObject);
         }
     }
 
@@ -109,11 +109,11 @@ public class Localization : MonoBehaviour
         {
             if (mInstance == null)
             {
-                mInstance = UnityEngine.Object.FindObjectOfType(typeof(Localization)) as Localization;
+                mInstance = FindObjectOfType(typeof(Localization)) as Localization;
                 if (mInstance == null)
                 {
                     GameObject target = new GameObject("_Localization");
-                    UnityEngine.Object.DontDestroyOnLoad(target);
+                    DontDestroyOnLoad(target);
                     mInstance = target.AddComponent<Localization>();
                 }
             }

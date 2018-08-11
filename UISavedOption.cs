@@ -10,8 +10,8 @@ public class UISavedOption : MonoBehaviour
 
     private void Awake()
     {
-        this.mList = base.GetComponent<UIPopupList>();
-        this.mCheck = base.GetComponent<UICheckbox>();
+        this.mList = GetComponent<UIPopupList>();
+        this.mCheck = GetComponent<UICheckbox>();
         if (this.mList != null)
         {
             this.mList.onSelectionChange = (UIPopupList.OnSelectionChange) Delegate.Combine(this.mList.onSelectionChange, new UIPopupList.OnSelectionChange(this.SaveSelection));
@@ -38,7 +38,7 @@ public class UISavedOption : MonoBehaviour
     {
         if (this.mCheck == null && this.mList == null)
         {
-            UICheckbox[] componentsInChildren = base.GetComponentsInChildren<UICheckbox>(true);
+            UICheckbox[] componentsInChildren = GetComponentsInChildren<UICheckbox>(true);
             int index = 0;
             int length = componentsInChildren.Length;
             while (index < length)
@@ -71,7 +71,7 @@ public class UISavedOption : MonoBehaviour
         else
         {
             string str2 = PlayerPrefs.GetString(this.key);
-            UICheckbox[] componentsInChildren = base.GetComponentsInChildren<UICheckbox>(true);
+            UICheckbox[] componentsInChildren = GetComponentsInChildren<UICheckbox>(true);
             int index = 0;
             int length = componentsInChildren.Length;
             while (index < length)
@@ -97,7 +97,7 @@ public class UISavedOption : MonoBehaviour
     {
         get
         {
-            return !string.IsNullOrEmpty(this.keyName) ? this.keyName : "NGUI State: " + base.name;
+            return !string.IsNullOrEmpty(this.keyName) ? this.keyName : "NGUI State: " + name;
         }
     }
 }

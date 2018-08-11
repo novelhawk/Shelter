@@ -12,97 +12,97 @@ public class Bomb : Photon.MonoBehaviour
 
     public void Awake()
     {
-        if (base.photonView != null)
+        if (photonView != null)
         {
             float num2;
             float num3;
             float num4;
-            base.photonView.observed = this;
-            this.correctPlayerPos = base.transform.position;
+            photonView.observed = this;
+            this.correctPlayerPos = transform.position;
             this.correctPlayerRot = Quaternion.identity;
-            PhotonPlayer owner = base.photonView.owner;
+            Player owner = photonView.owner;
             if (RCSettings.teamMode > 0)
             {
-                int num = RCextensions.returnIntFromObject(owner.CustomProperties[PhotonPlayerProperty.RCteam]);
+                int num = RCextensions.returnIntFromObject(owner.Properties[PhotonPlayerProperty.RCteam]);
                 if (num == 1)
                 {
-                    base.GetComponent<ParticleSystem>().startColor = Color.cyan;
+                    GetComponent<ParticleSystem>().startColor = Color.cyan;
                 }
                 else if (num == 2)
                 {
-                    base.GetComponent<ParticleSystem>().startColor = Color.magenta;
+                    GetComponent<ParticleSystem>().startColor = Color.magenta;
                 }
                 else
                 {
-                    num2 = RCextensions.returnFloatFromObject(owner.CustomProperties[PhotonPlayerProperty.RCBombR]);
-                    num3 = RCextensions.returnFloatFromObject(owner.CustomProperties[PhotonPlayerProperty.RCBombG]);
-                    num4 = RCextensions.returnFloatFromObject(owner.CustomProperties[PhotonPlayerProperty.RCBombB]);
-                    base.GetComponent<ParticleSystem>().startColor = new Color(num2, num3, num4, 1f);
+                    num2 = RCextensions.returnFloatFromObject(owner.Properties[PhotonPlayerProperty.RCBombR]);
+                    num3 = RCextensions.returnFloatFromObject(owner.Properties[PhotonPlayerProperty.RCBombG]);
+                    num4 = RCextensions.returnFloatFromObject(owner.Properties[PhotonPlayerProperty.RCBombB]);
+                    GetComponent<ParticleSystem>().startColor = new Color(num2, num3, num4, 1f);
                 }
             }
             else
             {
-                num2 = RCextensions.returnFloatFromObject(owner.CustomProperties[PhotonPlayerProperty.RCBombR]);
-                num3 = RCextensions.returnFloatFromObject(owner.CustomProperties[PhotonPlayerProperty.RCBombG]);
-                num4 = RCextensions.returnFloatFromObject(owner.CustomProperties[PhotonPlayerProperty.RCBombB]);
-                base.GetComponent<ParticleSystem>().startColor = new Color(num2, num3, num4, 1f);
+                num2 = RCextensions.returnFloatFromObject(owner.Properties[PhotonPlayerProperty.RCBombR]);
+                num3 = RCextensions.returnFloatFromObject(owner.Properties[PhotonPlayerProperty.RCBombG]);
+                num4 = RCextensions.returnFloatFromObject(owner.Properties[PhotonPlayerProperty.RCBombB]);
+                GetComponent<ParticleSystem>().startColor = new Color(num2, num3, num4, 1f);
             }
         }
     }
 
     public void destroyMe()
     {
-        if (base.photonView.isMine)
+        if (photonView.isMine)
         {
             if (this.myExplosion != null)
             {
                 PhotonNetwork.Destroy(this.myExplosion);
             }
-            PhotonNetwork.Destroy(base.gameObject);
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 
     public void Explode(float radius)
     {
         this.disabled = true;
-        base.rigidbody.velocity = Vector3.zero;
-        Vector3 position = base.transform.position;
+        rigidbody.velocity = Vector3.zero;
+        Vector3 position = transform.position;
         this.myExplosion = PhotonNetwork.Instantiate("RCAsset/BombExplodeMain", position, Quaternion.Euler(0f, 0f, 0f), 0);
         foreach (HERO hero in FengGameManagerMKII.instance.GetPlayers())
         {
             GameObject gameObject = hero.gameObject;
             if (Vector3.Distance(gameObject.transform.position, position) < radius && !gameObject.GetPhotonView().isMine && !hero.bombImmune)
             {
-                PhotonPlayer owner = gameObject.GetPhotonView().owner;
-                if (RCSettings.teamMode > 0 && PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.RCteam] != null && owner.CustomProperties[PhotonPlayerProperty.RCteam] != null)
+                Player owner = gameObject.GetPhotonView().owner;
+                if (RCSettings.teamMode > 0 && Player.Self.Properties[PhotonPlayerProperty.RCteam] != null && owner.Properties[PhotonPlayerProperty.RCteam] != null)
                 {
-                    int num = RCextensions.returnIntFromObject(PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.RCteam]);
-                    int num2 = RCextensions.returnIntFromObject(owner.CustomProperties[PhotonPlayerProperty.RCteam]);
+                    int num = RCextensions.returnIntFromObject(Player.Self.Properties[PhotonPlayerProperty.RCteam]);
+                    int num2 = RCextensions.returnIntFromObject(owner.Properties[PhotonPlayerProperty.RCteam]);
                     if (num == 0 || num != num2)
                     {
                         gameObject.GetComponent<HERO>().markDie();
-                        gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name]) + " " });
-                        FengGameManagerMKII.instance.PlayerKillInfoUpdate(PhotonPlayer.Self, 0);
+                        gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(Player.Self.Properties[PhotonPlayerProperty.name]) + " " });
+                        FengGameManagerMKII.instance.PlayerKillInfoUpdate(Player.Self, 0);
                     }
                 }
                 else
                 {
                     gameObject.GetComponent<HERO>().markDie();
-                    gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(PhotonPlayer.Self.CustomProperties[PhotonPlayerProperty.name]) + " " });
-                    FengGameManagerMKII.instance.PlayerKillInfoUpdate(PhotonPlayer.Self, 0);
+                    gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, RCextensions.returnStringFromObject(Player.Self.Properties[PhotonPlayerProperty.name]) + " " });
+                    FengGameManagerMKII.instance.PlayerKillInfoUpdate(Player.Self, 0);
                 }
             }
         }
-        base.StartCoroutine(this.WaitAndFade(1.5f));
+        StartCoroutine(this.WaitAndFade(1.5f));
     }
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
         if (stream.isWriting)
         {
-            stream.SendNext(base.transform.position);
-            stream.SendNext(base.transform.rotation);
-            stream.SendNext(base.rigidbody.velocity);
+            stream.SendNext(transform.position);
+            stream.SendNext(transform.rotation);
+            stream.SendNext(rigidbody.velocity);
         }
         else
         {
@@ -114,11 +114,11 @@ public class Bomb : Photon.MonoBehaviour
 
     public void Update()
     {
-        if (!(this.disabled || base.photonView.isMine))
+        if (!(this.disabled || photonView.isMine))
         {
-            base.transform.position = Vector3.Lerp(base.transform.position, this.correctPlayerPos, Time.deltaTime * this.SmoothingDelay);
-            base.transform.rotation = Quaternion.Lerp(base.transform.rotation, this.correctPlayerRot, Time.deltaTime * this.SmoothingDelay);
-            base.rigidbody.velocity = this.correctPlayerVelocity;
+            transform.position = Vector3.Lerp(transform.position, this.correctPlayerPos, Time.deltaTime * this.SmoothingDelay);
+            transform.rotation = Quaternion.Lerp(transform.rotation, this.correctPlayerRot, Time.deltaTime * this.SmoothingDelay);
+            rigidbody.velocity = this.correctPlayerVelocity;
         }
     }
 

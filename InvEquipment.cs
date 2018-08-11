@@ -87,7 +87,7 @@ public class InvEquipment : MonoBehaviour
             this.mItems[(int) slot - 1] = item;
             if (this.mAttachments == null)
             {
-                this.mAttachments = base.GetComponentsInChildren<InvAttachmentPoint>();
+                this.mAttachments = GetComponentsInChildren<InvAttachmentPoint>();
             }
             int index = 0;
             int length = this.mAttachments.Length;

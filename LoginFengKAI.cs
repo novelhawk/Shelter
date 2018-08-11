@@ -13,7 +13,7 @@ public class LoginFengKAI : MonoBehaviour
     private string ForgetPasswordURL = "http://fenglee.com/game/aog/forget_password.php";
     public string formText = string.Empty;
     private string GetInfoURL = "http://aotskins.com/version/getinfo.php";
-    public PanelLoginGroupManager loginGroup;
+    public object loginGroup;
     public GameObject output;
     public GameObject output2;
     public GameObject panelChangeGUILDNAME;
@@ -39,7 +39,7 @@ public class LoginFengKAI : MonoBehaviour
         }
         else
         {
-            base.StartCoroutine(this.changeGuild(name));
+            StartCoroutine(this.changeGuild(name));
         }
     }
 
@@ -72,7 +72,7 @@ public class LoginFengKAI : MonoBehaviour
         }
         else
         {
-            base.StartCoroutine(this.changePassword(oldpassword, password, password2));
+            StartCoroutine(this.changePassword(oldpassword, password, password2));
         }
     }
 
@@ -90,7 +90,7 @@ public class LoginFengKAI : MonoBehaviour
 
     public void login(string name, string password)
     {
-        base.StartCoroutine(this.Login(name, password));
+        StartCoroutine(this.Login(name, password));
     }
 
     [DebuggerHidden]
@@ -115,12 +115,12 @@ public class LoginFengKAI : MonoBehaviour
 
     public void resetPassword(string email)
     {
-        base.StartCoroutine(this.ForgetPassword(email));
+        StartCoroutine(this.ForgetPassword(email));
     }
 
     public void signup(string name, string password, string password2, string email)
     {
-        base.StartCoroutine(this.Register(name, password, password2, email));
+        StartCoroutine(this.Register(name, password, password2, email));
     }
 
     private void Start()
@@ -134,7 +134,7 @@ public class LoginFengKAI : MonoBehaviour
         {
             NGUITools.SetActive(this.panelLogin, false);
             NGUITools.SetActive(this.panelStatus, true);
-            base.StartCoroutine(this.getInfo());
+            StartCoroutine(this.getInfo());
         }
         else
         {
@@ -166,7 +166,7 @@ public class LoginFengKAI : MonoBehaviour
             {
                 case 0:
                     this.form__0 = new WWWForm();
-                    this.form__0.AddField("thisName", LoginFengKAI.playerName);
+                    this.form__0.AddField("thisName", playerName);
                     this.form__0.AddField("guildname", this.name);
                     this.w__1 = new WWW(this.f__this.ChangeGuildURL, this.form__0);
                     this.Scurrent = this.w__1;
@@ -186,7 +186,7 @@ public class LoginFengKAI : MonoBehaviour
                         this.w__1.Dispose();
                         break;
                     }
-                    MonoBehaviour.print(this.w__1.error);
+                    print(this.w__1.error);
                     break;
 
                 default:
@@ -248,7 +248,7 @@ public class LoginFengKAI : MonoBehaviour
             {
                 case 0:
                     this.form__0 = new WWWForm();
-                    this.form__0.AddField("userid", LoginFengKAI.playerName);
+                    this.form__0.AddField("userid", playerName);
                     this.form__0.AddField("old_password", this.oldpassword);
                     this.form__0.AddField("password", this.password);
                     this.form__0.AddField("password2", this.password2);
@@ -269,7 +269,7 @@ public class LoginFengKAI : MonoBehaviour
                         this.w__1.Dispose();
                         break;
                     }
-                    MonoBehaviour.print(this.w__1.error);
+                    print(this.w__1.error);
                     break;
 
                 default:
@@ -344,7 +344,7 @@ public class LoginFengKAI : MonoBehaviour
                         NGUITools.SetActive(this.f__this.panelLogin, true);
                         break;
                     }
-                    MonoBehaviour.print(this.w__1.error);
+                    print(this.w__1.error);
                     break;
 
                 default:
@@ -405,8 +405,8 @@ public class LoginFengKAI : MonoBehaviour
             {
                 case 0:
                     this.form__0 = new WWWForm();
-                    this.form__0.AddField("userid", LoginFengKAI.playerName);
-                    this.form__0.AddField("password", LoginFengKAI.playerPassword);
+                    this.form__0.AddField("userid", playerName);
+                    this.form__0.AddField("password", playerPassword);
                     this.w__1 = new WWW(this.f__this.GetInfoURL, this.form__0);
                     this.Scurrent = this.w__1;
                     this.SPC = 1;
@@ -420,22 +420,22 @@ public class LoginFengKAI : MonoBehaviour
                             NGUITools.SetActive(this.f__this.panelLogin, true);
                             NGUITools.SetActive(this.f__this.panelStatus, false);
                             this.f__this.output.GetComponent<UILabel>().text = this.w__1.text;
-                            LoginFengKAI.playerName = string.Empty;
-                            LoginFengKAI.playerPassword = string.Empty;
+                            playerName = string.Empty;
+                            playerPassword = string.Empty;
                         }
                         else
                         {
                             char[] separator = new char[] { '|' };
                             this.result__2 = this.w__1.text.Split(separator);
-                            LoginFengKAI.playerGUILDName = this.result__2[0];
+                            playerGUILDName = this.result__2[0];
                             this.f__this.output2.GetComponent<UILabel>().text = this.result__2[1];
-                            LoginFengKAI.player.name = LoginFengKAI.playerName;
-                            LoginFengKAI.player.guildname = LoginFengKAI.playerGUILDName;
+                            player.name = playerName;
+                            player.guildname = playerGUILDName;
                         }
                         this.w__1.Dispose();
                         break;
                     }
-                    MonoBehaviour.print(this.w__1.error);
+                    print(this.w__1.error);
                     break;
 
                 default:
@@ -515,13 +515,13 @@ public class LoginFengKAI : MonoBehaviour
                         {
                             NGUITools.SetActive(this.f__this.panelLogin, false);
                             NGUITools.SetActive(this.f__this.panelStatus, true);
-                            LoginFengKAI.playerName = this.name;
-                            LoginFengKAI.playerPassword = this.password;
+                            playerName = this.name;
+                            playerPassword = this.password;
                             this.f__this.StartCoroutine(this.f__this.getInfo());
                         }
                         break;
                     }
-                    MonoBehaviour.print(this.w__1.error);
+                    print(this.w__1.error);
                     break;
 
                 default:
@@ -605,7 +605,7 @@ public class LoginFengKAI : MonoBehaviour
                         this.w__1.Dispose();
                         break;
                     }
-                    MonoBehaviour.print(this.w__1.error);
+                    print(this.w__1.error);
                     break;
 
                 default:

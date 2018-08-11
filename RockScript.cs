@@ -11,8 +11,8 @@ public class RockScript : MonoBehaviour
 
     private void Start()
     {
-        base.transform.position = new Vector3(0f, 0f, 676f);
-        this.vh = this.desPt - base.transform.position;
+        transform.position = new Vector3(0f, 0f, 676f);
+        this.vh = this.desPt - transform.position;
         this.vv = new Vector3(0f, this.g * this.vh.magnitude / (2f * this.speed), 0f);
         this.vh.Normalize();
         this.vh = this.vh * this.speed;
@@ -23,27 +23,27 @@ public class RockScript : MonoBehaviour
         if (!this.disable)
         {
             this.vv += -Vector3.up * this.g * Time.deltaTime;
-            Transform transform = base.transform;
+            Transform transform = this.transform;
             transform.position += this.vv * Time.deltaTime;
-            Transform transform2 = base.transform;
+            Transform transform2 = this.transform;
             transform2.position += this.vh * Time.deltaTime;
-            if (Vector3.Distance(this.desPt, base.transform.position) < 20f || base.transform.position.y < 0f)
+            if (Vector3.Distance(this.desPt, this.transform.position) < 20f || this.transform.position.y < 0f)
             {
-                base.transform.position = this.desPt;
+                this.transform.position = this.desPt;
                 if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
                 {
                     if (FengGameManagerMKII.LAN)
                     {
-                        Network.Instantiate(Resources.Load("FX/boom1_CT_KICK"), base.transform.position + Vector3.up * 30f, Quaternion.Euler(270f, 0f, 0f), 0);
+                        Network.Instantiate(Resources.Load("FX/boom1_CT_KICK"), this.transform.position + Vector3.up * 30f, Quaternion.Euler(270f, 0f, 0f), 0);
                     }
                     else
                     {
-                        PhotonNetwork.Instantiate("FX/boom1_CT_KICK", base.transform.position + Vector3.up * 30f, Quaternion.Euler(270f, 0f, 0f), 0);
+                        PhotonNetwork.Instantiate("FX/boom1_CT_KICK", this.transform.position + Vector3.up * 30f, Quaternion.Euler(270f, 0f, 0f), 0);
                     }
                 }
                 else
                 {
-                    UnityEngine.Object.Instantiate(Resources.Load("FX/boom1_CT_KICK"), base.transform.position + Vector3.up * 30f, Quaternion.Euler(270f, 0f, 0f));
+                    Instantiate(Resources.Load("FX/boom1_CT_KICK"), this.transform.position + Vector3.up * 30f, Quaternion.Euler(270f, 0f, 0f));
                 }
                 this.disable = true;
             }

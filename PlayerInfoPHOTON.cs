@@ -9,7 +9,7 @@ public class PlayerInfoPHOTON
     public int kills;
     public int maxDamage;
     public string name = "Guest";
-    public PhotonPlayer networkplayer;
+    public Player networkplayer;
     public string resourceId = "not choose";
     public bool SET;
     public int totalCrawlerKills;

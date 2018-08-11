@@ -31,7 +31,7 @@ public class StyledComboBox : StyledItem
             Vector3 position = fourCornersArray[0];
             float num = position.y - fourCornersArray[2].y;
             position.y = this.items.Count * num;
-            yf.styledItem = UnityEngine.Object.Instantiate(this.itemPrefab, position, this.root.itemRoot.rotation) as StyledItem;
+            yf.styledItem = Instantiate(this.itemPrefab, position, this.root.itemRoot.rotation) as StyledItem;
             RectTransform component = yf.styledItem.GetComponent<RectTransform>();
             yf.styledItem.Populate(data);
             component.SetParent(this.root.itemRoot.transform, false);
@@ -71,7 +71,7 @@ public class StyledComboBox : StyledItem
     {
         for (int i = this.items.Count - 1; i >= 0; i--)
         {
-            UnityEngine.Object.DestroyObject(this.items[i].gameObject);
+            DestroyObject(this.items[i].gameObject);
         }
     }
 
@@ -81,12 +81,12 @@ public class StyledComboBox : StyledItem
         {
             for (int i = this.root.menuItem.transform.childCount - 1; i >= 0; i--)
             {
-                UnityEngine.Object.DestroyObject(this.root.menuItem.transform.GetChild(i).gameObject);
+                DestroyObject(this.root.menuItem.transform.GetChild(i).gameObject);
             }
         }
         if (this.itemMenuPrefab != null && this.root.menuItem != null)
         {
-            StyledItem item = UnityEngine.Object.Instantiate(this.itemMenuPrefab) as StyledItem;
+            StyledItem item = Instantiate(this.itemMenuPrefab) as StyledItem;
             item.Populate(data);
             item.transform.SetParent(this.root.menuItem.transform, false);
             RectTransform component = item.GetComponent<RectTransform>();
@@ -108,13 +108,13 @@ public class StyledComboBox : StyledItem
     {
         if (this.root != null)
         {
-            UnityEngine.Object.DestroyImmediate(this.root.gameObject);
+            DestroyImmediate(this.root.gameObject);
         }
         if (this.containerPrefab != null)
         {
-            RectTransform component = base.GetComponent<RectTransform>();
-            this.root = UnityEngine.Object.Instantiate(this.containerPrefab, component.position, component.rotation) as StyledComboBoxPrefab;
-            this.root.transform.SetParent(base.transform, false);
+            RectTransform component = GetComponent<RectTransform>();
+            this.root = Instantiate(this.containerPrefab, component.position, component.rotation) as StyledComboBoxPrefab;
+            this.root.transform.SetParent(transform, false);
             RectTransform transform2 = this.root.GetComponent<RectTransform>();
             transform2.pivot = new Vector2(0.5f, 0.5f);
             transform2.anchorMin = Vector2.zero;

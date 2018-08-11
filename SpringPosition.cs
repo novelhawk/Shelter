@@ -33,12 +33,12 @@ public class SpringPosition : IgnoreTimeScale
 
     private void Start()
     {
-        this.mTrans = base.transform;
+        this.mTrans = transform;
     }
 
     private void Update()
     {
-        float deltaTime = !this.ignoreTimeScale ? Time.deltaTime : base.UpdateRealTimeDelta();
+        float deltaTime = !this.ignoreTimeScale ? Time.deltaTime : UpdateRealTimeDelta();
         if (this.worldSpace)
         {
             if (this.mThreshold == 0f)
@@ -59,7 +59,7 @@ public class SpringPosition : IgnoreTimeScale
                 {
                     this.eventReceiver.SendMessage(this.callWhenFinished, this, SendMessageOptions.DontRequireReceiver);
                 }
-                base.enabled = false;
+                enabled = false;
             }
         }
         else
@@ -82,7 +82,7 @@ public class SpringPosition : IgnoreTimeScale
                 {
                     this.eventReceiver.SendMessage(this.callWhenFinished, this, SendMessageOptions.DontRequireReceiver);
                 }
-                base.enabled = false;
+                enabled = false;
             }
         }
     }

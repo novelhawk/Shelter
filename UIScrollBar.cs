@@ -233,7 +233,7 @@ public class UIScrollBar : MonoBehaviour
         {
             if (this.mCam == null)
             {
-                this.mCam = NGUITools.FindCameraForLayer(base.gameObject.layer);
+                this.mCam = NGUITools.FindCameraForLayer(gameObject.layer);
             }
             return this.mCam;
         }
@@ -245,7 +245,7 @@ public class UIScrollBar : MonoBehaviour
         {
             if (this.mTrans == null)
             {
-                this.mTrans = base.transform;
+                this.mTrans = transform;
             }
             return this.mTrans;
         }

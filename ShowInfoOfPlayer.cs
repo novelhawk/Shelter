@@ -36,7 +36,7 @@ public class ShowInfoOfPlayer : Photon.MonoBehaviour
         {
             this.textGo = new GameObject("3d text");
             this.textGo.transform.localScale = new Vector3(0.2f, 0.2f, 0.2f);
-            this.textGo.transform.parent = base.gameObject.transform;
+            this.textGo.transform.parent = gameObject.transform;
             this.textGo.transform.localPosition = Vector3.zero;
             this.textGo.AddComponent<MeshRenderer>().material = this.font.material;
             this.tm = this.textGo.AddComponent<TextMesh>();
@@ -44,9 +44,9 @@ public class ShowInfoOfPlayer : Photon.MonoBehaviour
             this.tm.fontSize = 0;
             this.tm.anchor = TextAnchor.MiddleCenter;
         }
-        if (!this.DisableOnOwnObjects && base.photonView.isMine)
+        if (!this.DisableOnOwnObjects && photonView.isMine)
         {
-            base.enabled = false;
+            enabled = false;
         }
     }
 
@@ -54,7 +54,7 @@ public class ShowInfoOfPlayer : Photon.MonoBehaviour
     {
         if (this.DisableOnOwnObjects)
         {
-            base.enabled = false;
+            enabled = false;
             if (this.textGo != null)
             {
                 this.textGo.SetActive(false);
@@ -62,16 +62,16 @@ public class ShowInfoOfPlayer : Photon.MonoBehaviour
         }
         else
         {
-            PhotonPlayer owner = base.photonView.owner;
+            Player owner = photonView.owner;
             if (owner != null)
             {
                 this.tm.text = !string.IsNullOrEmpty(owner.name) ? owner.name : "n/a";
             }
-            else if (base.photonView.isSceneView)
+            else if (photonView.isSceneView)
             {
-                if (!this.DisableOnOwnObjects && base.photonView.isMine)
+                if (!this.DisableOnOwnObjects && photonView.isMine)
                 {
-                    base.enabled = false;
+                    enabled = false;
                     this.textGo.SetActive(false);
                 }
                 else

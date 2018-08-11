@@ -24,29 +24,29 @@ public class ScaleAffector : Affector
 
     public override void Update()
     {
-        float elapsedTime = base.Node.GetElapsedTime();
+        float elapsedTime = Node.GetElapsedTime();
         if (this.Type == RSTYPE.CURVE)
         {
             if (this.ScaleXCurve != null)
             {
-                base.Node.Scale.x = this.ScaleXCurve.Evaluate(elapsedTime);
+                Node.Scale.x = this.ScaleXCurve.Evaluate(elapsedTime);
             }
             if (this.ScaleYCurve != null)
             {
-                base.Node.Scale.y = this.ScaleYCurve.Evaluate(elapsedTime);
+                Node.Scale.y = this.ScaleYCurve.Evaluate(elapsedTime);
             }
         }
         else if (this.Type == RSTYPE.SIMPLE)
         {
-            float num2 = base.Node.Scale.x + this.DeltaX * Time.deltaTime;
-            float num3 = base.Node.Scale.y + this.DeltaY * Time.deltaTime;
-            if (num2 * base.Node.Scale.x > 0f)
+            float num2 = Node.Scale.x + this.DeltaX * Time.deltaTime;
+            float num3 = Node.Scale.y + this.DeltaY * Time.deltaTime;
+            if (num2 * Node.Scale.x > 0f)
             {
-                base.Node.Scale.x = num2;
+                Node.Scale.x = num2;
             }
-            if (num3 * base.Node.Scale.y > 0f)
+            if (num3 * Node.Scale.y > 0f)
             {
-                base.Node.Scale.y = num3;
+                Node.Scale.y = num3;
             }
         }
     }

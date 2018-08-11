@@ -28,7 +28,7 @@ public class UIDragObject : IgnoreTimeScale
 
     private void LateUpdate()
     {
-        float deltaTime = base.UpdateRealTimeDelta();
+        float deltaTime = UpdateRealTimeDelta();
         if (this.target != null)
         {
             if (this.mPressed)
@@ -79,7 +79,7 @@ public class UIDragObject : IgnoreTimeScale
 
     private void OnDrag(Vector2 delta)
     {
-        if (base.enabled && NGUITools.GetActive(base.gameObject) && this.target != null)
+        if (enabled && NGUITools.GetActive(gameObject) && this.target != null)
         {
             UICamera.currentTouch.clickNotification = UICamera.ClickNotification.BasedOnDelta;
             Ray ray = UICamera.currentCamera.ScreenPointToRay(UICamera.currentTouch.pos);
@@ -120,7 +120,7 @@ public class UIDragObject : IgnoreTimeScale
 
     private void OnPress(bool pressed)
     {
-        if (base.enabled && NGUITools.GetActive(base.gameObject) && this.target != null)
+        if (enabled && NGUITools.GetActive(gameObject) && this.target != null)
         {
             this.mPressed = pressed;
             if (pressed)
@@ -153,7 +153,7 @@ public class UIDragObject : IgnoreTimeScale
 
     private void OnScroll(float delta)
     {
-        if (base.enabled && NGUITools.GetActive(base.gameObject))
+        if (enabled && NGUITools.GetActive(gameObject))
         {
             if (Mathf.Sign(this.mScroll) != Mathf.Sign(delta))
             {

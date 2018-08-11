@@ -8,8 +8,8 @@ public class AnimatedAlpha : MonoBehaviour
 
     private void Awake()
     {
-        this.mWidget = base.GetComponent<UIWidget>();
-        this.mPanel = base.GetComponent<UIPanel>();
+        this.mWidget = GetComponent<UIWidget>();
+        this.mPanel = GetComponent<UIPanel>();
         this.Update();
     }
 

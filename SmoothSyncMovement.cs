@@ -16,11 +16,11 @@ public class SmoothSyncMovement : Photon.MonoBehaviour
     {
         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
         {
-            base.enabled = false;
+            enabled = false;
         }
-        this.correctPlayerPos = base.transform.position;
-        this.correctPlayerRot = base.transform.rotation;
-        if (base.rigidbody == null)
+        this.correctPlayerPos = transform.position;
+        this.correctPlayerRot = transform.rotation;
+        if (rigidbody == null)
         {
             this.noVelocity = true;
         }
@@ -30,11 +30,11 @@ public class SmoothSyncMovement : Photon.MonoBehaviour
     {
         if (stream.isWriting)
         {
-            stream.SendNext(base.transform.position);
-            stream.SendNext(base.transform.rotation);
+            stream.SendNext(transform.position);
+            stream.SendNext(transform.rotation);
             if (!this.noVelocity)
             {
-                stream.SendNext(base.rigidbody.velocity);
+                stream.SendNext(rigidbody.velocity);
             }
             if (this.PhotonCamera)
             {
@@ -58,13 +58,13 @@ public class SmoothSyncMovement : Photon.MonoBehaviour
 
     public void Update()
     {
-        if (!(this.disabled || base.photonView.isMine))
+        if (!(this.disabled || photonView.isMine))
         {
-            base.transform.position = Vector3.Lerp(base.transform.position, this.correctPlayerPos, Time.deltaTime * this.SmoothingDelay);
-            base.transform.rotation = Quaternion.Lerp(base.transform.rotation, this.correctPlayerRot, Time.deltaTime * this.SmoothingDelay);
+            transform.position = Vector3.Lerp(transform.position, this.correctPlayerPos, Time.deltaTime * this.SmoothingDelay);
+            transform.rotation = Quaternion.Lerp(transform.rotation, this.correctPlayerRot, Time.deltaTime * this.SmoothingDelay);
             if (!this.noVelocity)
             {
-                base.rigidbody.velocity = this.correctPlayerVelocity;
+                rigidbody.velocity = this.correctPlayerVelocity;
             }
         }
     }

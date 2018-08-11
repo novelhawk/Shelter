@@ -8,7 +8,7 @@ using UnityEngine;
 [ExecuteInEditMode, AddComponentMenu("NGUI/Internal/Update Manager")]
 public class UpdateManager : MonoBehaviour
 {
-    private BetterList<DestroyEntry> mDest = new BetterList<DestroyEntry>();
+    private List<DestroyEntry> mDest = new List<DestroyEntry>();
     private static UpdateManager mInst;
     private List<UpdateEntry> mOnCoro = new List<UpdateEntry>();
     private List<UpdateEntry> mOnLate = new List<UpdateEntry>();
@@ -37,7 +37,7 @@ public class UpdateManager : MonoBehaviour
         list.Add(item);
         if (updateOrder != 0)
         {
-            list.Sort(new Comparison<UpdateEntry>(UpdateManager.Compare));
+            list.Sort(new Comparison<UpdateEntry>(Compare));
         }
     }
 
@@ -64,12 +64,12 @@ public class UpdateManager : MonoBehaviour
                 }
                 else
                 {
-                    UnityEngine.Object.Destroy(obj);
+                    Destroy(obj);
                 }
             }
             else
             {
-                UnityEngine.Object.DestroyImmediate(obj);
+                DestroyImmediate(obj);
             }
         }
     }
@@ -114,10 +114,10 @@ public class UpdateManager : MonoBehaviour
             this.mTime = realtimeSinceStartup;
             this.UpdateList(this.mOnCoro, delta);
             bool isPlaying = Application.isPlaying;
-            int size = this.mDest.size;
+            int size = this.mDest.Count;
             while (size > 0)
             {
-                DestroyEntry entry = this.mDest.buffer[--size];
+                DestroyEntry entry = this.mDest[--size];
                 if (!isPlaying || entry.time < this.mTime)
                 {
                     if (entry.obj != null)
@@ -128,9 +128,9 @@ public class UpdateManager : MonoBehaviour
                     this.mDest.RemoveAt(size);
                 }
             }
-            if (this.mOnUpdate.Count == 0 && this.mOnLate.Count == 0 && this.mOnCoro.Count == 0 && this.mDest.size == 0)
+            if (this.mOnUpdate.Count == 0 && this.mOnLate.Count == 0 && this.mOnCoro.Count == 0 && this.mDest.Count == 0)
             {
-                NGUITools.Destroy(base.gameObject);
+                NGUITools.Destroy(gameObject);
                 return false;
             }
         }
@@ -141,11 +141,11 @@ public class UpdateManager : MonoBehaviour
     {
         if (mInst == null)
         {
-            mInst = UnityEngine.Object.FindObjectOfType(typeof(UpdateManager)) as UpdateManager;
+            mInst = FindObjectOfType(typeof(UpdateManager)) as UpdateManager;
             if (mInst == null && Application.isPlaying)
             {
                 GameObject target = new GameObject("_UpdateManager");
-                UnityEngine.Object.DontDestroyOnLoad(target);
+                DontDestroyOnLoad(target);
                 mInst = target.AddComponent<UpdateManager>();
             }
         }
@@ -162,7 +162,7 @@ public class UpdateManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        UnityEngine.Object.DestroyImmediate(base.gameObject);
+        DestroyImmediate(gameObject);
     }
 
     private void Start()
@@ -170,7 +170,7 @@ public class UpdateManager : MonoBehaviour
         if (Application.isPlaying)
         {
             this.mTime = Time.realtimeSinceStartup;
-            base.StartCoroutine(this.CoroutineFunction());
+            StartCoroutine(this.CoroutineFunction());
         }
     }
 
@@ -178,7 +178,7 @@ public class UpdateManager : MonoBehaviour
     {
         if (mInst != this)
         {
-            NGUITools.Destroy(base.gameObject);
+            NGUITools.Destroy(gameObject);
         }
         else
         {
@@ -276,7 +276,7 @@ public class UpdateManager : MonoBehaviour
 
     public class UpdateEntry
     {
-        public UpdateManager.OnUpdate func;
+        public OnUpdate func;
         public int index;
         public bool isMonoBehaviour;
         public MonoBehaviour mb;

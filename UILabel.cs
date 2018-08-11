@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode, AddComponentMenu("NGUI/UI/Label")]
@@ -44,21 +45,21 @@ public class UILabel : UIWidget
     [HideInInspector, SerializeField]
     private string mText = string.Empty;
 
-    private void ApplyShadow(BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols, int start, int end, float x, float y)
+    private void ApplyShadow(List<Vector3> verts, List<Vector2> uvs, List<Color32> cols, int start, int end, float x, float y)
     {
-        Color mEffectColor = this.mEffectColor;
-        mEffectColor.a *= base.alpha * base.mPanel.alpha;
-        Color32 color2 = !this.font.premultipliedAlpha ? mEffectColor : NGUITools.ApplyPMA(mEffectColor);
+        Color color = this.mEffectColor;
+        color.a *= alpha * mPanel.alpha;
+        Color32 color2 = !this.font.premultipliedAlpha ? color : NGUITools.ApplyPMA(color);
         for (int i = start; i < end; i++)
         {
-            verts.Add(verts.buffer[i]);
-            uvs.Add(uvs.buffer[i]);
-            cols.Add(cols.buffer[i]);
-            Vector3 vector = verts.buffer[i];
+            verts.Add(verts[i]);
+            uvs.Add(uvs[i]);
+            cols.Add(cols[i]);
+            Vector3 vector = verts[i];
             vector.x += x;
             vector.y += y;
-            verts.buffer[i] = vector;
-            cols.buffer[i] = color2;
+            verts[i] = vector;
+            cols[i] = color2;
         }
     }
 
@@ -67,18 +68,18 @@ public class UILabel : UIWidget
         if (this.mFont != null)
         {
             float pixelSize = this.font.pixelSize;
-            Vector3 localScale = base.cachedTransform.localScale;
+            Vector3 localScale = cachedTransform.localScale;
             localScale.x = this.mFont.size * pixelSize;
             localScale.y = localScale.x;
             localScale.z = 1f;
-            Vector3 localPosition = base.cachedTransform.localPosition;
+            Vector3 localPosition = cachedTransform.localPosition;
             localPosition.x = Mathf.CeilToInt(localPosition.x / pixelSize * 4f) >> 2;
             localPosition.y = Mathf.CeilToInt(localPosition.y / pixelSize * 4f) >> 2;
             localPosition.z = Mathf.RoundToInt(localPosition.z);
             localPosition.x *= pixelSize;
             localPosition.y *= pixelSize;
-            base.cachedTransform.localPosition = localPosition;
-            base.cachedTransform.localScale = localScale;
+            cachedTransform.localPosition = localPosition;
+            cachedTransform.localScale = localScale;
             if (this.shrinkToFit)
             {
                 this.ProcessText();
@@ -96,28 +97,28 @@ public class UILabel : UIWidget
         base.MarkAsChanged();
     }
 
-    public override void OnFill(BetterList<Vector3> verts, BetterList<Vector2> uvs, BetterList<Color32> cols)
+    public override void OnFill(List<Vector3> verts, List<Vector2> uvs, List<Color32> cols)
     {
         if (this.mFont != null)
         {
-            UIWidget.Pivot pivot = base.pivot;
-            int size = verts.size;
-            Color c = base.color;
-            c.a *= base.mPanel.alpha;
+            Pivot pivot = this.pivot;
+            int size = verts.Count;
+            Color c = color;
+            c.a *= mPanel.alpha;
             if (this.font.premultipliedAlpha)
             {
                 c = NGUITools.ApplyPMA(c);
             }
             switch (pivot)
             {
-                case UIWidget.Pivot.Left:
-                case UIWidget.Pivot.TopLeft:
-                case UIWidget.Pivot.BottomLeft:
+                case Pivot.Left:
+                case Pivot.TopLeft:
+                case Pivot.BottomLeft:
                     this.mFont.Print(this.processedText, c, verts, uvs, cols, this.mEncoding, this.mSymbols, UIFont.Alignment.Left, 0, this.mPremultiply);
                     break;
 
                 default:
-                    if (pivot != UIWidget.Pivot.Right && pivot != UIWidget.Pivot.TopRight && pivot != UIWidget.Pivot.BottomRight)
+                    if (pivot != Pivot.Right && pivot != Pivot.TopRight && pivot != Pivot.BottomRight)
                     {
                         this.mFont.Print(this.processedText, c, verts, uvs, cols, this.mEncoding, this.mSymbols, UIFont.Alignment.Center, Mathf.RoundToInt(this.relativeSize.x * this.mFont.size), this.mPremultiply);
                     }
@@ -129,7 +130,7 @@ public class UILabel : UIWidget
             }
             if (this.effectStyle != Effect.None)
             {
-                int end = verts.size;
+                int end = verts.Count;
                 float num3 = 1f / this.mFont.size;
                 float x = num3 * this.mEffectDistance.x;
                 float y = num3 * this.mEffectDistance.y;
@@ -137,13 +138,13 @@ public class UILabel : UIWidget
                 if (this.effectStyle == Effect.Outline)
                 {
                     size = end;
-                    end = verts.size;
+                    end = verts.Count;
                     this.ApplyShadow(verts, uvs, cols, size, end, -x, y);
                     size = end;
-                    end = verts.size;
+                    end = verts.Count;
                     this.ApplyShadow(verts, uvs, cols, size, end, x, y);
                     size = end;
-                    end = verts.size;
+                    end = verts.Count;
                     this.ApplyShadow(verts, uvs, cols, size, end, -x, -y);
                 }
             }
@@ -167,16 +168,16 @@ public class UILabel : UIWidget
 
     private void ProcessText()
     {
-        base.mChanged = true;
+        mChanged = true;
         this.hasChanged = false;
         this.mLastText = this.mText;
-        float b = Mathf.Abs(base.cachedTransform.localScale.x);
+        float b = Mathf.Abs(cachedTransform.localScale.x);
         float num2 = this.mFont.size * this.mMaxLineCount;
         if (b <= 0f)
         {
             this.mSize.x = 1f;
             b = this.mFont.size;
-            base.cachedTransform.localScale = new Vector3(0.01f, 0.01f, 1f);
+            cachedTransform.localScale = new Vector3(0.01f, 0.01f, 1f);
             this.mProcessedText = string.Empty;
             goto Label_037C;
         }
@@ -240,7 +241,7 @@ public class UILabel : UIWidget
                 b = Mathf.Min(a, b);
             }
             b = Mathf.Round(b);
-            base.cachedTransform.localScale = new Vector3(b, b, 1f);
+            cachedTransform.localScale = new Vector3(b, b, 1f);
         }
         this.mSize.x = Mathf.Max(this.mSize.x, b <= 0f ? 1f : this.lineWidth / b);
     Label_037C:
@@ -310,7 +311,7 @@ public class UILabel : UIWidget
             {
                 this.mFont = value;
                 this.material = this.mFont == null ? null : this.mFont.material;
-                base.mChanged = true;
+                mChanged = true;
                 this.hasChanged = true;
                 this.MarkAsChanged();
             }
@@ -327,7 +328,7 @@ public class UILabel : UIWidget
         {
             if (value)
             {
-                base.mChanged = true;
+                mChanged = true;
                 this.mShouldBeProcessed = true;
             }
             else
@@ -443,9 +444,9 @@ public class UILabel : UIWidget
     {
         get
         {
-            if (this.mLastScale != base.cachedTransform.localScale)
+            if (this.mLastScale != cachedTransform.localScale)
             {
-                this.mLastScale = base.cachedTransform.localScale;
+                this.mLastScale = cachedTransform.localScale;
                 this.mShouldBeProcessed = true;
             }
             if (this.hasChanged)

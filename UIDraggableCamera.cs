@@ -20,12 +20,12 @@ public class UIDraggableCamera : IgnoreTimeScale
 
     private void Awake()
     {
-        this.mCam = base.camera;
-        this.mTrans = base.transform;
+        this.mCam = camera;
+        this.mTrans = transform;
         if (this.rootForBounds == null)
         {
-            Debug.LogError(NGUITools.GetHierarchy(base.gameObject) + " needs the 'Root For Bounds' parameter to be set", this);
-            base.enabled = false;
+            Debug.LogError(NGUITools.GetHierarchy(gameObject) + " needs the 'Root For Bounds' parameter to be set", this);
+            enabled = false;
         }
     }
 
@@ -57,7 +57,7 @@ public class UIDraggableCamera : IgnoreTimeScale
                 }
                 else
                 {
-                    SpringPosition position = SpringPosition.Begin(base.gameObject, this.mTrans.position - vector, 13f);
+                    SpringPosition position = SpringPosition.Begin(gameObject, this.mTrans.position - vector, 13f);
                     position.ignoreTimeScale = true;
                     position.worldSpace = true;
                 }
@@ -105,7 +105,7 @@ public class UIDraggableCamera : IgnoreTimeScale
                 this.mBounds = NGUIMath.CalculateAbsoluteWidgetBounds(this.rootForBounds);
                 this.mMomentum = Vector2.zero;
                 this.mScroll = 0f;
-                SpringPosition component = base.GetComponent<SpringPosition>();
+                SpringPosition component = GetComponent<SpringPosition>();
                 if (component != null)
                 {
                     component.enabled = false;
@@ -120,7 +120,7 @@ public class UIDraggableCamera : IgnoreTimeScale
 
     public void Scroll(float delta)
     {
-        if (base.enabled && NGUITools.GetActive(base.gameObject))
+        if (enabled && NGUITools.GetActive(gameObject))
         {
             if (Mathf.Sign(this.mScroll) != Mathf.Sign(delta))
             {
@@ -132,15 +132,15 @@ public class UIDraggableCamera : IgnoreTimeScale
 
     private void Start()
     {
-        this.mRoot = NGUITools.FindInParents<UIRoot>(base.gameObject);
+        this.mRoot = NGUITools.FindInParents<UIRoot>(gameObject);
     }
 
     private void Update()
     {
-        float deltaTime = base.UpdateRealTimeDelta();
+        float deltaTime = UpdateRealTimeDelta();
         if (this.mPressed)
         {
-            SpringPosition component = base.GetComponent<SpringPosition>();
+            SpringPosition component = GetComponent<SpringPosition>();
             if (component != null)
             {
                 component.enabled = false;
@@ -157,7 +157,7 @@ public class UIDraggableCamera : IgnoreTimeScale
                 this.mBounds = NGUIMath.CalculateAbsoluteWidgetBounds(this.rootForBounds);
                 if (!this.ConstrainToBounds(this.dragEffect == UIDragObject.DragEffect.None))
                 {
-                    SpringPosition position2 = base.GetComponent<SpringPosition>();
+                    SpringPosition position2 = GetComponent<SpringPosition>();
                     if (position2 != null)
                     {
                         position2.enabled = false;

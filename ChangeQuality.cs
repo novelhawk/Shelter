@@ -12,18 +12,18 @@ public class ChangeQuality : MonoBehaviour
             this.init = true;
             if (PlayerPrefs.HasKey("GameQuality"))
             {
-                base.gameObject.GetComponent<UISlider>().sliderValue = PlayerPrefs.GetFloat("GameQuality");
+                gameObject.GetComponent<UISlider>().sliderValue = PlayerPrefs.GetFloat("GameQuality");
             }
             else
             {
-                PlayerPrefs.SetFloat("GameQuality", base.gameObject.GetComponent<UISlider>().sliderValue);
+                PlayerPrefs.SetFloat("GameQuality", gameObject.GetComponent<UISlider>().sliderValue);
             }
         }
         else
         {
-            PlayerPrefs.SetFloat("GameQuality", base.gameObject.GetComponent<UISlider>().sliderValue);
+            PlayerPrefs.SetFloat("GameQuality", gameObject.GetComponent<UISlider>().sliderValue);
         }
-        setQuality(base.gameObject.GetComponent<UISlider>().sliderValue);
+        setQuality(gameObject.GetComponent<UISlider>().sliderValue);
     }
 
     public static void setCurrentQuality()

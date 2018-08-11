@@ -32,14 +32,14 @@ public class TweenVolume : UITweener
         {
             if (this.mSource == null)
             {
-                this.mSource = base.audio;
+                this.mSource = audio;
                 if (this.mSource == null)
                 {
-                    this.mSource = base.GetComponentInChildren<AudioSource>();
+                    this.mSource = GetComponentInChildren<AudioSource>();
                     if (this.mSource == null)
                     {
                         Debug.LogError("TweenVolume needs an AudioSource to work with", this);
-                        base.enabled = false;
+                        enabled = false;
                     }
                 }
             }

@@ -15,13 +15,13 @@ namespace Mod.Commands
             {
                 if (args[0].EqualsIgnoreCase("all"))
                 {
-                    foreach (PhotonPlayer player in PhotonNetwork.playerList)
+                    foreach (Player player in PhotonNetwork.playerList)
                         FengGameManagerMKII.instance.photonView.RPC("respawnHeroInNewRound", player);
                     Notify.New("Successfully respawned all players!", string.Empty, 1300, 35F);
                 }
                 else
                 {
-                    if (!PhotonPlayer.TryParse(args[0], out PhotonPlayer player))
+                    if (!Player.TryParse(args[0], out Player player))
                         throw new PlayerNotFoundException(args[0]);
                     FengGameManagerMKII.instance.photonView.RPC("respawnHeroInNewRound", player);
                     Notify.New($"{player.HexName} respawned!", string.Empty, 1300, 35F);

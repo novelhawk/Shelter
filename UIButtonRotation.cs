@@ -28,13 +28,13 @@ public class UIButtonRotation : MonoBehaviour
     {
         if (this.mStarted && this.mHighlighted)
         {
-            this.OnHover(UICamera.IsHighlighted(base.gameObject));
+            this.OnHover(UICamera.IsHighlighted(gameObject));
         }
     }
 
     private void OnHover(bool isOver)
     {
-        if (base.enabled)
+        if (enabled)
         {
             if (!this.mStarted)
             {
@@ -47,13 +47,13 @@ public class UIButtonRotation : MonoBehaviour
 
     private void OnPress(bool isPressed)
     {
-        if (base.enabled)
+        if (enabled)
         {
             if (!this.mStarted)
             {
                 this.Start();
             }
-            TweenRotation.Begin(this.tweenTarget.gameObject, this.duration, !isPressed ? (!UICamera.IsHighlighted(base.gameObject) ? this.mRot : this.mRot * Quaternion.Euler(this.hover)) : this.mRot * Quaternion.Euler(this.pressed)).method = UITweener.Method.EaseInOut;
+            TweenRotation.Begin(this.tweenTarget.gameObject, this.duration, !isPressed ? (!UICamera.IsHighlighted(gameObject) ? this.mRot : this.mRot * Quaternion.Euler(this.hover)) : this.mRot * Quaternion.Euler(this.pressed)).method = UITweener.Method.EaseInOut;
         }
     }
 
@@ -64,7 +64,7 @@ public class UIButtonRotation : MonoBehaviour
             this.mStarted = true;
             if (this.tweenTarget == null)
             {
-                this.tweenTarget = base.transform;
+                this.tweenTarget = transform;
             }
             this.mRot = this.tweenTarget.localRotation;
         }

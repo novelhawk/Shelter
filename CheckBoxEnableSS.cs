@@ -26,16 +26,16 @@ public class CheckBoxEnableSS : MonoBehaviour
         {
             if (PlayerPrefs.GetInt("EnableSS") == 1)
             {
-                base.GetComponent<UICheckbox>().isChecked = true;
+                GetComponent<UICheckbox>().isChecked = true;
             }
             else
             {
-                base.GetComponent<UICheckbox>().isChecked = false;
+                GetComponent<UICheckbox>().isChecked = false;
             }
         }
         else
         {
-            base.GetComponent<UICheckbox>().isChecked = true;
+            GetComponent<UICheckbox>().isChecked = true;
             PlayerPrefs.SetInt("EnableSS", 1);
         }
     }

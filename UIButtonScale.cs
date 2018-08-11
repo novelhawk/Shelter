@@ -28,13 +28,13 @@ public class UIButtonScale : MonoBehaviour
     {
         if (this.mStarted && this.mHighlighted)
         {
-            this.OnHover(UICamera.IsHighlighted(base.gameObject));
+            this.OnHover(UICamera.IsHighlighted(gameObject));
         }
     }
 
     private void OnHover(bool isOver)
     {
-        if (base.enabled)
+        if (enabled)
         {
             if (!this.mStarted)
             {
@@ -47,13 +47,13 @@ public class UIButtonScale : MonoBehaviour
 
     private void OnPress(bool isPressed)
     {
-        if (base.enabled)
+        if (enabled)
         {
             if (!this.mStarted)
             {
                 this.Start();
             }
-            TweenScale.Begin(this.tweenTarget.gameObject, this.duration, !isPressed ? (!UICamera.IsHighlighted(base.gameObject) ? this.mScale : Vector3.Scale(this.mScale, this.hover)) : Vector3.Scale(this.mScale, this.pressed)).method = UITweener.Method.EaseInOut;
+            TweenScale.Begin(this.tweenTarget.gameObject, this.duration, !isPressed ? (!UICamera.IsHighlighted(gameObject) ? this.mScale : Vector3.Scale(this.mScale, this.hover)) : Vector3.Scale(this.mScale, this.pressed)).method = UITweener.Method.EaseInOut;
         }
     }
 
@@ -64,7 +64,7 @@ public class UIButtonScale : MonoBehaviour
             this.mStarted = true;
             if (this.tweenTarget == null)
             {
-                this.tweenTarget = base.transform;
+                this.tweenTarget = transform;
             }
             this.mScale = this.tweenTarget.localScale;
         }

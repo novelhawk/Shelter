@@ -10,7 +10,7 @@ public class UILocalize : MonoBehaviour
     public void Localize()
     {
         Localization instance = Localization.instance;
-        UIWidget component = base.GetComponent<UIWidget>();
+        UIWidget component = GetComponent<UIWidget>();
         UILabel label = component as UILabel;
         UISprite sprite = component as UISprite;
         if (string.IsNullOrEmpty(this.mLanguage) && string.IsNullOrEmpty(this.key) && label != null)

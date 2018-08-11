@@ -9,7 +9,7 @@ public class UISliderColors : MonoBehaviour
 
     private void Start()
     {
-        this.mSlider = base.GetComponent<UISlider>();
+        this.mSlider = GetComponent<UISlider>();
         this.Update();
     }
 

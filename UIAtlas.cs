@@ -27,13 +27,13 @@ public class UIAtlas : MonoBehaviour
         return a.CompareTo(b);
     }
 
-    public BetterList<string> GetListOfSprites()
+    public List<string> GetListOfSprites()
     {
         if (this.mReplacement != null)
         {
             return this.mReplacement.GetListOfSprites();
         }
-        BetterList<string> list = new BetterList<string>();
+        List<string> list = new List<string>();
         int num = 0;
         int count = this.sprites.Count;
         while (num < count)
@@ -48,7 +48,7 @@ public class UIAtlas : MonoBehaviour
         return list;
     }
 
-    public BetterList<string> GetListOfSprites(string match)
+    public List<string> GetListOfSprites(string match)
     {
         if (this.mReplacement != null)
         {
@@ -58,7 +58,7 @@ public class UIAtlas : MonoBehaviour
         {
             return this.GetListOfSprites();
         }
-        BetterList<string> list = new BetterList<string>();
+        List<string> list = new List<string>();
         int num = 0;
         int count = this.sprites.Count;
         while (num < count)

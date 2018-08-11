@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [ExecuteInEditMode, AddComponentMenu("NGUI/Internal/Draw Call")]
@@ -87,33 +88,33 @@ public class UIDrawCall : MonoBehaviour
         }
     }
 
-    public void Set(BetterList<Vector3> verts, BetterList<Vector3> norms, BetterList<Vector4> tans, BetterList<Vector2> uvs, BetterList<Color32> cols)
+    public void Set(List<Vector3> verts, List<Vector3> norms, List<Vector4> tans, List<Vector2> uvs, List<Color32> cols)
     {
-        int size = verts.size;
-        if (size > 0 && size == uvs.size && size == cols.size && size % 4 == 0)
+        int size = verts.Count;
+        if (size > 0 && size == uvs.Count && size == cols.Count && size % 4 == 0)
         {
             if (this.mFilter == null)
             {
-                this.mFilter = base.gameObject.GetComponent<MeshFilter>();
+                this.mFilter = gameObject.GetComponent<MeshFilter>();
             }
             if (this.mFilter == null)
             {
-                this.mFilter = base.gameObject.AddComponent<MeshFilter>();
+                this.mFilter = gameObject.AddComponent<MeshFilter>();
             }
             if (this.mRen == null)
             {
-                this.mRen = base.gameObject.GetComponent<MeshRenderer>();
+                this.mRen = gameObject.GetComponent<MeshRenderer>();
             }
             if (this.mRen == null)
             {
-                this.mRen = base.gameObject.AddComponent<MeshRenderer>();
+                this.mRen = gameObject.AddComponent<MeshRenderer>();
                 this.UpdateMaterials();
             }
             else if (this.mClippedMat != null && this.mClippedMat.mainTexture != this.mSharedMat.mainTexture)
             {
                 this.UpdateMaterials();
             }
-            if (verts.size < 65000)
+            if (verts.Count < 65000)
             {
                 bool flag;
                 int num2 = (size >> 1) * 3;
@@ -131,7 +132,7 @@ public class UIDrawCall : MonoBehaviour
                         this.mIndices[num3++] = i;
                     }
                 }
-                Mesh mesh = this.GetMesh(ref flag, verts.size);
+                Mesh mesh = this.GetMesh(ref flag, verts.Count);
                 mesh.vertices = verts.ToArray();
                 if (norms != null)
                 {
@@ -156,7 +157,7 @@ public class UIDrawCall : MonoBehaviour
                 {
                     this.mFilter.mesh.Clear();
                 }
-                Debug.LogError("Too many vertices on one panel: " + verts.size);
+                Debug.LogError("Too many vertices on one panel: " + verts.Count);
             }
         }
         else
@@ -197,8 +198,7 @@ public class UIDrawCall : MonoBehaviour
             {
                 if (this.mClippedMat == null)
                 {
-                    this.mClippedMat = new Material(this.mSharedMat);
-                    this.mClippedMat.hideFlags = HideFlags.DontSave;
+                    this.mClippedMat = new Material(this.mSharedMat) {hideFlags = HideFlags.DontSave};
                 }
                 this.mClippedMat.shader = shader;
                 this.mClippedMat.CopyPropertiesFromMaterial(this.mSharedMat);
@@ -249,7 +249,7 @@ public class UIDrawCall : MonoBehaviour
         {
             if (this.mTrans == null)
             {
-                this.mTrans = base.transform;
+                this.mTrans = transform;
             }
             return this.mTrans;
         }

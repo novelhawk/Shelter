@@ -55,7 +55,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
         {
             if (obj2.GetComponent<FEMALE_TITAN>() != null)
             {
-                obj2.GetComponent<FEMALE_TITAN>().erenIsHere(base.gameObject);
+                obj2.GetComponent<FEMALE_TITAN>().erenIsHere(gameObject);
             }
         }
         if (!this.bottomObject.GetComponent<CheckHitGround>().isGrounded)
@@ -72,11 +72,11 @@ public class TITAN_EREN : Photon.MonoBehaviour
         this.playSound("snd_eren_shift");
         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
         {
-            UnityEngine.Object.Instantiate(Resources.Load("FX/Thunder"), base.transform.position + Vector3.up * 23f, Quaternion.Euler(270f, 0f, 0f));
+            Instantiate(Resources.Load("FX/Thunder"), transform.position + Vector3.up * 23f, Quaternion.Euler(270f, 0f, 0f));
         }
-        else if (base.photonView.isMine)
+        else if (photonView.isMine)
         {
-            PhotonNetwork.Instantiate("FX/Thunder", base.transform.position + Vector3.up * 23f, Quaternion.Euler(270f, 0f, 0f), 0);
+            PhotonNetwork.Instantiate("FX/Thunder", transform.position + Vector3.up * 23f, Quaternion.Euler(270f, 0f, 0f), 0);
         }
         float num2 = 30f;
         this.lifeTime = 30f;
@@ -85,11 +85,11 @@ public class TITAN_EREN : Photon.MonoBehaviour
 
     private void crossFade(string aniName, float time)
     {
-        base.animation.CrossFade(aniName, time);
-        if (PhotonNetwork.connected && base.photonView.isMine)
+        animation.CrossFade(aniName, time);
+        if (PhotonNetwork.connected && photonView.isMine)
         {
             object[] parameters = new object[] { aniName, time };
-            base.photonView.RPC("netCrossFade", PhotonTargets.Others, parameters);
+            photonView.RPC("netCrossFade", PhotonTargets.Others, parameters);
         }
     }
 
@@ -115,22 +115,22 @@ public class TITAN_EREN : Photon.MonoBehaviour
             {
                 this.RockUpdate();
             }
-            else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || base.photonView.isMine)
+            else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine)
             {
                 if (this.hitPause > 0f)
                 {
-                    base.rigidbody.velocity = Vector3.zero;
+                    rigidbody.velocity = Vector3.zero;
                 }
                 else if (this.hasDied)
                 {
-                    base.rigidbody.velocity = Vector3.zero + Vector3.up * base.rigidbody.velocity.y;
-                    base.rigidbody.AddForce(new Vector3(0f, -this.gravity * base.rigidbody.mass, 0f));
+                    rigidbody.velocity = Vector3.zero + Vector3.up * rigidbody.velocity.y;
+                    rigidbody.AddForce(new Vector3(0f, -this.gravity * rigidbody.mass, 0f));
                 }
-                else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || base.photonView.isMine)
+                else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine)
                 {
-                    if (base.rigidbody.velocity.magnitude > 50f)
+                    if (rigidbody.velocity.magnitude > 50f)
                     {
-                        this.currentCamera.GetComponent<Camera>().fieldOfView = Mathf.Lerp(this.currentCamera.GetComponent<Camera>().fieldOfView, Mathf.Min(100f, base.rigidbody.velocity.magnitude), 0.1f);
+                        this.currentCamera.GetComponent<Camera>().fieldOfView = Mathf.Lerp(this.currentCamera.GetComponent<Camera>().fieldOfView, Mathf.Min(100f, rigidbody.velocity.magnitude), 0.1f);
                     }
                     else
                     {
@@ -180,7 +180,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                     }
                     if (this.needFreshCorePosition)
                     {
-                        this.oldCorePosition = base.transform.position - base.transform.Find("Amarture/Core").position;
+                        this.oldCorePosition = transform.position - transform.Find("Amarture/Core").position;
                         this.needFreshCorePosition = false;
                     }
                     if (!this.isAttack && !this.isHit)
@@ -191,10 +191,10 @@ public class TITAN_EREN : Photon.MonoBehaviour
                             if (this.justGrounded)
                             {
                                 this.justGrounded = false;
-                                zero = base.rigidbody.velocity;
-                                if (base.animation.IsPlaying("jump_air"))
+                                zero = rigidbody.velocity;
+                                if (animation.IsPlaying("jump_air"))
                                 {
-                                    GameObject obj2 = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("FX/boom2_eren"), base.transform.position, Quaternion.Euler(270f, 0f, 0f));
+                                    GameObject obj2 = (GameObject) Instantiate(Resources.Load("FX/boom2_eren"), transform.position, Quaternion.Euler(270f, 0f, 0f));
                                     obj2.transform.localScale = Vector3.one * 1.5f;
                                     if (this.needRoar)
                                     {
@@ -208,7 +208,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                     }
                                 }
                             }
-                            if (!base.animation.IsPlaying("jump_land") && !this.isAttack && !this.isHit && !base.animation.IsPlaying("born"))
+                            if (!animation.IsPlaying("jump_land") && !this.isAttack && !this.isHit && !animation.IsPlaying("born"))
                             {
                                 Vector3 vector7 = new Vector3(x, 0f, z);
                                 float y = this.currentCamera.transform.rotation.eulerAngles.y;
@@ -224,14 +224,14 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                 zero = zero * this.speed;
                                 if (x == 0f && z == 0f)
                                 {
-                                    if (!base.animation.IsPlaying("idle") && !base.animation.IsPlaying("dash_land") && !base.animation.IsPlaying("dodge") && !base.animation.IsPlaying("jump_start") && !base.animation.IsPlaying("jump_air") && !base.animation.IsPlaying("jump_land"))
+                                    if (!animation.IsPlaying("idle") && !animation.IsPlaying("dash_land") && !animation.IsPlaying("dodge") && !animation.IsPlaying("jump_start") && !animation.IsPlaying("jump_air") && !animation.IsPlaying("jump_land"))
                                     {
                                         this.crossFade("idle", 0.1f);
                                         zero = zero * 0f;
                                     }
                                     num5 = -874f;
                                 }
-                                else if (!base.animation.IsPlaying("run") && !base.animation.IsPlaying("jump_start") && !base.animation.IsPlaying("jump_air"))
+                                else if (!animation.IsPlaying("run") && !animation.IsPlaying("jump_start") && !animation.IsPlaying("jump_air"))
                                 {
                                     this.crossFade("run", 0.1f);
                                 }
@@ -240,31 +240,31 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                     this.facingDirection = num5;
                                 }
                             }
-                            Vector3 velocity = base.rigidbody.velocity;
+                            Vector3 velocity = rigidbody.velocity;
                             Vector3 force = zero - velocity;
                             force.x = Mathf.Clamp(force.x, -this.maxVelocityChange, this.maxVelocityChange);
                             force.z = Mathf.Clamp(force.z, -this.maxVelocityChange, this.maxVelocityChange);
                             force.y = 0f;
-                            if (base.animation.IsPlaying("jump_start") && base.animation["jump_start"].normalizedTime >= 1f)
+                            if (animation.IsPlaying("jump_start") && animation["jump_start"].normalizedTime >= 1f)
                             {
                                 this.playAnimation("jump_air");
                                 force.y += 240f;
                             }
-                            else if (base.animation.IsPlaying("jump_start"))
+                            else if (animation.IsPlaying("jump_start"))
                             {
-                                force = -base.rigidbody.velocity;
+                                force = -rigidbody.velocity;
                             }
-                            base.rigidbody.AddForce(force, ForceMode.VelocityChange);
-                            base.rigidbody.rotation = Quaternion.Lerp(base.gameObject.transform.rotation, Quaternion.Euler(0f, this.facingDirection, 0f), Time.deltaTime * 10f);
+                            rigidbody.AddForce(force, ForceMode.VelocityChange);
+                            rigidbody.rotation = Quaternion.Lerp(gameObject.transform.rotation, Quaternion.Euler(0f, this.facingDirection, 0f), Time.deltaTime * 10f);
                         }
                         else
                         {
-                            if (base.animation.IsPlaying("jump_start") && base.animation["jump_start"].normalizedTime >= 1f)
+                            if (animation.IsPlaying("jump_start") && animation["jump_start"].normalizedTime >= 1f)
                             {
                                 this.playAnimation("jump_air");
-                                base.rigidbody.AddForce(Vector3.up * 240f, ForceMode.VelocityChange);
+                                rigidbody.AddForce(Vector3.up * 240f, ForceMode.VelocityChange);
                             }
-                            if (!base.animation.IsPlaying("jump") && !this.isHit)
+                            if (!animation.IsPlaying("jump") && !this.isHit)
                             {
                                 Vector3 vector11 = new Vector3(x, 0f, z);
                                 float num10 = this.currentCamera.transform.rotation.eulerAngles.y;
@@ -284,31 +284,31 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                 }
                                 else
                                 {
-                                    base.rigidbody.AddForce(vector13, ForceMode.Impulse);
+                                    rigidbody.AddForce(vector13, ForceMode.Impulse);
                                 }
                                 if (num12 != -874f)
                                 {
                                     this.facingDirection = num12;
                                 }
-                                if (!base.animation.IsPlaying(string.Empty) && !base.animation.IsPlaying("attack3_2") && !base.animation.IsPlaying("attack5"))
+                                if (!animation.IsPlaying(string.Empty) && !animation.IsPlaying("attack3_2") && !animation.IsPlaying("attack5"))
                                 {
-                                    base.rigidbody.rotation = Quaternion.Lerp(base.gameObject.transform.rotation, Quaternion.Euler(0f, this.facingDirection, 0f), Time.deltaTime * 6f);
+                                    rigidbody.rotation = Quaternion.Lerp(gameObject.transform.rotation, Quaternion.Euler(0f, this.facingDirection, 0f), Time.deltaTime * 6f);
                                 }
                             }
                         }
                     }
                     else
                     {
-                        Vector3 vector4 = base.transform.position - base.transform.Find("Amarture/Core").position - this.oldCorePosition;
-                        this.oldCorePosition = base.transform.position - base.transform.Find("Amarture/Core").position;
-                        base.rigidbody.velocity = vector4 / Time.deltaTime + Vector3.up * base.rigidbody.velocity.y;
-                        base.rigidbody.rotation = Quaternion.Lerp(base.gameObject.transform.rotation, Quaternion.Euler(0f, this.facingDirection, 0f), Time.deltaTime * 10f);
+                        Vector3 vector4 = transform.position - transform.Find("Amarture/Core").position - this.oldCorePosition;
+                        this.oldCorePosition = transform.position - transform.Find("Amarture/Core").position;
+                        rigidbody.velocity = vector4 / Time.deltaTime + Vector3.up * rigidbody.velocity.y;
+                        rigidbody.rotation = Quaternion.Lerp(gameObject.transform.rotation, Quaternion.Euler(0f, this.facingDirection, 0f), Time.deltaTime * 10f);
                         if (this.justGrounded)
                         {
                             this.justGrounded = false;
                         }
                     }
-                    base.rigidbody.AddForce(new Vector3(0f, -this.gravity * base.rigidbody.mass, 0f));
+                    rigidbody.AddForce(new Vector3(0f, -this.gravity * rigidbody.mass, 0f));
                 }
             }
         }
@@ -327,25 +327,25 @@ public class TITAN_EREN : Photon.MonoBehaviour
             {
                 GameObject obj2;
                 this.hasDied = true;
-                Transform transform = base.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck");
+                Transform transform = this.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck");
                 if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
                 {
                     obj2 = PhotonNetwork.Instantiate("bloodExplore", transform.position + Vector3.up * 1f * 4f, Quaternion.Euler(270f, 0f, 0f), 0);
                 }
                 else
                 {
-                    obj2 = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("bloodExplore"), transform.position + Vector3.up * 1f * 4f, Quaternion.Euler(270f, 0f, 0f));
+                    obj2 = (GameObject) Instantiate(Resources.Load("bloodExplore"), transform.position + Vector3.up * 1f * 4f, Quaternion.Euler(270f, 0f, 0f));
                 }
-                obj2.transform.localScale = base.transform.localScale;
+                obj2.transform.localScale = this.transform.localScale;
                 if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
                 {
                     obj2 = PhotonNetwork.Instantiate("bloodsplatter", transform.position, Quaternion.Euler(90f + transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z), 0);
                 }
                 else
                 {
-                    obj2 = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("bloodsplatter"), transform.position, Quaternion.Euler(90f + transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z));
+                    obj2 = (GameObject) Instantiate(Resources.Load("bloodsplatter"), transform.position, Quaternion.Euler(90f + transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z));
                 }
-                obj2.transform.localScale = base.transform.localScale;
+                obj2.transform.localScale = this.transform.localScale;
                 obj2.transform.parent = transform;
                 if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
                 {
@@ -353,7 +353,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                 }
                 else
                 {
-                    obj2 = (GameObject) UnityEngine.Object.Instantiate(Resources.Load("FX/justSmoke"), transform.position, Quaternion.Euler(270f, 0f, 0f));
+                    obj2 = (GameObject) Instantiate(Resources.Load("FX/justSmoke"), transform.position, Quaternion.Euler(270f, 0f, 0f));
                 }
                 obj2.transform.parent = transform;
             }
@@ -363,13 +363,13 @@ public class TITAN_EREN : Photon.MonoBehaviour
     public void hitByFTByServer(int phase)
     {
         object[] parameters = new object[] { phase };
-        base.photonView.RPC("hitByFTRPC", PhotonTargets.All, parameters);
+        photonView.RPC("hitByFTRPC", PhotonTargets.All, parameters);
     }
 
     [RPC]
     private void HitByFTRPC(int phase)
     {
-        if (base.photonView.isMine)
+        if (photonView.isMine)
         {
             this.hitByFT(phase);
         }
@@ -377,7 +377,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
 
     public void hitByTitan()
     {
-        if (!this.isHit && !this.hasDied && !base.animation.IsPlaying("born"))
+        if (!this.isHit && !this.hasDied && !animation.IsPlaying("born"))
         {
             if (this.rockLift)
             {
@@ -385,7 +385,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                 this.isHitWhileCarryingRock = true;
                 FengGameManagerMKII.instance.GameLose();
                 object[] parameters = new object[] { "set" };
-                base.photonView.RPC("rockPlayAnimation", PhotonTargets.All, parameters);
+                photonView.RPC("rockPlayAnimation", PhotonTargets.All, parameters);
             }
             else
             {
@@ -400,13 +400,13 @@ public class TITAN_EREN : Photon.MonoBehaviour
 
     public void hitByTitanByServer()
     {
-        base.photonView.RPC("hitByTitanRPC", PhotonTargets.All, new object[0]);
+        photonView.RPC("hitByTitanRPC", PhotonTargets.All, new object[0]);
     }
 
     [RPC]
     private void HitByTitanRPC()
     {
-        if (base.photonView.isMine)
+        if (photonView.isMine)
         {
             this.hitByTitan();
         }
@@ -419,7 +419,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
 
     public void lateUpdate()
     {
-        if ((!IN_GAME_MAIN_CAMERA.isPausing || IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE) && !this.rockLift && (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || base.photonView.isMine))
+        if ((!IN_GAME_MAIN_CAMERA.isPausing || IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE) && !this.rockLift && (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine))
         {
             Quaternion to = Quaternion.Euler(GameObject.Find("MainCamera").transform.rotation.eulerAngles.x, GameObject.Find("MainCamera").transform.rotation.eulerAngles.y, 0f);
             GameObject.Find("MainCamera").transform.rotation = Quaternion.Lerp(GameObject.Find("MainCamera").transform.rotation, to, Time.deltaTime * 2f);
@@ -433,12 +433,12 @@ public class TITAN_EREN : Photon.MonoBehaviour
             string url = (string) FengGameManagerMKII.settings[65];
             if ((int) FengGameManagerMKII.settings[1] == 1 && (url.EndsWith(".jpg") || url.EndsWith(".png") || url.EndsWith(".jpeg")))
             {
-                base.StartCoroutine(this.loadskinE(url));
+                StartCoroutine(this.loadskinE(url));
             }
         }
-        else if (base.photonView.isMine && (int) FengGameManagerMKII.settings[1] == 1)
+        else if (photonView.isMine && (int) FengGameManagerMKII.settings[1] == 1)
         {
-            base.photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, new object[] { (string) FengGameManagerMKII.settings[65] });
+            photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, new object[] { (string) FengGameManagerMKII.settings[65] });
         }
     }
 
@@ -490,27 +490,27 @@ public class TITAN_EREN : Photon.MonoBehaviour
     {
         if ((int) FengGameManagerMKII.settings[1] == 1 && (url.EndsWith(".jpg") || url.EndsWith(".png") || url.EndsWith(".jpeg")))
         {
-            base.StartCoroutine(this.loadskinE(url));
+            StartCoroutine(this.loadskinE(url));
         }
     }
 
     [RPC]
     private void NetCrossFade(string aniName, float time)
     {
-        base.animation.CrossFade(aniName, time);
+        animation.CrossFade(aniName, time);
     }
 
     [RPC]
     private void NetPlayAnimation(string aniName)
     {
-        base.animation.Play(aniName);
+        animation.Play(aniName);
     }
 
     [RPC]
     private void NetPlayAnimationAt(string aniName, float normalizedTime)
     {
-        base.animation.Play(aniName);
-        base.animation[aniName].normalizedTime = normalizedTime;
+        animation.Play(aniName);
+        animation[aniName].normalizedTime = normalizedTime;
     }
 
     [RPC]
@@ -518,13 +518,13 @@ public class TITAN_EREN : Photon.MonoBehaviour
     {
         foreach (GameObject obj2 in GameObject.FindGameObjectsWithTag("titan"))
         {
-            if (Vector3.Distance(obj2.transform.position, base.transform.position) < distance && obj2.GetComponent<TITAN>() != null)
+            if (Vector3.Distance(obj2.transform.position, transform.position) < distance && obj2.GetComponent<TITAN>() != null)
             {
-                obj2.GetComponent<TITAN>().beTauntedBy(base.gameObject, tauntTime);
+                obj2.GetComponent<TITAN>().beTauntedBy(gameObject, tauntTime);
             }
             if (obj2.GetComponent<FEMALE_TITAN>() != null)
             {
-                obj2.GetComponent<FEMALE_TITAN>().erenIsHere(base.gameObject);
+                obj2.GetComponent<FEMALE_TITAN>().erenIsHere(gameObject);
             }
         }
     }
@@ -539,22 +539,22 @@ public class TITAN_EREN : Photon.MonoBehaviour
 
     public void playAnimation(string aniName)
     {
-        base.animation.Play(aniName);
-        if (PhotonNetwork.connected && base.photonView.isMine)
+        animation.Play(aniName);
+        if (PhotonNetwork.connected && photonView.isMine)
         {
             object[] parameters = new object[] { aniName };
-            base.photonView.RPC("netPlayAnimation", PhotonTargets.Others, parameters);
+            photonView.RPC("netPlayAnimation", PhotonTargets.Others, parameters);
         }
     }
 
     private void playAnimationAt(string aniName, float normalizedTime)
     {
-        base.animation.Play(aniName);
-        base.animation[aniName].normalizedTime = normalizedTime;
-        if (PhotonNetwork.connected && base.photonView.isMine)
+        animation.Play(aniName);
+        animation[aniName].normalizedTime = normalizedTime;
+        if (PhotonNetwork.connected && photonView.isMine)
         {
             object[] parameters = new object[] { aniName, normalizedTime };
-            base.photonView.RPC("netPlayAnimationAt", PhotonTargets.Others, parameters);
+            photonView.RPC("netPlayAnimationAt", PhotonTargets.Others, parameters);
         }
     }
 
@@ -564,21 +564,21 @@ public class TITAN_EREN : Photon.MonoBehaviour
         if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE)
         {
             object[] parameters = new object[] { sndname };
-            base.photonView.RPC("playsoundRPC", PhotonTargets.Others, parameters);
+            photonView.RPC("playsoundRPC", PhotonTargets.Others, parameters);
         }
     }
 
     [RPC]
     private void PlaysoundRPC(string sndname)
     {
-        base.transform.Find(sndname).GetComponent<AudioSource>().Play();
+        transform.Find(sndname).GetComponent<AudioSource>().Play();
     }
 
     [RPC]
     private void RemoveMe()
     {
-        PhotonNetwork.RemoveRPCs(base.photonView);
-        UnityEngine.Object.Destroy(base.gameObject);
+        PhotonNetwork.RemoveRPCs(photonView);
+        Destroy(gameObject);
     }
 
     [RPC]
@@ -594,15 +594,15 @@ public class TITAN_EREN : Photon.MonoBehaviour
         {
             if (this.isROCKMOVE)
             {
-                this.rock.transform.position = base.transform.position;
-                this.rock.transform.rotation = base.transform.rotation;
+                this.rock.transform.position = transform.position;
+                this.rock.transform.rotation = transform.rotation;
             }
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || base.photonView.isMine)
+            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine)
             {
                 if (this.rockPhase == 0)
                 {
-                    base.rigidbody.AddForce(-base.rigidbody.velocity, ForceMode.VelocityChange);
-                    base.rigidbody.AddForce(new Vector3(0f, -10f * base.rigidbody.mass, 0f));
+                    rigidbody.AddForce(-rigidbody.velocity, ForceMode.VelocityChange);
+                    rigidbody.AddForce(new Vector3(0f, -10f * rigidbody.mass, 0f));
                     this.waitCounter += Time.deltaTime;
                     if (this.waitCounter > 20f)
                     {
@@ -614,8 +614,8 @@ public class TITAN_EREN : Photon.MonoBehaviour
                 }
                 else if (this.rockPhase == 1)
                 {
-                    base.rigidbody.AddForce(-base.rigidbody.velocity, ForceMode.VelocityChange);
-                    base.rigidbody.AddForce(new Vector3(0f, -this.gravity * base.rigidbody.mass, 0f));
+                    rigidbody.AddForce(-rigidbody.velocity, ForceMode.VelocityChange);
+                    rigidbody.AddForce(new Vector3(0f, -this.gravity * rigidbody.mass, 0f));
                     this.waitCounter += Time.deltaTime;
                     if (this.waitCounter > 2f)
                     {
@@ -626,16 +626,16 @@ public class TITAN_EREN : Photon.MonoBehaviour
                 }
                 else if (this.rockPhase == 2)
                 {
-                    Vector3 vector = base.transform.forward * 30f;
-                    Vector3 velocity = base.rigidbody.velocity;
+                    Vector3 vector = transform.forward * 30f;
+                    Vector3 velocity = rigidbody.velocity;
                     Vector3 force = vector - velocity;
                     force.x = Mathf.Clamp(force.x, -this.maxVelocityChange, this.maxVelocityChange);
                     force.z = Mathf.Clamp(force.z, -this.maxVelocityChange, this.maxVelocityChange);
                     force.y = 0f;
-                    base.rigidbody.AddForce(force, ForceMode.VelocityChange);
-                    if (base.transform.position.z < -238f)
+                    rigidbody.AddForce(force, ForceMode.VelocityChange);
+                    if (transform.position.z < -238f)
                     {
-                        base.transform.position = new Vector3(base.transform.position.x, 0f, -238f);
+                        transform.position = new Vector3(transform.position.x, 0f, -238f);
                         this.rockPhase++;
                         this.crossFade("idle", 0.2f);
                         this.waitCounter = 0f;
@@ -643,38 +643,38 @@ public class TITAN_EREN : Photon.MonoBehaviour
                 }
                 else if (this.rockPhase == 3)
                 {
-                    base.rigidbody.AddForce(-base.rigidbody.velocity, ForceMode.VelocityChange);
-                    base.rigidbody.AddForce(new Vector3(0f, -10f * base.rigidbody.mass, 0f));
+                    rigidbody.AddForce(-rigidbody.velocity, ForceMode.VelocityChange);
+                    rigidbody.AddForce(new Vector3(0f, -10f * rigidbody.mass, 0f));
                     this.waitCounter += Time.deltaTime;
                     if (this.waitCounter > 1f)
                     {
                         this.rockPhase++;
                         this.crossFade("rock_lift", 0.1f);
                         object[] parameters = new object[] { "lift" };
-                        base.photonView.RPC("rockPlayAnimation", PhotonTargets.All, parameters);
+                        photonView.RPC("rockPlayAnimation", PhotonTargets.All, parameters);
                         this.waitCounter = 0f;
                         this.targetCheckPt = (Vector3) this.checkPoints[0];
                     }
                 }
                 else if (this.rockPhase == 4)
                 {
-                    base.rigidbody.AddForce(-base.rigidbody.velocity, ForceMode.VelocityChange);
-                    base.rigidbody.AddForce(new Vector3(0f, -this.gravity * base.rigidbody.mass, 0f));
+                    rigidbody.AddForce(-rigidbody.velocity, ForceMode.VelocityChange);
+                    rigidbody.AddForce(new Vector3(0f, -this.gravity * rigidbody.mass, 0f));
                     this.waitCounter += Time.deltaTime;
                     if (this.waitCounter > 4.2f)
                     {
                         this.rockPhase++;
                         this.crossFade("rock_walk", 0.1f);
                         object[] objArray3 = new object[] { "move" };
-                        base.photonView.RPC("rockPlayAnimation", PhotonTargets.All, objArray3);
-                        this.rock.animation["move"].normalizedTime = base.animation["rock_walk"].normalizedTime;
+                        photonView.RPC("rockPlayAnimation", PhotonTargets.All, objArray3);
+                        this.rock.animation["move"].normalizedTime = animation["rock_walk"].normalizedTime;
                         this.waitCounter = 0f;
-                        base.photonView.RPC("startMovingRock", PhotonTargets.All, new object[0]);
+                        photonView.RPC("startMovingRock", PhotonTargets.All, new object[0]);
                     }
                 }
                 else if (this.rockPhase == 5)
                 {
-                    if (Vector3.Distance(base.transform.position, this.targetCheckPt) < 10f)
+                    if (Vector3.Distance(transform.position, this.targetCheckPt) < 10f)
                     {
                         if (this.checkPoints.Count > 0)
                         {
@@ -708,20 +708,20 @@ public class TITAN_EREN : Photon.MonoBehaviour
                             this.rockPhase++;
                         }
                     }
-                    if (this.checkPoints.Count > 0 && UnityEngine.Random.Range(0, 3000) < 10 - this.checkPoints.Count)
+                    if (this.checkPoints.Count > 0 && Random.Range(0, 3000) < 10 - this.checkPoints.Count)
                     {
                         Quaternion quaternion;
                         RaycastHit hit;
-                        if (UnityEngine.Random.Range(0, 10) > 5)
+                        if (Random.Range(0, 10) > 5)
                         {
-                            quaternion = base.transform.rotation * Quaternion.Euler(0f, UnityEngine.Random.Range(150f, 210f), 0f);
+                            quaternion = transform.rotation * Quaternion.Euler(0f, Random.Range(150f, 210f), 0f);
                         }
                         else
                         {
-                            quaternion = base.transform.rotation * Quaternion.Euler(0f, UnityEngine.Random.Range(-30f, 30f), 0f);
+                            quaternion = transform.rotation * Quaternion.Euler(0f, Random.Range(-30f, 30f), 0f);
                         }
-                        Vector3 vector7 = quaternion * new Vector3(UnityEngine.Random.Range((float)100f, (float)200f), 0f, 0f);
-                        Vector3 position = base.transform.position + vector7;
+                        Vector3 vector7 = quaternion * new Vector3(Random.Range((float)100f, (float)200f), 0f, 0f);
+                        Vector3 position = transform.position + vector7;
                         LayerMask mask2 = 1 << LayerMask.NameToLayer("Ground");
                         float y = 0f;
                         if (Physics.Raycast(position + Vector3.up * 500f, -Vector3.up, out hit, 1000f, mask2.value))
@@ -729,45 +729,45 @@ public class TITAN_EREN : Photon.MonoBehaviour
                             y = hit.point.y;
                         }
                         position += Vector3.up * y;
-                        GameObject obj5 = FengGameManagerMKII.instance.SpawnTitan(70, position, base.transform.rotation, false);
+                        GameObject obj5 = FengGameManagerMKII.instance.SpawnTitan(70, position, transform.rotation, false);
                         obj5.GetComponent<TITAN>().isAlarm = true;
                         obj5.GetComponent<TITAN>().chaseDistance = 999999f;
                     }
-                    Vector3 vector10 = base.transform.forward * 6f;
-                    Vector3 vector11 = base.rigidbody.velocity;
+                    Vector3 vector10 = transform.forward * 6f;
+                    Vector3 vector11 = rigidbody.velocity;
                     Vector3 vector12 = vector10 - vector11;
                     vector12.x = Mathf.Clamp(vector12.x, -this.maxVelocityChange, this.maxVelocityChange);
                     vector12.z = Mathf.Clamp(vector12.z, -this.maxVelocityChange, this.maxVelocityChange);
                     vector12.y = 0f;
-                    base.rigidbody.AddForce(vector12, ForceMode.VelocityChange);
-                    base.rigidbody.AddForce(new Vector3(0f, -this.gravity * base.rigidbody.mass, 0f));
-                    Vector3 vector13 = this.targetCheckPt - base.transform.position;
+                    rigidbody.AddForce(vector12, ForceMode.VelocityChange);
+                    rigidbody.AddForce(new Vector3(0f, -this.gravity * rigidbody.mass, 0f));
+                    Vector3 vector13 = this.targetCheckPt - transform.position;
                     float current = -Mathf.Atan2(vector13.z, vector13.x) * 57.29578f;
-                    float num4 = -Mathf.DeltaAngle(current, base.gameObject.transform.rotation.eulerAngles.y - 90f);
-                    base.gameObject.transform.rotation = Quaternion.Lerp(base.gameObject.transform.rotation, Quaternion.Euler(0f, base.gameObject.transform.rotation.eulerAngles.y + num4, 0f), 0.8f * Time.deltaTime);
+                    float num4 = -Mathf.DeltaAngle(current, gameObject.transform.rotation.eulerAngles.y - 90f);
+                    gameObject.transform.rotation = Quaternion.Lerp(gameObject.transform.rotation, Quaternion.Euler(0f, gameObject.transform.rotation.eulerAngles.y + num4, 0f), 0.8f * Time.deltaTime);
                 }
                 else if (this.rockPhase == 6)
                 {
-                    base.rigidbody.AddForce(-base.rigidbody.velocity, ForceMode.VelocityChange);
-                    base.rigidbody.AddForce(new Vector3(0f, -10f * base.rigidbody.mass, 0f));
-                    base.transform.rotation = Quaternion.Euler(0f, 0f, 0f);
+                    rigidbody.AddForce(-rigidbody.velocity, ForceMode.VelocityChange);
+                    rigidbody.AddForce(new Vector3(0f, -10f * rigidbody.mass, 0f));
+                    transform.rotation = Quaternion.Euler(0f, 0f, 0f);
                     this.rockPhase++;
                     this.crossFade("rock_fix_hole", 0.1f);
                     object[] objArray4 = new object[] { "set" };
-                    base.photonView.RPC("rockPlayAnimation", PhotonTargets.All, objArray4);
-                    base.photonView.RPC("endMovingRock", PhotonTargets.All, new object[0]);
+                    photonView.RPC("rockPlayAnimation", PhotonTargets.All, objArray4);
+                    photonView.RPC("endMovingRock", PhotonTargets.All, new object[0]);
                 }
                 else if (this.rockPhase == 7)
                 {
-                    base.rigidbody.AddForce(-base.rigidbody.velocity, ForceMode.VelocityChange);
-                    base.rigidbody.AddForce(new Vector3(0f, -10f * base.rigidbody.mass, 0f));
-                    if (base.animation["rock_fix_hole"].normalizedTime >= 1.2f)
+                    rigidbody.AddForce(-rigidbody.velocity, ForceMode.VelocityChange);
+                    rigidbody.AddForce(new Vector3(0f, -10f * rigidbody.mass, 0f));
+                    if (animation["rock_fix_hole"].normalizedTime >= 1.2f)
                     {
                         this.crossFade("die", 0.1f);
                         this.rockPhase++;
                         FengGameManagerMKII.instance.GameWin();
                     }
-                    if (base.animation["rock_fix_hole"].normalizedTime >= 0.62f && !this.rockHitGround)
+                    if (animation["rock_fix_hole"].normalizedTime >= 0.62f && !this.rockHitGround)
                     {
                         this.rockHitGround = true;
                         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
@@ -776,7 +776,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                         }
                         else
                         {
-                            UnityEngine.Object.Instantiate(Resources.Load("FX/boom1_CT_KICK"), new Vector3(0f, 30f, 684f), Quaternion.Euler(270f, 0f, 0f));
+                            Instantiate(Resources.Load("FX/boom1_CT_KICK"), new Vector3(0f, 30f, 684f), Quaternion.Euler(270f, 0f, 0f));
                         }
                     }
                 }
@@ -832,11 +832,11 @@ public class TITAN_EREN : Photon.MonoBehaviour
         {
             this.currentCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
             this.inputManager = GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>();
-            this.oldCorePosition = base.transform.position - base.transform.Find("Amarture/Core").position;
+            this.oldCorePosition = transform.position - transform.Find("Amarture/Core").position;
             this.myR = this.sqrt2 * 6f;
-            base.animation["hit_annie_1"].speed = 0.8f;
-            base.animation["hit_annie_2"].speed = 0.7f;
-            base.animation["hit_annie_3"].speed = 0.7f;
+            animation["hit_annie_1"].speed = 0.8f;
+            animation["hit_annie_2"].speed = 0.7f;
+            animation["hit_annie_3"].speed = 0.7f;
         }
         this.hasSpawn = true;
     }
@@ -851,33 +851,33 @@ public class TITAN_EREN : Photon.MonoBehaviour
     {
         if ((!IN_GAME_MAIN_CAMERA.isPausing || IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE) && !this.rockLift)
         {
-            if (base.animation.IsPlaying("run"))
+            if (animation.IsPlaying("run"))
             {
-                if (base.animation["run"].normalizedTime % 1f > 0.3f && base.animation["run"].normalizedTime % 1f < 0.75f && this.stepSoundPhase == 2)
+                if (animation["run"].normalizedTime % 1f > 0.3f && animation["run"].normalizedTime % 1f < 0.75f && this.stepSoundPhase == 2)
                 {
                     this.stepSoundPhase = 1;
-                    Transform transform = base.transform.Find("snd_eren_foot");
+                    Transform transform = this.transform.Find("snd_eren_foot");
                     transform.GetComponent<AudioSource>().Stop();
                     transform.GetComponent<AudioSource>().Play();
                 }
-                if (base.animation["run"].normalizedTime % 1f > 0.75f && this.stepSoundPhase == 1)
+                if (animation["run"].normalizedTime % 1f > 0.75f && this.stepSoundPhase == 1)
                 {
                     this.stepSoundPhase = 2;
-                    Transform transform2 = base.transform.Find("snd_eren_foot");
+                    Transform transform2 = transform.Find("snd_eren_foot");
                     transform2.GetComponent<AudioSource>().Stop();
                     transform2.GetComponent<AudioSource>().Play();
                 }
             }
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || base.photonView.isMine)
+            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine)
             {
                 if (this.hasDied)
                 {
-                    if (base.animation["die"].normalizedTime >= 1f || this.hitAnimation == "hit_annie_3")
+                    if (animation["die"].normalizedTime >= 1f || this.hitAnimation == "hit_annie_3")
                     {
                         if (this.realBody != null)
                         {
                             this.realBody.GetComponent<HERO>().backToHuman();
-                            this.realBody.transform.position = base.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck").position + Vector3.up * 2f;
+                            this.realBody.transform.position = transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck").position + Vector3.up * 2f;
                             this.realBody = null;
                         }
                         this.dieTime += Time.deltaTime;
@@ -886,37 +886,37 @@ public class TITAN_EREN : Photon.MonoBehaviour
                             this.hasDieSteam = true;
                             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
                             {
-                                GameObject obj2 = (GameObject)UnityEngine.Object.Instantiate(Resources.Load("FX/FXtitanDie1"));
-                                obj2.transform.position = base.transform.Find("Amarture/Core/Controller_Body/hip").position;
-                                obj2.transform.localScale = base.transform.localScale;
+                                GameObject obj2 = (GameObject)Instantiate(Resources.Load("FX/FXtitanDie1"));
+                                obj2.transform.position = transform.Find("Amarture/Core/Controller_Body/hip").position;
+                                obj2.transform.localScale = transform.localScale;
                             }
-                            else if (base.photonView.isMine)
+                            else if (photonView.isMine)
                             {
-                                PhotonNetwork.Instantiate("FX/FXtitanDie1", base.transform.Find("Amarture/Core/Controller_Body/hip").position, Quaternion.Euler(-90f, 0f, 0f), 0).transform.localScale = base.transform.localScale;
+                                PhotonNetwork.Instantiate("FX/FXtitanDie1", transform.Find("Amarture/Core/Controller_Body/hip").position, Quaternion.Euler(-90f, 0f, 0f), 0).transform.localScale = transform.localScale;
                             }
                         }
                         if (this.dieTime > 5f)
                         {
                             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
                             {
-                                GameObject obj4 = (GameObject)UnityEngine.Object.Instantiate(Resources.Load("FX/FXtitanDie"));
-                                obj4.transform.position = base.transform.Find("Amarture/Core/Controller_Body/hip").position;
-                                obj4.transform.localScale = base.transform.localScale;
-                                UnityEngine.Object.Destroy(base.gameObject);
+                                GameObject obj4 = (GameObject)Instantiate(Resources.Load("FX/FXtitanDie"));
+                                obj4.transform.position = transform.Find("Amarture/Core/Controller_Body/hip").position;
+                                obj4.transform.localScale = transform.localScale;
+                                Destroy(gameObject);
                             }
-                            else if (base.photonView.isMine)
+                            else if (photonView.isMine)
                             {
-                                PhotonNetwork.Instantiate("FX/FXtitanDie", base.transform.Find("Amarture/Core/Controller_Body/hip").position, Quaternion.Euler(-90f, 0f, 0f), 0).transform.localScale = base.transform.localScale;
-                                PhotonNetwork.Destroy(base.photonView);
+                                PhotonNetwork.Instantiate("FX/FXtitanDie", transform.Find("Amarture/Core/Controller_Body/hip").position, Quaternion.Euler(-90f, 0f, 0f), 0).transform.localScale = transform.localScale;
+                                PhotonNetwork.Destroy(photonView);
                             }
                         }
                     }
                 }
-                else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || base.photonView.isMine)
+                else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine)
                 {
                     if (this.isHit)
                     {
-                        if (base.animation[this.hitAnimation].normalizedTime >= 1f)
+                        if (animation[this.hitAnimation].normalizedTime >= 1f)
                         {
                             this.isHit = false;
                             this.falseAttack();
@@ -935,7 +935,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                 return;
                             }
                         }
-                        if (this.grounded && !this.isAttack && !base.animation.IsPlaying("jump_land") && !this.isAttack && !base.animation.IsPlaying("born"))
+                        if (this.grounded && !this.isAttack && !animation.IsPlaying("jump_land") && !this.isAttack && !animation.IsPlaying("born"))
                         {
                             if (this.inputManager.isInputDown[InputCode.attack0] || this.inputManager.isInputDown[InputCode.attack1])
                             {
@@ -962,20 +962,20 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                 if (!flag)
                                 {
                                     this.playAnimation(this.attackAnimation);
-                                    base.animation[this.attackAnimation].time = 0f;
+                                    animation[this.attackAnimation].time = 0f;
                                     this.isAttack = true;
                                     this.needFreshCorePosition = true;
                                     if (this.attackAnimation == "attack_combo_001" || this.attackAnimation == "attack_combo_001")
                                     {
-                                        this.attackBox = base.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R");
+                                        this.attackBox = transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R");
                                     }
                                     else if (this.attackAnimation == "attack_combo_002")
                                     {
-                                        this.attackBox = base.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L");
+                                        this.attackBox = transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L");
                                     }
                                     else if (this.attackAnimation == "attack_kick")
                                     {
-                                        this.attackBox = base.transform.Find("Amarture/Core/Controller_Body/hip/thigh_R/shin_R/foot_R");
+                                        this.attackBox = transform.Find("Amarture/Core/Controller_Body/hip/thigh_R/shin_R/foot_R");
                                     }
                                     this.hitTargets = new ArrayList();
                                 }
@@ -983,20 +983,20 @@ public class TITAN_EREN : Photon.MonoBehaviour
                             if (this.inputManager.isInputDown[InputCode.salute])
                             {
                                 this.crossFade("born", 0.1f);
-                                base.animation["born"].normalizedTime = 0.28f;
+                                animation["born"].normalizedTime = 0.28f;
                                 this.isPlayRoar = false;
                             }
                         }
                         if (!this.isAttack)
                         {
-                            if ((this.grounded || base.animation.IsPlaying("idle")) && (!base.animation.IsPlaying("jump_start") && !base.animation.IsPlaying("jump_air")) && !base.animation.IsPlaying("jump_land") && this.inputManager.isInput[InputCode.bothRope])
+                            if ((this.grounded || animation.IsPlaying("idle")) && (!animation.IsPlaying("jump_start") && !animation.IsPlaying("jump_air")) && !animation.IsPlaying("jump_land") && this.inputManager.isInput[InputCode.bothRope])
                             {
                                 this.crossFade("jump_start", 0.1f);
                             }
                         }
                         else
                         {
-                            if (base.animation[this.attackAnimation].time >= 0.1f && this.inputManager.isInputDown[InputCode.attack0])
+                            if (animation[this.attackAnimation].time >= 0.1f && this.inputManager.isInputDown[InputCode.attack0])
                             {
                                 this.isNextAttack = true;
                             }
@@ -1040,39 +1040,39 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                 this.hitPause -= Time.deltaTime;
                                 if (this.hitPause <= 0f)
                                 {
-                                    base.animation[this.attackAnimation].speed = 1f;
+                                    animation[this.attackAnimation].speed = 1f;
                                     this.hitPause = 0f;
                                 }
                             }
-                            if (num3 > 0f && this.isNextAttack && base.animation[this.attackAnimation].normalizedTime >= num3)
+                            if (num3 > 0f && this.isNextAttack && animation[this.attackAnimation].normalizedTime >= num3)
                             {
                                 if (this.hitTargets.Count > 0)
                                 {
                                     Transform transform3 = (Transform)this.hitTargets[0];
                                     if (transform3 != null)
                                     {
-                                        base.transform.rotation = Quaternion.Euler(0f, Quaternion.LookRotation(transform3.position - base.transform.position).eulerAngles.y, 0f);
-                                        this.facingDirection = base.transform.rotation.eulerAngles.y;
+                                        transform.rotation = Quaternion.Euler(0f, Quaternion.LookRotation(transform3.position - transform.position).eulerAngles.y, 0f);
+                                        this.facingDirection = transform.rotation.eulerAngles.y;
                                     }
                                 }
                                 this.falseAttack();
                                 this.attackAnimation = str;
                                 this.crossFade(this.attackAnimation, 0.1f);
-                                base.animation[this.attackAnimation].time = 0f;
-                                base.animation[this.attackAnimation].speed = 1f;
+                                animation[this.attackAnimation].time = 0f;
+                                animation[this.attackAnimation].speed = 1f;
                                 this.isAttack = true;
                                 this.needFreshCorePosition = true;
                                 if (this.attackAnimation == "attack_combo_002")
                                 {
-                                    this.attackBox = base.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L");
+                                    this.attackBox = transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L");
                                 }
                                 else if (this.attackAnimation == "attack_combo_003")
                                 {
-                                    this.attackBox = base.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R");
+                                    this.attackBox = transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R");
                                 }
                                 this.hitTargets = new ArrayList();
                             }
-                            if (base.animation[this.attackAnimation].normalizedTime >= num && base.animation[this.attackAnimation].normalizedTime <= num2 || !this.attackChkOnce && base.animation[this.attackAnimation].normalizedTime >= num)
+                            if (animation[this.attackAnimation].normalizedTime >= num && animation[this.attackAnimation].normalizedTime <= num2 || !this.attackChkOnce && animation[this.attackAnimation].normalizedTime >= num)
                             {
                                 if (!this.attackChkOnce)
                                 {
@@ -1108,24 +1108,24 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                     }
                                     if (!flag2 && !colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().hasDie)
                                     {
-                                        base.animation[this.attackAnimation].speed = 0f;
+                                        animation[this.attackAnimation].speed = 0f;
                                         if (this.attackAnimation == "attack_combo_002")
                                         {
                                             this.hitPause = 0.05f;
-                                            colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().hitL(base.transform.position, this.hitPause);
+                                            colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().hitL(transform.position, this.hitPause);
                                             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(1f, 0.03f, 0.95f);
                                         }
                                         else if (this.attackAnimation == "attack_combo_001")
                                         {
                                             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(1.2f, 0.04f, 0.95f);
                                             this.hitPause = 0.08f;
-                                            colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().hitR(base.transform.position, this.hitPause);
+                                            colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().hitR(transform.position, this.hitPause);
                                         }
                                         else if (this.attackAnimation == "attack_combo_003")
                                         {
                                             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(3f, 0.1f, 0.95f);
                                             this.hitPause = 0.3f;
-                                            colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().dieHeadBlow(base.transform.position, this.hitPause);
+                                            colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().dieHeadBlow(transform.position, this.hitPause);
                                         }
                                         else if (this.attackAnimation == "attack_kick")
                                         {
@@ -1133,15 +1133,15 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                             this.hitPause = 0.2f;
                                             if (colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().abnormalType == AbnormalType.TYPE_CRAWLER)
                                             {
-                                                colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().dieBlow(base.transform.position, this.hitPause);
+                                                colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().dieBlow(transform.position, this.hitPause);
                                             }
                                             else if (colliderArray[i].gameObject.transform.root.transform.localScale.x < 2f)
                                             {
-                                                colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().dieBlow(base.transform.position, this.hitPause);
+                                                colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().dieBlow(transform.position, this.hitPause);
                                             }
                                             else
                                             {
-                                                colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().hitR(base.transform.position, this.hitPause);
+                                                colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().hitR(transform.position, this.hitPause);
                                             }
                                         }
                                         this.hitTargets.Add(colliderArray[i].gameObject.transform.root);
@@ -1151,33 +1151,33 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                         }
                                         else
                                         {
-                                            UnityEngine.Object.Instantiate(Resources.Load("hitMeatBIG"), (colliderArray[i].transform.position + this.attackBox.position) * 0.5f, Quaternion.Euler(270f, 0f, 0f));
+                                            Instantiate(Resources.Load("hitMeatBIG"), (colliderArray[i].transform.position + this.attackBox.position) * 0.5f, Quaternion.Euler(270f, 0f, 0f));
                                         }
                                     }
                                 }
                             }
-                            if (base.animation[this.attackAnimation].normalizedTime >= 1f)
+                            if (animation[this.attackAnimation].normalizedTime >= 1f)
                             {
                                 this.falseAttack();
                                 this.playAnimation("idle");
                             }
                         }
-                        if (base.animation.IsPlaying("jump_land") && base.animation["jump_land"].normalizedTime >= 1f)
+                        if (animation.IsPlaying("jump_land") && animation["jump_land"].normalizedTime >= 1f)
                         {
                             this.crossFade("idle", 0.1f);
                         }
-                        if (base.animation.IsPlaying("born"))
+                        if (animation.IsPlaying("born"))
                         {
-                            if (base.animation["born"].normalizedTime >= 0.28f && !this.isPlayRoar)
+                            if (animation["born"].normalizedTime >= 0.28f && !this.isPlayRoar)
                             {
                                 this.isPlayRoar = true;
                                 this.playSound("snd_eren_roar");
                             }
-                            if (base.animation["born"].normalizedTime >= 0.5f && base.animation["born"].normalizedTime <= 0.7f)
+                            if (animation["born"].normalizedTime >= 0.5f && animation["born"].normalizedTime <= 0.7f)
                             {
                                 this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(0.5f, 1f, 0.95f);
                             }
-                            if (base.animation["born"].normalizedTime >= 1f)
+                            if (animation["born"].normalizedTime >= 1f)
                             {
                                 this.crossFade("idle", 0.1f);
                                 if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE)
@@ -1185,7 +1185,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                     if (PhotonNetwork.isMasterClient)
                                     {
                                         object[] parameters = new object[] { 10f, 500f };
-                                        base.photonView.RPC("netTauntAttack", PhotonTargets.MasterClient, parameters);
+                                        photonView.RPC("netTauntAttack", PhotonTargets.MasterClient, parameters);
                                     }
                                     else
                                     {

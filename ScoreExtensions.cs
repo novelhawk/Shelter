@@ -2,7 +2,7 @@ using ExitGames.Client.Photon;
 
 internal static class ScoreExtensions
 {
-    public static void AddScore(this PhotonPlayer player, int scoreToAddToCurrent)
+    public static void AddScore(this Player player, int scoreToAddToCurrent)
     {
         int num = player.GetScore() + scoreToAddToCurrent;
         Hashtable propertiesToSet = new Hashtable
@@ -12,17 +12,17 @@ internal static class ScoreExtensions
         player.SetCustomProperties(propertiesToSet);
     }
 
-    public static int GetScore(this PhotonPlayer player)
+    public static int GetScore(this Player player)
     {
         object obj2;
-        if (player.CustomProperties.TryGetValue("score", out obj2))
+        if (player.Properties.TryGetValue("score", out obj2))
         {
             return (int) obj2;
         }
         return 0;
     }
 
-    public static void SetScore(this PhotonPlayer player, int newScore)
+    public static void SetScore(this Player player, int newScore)
     {
         Hashtable propertiesToSet = new Hashtable
         {

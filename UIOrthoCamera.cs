@@ -8,8 +8,8 @@ public class UIOrthoCamera : MonoBehaviour
 
     private void Start()
     {
-        this.mCam = base.camera;
-        this.mTrans = base.transform;
+        this.mCam = camera;
+        this.mTrans = transform;
         this.mCam.orthographic = true;
     }
 
