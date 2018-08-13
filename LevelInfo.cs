@@ -15,10 +15,5 @@ public class LevelInfo
     public bool Supply { get; set; } = true;
     public bool PlayerTitansAllowed { get; set; }
     public GAMEMODE Gamemode { get; set; }
-
-    public static LevelInfo getInfo(string name)
-    {
-        return null;
-    }
 }
 
