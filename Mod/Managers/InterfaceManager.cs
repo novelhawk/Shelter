@@ -9,12 +9,12 @@ namespace Mod.Managers
 {
     public class InterfaceManager
     {
-        private readonly List<Gui> guis = new List<Gui>();
+        private readonly List<Gui> _interfaces = new List<Gui>();
 
         public InterfaceManager()
         {
             GameObject go = new GameObject("Interface");
-            guis.AddRange(new Gui[]
+            _interfaces.AddRange(new Gui[]
             {
                 go.AddComponent<Notify>(),
                 go.AddComponent<Scoreboard>(),
@@ -31,7 +31,7 @@ namespace Mod.Managers
 
         public bool IsVisible(string name)
         {
-            Gui gui = guis.FirstOrDefault(g => g.Name == name);
+            Gui gui = _interfaces.FirstOrDefault(g => g.Name == name);
             if (gui != null && gui.Visible)
                 return true;
             return false;
@@ -49,21 +49,21 @@ namespace Mod.Managers
 
         public void Enable(string name)
         {
-            Gui gui = guis.FirstOrDefault(g => g.Name == name);
+            Gui gui = _interfaces.FirstOrDefault(g => g.Name == name);
             if (gui != null && !gui.Visible)
                 gui.Enable();
         }
 
         public void Disable(string name)
         {
-            Gui gui = guis.FirstOrDefault(g => g.Name == name);
+            Gui gui = _interfaces.FirstOrDefault(g => g.Name == name);
             if (gui != null && gui.Visible)
                 gui.Disable();
         }
 
         public void DisableAll()
         {
-            foreach (Gui gui in guis)
+            foreach (Gui gui in _interfaces)
                 if (gui != null && gui.Visible)
                     gui.Disable();
         }

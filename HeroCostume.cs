@@ -59,7 +59,7 @@ public class HeroCostume
     public int skin_color = 1;
     public string skin_texture = string.Empty;
     public HeroStat stat;
-    public UNIFORM_TYPE uniform_type = UNIFORM_TYPE.CasualA;
+    public UniformType uniform_type = UniformType.CasualA;
     public string weapon_l_mesh = string.Empty;
     public string weapon_r_mesh = string.Empty;
 
@@ -96,7 +96,7 @@ public class HeroCostume
             costume[0] = new HeroCostume();
             costume[0].name = "annie";
             costume[0].sex = Sex.Female;
-            costume[0].uniform_type = UNIFORM_TYPE.UniformB;
+            costume[0].uniform_type = UniformType.UniformB;
             costume[0].part_chest_object_mesh = "character_cap_uniform";
             costume[0].part_chest_object_texture = "aottg_hero_annie_cap_uniform";
             costume[0].cape = true;
@@ -112,7 +112,7 @@ public class HeroCostume
             costume[1] = new HeroCostume();
             costume[1].name = "annie";
             costume[1].sex = Sex.Female;
-            costume[1].uniform_type = UNIFORM_TYPE.UniformB;
+            costume[1].uniform_type = UniformType.UniformB;
             costume[1].part_chest_object_mesh = "character_cap_uniform";
             costume[1].part_chest_object_texture = "aottg_hero_annie_cap_uniform";
             costume[1].body_texture = body_uniform_fb_texture[0];
@@ -128,7 +128,7 @@ public class HeroCostume
             costume[2] = new HeroCostume();
             costume[2].name = "annie";
             costume[2].sex = Sex.Female;
-            costume[2].uniform_type = UNIFORM_TYPE.CasualB;
+            costume[2].uniform_type = UniformType.CasualB;
             costume[2].part_chest_object_mesh = "character_cap_casual";
             costume[2].part_chest_object_texture = "aottg_hero_annie_cap_causal";
             costume[2].part_chest_1_object_mesh = "character_body_blade_keeper_f";
@@ -145,7 +145,7 @@ public class HeroCostume
             costume[3] = new HeroCostume();
             costume[3].name = "mikasa";
             costume[3].sex = Sex.Female;
-            costume[3].uniform_type = UNIFORM_TYPE.UniformB;
+            costume[3].uniform_type = UniformType.UniformB;
             costume[3].body_texture = body_uniform_fb_texture[1];
             costume[3].cape = true;
             costume[3].hairInfo = CostumeHair.hairsF[7];
@@ -159,7 +159,7 @@ public class HeroCostume
             costume[4] = new HeroCostume();
             costume[4].name = "mikasa";
             costume[4].sex = Sex.Female;
-            costume[4].uniform_type = UNIFORM_TYPE.UniformB;
+            costume[4].uniform_type = UniformType.UniformB;
             costume[4].part_chest_skinned_cloth_mesh = "mikasa_asset_uni";
             costume[4].part_chest_skinned_cloth_texture = body_uniform_fb_texture[1];
             costume[4].body_texture = body_uniform_fb_texture[1];
@@ -175,7 +175,7 @@ public class HeroCostume
             costume[5] = new HeroCostume();
             costume[5].name = "mikasa";
             costume[5].sex = Sex.Female;
-            costume[5].uniform_type = UNIFORM_TYPE.CasualB;
+            costume[5].uniform_type = UniformType.CasualB;
             costume[5].part_chest_skinned_cloth_mesh = "mikasa_asset_cas";
             costume[5].part_chest_skinned_cloth_texture = body_casual_fb_texture[1];
             costume[5].part_chest_1_object_mesh = "character_body_blade_keeper_f";
@@ -192,7 +192,7 @@ public class HeroCostume
             costume[6] = new HeroCostume();
             costume[6].name = "levi";
             costume[6].sex = Sex.Male;
-            costume[6].uniform_type = UNIFORM_TYPE.UniformB;
+            costume[6].uniform_type = UniformType.UniformB;
             costume[6].body_texture = body_uniform_mb_texture[1];
             costume[6].cape = true;
             costume[6].hairInfo = CostumeHair.hairsM[7];
@@ -206,7 +206,7 @@ public class HeroCostume
             costume[7] = new HeroCostume();
             costume[7].name = "levi";
             costume[7].sex = Sex.Male;
-            costume[7].uniform_type = UNIFORM_TYPE.CasualB;
+            costume[7].uniform_type = UniformType.CasualB;
             costume[7].body_texture = body_casual_mb_texture[1];
             costume[7].part_chest_1_object_mesh = "character_body_blade_keeper_m";
             costume[7].part_chest_1_object_texture = body_casual_mb_texture[1];
@@ -221,7 +221,7 @@ public class HeroCostume
             costume[8] = new HeroCostume();
             costume[8].name = "eren";
             costume[8].sex = Sex.Male;
-            costume[8].uniform_type = UNIFORM_TYPE.UniformB;
+            costume[8].uniform_type = UniformType.UniformB;
             costume[8].body_texture = body_uniform_mb_texture[0];
             costume[8].cape = true;
             costume[8].hairInfo = CostumeHair.hairsM[4];
@@ -235,7 +235,7 @@ public class HeroCostume
             costume[9] = new HeroCostume();
             costume[9].name = "eren";
             costume[9].sex = Sex.Male;
-            costume[9].uniform_type = UNIFORM_TYPE.UniformB;
+            costume[9].uniform_type = UniformType.UniformB;
             costume[9].body_texture = body_uniform_mb_texture[0];
             costume[9].cape = false;
             costume[9].hairInfo = CostumeHair.hairsM[4];
@@ -249,7 +249,7 @@ public class HeroCostume
             costume[10] = new HeroCostume();
             costume[10].name = "eren";
             costume[10].sex = Sex.Male;
-            costume[10].uniform_type = UNIFORM_TYPE.CasualB;
+            costume[10].uniform_type = UniformType.CasualB;
             costume[10].body_texture = body_casual_mb_texture[0];
             costume[10].part_chest_1_object_mesh = "character_body_blade_keeper_m";
             costume[10].part_chest_1_object_texture = body_casual_mb_texture[0];
@@ -264,7 +264,7 @@ public class HeroCostume
             costume[11] = new HeroCostume();
             costume[11].name = "sasha";
             costume[11].sex = Sex.Female;
-            costume[11].uniform_type = UNIFORM_TYPE.UniformA;
+            costume[11].uniform_type = UniformType.UniformA;
             costume[11].body_texture = body_uniform_fa_texture[1];
             costume[11].cape = true;
             costume[11].hairInfo = CostumeHair.hairsF[10];
@@ -278,7 +278,7 @@ public class HeroCostume
             costume[12] = new HeroCostume();
             costume[12].name = "sasha";
             costume[12].sex = Sex.Female;
-            costume[12].uniform_type = UNIFORM_TYPE.UniformA;
+            costume[12].uniform_type = UniformType.UniformA;
             costume[12].body_texture = body_uniform_fa_texture[1];
             costume[12].cape = false;
             costume[12].hairInfo = CostumeHair.hairsF[10];
@@ -292,7 +292,7 @@ public class HeroCostume
             costume[13] = new HeroCostume();
             costume[13].name = "sasha";
             costume[13].sex = Sex.Female;
-            costume[13].uniform_type = UNIFORM_TYPE.CasualA;
+            costume[13].uniform_type = UniformType.CasualA;
             costume[13].body_texture = body_casual_fa_texture[1];
             costume[13].part_chest_1_object_mesh = "character_body_blade_keeper_f";
             costume[13].part_chest_1_object_texture = body_casual_fa_texture[1];
@@ -307,7 +307,7 @@ public class HeroCostume
             costume[14] = new HeroCostume();
             costume[14].name = "hanji";
             costume[14].sex = Sex.Female;
-            costume[14].uniform_type = UNIFORM_TYPE.UniformA;
+            costume[14].uniform_type = UniformType.UniformA;
             costume[14].body_texture = body_uniform_fa_texture[2];
             costume[14].cape = true;
             costume[14].hairInfo = CostumeHair.hairsF[6];
@@ -321,7 +321,7 @@ public class HeroCostume
             costume[15] = new HeroCostume();
             costume[15].name = "hanji";
             costume[15].sex = Sex.Female;
-            costume[15].uniform_type = UNIFORM_TYPE.CasualA;
+            costume[15].uniform_type = UniformType.CasualA;
             costume[15].body_texture = body_casual_fa_texture[2];
             costume[15].part_chest_1_object_mesh = "character_body_blade_keeper_f";
             costume[15].part_chest_1_object_texture = body_casual_fa_texture[2];
@@ -336,7 +336,7 @@ public class HeroCostume
             costume[16] = new HeroCostume();
             costume[16].name = "rico";
             costume[16].sex = Sex.Female;
-            costume[16].uniform_type = UNIFORM_TYPE.UniformA;
+            costume[16].uniform_type = UniformType.UniformA;
             costume[16].body_texture = body_uniform_fa_texture[0];
             costume[16].cape = true;
             costume[16].hairInfo = CostumeHair.hairsF[9];
@@ -350,7 +350,7 @@ public class HeroCostume
             costume[17] = new HeroCostume();
             costume[17].name = "rico";
             costume[17].sex = Sex.Female;
-            costume[17].uniform_type = UNIFORM_TYPE.CasualA;
+            costume[17].uniform_type = UniformType.CasualA;
             costume[17].body_texture = body_casual_fa_texture[0];
             costume[17].part_chest_1_object_mesh = "character_body_blade_keeper_f";
             costume[17].part_chest_1_object_texture = body_casual_fa_texture[0];
@@ -365,7 +365,7 @@ public class HeroCostume
             costume[18] = new HeroCostume();
             costume[18].name = "jean";
             costume[18].sex = Sex.Male;
-            costume[18].uniform_type = UNIFORM_TYPE.UniformA;
+            costume[18].uniform_type = UniformType.UniformA;
             costume[18].body_texture = body_uniform_ma_texture[1];
             costume[18].cape = true;
             costume[18].hairInfo = CostumeHair.hairsM[6];
@@ -379,7 +379,7 @@ public class HeroCostume
             costume[19] = new HeroCostume();
             costume[19].name = "jean";
             costume[19].sex = Sex.Male;
-            costume[19].uniform_type = UNIFORM_TYPE.UniformA;
+            costume[19].uniform_type = UniformType.UniformA;
             costume[19].body_texture = body_uniform_ma_texture[1];
             costume[19].cape = false;
             costume[19].hairInfo = CostumeHair.hairsM[6];
@@ -393,7 +393,7 @@ public class HeroCostume
             costume[20] = new HeroCostume();
             costume[20].name = "jean";
             costume[20].sex = Sex.Male;
-            costume[20].uniform_type = UNIFORM_TYPE.CasualA;
+            costume[20].uniform_type = UniformType.CasualA;
             costume[20].body_texture = body_casual_ma_texture[1];
             costume[20].part_chest_1_object_mesh = "character_body_blade_keeper_m";
             costume[20].part_chest_1_object_texture = body_casual_ma_texture[1];
@@ -408,7 +408,7 @@ public class HeroCostume
             costume[21] = new HeroCostume();
             costume[21].name = "marco";
             costume[21].sex = Sex.Male;
-            costume[21].uniform_type = UNIFORM_TYPE.UniformA;
+            costume[21].uniform_type = UniformType.UniformA;
             costume[21].body_texture = body_uniform_ma_texture[2];
             costume[21].cape = false;
             costume[21].hairInfo = CostumeHair.hairsM[8];
@@ -422,7 +422,7 @@ public class HeroCostume
             costume[22] = new HeroCostume();
             costume[22].name = "marco";
             costume[22].sex = Sex.Male;
-            costume[22].uniform_type = UNIFORM_TYPE.CasualA;
+            costume[22].uniform_type = UniformType.CasualA;
             costume[22].body_texture = body_casual_ma_texture[2];
             costume[22].cape = false;
             costume[22].hairInfo = CostumeHair.hairsM[8];
@@ -435,7 +435,7 @@ public class HeroCostume
             costume[23] = new HeroCostume();
             costume[23].name = "mike";
             costume[23].sex = Sex.Male;
-            costume[23].uniform_type = UNIFORM_TYPE.UniformB;
+            costume[23].uniform_type = UniformType.UniformB;
             costume[23].body_texture = body_uniform_mb_texture[3];
             costume[23].cape = true;
             costume[23].hairInfo = CostumeHair.hairsM[9];
@@ -449,7 +449,7 @@ public class HeroCostume
             costume[24] = new HeroCostume();
             costume[24].name = "mike";
             costume[24].sex = Sex.Male;
-            costume[24].uniform_type = UNIFORM_TYPE.CasualB;
+            costume[24].uniform_type = UniformType.CasualB;
             costume[24].body_texture = body_casual_mb_texture[3];
             costume[24].part_chest_1_object_mesh = "character_body_blade_keeper_m";
             costume[24].part_chest_1_object_texture = body_casual_mb_texture[3];
@@ -465,7 +465,7 @@ public class HeroCostume
             costume[25] = new HeroCostume();
             costume[25].name = "connie";
             costume[25].sex = Sex.Male;
-            costume[25].uniform_type = UNIFORM_TYPE.UniformB;
+            costume[25].uniform_type = UniformType.UniformB;
             costume[25].body_texture = body_uniform_mb_texture[2];
             costume[25].cape = true;
             costume[25].hairInfo = CostumeHair.hairsM[10];
@@ -478,7 +478,7 @@ public class HeroCostume
             costume[26] = new HeroCostume();
             costume[26].name = "connie";
             costume[26].sex = Sex.Male;
-            costume[26].uniform_type = UNIFORM_TYPE.UniformB;
+            costume[26].uniform_type = UniformType.UniformB;
             costume[26].body_texture = body_uniform_mb_texture[2];
             costume[26].cape = false;
             costume[26].hairInfo = CostumeHair.hairsM[10];
@@ -491,7 +491,7 @@ public class HeroCostume
             costume[27] = new HeroCostume();
             costume[27].name = "connie";
             costume[27].sex = Sex.Male;
-            costume[27].uniform_type = UNIFORM_TYPE.CasualB;
+            costume[27].uniform_type = UniformType.CasualB;
             costume[27].body_texture = body_casual_mb_texture[2];
             costume[27].part_chest_1_object_mesh = "character_body_blade_keeper_m";
             costume[27].part_chest_1_object_texture = body_casual_mb_texture[2];
@@ -505,7 +505,7 @@ public class HeroCostume
             costume[28] = new HeroCostume();
             costume[28].name = "armin";
             costume[28].sex = Sex.Male;
-            costume[28].uniform_type = UNIFORM_TYPE.UniformA;
+            costume[28].uniform_type = UniformType.UniformA;
             costume[28].body_texture = body_uniform_ma_texture[0];
             costume[28].cape = true;
             costume[28].hairInfo = CostumeHair.hairsM[5];
@@ -519,7 +519,7 @@ public class HeroCostume
             costume[29] = new HeroCostume();
             costume[29].name = "armin";
             costume[29].sex = Sex.Male;
-            costume[29].uniform_type = UNIFORM_TYPE.UniformA;
+            costume[29].uniform_type = UniformType.UniformA;
             costume[29].body_texture = body_uniform_ma_texture[0];
             costume[29].cape = false;
             costume[29].hairInfo = CostumeHair.hairsM[5];
@@ -533,7 +533,7 @@ public class HeroCostume
             costume[30] = new HeroCostume();
             costume[30].name = "armin";
             costume[30].sex = Sex.Male;
-            costume[30].uniform_type = UNIFORM_TYPE.CasualA;
+            costume[30].uniform_type = UniformType.CasualA;
             costume[30].body_texture = body_casual_ma_texture[0];
             costume[30].part_chest_1_object_mesh = "character_body_blade_keeper_m";
             costume[30].part_chest_1_object_texture = body_casual_ma_texture[0];
@@ -548,7 +548,7 @@ public class HeroCostume
             costume[31] = new HeroCostume();
             costume[31].name = "petra";
             costume[31].sex = Sex.Female;
-            costume[31].uniform_type = UNIFORM_TYPE.UniformA;
+            costume[31].uniform_type = UniformType.UniformA;
             costume[31].body_texture = body_uniform_fa_texture[0];
             costume[31].cape = true;
             costume[31].hairInfo = CostumeHair.hairsF[8];
@@ -562,7 +562,7 @@ public class HeroCostume
             costume[32] = new HeroCostume();
             costume[32].name = "petra";
             costume[32].sex = Sex.Female;
-            costume[32].uniform_type = UNIFORM_TYPE.CasualA;
+            costume[32].uniform_type = UniformType.CasualA;
             costume[32].body_texture = body_casual_fa_texture[0];
             costume[32].part_chest_1_object_mesh = "character_body_blade_keeper_f";
             costume[32].part_chest_1_object_texture = body_casual_fa_texture[0];
@@ -578,7 +578,7 @@ public class HeroCostume
             costume[33] = new HeroCostume();
             costume[33].name = "custom";
             costume[33].sex = Sex.Female;
-            costume[33].uniform_type = UNIFORM_TYPE.CasualB;
+            costume[33].uniform_type = UniformType.CasualB;
             costume[33].part_chest_skinned_cloth_mesh = "mikasa_asset_cas";
             costume[33].part_chest_skinned_cloth_texture = body_casual_fb_texture[1];
             costume[33].part_chest_1_object_mesh = "character_body_blade_keeper_f";
@@ -595,7 +595,7 @@ public class HeroCostume
             costume[34] = new HeroCostume();
             costume[34].name = "custom";
             costume[34].sex = Sex.Male;
-            costume[34].uniform_type = UNIFORM_TYPE.CasualA;
+            costume[34].uniform_type = UniformType.CasualA;
             costume[34].body_texture = body_casual_ma_texture[0];
             costume[34].part_chest_1_object_mesh = "character_body_blade_keeper_m";
             costume[34].part_chest_1_object_texture = body_casual_ma_texture[0];
@@ -610,7 +610,7 @@ public class HeroCostume
             costume[35] = new HeroCostume();
             costume[35].name = "custom";
             costume[35].sex = Sex.Female;
-            costume[35].uniform_type = UNIFORM_TYPE.UniformA;
+            costume[35].uniform_type = UniformType.UniformA;
             costume[35].body_texture = body_uniform_fa_texture[1];
             costume[35].cape = false;
             costume[35].hairInfo = CostumeHair.hairsF[4];
@@ -623,7 +623,7 @@ public class HeroCostume
             costume[36] = new HeroCostume();
             costume[36].name = "feng";
             costume[36].sex = Sex.Male;
-            costume[36].uniform_type = UNIFORM_TYPE.CasualB;
+            costume[36].uniform_type = UniformType.CasualB;
             costume[36].body_texture = body_casual_mb_texture[3];
             costume[36].part_chest_1_object_mesh = "character_body_blade_keeper_m";
             costume[36].part_chest_1_object_texture = body_casual_mb_texture[3];
@@ -638,7 +638,7 @@ public class HeroCostume
             costume[37] = new HeroCostume();
             costume[37].name = "AHSS";
             costume[37].sex = Sex.Male;
-            costume[37].uniform_type = UNIFORM_TYPE.CasualAHSS;
+            costume[37].uniform_type = UniformType.CasualAHSS;
             costume[37].body_texture = body_casual_ma_texture[0] + "_ahss";
             costume[37].cape = false;
             costume[37].hairInfo = CostumeHair.hairsM[6];
@@ -651,7 +651,7 @@ public class HeroCostume
             costume[38] = new HeroCostume();
             costume[38].name = "AHSS (F)";
             costume[38].sex = Sex.Female;
-            costume[38].uniform_type = UNIFORM_TYPE.CasualAHSS;
+            costume[38].uniform_type = UniformType.CasualAHSS;
             costume[38].body_texture = body_casual_fa_texture[0];
             costume[38].cape = false;
             costume[38].hairInfo = CostumeHair.hairsF[6];
@@ -721,7 +721,7 @@ public class HeroCostume
         this.mesh_3dmg_gas_r = "character_3dmg_gas_r";
         this.weapon_l_mesh = "character_blade_l";
         this.weapon_r_mesh = "character_blade_r";
-        if (this.uniform_type == UNIFORM_TYPE.CasualAHSS)
+        if (this.uniform_type == UniformType.CasualAHSS)
         {
             this.hand_l_mesh = "character_hand_l_ah";
             this.hand_r_mesh = "character_hand_r_ah";
@@ -742,7 +742,7 @@ public class HeroCostume
             this.weapon_l_mesh = "character_gun_l";
             this.weapon_r_mesh = "character_gun_r";
         }
-        else if (this.uniform_type == UNIFORM_TYPE.UniformA)
+        else if (this.uniform_type == UniformType.UniformA)
         {
             this.arm_l_mesh = "character_arm_uniform_l";
             this.arm_r_mesh = "character_arm_uniform_r";
@@ -761,7 +761,7 @@ public class HeroCostume
                 this.brand4_mesh = "character_brand_back_m";
             }
         }
-        else if (this.uniform_type == UNIFORM_TYPE.UniformB)
+        else if (this.uniform_type == UniformType.UniformB)
         {
             this.arm_l_mesh = "character_arm_uniform_l";
             this.arm_r_mesh = "character_arm_uniform_r";
@@ -780,7 +780,7 @@ public class HeroCostume
                 this.brand4_mesh = "character_brand_back_m";
             }
         }
-        else if (this.uniform_type == UNIFORM_TYPE.CasualA)
+        else if (this.uniform_type == UniformType.CasualA)
         {
             this.arm_l_mesh = "character_arm_casual_l";
             this.arm_r_mesh = "character_arm_casual_r";
@@ -793,7 +793,7 @@ public class HeroCostume
                 this.body_mesh = "character_body_casual_MA";
             }
         }
-        else if (this.uniform_type == UNIFORM_TYPE.CasualB)
+        else if (this.uniform_type == UniformType.CasualB)
         {
             this.arm_l_mesh = "character_arm_casual_l";
             this.arm_r_mesh = "character_arm_casual_r";
@@ -839,7 +839,7 @@ public class HeroCostume
 
     public void setTexture()
     {
-        if (this.uniform_type == UNIFORM_TYPE.CasualAHSS)
+        if (this.uniform_type == UniformType.CasualAHSS)
         {
             this._3dmg_texture = "aottg_hero_AHSS_3dmg";
         }

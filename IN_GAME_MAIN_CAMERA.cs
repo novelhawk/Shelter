@@ -190,7 +190,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     private void CreateMinimap()
     {
-        LevelInfo info = LevelInfoManager.GetInfo(FengGameManagerMKII.level);
+        LevelInfo info = LevelInfoManager.GetInfo(FengGameManagerMKII.Level);
         if (info != null)
         {
             Minimap minimap = gameObject.AddComponent<Minimap>();

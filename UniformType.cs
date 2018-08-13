@@ -1,4 +1,4 @@
-public enum UNIFORM_TYPE
+public enum UniformType
 {
     UniformA,
     UniformB,

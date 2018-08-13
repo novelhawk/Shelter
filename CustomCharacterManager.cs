@@ -521,7 +521,7 @@ public class CustomCharacterManager : MonoBehaviour
                 goto Label_06AE;
 
             case CreatePart.Skin:
-                if (this.setup.myCostume.uniform_type != UNIFORM_TYPE.CasualAHSS)
+                if (this.setup.myCostume.uniform_type != UniformType.CasualAHSS)
                 {
                     this.skinId = !next ? this.toPrev(this.skinId, 2, 0) : this.toNext(this.skinId, 2, 0);
                 }
@@ -535,7 +535,7 @@ public class CustomCharacterManager : MonoBehaviour
                 goto Label_06AE;
 
             case CreatePart.Costume:
-                if (this.setup.myCostume.uniform_type != UNIFORM_TYPE.CasualAHSS)
+                if (this.setup.myCostume.uniform_type != UniformType.CasualAHSS)
                 {
                     if (this.sexId == 0)
                     {
@@ -650,7 +650,7 @@ public class CustomCharacterManager : MonoBehaviour
                 break;
 
             case CreatePart.Skin:
-                if (this.setup.myCostume.uniform_type == UNIFORM_TYPE.CasualAHSS)
+                if (this.setup.myCostume.uniform_type == UniformType.CasualAHSS)
                 {
                     this.skinId = 2;
                 }
@@ -664,7 +664,7 @@ public class CustomCharacterManager : MonoBehaviour
                 goto Label_0750;
 
             case CreatePart.Costume:
-                if (this.setup.myCostume.uniform_type == UNIFORM_TYPE.CasualAHSS)
+                if (this.setup.myCostume.uniform_type == UniformType.CasualAHSS)
                 {
                     if (this.setup.myCostume.sex == Sex.Female)
                     {

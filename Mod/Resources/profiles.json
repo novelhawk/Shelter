@@ -1,0 +1,11 @@
+﻿{
+  "selected": 0,
+  "profiles": [{
+    "profileName": "Profile 1",
+    "name": "Name",
+    "guild": "Guild",
+    "chatName": "ChatName",
+    "friendName": "",
+    "chatFormat": "$(chatName): $(message)"
+  }]
+}

@@ -23,12 +23,10 @@
     <DefineConstants>RELEASE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Mod\Resources\Background.png" />
-    <None Remove="Mod\Resources\Loading.png" />
+    <None Remove="Mod\Resources\*" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Mod\Resources\Background.png" />
-    <EmbeddedResource Include="Mod\Resources\Loading.png" />
+    <EmbeddedResource Include="Mod\Resources\*" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp-firstpass">
@@ -42,6 +40,9 @@
     </Reference>
     <Reference Include="Boo.Lang">
       <HintPath>D:\Attack on Titan\Assemblies\Boo.Lang.dll</HintPath>
+    </Reference>
+    <Reference Include="DiscordRPC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\Assemblies\DiscordRPC.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Security">
       <HintPath>D:\Attack on Titan\Assemblies\Mono.Security.dll</HintPath>
@@ -58,5 +59,11 @@
     <Reference Include="UnityScript.Lang">
       <HintPath>D:\Attack on Titan\Assemblies\UnityScript.Lang.dll</HintPath>
     </Reference>
+    <Reference Update="System.Runtime.Serialization">
+      <Pack>false</Pack>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
   </ItemGroup>
 </Project>

@@ -57,7 +57,7 @@ namespace Mod.Interface
                 Disable("CreateRoom");
                 Disable("ProfileChanger");
             }
-            GUI.Label(rect.Set(143, 393, 167, 40), "Profile Manager", IsVisible("ProfileChanger") ? selected : text);
+            GUI.Label(rect.Set(143, 393, 167, 40), "Profile", IsVisible("ProfileChanger") ? selected : text);
             if (GUI.Button(rect.OY(-10), string.Empty, GUIStyle.none))
             {
                 Enable("ProfileChanger");

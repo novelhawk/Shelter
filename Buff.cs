@@ -1,4 +1,4 @@
-public enum BUFF
+public enum Buff
 {
     NoBuff,
     SpeedUp

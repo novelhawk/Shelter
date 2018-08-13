@@ -4,7 +4,7 @@
     {
         public string Name { get; set; }
         public Sex Sex { get; set; }
-        public UNIFORM_TYPE Uniform { get; set; }
+        public UniformType Uniform { get; set; }
         public string PartChestObjectMesh { get; set; }
         public string PartChestObjectTexture { get; set; }
         public bool HasCape { get; set; }

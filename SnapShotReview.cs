@@ -1,4 +1,5 @@
 using System;
+using Mod;
 using UnityEngine;
 
 public class SnapShotReview : MonoBehaviour
@@ -74,7 +75,7 @@ public class SnapShotReview : MonoBehaviour
         {
             this.texture.GetComponent<UITexture>().mainTexture = SnapShotSaves.getCurrentIMG();
         }
-        this.labelInfo.GetComponent<UILabel>().text = LoginFengKAI.player.name + " " + DateTime.Today.ToShortDateString();
+        this.labelInfo.GetComponent<UILabel>().text = Shelter.Profile.Name + " " + DateTime.Today.ToShortDateString();
         this.freshInfo();
         this.setTextureWH();
     }

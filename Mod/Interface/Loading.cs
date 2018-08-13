@@ -24,7 +24,7 @@ namespace Mod.Interface
                 Shelter.InterfaceManager.Disable(typeof(Loading));
         }
 
-        protected override void Update()
+        protected virtual void Update()
         {
             rotAngle += Time.deltaTime * 250;
         }

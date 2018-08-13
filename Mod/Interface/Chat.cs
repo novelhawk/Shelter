@@ -35,7 +35,18 @@ namespace Mod.Interface
         /// <param name="message">Message content</param>
         public static void SendMessageAsPlayer(object message) //TODO: todo
         {
-            FengGameManagerMKII.instance.photonView.RPC("Chat", PhotonTargets.All, $"{Player.Self.HexName}: {message}", string.Empty);
+            FengGameManagerMKII.instance.photonView.RPC("Chat", PhotonTargets.All, CustomFormat(message.ToString()), string.Empty);
+        }
+
+        private static string CustomFormat(string message)
+        {
+            var format = Shelter.Profile.ChatFormat; //TODO: Make it automatic
+            format = format.Replace("$(profileName)", Shelter.Profile.ProfileName);
+            format = format.Replace("$(name)", Shelter.Profile.HexName);
+            format = format.Replace("$(guild)", Shelter.Profile.Guild);
+            format = format.Replace("$(chatName)", Shelter.Profile.ChatName);
+            format = format.Replace("$(message)", message);
+            return format.Replace("$(friendName)", Shelter.Profile.FriendName);
         }
 
         /// <summary>
@@ -186,7 +197,7 @@ namespace Mod.Interface
 
 
         private Vector2 _mRealScroll;
-        protected override void Update()
+        protected virtual void Update()
         {
             if (!_mWriting) return;
             Vector2 vector = new Vector2(0, 30);

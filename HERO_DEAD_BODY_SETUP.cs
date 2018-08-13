@@ -25,14 +25,14 @@ public class HERO_DEAD_BODY_SETUP : MonoBehaviour
     public GameObject leg;
     private float lifetime = 15f;
 
-    public void init(string aniname, float time, BODY_PARTS part)
+    public void init(string aniname, float time, BodyPart part)
     {
         animation.Play(aniname);
         animation[aniname].normalizedTime = time;
         animation[aniname].speed = 0f;
         switch (part)
         {
-            case BODY_PARTS.UPPER:
+            case BodyPart.Upper:
                 this.col_upper_arm_l.GetComponent<CapsuleCollider>().enabled = false;
                 this.col_lower_arm_l.GetComponent<CapsuleCollider>().enabled = false;
                 this.col_upper_arm_r.GetComponent<CapsuleCollider>().enabled = false;
@@ -51,7 +51,7 @@ public class HERO_DEAD_BODY_SETUP : MonoBehaviour
                 gameObject.GetComponent<HERO_SETUP>().createUpperBody2();
                 break;
 
-            case BODY_PARTS.ARM_L:
+            case BodyPart.LeftArm:
                 this.col_upper_arm_r.GetComponent<CapsuleCollider>().enabled = false;
                 this.col_lower_arm_r.GetComponent<CapsuleCollider>().enabled = false;
                 this.col_thigh_l.GetComponent<CapsuleCollider>().enabled = false;
@@ -72,7 +72,7 @@ public class HERO_DEAD_BODY_SETUP : MonoBehaviour
                 gameObject.GetComponent<HERO_SETUP>().createLeftArm();
                 break;
 
-            case BODY_PARTS.ARM_R:
+            case BodyPart.RightArm:
                 this.col_upper_arm_l.GetComponent<CapsuleCollider>().enabled = false;
                 this.col_lower_arm_l.GetComponent<CapsuleCollider>().enabled = false;
                 this.col_thigh_l.GetComponent<CapsuleCollider>().enabled = false;
@@ -93,7 +93,7 @@ public class HERO_DEAD_BODY_SETUP : MonoBehaviour
                 gameObject.GetComponent<HERO_SETUP>().createRightArm();
                 break;
 
-            case BODY_PARTS.LOWER:
+            case BodyPart.Lower:
                 this.col_upper_arm_l.GetComponent<CapsuleCollider>().enabled = false;
                 this.col_lower_arm_l.GetComponent<CapsuleCollider>().enabled = false;
                 this.col_upper_arm_r.GetComponent<CapsuleCollider>().enabled = false;
@@ -112,10 +112,6 @@ public class HERO_DEAD_BODY_SETUP : MonoBehaviour
                 gameObject.GetComponent<HERO_SETUP>().createLowerBody();
                 break;
         }
-    }
-
-    private void Start()
-    {
     }
 
     private void Update()

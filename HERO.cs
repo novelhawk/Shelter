@@ -47,7 +47,7 @@ public class HERO : Photon.MonoBehaviour
     public string currentAnimation;
     private int currentBladeNum = 5;
     private float currentBladeSta = 100f;
-    private BUFF currentBuff;
+    private Buff currentBuff;
     public Camera currentCamera;
     private float currentGas = 100f;
     public float currentSpeed;
@@ -387,71 +387,7 @@ public class HERO : Photon.MonoBehaviour
         }
     }
 
-    private void breakApart(Vector3 v, bool isBite)
-    {
-        GameObject obj6;
-        GameObject obj7;
-        GameObject obj8;
-        GameObject obj9;
-        GameObject obj10;
-        GameObject obj2 = (GameObject) Instantiate(Resources.Load("Character_parts/AOTTG_HERO_body"), this.transform.position, this.transform.rotation);
-        obj2.gameObject.GetComponent<HERO_SETUP>().myCostume = this.setup.myCostume;
-        obj2.GetComponent<HERO_DEAD_BODY_SETUP>().init(this.currentAnimation, animation[this.currentAnimation].normalizedTime, BODY_PARTS.ARM_R);
-        if (!isBite)
-        {
-            GameObject gO = (GameObject) Instantiate(Resources.Load("Character_parts/AOTTG_HERO_body"), this.transform.position, this.transform.rotation);
-            GameObject obj4 = (GameObject) Instantiate(Resources.Load("Character_parts/AOTTG_HERO_body"), this.transform.position, this.transform.rotation);
-            GameObject obj5 = (GameObject) Instantiate(Resources.Load("Character_parts/AOTTG_HERO_body"), this.transform.position, this.transform.rotation);
-            gO.gameObject.GetComponent<HERO_SETUP>().myCostume = this.setup.myCostume;
-            obj4.gameObject.GetComponent<HERO_SETUP>().myCostume = this.setup.myCostume;
-            obj5.gameObject.GetComponent<HERO_SETUP>().myCostume = this.setup.myCostume;
-            gO.GetComponent<HERO_DEAD_BODY_SETUP>().init(this.currentAnimation, animation[this.currentAnimation].normalizedTime, BODY_PARTS.UPPER);
-            obj4.GetComponent<HERO_DEAD_BODY_SETUP>().init(this.currentAnimation, animation[this.currentAnimation].normalizedTime, BODY_PARTS.LOWER);
-            obj5.GetComponent<HERO_DEAD_BODY_SETUP>().init(this.currentAnimation, animation[this.currentAnimation].normalizedTime, BODY_PARTS.ARM_L);
-            this.applyForceToBody(gO, v);
-            this.applyForceToBody(obj4, v);
-            this.applyForceToBody(obj5, v);
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine)
-            {
-                this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(gO, false, false);
-            }
-        }
-        else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine)
-        {
-            this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(obj2, false, false);
-        }
-        this.applyForceToBody(obj2, v);
-        Transform transform = this.transform.Find("Amarture/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L").transform;
-        Transform transform2 = this.transform.Find("Amarture/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R").transform;
-        if (this.useGun)
-        {
-            obj6 = (GameObject) Instantiate(Resources.Load("Character_parts/character_gun_l"), transform.position, transform.rotation);
-            obj7 = (GameObject) Instantiate(Resources.Load("Character_parts/character_gun_r"), transform2.position, transform2.rotation);
-            obj8 = (GameObject) Instantiate(Resources.Load("Character_parts/character_3dmg_2"), this.transform.position, this.transform.rotation);
-            obj9 = (GameObject) Instantiate(Resources.Load("Character_parts/character_gun_mag_l"), this.transform.position, this.transform.rotation);
-            obj10 = (GameObject) Instantiate(Resources.Load("Character_parts/character_gun_mag_r"), this.transform.position, this.transform.rotation);
-        }
-        else
-        {
-            obj6 = (GameObject) Instantiate(Resources.Load("Character_parts/character_blade_l"), transform.position, transform.rotation);
-            obj7 = (GameObject) Instantiate(Resources.Load("Character_parts/character_blade_r"), transform2.position, transform2.rotation);
-            obj8 = (GameObject) Instantiate(Resources.Load("Character_parts/character_3dmg"), this.transform.position, this.transform.rotation);
-            obj9 = (GameObject) Instantiate(Resources.Load("Character_parts/character_3dmg_gas_l"), this.transform.position, this.transform.rotation);
-            obj10 = (GameObject) Instantiate(Resources.Load("Character_parts/character_3dmg_gas_r"), this.transform.position, this.transform.rotation);
-        }
-        obj6.renderer.material = CharacterMaterials.materials[this.setup.myCostume._3dmg_texture];
-        obj7.renderer.material = CharacterMaterials.materials[this.setup.myCostume._3dmg_texture];
-        obj8.renderer.material = CharacterMaterials.materials[this.setup.myCostume._3dmg_texture];
-        obj9.renderer.material = CharacterMaterials.materials[this.setup.myCostume._3dmg_texture];
-        obj10.renderer.material = CharacterMaterials.materials[this.setup.myCostume._3dmg_texture];
-        this.applyForceToBody(obj6, v);
-        this.applyForceToBody(obj7, v);
-        this.applyForceToBody(obj8, v);
-        this.applyForceToBody(obj9, v);
-        this.applyForceToBody(obj10, v);
-    }
-
-    private void breakApart2(Vector3 v, bool isBite)
+    private void BreakApart(Vector3 force, bool isBite)
     {
         GameObject obj6;
         GameObject obj7;
@@ -461,7 +397,7 @@ public class HERO : Photon.MonoBehaviour
         GameObject obj2 = (GameObject) Instantiate(Resources.Load("Character_parts/AOTTG_HERO_body"), this.transform.position, this.transform.rotation);
         obj2.gameObject.GetComponent<HERO_SETUP>().myCostume = this.setup.myCostume;
         obj2.GetComponent<HERO_SETUP>().isDeadBody = true;
-        obj2.GetComponent<HERO_DEAD_BODY_SETUP>().init(this.currentAnimation, animation[this.currentAnimation].normalizedTime, BODY_PARTS.ARM_R);
+        obj2.GetComponent<HERO_DEAD_BODY_SETUP>().init(this.currentAnimation, animation[this.currentAnimation].normalizedTime, BodyPart.RightArm);
         if (!isBite)
         {
             GameObject gO = (GameObject) Instantiate(Resources.Load("Character_parts/AOTTG_HERO_body"), this.transform.position, this.transform.rotation);
@@ -473,12 +409,12 @@ public class HERO : Photon.MonoBehaviour
             gO.GetComponent<HERO_SETUP>().isDeadBody = true;
             obj4.GetComponent<HERO_SETUP>().isDeadBody = true;
             obj5.GetComponent<HERO_SETUP>().isDeadBody = true;
-            gO.GetComponent<HERO_DEAD_BODY_SETUP>().init(this.currentAnimation, animation[this.currentAnimation].normalizedTime, BODY_PARTS.UPPER);
-            obj4.GetComponent<HERO_DEAD_BODY_SETUP>().init(this.currentAnimation, animation[this.currentAnimation].normalizedTime, BODY_PARTS.LOWER);
-            obj5.GetComponent<HERO_DEAD_BODY_SETUP>().init(this.currentAnimation, animation[this.currentAnimation].normalizedTime, BODY_PARTS.ARM_L);
-            this.applyForceToBody(gO, v);
-            this.applyForceToBody(obj4, v);
-            this.applyForceToBody(obj5, v);
+            gO.GetComponent<HERO_DEAD_BODY_SETUP>().init(this.currentAnimation, animation[this.currentAnimation].normalizedTime, BodyPart.Upper);
+            obj4.GetComponent<HERO_DEAD_BODY_SETUP>().init(this.currentAnimation, animation[this.currentAnimation].normalizedTime, BodyPart.Lower);
+            obj5.GetComponent<HERO_DEAD_BODY_SETUP>().init(this.currentAnimation, animation[this.currentAnimation].normalizedTime, BodyPart.LeftArm);
+            this.applyForceToBody(gO, force);
+            this.applyForceToBody(obj4, force);
+            this.applyForceToBody(obj5, force);
             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine)
             {
                 this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(gO, false, false);
@@ -488,7 +424,7 @@ public class HERO : Photon.MonoBehaviour
         {
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(obj2, false, false);
         }
-        this.applyForceToBody(obj2, v);
+        this.applyForceToBody(obj2, force);
         Transform transform = this.transform.Find("Amarture/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L").transform;
         Transform transform2 = this.transform.Find("Amarture/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R").transform;
         if (this.useGun)
@@ -512,11 +448,11 @@ public class HERO : Photon.MonoBehaviour
         obj8.renderer.material = CharacterMaterials.materials[this.setup.myCostume._3dmg_texture];
         obj9.renderer.material = CharacterMaterials.materials[this.setup.myCostume._3dmg_texture];
         obj10.renderer.material = CharacterMaterials.materials[this.setup.myCostume._3dmg_texture];
-        this.applyForceToBody(obj6, v);
-        this.applyForceToBody(obj7, v);
-        this.applyForceToBody(obj8, v);
-        this.applyForceToBody(obj9, v);
-        this.applyForceToBody(obj10, v);
+        this.applyForceToBody(obj6, force);
+        this.applyForceToBody(obj7, force);
+        this.applyForceToBody(obj8, force);
+        this.applyForceToBody(obj9, force);
+        this.applyForceToBody(obj10, force);
     }
 
     private void bufferUpdate()
@@ -527,11 +463,11 @@ public class HERO : Photon.MonoBehaviour
             if (this.buffTime <= 0f)
             {
                 this.buffTime = 0f;
-                if (this.currentBuff == BUFF.SpeedUp && animation.IsPlaying("run_sasha"))
+                if (this.currentBuff == Buff.SpeedUp && animation.IsPlaying("run_sasha"))
                 {
                     this.crossFade("run", 0.1f);
                 }
-                this.currentBuff = BUFF.NoBuff;
+                this.currentBuff = Buff.NoBuff;
             }
         }
     }
@@ -613,7 +549,7 @@ public class HERO : Photon.MonoBehaviour
 
     private void changeBlade()
     {
-        if (!this.useGun || this.grounded || LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode != GAMEMODE.PVP_AHSS)
+        if (!this.useGun || this.grounded || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Gamemode != GAMEMODE.PVP_AHSS)
         {
             this.State = HeroState.ChangeBlade;
             this.throwedBlades = false;
@@ -981,7 +917,7 @@ public class HERO : Photon.MonoBehaviour
                 this.leftbladetrail2.Deactivate();
                 this.rightbladetrail2.Deactivate();
             }
-            this.breakApart2(v, isBite);
+            this.BreakApart(v, isBite);
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
             FengGameManagerMKII.instance.GameLose();
             this.falseAttack();
@@ -1500,7 +1436,7 @@ public class HERO : Photon.MonoBehaviour
                             float num6 = vector8.magnitude <= 0.95f ? (vector8.magnitude >= 0.25f ? vector8.magnitude : 0f) : 1f;
                             zero = zero * num6;
                             zero = zero * this.speed;
-                            if (this.buffTime > 0f && this.currentBuff == BUFF.SpeedUp)
+                            if (this.buffTime > 0f && this.currentBuff == Buff.SpeedUp)
                             {
                                 zero = zero * 4f;
                             }
@@ -1508,7 +1444,7 @@ public class HERO : Photon.MonoBehaviour
                             {
                                 if (!this.baseAnimation.IsPlaying("run") && !this.baseAnimation.IsPlaying("jump") && !this.baseAnimation.IsPlaying("run_sasha") && (!this.baseAnimation.IsPlaying("horse_geton") || this.baseAnimation["horse_geton"].normalizedTime >= 0.5f))
                                 {
-                                    if (this.buffTime > 0f && this.currentBuff == BUFF.SpeedUp)
+                                    if (this.buffTime > 0f && this.currentBuff == Buff.SpeedUp)
                                     {
                                         this.crossFade("run_sasha", 0.1f);
                                     }
@@ -2727,7 +2663,7 @@ public class HERO : Photon.MonoBehaviour
             iteratorVariable3 = true;
         }
         bool iteratorVariable4 = false;
-        if (LevelInfoManager.GetInfo(FengGameManagerMKII.level).Horse || RCSettings.horseMode == 1)
+        if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Horse || RCSettings.horseMode == 1)
         {
             iteratorVariable4 = true;
         }
@@ -3357,13 +3293,13 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    public void NetDie(Vector3 v, bool isBite, int viewID = -1, string titanName = "", bool killByTitan = true, PhotonMessageInfo info = null)
+    public void NetDie(Vector3 force, bool isBite, int viewID = -1, string titanName = "", bool killByTitan = true, PhotonMessageInfo info = null)
     {
         if (photonView.isMine && info != null && IN_GAME_MAIN_CAMERA.gamemode != GAMEMODE.BOSS_FIGHT_CT)
         {
             if (FengGameManagerMKII.ignoreList.Contains(info.sender.ID))
             {
-                photonView.RPC("backToHumanRPC", PhotonTargets.Others, new object[0]);
+                photonView.RPC("backToHumanRPC", PhotonTargets.Others);
                 return;
             }
             if (!info.sender.isLocal && !info.sender.IsMasterClient)
@@ -3396,10 +3332,10 @@ public class HERO : Photon.MonoBehaviour
         if (PhotonNetwork.isMasterClient)
         {
             this.onDeathEvent(viewID, killByTitan);
-            int iD = photonView.owner.ID;
-            if (FengGameManagerMKII.heroHash.ContainsKey(iD))
+            int id = photonView.owner.ID;
+            if (FengGameManagerMKII.heroHash.ContainsKey(id))
             {
-                FengGameManagerMKII.heroHash.Remove(iD);
+                FengGameManagerMKII.heroHash.Remove(id);
             }
         }
         if (photonView.isMine)
@@ -3439,7 +3375,7 @@ public class HERO : Photon.MonoBehaviour
             this.rightbladetrail2.Deactivate();
         }
         this.falseAttack();
-        this.breakApart2(v, isBite);
+        this.BreakApart(force, isBite);
         if (photonView.isMine)
         {
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(false);
@@ -3447,11 +3383,11 @@ public class HERO : Photon.MonoBehaviour
             FengGameManagerMKII.instance.myRespawnTime = 0f;
         }
         this.hasDied = true;
-        Transform transform = this.transform.Find("audio_die");
-        if (transform != null)
+        Transform audioTransform = this.transform.Find("audio_die");
+        if (audioTransform != null)
         {
-            transform.parent = null;
-            transform.GetComponent<AudioSource>().Play();
+            audioTransform.parent = null;
+            audioTransform.GetComponent<AudioSource>().Play();
         }
         gameObject.GetComponent<SmoothSyncMovement>().disabled = true;
         if (photonView.isMine)
@@ -3463,8 +3399,7 @@ public class HERO : Photon.MonoBehaviour
                 { PlayerProperty.Deaths, Player.Self.Properties.Deaths + 1 }
             };
             Player.Self.SetCustomProperties(propertiesToSet);
-            object[] parameters = new object[] { !(titanName == string.Empty) ? 1 : 0 };
-            FengGameManagerMKII.instance.photonView.RPC("someOneIsDead", PhotonTargets.MasterClient, parameters);
+            FengGameManagerMKII.instance.photonView.RPC("someOneIsDead", PhotonTargets.MasterClient, titanName != string.Empty ? 1 : 0);
             if (viewID != -1)
             {
                 PhotonView view2 = PhotonView.Find(viewID);
@@ -3480,7 +3415,7 @@ public class HERO : Photon.MonoBehaviour
             }
             else
             {
-                FengGameManagerMKII.instance.SendKillInfo(!(titanName == string.Empty), "[FFC000][" + info.sender.ID + "][FFFFFF]" + titanName, false, Player.Self.Properties.Name, 0);
+                FengGameManagerMKII.instance.SendKillInfo(titanName != string.Empty, "[FFC000][" + info.sender.ID + "][FFFFFF]" + titanName, false, Player.Self.Properties.Name, 0);
             }
         }
         if (photonView.isMine)
@@ -3666,7 +3601,7 @@ public class HERO : Photon.MonoBehaviour
             this.rightbladetrail2.Deactivate();
         }
         this.falseAttack();
-        this.breakApart2(v, isBite);
+        this.BreakApart(v, isBite);
         if (photonView.isMine)
         {
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(false);
@@ -4267,7 +4202,7 @@ public class HERO : Photon.MonoBehaviour
             this.skillCDLast = 120f;
             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
             {
-                if (!LevelInfoManager.GetInfo(FengGameManagerMKII.level).PlayerTitansAllowed && LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode != GAMEMODE.RACING && LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode != GAMEMODE.PVP_CAPTURE && LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode != GAMEMODE.TROST)
+                if (!LevelInfoManager.GetInfo(FengGameManagerMKII.Level).PlayerTitansAllowed && LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Gamemode != GAMEMODE.RACING && LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Gamemode != GAMEMODE.PVP_CAPTURE && LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Gamemode != GAMEMODE.TROST)
                 {
                     int num = 0;
                     foreach (Player player in PhotonNetwork.playerList)
@@ -4326,7 +4261,7 @@ public class HERO : Photon.MonoBehaviour
             GameObject.Find("bulletL7").GetComponent<UISprite>().enabled = false;
             GameObject.Find("bulletR7").GetComponent<UISprite>().enabled = false;
         }
-        if (this.setup.myCostume.uniform_type == UNIFORM_TYPE.CasualAHSS)
+        if (this.setup.myCostume.uniform_type == UniformType.CasualAHSS)
         {
             this.standAnimation = "AHSS_stand_gun";
             this.useGun = true;
@@ -4407,7 +4342,7 @@ public class HERO : Photon.MonoBehaviour
             this.skillCDLast = 120f;
             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
             {
-                if (LevelInfoManager.GetInfo(FengGameManagerMKII.level).PlayerTitansAllowed || LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode == GAMEMODE.RACING || LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode == GAMEMODE.PVP_CAPTURE || LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode == GAMEMODE.TROST)
+                if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).PlayerTitansAllowed || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Gamemode == GAMEMODE.RACING || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Gamemode == GAMEMODE.PVP_CAPTURE || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Gamemode == GAMEMODE.TROST)
                 {
                     this.skillId = "petra";
                     this.skillCDLast = 1f;
@@ -4466,7 +4401,7 @@ public class HERO : Photon.MonoBehaviour
             GameObject.Find("bulletL7").GetComponent<UISprite>().enabled = false;
             GameObject.Find("bulletR7").GetComponent<UISprite>().enabled = false;
         }
-        if (this.setup.myCostume.uniform_type == UNIFORM_TYPE.CasualAHSS)
+        if (this.setup.myCostume.uniform_type == UniformType.CasualAHSS)
         {
             this.standAnimation = "AHSS_stand_gun";
             this.useGun = true;
@@ -5147,7 +5082,7 @@ public class HERO : Photon.MonoBehaviour
     private void Start()
     {
         FengGameManagerMKII.instance.AddHero(this);
-        if ((LevelInfoManager.GetInfo(FengGameManagerMKII.level).Horse || RCSettings.horseMode == 1) && IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
+        if ((LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Horse || RCSettings.horseMode == 1) && IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
         {
             this.myHorse = PhotonNetwork.Instantiate("horse", this.baseTransform.position + Vector3.up * 5f, this.baseTransform.rotation, 0);
             this.myHorse.GetComponent<Horse>().myHero = gameObject;
@@ -5564,7 +5499,7 @@ public class HERO : Photon.MonoBehaviour
                                             {
                                                 this.attackAnimation = "special_sasha";
                                                 this.playAnimation("special_sasha");
-                                                this.currentBuff = BUFF.SpeedUp;
+                                                this.currentBuff = Buff.SpeedUp;
                                                 this.buffTime = 10f;
                                             }
                                             else
@@ -5904,7 +5839,7 @@ public class HERO : Photon.MonoBehaviour
                                     this.facingDirection = this.gunDummy.transform.rotation.eulerAngles.y;
                                     this.targetRotation = Quaternion.Euler(0f, this.facingDirection, 0f);
                                 }
-                                else if (flag4 && (this.grounded || LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode != GAMEMODE.PVP_AHSS))
+                                else if (flag4 && (this.grounded || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Gamemode != GAMEMODE.PVP_AHSS))
                                 {
                                     this.changeBlade();
                                 }
@@ -6694,7 +6629,7 @@ public class HERO : Photon.MonoBehaviour
                                             {
                                                 this.attackAnimation = "special_sasha";
                                                 this.playAnimation("special_sasha");
-                                                this.currentBuff = BUFF.SpeedUp;
+                                                this.currentBuff = Buff.SpeedUp;
                                                 this.buffTime = 10f;
                                             }
                                             else
@@ -7028,7 +6963,7 @@ public class HERO : Photon.MonoBehaviour
                                     this.facingDirection = this.gunDummy.transform.rotation.eulerAngles.y;
                                     this.targetRotation = Quaternion.Euler(0f, this.facingDirection, 0f);
                                 }
-                                else if (flag5 && (this.grounded || LevelInfoManager.GetInfo(FengGameManagerMKII.level).Gamemode != GAMEMODE.PVP_AHSS && RCSettings.ahssReload == 0))
+                                else if (flag5 && (this.grounded || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Gamemode != GAMEMODE.PVP_AHSS && RCSettings.ahssReload == 0))
                                 {
                                     this.changeBlade();
                                 }

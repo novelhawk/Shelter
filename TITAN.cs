@@ -2954,7 +2954,7 @@ public class TITAN : Photon.MonoBehaviour
         {
             this.headscale = new Vector3(1f, 1f, 1f);
         }
-        else if (level < 1f && FengGameManagerMKII.level.StartsWith("Custom"))
+        else if (level < 1f && FengGameManagerMKII.Level.StartsWith("Custom"))
         {
             CapsuleCollider component = this.myTitanTrigger.GetComponent<CapsuleCollider>();
             component.radius *= 2.5f - level;
@@ -3202,7 +3202,7 @@ public class TITAN : Photon.MonoBehaviour
         }
         if (num == 4)
         {
-            if (!LevelInfoManager.GetInfo(FengGameManagerMKII.level).HasPunk)
+            if (!LevelInfoManager.GetInfo(FengGameManagerMKII.Level).HasPunk)
             {
                 num = 1;
             }
@@ -3235,7 +3235,7 @@ public class TITAN : Photon.MonoBehaviour
 
     public void setAbnormalType2(AbnormalType type, bool forceCrawler)
     {
-        bool flag = RCSettings.spawnMode > 0 || (int) FengGameManagerMKII.settings[91] == 1 && IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient || FengGameManagerMKII.level.StartsWith("Custom");
+        bool flag = RCSettings.spawnMode > 0 || (int) FengGameManagerMKII.settings[91] == 1 && IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient || FengGameManagerMKII.Level.StartsWith("Custom");
         int num = 0;
         float num2 = 0.02f * (IN_GAME_MAIN_CAMERA.difficulty + 1);
         if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.PVP_AHSS)
@@ -3309,7 +3309,7 @@ public class TITAN : Photon.MonoBehaviour
         }
         if (num == 4)
         {
-            if (!LevelInfoManager.GetInfo(FengGameManagerMKII.level).HasPunk)
+            if (!LevelInfoManager.GetInfo(FengGameManagerMKII.Level).HasPunk)
             {
                 num = 1;
             }

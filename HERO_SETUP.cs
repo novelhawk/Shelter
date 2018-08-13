@@ -163,7 +163,7 @@ public class HERO_SETUP : MonoBehaviour
         if (this.myCostume.mesh_3dmg_gas_l.Length > 0)
         {
             this.part_3dmg_gas_l = (GameObject) Instantiate(Resources.Load("Character/" + this.myCostume.mesh_3dmg_gas_l));
-            if (this.myCostume.uniform_type != UNIFORM_TYPE.CasualAHSS)
+            if (this.myCostume.uniform_type != UniformType.CasualAHSS)
             {
                 this.part_3dmg_gas_l.transform.position = this.mount_3dmg_gas_l.transform.position;
                 this.part_3dmg_gas_l.transform.rotation = this.mount_3dmg_gas_l.transform.rotation;
@@ -180,7 +180,7 @@ public class HERO_SETUP : MonoBehaviour
         if (this.myCostume.mesh_3dmg_gas_r.Length > 0)
         {
             this.part_3dmg_gas_r = (GameObject) Instantiate(Resources.Load("Character/" + this.myCostume.mesh_3dmg_gas_r));
-            if (this.myCostume.uniform_type != UNIFORM_TYPE.CasualAHSS)
+            if (this.myCostume.uniform_type != UniformType.CasualAHSS)
             {
                 this.part_3dmg_gas_r.transform.position = this.mount_3dmg_gas_r.transform.position;
                 this.part_3dmg_gas_r.transform.rotation = this.mount_3dmg_gas_r.transform.rotation;

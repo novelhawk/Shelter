@@ -60,7 +60,7 @@ public class TriggerColliderWeapon : MonoBehaviour
             }
             if (other.gameObject.tag == "playerHitbox")
             {
-                if (LevelInfoManager.GetInfo(FengGameManagerMKII.level).IsPvP)
+                if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).IsPvP)
                 {
                     float b = 1f - Vector3.Distance(other.gameObject.transform.position, transform.position) * 0.05f;
                     b = Mathf.Min(1f, b);
