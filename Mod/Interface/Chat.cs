@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Mod.Managers;
 using UnityEngine;
 
 namespace Mod.Interface
@@ -15,7 +16,7 @@ namespace Mod.Interface
         private GUIStyle _mInputStyle;
 
         private static readonly List<ChatMessage> Messages = new List<ChatMessage>();
-        public static string Message { get; set; } = string.Empty;
+        public static string Message { get; private set; } = string.Empty;
 
         #region Static methods
 
@@ -107,27 +108,21 @@ namespace Mod.Interface
 
         protected override void Render()
         {
-            _mInputStyle = new GUIStyle(GUI.skin.textArea) // It creates a new instance every frame. Anyone does it so i don't think it's that much of performance loss. (GUI.skin is available only in OnGUI) TODO: Find alternative
+            // Works in OnShow() for ProfileChanger. TODO: Move it to OnShow
+            _mInputStyle = new GUIStyle(GUI.skin.textArea) // It creates a new instance every frame. Anyone does it so i don't think it's that much of performance loss. (GUI.skin is available only in OnGUI)
             {
                 hover = { background = _mGreyTexture, textColor = Color(0, 0, 0) }, // Used as 'normal'
                 border = new RectOffset(0, 0, 0, 0),
                 padding = new RectOffset(0, 0, 0, 0),
                 margin = new RectOffset(0, 0, 0, 0)
             };
+            
             if (Event.current.type == EventType.KeyDown && (Event.current.keyCode == KeyCode.Return || Event.current.keyCode == KeyCode.KeypadEnter))
             {
                 if (GUI.GetNameOfFocusedControl() == "ChatInput")
                 {
                     if (Message.StartsWith("/") || Message.StartsWith("\\"))
                     {
-                        foreach (GameObject obj in GameObject.FindGameObjectsWithTag("titan"))
-                        {
-                            if (obj.GetComponent<TITAN>() != null)
-                            {
-                                obj.GetComponent<TITAN>().photonView.RPC("netDie", PhotonTargets.All);
-                            }
-                        }
-
                         Match match = Regex.Match(Message, @"[\\\/](\w+)(?:\s+(.*))?.*?");
                         Command cmd = Shelter.CommandManager.GetCommand(match.Groups[1].Value); //Core.CommandManager.FirstOrDefault(cmds => cmds.Commands.FirstOrDefault(x => x.EqualsIgnoreCase(match.Groups[1].Value)) != null);
 
@@ -143,7 +138,7 @@ namespace Mod.Interface
                         var args = match.Groups[2].Value.Split(' ');
                         if (args[0].Equals(string.Empty)) args = new string[0];
 
-                        if (Shelter.CommandManager.Execute(cmd, args) != null)
+                        if (CommandManager.Execute(cmd, args) != null)
                         {
                             Notify.New("UNHANDLED ERROR", $"Unexpected error running {cmd.CommandName}!\nPlease report the bug to the developer", 10000);
                             System("Exception thrown on " + cmd.CommandName/*Shelter.Lang.Get("message.commandexecutionerror.text", match.Groups[1].Value)*/);
@@ -197,7 +192,7 @@ namespace Mod.Interface
 
 
         private Vector2 _mRealScroll;
-        protected virtual void Update()
+        protected void Update()
         {
             if (!_mWriting) return;
             Vector2 vector = new Vector2(0, 30);

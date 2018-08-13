@@ -45,7 +45,7 @@ namespace Mod.Managers
         public Exception Execute(string commandName, string[] commandArgs)
             => Execute(GetCommand(commandName), commandArgs);
 
-        public Exception Execute(Command command, string[] commandArgs)
+        public static Exception Execute(Command command, string[] commandArgs)
         {
             try
             {
