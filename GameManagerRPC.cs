@@ -136,8 +136,7 @@ public partial class FengGameManagerMKII
             if (hero != null)
             {
                 if (info.sender.Properties.Guild != string.Empty)
-                    hero.myNetWorkName.GetComponent<UILabel>().text =
-                        "[FFFF00]" + info.sender.Properties.Guild + "\n[FFFFFF]" + info.sender.Properties.Name;
+                    hero.myNetWorkName.GetComponent<UILabel>().text = "[FFFF00]" + info.sender.Properties.Guild + "\n[FFFFFF]" + info.sender.Properties.Name;
                 else
                     hero.myNetWorkName.GetComponent<UILabel>().text = info.sender.Properties.Name;
             }
@@ -187,7 +186,7 @@ public partial class FengGameManagerMKII
             {
                 if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.KILL_TITAN)
                 {
-                    if (IsAnyTitanAlive())
+                    if (!IsAnyTitanAlive)
                     {
                         GameWin();
                         Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
@@ -195,7 +194,7 @@ public partial class FengGameManagerMKII
                 }
                 else if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.SURVIVE_MODE)
                 {
-                    if (IsAnyTitanAlive())
+                    if (!IsAnyTitanAlive)
                     {
                         wave++;
                         if (!(LevelInfoManager.GetInfo(Level).RespawnMode != RespawnMode.NEWROUND &&
@@ -557,7 +556,7 @@ public partial class FengGameManagerMKII
                 titanSpawns.Clear();
                 playerSpawnsC.Clear();
                 playerSpawnsM.Clear();
-                ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
+                Hashtable propertiesToSet = new Hashtable
                 {
                     {PlayerProperty.CurrentLevel, currentLevel}
                 };
@@ -639,7 +638,7 @@ public partial class FengGameManagerMKII
     {
         if (info.sender.IsMasterClient)
         {
-            foreach (TITAN titan in titans)
+            foreach (TITAN titan in Titans)
             {
                 if (titan.photonView.isMine && !(PhotonNetwork.isMasterClient && !titan.nonAI))
                 {
@@ -670,29 +669,18 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
-    private void SettingRPC(ExitGames.Client.Photon.Hashtable hash, PhotonMessageInfo info)
+    private void SettingRPC(Hashtable hash, PhotonMessageInfo info)
     {
-        if (info.sender.IsMasterClient)
-        {
-            SetGameSettings(hash);
-        }
+        if (!info.sender.IsMasterClient) 
+            throw new NotAllowedException(nameof(SettingRPC), info);
+        
+        SetGameSettings(hash);
     }
 
     [RPC]
-    private void ShowChatContent(string content) // I don't know what this is
+    private void ShowChatContent(string content, PhotonMessageInfo info) 
     {
-        chatContent.Add(content);
-        if (chatContent.Count > 10)
-        {
-            chatContent.RemoveAt(0);
-        }
-
-        GameObject.Find("LabelChatContent").GetComponent<UILabel>().text = string.Empty;
-        foreach (object chat in chatContent)
-        {
-            UILabel component = GameObject.Find("LabelChatContent").GetComponent<UILabel>();
-            component.text = component.text + chat;
-        }
+        throw new NotAllowedException(nameof(ShowChatContent), info, false);
     }
 
     [RPC]
@@ -742,10 +730,10 @@ public partial class FengGameManagerMKII
     public void SpawnPlayerAtRPC(float posX, float posY, float posZ, PhotonMessageInfo info)
     {
         if (info.sender.IsMasterClient && logicLoaded && customLevelLoaded && !needChooseSide &&
-            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver)
+            UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver)
         {
             Vector3 position = new Vector3(posX, posY, posZ);
-            IN_GAME_MAIN_CAMERA component = Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>();
+            IN_GAME_MAIN_CAMERA component = UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>();
             component.setMainObject(PhotonNetwork.Instantiate("AOTTG_HERO 1", position, new Quaternion(0f, 0f, 0f, 1f),
                 0));
             string slot = myLastHero.ToUpper();
@@ -811,7 +799,7 @@ public partial class FengGameManagerMKII
             {
                 Transform transform1 = component.main_object.transform;
                 transform1.position +=
-                    new Vector3(UnityEngine.Random.Range(-20, 20), 2f, UnityEngine.Random.Range(-20, 20));
+                    new Vector3(Random.Range(-20, 20), 2f, Random.Range(-20, 20));
             }
 
             Player.Self.SetCustomProperties(new Hashtable

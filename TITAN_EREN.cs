@@ -417,7 +417,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
         return this.bottomObject.GetComponent<CheckHitGround>().isGrounded;
     }
 
-    public void lateUpdate()
+    public void DoLateUpdate()
     {
         if ((!IN_GAME_MAIN_CAMERA.isPausing || IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE) && !this.rockLift && (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine))
         {
@@ -533,7 +533,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     {
         if (GameObject.Find("MultiplayerManager") != null)
         {
-            FengGameManagerMKII.instance.RemoveTitanEren(this);
+            FengGameManagerMKII.instance.ErenTitans.Remove(this);
         }
     }
 
@@ -822,7 +822,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     private void Start()
     {
         this.loadskin();
-        FengGameManagerMKII.instance.AddTitanEren(this);
+        FengGameManagerMKII.instance.ErenTitans.Add(this);
         if (this.rockLift)
         {
             this.rock = GameObject.Find("rock");
@@ -847,7 +847,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
         this.isROCKMOVE = true;
     }
 
-    public void update()
+    public void DoUpdate()
     {
         if ((!IN_GAME_MAIN_CAMERA.isPausing || IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE) && !this.rockLift)
         {

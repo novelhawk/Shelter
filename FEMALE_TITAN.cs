@@ -1146,34 +1146,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         }
     }
 
-    public void lateUpdate()
-    {
-        if (!IN_GAME_MAIN_CAMERA.isPausing || IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE)
-        {
-            if (animation.IsPlaying("run"))
-            {
-                if (animation["run"].normalizedTime % 1f > 0.1f && animation["run"].normalizedTime % 1f < 0.6f && stepSoundPhase == 2)
-                {
-                    stepSoundPhase = 1;
-                    Transform transform = this.transform.Find("snd_titan_foot");
-                    transform.GetComponent<AudioSource>().Stop();
-                    transform.GetComponent<AudioSource>().Play();
-                }
-                if (animation["run"].normalizedTime % 1f > 0.6f && stepSoundPhase == 1)
-                {
-                    stepSoundPhase = 2;
-                    Transform transform2 = transform.Find("snd_titan_foot");
-                    transform2.GetComponent<AudioSource>().Stop();
-                    transform2.GetComponent<AudioSource>().Play();
-                }
-            }
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine)
-            {
-            }
-        }
-    }
-
-    public void lateUpdate2()
+    public void DoLateUpdate()
     {
         if (!IN_GAME_MAIN_CAMERA.isPausing || IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE)
         {
@@ -1292,7 +1265,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     {
         if (GameObject.Find("MultiplayerManager") != null)
         {
-            FengGameManagerMKII.instance.RemoveFemaleTitan(this);
+            FengGameManagerMKII.instance.FemaleTitans.Remove(this);
         }
     }
 
@@ -1380,7 +1353,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
 
     private void startMain()
     {
-        FengGameManagerMKII.instance.AddFemaleTitan(this);
+        FengGameManagerMKII.instance.FemaleTitans.Add(this);
         name = "Female Titan";
         grabTF = new GameObject();
         grabTF.name = "titansTmpGrabTF";
@@ -1550,7 +1523,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         needFreshCorePosition = true;
     }
 
-    public void update()
+    public void DoUpdate()
     {
         if ((!IN_GAME_MAIN_CAMERA.isPausing || IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE) && (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine))
         {

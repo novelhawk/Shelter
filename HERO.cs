@@ -2130,129 +2130,7 @@ public class HERO : Photon.MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void lateUpdate()
-    {
-        if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && this.myNetWorkName != null)
-        {
-            if (this.titanForm && this.eren_titan != null)
-            {
-                this.myNetWorkName.transform.localPosition = Vector3.up * Screen.height * 2f;
-            }
-            Vector3 start = new Vector3(transform.position.x, transform.position.y + 2f, transform.position.z);
-            GameObject obj2 = GameObject.Find("MainCamera");
-            LayerMask mask = 1 << LayerMask.NameToLayer("Ground");
-            LayerMask mask2 = 1 << LayerMask.NameToLayer("EnemyBox");
-            LayerMask mask3 = mask2 | mask;
-            if (Vector3.Angle(obj2.transform.forward, start - obj2.transform.position) <= 90f && !Physics.Linecast(start, obj2.transform.position, mask3))
-            {
-                Vector2 vector5 = GameObject.Find("MainCamera").GetComponent<Camera>().WorldToScreenPoint(start);
-                this.myNetWorkName.transform.localPosition = new Vector3((int)(vector5.x - Screen.width * 0.5f), (int)(vector5.y - Screen.height * 0.5f), 0f);
-            }
-            else
-            {
-                this.myNetWorkName.transform.localPosition = Vector3.up * Screen.height * 2f;
-            }
-        }
-        if (!this.titanForm)
-        {
-            if (IN_GAME_MAIN_CAMERA.cameraTilt == 1 && (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine))
-            {
-                Quaternion quaternion3;
-                Vector3 zero = Vector3.zero;
-                Vector3 position = Vector3.zero;
-                if (this.isLaunchLeft && this.bulletLeft != null && this.bulletLeft.GetComponent<Bullet>().isHooked())
-                {
-                    zero = this.bulletLeft.transform.position;
-                }
-                if (this.isLaunchRight && this.bulletRight != null && this.bulletRight.GetComponent<Bullet>().isHooked())
-                {
-                    position = this.bulletRight.transform.position;
-                }
-                Vector3 vector8 = Vector3.zero;
-                if (zero.magnitude != 0f && position.magnitude == 0f)
-                {
-                    vector8 = zero;
-                }
-                else if (zero.magnitude == 0f && position.magnitude != 0f)
-                {
-                    vector8 = position;
-                }
-                else if (zero.magnitude != 0f && position.magnitude != 0f)
-                {
-                    vector8 = (zero + position) * 0.5f;
-                }
-                Vector3 from = Vector3.Project(vector8 - transform.position, GameObject.Find("MainCamera").transform.up);
-                Vector3 vector10 = Vector3.Project(vector8 - transform.position, GameObject.Find("MainCamera").transform.right);
-                if (vector8.magnitude > 0f)
-                {
-                    Vector3 to = from + vector10;
-                    float num = Vector3.Angle(vector8 - transform.position, rigidbody.velocity) * 0.005f;
-                    Vector3 vector14 = GameObject.Find("MainCamera").transform.right + vector10.normalized;
-                    quaternion3 = Quaternion.Euler(GameObject.Find("MainCamera").transform.rotation.eulerAngles.x, GameObject.Find("MainCamera").transform.rotation.eulerAngles.y, vector14.magnitude >= 1f ? -Vector3.Angle(@from, to) * num : Vector3.Angle(@from, to) * num);
-                }
-                else
-                {
-                    quaternion3 = Quaternion.Euler(GameObject.Find("MainCamera").transform.rotation.eulerAngles.x, GameObject.Find("MainCamera").transform.rotation.eulerAngles.y, 0f);
-                }
-                GameObject.Find("MainCamera").transform.rotation = Quaternion.Lerp(GameObject.Find("MainCamera").transform.rotation, quaternion3, Time.deltaTime * 2f);
-            }
-            if (this.State == HeroState.Grab && this.titanWhoGrabMe != null)
-            {
-                if (this.titanWhoGrabMe.GetComponent<TITAN>() != null)
-                {
-                    transform.position = this.titanWhoGrabMe.GetComponent<TITAN>().grabTF.transform.position;
-                    transform.rotation = this.titanWhoGrabMe.GetComponent<TITAN>().grabTF.transform.rotation;
-                }
-                else if (this.titanWhoGrabMe.GetComponent<FEMALE_TITAN>() != null)
-                {
-                    transform.position = this.titanWhoGrabMe.GetComponent<FEMALE_TITAN>().grabTF.transform.position;
-                    transform.rotation = this.titanWhoGrabMe.GetComponent<FEMALE_TITAN>().grabTF.transform.rotation;
-                }
-            }
-            if (this.useGun)
-            {
-                if (!this.leftArmAim && !this.rightArmAim)
-                {
-                    if (!this.grounded)
-                    {
-                        this.handL.localRotation = Quaternion.Euler(90f, 0f, 0f);
-                        this.handR.localRotation = Quaternion.Euler(-90f, 0f, 0f);
-                    }
-                }
-                else
-                {
-                    Vector3 vector17 = this.gunTarget - transform.position;
-                    float current = -Mathf.Atan2(vector17.z, vector17.x) * 57.29578f;
-                    float num3 = -Mathf.DeltaAngle(current, transform.rotation.eulerAngles.y - 90f);
-                    this.headMovement();
-                    if (!this.isLeftHandHooked && this.leftArmAim && num3 < 40f && num3 > -90f)
-                    {
-                        this.leftArmAimTo(this.gunTarget);
-                    }
-                    if (!this.isRightHandHooked && this.rightArmAim && num3 > -40f && num3 < 90f)
-                    {
-                        this.rightArmAimTo(this.gunTarget);
-                    }
-                }
-                if (this.isLeftHandHooked && this.bulletLeft != null)
-                {
-                    this.leftArmAimTo(this.bulletLeft.transform.position);
-                }
-                if (this.isRightHandHooked && this.bulletRight != null)
-                {
-                    this.rightArmAimTo(this.bulletRight.transform.position);
-                }
-            }
-            this.setHookedPplDirection();
-            this.bodyLean();
-            if (!animation.IsPlaying("attack3_2") && !animation.IsPlaying("attack5") && !animation.IsPlaying("special_petra"))
-            {
-                rigidbody.rotation = Quaternion.Lerp(gameObject.transform.rotation, this.targetRotation, Time.deltaTime * 6f);
-            }
-        }
-    }
-
-    public void lateUpdate2()
+    public void DoLateUpdate()
     {
         if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && this.myNetWorkName != null)
         {
@@ -3818,7 +3696,7 @@ public class HERO : Photon.MonoBehaviour
         }
         if (GameObject.Find("MultiplayerManager") != null)
         {
-            FengGameManagerMKII.instance.RemoveHero(this);
+            FengGameManagerMKII.instance.Heroes.Remove(this);
         }
         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
         {
@@ -5072,7 +4950,7 @@ public class HERO : Photon.MonoBehaviour
 
     private void Start()
     {
-        FengGameManagerMKII.instance.AddHero(this);
+        FengGameManagerMKII.instance.Heroes.Add(this);
         if ((LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Horse || RCSettings.horseMode == 1) && IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
         {
             this.myHorse = PhotonNetwork.Instantiate("horse", this.baseTransform.position + Vector3.up * 5f, this.baseTransform.rotation, 0);

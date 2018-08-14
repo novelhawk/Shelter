@@ -75,7 +75,6 @@ public partial class FengGameManagerMKII
         highestwave = 1;
         localRacingResult = string.Empty;
         needChooseSide = true;
-        chatContent = new ArrayList();
         killInfoGO = new ArrayList();
         //        InRoomChat.messages = new List<string>();
         if (!PhotonNetwork.isMasterClient)
@@ -161,16 +160,16 @@ public partial class FengGameManagerMKII
             Cache();
             LoadMapCustom();
             //TODO: Remove SetInterfacePosition
-            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().SetInterfacePosition();
-            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().SetDayLight(IN_GAME_MAIN_CAMERA.dayLight);
+            UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().SetInterfacePosition();
+            UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().SetDayLight(IN_GAME_MAIN_CAMERA.dayLight);
             if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
             {
                 single_kills = 0;
                 single_maxDamage = 0;
                 single_totalDamage = 0;
-                Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled = true;
-                Camera.main.GetComponent<SpectatorMovement>().disable = true;
-                Camera.main.GetComponent<MouseLook>().disable = true;
+                UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled = true;
+                UnityEngine.Camera.main.GetComponent<SpectatorMovement>().disable = true;
+                UnityEngine.Camera.main.GetComponent<MouseLook>().disable = true;
                 IN_GAME_MAIN_CAMERA.gamemode = info.Gamemode;
                 SpawnPlayer(IN_GAME_MAIN_CAMERA.singleCharacter.ToUpper());
                 if (IN_GAME_MAIN_CAMERA.cameraMode == CAMERA_TYPE.TPS)
@@ -194,8 +193,8 @@ public partial class FengGameManagerMKII
             else
             {
                 PVPcheckPoint.chkPts = new ArrayList();
-                Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled = false;
-                Camera.main.GetComponent<CameraShake>().enabled = false;
+                UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled = false;
+                UnityEngine.Camera.main.GetComponent<CameraShake>().enabled = false;
                 IN_GAME_MAIN_CAMERA.gametype = GAMETYPE.MULTIPLAYER;
                 if (info.Gamemode == GAMEMODE.TROST)
                 {
@@ -743,122 +742,28 @@ public partial class FengGameManagerMKII
         //        }
         if (gameStart)
         {
-            IEnumerator enumerator = heroes.GetEnumerator();
-            try
-            {
-                while (enumerator.MoveNext())
-                {
-                    var current = (HERO) enumerator.Current;
-                    if (current != null)
-                        current.DoUpdate();
-                }
-            }
-            finally
-            {
-                if (enumerator is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
-            }
+            foreach (HERO hero in Heroes)
+                hero.DoUpdate();
+            
+            foreach (Bullet bullet in Hooks)
+                bullet.DoUpdate();
 
-            enumerator = hooks.GetEnumerator();
-            try
-            {
-                while (enumerator.MoveNext())
-                {
-                    var current = (Bullet) enumerator.Current;
-                    if (current != null)
-                        current.update();
-                }
-            }
-            finally
-            {
-                if (enumerator is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
-            }
+            foreach (TITAN_EREN et in ErenTitans)
+                et.DoUpdate();
 
-            if (mainCamera != null)
-            {
-                mainCamera.snapShotUpdate();
-            }
+            foreach (TITAN titan in Titans)
+                titan.DoUpdate();
 
-            enumerator = eT.GetEnumerator();
-            try
-            {
-                while (enumerator.MoveNext())
-                {
-                    var titanEren = (TITAN_EREN) enumerator.Current;
-                    if (titanEren != null)
-                        titanEren.update();
-                }
-            }
-            finally
-            {
-                if (enumerator is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
-            }
+            foreach (FEMALE_TITAN ft in FemaleTitans)
+                ft.DoUpdate();
 
-            enumerator = titans.GetEnumerator();
-            try
-            {
-                while (enumerator.MoveNext())
-                {
-                    var current = (TITAN) enumerator.Current;
-                    if (current != null)
-                        current.update2();
-                }
-            }
-            finally
-            {
-                if (enumerator is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
-            }
+            foreach (COLOSSAL_TITAN ct in ColossalTitans)
+                ct.DoUpdate();
 
-            enumerator = fT.GetEnumerator();
-            try
+            if (IN_GAME_MAIN_CAMERA.instance != null)
             {
-                while (enumerator.MoveNext())
-                {
-                    var femaleTitan = (FEMALE_TITAN) enumerator.Current;
-                    if (femaleTitan != null)
-                        femaleTitan.update();
-                }
-            }
-            finally
-            {
-                if (enumerator is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
-            }
-
-            enumerator = cT.GetEnumerator();
-            try
-            {
-                while (enumerator.MoveNext())
-                {
-                    var colossalTitan = (COLOSSAL_TITAN) enumerator.Current;
-                    if (colossalTitan != null)
-                        colossalTitan.update2();
-                }
-            }
-            finally
-            {
-                if (enumerator is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
-            }
-
-            if (mainCamera != null)
-            {
-                mainCamera.update2();
+                IN_GAME_MAIN_CAMERA.instance.DoUpdate();
+                IN_GAME_MAIN_CAMERA.instance.SnapshotUpdate();
             }
         }
     }
@@ -870,12 +775,6 @@ public partial class FengGameManagerMKII
         HeroCostume.init2();
         CharacterMaterials.init();
         DontDestroyOnLoad(gameObject);
-        heroes = new ArrayList();
-        eT = new ArrayList();
-        titans = new ArrayList();
-        fT = new ArrayList();
-        cT = new ArrayList();
-        hooks = new ArrayList();
         name = string.Empty;
         if (nameField == null)
         {
@@ -888,8 +787,6 @@ public partial class FengGameManagerMKII
             privateServerField = string.Empty;
         }
 
-        usernameField = string.Empty;
-        passwordField = string.Empty;
         ResetGameSettings();
         banHash = new ExitGames.Client.Photon.Hashtable();
         imatitan = new ExitGames.Client.Photon.Hashtable();
@@ -953,78 +850,22 @@ public partial class FengGameManagerMKII
 
     private void LateUpdate()
     {
-        if (gameStart)
-        {
-            IEnumerator enumerator = heroes.GetEnumerator();
-            try
-            {
-                while (enumerator.MoveNext())
-                {
-                    var current = (HERO) enumerator.Current;
-                    if (current != null)
-                        current.lateUpdate2();
-                }
-            }
-            finally
-            {
-                if (enumerator is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
-            }
+        if (!gameStart) 
+            return;
+        
+        foreach (HERO hero in Heroes)
+            hero.DoLateUpdate();
+            
+        foreach (TITAN_EREN eren in ErenTitans)
+            eren.DoLateUpdate();
 
-            IEnumerator enumerator2 = eT.GetEnumerator();
-            try
-            {
-                while (enumerator2.MoveNext())
-                {
-                    var titanEren = (TITAN_EREN) enumerator2.Current;
-                    if (titanEren != null)
-                        titanEren.lateUpdate();
-                }
-            }
-            finally
-            {
-                if (enumerator2 is IDisposable disposable2)
-                {
-                    disposable2.Dispose();
-                }
-            }
-
-            IEnumerator enumerator3 = titans.GetEnumerator();
-            try
-            {
-                while (enumerator3.MoveNext())
-                {
-                    var current = (TITAN) enumerator3.Current;
-                    if (current != null)
-                        current.lateUpdate2();
-                }
-            }
-            finally
-            {
-                if (enumerator3 is IDisposable disposable3)
-                    disposable3.Dispose();
-            }
-
-            IEnumerator enumerator4 = fT.GetEnumerator();
-            try
-            {
-                while (enumerator4.MoveNext())
-                {
-                    var femaleTitan = (FEMALE_TITAN) enumerator4.Current;
-                    if (femaleTitan != null)
-                        femaleTitan.lateUpdate2();
-                }
-            }
-            finally
-            {
-                if (enumerator4 is IDisposable disposable4)
-                    disposable4.Dispose();
-            }
-
-            Core();
-        }
+        foreach (TITAN t in Titans)
+            t.DoLateUpdate();
+            
+        foreach (FEMALE_TITAN ft in FemaleTitans)
+            ft.DoLateUpdate();
+            
+        Core();
     }
 
     #endregion

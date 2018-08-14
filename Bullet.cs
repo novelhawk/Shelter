@@ -344,7 +344,7 @@ public class Bullet : Photon.MonoBehaviour
     {
         if (FengGameManagerMKII.instance != null)
         {
-            FengGameManagerMKII.instance.RemoveHook(this);
+            FengGameManagerMKII.instance.Hooks.Remove(this);
         }
         if (this.myTitan != null)
         {
@@ -409,7 +409,7 @@ public class Bullet : Photon.MonoBehaviour
     {
         this.rope = (GameObject) Instantiate(Resources.Load("rope"));
         this.lineRenderer = this.rope.GetComponent<LineRenderer>();
-        FengGameManagerMKII.instance.AddHook(this);
+        FengGameManagerMKII.instance.Hooks.Add(this);
     }
 
     [RPC]
@@ -424,7 +424,7 @@ public class Bullet : Photon.MonoBehaviour
         transform.parent = PhotonView.Find(id).gameObject.transform;
     }
 
-    public void update()
+    public void DoUpdate()
     {
         if (this.master == null)
         {

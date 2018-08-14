@@ -1364,11 +1364,11 @@ public partial class FengGameManagerMKII
 
                         num41 = 10f + z * y * 1.2f / 2f;
                         selectedObj.transform.position = new Vector3(
-                            Camera.main.transform.position.x + Camera.main.transform.forward.x * num41,
-                            Camera.main.transform.position.y + Camera.main.transform.forward.y * 10f,
-                            Camera.main.transform.position.z + Camera.main.transform.forward.z * num41);
+                            UnityEngine.Camera.main.transform.position.x + UnityEngine.Camera.main.transform.forward.x * num41,
+                            UnityEngine.Camera.main.transform.position.y + UnityEngine.Camera.main.transform.forward.y * 10f,
+                            UnityEngine.Camera.main.transform.position.z + UnityEngine.Camera.main.transform.forward.z * num41);
                         selectedObj.transform.rotation =
-                            Quaternion.Euler(0f, Camera.main.transform.rotation.eulerAngles.y, 0f);
+                            Quaternion.Euler(0f, UnityEngine.Camera.main.transform.rotation.eulerAngles.y, 0f);
                         name1 = selectedObj.name;
                         string[] strArray3 = new string[21];
                         strArray3[0] = name1;
@@ -1411,13 +1411,13 @@ public partial class FengGameManagerMKII
                             z = selectedObj.transform.localScale.z;
                             num41 = 10f + z * y * 1.2f / 2f;
                             selectedObj.transform.position = new Vector3(
-                                Camera.main.transform.position.x + Camera.main.transform.forward.x * num41,
-                                Camera.main.transform.position.y + Camera.main.transform.forward.y * 10f,
-                                Camera.main.transform.position.z + Camera.main.transform.forward.z * num41);
+                                UnityEngine.Camera.main.transform.position.x + UnityEngine.Camera.main.transform.forward.x * num41,
+                                UnityEngine.Camera.main.transform.position.y + UnityEngine.Camera.main.transform.forward.y * 10f,
+                                UnityEngine.Camera.main.transform.position.z + UnityEngine.Camera.main.transform.forward.z * num41);
                             if (!selectedObj.name.Contains("region"))
                             {
                                 selectedObj.transform.rotation = Quaternion.Euler(0f,
-                                    Camera.main.transform.rotation.eulerAngles.y, 0f);
+                                    UnityEngine.Camera.main.transform.rotation.eulerAngles.y, 0f);
                             }
 
                             name1 = selectedObj.name;
@@ -1436,11 +1436,11 @@ public partial class FengGameManagerMKII
                         z = selectedObj.transform.localScale.z;
                         num41 = 10f + z * y * 1.2f / 2f;
                         selectedObj.transform.position = new Vector3(
-                            Camera.main.transform.position.x + Camera.main.transform.forward.x * num41,
-                            Camera.main.transform.position.y + Camera.main.transform.forward.y * 10f,
-                            Camera.main.transform.position.z + Camera.main.transform.forward.z * num41);
+                            UnityEngine.Camera.main.transform.position.x + UnityEngine.Camera.main.transform.forward.x * num41,
+                            UnityEngine.Camera.main.transform.position.y + UnityEngine.Camera.main.transform.forward.y * 10f,
+                            UnityEngine.Camera.main.transform.position.z + UnityEngine.Camera.main.transform.forward.z * num41);
                         selectedObj.transform.rotation =
-                            Quaternion.Euler(0f, Camera.main.transform.rotation.eulerAngles.y, 0f);
+                            Quaternion.Euler(0f, UnityEngine.Camera.main.transform.rotation.eulerAngles.y, 0f);
                         name1 = selectedObj.name;
                         selectedObj.name = name1 + "," + (string) settings[70] + "," + (string) settings[71] + "," +
                                            (string) settings[72];
@@ -1448,11 +1448,11 @@ public partial class FengGameManagerMKII
                     else
                     {
                         selectedObj.transform.position = new Vector3(
-                            Camera.main.transform.position.x + Camera.main.transform.forward.x * 10f,
-                            Camera.main.transform.position.y + Camera.main.transform.forward.y * 10f,
-                            Camera.main.transform.position.z + Camera.main.transform.forward.z * 10f);
+                            UnityEngine.Camera.main.transform.position.x + UnityEngine.Camera.main.transform.forward.x * 10f,
+                            UnityEngine.Camera.main.transform.position.y + UnityEngine.Camera.main.transform.forward.y * 10f,
+                            UnityEngine.Camera.main.transform.position.z + UnityEngine.Camera.main.transform.forward.z * 10f);
                         selectedObj.transform.rotation =
-                            Quaternion.Euler(0f, Camera.main.transform.rotation.eulerAngles.y, 0f);
+                            Quaternion.Euler(0f, UnityEngine.Camera.main.transform.rotation.eulerAngles.y, 0f);
                     }
 
                     Screen.lockCursor = true;
@@ -2271,11 +2271,11 @@ public partial class FengGameManagerMKII
 
                                         if (!(qualitySlider < 0.9f || Level.StartsWith("Custom")))
                                         {
-                                            Camera.main.GetComponent<TiltShift>().enabled = true;
+                                            UnityEngine.Camera.main.GetComponent<TiltShift>().enabled = true;
                                         }
                                         else
                                         {
-                                            Camera.main.GetComponent<TiltShift>().enabled = false;
+                                            UnityEngine.Camera.main.GetComponent<TiltShift>().enabled = false;
                                         }
 
                                         bool flag14 = false;
@@ -3999,14 +3999,14 @@ public partial class FengGameManagerMKII
                                 Time.timeScale = 1f;
                             }
 
-                            if (!Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled)
+                            if (!UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled)
                             {
                                 Screen.showCursor = true;
                                 Screen.lockCursor = true;
                                 GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().menuOn =
                                     false;
-                                Camera.main.GetComponent<SpectatorMovement>().disable = false;
-                                Camera.main.GetComponent<MouseLook>().disable = false;
+                                UnityEngine.Camera.main.GetComponent<SpectatorMovement>().disable = false;
+                                UnityEngine.Camera.main.GetComponent<MouseLook>().disable = false;
                             }
                             else
                             {

@@ -14,10 +14,10 @@ namespace Mod.Exceptions
                 FengGameManagerMKII.ignoreList.Add(sender.ID);
         }
 
-        public NotAllowedException(string rpc, PhotonMessageInfo info)
+        public NotAllowedException(string rpc, PhotonMessageInfo info, bool ignore = true)
         {
             Chat.System($"NotAllowedExeption from {info.sender} on calling RPC({rpc})");
-            if (!FengGameManagerMKII.ignoreList.Contains(info.sender.ID))
+            if (ignore && !FengGameManagerMKII.ignoreList.Contains(info.sender.ID))
                 FengGameManagerMKII.ignoreList.Add(info.sender.ID);
         }
     }
