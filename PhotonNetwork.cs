@@ -296,6 +296,9 @@ public static class PhotonNetwork
 
     public static void Disconnect()
     {
+        if (!connected)
+            return;
+        
         if (offlineMode)
         {
             offlineMode = false;

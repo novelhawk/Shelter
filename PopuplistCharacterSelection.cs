@@ -10,6 +10,30 @@ public class PopuplistCharacterSelection : MonoBehaviour
     public GameObject GAS;
     public GameObject SPD;
 
+    private void Start()
+    {
+        // destroy the Camera Typesadasdasdasdadsasdasdasdasdasdasdasdasdasdasasd label
+        // use instance id instead?
+        foreach (Object obj in GameObject.FindObjectsOfType(typeof(GameObject)))
+        {
+            if (obj is GameObject go)
+            {
+                if (go.name == "Label")
+                {
+                    UILabel label = go.GetComponent<UILabel>();
+                    if (label == null)
+                        continue;
+
+                    if (label.text.StartsWith("Camera Types")) 
+                    {
+                        Destroy(label);
+                        return;
+                    }
+                }
+            }
+        }
+    }
+    
     // ReSharper disable once UnusedMember.Local
     private void onCharacterChange() // Called by Unity.
     {

@@ -13,7 +13,7 @@ public class BTN_choose_titan : MonoBehaviour
             if (!PhotonNetwork.isMasterClient && FengGameManagerMKII.instance.roundTime > 60f)
             {
                 FengGameManagerMKII.instance.SpawnPlayerAfterGameEnd(id);
-                FengGameManagerMKII.instance.photonView.RPC("restartGameByClient", PhotonTargets.MasterClient, new object[0]);
+                FengGameManagerMKII.instance.photonView.RPC("restartGameByClient", PhotonTargets.MasterClient);
             }
             else
             {

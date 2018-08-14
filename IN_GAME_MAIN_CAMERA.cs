@@ -360,12 +360,24 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     public void SetInterfacePosition() //TODO: Redo it
     {
-        GameObject.Find("Flare").transform.localPosition = new Vector3((int)(-Screen.width * 0.5f) + 14, (int)(-Screen.height * 0.5f), 0f);
+        GameObject obj;
+        if ((obj = GameObject.Find("Flare")) != null)
+            Destroy(obj);
+        
+        if ((obj = GameObject.Find("Chatroom")) != null)
+            Destroy(obj);
+        
+        if ((obj = GameObject.Find("UILabel")) != null)
+            Destroy(obj);
+        
+        if ((obj = GameObject.Find("LabelNetworkStatus")) != null)
+            Destroy(obj);
+        
+//        GameObject.Find("Flare").transform.localPosition = new Vector3((int)(-Screen.width * 0.5f) + 14, (int)(-Screen.height * 0.5f), 0f);
         GameObject.Find("LabelInfoBottomRight").transform.localPosition = new Vector3((int)(Screen.width * 0.5f), (int)(-Screen.height * 0.5f), 0f);
 //        obj2.GetComponent<UILabel>().text = "Pause : " + GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.pause] + " ";
         GameObject.Find("LabelInfoTopCenter").transform.localPosition = new Vector3(0f, (int)(Screen.height * 0.5f), 0f);
         GameObject.Find("LabelInfoTopRight").transform.localPosition = new Vector3((int)(Screen.width * 0.5f), (int)(Screen.height * 0.5f), 0f);
-        Destroy(GameObject.Find("LabelNetworkStatus"));
 //        GameObject.Find("LabelNetworkStatus").transform.localPosition = new Vector3((float) ((int) (-Screen.width * 0.5f)), (float) ((int) (Screen.height * 0.5f)), 0f); MOD: Removed Connection state top left
         GameObject.Find("LabelInfoTopLeft").transform.localPosition = new Vector3((int)(-Screen.width * 0.5f), (int)(Screen.height * 0.5f - 20f), 0f);
         Destroy(GameObject.Find("Chatroom"));

@@ -39,10 +39,10 @@ namespace Mod
 
             _roomName = split[0];
             _roomMap = LevelInfoManager.GetInfo(split[1]);
-            _roomDifficulty = FengGameManagerMKII.DifficultyToEnum(split[2]);
+            _roomDifficulty = DifficultyToEnum(split[2]);
             if (int.TryParse(split[3], out int maxPlayers))
                 _maxPlayers = maxPlayers;
-            _roomDayLight = FengGameManagerMKII.DayLightToEnum(split[4]);
+            _roomDayLight = DayLightToEnum(split[4]);
             _roomPassword = split[5];
             if (int.TryParse(split[6], out int time))
                 _roomTime = time;
@@ -60,10 +60,10 @@ namespace Mod
 
             _roomName = split[0];
             _roomMap = LevelInfoManager.GetInfo(split[1]);
-            _roomDifficulty = FengGameManagerMKII.DifficultyToEnum(split[2]);
+            _roomDifficulty = DifficultyToEnum(split[2]);
             if (int.TryParse(split[3], out int maxPlayers))
                 _maxPlayers = maxPlayers;
-            _roomDayLight = FengGameManagerMKII.DayLightToEnum(split[4]);
+            _roomDayLight = DayLightToEnum(split[4]);
             _roomPassword = split[5];
             if (int.TryParse(split[6], out int time))
                 _roomTime = time;
@@ -76,6 +76,32 @@ namespace Mod
                 _isVisible = options.IsVisible;
                 _isOpen = options.IsOpen;
                 _doAutoCleanup = options.DoAutoCleanup;
+            }
+        }
+        
+        private static Difficulty DifficultyToEnum(string difficulty)
+        {
+            switch (difficulty.ToLowerInvariant())
+            {
+                default:
+                    return Difficulty.Normal;
+                case "hard":
+                    return Difficulty.Hard;
+                case "abnormal":
+                    return Difficulty.Abnormal;
+            }
+        }
+
+        public static DayLight DayLightToEnum(string dayLight)
+        {
+            switch (dayLight.ToLowerInvariant())
+            {
+                default:
+                    return DayLight.Day;
+                case "dawn":
+                    return DayLight.Dawn;
+                case "night":
+                    return DayLight.Night;
             }
         }
 
