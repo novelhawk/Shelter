@@ -14,10 +14,15 @@ public class PopuplistCharacterSelection : MonoBehaviour
     private void onCharacterChange() // Called by Unity.
     {
         HeroStat stat;
-        string selection = GetComponent<UIPopupList>().selection;
+        var list = GetComponent<UIPopupList>();
+        string selection = list.selection;
+        
+        if (!list.items.Contains("AHSS"))
+            list.items.Insert(list.items.Count - 3, "AHSS");
+        
         if (selection != "Set 1" && selection != "Set 2" && selection != "Set 3")
         {
-            stat = HeroStat.GetInfo(GetComponent<UIPopupList>().selection);
+            stat = HeroStat.GetInfo(list.selection);
         }
         else
         {
