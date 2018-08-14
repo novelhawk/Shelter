@@ -21,7 +21,7 @@ namespace Mod.Managers
                 new CommandMasterClient(), 
                 new CommandPause(), 
                 new CommandPrivateMessage(), 
-                new CommandProp(), 
+                new CommandProperties(), 
                 new CommandReply(), 
                 new CommandResetkd(), 
                 new CommandRestart(), 
@@ -31,6 +31,7 @@ namespace Mod.Managers
                 new CommandSpectate(), 
                 new CommandSpectateMode(), 
                 new CommandTeleport(), 
+                new CommandTest(), 
             });
         }
 
