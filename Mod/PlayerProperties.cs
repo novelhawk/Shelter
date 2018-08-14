@@ -7,8 +7,8 @@ namespace Mod
     public class PlayerProperties : Hashtable
     {
         public string Name => this[PlayerProperty.Name] as string ?? "Unknown";
-        public string Guild => this[PlayerProperty.Guild] as string;
-        public string FriendName => this[(byte) 0xFF] as string;
+        public string Guild => this[PlayerProperty.Guild] as string ?? "";
+        public string FriendName => this[(byte) 0xFF] as string ?? "";
 
         public PlayerType PlayerType
         {

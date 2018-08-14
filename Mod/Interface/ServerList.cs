@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using UnityEngine;
 
 namespace Mod.Interface
 {
@@ -83,9 +84,9 @@ namespace Mod.Interface
             GUI.SetNextControlName("Search");
             _filter = GUILayout.TextField(_filter.Replace("\n", ""), filterStyle);
             _scrollPosition = GUILayout.BeginScrollView(_scrollPosition, false, false, GUIStyle.none, GUIStyle.none);
-            foreach (Room room in Room.GetOrdinatedList(Room.List))
+            foreach (Room room in Room.List)
             {
-                if (_filter != string.Empty && !room.RoomName.RemoveColors().ContainsIgnoreCase(_filter) && !room.Map.ContainsIgnoreCase(_filter))
+                if (_filter != string.Empty && !room.Name.RemoveColors().ContainsIgnoreCase(_filter) && !room.Map.Name.ContainsIgnoreCase(_filter))
                     continue;
                 GUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();

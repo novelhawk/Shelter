@@ -40,7 +40,7 @@ public class SupportLogging : MonoBehaviour
 
     public void OnCreatedRoom()
     {
-        Debug.Log(string.Concat(new object[] { "SupportLogger OnCreatedRoom(", PhotonNetwork.room, "). ", PhotonNetwork.lobby }));
+        Debug.Log(string.Concat(new object[] { "SupportLogger OnCreatedRoom(", PhotonNetwork.Room, "). ", PhotonNetwork.lobby }));
     }
 
     public void OnFailedToConnectToPhoton(DisconnectCause cause)
@@ -56,7 +56,7 @@ public class SupportLogging : MonoBehaviour
 
     public void OnJoinedRoom()
     {
-        Debug.Log(string.Concat(new object[] { "SupportLogger OnJoinedRoom(", PhotonNetwork.room, "). ", PhotonNetwork.lobby }));
+        Debug.Log(string.Concat(new object[] { "SupportLogger OnJoinedRoom(", PhotonNetwork.Room, "). ", PhotonNetwork.lobby }));
     }
 
     public void OnLeftRoom()

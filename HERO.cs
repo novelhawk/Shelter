@@ -256,6 +256,7 @@ public class HERO : Photon.MonoBehaviour
     [RPC]
     public void BlowAway(Vector3 force, PhotonMessageInfo info = null)
     {
+        //BUG: Player titans use blowaway (Need to check)
         if (info != null && !info.sender.isLocal && !info.sender.IsMasterClient) // This allows MC to blowAway need TODO: To check for force valididy
             throw new NotAllowedException(nameof(BlowAway), info);
         if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine)
@@ -927,7 +928,7 @@ public class HERO : Photon.MonoBehaviour
             transform.GetComponent<AudioSource>().Play();
             if (PlayerPrefs.HasKey("EnableSS") && PlayerPrefs.GetInt("EnableSS") == 1)
             {
-                GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().startSnapShot2(this.transform.position, 0, null, 0.02f);
+                GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().TakeScreenshot(this.transform.position, 0, null, 0.02f);
             }
             Destroy(gameObject);
         }

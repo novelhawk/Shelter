@@ -1,6 +1,7 @@
 using ExitGames.Client.Photon;
 using ExitGames.Client.Photon.Lite;
 using System.Collections.Generic;
+using UnityEngine;
 
 internal class LoadbalancingPeer : PhotonPeer
 {
@@ -106,15 +107,15 @@ internal class LoadbalancingPeer : PhotonPeer
             }
             Hashtable target = new Hashtable();
             customOpParameters[248] = target;
-            target.MergeStringKeys(roomOptions.customRoomProperties);
-            target[(byte) 253] = roomOptions.isOpen;
-            target[(byte) 254] = roomOptions.isVisible;
-            target[(byte) 250] = roomOptions.customRoomPropertiesForLobby;
-            if (roomOptions.maxPlayers > 0)
+            target.MergeStringKeys(roomOptions.RoomProperties);
+            target[(byte) 253] = roomOptions.IsOpen;
+            target[(byte) 254] = roomOptions.IsVisible;
+            target[(byte) 250] = new string[0];
+            if (roomOptions.MaxPlayers > 0)
             {
-                target[(byte) 255] = roomOptions.maxPlayers;
+                target[(byte) 255] = roomOptions.MaxPlayers;
             }
-            if (roomOptions.cleanupCacheOnLeave)
+            if (roomOptions.DoAutoCleanup)
             {
                 customOpParameters[241] = true;
                 target[(byte) 249] = true;
@@ -228,15 +229,15 @@ internal class LoadbalancingPeer : PhotonPeer
                 }
                 Hashtable target = new Hashtable();
                 customOpParameters[248] = target;
-                target.MergeStringKeys(roomOptions.customRoomProperties);
-                target[(byte) 253] = roomOptions.isOpen;
-                target[(byte) 254] = roomOptions.isVisible;
-                target[(byte) 250] = roomOptions.customRoomPropertiesForLobby;
-                if (roomOptions.maxPlayers > 0)
+                target.MergeStringKeys(roomOptions.RoomProperties);
+                target[(byte) 253] = roomOptions.IsOpen;
+                target[(byte) 254] = roomOptions.IsVisible;
+                target[(byte) 250] = new string[0    ];
+                if (roomOptions.MaxPlayers > 0)
                 {
-                    target[(byte) 255] = roomOptions.maxPlayers;
+                    target[(byte) 255] = roomOptions.MaxPlayers;
                 }
-                if (roomOptions.cleanupCacheOnLeave)
+                if (roomOptions.DoAutoCleanup)
                 {
                     customOpParameters[241] = true;
                     target[(byte) 249] = true;
@@ -318,10 +319,10 @@ internal class LoadbalancingPeer : PhotonPeer
                 { 251, actorProperties },
                 { 254, actorNr }
             };
+            
             if (broadcast)
-            {
-                customOpParameters.Add(250, broadcast);
-            }
+                customOpParameters.Add(250, true);
+            
             return this.OpCustom(252, customOpParameters, broadcast, channelId);
         }
         if (DebugOut >= DebugLevel.INFO)

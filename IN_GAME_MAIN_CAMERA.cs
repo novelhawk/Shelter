@@ -191,21 +191,18 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     private void CreateMinimap()
     {
         LevelInfo info = LevelInfoManager.GetInfo(FengGameManagerMKII.Level);
-        if (info != null)
+        Minimap minimap = gameObject.AddComponent<Minimap>();
+        if (Minimap.instance.myCam == null)
         {
-            Minimap minimap = gameObject.AddComponent<Minimap>();
-            if (Minimap.instance.myCam == null)
-            {
-                Minimap.instance.myCam = new GameObject().AddComponent<Camera>();
-                Minimap.instance.myCam.nearClipPlane = 0.3f;
-                Minimap.instance.myCam.farClipPlane = 1000f;
-                Minimap.instance.myCam.enabled = false;
-            }
-            minimap.CreateMinimap(Minimap.instance.myCam, 512, 0.3f, info.MinimapPreset);
-            if ((int) FengGameManagerMKII.settings[231] == 0 || RCSettings.globalDisableMinimap == 1)
-            {
-                minimap.SetEnabled(false);
-            }
+            Minimap.instance.myCam = new GameObject().AddComponent<Camera>();
+            Minimap.instance.myCam.nearClipPlane = 0.3f;
+            Minimap.instance.myCam.farClipPlane = 1000f;
+            Minimap.instance.myCam.enabled = false;
+        }
+        minimap.CreateMinimap(Minimap.instance.myCam, 512, 0.3f, info.MinimapPreset);
+        if ((int) FengGameManagerMKII.settings[231] == 0 || RCSettings.globalDisableMinimap == 1)
+        {
+            minimap.SetEnabled(false);
         }
     }
 
@@ -335,28 +332,29 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     public void SetDayLight(DayLight val)
     {
         dayLight = val;
-        if (dayLight == DayLight.Night)
+        switch (dayLight)
         {
-            GameObject obj2 = (GameObject) Instantiate(Resources.Load("flashlight"));
-            obj2.transform.parent = transform;
-            obj2.transform.position = transform.position;
-            obj2.transform.rotation = Quaternion.Euler(353f, 0f, 0f);
-            RenderSettings.ambientLight = FengColor.nightAmbientLight;
-            GameObject.Find("mainLight").GetComponent<Light>().color = FengColor.nightLight;
-            gameObject.GetComponent<Skybox>().material = this.skyBoxNIGHT;
+            case DayLight.Night:
+                GameObject obj2 = (GameObject) Instantiate(Resources.Load("flashlight"));
+                obj2.transform.parent = transform;
+                obj2.transform.position = transform.position;
+                obj2.transform.rotation = Quaternion.Euler(353f, 0f, 0f);
+                RenderSettings.ambientLight = FengColor.nightAmbientLight;
+                GameObject.Find("mainLight").GetComponent<Light>().color = FengColor.nightLight;
+                gameObject.GetComponent<Skybox>().material = this.skyBoxNIGHT;
+                break;
+            case DayLight.Day:
+                RenderSettings.ambientLight = FengColor.dayAmbientLight;
+                GameObject.Find("mainLight").GetComponent<Light>().color = FengColor.dayLight;
+                gameObject.GetComponent<Skybox>().material = this.skyBoxDAY;
+                break;
+            case DayLight.Dawn:
+                RenderSettings.ambientLight = FengColor.dawnAmbientLight;
+                GameObject.Find("mainLight").GetComponent<Light>().color = FengColor.dawnAmbientLight;
+                gameObject.GetComponent<Skybox>().material = this.skyBoxDAWN;
+                break;
         }
-        if (dayLight == DayLight.Day)
-        {
-            RenderSettings.ambientLight = FengColor.dayAmbientLight;
-            GameObject.Find("mainLight").GetComponent<Light>().color = FengColor.dayLight;
-            gameObject.GetComponent<Skybox>().material = this.skyBoxDAY;
-        }
-        if (dayLight == DayLight.Dawn)
-        {
-            RenderSettings.ambientLight = FengColor.dawnAmbientLight;
-            GameObject.Find("mainLight").GetComponent<Light>().color = FengColor.dawnAmbientLight;
-            gameObject.GetComponent<Skybox>().material = this.skyBoxDAWN;
-        }
+
         this.snapShotCamera.gameObject.GetComponent<Skybox>().material = gameObject.GetComponent<Skybox>().material;
     }
 
@@ -671,21 +669,9 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         }
     }
 
-    public void startSnapShot(Vector3 p, int dmg, GameObject target = null, float startTime = 0.02f)
+    public void TakeScreenshot(Vector3 p, int dmg, GameObject target, float startTime)
     {
-        this.snapShotCount = 1;
-        this.startSnapShotFrameCount = true;
-        this.snapShotTargetPosition = p;
-        this.snapShotTarget = target;
-        this.snapShotStartCountDownTime = startTime;
-        this.snapShotInterval = 0.05f + Random.Range(0f, 0.03f);
-        this.snapShotDmg = dmg;
-    }
-
-    public void startSnapShot2(Vector3 p, int dmg, GameObject target, float startTime)
-    {
-        int num;
-        if (int.TryParse((string) FengGameManagerMKII.settings[95], out num))
+        if (int.TryParse((string) FengGameManagerMKII.settings[95], out var num))
         {
             if (dmg >= num)
             {

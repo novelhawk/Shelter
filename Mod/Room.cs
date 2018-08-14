@@ -2,40 +2,145 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using ExitGames.Client.Photon;
+using Mod.Interface;
+using UnityEngine;
 
 namespace Mod
 {
-    public class Room
+    public class Room : IComparable
     {
-        private readonly string _roomFullName;
-        private readonly string _roomName;
-        private readonly string _roomMap;
-        private readonly bool _isProtected;
-        private readonly int _currentPlayers;
-        private readonly int _maxPlayers;
+        public static List<Room> List;
+        
+        private readonly Hashtable _properties = new Hashtable();
 
-        public Room(string roomFullName, bool isPasswordProtected, int currentPlayers, int maxPlayers)
+        public string FullName { get; set; }
+        private readonly string _roomName;
+        private readonly LevelInfo _roomMap;
+        private readonly Difficulty _roomDifficulty;
+        private readonly DayLight _roomDayLight;
+        private readonly string _roomPassword;
+        private readonly int _roomTime;
+
+        private bool _removedFromList;
+        private int _maxPlayers;
+        private int _currentPlayers;
+        private bool _isVisible;
+        private bool _isOpen;
+        private bool _doAutoCleanup;
+
+        public Room(string fullName, Hashtable properties)
         {
-            _roomFullName = roomFullName;
-            _roomName = _roomFullName.Split('`')[0];
-            _roomMap = _roomFullName.Split('`')[1];
-            _isProtected = isPasswordProtected;
-            _currentPlayers = currentPlayers;
-            _maxPlayers = maxPlayers;
+            FullName = fullName;
+
+            var split = fullName.Split('`');
+            if (split.Length < 6)
+                throw new Exception(); //TODO: LOG!
+
+            _roomName = split[0];
+            _roomMap = LevelInfoManager.GetInfo(split[1]);
+            _roomDifficulty = FengGameManagerMKII.DifficultyToEnum(split[2]);
+            if (int.TryParse(split[3], out int maxPlayers))
+                _maxPlayers = maxPlayers;
+            _roomDayLight = FengGameManagerMKII.DayLightToEnum(split[4]);
+            _roomPassword = split[5];
+            if (int.TryParse(split[6], out int time))
+                _roomTime = time;
+
+            LoadFromHashtable(properties);
         }
 
-        public static List<Room> List => PhotonNetwork.GetRoomList().Select(room => new Room(room.name, room.name.Split('`')[5] != string.Empty, room.playerCount, room.maxPlayers)).ToList();
-        public static readonly Func<List<Room>, List<Room>> GetOrdinatedList = list =>
+        public Room(string fullName, RoomOptions options)
         {
-            //TODO: Change it with IComparable
-            var value = list.Where(room => room.IsJoinable && !room.IsProtected).ToList();
-            value.AddRange(list.Where(room => room.IsProtected && room.IsJoinable));
-            value.AddRange(list.Where(room => room.IsProtected && !room.IsJoinable));
-            value.AddRange(list.Where(room => !room.IsJoinable && !room.IsProtected));
-            return value;
-        };
+            FullName = fullName;
 
-        public bool Join() => PhotonNetwork.JoinRoom(_roomFullName);
+            var split = fullName.Split('`');
+            if (split.Length < 6)
+                throw new Exception(); //TODO: LOG!
+
+            _roomName = split[0];
+            _roomMap = LevelInfoManager.GetInfo(split[1]);
+            _roomDifficulty = FengGameManagerMKII.DifficultyToEnum(split[2]);
+            if (int.TryParse(split[3], out int maxPlayers))
+                _maxPlayers = maxPlayers;
+            _roomDayLight = FengGameManagerMKII.DayLightToEnum(split[4]);
+            _roomPassword = split[5];
+            if (int.TryParse(split[6], out int time))
+                _roomTime = time;
+
+            if (options != null)
+            {
+                _removedFromList = options.RemovedFromList;
+                _maxPlayers = options.MaxPlayers;
+                _currentPlayers = options.CurrentPlayers;
+                _isVisible = options.IsVisible;
+                _isOpen = options.IsOpen;
+                _doAutoCleanup = options.DoAutoCleanup;
+            }
+        }
+
+
+        public void LoadFromHashtable(Hashtable hash)
+        {
+            if (hash != null && hash.Count > 0)
+            {
+                if (hash.ContainsKey((byte) 251))
+                    _removedFromList = (bool) hash[(byte) 251];
+                if (_removedFromList)
+                    return;
+                
+                if (hash.ContainsKey((byte) 255))
+                    _maxPlayers = (byte) hash[(byte) 255];
+                
+                if (hash.ContainsKey((byte) 253))
+                    _isOpen = (bool) hash[(byte) 253];
+                
+                if (hash.ContainsKey((byte) 254))
+                    _isVisible = (bool) hash[(byte) 254];
+                
+                if (hash.ContainsKey((byte) 252))
+                    _currentPlayers = (byte) hash[(byte) 252];
+                
+                if (hash.ContainsKey((byte) 249))
+                    _doAutoCleanup = (bool) hash[(byte) 249];
+                
+                _properties.MergeStringKeys(hash);
+            }
+        }
+        
+        
+        public void SetCustomProperties(Hashtable propertiesToSet)
+        {
+            if (propertiesToSet == null) 
+                return;
+            
+            _properties.MergeStringKeys(propertiesToSet);
+            _properties.StripKeysWithNullValues();
+            Hashtable gameProperties = propertiesToSet.StripToStringKeys();
+            if (!PhotonNetwork.offlineMode)
+                PhotonNetwork.networkingPeer.OpSetCustomPropertiesOfRoom(gameProperties, true, 0);
+            NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnPhotonCustomRoomPropertiesChanged, propertiesToSet);
+        }
+
+        public int CompareTo(object obj)
+        {
+            if (obj is Room room)
+            {
+                if (IsJoinable && !room.IsJoinable)
+                    return -1;
+                
+                if (IsJoinable == room.IsJoinable && 
+                    !IsProtected && room.IsProtected)
+                    return -1;
+
+                if (IsProtected == room.IsProtected && 
+                    IsJoinable && !room.IsJoinable)
+                    return -1;
+            }
+            return 0;
+        }
+
+        public bool Join() => PhotonNetwork.JoinRoom(FullName);
         public string ToString(int alpha)
         {
             var aa = alpha.ToString("X2");
@@ -43,20 +148,100 @@ namespace Mod
             str.Append("<color=#5D334B" + aa + ">");
             if (IsProtected)
                 str.Append("<color=#034C94" + aa + ">[</color><color=#1191D1" + aa + ">PW</color><color=#034C94" + aa + ">]</color> ");
-            str.Append(RoomName.RemoveColors());
+            str.Append(Name.RemoveColors());
             str.Append(" || ");
-            str.Append(Map);
+            str.Append(Map.Name);
             str.Append(" || ");
             str.Append(IsJoinable ? "<color=#00FF00" + aa + ">" : "<color=#FF0000" + aa + ">");
             str.Append(CurrentPlayers + "/" + MaxPlayers);
             str.Append("</color></color>");
             return str.ToString();
         }
-        public string RoomName => _roomName;
-        public string Map => _roomMap;
-        public bool IsJoinable => _maxPlayers == 0 || _currentPlayers < _maxPlayers;
-        public bool IsProtected => _isProtected;
-        public int MaxPlayers => _maxPlayers;
-        public int CurrentPlayers => _currentPlayers;
+
+
+        public Hashtable Properties => _properties;
+        
+        public string Name => _roomName;
+        public LevelInfo Map => _roomMap;
+        public Difficulty Difficulty => _roomDifficulty;
+        public DayLight DayLight => _roomDayLight;
+        public string Password => _roomPassword;
+        public int Time => _roomTime;
+
+        public bool IsJoinable => _currentPlayers < _maxPlayers;
+        public bool IsProtected => _roomPassword.Length > 0;
+
+        public static int CurrentPlayers
+        {
+            get
+            {
+                if (PhotonNetwork.playerList != null)
+                    return PhotonNetwork.playerList.Length;
+                return 0;
+            }
+        }
+
+        public int MaxPlayers
+        {
+            get => _maxPlayers;
+            set
+            {
+                if (!Equals(PhotonNetwork.Room))
+                    throw new Exception("Can't set open when not in that room."); //TODO: LOG
+                
+                if (value != _maxPlayers && !PhotonNetwork.offlineMode)
+                {
+                    PhotonNetwork.networkingPeer.OpSetPropertiesOfRoom(new Hashtable
+                    {
+                        { (byte)255, (byte) Math.Min(value, 255) }
+                    }, true, 0);
+                }
+                _maxPlayers = value;
+            }
+        }
+
+        public bool RemovedFromList => _removedFromList;
+        public bool DoAutoCleanup => _doAutoCleanup;
+        public bool IsLocalClientInside { get; set; }
+
+        public bool IsVisible
+        {
+            get => _isVisible;
+            set
+            {
+                if (!Equals(PhotonNetwork.Room))
+                    throw new Exception("Can't set open when not in that room."); //TODO: LOG
+                
+                if (value != _isVisible && !PhotonNetwork.offlineMode)
+                {
+                    PhotonNetwork.networkingPeer.OpSetPropertiesOfRoom(new Hashtable
+                    {
+                        { (byte)254, value }
+                    }, true, 0);
+
+                    _isVisible = value;
+                }
+            }
+        }
+
+        public bool IsOpen
+        {
+            get => _isOpen;
+            set
+            {
+                if (!Equals(PhotonNetwork.Room))
+                    throw new Exception("Can't set open when not in that room."); //TODO: LOG
+
+                if (value != _isOpen && !PhotonNetwork.offlineMode)
+                {
+                    PhotonNetwork.networkingPeer.OpSetPropertiesOfRoom(new Hashtable
+                    {
+                        { (byte)253, value }
+                    }, true, 0);
+                    
+                    _isOpen = value;
+                }
+            }
+        }
     }
 }

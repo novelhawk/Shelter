@@ -1,6 +1,7 @@
 using ExitGames.Client.Photon;
 using System;
 using System.Collections.Generic;
+using Mod;
 using UnityEngine;
 
 public static class PhotonNetwork
@@ -12,7 +13,7 @@ public static class PhotonNetwork
     internal static int lastUsedViewSubId = 0;
     internal static int lastUsedViewSubIdStatic = 0;
     public static PhotonLogLevel logLevel = PhotonLogLevel.ErrorsOnly;
-    private static bool m_autoCleanUpPlayerObjects = true;
+    private static bool _cleanupPlayerObjects = true;
     private static bool m_isMessageQueueRunning = true;
     internal static List<int> manuallyAllocatedViewIds = new List<int>();
     public static readonly int MAX_VIEW_IDS = 1000;
@@ -233,22 +234,9 @@ public static class PhotonNetwork
     public static bool CreateRoom(string roomName, bool isVisible, bool isOpen, int maxPlayers)
     {
         RoomOptions roomOptions = new RoomOptions {
-            isVisible = isVisible,
-            isOpen = isOpen,
-            maxPlayers = maxPlayers
-        };
-        return CreateRoom(roomName, roomOptions, null);
-    }
-
-    [Obsolete("Use overload with RoomOptions and TypedLobby parameters.")]
-    public static bool CreateRoom(string roomName, bool isVisible, bool isOpen, int maxPlayers, Hashtable customRoomProperties, string[] propsToListInLobby)
-    {
-        RoomOptions roomOptions = new RoomOptions {
-            isVisible = isVisible,
-            isOpen = isOpen,
-            maxPlayers = maxPlayers,
-            customRoomProperties = customRoomProperties,
-            customRoomPropertiesForLobby = propsToListInLobby
+            IsVisible = isVisible,
+            IsOpen = isOpen,
+            MaxPlayers = maxPlayers
         };
         return CreateRoom(roomName, roomOptions, null);
     }
@@ -337,15 +325,6 @@ public static class PhotonNetwork
     public static int GetPing()
     {
         return networkingPeer.RoundTripTime;
-    }
-
-    public static RoomInfo[] GetRoomList()
-    {
-        if (!offlineMode && networkingPeer != null)
-        {
-            return networkingPeer.mGameListCopy;
-        }
-        return new RoomInfo[0];
     }
 
     [Obsolete("Used for compatibility with Unity networking only. Encryption is automatically initialized while connecting.")]
@@ -527,7 +506,7 @@ public static class PhotonNetwork
                 Debug.LogError("JoinRandomRoom failed. In offline mode you still have to leave a room to enter another.");
                 return false;
             }
-            offlineModeRoom = new Room("offline room", null);
+            offlineModeRoom = new Room("offline room", (Hashtable)null);
             NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom, new object[0]);
             return true;
         }
@@ -554,7 +533,7 @@ public static class PhotonNetwork
                 Debug.LogError("JoinRoom failed. In offline mode you still have to leave a room to enter another.");
                 return false;
             }
-            offlineModeRoom = new Room(roomName, null);
+            offlineModeRoom = new Room(roomName, (Hashtable)null);
             NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom, new object[0]);
             return true;
         }
@@ -576,13 +555,13 @@ public static class PhotonNetwork
     {
         if (connectionStatesDetailed != PeerStates.Joining && connectionStatesDetailed != PeerStates.Joined && connectionStatesDetailed != PeerStates.ConnectedToGameserver)
         {
-            if (room == null)
+            if (Room == null)
             {
                 if (roomName != string.Empty)
                 {
                     if (offlineMode)
                     {
-                        offlineModeRoom = new Room(roomName, null);
+                        offlineModeRoom = new Room(roomName, (Hashtable)null);
                         NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom, new object[0]);
                         return true;
                     }
@@ -615,7 +594,7 @@ public static class PhotonNetwork
             NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnLeftRoom, new object[0]);
             return true;
         }
-        if (room == null)
+        if (Room == null)
         {
             Debug.LogWarning("PhotonNetwork.room is null. You don't have to call LeaveRoom() when you're not in one. State: " + connectionStatesDetailed);
         }
@@ -707,7 +686,7 @@ public static class PhotonNetwork
     {
         if (VerifyCanUseNetwork())
         {
-            if (room == null)
+            if (Room == null)
             {
                 Debug.LogWarning("Cannot send RPCs in Lobby, only processed locally");
             }
@@ -733,7 +712,7 @@ public static class PhotonNetwork
     {
         if (VerifyCanUseNetwork())
         {
-            if (room == null)
+            if (Room == null)
             {
                 Debug.LogWarning("Cannot send RPCs in Lobby! RPC dropped.");
             }
@@ -781,7 +760,7 @@ public static class PhotonNetwork
                 customProperties[(string) obj2] = null;
             }
         }
-        if (room != null && room.isLocalClientInside)
+        if (Room != null && Room.IsLocalClientInside)
         {
             Player.Self.SetCustomProperties(customProperties);
         }
@@ -879,21 +858,21 @@ public static class PhotonNetwork
         }
     }
 
-    public static bool autoCleanUpPlayerObjects
+    public static bool CleanupPlayerObjects
     {
         get
         {
-            return m_autoCleanUpPlayerObjects;
+            return _cleanupPlayerObjects;
         }
         set
         {
-            if (room != null)
+            if (Room != null)
             {
                 Debug.LogError("Setting autoCleanUpPlayerObjects while in a room is not supported.");
             }
             else
             {
-                m_autoCleanUpPlayerObjects = value;
+                _cleanupPlayerObjects = value;
             }
         }
     }
@@ -919,7 +898,7 @@ public static class PhotonNetwork
         set
         {
             _mAutomaticallySyncScene = value;
-            if (_mAutomaticallySyncScene && room != null)
+            if (_mAutomaticallySyncScene && Room != null)
             {
                 networkingPeer.LoadLevelIfSynced();
             }
@@ -1145,7 +1124,7 @@ public static class PhotonNetwork
     {
         get
         {
-            return !isMasterClient && room != null;
+            return !isMasterClient && Room != null;
         }
     }
 
@@ -1178,15 +1157,15 @@ public static class PhotonNetwork
     {
         get
         {
-            if (room == null)
+            if (Room == null)
             {
                 return 0;
             }
-            return room.maxPlayers;
+            return Room.MaxPlayers;
         }
         set
         {
-            room.maxPlayers = value;
+            Room.MaxPlayers = value;
         }
     }
 
@@ -1315,7 +1294,7 @@ public static class PhotonNetwork
         }
     }
 
-    public static Room room //TODO: Make it into a custom class/struct with all infos
+    public static Room Room //TODO: Make it into a custom class/struct with all infos
     {
         get
         {

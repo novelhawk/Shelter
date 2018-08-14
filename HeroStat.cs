@@ -17,7 +17,7 @@ public struct HeroStat
 
     public static HeroStat GetInfo(string name)
     {
-        switch (name.ToUpper())
+        switch (name.ToUpperInvariant())
         {
             case "CUSTOM_DEFAULT":
                 return CustomDefault;

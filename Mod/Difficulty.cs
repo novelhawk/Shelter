@@ -1,4 +1,10 @@
-﻿$HEADER$namespace $NAMESPACE$
+﻿namespace Mod
 {
-  public class $CLASS$ {$END$}
+    public enum Difficulty
+    {
+        Normal,
+        Hard,
+        Abnormal
+//        Tutorial
+    }
 }

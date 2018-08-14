@@ -131,19 +131,16 @@ public class Player
 
     public void SetCustomProperties(Hashtable propertiesToSet)
     {
-        if (propertiesToSet != null)
-        {
-            this.Properties.MergeStringKeys(propertiesToSet);
-            this.Properties.StripKeysWithNullValues();
-            Hashtable actorProperties = propertiesToSet.StripToStringKeys();
-            if (this.actorID > 0 && !PhotonNetwork.offlineMode)
-            {
-                PhotonNetwork.networkingPeer.OpSetCustomPropertiesOfActor(this.actorID, actorProperties, true, 0);
-            }
-            object[] parameters = new object[] { this, propertiesToSet };
-            NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnPhotonPlayerPropertiesChanged, parameters);
-            _hexName = Properties.Name.HexColor();
-        }
+        if (propertiesToSet == null) 
+            return;
+
+        this.Properties.MergeStringKeys(propertiesToSet);
+        this.Properties.StripKeysWithNullValues();
+        Hashtable actorProperties = propertiesToSet.StripToStringKeys();
+        if (this.actorID > 0 && !PhotonNetwork.offlineMode)
+            PhotonNetwork.networkingPeer.OpSetCustomPropertiesOfActor(this.actorID, actorProperties, true, 0);
+        NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnPhotonPlayerPropertiesChanged, this, propertiesToSet);
+        _hexName = Properties.Name?.HexColor();
     }
 
     public override string ToString() => $"{(IsMasterClient ? "[M] " : string.Empty)}{HexName} ({ID})";

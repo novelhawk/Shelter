@@ -18,7 +18,7 @@ namespace Mod.Commands
                 case "players":
                 case "max":
                     num = args[1].ToInt();
-                    PhotonNetwork.room.maxPlayers = num;
+                    PhotonNetwork.Room.MaxPlayers = num;
                     Chat.System("Max player changed to " + num + ".");
                     break;
 
@@ -37,8 +37,8 @@ namespace Mod.Commands
                     break;
 
                 case "visible":
-                    PhotonNetwork.room.visible = args[1].ToBool();
-                    PhotonNetwork.room.open = args[1].ToBool();
+                    PhotonNetwork.Room.IsVisible = args[1].ToBool();
+                    PhotonNetwork.Room.IsOpen = args[1].ToBool();
 
                     Chat.System($"The room is now {(!args[1].ToBool() ? "in" : "")}visible.");
                     break;

@@ -77,18 +77,19 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     {
     }
 
-    public void blowPlayer(GameObject player, Transform neck)
+    public void BlowPlayer(GameObject player, Transform neck)
     {
         Vector3 vector = -(neck.position + transform.forward * 50f - player.transform.position);
-        float num = 20f;
-        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+        switch (IN_GAME_MAIN_CAMERA.gametype)
         {
-            player.GetComponent<HERO>().BlowAway(vector.normalized * num + Vector3.up * 1f);
-        }
-        else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
-        {
-            object[] parameters = new object[] { vector.normalized * num + Vector3.up * 1f };
-            player.GetComponent<HERO>().photonView.RPC("blowAway", PhotonTargets.All, parameters);
+            case GAMETYPE.SINGLE:
+                player.GetComponent<HERO>().BlowAway(vector.normalized * 20f + Vector3.up * 1f);
+                break;
+            
+            case GAMETYPE.MULTIPLAYER when PhotonNetwork.isMasterClient:
+                player.GetComponent<HERO>().photonView.RPC("blowAway", PhotonTargets.All, 
+                    vector.normalized * 20f + Vector3.up * 1f);
+                break;
         }
     }
 
@@ -462,7 +463,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                 GameObject gameObject = collider.transform.root.gameObject;
                 if (gameObject.GetComponent<TITAN_EREN>() == null && gameObject.GetComponent<HERO>() != null)
                 {
-                    this.blowPlayer(gameObject, neck);
+                    this.BlowPlayer(gameObject, neck);
                 }
             }
         }

@@ -1,6 +1,7 @@
 using System.Linq;
 using ExitGames.Client.Photon;
 using Mod;
+using Mod.Interface;
 using UnityEngine;
 
 public class BTN_choose_human : MonoBehaviour

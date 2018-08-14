@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class FengGameManagerMKII : Photon.MonoBehaviour
 {
@@ -147,7 +148,11 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
     public static string usernameField;
     public int wave = 1;
 
-    public new string name { get; set; } //TODO: Remove (non mi ricordo per cosa viene usato)
+    public new string name
+    {
+        get => Shelter.Profile.Name;
+        set {  }
+    } //TODO: Remove (non mi ricordo per cosa viene usato)
 
     // ReSharper disable UnusedMember.Local
 
@@ -495,19 +500,22 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
     [RPC]
     public void NetShowDamage(int speed)
     {
-        GameObject.Find("Stylish").GetComponent<StylishComponent>().Style(speed);
+        GameObject t;
+        if ((t = GameObject.Find("Stylish")) != null)
+            t.GetComponent<StylishComponent>().Style(speed);
         GameObject target = GameObject.Find("LabelScore");
+        Debug.Log("Target null?:" + target == null);
         if (target != null)
         {
             target.GetComponent<UILabel>().text = speed.ToString();
             target.transform.localScale = Vector3.zero;
-            speed = (int)(speed * 0.1f);
+            speed = (int) (speed * 0.1f);
             speed = Mathf.Max(40, speed);
             speed = Mathf.Min(150, speed);
             iTween.Stop(target);
-            object[] args = { "x", speed, "y", speed, "z", speed, "easetype", iTween.EaseType.easeOutElastic, "time", 1f };
+            object[] args = {"x", speed, "y", speed, "z", speed, "easetype", iTween.EaseType.easeOutElastic, "time", 1f};
             iTween.ScaleTo(target, iTween.Hash(args));
-            object[] objArray2 = { "x", 0, "y", 0, "z", 0, "easetype", iTween.EaseType.easeInBounce, "time", 0.5f, "delay", 2f };
+            object[] objArray2 = {"x", 0, "y", 0, "z", 0, "easetype", iTween.EaseType.easeInBounce, "time", 0.5f, "delay", 2f};
             iTween.ScaleTo(target, iTween.Hash(objArray2));
         }
     }
@@ -527,7 +535,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
         if (info.sender.IsMasterClient)
         {
             DestroyAllExistingCloths();
-            PhotonNetwork.LoadLevel(LevelInfoManager.GetInfo(Level).Map);
+            PhotonNetwork.LoadLevel(LevelInfoManager.GetInfo(Level).LevelName);
         }
         else if (PhotonNetwork.isMasterClient)
         {
@@ -546,7 +554,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
             if (restartCount.Count < 6)
             {
                 DestroyAllExistingCloths();
-                PhotonNetwork.LoadLevel(LevelInfoManager.GetInfo(Level).Map);
+                PhotonNetwork.LoadLevel(LevelInfoManager.GetInfo(Level).LevelName);
             }
         }
     }
@@ -854,18 +862,12 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                 Transform transform1 = component.main_object.transform;
                 transform1.position += new Vector3(UnityEngine.Random.Range(-20, 20), 2f, UnityEngine.Random.Range(-20, 20));
             }
-            ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable
+
+            Player.Self.SetCustomProperties(new Hashtable
             {
-                { "dead", false }
-            };
-            ExitGames.Client.Photon.Hashtable propertiesToSet = hashtable;
-            Player.Self.SetCustomProperties(propertiesToSet);
-            hashtable = new ExitGames.Client.Photon.Hashtable
-            {
+                { "dead", false },
                 { PlayerProperty.IsTitan, 1 }
-            };
-            propertiesToSet = hashtable;
-            Player.Self.SetCustomProperties(propertiesToSet);
+            });
             component.enabled = true;
             GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().SetInterfacePosition();
             GameObject.Find("MainCamera").GetComponent<SpectatorMovement>().disable = true;
@@ -4211,50 +4213,48 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
         //        NGUITools.SetActive(GameObject.Find("UIRefer").GetComponent<UIMainReferences>().PanelMultiJoinPrivate, false);
     }
 
+    public static Difficulty DifficultyToEnum(string difficulty)
+    {
+        switch (difficulty.ToLowerInvariant())
+        {
+            default:
+                return Difficulty.Normal;
+            case "hard":
+                return Difficulty.Hard;
+            case "abnormal":
+                return Difficulty.Abnormal;
+        }
+    }
+
+    public static DayLight DayLightToEnum(string dayLight)
+    {
+        switch (dayLight.ToLowerInvariant())
+        {
+            default:
+                return DayLight.Day;
+            case "dawn":
+                return DayLight.Dawn;
+            case "night":
+                return DayLight.Night;
+        }
+    }
+
     public void OnJoinedRoom()
     {
         Shelter.OnJoinedGame();
-        if (PhotonNetwork.room != null)
-            Mod.Interface.Chat.System("Joined " + PhotonNetwork.room.name.Split('`')[0].HexColor());
-        maxPlayers = PhotonNetwork.room.maxPlayers;
+        var room = PhotonNetwork.Room;
+        Mod.Interface.Chat.System("Joined " + room.Name.RemoveColors());
+        maxPlayers = room.MaxPlayers;
         playerList = string.Empty;
-        print("OnJoinedRoom " + PhotonNetwork.room.name + "    >>>>   " + LevelInfoManager.GetInfo(PhotonNetwork.room.name.Split('`')[1]).Map);
         gameTimesUp = false;
-        char[] chArray3 = { "`"[0] };
-        string[] strArray = PhotonNetwork.room.name.Split(chArray3);
-        Level = strArray[1];
-        switch (strArray[2])
-        {
-            case "normal":
-                difficulty = 0;
-                break;
-            case "hard":
-                difficulty = 1;
-                break;
-            case "abnormal":
-                difficulty = 2;
-                break;
-        }
-
-        IN_GAME_MAIN_CAMERA.difficulty = difficulty;
-        time = int.Parse(strArray[3]);
-        time *= 60;
-        switch (strArray[4])
-        {
-            case "day":
-                IN_GAME_MAIN_CAMERA.dayLight = DayLight.Day;
-                break;
-            case "dawn":
-                IN_GAME_MAIN_CAMERA.dayLight = DayLight.Dawn;
-                break;
-            case "night":
-                IN_GAME_MAIN_CAMERA.dayLight = DayLight.Night;
-                break;
-        }
-
-        IN_GAME_MAIN_CAMERA.gamemode = LevelInfoManager.GetInfo(Level).Gamemode;
-        PhotonNetwork.LoadLevel(LevelInfoManager.GetInfo(Level).Map);
-        ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable
+        Level = room.Map.LevelName;
+        IN_GAME_MAIN_CAMERA.difficulty = (int) room.Difficulty;
+        IN_GAME_MAIN_CAMERA.dayLight = room.DayLight;
+        time = room.Time * 60;
+        
+        IN_GAME_MAIN_CAMERA.gamemode = room.Map.Gamemode;
+        PhotonNetwork.LoadLevel(room.Map.LevelName);
+        Player.Self.SetCustomProperties(new ExitGames.Client.Photon.Hashtable
         {
             { PlayerProperty.Name, Shelter.Profile.Name },
             { PlayerProperty.Guild, Shelter.Profile.Guild },
@@ -4265,10 +4265,8 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
             { PlayerProperty.Dead, true },
             { PlayerProperty.IsTitan, 0 },
             { PlayerProperty.RCTeam, 0 },
-            { PlayerProperty.CurrentLevel, string.Empty }
-        };
-        ExitGames.Client.Photon.Hashtable propertiesToSet = hashtable;
-        Player.Self.SetCustomProperties(propertiesToSet);
+            { PlayerProperty.CurrentLevel, room.Map.LevelName } // was string.Empty
+        });
         humanScore = 0;
         titanScore = 0;
         PVPtitanScore = 0;
@@ -4279,23 +4277,14 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
         needChooseSide = true;
         chatContent = new ArrayList();
         killInfoGO = new ArrayList();
-        //        InRoomChat.messages = new List<string>(); TODO: Write in chat "New room: name"
+        //        InRoomChat.messages = new List<string>();
         if (!PhotonNetwork.isMasterClient)
-        {
-            photonView.RPC("RequireStatus", PhotonTargets.MasterClient, new object[0]);
-        }
+            photonView.RPC("RequireStatus", PhotonTargets.MasterClient);
         assetCacheTextures = new Dictionary<string, Texture2D>();
         isFirstLoad = true;
         name = Shelter.Profile.Name;
-        ExitGames.Client.Photon.Hashtable hashtable3 = new ExitGames.Client.Photon.Hashtable
-        {
-            { PlayerProperty.Name, name }
-        };
-        Player.Self.SetCustomProperties(hashtable3);
         if (OnPrivateServer)
-        {
             ServerRequestAuthentication(PrivateServerAuthPass);
-        }
     }
 
     public void OnLeftLobby()
@@ -4513,7 +4502,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                             SpawnTitanCustom("titanRespawn", num4, info.EnemyNumber, false);
                         }
                     }
-                    else if (info.Gamemode != GAMEMODE.TROST && info.Gamemode == GAMEMODE.PVP_CAPTURE && info.Map == "OutSide")
+                    else if (info.Gamemode != GAMEMODE.TROST && info.Gamemode == GAMEMODE.PVP_CAPTURE && info.LevelName == "OutSide")
                     {
                         GameObject[] objArray3 = GameObject.FindGameObjectsWithTag("titanRespawn");
                         if (objArray3.Length <= 0)
@@ -4599,22 +4588,20 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
     {
         if (PhotonNetwork.isMasterClient)
         {
-            if (!PhotonNetwork.room.open)
-            {
-                PhotonNetwork.room.open = true;
-            }
-            if (!PhotonNetwork.room.visible)
-            {
-                PhotonNetwork.room.visible = true;
-            }
-            if (PhotonNetwork.room.maxPlayers != maxPlayers)
-            {
-                PhotonNetwork.room.maxPlayers = maxPlayers;
-            }
+            //TODO: Ignore the player
+            
+            if (!PhotonNetwork.Room.IsOpen)
+                PhotonNetwork.Room.IsOpen = true;
+            
+            if (!PhotonNetwork.Room.IsVisible)
+                PhotonNetwork.Room.IsVisible = true;
+            
+            if (PhotonNetwork.Room.MaxPlayers != maxPlayers)
+                PhotonNetwork.Room.MaxPlayers = maxPlayers;
         }
         else
         {
-            maxPlayers = PhotonNetwork.room.maxPlayers;
+            maxPlayers = PhotonNetwork.Room.MaxPlayers;
         }
     }
 
@@ -4818,15 +4805,14 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
     {
         if (playerAndUpdatedProps != null && playerAndUpdatedProps.Length >= 2 && (Player)playerAndUpdatedProps[0] == Player.Self)
         {
-            ExitGames.Client.Photon.Hashtable hashtable2;
-            ExitGames.Client.Photon.Hashtable hashtable = (ExitGames.Client.Photon.Hashtable)playerAndUpdatedProps[1];
-            if (hashtable.ContainsKey("name") && Player.Self.Properties.Name != name)
+            Hashtable hashtable = (Hashtable) playerAndUpdatedProps[1];
+
+            if (hashtable.ContainsKey(PlayerProperty.Name) && Shelter.Profile.Name != (string) hashtable[PlayerProperty.Name])
             {
-                hashtable2 = new ExitGames.Client.Photon.Hashtable
+                Player.Self.SetCustomProperties(new Hashtable
                 {
-                    { PlayerProperty.Name, name }
-                };
-                Player.Self.SetCustomProperties(hashtable2);
+                    { PlayerProperty.Name, Shelter.Profile.Name }
+                });
             }
             if (hashtable.ContainsKey("statACL") || hashtable.ContainsKey("statBLA") || hashtable.ContainsKey("statGAS") || hashtable.ContainsKey("statSPD"))
             {
@@ -4837,35 +4823,31 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                 int num4 = player.Properties.Speed;
                 if (num > 150)
                 {
-                    hashtable2 = new ExitGames.Client.Photon.Hashtable
+                    Player.Self.SetCustomProperties(new Hashtable
                     {
                         { PlayerProperty.Acceleration, 100 }
-                    };
-                    Player.Self.SetCustomProperties(hashtable2);
+                    });
                 }
                 if (num2 > 125)
                 {
-                    hashtable2 = new ExitGames.Client.Photon.Hashtable
+                    Player.Self.SetCustomProperties(new Hashtable
                     {
                         { PlayerProperty.Blade, 100 }
-                    };
-                    Player.Self.SetCustomProperties(hashtable2);
+                    });
                 }
                 if (num3 > 150)
                 {
-                    hashtable2 = new ExitGames.Client.Photon.Hashtable
+                    Player.Self.SetCustomProperties(new Hashtable
                     {
                         { PlayerProperty.Gas, 100 }
-                    };
-                    Player.Self.SetCustomProperties(hashtable2);
+                    });
                 }
                 if (num4 > 140)
                 {
-                    hashtable2 = new ExitGames.Client.Photon.Hashtable
+                    Player.Self.SetCustomProperties(new Hashtable
                     {
                         { PlayerProperty.Speed, 100 }
-                    };
-                    Player.Self.SetCustomProperties(hashtable2);
+                    });
                 }
             }
         }
@@ -6373,13 +6355,12 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                     }
                     if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
                     {
-                        char[] separator = { "`"[0] };
-                        string str5 = PhotonNetwork.room.name.Split(separator)[0];
-                        if (str5.Length > 20)
+                        string roomName = PhotonNetwork.Room.Name;
+                        if (roomName.Length > 20)
                         {
-                            str5 = str5.Remove(19) + "...";
+                            roomName = roomName.Remove(19) + "...";
                         }
-                        ShowHUDInfoTopRightMAPNAME("\n" + str5 + " [FFC000](" + Convert.ToString(PhotonNetwork.room.playerCount) + "/" + Convert.ToString(PhotonNetwork.room.maxPlayers) + ")");
+                        ShowHUDInfoTopRightMAPNAME("\n" + roomName + " [FFC000](" + Convert.ToString(Room.CurrentPlayers) + "/" + Convert.ToString(PhotonNetwork.Room.MaxPlayers) + ")");
                         if (needChooseSide)
                         {
                             ShowHUDInfoTopCenterADD("\n\nPRESS 1 TO ENTER GAME");
@@ -7787,7 +7768,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                 string str3 = string.Empty;
                 string n = string.Empty;
                 strArray3 = new[] { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
-                if (LevelInfoManager.GetInfo(Level).Map.Contains("City"))
+                if (LevelInfoManager.GetInfo(Level).LevelName.Contains("City"))
                 {
                     for (num = 51; num < 59; num++)
                     {
@@ -7805,7 +7786,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                         strArray3[num] = (string) settings[num + 169];
                     }
                 }
-                else if (LevelInfoManager.GetInfo(Level).Map.Contains("Forest"))
+                else if (LevelInfoManager.GetInfo(Level).LevelName.Contains("Forest"))
                 {
                     for (int i = 33; i < 41; i++)
                     {
@@ -8103,7 +8084,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                 skyMaterial = (Material)linkHash[1][key];
             }
         }
-        if (LevelInfoManager.GetInfo(Level).Map.Contains("Forest"))
+        if (LevelInfoManager.GetInfo(Level).LevelName.Contains("Forest"))
         {
             string[] iteratorVariable22 = url.Split(',');
             string[] iteratorVariable23 = url2.Split(',');
@@ -8229,7 +8210,7 @@ public class FengGameManagerMKII : Photon.MonoBehaviour
                 }
             }
         }
-        else if (LevelInfoManager.GetInfo(Level).Map.Contains("City"))
+        else if (LevelInfoManager.GetInfo(Level).LevelName.Contains("City"))
         {
             string[] iteratorVariable42 = url.Split(',');
             string[] iteratorVariable43 = url2.Split(',');

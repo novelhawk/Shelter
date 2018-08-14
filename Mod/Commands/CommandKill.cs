@@ -12,7 +12,7 @@ namespace Mod.Commands
         public override void Execute(string[] args)
         {
             if (args.Length < 1)
-                throw new CommandArgumentException(CommandName, "/kill [id] [msg]");
+                throw new CommandArgumentException(CommandName, "/kill [id|all|titans] [msg]");
             string msg = Regex.Match(Chat.Message, @"[\\\/]\w+\s(?:\d+|\w+)\s(.*)").Groups[1].Value;
             if (string.IsNullOrEmpty(msg))
                 msg = "<color=#ffffff>Server</color> ";
@@ -21,12 +21,16 @@ namespace Mod.Commands
             {
                 foreach (var obj in GameObject.FindGameObjectsWithTag("Player"))
                 {
-                    if (obj.GetComponent<HERO>() != null)
-                    {
-                        obj.GetComponent<HERO>().markDie();
-                        obj.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, -1, "[FF0000]" + msg + "[-]  ");
-                    }
+                    obj.GetComponent<HERO>()?.markDie();
+                    obj.GetComponent<HERO>()?.photonView.RPC("netDie2", PhotonTargets.All, -1, "[FF0000]" + msg + "[-]  ");
                 }
+                return;
+            }
+
+            if (args[0].EqualsIgnoreCase("titans"))
+            {
+                foreach (GameObject obj in GameObject.FindGameObjectsWithTag("titan"))
+                    obj.GetComponent<TITAN>()?.photonView.RPC("netDie", PhotonTargets.All);
                 return;
             }
 

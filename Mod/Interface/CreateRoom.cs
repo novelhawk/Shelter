@@ -199,7 +199,7 @@ namespace Mod.Interface
 //                if (LevelInfoManager.Levels[roomMapIndex].Map == "trainning_0") Does not exist in LevelInfoManager TODO: Check why
 //                    IN_GAME_MAIN_CAMERA.difficulty = -1;
                 FengGameManagerMKII.Level = LevelInfoManager.Levels[roomMapIndex].Name;
-                Application.LoadLevel(LevelInfoManager.Levels[roomMapIndex].Map);
+                Application.LoadLevel(LevelInfoManager.Levels[roomMapIndex].LevelName);
                 Shelter.OnJoinedGame();
             }
         }

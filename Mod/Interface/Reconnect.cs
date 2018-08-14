@@ -35,6 +35,6 @@ namespace Mod.Interface
             Destroy(_backgroundTexture);
         }
 
-        public static global::Room LastRoom { get; set; }
+        public static Room LastRoom { get; set; }
     }
 }
