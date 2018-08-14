@@ -41,7 +41,6 @@ public class UIMainReferences : MonoBehaviour
     {
         if (isFirstLaunch)
         {
-            LevelInfoManager.Initialize();
             GameObject go = new GameObject("Shelter");
             Shelter shelter = go.AddComponent<Shelter>();
             DontDestroyOnLoad(go);
