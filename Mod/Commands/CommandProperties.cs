@@ -4,7 +4,7 @@ using Mod.Interface;
 
 namespace Mod.Commands
 {
-    public class CommandProp : Command
+    public class CommandProperties : Command
     {
         public override string CommandName => "prop";
 
@@ -14,10 +14,18 @@ namespace Mod.Commands
                 throw new CommandArgumentException(CommandName, "/prop [id]");
             if (!Player.TryParse(args[0], out Player player))
                 throw new PlayerNotFoundException();
-            var list = player.Properties.Keys.Where(prop => !Player.Self.Properties.Keys.Contains(prop)).Select(prop => prop.ToString()).ToList();
-            foreach (var str in list)
-                if (str != "sender")
-                    Chat.SendMessage(str);
+            
+            var list = player.Properties.Where(prop => !Player.Self.Properties.Contains(prop)).ToArray();
+            if (list.Length > 0)
+            {
+                Chat.System(player.HexName + " properties:");
+                foreach (var str in list)
+                    Chat.System($"{str.Key} : {str.Value}");
+//                if (str != "sender") ??
+                return;
+            }
+            
+            Chat.System(player.HexName + " has no unregular properties.");
         }
     }
 }
