@@ -1,7 +1,7 @@
 ﻿namespace Mod.Discord.RPC.Commands
 {
-    public class ICommand
+    public interface ICommand
     {
-        
+        IPayload PreparePayload(long nonce);
     }
 }

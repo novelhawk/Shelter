@@ -1,7 +1,18 @@
-﻿namespace Mod.Discord.Message
+﻿using Newtonsoft.Json;
+
+namespace Mod.Discord.Message
 {
-    public class JoinRequestMessage
+    /// <summary>
+    /// Called when some other person has requested access to this game. C -> D -> C.
+    /// </summary>
+    public class JoinRequestMessage : IMessage
     {
-        
+        public override MessageType Type { get { return MessageType.JoinRequest; } }
+
+        /// <summary>
+        /// The discord user that is requesting access.
+        /// </summary>
+        [JsonProperty("user")]
+        public User User { get; internal set; }
     }
 }

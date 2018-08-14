@@ -1,7 +1,9 @@
-﻿namespace Mod.Discord.Exceptions
+﻿using System;
+
+namespace Mod.Discord.Exceptions
 {
-    public class BadPresenceExceptionm
+    class BadPresenceException : Exception
     {
-        
+        public BadPresenceException(string message) : base(message) { }
     }
 }

@@ -1,7 +1,19 @@
-﻿namespace Mod.Discord.IO
+﻿using Newtonsoft.Json;
+
+namespace Mod.Discord.IO
 {
-    public class Handshake
-    {
-        
+    internal class Handshake
+    {       
+        /// <summary>
+        /// Version of the IPC API we are using
+        /// </summary>
+        [JsonProperty("v")]
+        public int Version { get; set; }
+
+        /// <summary>
+        /// The ID of the app.
+        /// </summary>
+        [JsonProperty("client_id")]
+        public string ClientID { get; set; }
     }
 }

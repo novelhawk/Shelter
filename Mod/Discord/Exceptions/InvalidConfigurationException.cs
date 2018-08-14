@@ -1,7 +1,9 @@
-﻿namespace Mod.Discord.Exceptions
+﻿using System;
+
+namespace Mod.Discord.Exceptions
 {
-    public class InvalidConfigurationException
+    class InvalidConfigurationException : Exception
     {
-        
+        public InvalidConfigurationException(string message) : base(message) { }
     }
 }
