@@ -7,9 +7,9 @@ namespace Mod.Exceptions
     [Serializable]
     public class NotAllowedException : CustomException
     {
-        public NotAllowedException(string eventId, Player sender)
+        public NotAllowedException(byte eventId, Player sender)
         {
-            Chat.System($"NotAllowedExeption from {sender} on calling Event({eventId})");
+            Chat.System($"NotAllowedExeption from {sender} on calling Event({eventId:X})");
             if (!FengGameManagerMKII.ignoreList.Contains(sender.ID))
                 FengGameManagerMKII.ignoreList.Add(sender.ID);
         }
