@@ -17,7 +17,7 @@ public partial class FengGameManagerMKII
         //TODO: Log
         Screen.lockCursor = false;
         Screen.showCursor = true;
-        IN_GAME_MAIN_CAMERA.gametype = GAMETYPE.STOP;
+        IN_GAME_MAIN_CAMERA.GameType = GameType.NotInRoom;
         gameStart = false;
     }
 
@@ -47,14 +47,15 @@ public partial class FengGameManagerMKII
         maxPlayers = room.MaxPlayers;
         playerList = string.Empty;
         gameTimesUp = false;
-        Level = room.Map.LevelName;
+        Level = room.Map.Name;
         IN_GAME_MAIN_CAMERA.difficulty = (int) room.Difficulty;
         IN_GAME_MAIN_CAMERA.dayLight = room.DayLight;
         time = room.Time * 60;
 
-        IN_GAME_MAIN_CAMERA.gamemode = room.Map.Gamemode;
+        IN_GAME_MAIN_CAMERA.GameMode = room.Map.Gamemode;
         PhotonNetwork.LoadLevel(room.Map.LevelName);
-        Player.Self.SetCustomProperties(new ExitGames.Client.Photon.Hashtable
+//        currentLevel = string.Empty;
+        Player.Self.SetCustomProperties(new Hashtable
         {
             {PlayerProperty.Name, Shelter.Profile.Name},
             {PlayerProperty.Guild, Shelter.Profile.Guild},
@@ -65,7 +66,7 @@ public partial class FengGameManagerMKII
             {PlayerProperty.Dead, true},
             {PlayerProperty.IsTitan, 0},
             {PlayerProperty.RCTeam, 0},
-            {PlayerProperty.CurrentLevel, room.Map.LevelName} // was string.Empty
+            {PlayerProperty.CurrentLevel, string.Empty}
         });
         humanScore = 0;
         titanScore = 0;
@@ -81,7 +82,6 @@ public partial class FengGameManagerMKII
             photonView.RPC("RequireStatus", PhotonTargets.MasterClient);
         assetCacheTextures = new Dictionary<string, Texture2D>();
         isFirstLoad = true;
-        name = Shelter.Profile.Name;
         if (OnPrivateServer)
             ServerRequestAuthentication(PrivateServerAuthPass);
     }
@@ -97,7 +97,7 @@ public partial class FengGameManagerMKII
 
             ResetSettings(true);
             LoadConfig();
-            IN_GAME_MAIN_CAMERA.gametype = GAMETYPE.STOP;
+            IN_GAME_MAIN_CAMERA.GameType = GameType.NotInRoom;
             gameStart = false;
             Screen.lockCursor = false;
             Screen.showCursor = true;
@@ -140,7 +140,6 @@ public partial class FengGameManagerMKII
 
             isWinning = false;
             gameStart = true;
-            ShowHUDInfoCenter(string.Empty);
             GameObject obj3 = (GameObject) Instantiate(Resources.Load("MainCamera_mono"),
                 GameObject.Find("cameraDefaultPosition").transform.position,
                 GameObject.Find("cameraDefaultPosition").transform.rotation);
@@ -160,19 +159,16 @@ public partial class FengGameManagerMKII
             Cache();
             LoadMapCustom();
             //TODO: Remove SetInterfacePosition
-            UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().SetInterfacePosition();
-            UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().SetDayLight(IN_GAME_MAIN_CAMERA.dayLight);
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().SetInterfacePosition();
+            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().SetDayLight(IN_GAME_MAIN_CAMERA.dayLight);
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
             {
-                single_kills = 0;
-                single_maxDamage = 0;
-                single_totalDamage = 0;
-                UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled = true;
-                UnityEngine.Camera.main.GetComponent<SpectatorMovement>().disable = true;
-                UnityEngine.Camera.main.GetComponent<MouseLook>().disable = true;
-                IN_GAME_MAIN_CAMERA.gamemode = info.Gamemode;
+                Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled = true;
+                Camera.main.GetComponent<SpectatorMovement>().disable = true;
+                Camera.main.GetComponent<MouseLook>().disable = true;
+                IN_GAME_MAIN_CAMERA.GameMode = info.Gamemode;
                 SpawnPlayer(IN_GAME_MAIN_CAMERA.singleCharacter.ToUpper());
-                if (IN_GAME_MAIN_CAMERA.cameraMode == CAMERA_TYPE.TPS)
+                if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS)
                 {
                     Screen.lockCursor = true;
                 }
@@ -192,11 +188,11 @@ public partial class FengGameManagerMKII
             }
             else
             {
-                PVPcheckPoint.chkPts = new ArrayList();
+                PVPcheckPoint.checkPoints = new ArrayList();
                 UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled = false;
                 UnityEngine.Camera.main.GetComponent<CameraShake>().enabled = false;
-                IN_GAME_MAIN_CAMERA.gametype = GAMETYPE.MULTIPLAYER;
-                if (info.Gamemode == GAMEMODE.TROST)
+                IN_GAME_MAIN_CAMERA.GameType = GameType.Multiplayer;
+                if (info.Gamemode == GameMode.Trost)
                 {
                     GameObject.Find(PlayerRespawnTag).SetActive(false);
                     Destroy(GameObject.Find(PlayerRespawnTag));
@@ -205,7 +201,7 @@ public partial class FengGameManagerMKII
                     GameObject.Find("door_broke").SetActive(true);
                     Destroy(GameObject.Find("ppl"));
                 }
-                else if (info.Gamemode == GAMEMODE.BOSS_FIGHT_CT)
+                else if (info.Gamemode == GameMode.BossFight)
                 {
                     GameObject.Find("playerRespawnTrost").SetActive(false);
                     Destroy(GameObject.Find("playerRespawnTrost"));
@@ -217,7 +213,7 @@ public partial class FengGameManagerMKII
                 }
                 else if ((int) settings[245] == 0)
                 {
-                    if (IN_GAME_MAIN_CAMERA.cameraMode == CAMERA_TYPE.TPS)
+                    if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS)
                     {
                         Screen.lockCursor = true;
                     }
@@ -226,12 +222,12 @@ public partial class FengGameManagerMKII
                         Screen.lockCursor = false;
                     }
 
-                    switch (IN_GAME_MAIN_CAMERA.gamemode)
+                    switch (IN_GAME_MAIN_CAMERA.GameMode)
                     {
-                        case GAMEMODE.PVP_CAPTURE when Player.Self.Properties.PlayerType == PlayerType.Titan:
+                        case GameMode.PvpCapture when Player.Self.Properties.PlayerType == PlayerType.Titan:
                             checkpoint = GameObject.Find("PVPchkPtT");
                             break;
-                        case GAMEMODE.PVP_CAPTURE:
+                        case GameMode.PvpCapture:
                             checkpoint = GameObject.Find("PVPchkPtH");
                             break;
                     }
@@ -246,14 +242,14 @@ public partial class FengGameManagerMKII
                     }
                 }
 
-                if (info.Gamemode == GAMEMODE.BOSS_FIGHT_CT)
+                if (info.Gamemode == GameMode.BossFight)
                 {
                     Destroy(GameObject.Find("rock"));
                 }
 
                 if (PhotonNetwork.isMasterClient)
                 {
-                    if (info.Gamemode == GAMEMODE.TROST)
+                    if (info.Gamemode == GameMode.Trost)
                     {
                         if (!IsAnyPlayerAlive())
                         {
@@ -280,7 +276,7 @@ public partial class FengGameManagerMKII
                             }
                         }
                     }
-                    else if (info.Gamemode == GAMEMODE.BOSS_FIGHT_CT)
+                    else if (info.Gamemode == GameMode.BossFight)
                     {
                         if (!IsAnyPlayerAlive())
                         {
@@ -288,8 +284,8 @@ public partial class FengGameManagerMKII
                                 Quaternion.Euler(0f, 180f, 0f), 0);
                         }
                     }
-                    else if (info.Gamemode == GAMEMODE.KILL_TITAN || info.Gamemode == GAMEMODE.ENDLESS_TITAN ||
-                             info.Gamemode == GAMEMODE.SURVIVE_MODE)
+                    else if (info.Gamemode == GameMode.KillTitan || info.Gamemode == GameMode.EndlessTitan ||
+                             info.Gamemode == GameMode.SurviveMode)
                     {
                         if (info.Name == "Annie" || info.Name == "Annie II")
                         {
@@ -308,7 +304,7 @@ public partial class FengGameManagerMKII
                             SpawnTitanCustom("titanRespawn", num4, info.EnemyNumber, false);
                         }
                     }
-                    else if (info.Gamemode != GAMEMODE.TROST && info.Gamemode == GAMEMODE.PVP_CAPTURE &&
+                    else if (info.Gamemode != GameMode.Trost && info.Gamemode == GameMode.PvpCapture &&
                              info.LevelName == "OutSide")
                     {
                         GameObject[] objArray3 = GameObject.FindGameObjectsWithTag("titanRespawn");
@@ -743,22 +739,44 @@ public partial class FengGameManagerMKII
         if (gameStart)
         {
             foreach (HERO hero in Heroes)
-                hero.DoUpdate();
+                if (hero != null)
+                    hero.DoUpdate();
+
+            //TODO: Make tags look smaller from distance
+            foreach (HERO hero in Heroes)
+            {
+                //hero.myNetWorkName.GetComponent<UILabel>().text
+                if (hero != null &&
+                    !hero.photonView.isMine &&
+                    !hero.IsGrabbed &&
+                    !hero.HasDied() &&
+                    hero.myNetWorkName != null &&
+                    hero.myNetWorkName.GetComponent<UILabel>() != null)
+                {
+                    hero.myNetWorkName.GetComponent<UILabel>().transform.localScale = new Vector3(14, 14, 14);
+                }
+                    
+            }
             
             foreach (Bullet bullet in Hooks)
-                bullet.DoUpdate();
+                if (bullet != null)
+                    bullet.DoUpdate();
 
             foreach (TITAN_EREN et in ErenTitans)
-                et.DoUpdate();
+                if (et != null)
+                    et.DoUpdate();
 
             foreach (TITAN titan in Titans)
-                titan.DoUpdate();
+                if (titan != null)
+                    titan.DoUpdate();
 
             foreach (FEMALE_TITAN ft in FemaleTitans)
-                ft.DoUpdate();
+                if (ft != null)
+                    ft.DoUpdate();
 
             foreach (COLOSSAL_TITAN ct in ColossalTitans)
-                ct.DoUpdate();
+                if (ct != null)
+                    ct.DoUpdate();
 
             if (IN_GAME_MAIN_CAMERA.instance != null)
             {
@@ -771,16 +789,11 @@ public partial class FengGameManagerMKII
     private void Start()
     {
         instance = this;
+        ignoreList = new List<int>();
         gameObject.name = "MultiplayerManager";
         HeroCostume.init2();
         CharacterMaterials.init();
         DontDestroyOnLoad(gameObject);
-        name = string.Empty;
-        if (nameField == null)
-        {
-            nameField = "Hawk of the Death";
-//            nameField = "[ff00ca]S[eb02ba]h[d703ab]e[c2059b]l[ae068c]t[9a087c]e[7b2396]r[5c3eb0] [3e59cb]M[1f74e5]o[008fff]d - #" + new string(Enumerable.Repeat("abcdefghijklmnopqrstuvwxyz0123456789", 10).Select(x => x[UnityEngine.Random.Range(0, x.Length)]).ToArray());
-        }
 
         if (privateServerField == null)
         {
@@ -804,7 +817,8 @@ public partial class FengGameManagerMKII
         levelCache = new List<string[]>();
         titanSpawners = new List<TitanSpawner>();
         restartCount = new List<float>();
-        ignoreList = new List<int>();
+        
+        
         groundList = new List<GameObject>();
         noRestart = false;
         masterRC = false;
@@ -854,16 +868,20 @@ public partial class FengGameManagerMKII
             return;
         
         foreach (HERO hero in Heroes)
-            hero.DoLateUpdate();
+            if (hero != null)
+                hero.DoLateUpdate();
             
         foreach (TITAN_EREN eren in ErenTitans)
-            eren.DoLateUpdate();
+            if (eren != null)
+                eren.DoLateUpdate();
 
-        foreach (TITAN t in Titans)
-            t.DoLateUpdate();
+        foreach (TITAN titan in Titans)
+            if (titan != null)
+                titan.DoLateUpdate();
             
         foreach (FEMALE_TITAN ft in FemaleTitans)
-            ft.DoLateUpdate();
+            if (ft != null)
+                ft.DoLateUpdate();
             
         Core();
     }

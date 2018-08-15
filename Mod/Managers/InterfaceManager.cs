@@ -25,6 +25,7 @@ namespace Mod.Managers
                 go.AddComponent<CreateRoom>(),
                 go.AddComponent<MainMenu>(),
                 go.AddComponent<Background>(),
+                go.AddComponent<GameInfo>(),
             });
             Object.DontDestroyOnLoad(go);
         }

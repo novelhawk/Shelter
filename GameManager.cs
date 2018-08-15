@@ -2061,7 +2061,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[3], false);
             instance.needChooseSide = false;
             UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled = true;
-            if (IN_GAME_MAIN_CAMERA.cameraMode == CAMERA_TYPE.ORIGINAL)
+            if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.Original)
             {
                 Screen.lockCursor = false;
                 Screen.showCursor = false;
@@ -3312,7 +3312,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         };
         propertiesToSet = hashtable;
         Player.Self.SetCustomProperties(propertiesToSet);
-        if (IN_GAME_MAIN_CAMERA.cameraMode == CAMERA_TYPE.TPS)
+        if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS)
         {
             Screen.lockCursor = true;
         }
@@ -3343,7 +3343,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         };
         propertiesToSet = hashtable;
         Player.Self.SetCustomProperties(propertiesToSet);
-        if (IN_GAME_MAIN_CAMERA.cameraMode == CAMERA_TYPE.TPS)
+        if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS)
         {
             Screen.lockCursor = true;
         }
@@ -3374,7 +3374,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         };
         propertiesToSet = hashtable;
         Player.Self.SetCustomProperties(propertiesToSet);
-        if (IN_GAME_MAIN_CAMERA.cameraMode == CAMERA_TYPE.TPS)
+        if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS)
         {
             Screen.lockCursor = true;
         }
@@ -3405,7 +3405,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         };
         propertiesToSet = hashtable;
         Player.Self.SetCustomProperties(propertiesToSet);
-        if (IN_GAME_MAIN_CAMERA.cameraMode == CAMERA_TYPE.TPS)
+        if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS)
         {
             Screen.lockCursor = true;
         }
@@ -5549,7 +5549,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             };
             propertiesToSet = hashtable;
             Player.Self.SetCustomProperties(propertiesToSet);
-            if (IN_GAME_MAIN_CAMERA.cameraMode == CAMERA_TYPE.TPS)
+            if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS)
             {
                 Screen.lockCursor = true;
             }
@@ -5752,7 +5752,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             GameObject.Find("MainCamera").GetComponent<SpectatorMovement>().disable = true;
             GameObject.Find("MainCamera").GetComponent<MouseLook>().disable = true;
             component.gameOver = false;
-            if (IN_GAME_MAIN_CAMERA.cameraMode == CAMERA_TYPE.TPS)
+            if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS)
             {
                 Screen.lockCursor = true;
             }
