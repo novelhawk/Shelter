@@ -14,52 +14,7 @@ public static class RCextensions
         source = localArray;
     }
 
-    public static string hexColor(this string text)
-    {
-        if (text.Contains("]"))
-        {
-            text = text.Replace("]", ">");
-        }
-        bool flag2 = false;
-        while (text.Contains("[") && !flag2)
-        {
-            int index = text.IndexOf("[");
-            if (text.Length >= index + 7)
-            {
-                string str = text.Substring(index + 1, 6);
-                text = text.Remove(index, 7).Insert(index, "<color=#" + str);
-                int length = text.Length;
-                if (text.Contains("["))
-                {
-                    length = text.IndexOf("[");
-                }
-                text = text.Insert(length, "</color>");
-            }
-            else
-            {
-                flag2 = true;
-            }
-        }
-        if (flag2)
-        {
-            return string.Empty;
-        }
-        return text;
-    }
-
-    public static bool isLowestID(this Player player)
-    {
-        foreach (Player player2 in PhotonNetwork.playerList)
-        {
-            if (player2.ID < player.ID)
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public static Texture2D loadimage(WWW link, bool mipmap, int size)
+    public static Texture2D LoadImageRC(WWW link, bool mipmap, int size)
     {
         Texture2D tex = new Texture2D(4, 4, TextureFormat.DXT1, mipmap);
         if (link.size >= size)
@@ -116,7 +71,7 @@ public static class RCextensions
         {
             try
             {
-                textured3.Resize(num3, num3, TextureFormat.DXT1, mipmap);
+                textured3.Resize(num3, num3, TextureFormat.DXT1, true);
             }
             catch
             {
@@ -125,7 +80,7 @@ public static class RCextensions
         }
         else
         {
-            textured3.Resize(num3, num3, TextureFormat.DXT1, mipmap);
+            textured3.Resize(num3, num3, TextureFormat.DXT1, false);
         }
         textured3.Apply();
         return textured3;
@@ -153,41 +108,6 @@ public static class RCextensions
             }
             source = localArray;
         }
-    }
-
-    public static bool returnBoolFromObject(object obj)
-    {
-        return obj != null && obj is bool && (bool) obj;
-    }
-
-    public static float returnFloatFromObject(object obj)
-    {
-        if (obj != null && obj is float)
-        {
-            return (float) obj;
-        }
-        return 0f;
-    }
-
-    public static int returnIntFromObject(object obj)
-    {
-        if (obj != null && obj is int)
-        {
-            return (int) obj;
-        }
-        return 0;
-    }
-
-    public static string returnStringFromObject(object obj)
-    {
-        if (obj != null)
-        {
-            if (obj is string str)
-            {
-                return str;
-            }
-        }
-        return string.Empty;
     }
 }
 
