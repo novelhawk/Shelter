@@ -1,52 +1,37 @@
 using UnityEngine;
 
-public class CameraShake : MonoBehaviour
+public class CameraShake : MonoBehaviour //TODO: Removed unusued class? || Add camera shake to the game
 {
-    private float decay;
-    private float duration;
-    private bool flip;
-    private float R;
-
-    private void FixedUpdate()
-    {
-    }
+    private float _forceDecay;
+    private float _duration;
+    private bool _direction;
+    private float _force;
 
     private void shakeUpdate()
     {
-        if (this.duration > 0f)
+        if (_duration > 0f)
         {
-            this.duration -= Time.deltaTime;
-            if (this.flip)
-            {
-                Transform transform = gameObject.transform;
-                transform.position += Vector3.up * this.R;
-            }
+            _duration -= Time.deltaTime;
+            Transform cameraTransform = gameObject.transform;
+            
+            if (_direction)
+                cameraTransform.position += Vector3.up * this._force;
             else
-            {
-                Transform transform2 = gameObject.transform;
-                transform2.position -= Vector3.up * this.R;
-            }
-            this.flip = !this.flip;
-            this.R *= this.decay;
+                cameraTransform.position -= Vector3.up * this._force;
+            
+            _direction = !_direction;
+            _force *= _forceDecay;
         }
     }
 
-    private void Start()
+    public void startShake(float force, float duration, float decay = 0.95f)
     {
-    }
-
-    public void startShake(float R, float duration, float decay = 0.95f)
-    {
-        if (this.duration < duration)
+        if (_duration <= 0)
         {
-            this.R = R;
-            this.duration = duration;
-            this.decay = decay;
+            _force = force;
+            _duration = duration;
+            _forceDecay = decay;
         }
-    }
-
-    private void Update()
-    {
     }
 }
 

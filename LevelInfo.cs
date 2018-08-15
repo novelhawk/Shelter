@@ -14,6 +14,6 @@ public struct LevelInfo
     public RespawnMode RespawnMode { get; set; }
     public bool Supply { get; set; }
     public bool PlayerTitansAllowed { get; set; }
-    public GAMEMODE Gamemode { get; set; }
+    public GameMode Gamemode { get; set; }
 }
 

@@ -8,4 +8,3 @@ public enum PhotonTargets
     AllViaServer,
     AllBufferedViaServer
 }
-

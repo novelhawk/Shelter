@@ -8,7 +8,7 @@ public class LevelTriggerRacingEnd : MonoBehaviour
     {
         if (!this.disable && other.gameObject.tag == "Player")
         {
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
             {
                 FengGameManagerMKII.instance.GameWin();
                 this.disable = true;

@@ -1,3 +1,4 @@
+using Mod;
 using UnityEngine;
 
 public class IN_GAME_MAIN_CAMERA : MonoBehaviour
@@ -6,7 +7,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     public RotationAxes axes;
     public AudioSource bgmusic;
     public static float cameraDistance = 0.6f;
-    public static CAMERA_TYPE cameraMode;
+    public static CameraType cameraMode;
     public static int cameraTilt = 1;
     public static int character = 1;
     private float closestDistance;
@@ -20,9 +21,9 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     private float duration;
     private float flashDuration;
     private bool flip;
-    public static GAMEMODE gamemode;
+    public static GameMode GameMode;
     public bool gameOver;
-    public static GAMETYPE gametype = GAMETYPE.STOP;
+    public static GameType GameType = GameType.NotInRoom;
     private bool hasSnapShot;
     private Transform head;
     public float height = 5f;
@@ -110,7 +111,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         transform.position += Vector3.up * this.heightMulti;
         Transform transform2 = this.transform;
         transform2.position -= Vector3.up * (0.6f - cameraDistance) * 2f;
-        if (cameraMode == CAMERA_TYPE.WOW)
+        if (cameraMode == CameraType.Stop)
         {
             if (Input.GetKey(KeyCode.Mouse1))
             {
@@ -122,7 +123,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             Transform transform3 = this.transform;
             transform3.position -= this.transform.forward * this.distance * this.distanceMulti * this.distanceOffsetMulti;
         }
-        else if (cameraMode == CAMERA_TYPE.ORIGINAL)
+        else if (cameraMode == CameraType.Original)
         {
             float num3 = 0f;
             if (Input.mousePosition.x < Screen.width * 0.4f)
@@ -140,7 +141,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             Transform transform4 = this.transform;
             transform4.position -= this.transform.forward * this.distance * this.distanceMulti * this.distanceOffsetMulti;
         }
-        else if (cameraMode == CAMERA_TYPE.TPS)
+        else if (cameraMode == CameraType.TPS)
         {
             if (!this.inputManager.menuOn)
             {
@@ -285,7 +286,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     private void reset()
     {
-        if (gametype == GAMETYPE.SINGLE)
+        if (GameType == GameType.Singleplayer)
         {
             FengGameManagerMKII.instance.RestartSingleplayer();
         }
@@ -360,33 +361,42 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     public void SetInterfacePosition() //TODO: Redo it
     {
-        GameObject obj;
-        if ((obj = GameObject.Find("Flare")) != null)
+        if (Shelter.TryFind("Flare", out GameObject obj))
             Destroy(obj);
         
-        if ((obj = GameObject.Find("Chatroom")) != null)
+        if (Shelter.TryFind("Chatroom", out obj))
             Destroy(obj);
         
-        if ((obj = GameObject.Find("UILabel")) != null)
+        if (Shelter.TryFind("UILabel", out obj))
             Destroy(obj);
         
-        if ((obj = GameObject.Find("LabelNetworkStatus")) != null)
+        if (Shelter.TryFind("LabelNetworkStatus", out obj))
             Destroy(obj);
+        
+        if (Shelter.TryFind("LabelInfoBottomRight", out obj))
+            Destroy(obj);
+        
+        if (Shelter.TryFind("LabelInfoTopCenter", out obj))
+            Destroy(obj);
+        
+        if (Shelter.TryFind("LabelInfoTopRight", out obj))
+            Destroy(obj);
+        
         
 //        GameObject.Find("Flare").transform.localPosition = new Vector3((int)(-Screen.width * 0.5f) + 14, (int)(-Screen.height * 0.5f), 0f);
-        GameObject.Find("LabelInfoBottomRight").transform.localPosition = new Vector3((int)(Screen.width * 0.5f), (int)(-Screen.height * 0.5f), 0f);
+//        GameObject.Find("LabelInfoBottomRight").transform.localPosition = new Vector3((int)(Screen.width * 0.5f), (int)(-Screen.height * 0.5f), 0f);
 //        obj2.GetComponent<UILabel>().text = "Pause : " + GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.pause] + " ";
-        GameObject.Find("LabelInfoTopCenter").transform.localPosition = new Vector3(0f, (int)(Screen.height * 0.5f), 0f);
-        GameObject.Find("LabelInfoTopRight").transform.localPosition = new Vector3((int)(Screen.width * 0.5f), (int)(Screen.height * 0.5f), 0f);
+//        GameObject.Find("LabelInfoTopCenter").transform.localPosition = new Vector3(0f, (int)(Screen.height * 0.5f), 0f);
+//        GameObject.Find("LabelInfoTopRight").transform.localPosition = new Vector3((int)(Screen.width * 0.5f), (int)(Screen.height * 0.5f), 0f);
 //        GameObject.Find("LabelNetworkStatus").transform.localPosition = new Vector3((float) ((int) (-Screen.width * 0.5f)), (float) ((int) (Screen.height * 0.5f)), 0f); MOD: Removed Connection state top left
-        GameObject.Find("LabelInfoTopLeft").transform.localPosition = new Vector3((int)(-Screen.width * 0.5f), (int)(Screen.height * 0.5f - 20f), 0f);
-        Destroy(GameObject.Find("Chatroom"));
+//        GameObject.Find("LabelInfoTopLeft").transform.localPosition = new Vector3((int)(-Screen.width * 0.5f), (int)(Screen.height * 0.5f - 20f), 0f);
+//        Destroy(GameObject.Find("Chatroom"));
 //        GameObject.Find("Chatroom").transform.localPosition = new Vector3((float) ((int) (-Screen.width * 0.5f)), (float) ((int) (-Screen.height * 0.5f)), 0f);
 //        if (GameObject.Find("Chatroom") != null)
 //        {
 //            GameObject.Find("Chatroom").GetComponent<InRoomChat>().setPosition();
 //        }
-        if (usingTitan && gametype != GAMETYPE.SINGLE)
+        if (usingTitan && GameType != GameType.Singleplayer)
         {
             Vector3 vector = new Vector3(0f, 9999f, 0f);
             GameObject.Find("skill_cd_bottom").transform.localPosition = vector;
@@ -411,13 +421,13 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         }
         if (this.main_object != null && this.main_object.GetComponent<HERO>() != null)
         {
-            if (gametype == GAMETYPE.SINGLE)
+            if (GameType == GameType.Singleplayer)
             {
-                this.main_object.GetComponent<HERO>().setSkillHUDPosition2();
+                this.main_object.GetComponent<HERO>().SetSkillHUDPosition();
             }
             else if (this.main_object.GetPhotonView() != null && this.main_object.GetPhotonView().isMine)
             {
-                this.main_object.GetComponent<HERO>().setSkillHUDPosition2();
+                this.main_object.GetComponent<HERO>().SetSkillHUDPosition();
             }
         }
         if (stereoType == STEREO_3D_TYPE.SIDE_BY_SIDE)
@@ -718,14 +728,14 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             }
             GameObject.Find("flash").GetComponent<UISprite>().alpha = this.flashDuration * 0.5f;
         }
-        if (gametype == GAMETYPE.STOP)
+        if (GameType == GameType.NotInRoom)
         {
             Screen.showCursor = true;
             Screen.lockCursor = false;
         }
         else
         {
-            if (gametype != GAMETYPE.SINGLE && this.gameOver)
+            if (GameType != GameType.Singleplayer && this.gameOver)
             {
                 if (this.inputManager.isInputDown[InputCode.attack1])
                 {
@@ -793,7 +803,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 isPausing = !isPausing;
                 if (isPausing)
                 {
-                    if (gametype == GAMETYPE.SINGLE)
+                    if (GameType == GameType.Singleplayer)
                     {
                         Time.timeScale = 0f;
                     }
@@ -832,19 +842,19 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 RaycastHit hit;
                 if (this.inputManager.isInputDown[InputCode.camera])
                 {
-                    if (cameraMode == CAMERA_TYPE.ORIGINAL)
+                    if (cameraMode == CameraType.Original)
                     {
-                        cameraMode = CAMERA_TYPE.WOW;
+                        cameraMode = CameraType.Stop;
                         Screen.lockCursor = false;
                     }
-                    else if (cameraMode == CAMERA_TYPE.WOW)
+                    else if (cameraMode == CameraType.Stop)
                     {
-                        cameraMode = CAMERA_TYPE.TPS;
+                        cameraMode = CameraType.TPS;
                         Screen.lockCursor = true;
                     }
-                    else if (cameraMode == CAMERA_TYPE.TPS)
+                    else if (cameraMode == CameraType.TPS)
                     {
-                        cameraMode = CAMERA_TYPE.ORIGINAL;
+                        cameraMode = CameraType.Original;
                         Screen.lockCursor = false;
                     }
                     this.verticalRotationOffset = 0f;

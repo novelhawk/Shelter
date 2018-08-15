@@ -1195,17 +1195,15 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     {
         if (PhotonNetwork.automaticallySyncScene && !PhotonNetwork.isMasterClient && PhotonNetwork.Room != null && PhotonNetwork.Room.Properties.ContainsKey("curScn"))
         {
-            object obj2 = PhotonNetwork.Room.Properties["curScn"];
-            if (obj2 is int)
+            object currentLevel = PhotonNetwork.Room.Properties["curScn"];
+            switch (currentLevel)
             {
-                if (Application.loadedLevel != (int) obj2)
-                {
-                    PhotonNetwork.LoadLevel((int) obj2);
-                }
-            }
-            else if (obj2 is string && Application.loadedLevelName != (string) obj2)
-            {
-                PhotonNetwork.LoadLevel((string) obj2);
+                case int lvl when Application.loadedLevel != lvl:
+                    PhotonNetwork.LoadLevel(lvl);
+                    break;
+                case string lvl when Application.loadedLevelName != lvl:
+                    PhotonNetwork.LoadLevel(lvl);
+                    break;
             }
         }
     }
@@ -1214,7 +1212,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     {
         view.destroyedByPhotonNetworkOrQuit = true;
         this.photonViewList.Remove(view.viewID);
-    }
+    }    
 
     protected internal void LocalCleanupAnythingInstantiated(bool destroyInstantiatedGameObjects)
     {
@@ -1316,7 +1314,6 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         Hashtable hashtable3;
         object obj7;
         object obj8;
-        object obj9;
         int key = -1;
         Player sender = null;
         if (photonEvent.Parameters.ContainsKey(254))
@@ -1331,9 +1328,10 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         {
             return;
         }
-        switch (photonEvent.Code) //TODO: Add enum?
+
+        switch ((PhotonEvent) photonEvent.Code) //TODO: Add enum?
         {
-            case 200:
+            case PhotonEvent.RPC:
                 if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
                 {
                     this.ExecuteRPC(photonEvent[245] as Hashtable, sender);
@@ -1341,8 +1339,8 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 }
                 return;
 
-            case 201:
-            case 206:
+            case PhotonEvent.OSR1:
+            case PhotonEvent.OSR:
                 if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
                 {
                     object obj2 = photonEvent[245];
@@ -1374,26 +1372,17 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 }
                 return;
 
-            case 202:
+            case PhotonEvent.Instantiate:
                 if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
                 {
-                    if (photonEvent[245] is Hashtable)
-                    {
-                        Hashtable evData = (Hashtable)photonEvent[245];
+                    if (photonEvent[245] is Hashtable evData)
                         if (evData[(byte)0] is string)
-                        {
-                            string str = (string)evData[(byte)0];
-                            if (str != null)
-                            {
-                                this.DoInstantiate2(evData, sender, null);
-                            }
-                        }
-                    }
+                            this.DoInstantiate2(evData, sender, null);
                     break;
                 }
                 return;
 
-            case 203:
+            case PhotonEvent.CloseConnection:
                 break;
 
 //                if (sender != null && sender.IsMasterClient && !sender.isLocal) TODO: Add reconnect
@@ -1402,20 +1391,16 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 //                }
 //                break;
 
-            case 204:
-                if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
+            case PhotonEvent.RemoveInstantiatedObject:
+                if (sender != null && !FengGameManagerMKII.ignoreList.Contains(sender.ID)) // Only remote? TODO: Check 
                 {
-                    if (photonEvent[245] is Hashtable)
+                    if (photonEvent[245] is Hashtable hashtable)
                     {
-                        hashtable3 = (Hashtable)photonEvent[245];
-                        if (hashtable3[(byte)0] is int)
+                        if (hashtable[(byte)0] is int num8)
                         {
-                            int num8 = (int)hashtable3[(byte)0];
-                            GameObject obj3 = null;
-                            this.instantiatedObjects.TryGetValue(num8, out obj3);
-                            if (obj3 != null && sender != null)
+                            if (instantiatedObjects.TryGetValue(num8, out var obj) && obj != null)
                             {
-                                this.RemoveInstantiatedGO(obj3, true);
+                                RemoveInstantiatedGO(obj, true);
                             }
                         }
                     }
@@ -1423,15 +1408,13 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 }
                 return;
 
-            case 207:
+            case PhotonEvent.DestroyPlayerObjects:
                 if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
                 {
-                    if (photonEvent[245] is Hashtable)
+                    if (photonEvent[245] is Hashtable hashtable)
                     {
-                        hashtable3 = (Hashtable)photonEvent[245];
-                        if (hashtable3[(byte)0] is int)
+                        if (hashtable[(byte)0] is int playerId)
                         {
-                            int playerId = (int)hashtable3[(byte)0];
                             if (playerId < 0 && sender != null && (sender.IsMasterClient || sender.isLocal))
                             {
                                 this.DestroyAll(true);
@@ -1446,19 +1429,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 }
                 return;
 
-            case 208:
+            case PhotonEvent.SetMasterClient:
                 {
-                    if (!(photonEvent[245] is Hashtable))
-                    {
-                        break;
-                    }
-                    hashtable3 = (Hashtable)photonEvent[245];
-                    if (!(hashtable3[(byte)1] is int))
-                    {
-                        break;
-                    }
-                    int num10 = (int)hashtable3[(byte)1];
-                    if (sender == null || !sender.IsMasterClient || num10 != sender.ID)
+                    var hashtable = photonEvent[245] as Hashtable;
+
+                    if (hashtable?[(byte) 1] is int id && (sender == null || !sender.IsMasterClient ||  id != sender.ID))
                     {
                         if (!(sender == null || sender.IsMasterClient || sender.isLocal))
                         {
@@ -1468,58 +1443,46 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                                 PhotonNetwork.SetMasterClient(Player.Self);
                                 FengGameManagerMKII.instance.KickPlayerRC(sender, true, "stealing MC.");
                             }
-                            return;
+                            
+                            throw new NotAllowedException(photonEvent.Code, sender);
                         }
-                        if (num10 == this.mLocalActor.ID)
-                        {
-                            this.SetMasterClient(num10, false);
-                        }
-                        else if (sender == null || sender.IsMasterClient || sender.isLocal)
-                        {
-                            this.SetMasterClient(num10, false);
-                        }
+
+                        if (id == mLocalActor.ID || sender == null || 
+                            sender.IsMasterClient || sender.isLocal)
+                            SetMasterClient(id, false);
+
                         break;
                     }
                     return;
                 }
-            case 226:
+            case PhotonEvent.UpdatePlayersCounters:
                 if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
                 {
-                    object obj4 = photonEvent[229];
-                    object obj5 = photonEvent[227];
-                    object obj6 = photonEvent[228];
-                    if (obj4 is int && obj5 is int && obj6 is int)
+                    if (photonEvent[229] is int players && 
+                        photonEvent[227] is int playersMC && 
+                        photonEvent[228] is int gameCount)
                     {
-                        this.mPlayersInRoomsCount = (int)obj4;
-                        this.mPlayersOnMasterCount = (int)obj5;
-                        this.mGameCount = (int)obj6;
+                        this.mPlayersInRoomsCount = players;
+                        this.mPlayersOnMasterCount = playersMC;
+                        this.mGameCount = gameCount;
                     }
                     break;
                 }
                 return;
 
-            case 228:
+            case PhotonEvent.UpdateQueuePosition:
                 if (sender != null)
                     throw new NotAllowedException(photonEvent.Code, sender);
                 
-                if (sender == null)
-                {
-                    if (photonEvent.Parameters.ContainsKey(223))
-                    {
-                        obj7 = photonEvent[223];
-                        if (obj7 is int id)
-                        {
-                            this.mQueuePosition = id;
-                        }
-                    }
-                }
+                if (photonEvent.Parameters.ContainsKey(223))
+                    if (photonEvent[223] is int id)
+                        this.mQueuePosition = id;
                 return;
 
-            case 229:
+            case PhotonEvent.RoomListUpdate:
                 if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
                 {
-                    obj7 = photonEvent[222];
-                    if (obj7 is Hashtable hashtable)
+                    if (photonEvent[222] is Hashtable hashtable)
                     {
                         foreach (DictionaryEntry entry in hashtable)
                         {
@@ -1539,11 +1502,10 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 }
                 return;
 
-            case 230:
+            case PhotonEvent.RoomListCreated:
                 if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
                 {
-                    obj7 = photonEvent[222];
-                    if (obj7 is Hashtable hashtable)
+                    if (photonEvent[222] is Hashtable hashtable)
                     {
                         mGameList = new Dictionary<string, Room>();
                         foreach (DictionaryEntry entry in hashtable)
@@ -1560,11 +1522,10 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 }
                 return;
 
-            case 253:
+            case PhotonEvent.PlayerJoined:
                 if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
                 {
-                    obj8 = photonEvent[253];
-                    if (obj8 is int id)
+                    if (photonEvent[253] is int id)
                     {
                         Hashtable pActorProperties = null;
                         if (id != 0)
@@ -1601,7 +1562,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                         else
                         {
                             if (photonEvent[251] is Hashtable hash)
-                                ReadoutProperties(hash, pActorProperties, id);
+                                ReadoutProperties(hash, null, id);
                             return;
                         }
                         this.ReadoutProperties(null, pActorProperties, id);
@@ -1610,39 +1571,34 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 }
                 return;
 
-            case 254:
+            case PhotonEvent.PlayerLeft:
                 this.HandleEventLeave(key);
                 break;
 
-            case 255:
+            case PhotonEvent.JoinedRoom:
                 if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
                 {
-                    obj8 = photonEvent[249];
-                    if (obj8 == null || obj8 is Hashtable)
+                    var properties = photonEvent[249] as Hashtable;
+                    if (photonEvent[249] == null || properties != null)
                     {
-                        Hashtable properties = (Hashtable)obj8;
                         if (sender == null)
                         {
-                            bool isLocal = this.mLocalActor.ID == key;
-                            this.AddNewPlayer(key, new Player(isLocal, key, properties));
+                            this.AddNewPlayer(key, new Player(mLocalActor.ID == key, key, properties));
                             this.ResetPhotonViewsOnSerialize();
                         }
                         if (key != this.mLocalActor.ID)
                         {
-                            object[] parameters = new object[] { this.mActors[key] };
-                            SendMonoMessage(PhotonNetworkingMessage.OnPhotonPlayerConnected, parameters);
+                            SendMonoMessage(PhotonNetworkingMessage.OnPhotonPlayerConnected, mActors[key]);
                         }
                         else
                         {
-                            obj9 = photonEvent[252];
-                            if (obj9 is int[])
+                            if (photonEvent[252] is int[] ids)
                             {
-                                int[] numArray = (int[])obj9;
-                                foreach (int num17 in numArray)
+                                foreach (int id in ids)
                                 {
-                                    if (!(this.mLocalActor.ID == num17 || this.mActors.ContainsKey(num17)))
+                                    if (!(this.mLocalActor.ID == id || this.mActors.ContainsKey(id)))
                                     {
-                                        this.AddNewPlayer(num17, new Player(false, num17, string.Empty));
+                                        this.AddNewPlayer(id, new Player(false, id, string.Empty));
                                     }
                                 }
                                 if (this.mLastJoinType == JoinType.JoinOrCreateOnDemand && this.mLocalActor.ID == 1)
@@ -2542,9 +2498,8 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     public void RegisterPhotonView(PhotonView netView)
     {
         if (!Application.isPlaying)
-        {
             this.photonViewList = new Dictionary<int, PhotonView>();
-        }
+        
         else if (netView.subId != 0)
         {
             if (this.photonViewList.ContainsKey(netView.viewID))
@@ -2725,8 +2680,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 rpcData[(byte) 1] = (short) view.prefix;
             }
             rpcData[(byte) 2] = ServerTimeInMilliSeconds;
-            int num = 0;
-            if (this.rpcShortcuts.TryGetValue(methodName, out num))
+            if (this.rpcShortcuts.TryGetValue(methodName, out var num))
             {
                 rpcData[(byte) 5] = (byte) num;
             }
@@ -2774,8 +2728,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 customEventContent[(byte) 1] = (short) view.prefix;
             }
             customEventContent[(byte) 2] = ServerTimeInMilliSeconds;
-            int num = 0;
-            if (this.rpcShortcuts.TryGetValue(methodName, out num))
+            if (this.rpcShortcuts.TryGetValue(methodName, out var num))
             {
                 customEventContent[(byte) 5] = (byte) num;
             }
@@ -2787,77 +2740,69 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             {
                 customEventContent[(byte) 4] = parameters;
             }
-            if (target == PhotonTargets.All)
+            switch (target)
             {
-                options = new RaiseEventOptions {
-                    InterestGroup = (byte) view.group
-                };
-                RaiseEventOptions raiseEventOptions = options;
-                this.OpRaiseEvent(200, customEventContent, true, raiseEventOptions);
-                this.ExecuteRPC(customEventContent, this.mLocalActor);
-            }
-            else if (target == PhotonTargets.Others)
-            {
-                options = new RaiseEventOptions {
-                    InterestGroup = (byte) view.group
-                };
-                RaiseEventOptions options3 = options;
-                this.OpRaiseEvent(200, customEventContent, true, options3);
-            }
-            else if (target == PhotonTargets.AllBuffered)
-            {
-                options = new RaiseEventOptions {
-                    CachingOption = EventCaching.AddToRoomCache
-                };
-                RaiseEventOptions options4 = options;
-                this.OpRaiseEvent(200, customEventContent, true, options4);
-                this.ExecuteRPC(customEventContent, this.mLocalActor);
-            }
-            else if (target == PhotonTargets.OthersBuffered)
-            {
-                options = new RaiseEventOptions {
-                    CachingOption = EventCaching.AddToRoomCache
-                };
-                RaiseEventOptions options5 = options;
-                this.OpRaiseEvent(200, customEventContent, true, options5);
-            }
-            else if (target == PhotonTargets.MasterClient)
-            {
-                if (this.mMasterClient == this.mLocalActor)
-                {
+                case PhotonTargets.All:
+                    options = new RaiseEventOptions {
+//                        TargetActors = PhotonNetwork.playerList.Select(x => x.ID).Where(x => !FengGameManagerMKII.ignoreList.Contains(x)).ToArray()
+                        InterestGroup = (byte) view.group
+                    };
+                    RaiseEventOptions raiseEventOptions = options;
+                    this.OpRaiseEvent(200, customEventContent, true, raiseEventOptions);
                     this.ExecuteRPC(customEventContent, this.mLocalActor);
-                }
-                else
-                {
+                    break;
+                case PhotonTargets.Others:
+                    options = new RaiseEventOptions {
+                        InterestGroup = (byte) view.@group
+                    };
+                    RaiseEventOptions options3 = options;
+                    this.OpRaiseEvent(200, customEventContent, true, options3);
+                    break;
+                case PhotonTargets.AllBuffered:
+                    options = new RaiseEventOptions {
+                        CachingOption = EventCaching.AddToRoomCache
+                    };
+                    RaiseEventOptions options4 = options;
+                    this.OpRaiseEvent(200, customEventContent, true, options4);
+                    this.ExecuteRPC(customEventContent, this.mLocalActor);
+                    break;
+                case PhotonTargets.OthersBuffered:
+                    options = new RaiseEventOptions {
+                        CachingOption = EventCaching.AddToRoomCache
+                    };
+                    RaiseEventOptions options5 = options;
+                    this.OpRaiseEvent(200, customEventContent, true, options5);
+                    break;
+                case PhotonTargets.MasterClient when this.mMasterClient == this.mLocalActor:
+                    this.ExecuteRPC(customEventContent, this.mLocalActor);
+                    break;
+                case PhotonTargets.MasterClient:
                     options = new RaiseEventOptions {
                         Receivers = ReceiverGroup.MasterClient
                     };
                     RaiseEventOptions options6 = options;
                     this.OpRaiseEvent(200, customEventContent, true, options6);
-                }
-            }
-            else if (target == PhotonTargets.AllViaServer)
-            {
-                options = new RaiseEventOptions {
-                    InterestGroup = (byte) view.group,
-                    Receivers = ReceiverGroup.All
-                };
-                RaiseEventOptions options7 = options;
-                this.OpRaiseEvent(200, customEventContent, true, options7);
-            }
-            else if (target == PhotonTargets.AllBufferedViaServer)
-            {
-                options = new RaiseEventOptions {
-                    InterestGroup = (byte) view.group,
-                    Receivers = ReceiverGroup.All,
-                    CachingOption = EventCaching.AddToRoomCache
-                };
-                RaiseEventOptions options8 = options;
-                this.OpRaiseEvent(200, customEventContent, true, options8);
-            }
-            else
-            {
-                Debug.LogError("Unsupported target enum: " + target);
+                    break;
+                case PhotonTargets.AllViaServer:
+                    options = new RaiseEventOptions {
+                        InterestGroup = (byte) view.@group,
+                        Receivers = ReceiverGroup.All
+                    };
+                    RaiseEventOptions options7 = options;
+                    this.OpRaiseEvent(200, customEventContent, true, options7);
+                    break;
+                case PhotonTargets.AllBufferedViaServer:
+                    options = new RaiseEventOptions {
+                        InterestGroup = (byte) view.@group,
+                        Receivers = ReceiverGroup.All,
+                        CachingOption = EventCaching.AddToRoomCache
+                    };
+                    RaiseEventOptions options8 = options;
+                    this.OpRaiseEvent(200, customEventContent, true, options8);
+                    break;
+                default:
+                    Debug.LogError("Unsupported target enum: " + target);
+                    break;
             }
         }
     }

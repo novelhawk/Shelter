@@ -7,7 +7,7 @@ public class PVPcheckPoint : Photon.MonoBehaviour
     private bool annie;
     public GameObject[] chkPtNextArr;
     public GameObject[] chkPtPreviousArr;
-    public static ArrayList chkPts;
+    public static ArrayList checkPoints;
     private float getPtsInterval = 20f;
     private float getPtsTimer;
     public bool hasAnnie;
@@ -103,9 +103,9 @@ public class PVPcheckPoint : Photon.MonoBehaviour
 
     private bool checkIfHumanWins()
     {
-        for (int i = 0; i < chkPts.Count; i++)
+        for (int i = 0; i < checkPoints.Count; i++)
         {
-            if ((chkPts[i] as PVPcheckPoint).state != CheckPointState.Human)
+            if ((checkPoints[i] as PVPcheckPoint).state != CheckPointState.Human)
             {
                 return false;
             }
@@ -115,9 +115,9 @@ public class PVPcheckPoint : Photon.MonoBehaviour
 
     private bool checkIfTitanWins()
     {
-        for (int i = 0; i < chkPts.Count; i++)
+        for (int i = 0; i < checkPoints.Count; i++)
         {
-            if ((chkPts[i] as PVPcheckPoint).state != CheckPointState.Titan)
+            if ((checkPoints[i] as PVPcheckPoint).state != CheckPointState.Titan)
             {
                 return false;
             }
@@ -211,11 +211,11 @@ public class PVPcheckPoint : Photon.MonoBehaviour
 
     private void Start()
     {
-        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
         {
             Destroy(gameObject);
         }
-        else if (IN_GAME_MAIN_CAMERA.gamemode != GAMEMODE.PVP_CAPTURE)
+        else if (IN_GAME_MAIN_CAMERA.GameMode != GameMode.PvpCapture)
         {
             if (photonView.isMine)
             {
@@ -225,9 +225,9 @@ public class PVPcheckPoint : Photon.MonoBehaviour
         }
         else
         {
-            chkPts.Add(this);
+            checkPoints.Add(this);
             IComparer comparer = new IComparerPVPchkPtID();
-            chkPts.Sort(comparer);
+            checkPoints.Sort(comparer);
             if (this.humanPt == this.humanPtMax)
             {
                 this.state = CheckPointState.Human;

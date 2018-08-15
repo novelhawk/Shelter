@@ -14,7 +14,7 @@ public class SmoothSyncMovement : Photon.MonoBehaviour
 
     public void Awake()
     {
-        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
         {
             enabled = false;
         }

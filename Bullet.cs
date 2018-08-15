@@ -59,7 +59,7 @@ public class Bullet : Photon.MonoBehaviour
     {
         this.phase = 2;
         this.killTime = 0f;
-        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
         {
             object[] parameters = new object[] { 2 };
             photonView.RPC("setPhase", PhotonTargets.Others, parameters);
@@ -78,7 +78,7 @@ public class Bullet : Photon.MonoBehaviour
                 return;
             }
         }
-        if (!(IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine))
+        if (!(IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine))
         {
             if (this.phase == 0)
             {
@@ -112,7 +112,7 @@ public class Bullet : Photon.MonoBehaviour
                 bool flag4 = true;
                 if (hit.collider.transform.gameObject.layer == LayerMask.NameToLayer("EnemyBox"))
                 {
-                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+                    if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                     {
                         object[] parameters = new object[] { hit.collider.transform.root.gameObject.GetPhotonView().viewID };
                         photonView.RPC("tieMeToOBJ", PhotonTargets.Others, parameters);
@@ -126,7 +126,7 @@ public class Bullet : Photon.MonoBehaviour
                 }
                 else if (hit.collider.transform.gameObject.layer == LayerMask.NameToLayer("NetworkObject") && hit.collider.transform.gameObject.tag == "Player" && !this.leviMode)
                 {
-                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+                    if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                     {
                         object[] objArray3 = new object[] { hit.collider.transform.root.gameObject.GetPhotonView().viewID };
                         photonView.RPC("tieMeToOBJ", PhotonTargets.Others, objArray3);
@@ -150,7 +150,7 @@ public class Bullet : Photon.MonoBehaviour
                     if (this.phase != 2)
                     {
                         this.phase = 1;
-                        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+                        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                         {
                             object[] objArray4 = new object[] { 1 };
                             photonView.RPC("setPhase", PhotonTargets.Others, objArray4);
@@ -172,7 +172,7 @@ public class Bullet : Photon.MonoBehaviour
                 if (this.killTime2 > 0.8f)
                 {
                     this.phase = 4;
-                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+                    if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                     {
                         object[] objArray6 = new object[] { 4 };
                         photonView.RPC("setPhase", PhotonTargets.Others, objArray6);
@@ -264,7 +264,7 @@ public class Bullet : Photon.MonoBehaviour
             this.phase = 0;
             this.leviMode = leviMode;
             this.left = isLeft;
-            if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && photonView.isMine)
+            if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
             {
                 object[] parameters = new object[] { hero.GetComponent<HERO>().photonView.viewID, launcher_ref };
                 photonView.RPC("myMasterIs", PhotonTargets.Others, parameters);
@@ -356,12 +356,12 @@ public class Bullet : Photon.MonoBehaviour
     public void removeMe()
     {
         this.isdestroying = true;
-        if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && photonView.isMine)
+        if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
         {
             PhotonNetwork.Destroy(photonView);
             PhotonNetwork.RemoveRPCs(photonView);
         }
-        else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+        else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
         {
             Destroy(this.rope);
             Destroy(gameObject);

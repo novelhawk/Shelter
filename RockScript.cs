@@ -30,7 +30,7 @@ public class RockScript : MonoBehaviour
             if (Vector3.Distance(this.desPt, this.transform.position) < 20f || this.transform.position.y < 0f)
             {
                 this.transform.position = this.desPt;
-                if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
+                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
                 {
                     if (FengGameManagerMKII.LAN)
                     {

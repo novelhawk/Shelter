@@ -1,20 +1,17 @@
 using Mod;
-using Mod.Exceptions;
-using Mod.Interface;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using Object = System.Object;
 
 public partial class FengGameManagerMKII : Photon.MonoBehaviour
 {
     public const string ApplicationID = "f1f6195c-df4a-40f9-bae5-4744c32901ef";
     private const string PlayerRespawnTag = "playerRespawn";
-    public static Dictionary<string, GameObject> CachedPrefabs;
     public static Hashtable banHash;
     public static Hashtable boolVariables;
     public static string currentLevel;
@@ -28,7 +25,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     private float gameEndTotalCDtime = 9f;
     private bool gameTimesUp;
     public static Hashtable globalVariables;
-    public static bool hasLogged;
     public static Hashtable heroHash;
     private int highestwave = 1;
     private int humanScore;
@@ -37,7 +33,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     public static InputManagerRC inputRC;
     public static FengGameManagerMKII instance;
     public static Hashtable intVariables;
-    public static bool isAssetLoaded;
     private bool isLosing;
     private bool isWinning;
     private ArrayList killInfoGO = new ArrayList();
@@ -46,11 +41,9 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     public static Hashtable[] linkHash;
     private string localRacingResult;
     public static bool logicLoaded;
-    public static int loginstate;
     public static bool masterRC;
     private float maxSpeed;
     private string myLastHero;
-    public static string nameField;
     public static bool noRestart;
     public static string oldScript;
     public static string oldScriptLogic;
@@ -66,9 +59,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     public static Hashtable RCRegionTriggers;
     public static Hashtable RCVariableNames;
     public static object[] settings; //TODO: Replace with a class which contains named settings
-    private int single_kills;
-    private int single_maxDamage;
-    private int single_totalDamage;
     public static Material skyMaterial;
     private bool startRacing;
     public static Hashtable stringVariables;
@@ -80,8 +70,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     public static Hashtable titanVariables;
     private GameObject ui;
     private ArrayList racingResult;
-
-    // ReSharper restore UnusedMember.Local
 
     public readonly ArrayList Heroes = new ArrayList();
     public readonly ArrayList Hooks = new ArrayList();
@@ -121,7 +109,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         {
             StartCoroutine(WaitAndResetRestarts());
         }
-        if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE)
+        if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer)
         {
             roundTime = 0f;
             if (Level.StartsWith("Custom"))
@@ -444,7 +432,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     WWW link = new WWW(url);
                     yield return link;
-                    Texture2D texture = RCextensions.loadimage(link, mipmap, 500000);
+                    Texture2D texture = RCextensions.LoadImageRC(link, mipmap, 500000);
                     link.Dispose();
                     material.SetTexture("_FrontTex", texture);
                 }
@@ -452,7 +440,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     WWW iteratorVariable13 = new WWW(iteratorVariable6);
                     yield return iteratorVariable13;
-                    Texture2D iteratorVariable14 = RCextensions.loadimage(iteratorVariable13, mipmap, 500000);
+                    Texture2D iteratorVariable14 = RCextensions.LoadImageRC(iteratorVariable13, mipmap, 500000);
                     iteratorVariable13.Dispose();
                     material.SetTexture("_BackTex", iteratorVariable14);
                 }
@@ -460,7 +448,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     WWW iteratorVariable15 = new WWW(iteratorVariable7);
                     yield return iteratorVariable15;
-                    Texture2D iteratorVariable16 = RCextensions.loadimage(iteratorVariable15, mipmap, 500000);
+                    Texture2D iteratorVariable16 = RCextensions.LoadImageRC(iteratorVariable15, mipmap, 500000);
                     iteratorVariable15.Dispose();
                     material.SetTexture("_LeftTex", iteratorVariable16);
                 }
@@ -468,7 +456,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     WWW iteratorVariable17 = new WWW(iteratorVariable8);
                     yield return iteratorVariable17;
-                    Texture2D iteratorVariable18 = RCextensions.loadimage(iteratorVariable17, mipmap, 500000);
+                    Texture2D iteratorVariable18 = RCextensions.LoadImageRC(iteratorVariable17, mipmap, 500000);
                     iteratorVariable17.Dispose();
                     material.SetTexture("_RightTex", iteratorVariable18);
                 }
@@ -476,7 +464,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     WWW iteratorVariable19 = new WWW(iteratorVariable9);
                     yield return iteratorVariable19;
-                    Texture2D iteratorVariable20 = RCextensions.loadimage(iteratorVariable19, mipmap, 500000);
+                    Texture2D iteratorVariable20 = RCextensions.LoadImageRC(iteratorVariable19, mipmap, 500000);
                     iteratorVariable19.Dispose();
                     material.SetTexture("_UpTex", iteratorVariable20);
                 }
@@ -484,7 +472,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     WWW iteratorVariable21 = new WWW(iteratorVariable10);
                     yield return iteratorVariable21;
-                    Texture2D iteratorVariable22 = RCextensions.loadimage(iteratorVariable21, mipmap, 500000);
+                    Texture2D iteratorVariable22 = RCextensions.LoadImageRC(iteratorVariable21, mipmap, 500000);
                     iteratorVariable21.Dispose();
                     material.SetTexture("_DownTex", iteratorVariable22);
                 }
@@ -510,7 +498,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                         {
                             WWW iteratorVariable25 = new WWW(key);
                             yield return iteratorVariable25;
-                            Texture2D iteratorVariable26 = RCextensions.loadimage(iteratorVariable25, mipmap, 200000);
+                            Texture2D iteratorVariable26 = RCextensions.LoadImageRC(iteratorVariable25, mipmap, 200000);
                             iteratorVariable25.Dispose();
                             if (!linkHash[0].ContainsKey(key))
                             {
@@ -862,7 +850,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         }
         else
         {
-            if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && needChooseSide)
+            if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && needChooseSide)
             {
                 if (inputManager.isInputDown[InputCode.flare1])
                 {
@@ -898,17 +886,15 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                     inputManager.menuOn = true;
                 }
             }
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
             {
                 int length;
-                switch (IN_GAME_MAIN_CAMERA.gametype)
+                switch (IN_GAME_MAIN_CAMERA.GameType)
                 {
-                    case GAMETYPE.MULTIPLAYER:
+                    case GameType.Multiplayer:
                         CoreAdd();
-//                    this.ShowHUDInfoTopLeft(this.playerList); Custom scoreboard
-                        if (UnityEngine.Camera.main != null && IN_GAME_MAIN_CAMERA.gamemode != GAMEMODE.RACING && UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver && !needChooseSide && (int) settings[245] == 0)
+                        if (Camera.main != null && IN_GAME_MAIN_CAMERA.GameMode != GameMode.Racing && UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver && !needChooseSide && (int) settings[245] == 0)
                         {
-                            ShowHUDInfoCenter("Press [F7D358]" + inputManager.inputString[InputCode.flare1] + "[-] to spectate the next player. \nPress [F7D358]" + inputManager.inputString[InputCode.flare2] + "[-] to spectate the previous player.\nPress [F7D358]" + inputManager.inputString[InputCode.attack1] + "[-] to enter the spectator mode.\n\n\n\n");
                             if (LevelInfoManager.GetInfo(Level).RespawnMode == RespawnMode.DEATHMATCH || RCSettings.endlessMode > 0 || !(RCSettings.bombMode == 1 || RCSettings.pvpMode > 0 ? RCSettings.pointMode <= 0 : true))
                             {
                                 myRespawnTime += Time.deltaTime;
@@ -921,120 +907,36 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                 {
                                     endlessMode = RCSettings.endlessMode;
                                 }
-                                length = endlessMode - (int)myRespawnTime;
-                                ShowHUDInfoCenterADD("Respawn in " + length + "s.");
-                                if (myRespawnTime > endlessMode)
+                                myRespawnTime = 0f; //TODO: Add option to disable insta respawn
+                                Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
+                                if (Player.Self.Properties.PlayerType == PlayerType.Titan)
                                 {
-                                    myRespawnTime = 0f;
-                                    UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
-                                    if (Player.Self.Properties.PlayerType == PlayerType.Titan)
-                                    {
-                                        SpawnPlayerTitan(myLastHero);
-                                    }
-                                    else
-                                    {
-                                        StartCoroutine(WaitAndRespawn1(0.1f));
-                                    }
-                                    UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
-                                    ShowHUDInfoCenter(string.Empty);
-                                }
-                            }
-                        }
-                        break;
-                    case GAMETYPE.SINGLE:
-                        if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.RACING)
-                        {
-                            if (!isLosing)
-                            {
-                                currentSpeed = UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity.magnitude;
-                                maxSpeed = Mathf.Max(maxSpeed, currentSpeed);
-                                ShowHUDInfoTopLeft(string.Concat("Current Speed : ", (int)currentSpeed, "\nMax Speed:", maxSpeed));
-                            }
-                        }
-                        else
-                        {
-                            ShowHUDInfoTopLeft(string.Concat("Kills:", single_kills, "\nMax Damage:", single_maxDamage, "\nTotal Damage:", single_totalDamage));
-                        }
-                        break;
-                }
-                if (isLosing && IN_GAME_MAIN_CAMERA.gamemode != GAMEMODE.RACING)
-                {
-                    switch (IN_GAME_MAIN_CAMERA.gametype)
-                    {
-                        case GAMETYPE.SINGLE when IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.SURVIVE_MODE:
-                            ShowHUDInfoCenter(string.Concat("Survive ", wave, " Waves!\n Press ", inputManager.inputString[InputCode.restart], " to Restart.\n\n\n"));
-                            break;
-                        case GAMETYPE.SINGLE:
-                            ShowHUDInfoCenter("Humanity Fail!\n Press " + inputManager.inputString[InputCode.restart] + " to Restart.\n\n\n");
-                            break;
-                        default:
-                            if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.SURVIVE_MODE)
-                            {
-                                ShowHUDInfoCenter(string.Concat("Survive ", wave, " Waves!\nGame Restart in ", (int)gameEndCD, "s\n\n"));
-                            }
-                            else
-                            {
-                                ShowHUDInfoCenter("Humanity Fail!\nAgain!\nGame Restart in " + (int)gameEndCD + "s\n\n");
-                            }
-                            if (gameEndCD <= 0f)
-                            {
-                                gameEndCD = 0f;
-                                if (PhotonNetwork.isMasterClient)
-                                {
-                                    RestartGameRC();
-                                }
-                                ShowHUDInfoCenter(string.Empty);
-                            }
-                            else
-                            {
-                                gameEndCD -= Time.deltaTime;
-                            }
-
-                            break;
-                    }
-                }
-                if (isWinning)
-                {
-                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
-                    {
-                        switch (IN_GAME_MAIN_CAMERA.gamemode)
-                        {
-                            case GAMEMODE.RACING:
-                                var num3 = (int) (timeTotalServer * 10f) * 0.1f - 5f;
-                                ShowHUDInfoCenter(num3 + "s !\n Press " + inputManager.inputString[InputCode.restart] + " to Restart.\n\n\n");
-                                break;
-                            case GAMEMODE.SURVIVE_MODE:
-                                ShowHUDInfoCenter("Survive All Waves!\n Press " + inputManager.inputString[InputCode.restart] + " to Restart.\n\n\n");
-                                break;
-                            default:
-                                ShowHUDInfoCenter("Humanity Win!\n Press " + inputManager.inputString[InputCode.restart] + " to Restart.\n\n\n");
-                                break;
-                        }
-                    }
-                    else
-                    {
-                        switch (IN_GAME_MAIN_CAMERA.gamemode)
-                        {
-                            case GAMEMODE.RACING:
-                                ShowHUDInfoCenter(string.Concat(localRacingResult, "\n\nGame Restart in ", (int)gameEndCD, "s"));
-                                break;
-                            case GAMEMODE.SURVIVE_MODE:
-                                ShowHUDInfoCenter("Survive All Waves!\nGame Restart in " + (int)gameEndCD + "s\n\n");
-                                break;
-                            case GAMEMODE.PVP_AHSS:
-                                if (RCSettings.pvpMode == 0 && RCSettings.bombMode == 0)
-                                {
-                                    ShowHUDInfoCenter(string.Concat("Team ", teamWinner, " Win!\nGame Restart in ", (int)gameEndCD, "s\n\n"));
+                                    SpawnPlayerTitan(myLastHero);
                                 }
                                 else
                                 {
-                                    ShowHUDInfoCenter(string.Concat("Round Ended!\nGame Restart in ", (int)gameEndCD, "s\n\n"));
+                                    StartCoroutine(WaitAndRespawn1(0.1f));
                                 }
-                                break;
-                            default:
-                                ShowHUDInfoCenter("Humanity Win!\nGame Restart in " + (int)gameEndCD + "s\n\n");
-                                break;
+                                Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
+                            }
                         }
+                        break;
+                    case GameType.Singleplayer:
+                        if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.Racing)
+                        {
+                            if (!isLosing)
+                            {
+                                currentSpeed = UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity.magnitude; //TODO: Show in new gui
+                                maxSpeed = Mathf.Max(maxSpeed, currentSpeed);
+                            }
+                        }
+                        break;
+                }
+
+                if (isLosing && IN_GAME_MAIN_CAMERA.GameMode != GameMode.Racing)
+                {
+                    if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer)
+                    {
                         if (gameEndCD <= 0f)
                         {
                             gameEndCD = 0f;
@@ -1042,7 +944,24 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                             {
                                 RestartGameRC();
                             }
-                            ShowHUDInfoCenter(string.Empty);
+                        }
+                        else
+                        {
+                            gameEndCD -= Time.deltaTime;
+                        }
+                    }
+                }
+                if (isWinning)
+                {
+                    if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer)
+                    {
+                        if (gameEndCD <= 0f)
+                        {
+                            gameEndCD = 0f;
+                            if (PhotonNetwork.isMasterClient)
+                            {
+                                RestartGameRC();
+                            }
                         }
                         else
                         {
@@ -1052,39 +971,32 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 }
                 timeElapse += Time.deltaTime;
                 roundTime += Time.deltaTime;
-                if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+                switch (IN_GAME_MAIN_CAMERA.GameType)
                 {
-                    if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.RACING)
-                    {
+                    case GameType.Singleplayer when IN_GAME_MAIN_CAMERA.GameMode == GameMode.Racing:
                         if (!isWinning)
                         {
                             timeTotalServer += Time.deltaTime;
                         }
-                    }
-                    else if (!(isLosing || isWinning))
-                    {
+
+                        break;
+                    case GameType.Singleplayer:
+                        if (!(isLosing || isWinning))
+                        {
+                            timeTotalServer += Time.deltaTime;
+                        }
+
+                        break;
+                    default:
                         timeTotalServer += Time.deltaTime;
-                    }
+                        break;
                 }
-                else
+                if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.Racing)
                 {
-                    timeTotalServer += Time.deltaTime;
-                }
-                if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.RACING)
-                {
-                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+                    if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                     {
-                        if (!isWinning)
+                        if (!startRacing && isWinning && timeTotalServer >= 5f)
                         {
-                            ShowHUDInfoTopCenter("Time : " + ((int) (timeTotalServer * 10f) * 0.1f - 5f));
-                        }
-                        if (timeTotalServer < 5f)
-                        {
-                            ShowHUDInfoCenter("RACE START IN " + (int) (5f - timeTotalServer));
-                        }
-                        else if (!startRacing)
-                        {
-                            ShowHUDInfoCenter(string.Empty);
                             startRacing = true;
                             endRacing = false;
                             GameObject.Find("door").SetActive(false);
@@ -1092,46 +1004,40 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                     }
                     else
                     {
-                        ShowHUDInfoTopCenter("Time : " + (roundTime >= 20f ? ((int) (roundTime * 10f) * 0.1f - 20f).ToString(CultureInfo.InvariantCulture) : "WAITING"));
-                        if (roundTime < 20f)
+                        if (!(roundTime < 20f))
                         {
-                            ShowHUDInfoCenter("RACE START IN " + (int) (20f - roundTime) + (localRacingResult != string.Empty ? "\nLast Round\n" + localRacingResult : "\n\n"));
-                        }
-                        else if (!startRacing)
-                        {
-                            ShowHUDInfoCenter(string.Empty);
-                            startRacing = true;
-                            endRacing = false;
-                            GameObject obj2 = GameObject.Find("door");
-                            if (obj2 != null)
+                            if (!startRacing)
                             {
-                                obj2.SetActive(false);
-                            }
-                            if (racingDoors != null && customLevelLoaded)
-                            {
-                                foreach (GameObject obj3 in racingDoors)
+                                startRacing = true;
+                                endRacing = false;
+                                GameObject obj = GameObject.Find("door");
+                                if (obj != null)
+                                    obj.SetActive(false);
+
+                                if (racingDoors != null && customLevelLoaded)
                                 {
-                                    obj3.SetActive(false);
+                                    foreach (GameObject door in racingDoors)
+                                        door.SetActive(false);
+
+                                    racingDoors = null;
                                 }
+                            }
+                            else if (racingDoors != null && customLevelLoaded)
+                            {
+                                foreach (GameObject door in racingDoors)
+                                    door.SetActive(false);
+
                                 racingDoors = null;
                             }
                         }
-                        else if (racingDoors != null && customLevelLoaded)
-                        {
-                            foreach (GameObject obj3 in racingDoors)
-                            {
-                                obj3.SetActive(false);
-                            }
-                            racingDoors = null;
-                        }
                     }
-                    if (UnityEngine.Camera.main != null && UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver && !needChooseSide && customLevelLoaded)
+                    if (Camera.main != null && Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver && !needChooseSide && customLevelLoaded)
                     {
                         myRespawnTime += Time.deltaTime;
                         if (myRespawnTime > 1.5f)
                         {
                             myRespawnTime = 0f;
-                            UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
+                            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
                             if (checkpoint != null)
                             {
                                 StartCoroutine(WaitAndRespawn2(0.1f, checkpoint));
@@ -1140,170 +1046,59 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                             {
                                 StartCoroutine(WaitAndRespawn1(0.1f));
                             }
-                            UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
-                            ShowHUDInfoCenter(string.Empty);
+                            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
                         }
                     }
                 }
                 if (timeElapse > 1f)
-                {
                     timeElapse--;
-                    string content = string.Empty;
-                    switch (IN_GAME_MAIN_CAMERA.gamemode)
-                    {
-                        case GAMEMODE.ENDLESS_TITAN:
-                            length = time - (int)timeTotalServer;
-                            content = content + "Time : " + length;
-                            break;
-                        case GAMEMODE.KILL_TITAN:
-                        case GAMEMODE.None:
-                            content = "Titan Left: ";
-                            length = GameObject.FindGameObjectsWithTag("titan").Length;
-                            content = content + length + "  Time : ";
-                            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
-                            {
-                                length = (int)timeTotalServer;
-                                content = content + length;
-                            }
-                            else
-                            {
-                                length = time - (int)timeTotalServer;
-                                content = content + length;
-                            }
-                            break;
-                        case GAMEMODE.SURVIVE_MODE:
-                            content = "Titan Left: ";
-                            object[] objArray = new object[4];
-                            objArray[0] = content;
-                            length = GameObject.FindGameObjectsWithTag("titan").Length;
-                            objArray[1] = length;
-                            objArray[2] = " Wave : ";
-                            objArray[3] = wave;
-                            content = string.Concat(objArray);
-                            break;
-                        case GAMEMODE.BOSS_FIGHT_CT:
-                            content = "Time : ";
-                            length = time - (int)timeTotalServer;
-                            content = content + length + "\nDefeat the Colossal Titan.\nPrevent abnormal titan from running to the north gate";
-                            break;
-                        case GAMEMODE.PVP_CAPTURE:
-                            string str2 = PVPcheckPoint.chkPts.Cast<PVPcheckPoint>().Aggregate("| ", (current, t) => current + t.getStateString() + " ");
-                            str2 = str2 + "|";
-                            length = time - (int)timeTotalServer;
-                            content = string.Concat(PVPtitanScoreMax - PVPtitanScore, "  ", str2, "  ", PVPhumanScoreMax - PVPhumanScore, "\n") + "Time : " + length;
-                            break;
-                    }
-                    if (RCSettings.teamMode > 0)
-                    {
-                        content = content + "\n[00FFFF]Cyan:" + Convert.ToString(cyanKills) + "       [FF00FF]Magenta:" + Convert.ToString(magentaKills) + "[ffffff]";
-                    }
-                    ShowHUDInfoTopCenter(content);
-                    content = string.Empty;
-                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
-                    {
-                        if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.SURVIVE_MODE)
-                        {
-                            content = "Time : ";
-                            length = (int)timeTotalServer;
-                            content = content + length;
-                        }
-                    }
-                    else if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.ENDLESS_TITAN)
-                    {
-                        content = string.Concat("Humanity ", humanScore, " : Titan ", titanScore, " ");
-                    }
-                    else if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.KILL_TITAN || IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.BOSS_FIGHT_CT || IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.PVP_CAPTURE)
-                    {
-                        content = string.Concat("Humanity ", humanScore, " : Titan ", titanScore, " ");
-                    }
-                    else if (IN_GAME_MAIN_CAMERA.gamemode != GAMEMODE.CAGE_FIGHT)
-                    {
-                        switch (IN_GAME_MAIN_CAMERA.gamemode)
-                        {
-                            case GAMEMODE.SURVIVE_MODE:
-                                content = "Time : ";
-                                length = time - (int)timeTotalServer;
-                                content = content + length;
-                                break;
-                            case GAMEMODE.PVP_AHSS:
-                                for (int j = 0; j < teamScores.Length; j++)
-                                {
-                                    string str3 = content;
-                                    content = string.Concat(str3, j == 0 ? string.Empty : " : ", "Team", j + 1, " ", teamScores[j], string.Empty);
-                                }
-                                content = content + "\nTime : " + (time - (int)timeTotalServer);
-                                break;
-                        }
-                    }
-                    ShowHUDInfoTopRight(content);
-                    string str4 = IN_GAME_MAIN_CAMERA.difficulty >= 0 ? (IN_GAME_MAIN_CAMERA.difficulty != 0 ? (IN_GAME_MAIN_CAMERA.difficulty != 1 ? "Abnormal" : "Hard") : "Normal") : "Trainning";
-                    if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.CAGE_FIGHT)
-                    {
-                        ShowHUDInfoTopRightMAPNAME(string.Concat((int)roundTime, "s\n", Level, " : ", str4));
-                    }
-                    else
-                    {
-                        ShowHUDInfoTopRightMAPNAME("\n" + Level + " : " + str4);
-                    }
-                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
-                    {
-                        string roomName = PhotonNetwork.Room.Name;
-                        if (roomName.Length > 20)
-                        {
-                            roomName = roomName.Remove(19) + "...";
-                        }
-                        ShowHUDInfoTopRightMAPNAME("\n" + roomName + " [FFC000](" + Convert.ToString(Room.CurrentPlayers) + "/" + Convert.ToString(PhotonNetwork.Room.MaxPlayers) + ")");
-                        if (needChooseSide)
-                        {
-                            ShowHUDInfoTopCenterADD("\n\nPRESS 1 TO ENTER GAME");
-                        }
-                    }
-                }
-                if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && killInfoGO.Count > 0 && killInfoGO[0] == null)
+                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && killInfoGO.Count > 0 && killInfoGO[0] == null)
                 {
                     killInfoGO.RemoveAt(0);
                 }
-                if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && PhotonNetwork.isMasterClient && timeTotalServer > time)
+                if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && PhotonNetwork.isMasterClient && timeTotalServer > time)
                 {
-                    string str11;
-                    IN_GAME_MAIN_CAMERA.gametype = GAMETYPE.STOP;
+                    string highestWave;
+                    IN_GAME_MAIN_CAMERA.GameType = GameType.NotInRoom;
                     gameStart = false;
                     Screen.lockCursor = false;
                     Screen.showCursor = true;
-                    string str6 = string.Empty;
-                    string str7 = string.Empty;
-                    string str8 = string.Empty;
-                    string str9 = string.Empty;
-                    string str10 = string.Empty;
+                    string playersName = string.Empty;
+                    string playersKill = string.Empty;
+                    string playersDeath = string.Empty;
+                    string playersMaxDamage = string.Empty;
+                    string playersTotalDamage = string.Empty;
                     foreach (Player player in PhotonNetwork.playerList)
                     {
                         if (player != null)
                         {
-                            str6 = str6 + player.Properties.Name + "\n";
-                            str7 = str7 + player.Properties.Kills + "\n";
-                            str8 = str8 + player.Properties.Deaths + "\n";
-                            str9 = str9 + player.Properties.MaxDamage + "\n";
-                            str10 = str10 + player.Properties.TotalDamage + "\n";
+                            playersName = playersName + player.Properties.Name + "\n";
+                            playersKill = playersKill + player.Properties.Kills + "\n";
+                            playersDeath = playersDeath + player.Properties.Deaths + "\n";
+                            playersMaxDamage = playersMaxDamage + player.Properties.MaxDamage + "\n";
+                            playersTotalDamage = playersTotalDamage + player.Properties.TotalDamage + "\n";
                         }
                     }
-                    if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.PVP_AHSS)
+                    if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpAHSS)
                     {
-                        str11 = string.Empty;
+                        highestWave = string.Empty;
                         for (int k = 0; k < teamScores.Length; k++)
                         {
-                            str11 = str11 + (k == 0 ? string.Concat("Team", k + 1, " ", teamScores[k], " " ) : " : ");
+                            highestWave = highestWave + (k == 0 ? string.Concat("Team", k + 1, " ", teamScores[k], " " ) : " : ");
                         }
                     }
-                    else if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.SURVIVE_MODE)
-                    {
-                        str11 = "Highest Wave : " + highestwave;
-                    }
+                    else if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.SurviveMode)
+                        highestWave = "Highest Wave : " + highestwave;
                     else
-                    {
-                        str11 = string.Concat("Humanity ", humanScore, " : Titan ", titanScore);
-                    }
-                    object[] parameters = { str6, str7, str8, str9, str10, str11 };
-                    photonView.RPC("showResult", PhotonTargets.AllBuffered, parameters);
+                        highestWave = string.Concat("Humanity ", humanScore, " : Titan ", titanScore);
+                    
+                    photonView.RPC("showResult", PhotonTargets.AllBuffered, 
+                        playersName, 
+                        playersKill, 
+                        playersDeath, 
+                        playersMaxDamage, 
+                        playersTotalDamage, 
+                        highestWave);
                 }
             }
         }
@@ -2113,7 +1908,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             isLosing = true;
             titanScore++;
             gameEndCD = gameEndTotalCDtime;
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
             {
                 object[] parameters = { titanScore };
                 photonView.RPC("netGameLose", PhotonTargets.Others, parameters);
@@ -2131,7 +1926,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         {
             isWinning = true;
             humanScore++;
-            if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.RACING)
+            if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.Racing)
             {
                 if (RCSettings.racingStatic == 1)
                 {
@@ -2141,7 +1936,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     gameEndCD = 20f;
                 }
-                if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                 {
                     object[] parameters = { 0 };
                     photonView.RPC("netGameWin", PhotonTargets.Others, parameters);
@@ -2151,10 +1946,10 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                     }
                 }
             }
-            else if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.PVP_AHSS)
+            else if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpAHSS)
             {
                 gameEndCD = gameEndTotalCDtime;
-                if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                 {
                     object[] objArray3 = { teamWinner };
                     photonView.RPC("netGameWin", PhotonTargets.Others, objArray3);
@@ -2168,7 +1963,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             else
             {
                 gameEndCD = gameEndTotalCDtime;
-                if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                 {
                     object[] objArray4 = { humanScore };
                     photonView.RPC("netGameWin", PhotonTargets.Others, objArray4);
@@ -2581,33 +2376,24 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
 
     private void LoadMapCustom()
     {
-        GameObject[] objArray;
-        int num;
-        GameObject obj2;
         if ((int) settings[64] >= 100)
         {
-            string[] strArray2 = { "Flare", "LabelInfoBottomRight", "LabelNetworkStatus", "skill_cd_bottom", "GasUI" };
-            objArray = (GameObject[]) FindObjectsOfType(typeof(GameObject));
-            for (num = 0; num < objArray.Length; num++)
-            {
-                obj2 = objArray[num];
-                if (obj2.name.Contains("TREE") || obj2.name.Contains("aot_supply") || obj2.name.Contains("gameobjectOutSide"))
-                {
-                    Destroy(obj2);
-                }
-            }
-            GameObject.Find("Cube_001").renderer.material.mainTexture = ((Material) RCassets.Load("grass")).mainTexture;
+            foreach (var o in FindObjectsOfType(typeof(GameObject)))
+                if (o is GameObject obj)
+                    if (obj.name.Contains("TREE") || obj.name.Contains("aot_supply") || obj.name.Contains("gameobjectOutSide"))
+                        Destroy(obj);
+
+            if (Shelter.TryFind("Cube_001", out GameObject go))
+                go.renderer.material.mainTexture = ((Material) RCassets.Load("grass")).mainTexture;
+            
             Instantiate(RCassets.Load("spawnPlayer"), new Vector3(-10f, 1f, -10f), new Quaternion(0f, 0f, 0f, 1f));
-            for (num = 0; num < strArray2.Length; num++)
-            {
-                string name1 = strArray2[num];
-                GameObject obj3 = GameObject.Find(name1);
-                if (obj3 != null)
-                {
-                    Destroy(obj3);
-                }
-            }
-            UnityEngine.Camera.main.GetComponent<SpectatorMovement>().disable = true;
+            
+            if (Shelter.TryFind("skill_cd_bottom", out go))
+                Destroy(go);
+            if (Shelter.TryFind("GasUI", out go))
+                Destroy(go);
+            
+            Camera.main.GetComponent<SpectatorMovement>().disable = true;
         }
         else
         {
@@ -2615,7 +2401,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             string[] strArray3;
             int num2;
             InstantiateTracker.instance.Dispose();
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
             {
                 updateTime = 1f;
                 if (oldScriptLogic != currentScriptLogic)
@@ -2649,7 +2435,8 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             racingSpawnPointSet = false;
             racingDoors = new List<GameObject>();
             allowedToCannon = new Dictionary<int, CannonValues>();
-            if (!Level.StartsWith("Custom") && (int) settings[2] == 1 && (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || PhotonNetwork.isMasterClient))
+            int i;
+            if (!Level.StartsWith("Custom") && (int) settings[2] == 1 && (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || PhotonNetwork.isMasterClient))
             {
                 obj4 = GameObject.Find("aot_supply");
                 if (obj4 != null && Minimap.instance != null)
@@ -2662,9 +2449,9 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 strArray3 = new[] { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
                 if (LevelInfoManager.GetInfo(Level).LevelName.Contains("City"))
                 {
-                    for (num = 51; num < 59; num++)
+                    for (i = 51; i < 59; i++)
                     {
-                        url = url + (string) settings[num] + ",";
+                        url = url + (string) settings[i] + ",";
                     }
                     num2 = 0;
                     while (num2 < 250)
@@ -2673,14 +2460,14 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                         num2++;
                     }
                     str3 = (string) settings[59] + "," + (string) settings[60] + "," + (string) settings[61];
-                    for (num = 0; num < 6; num++)
+                    for (i = 0; i < 6; i++)
                     {
-                        strArray3[num] = (string) settings[num + 169];
+                        strArray3[i] = (string) settings[i + 169];
                     }
                 }
                 else if (LevelInfoManager.GetInfo(Level).LevelName.Contains("Forest"))
                 {
-                    for (int i = 33; i < 41; i++)
+                    for (i = 33; i < 41; i++)
                     {
                         url = url + (string) settings[i] + ",";
                     }
@@ -2702,12 +2489,12 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                             n = n + Convert.ToString((int) UnityEngine.Random.Range(0f, 8f));
                         }
                     }
-                    for (num = 0; num < 6; num++)
+                    for (i = 0; i < 6; i++)
                     {
-                        strArray3[num] = (string) settings[num + 163];
+                        strArray3[i] = (string) settings[i + 163];
                     }
                 }
-                if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                 {
                     StartCoroutine(LoadSkinEnumerator(n, url, str3, strArray3));
                 }
@@ -2716,34 +2503,34 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                     photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, n, url, str3, strArray3);
                 }
             }
-            else if (Level.StartsWith("Custom") && IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE)
+            else if (Level.StartsWith("Custom") && IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer)
             {
-                GameObject[] objArray3 = GameObject.FindGameObjectsWithTag(PlayerRespawnTag);
-                for (num = 0; num < objArray3.Length; num++)
+                GameObject[] spawns = GameObject.FindGameObjectsWithTag(PlayerRespawnTag);
+                foreach (GameObject spawn in spawns)
+                    spawn.transform.position = new Vector3(UnityEngine.Random.Range(-5f, 5f), 0f, UnityEngine.Random.Range(-5f, 5f));
+
+                
+                foreach (UnityEngine.Object o in FindObjectsOfType(typeof(GameObject)))
                 {
-                    obj4 = objArray3[num];
-                    obj4.transform.position = new Vector3(UnityEngine.Random.Range(-5f, 5f), 0f, UnityEngine.Random.Range(-5f, 5f));
-                }
-                objArray = (GameObject[]) FindObjectsOfType(typeof(GameObject));
-                for (num = 0; num < objArray.Length; num++)
-                {
-                    obj2 = objArray[num];
-                    if (obj2.name.Contains("TREE") || obj2.name.Contains("aot_supply"))
+                    if (o is GameObject obj)
                     {
-                        Destroy(obj2);
+                        if (obj.name.Contains("TREE") || obj.name.Contains("aot_supply"))
+                            Destroy(obj);
+                        if (obj.name == "Cube_001" && obj.transform.parent.gameObject.tag != "player" &&
+                            obj.renderer != null)
+                        {
+                            groundList.Add(obj);
+                            obj.renderer.material.mainTexture = ((Material) RCassets.Load("grass")).mainTexture;
+                        }
                     }
-                    else if (obj2.name == "Cube_001" && obj2.transform.parent.gameObject.tag != "player" && obj2.renderer != null)
-                    {
-                        groundList.Add(obj2);
-                        obj2.renderer.material.mainTexture = ((Material) RCassets.Load("grass")).mainTexture;
-                    }
+                    
                 }
                 if (PhotonNetwork.isMasterClient)
                 {
                     strArray3 = new[] { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
-                    for (num = 0; num < 6; num++)
+                    for (i = 0; i < 6; i++)
                     {
-                        strArray3[num] = (string) settings[num + 175];
+                        strArray3[i] = (string) settings[i + 175];
                     }
                     strArray3[6] = (string) settings[162];
                     if (int.TryParse((string) settings[85], out int num6))
@@ -2779,18 +2566,18 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                         else
                         {
                             string[] strArray4 = Regex.Replace(currentScript, @"\s+", "").Replace("\r\n", "").Replace("\n", "").Replace("\r", "").Split(';');
-                            for (num = 0; num < Mathf.FloorToInt(((strArray4.Length - 1) / 100f)) + 1; num++)
+                            for (i = 0; i < Mathf.FloorToInt(((strArray4.Length - 1) / 100f)) + 1; i++)
                             {
                                 string[] strArray5;
                                 int num7;
                                 string[] strArray6;
                                 string str6;
-                                if (num < strArray4.Length / 100)
+                                if (i < strArray4.Length / 100)
                                 {
                                     strArray5 = new string[101];
                                     num7 = 0;
-                                    num2 = 100 * num;
-                                    while (num2 < 100 * num + 100)
+                                    num2 = 100 * i;
+                                    while (num2 < 100 * i + 100)
                                     {
                                         if (strArray4[num2].StartsWith("spawnpoint"))
                                         {
@@ -2821,7 +2608,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                 {
                                     strArray5 = new string[strArray4.Length % 100 + 1];
                                     num7 = 0;
-                                    for (num2 = 100 * num; num2 < 100 * num + strArray4.Length % 100; num2++)
+                                    for (num2 = 100 * i; num2 < 100 * i + strArray4.Length % 100; num2++)
                                     {
                                         if (strArray4[num2].StartsWith("spawnpoint"))
                                         {
@@ -2876,9 +2663,9 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                             oldScript = currentScript;
                         }
                     }
-                    for (num = 0; num < PhotonNetwork.playerList.Length; num++)
+                    for (i = 0; i < PhotonNetwork.playerList.Length; i++)
                     {
-                        Player player = PhotonNetwork.playerList[num];
+                        Player player = PhotonNetwork.playerList[i];
                         if (!player.IsMasterClient)
                         {
                             playersRPC.Add(player);
@@ -2916,7 +2703,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     WWW link = new WWW(iteratorVariable4);
                     yield return link;
-                    Texture2D texture = RCextensions.loadimage(link, mipmap, 500000);
+                    Texture2D texture = RCextensions.LoadImageRC(link, mipmap, 500000);
                     link.Dispose();
                     texture.wrapMode = TextureWrapMode.Clamp;
                     material.SetTexture("_FrontTex", texture);
@@ -2925,7 +2712,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     WWW iteratorVariable12 = new WWW(iteratorVariable5);
                     yield return iteratorVariable12;
-                    Texture2D iteratorVariable13 = RCextensions.loadimage(iteratorVariable12, mipmap, 500000);
+                    Texture2D iteratorVariable13 = RCextensions.LoadImageRC(iteratorVariable12, mipmap, 500000);
                     iteratorVariable12.Dispose();
                     iteratorVariable13.wrapMode = TextureWrapMode.Clamp;
                     material.SetTexture("_BackTex", iteratorVariable13);
@@ -2934,7 +2721,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     WWW iteratorVariable14 = new WWW(iteratorVariable6);
                     yield return iteratorVariable14;
-                    Texture2D iteratorVariable15 = RCextensions.loadimage(iteratorVariable14, mipmap, 500000);
+                    Texture2D iteratorVariable15 = RCextensions.LoadImageRC(iteratorVariable14, mipmap, 500000);
                     iteratorVariable14.Dispose();
                     iteratorVariable15.wrapMode = TextureWrapMode.Clamp;
                     material.SetTexture("_LeftTex", iteratorVariable15);
@@ -2943,7 +2730,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     WWW iteratorVariable16 = new WWW(iteratorVariable7);
                     yield return iteratorVariable16;
-                    Texture2D iteratorVariable17 = RCextensions.loadimage(iteratorVariable16, mipmap, 500000);
+                    Texture2D iteratorVariable17 = RCextensions.LoadImageRC(iteratorVariable16, mipmap, 500000);
                     iteratorVariable16.Dispose();
                     iteratorVariable17.wrapMode = TextureWrapMode.Clamp;
                     material.SetTexture("_RightTex", iteratorVariable17);
@@ -2952,7 +2739,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     WWW iteratorVariable18 = new WWW(iteratorVariable8);
                     yield return iteratorVariable18;
-                    Texture2D iteratorVariable19 = RCextensions.loadimage(iteratorVariable18, mipmap, 500000);
+                    Texture2D iteratorVariable19 = RCextensions.LoadImageRC(iteratorVariable18, mipmap, 500000);
                     iteratorVariable18.Dispose();
                     iteratorVariable19.wrapMode = TextureWrapMode.Clamp;
                     material.SetTexture("_UpTex", iteratorVariable19);
@@ -2961,7 +2748,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     WWW iteratorVariable20 = new WWW(iteratorVariable9);
                     yield return iteratorVariable20;
-                    Texture2D iteratorVariable21 = RCextensions.loadimage(iteratorVariable20, mipmap, 500000);
+                    Texture2D iteratorVariable21 = RCextensions.LoadImageRC(iteratorVariable20, mipmap, 500000);
                     iteratorVariable20.Dispose();
                     iteratorVariable21.wrapMode = TextureWrapMode.Clamp;
                     material.SetTexture("_DownTex", iteratorVariable21);
@@ -3004,7 +2791,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                         {
                                             WWW iteratorVariable34 = new WWW(iteratorVariable31);
                                             yield return iteratorVariable34;
-                                            Texture2D iteratorVariable35 = RCextensions.loadimage(iteratorVariable34, mipmap, 1000000);
+                                            Texture2D iteratorVariable35 = RCextensions.LoadImageRC(iteratorVariable34, mipmap, 1000000);
                                             iteratorVariable34.Dispose();
                                             if (!linkHash[2].ContainsKey(iteratorVariable31))
                                             {
@@ -3032,7 +2819,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                         {
                                             WWW iteratorVariable36 = new WWW(iteratorVariable32);
                                             yield return iteratorVariable36;
-                                            Texture2D iteratorVariable37 = RCextensions.loadimage(iteratorVariable36, mipmap, 200000);
+                                            Texture2D iteratorVariable37 = RCextensions.LoadImageRC(iteratorVariable36, mipmap, 200000);
                                             iteratorVariable36.Dispose();
                                             if (!linkHash[0].ContainsKey(iteratorVariable32))
                                             {
@@ -3071,7 +2858,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                 {
                                     WWW iteratorVariable40 = new WWW(iteratorVariable38);
                                     yield return iteratorVariable40;
-                                    Texture2D iteratorVariable41 = RCextensions.loadimage(iteratorVariable40, mipmap, 200000);
+                                    Texture2D iteratorVariable41 = RCextensions.LoadImageRC(iteratorVariable40, mipmap, 200000);
                                     iteratorVariable40.Dispose();
                                     if (!linkHash[0].ContainsKey(iteratorVariable38))
                                     {
@@ -3126,7 +2913,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                     {
                                         WWW iteratorVariable50 = new WWW(iteratorVariable48);
                                         yield return iteratorVariable50;
-                                        Texture2D iteratorVariable51 = RCextensions.loadimage(iteratorVariable50, mipmap, 200000);
+                                        Texture2D iteratorVariable51 = RCextensions.LoadImageRC(iteratorVariable50, mipmap, 200000);
                                         iteratorVariable50.Dispose();
                                         if (!linkHash[0].ContainsKey(iteratorVariable48))
                                         {
@@ -3168,7 +2955,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                     {
                                         WWW iteratorVariable54 = new WWW(iteratorVariable52);
                                         yield return iteratorVariable54;
-                                        Texture2D iteratorVariable55 = RCextensions.loadimage(iteratorVariable54, mipmap, 200000);
+                                        Texture2D iteratorVariable55 = RCextensions.LoadImageRC(iteratorVariable54, mipmap, 200000);
                                         iteratorVariable54.Dispose();
                                         if (!linkHash[0].ContainsKey(iteratorVariable52))
                                         {
@@ -3204,7 +2991,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                     {
                                         WWW iteratorVariable60 = new WWW(iteratorVariable58);
                                         yield return iteratorVariable60;
-                                        Texture2D iteratorVariable61 = RCextensions.loadimage(iteratorVariable60, mipmap, 1000000);
+                                        Texture2D iteratorVariable61 = RCextensions.LoadImageRC(iteratorVariable60, mipmap, 1000000);
                                         iteratorVariable60.Dispose();
                                         if (!linkHash[2].ContainsKey(iteratorVariable58))
                                         {
@@ -3238,7 +3025,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                 {
                                     WWW iteratorVariable64 = new WWW(iteratorVariable62);
                                     yield return iteratorVariable64;
-                                    Texture2D iteratorVariable65 = RCextensions.loadimage(iteratorVariable64, mipmap, 1000000);
+                                    Texture2D iteratorVariable65 = RCextensions.LoadImageRC(iteratorVariable64, mipmap, 1000000);
                                     iteratorVariable64.Dispose();
                                     if (!linkHash[2].ContainsKey(iteratorVariable62))
                                     {
@@ -3321,7 +3108,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             Screen.lockCursor = false;
         }
         Screen.showCursor = true;
-        ShowHUDInfoCenter("the game has started for 60 seconds.\n please wait for next round.\n Click Right Mouse Key to Enter or Exit the Spectator Mode.");
         GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().enabled = true;
         GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(null);
         GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(true);
@@ -3352,7 +3138,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             Screen.lockCursor = false;
         }
         Screen.showCursor = true;
-        ShowHUDInfoCenter("Syncing spawn locations...");
         GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().enabled = true;
         GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(null);
         GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(true);
@@ -3362,18 +3147,11 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     public void SpawnPlayerAfterGameEnd(string id)
     {
         myLastHero = id.ToUpper();
-        Hashtable hashtable = new Hashtable
+        Player.Self.SetCustomProperties(new Hashtable
         {
-            { "dead", true }
-        };
-        Hashtable propertiesToSet = hashtable;
-        Player.Self.SetCustomProperties(propertiesToSet);
-        hashtable = new Hashtable
-        {
+            { "dead", true },
             { PlayerProperty.IsTitan, 1 }
-        };
-        propertiesToSet = hashtable;
-        Player.Self.SetCustomProperties(propertiesToSet);
+        });
         if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS)
         {
             Screen.lockCursor = true;
@@ -3383,7 +3161,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             Screen.lockCursor = false;
         }
         Screen.showCursor = false;
-        ShowHUDInfoCenter("the game has started for 60 seconds.\n please wait for next round.\n Click Right Mouse Key to Enter or Exit the Spectator Mode.");
         GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().enabled = true;
         GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(null);
         GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(true);
@@ -4241,9 +4018,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
 
     public void PlayerKillInfoSingleplayerUpdate(int dmg)
     {
-        single_kills++;
-        single_maxDamage = Mathf.Max(dmg, single_maxDamage);
-        single_totalDamage += dmg;
     }
 
     public void PlayerKillInfoUpdate(Player player, int dmg)
@@ -4377,7 +4151,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
 
     private void ResetSettings(bool isLeave)
     {
-        name = Shelter.Profile.Name;
         masterRC = false;
         Hashtable propertiesToSet = new Hashtable
         {
@@ -4467,7 +4240,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             myRespawnTime = 0f;
             killInfoGO = new ArrayList();
             racingResult = new ArrayList();
-            ShowHUDInfoCenter(string.Empty);
             isRestarting = true;
             DestroyAllExistingCloths();
             PhotonNetwork.DestroyAll();
@@ -4475,10 +4247,9 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             photonView.RPC("settingRPC", PhotonTargets.Others, hash);
             photonView.RPC("RPCLoadLevel", PhotonTargets.All);
             SetGameSettings(hash);
+            
             if (masterclientSwitched)
-            {
-                SendChatContentInfo("<color=#A8FF24>MasterClient has switched to </color>" + Player.Self.Properties.Name.hexColor());
-            }
+                SendChatContentInfo("<color=#A8FF24>MasterClient has switched to</color> " + Shelter.Profile.HexName);
         }
     }
     
@@ -4487,9 +4258,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         startRacing = false;
         endRacing = false;
         checkpoint = null;
-        single_kills = 0;
-        single_maxDamage = 0;
-        single_totalDamage = 0;
         timeElapse = 0f;
         roundTime = 0f;
         timeTotalServer = 0f;
@@ -4499,7 +4267,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         isPlayer2Winning = false;
         wave = 1;
         myRespawnTime = 0f;
-        ShowHUDInfoCenter(string.Empty);
         DestroyAllExistingCloths();
         Application.LoadLevel(Application.loadedLevel);
     }
@@ -5131,7 +4898,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             if (RCSettings.infectionMode != (int) hash["infection"])
             {
                 RCSettings.infectionMode = (int) hash["infection"];
-                name = Shelter.Profile.Name;
                 Player.Self.SetCustomProperties(new Hashtable
                 {
                     { PlayerProperty.RCTeam, 0 }
@@ -5353,79 +5119,48 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
 
     private void SetTeam(int setting)
     {
-        if (setting == 0)
+        switch (setting)
         {
-            name = Shelter.Profile.Name;
-            Hashtable propertiesToSet = new Hashtable
-            {
-                { PlayerProperty.RCTeam, 0 },
-                { PlayerProperty.Name, name }
-            };
-            Player.Self.SetCustomProperties(propertiesToSet);
-        }
-        else if (setting == 1)
-        {
-            Hashtable hashtable2 = new Hashtable
-            {
-                { PlayerProperty.RCTeam, 1 }
-            };
-            string playerName = Shelter.Profile.Name;
-            while (playerName.Contains('[') && playerName.Length >= playerName.IndexOf('[') + 8)
-            {
-                int index = playerName.IndexOf('[');
-                playerName = playerName.Remove(index, 8);
-            }
-            if (!playerName.StartsWith("[00FFFF]"))
-            {
-                playerName = "[00FFFF]" + playerName;
-            }
-            this.name = playerName;
-            hashtable2.Add(PlayerProperty.Name, this.name);
-            Player.Self.SetCustomProperties(hashtable2);
-        }
-        else if (setting == 2)
-        {
-            Hashtable hashtable3 = new Hashtable
-            {
-                { PlayerProperty.RCTeam, 2 }
-            };
-            string str2 = Shelter.Profile.Name;
-            while (str2.Contains('[') && str2.Length >= str2.IndexOf('[') + 8)
-            {
-                int startIndex = str2.IndexOf('[');
-                str2 = str2.Remove(startIndex, 8);
-            }
-            if (!str2.StartsWith("[FF00FF]"))
-            {
-                str2 = "[FF00FF]" + str2;
-            }
-            name = str2;
-            hashtable3.Add(PlayerProperty.Name, name);
-            Player.Self.SetCustomProperties(hashtable3);
-        }
-        else if (setting == 3)
-        {
-            int num3 = 0;
-            int num4 = 0;
-            int num5 = 1;
-            foreach (Player player in PhotonNetwork.playerList)
-            {
-                switch (player.Properties.RCTeam)
+            case 0:
+                Player.Self.SetCustomProperties(new Hashtable
                 {
-                    case 1:
-                        num3++;
-                        break;
-                    case 2:
-                        num4++;
-                        break;
+                    { PlayerProperty.RCTeam, 0 },
+                    { PlayerProperty.Name, Shelter.Profile.Name }
+                });
+                break;
+            case 1:
+                Player.Self.SetCustomProperties(new Hashtable
+                {
+                    { PlayerProperty.RCTeam, 1 },
+                    { PlayerProperty.Name, "[00FFFF][Cyan][-] " + Shelter.Profile.Name }
+                });
+                break;
+            case 2:
+                Player.Self.SetCustomProperties(new Hashtable
+                {
+                    { PlayerProperty.RCTeam, 2 },
+                    { PlayerProperty.Name, "[FF00FF][Magenta][-] " + Shelter.Profile.Name }
+                });
+                break;
+            case 3:
+                int cyanTeam = 0;
+                int magentaTeam = 0;
+                foreach (Player player in PhotonNetwork.playerList)
+                {
+                    switch (player.Properties.RCTeam)
+                    {
+                        case 1:
+                            cyanTeam++;
+                            break;
+                        case 2:
+                            magentaTeam++;
+                            break;
+                    }
                 }
-            }
-            if (num3 > num4)
-            {
-                num5 = 2;
-            }
-            SetTeam(num5);
+                SetTeam(cyanTeam < magentaTeam ? 1 : 2);
+                break;
         }
+
         if (setting == 0 || setting == 1 || setting == 2)
         {
             foreach (GameObject obj2 in GameObject.FindGameObjectsWithTag("Player"))
@@ -5435,72 +5170,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                     photonView.RPC("labelRPC", PhotonTargets.All, obj2.GetPhotonView().viewID);
                 }
             }
-        }
-    }
-
-    public void ShowHUDInfoCenter(string content)
-    {
-        GameObject obj2 = GameObject.Find("LabelInfoCenter");
-        if (obj2 != null)
-        {
-            obj2.GetComponent<UILabel>().text = content;
-        }
-    }
-
-    public void ShowHUDInfoCenterADD(string content)
-    {
-        GameObject obj2 = GameObject.Find("LabelInfoCenter");
-        if (obj2 != null)
-        {
-            UILabel component = obj2.GetComponent<UILabel>();
-            component.text = component.text + content;
-        }
-    }
-
-    private void ShowHUDInfoTopCenter(string content)
-    {
-        GameObject obj2 = GameObject.Find("LabelInfoTopCenter");
-        if (obj2 != null)
-        {
-            obj2.GetComponent<UILabel>().text = content;
-        }
-    }
-
-    private void ShowHUDInfoTopCenterADD(string content)
-    {
-        GameObject obj2 = GameObject.Find("LabelInfoTopCenter");
-        if (obj2 != null)
-        {
-            UILabel component = obj2.GetComponent<UILabel>();
-            component.text = component.text + content;
-        }
-    }
-
-    private void ShowHUDInfoTopLeft(string content)
-    {
-        GameObject obj2 = GameObject.Find("LabelInfoTopLeft");
-        if (obj2 != null)
-        {
-            obj2.GetComponent<UILabel>().text = content;
-        }
-    }
-
-    private void ShowHUDInfoTopRight(string content)
-    {
-        GameObject obj2 = GameObject.Find("LabelInfoTopRight");
-        if (obj2 != null)
-        {
-            obj2.GetComponent<UILabel>().text = content;
-        }
-    }
-
-    private void ShowHUDInfoTopRightMAPNAME(string content)
-    {
-        GameObject obj2 = GameObject.Find("LabelInfoTopRight");
-        if (obj2 != null)
-        {
-            UILabel component = obj2.GetComponent<UILabel>();
-            component.text = component.text + content;
         }
     }
     
@@ -5517,7 +5186,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 position = titanSpawns[UnityEngine.Random.Range(0, titanSpawns.Count)];
             }
             myLastHero = id.ToUpper();
-            if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.PVP_CAPTURE)
+            if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpCapture)
             {
                 obj3 = PhotonNetwork.Instantiate("TITAN_VER3.1", checkpoint.transform.position + new Vector3(UnityEngine.Random.Range(-20, 20), 2f, UnityEngine.Random.Range(-20, 20)), checkpoint.transform.rotation, 0);
             }
@@ -5558,7 +5227,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 Screen.lockCursor = false;
             }
             Screen.showCursor = true;
-            ShowHUDInfoCenter(string.Empty);
         }
         else
         {
@@ -5568,7 +5236,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
 
     public void SpawnPlayer(string id)
     {
-        if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.PVP_CAPTURE)
+        if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpCapture)
         {
             SpawnPlayerAt(id, checkpoint);
         }
@@ -5625,7 +5293,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             }
             IN_GAME_MAIN_CAMERA component = GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>();
             myLastHero = id.ToUpper();
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
             {
                 if (IN_GAME_MAIN_CAMERA.singleCharacter == "TITAN_EREN")
                 {
@@ -5653,7 +5321,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                         }
                         component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().setCharacterComponent();
                         component.main_object.GetComponent<HERO>().setStat2();
-                        component.main_object.GetComponent<HERO>().setSkillHUDPosition2();
+                        component.main_object.GetComponent<HERO>().SetSkillHUDPosition();
                     }
                     else
                     {
@@ -5671,7 +5339,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                 component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().myCostume.stat = HeroStat.GetInfo(HeroCostume.costume[index].name);
                                 component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().setCharacterComponent();
                                 component.main_object.GetComponent<HERO>().setStat2();
-                                component.main_object.GetComponent<HERO>().setSkillHUDPosition2();
+                                component.main_object.GetComponent<HERO>().SetSkillHUDPosition();
                                 break;
                             }
                         }
@@ -5701,7 +5369,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                     }
                     component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().setCharacterComponent();
                     component.main_object.GetComponent<HERO>().setStat2();
-                    component.main_object.GetComponent<HERO>().setSkillHUDPosition2();
+                    component.main_object.GetComponent<HERO>().SetSkillHUDPosition();
                 }
                 else
                 {
@@ -5723,13 +5391,13 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                             component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().myCostume.stat = HeroStat.GetInfo(HeroCostume.costume[num4].name);
                             component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().setCharacterComponent();
                             component.main_object.GetComponent<HERO>().setStat2();
-                            component.main_object.GetComponent<HERO>().setSkillHUDPosition2();
+                            component.main_object.GetComponent<HERO>().SetSkillHUDPosition();
                             break;
                         }
                     }
                 }
                 CostumeConverter.HeroCostumeToPhotonData(component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().myCostume, Player.Self);
-                if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.PVP_CAPTURE)
+                if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpCapture)
                 {
                     Transform transform1 = component.main_object.transform;
                     transform1.position += new Vector3(UnityEngine.Random.Range(-20, 20), 2f, UnityEngine.Random.Range(-20, 20));
@@ -5762,7 +5430,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             }
             Screen.showCursor = false;
             isLosing = false;
-            ShowHUDInfoCenter(string.Empty);
         }
     }
 
@@ -5779,7 +5446,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             {
                 SpawnPlayer(myLastHero);
             }
-            ShowHUDInfoCenter(string.Empty);
         }
     }
 
@@ -5835,7 +5501,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         {
             obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_JUMPER, false);
         }
-        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
         {
             obj3 = (GameObject)Instantiate(Resources.Load("FX/FXtitanSpawn"), obj2.transform.position, Quaternion.Euler(-90f, 0f, 0f));
         }
@@ -5971,7 +5637,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         {
             moreTitans = RCSettings.moreTitans;
         }
-        if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.SURVIVE_MODE)
+        if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.SurviveMode)
         {
             if (punk)
             {
@@ -6115,7 +5781,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
 
     private GameObject SpawnTitanRaw(Vector3 position, Quaternion rotation)
     {
-        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
         {
             return (GameObject)Instantiate(Resources.Load("TITAN_VER3.1"), position, rotation);
         }

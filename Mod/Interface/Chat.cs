@@ -1,5 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
+using System.Runtime.Serialization.Formatters;
 using System.Text.RegularExpressions;
+using Mod.Interface.Components;
 using Mod.Managers;
 using UnityEngine;
 
@@ -20,20 +24,26 @@ namespace Mod.Interface
 
         #region Static methods
 
-        /// <summary>
-        /// Send a message to all clients which does not include any username.
-        /// </summary>
-        /// <param name="message">Message content</param>
-        /// <param name="target">The destinator of the message</param>
-        public static void SendMessage(object message, PhotonTargets target = PhotonTargets.All)
+        public static void SendMessage(object sender, object message, PhotonTargets target)
         {
-            FengGameManagerMKII.instance.photonView.RPC("Chat", target, message, string.Empty);
+            FengGameManagerMKII.instance.photonView.RPC("Chat", target, message, sender.ToString());
         }
 
-        /// <summary>
-        /// Sends a player to all players (included this client). Handled by FengGameManager.Chat(string, string);
-        /// </summary>
-        /// <param name="message">Message content</param>
+        public static void SendMessage(object sender, object message, Player player)
+        {
+            FengGameManagerMKII.instance.photonView.RPC("Chat", player, message, sender.ToString());
+        }
+
+        public static void SendMessage(object message, PhotonTargets target = PhotonTargets.All)
+        {
+            SendMessage(string.Empty, message, target);
+        }
+
+        public static void SendMessage(object message, Player player)
+        {
+            SendMessage(string.Empty, message, player);
+        }
+
         public static void SendMessageAsPlayer(object message) //TODO: todo
         {
             FengGameManagerMKII.instance.photonView.RPC("Chat", PhotonTargets.All, CustomFormat(message.ToString()), string.Empty);
@@ -50,20 +60,11 @@ namespace Mod.Interface
             return format.Replace("$(friendName)", Shelter.Profile.FriendName);
         }
 
-        /// <summary>
-        /// Write a message in chat which contains: (message). Used by this client to comunicate to the user.
-        /// </summary>
-        /// <param name="message">Message content</param>
         public static void AddMessage(object message)
         {
             Messages.Insert(0, new ChatMessage(message).CheckHTMLTags());
         }
 
-        /// <summary>
-        /// Write a message in chat which contains: [id] (username): (message). Caused by FengGameManager.Chat("message", "sender name (ignored)");
-        /// </summary>
-        /// <param name="sender">Sender of the message</param>
-        /// <param name="message">Message content</param>
         public static void ReceiveMessageFromPlayer(Player sender, object message)
         {
             Messages.Insert(0, new ChatMessage($"{sender.HexName}: {message}", sender).CheckHTMLTags());
@@ -74,11 +75,6 @@ namespace Mod.Interface
             Messages.Insert(0, new ChatMessage($"<color=#1068D4>PM<color=#108CD4>></color></color> <color=#{SystemColor}>{sender.HexName}: {message}</color>", sender).CheckHTMLTags());
         }
 
-        /// <summary>
-        /// Write a message in chat which contains: [id] (message). Caused by FengGameManager.Chat("message", string.Empty);
-        /// </summary>
-        /// <param name="sender">Sender of the message</param>
-        /// <param name="message">Message content</param>
         public static void ReceiveMessage(Player sender, object message)
         {
             Messages.Insert(0, new ChatMessage($"{message}", sender).CheckHTMLTags());
@@ -88,10 +84,7 @@ namespace Mod.Interface
         {
             AddMessage($"<color=#{SystemColor}>{message}</color>");
         } 
-
-        /// <summary>
-        /// Clears the list of messages
-        /// </summary>
+        
         public static void Clear()
         {
             Messages.Clear();
@@ -191,16 +184,33 @@ namespace Mod.Interface
         }
 
 
+        private float _animation;
         private Vector2 _mRealScroll;
         protected void Update()
         {
-            if (!_mWriting) return;
-            Vector2 vector = new Vector2(0, 30);
+            if (!_mWriting) 
+                return;
+            
+            const int moveBy = 50;
             if (Input.mouseScrollDelta.y > 0)
-                _mRealScroll -= vector;
+            {
+                _mRealScroll -= new Vector2(0, moveBy);
+                _animation = .3f;
+            }
             else if (Input.mouseScrollDelta.y < 0)
-                _mRealScroll += vector;
-            _mScroll = Vector2.Lerp(_mScroll, _mRealScroll, Time.deltaTime * 100f);
+            {
+                _mRealScroll += new Vector2(0, moveBy);
+                _animation = .3f;
+            }
+
+            if (_mScroll != _mRealScroll || _animation != 0f)
+            {
+                _mScroll = Vector2.Lerp(_mScroll, _mRealScroll, 1f - _animation * 10 / 3);
+                _animation -= Time.deltaTime;
+
+                if (_mScroll == _mRealScroll || _animation <= 0f)
+                    _animation = 0f;
+            }
         }
 
         protected override void OnHide()

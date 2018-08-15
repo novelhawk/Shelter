@@ -190,10 +190,10 @@ namespace Mod.Interface
             if (GUI.Button(new Rect(areaRect.x + areaRect.width / 2f - 100f, areaRect.y + areaRect.height - 90f, 200f, 70f), "Play", _button))
             {                    
                 PhotonNetwork.Disconnect();
-                IN_GAME_MAIN_CAMERA.gametype = GAMETYPE.SINGLE;
+                IN_GAME_MAIN_CAMERA.GameType = GameType.Singleplayer;
                 IN_GAME_MAIN_CAMERA.singleCharacter = roomCharacter.ToUpper();
                 IN_GAME_MAIN_CAMERA.difficulty = roomDifficultySingle;
-                if (IN_GAME_MAIN_CAMERA.cameraMode == CAMERA_TYPE.TPS)
+                if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS)
                     Screen.lockCursor = true;
                 Screen.showCursor = false;
 //                if (LevelInfoManager.Levels[roomMapIndex].Map == "trainning_0") Does not exist in LevelInfoManager TODO: Check why

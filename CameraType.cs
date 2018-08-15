@@ -1,7 +1,7 @@
-public enum CAMERA_TYPE
+public enum CameraType
 {
-    ORIGINAL,
-    WOW,
+    Original,
+    Stop,
     TPS
 }
 

@@ -32,12 +32,12 @@ namespace Mod
         public Room(string fullName, Hashtable properties)
         {
             FullName = fullName;
-
+            
             var split = fullName.Split('`');
             if (split.Length < 6)
-                throw new Exception(); //TODO: LOG!
+                throw new Exception("Room..ctor called with invalid arguments: " + nameof(fullName)); //TODO: LOG!
 
-            _roomName = split[0];
+            _roomName = split[0].MaxChars(100);
             _roomMap = LevelInfoManager.GetInfo(split[1]);
             _roomDifficulty = DifficultyToEnum(split[2]);
             if (int.TryParse(split[3], out int maxPlayers))
@@ -179,7 +179,7 @@ namespace Mod
             str.Append(Map.Name);
             str.Append(" || ");
             str.Append(IsJoinable ? "<color=#00FF00" + aa + ">" : "<color=#FF0000" + aa + ">");
-            str.Append(CurrentPlayers + "/" + MaxPlayers);
+            str.Append(_currentPlayers + "/" + _maxPlayers);
             str.Append("</color></color>");
             return str.ToString();
         }

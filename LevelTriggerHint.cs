@@ -82,7 +82,6 @@ public class LevelTriggerHint : MonoBehaviour
     {
         if (this.on)
         {
-            FengGameManagerMKII.instance.ShowHUDInfoCenter(this.content + "\n\n\n\n\n");
             this.on = false;
         }
     }

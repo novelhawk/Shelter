@@ -6,7 +6,7 @@ public class LevelTriggerGas : MonoBehaviour
     {
         if (other.gameObject.tag == "Player")
         {
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
             {
                 other.gameObject.GetComponent<HERO>().fillGas();
                 Destroy(gameObject);

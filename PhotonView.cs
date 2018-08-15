@@ -125,8 +125,7 @@ public class PhotonView : Photon.MonoBehaviour
 
     public override string ToString()
     {
-        object[] args = new object[] { this.viewID, gameObject == null ? "GO==null" : gameObject.name, !this.isSceneView ? string.Empty : "(scene)", this.prefix };
-        return string.Format("View ({3}){0} on {1} {2}", args);
+        return string.Format("View ({3}){0} on {1} {2}", viewID, gameObject.name, !isSceneView ? string.Empty : "(scene)", this.prefix);
     }
 
     public object[] instantiationData

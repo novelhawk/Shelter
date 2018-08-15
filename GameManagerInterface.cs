@@ -10,7 +10,7 @@ public partial class FengGameManagerMKII
 
     public void OnGUI()
     {
-        if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.STOP)
+        if (IN_GAME_MAIN_CAMERA.GameType != GameType.NotInRoom)
         {
             bool flag2;
             int num13;
@@ -358,7 +358,7 @@ public partial class FengGameManagerMKII
                     {
                         Screen.lockCursor = false;
                         Screen.showCursor = true;
-                        IN_GAME_MAIN_CAMERA.gametype = GAMETYPE.STOP;
+                        IN_GAME_MAIN_CAMERA.GameType = GameType.NotInRoom;
                         inputManager.menuOn = false;
                         Destroy(GameObject.Find("MultiplayerManager"));
                         Application.LoadLevel("menu");
@@ -3994,7 +3994,7 @@ public partial class FengGameManagerMKII
                         }
                         else if (GUI.Button(new Rect(num7 + 565f, num8 + 465f, 75f, 25f), "Continue"))
                         {
-                            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+                            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                             {
                                 Time.timeScale = 1f;
                             }
@@ -4011,7 +4011,7 @@ public partial class FengGameManagerMKII
                             else
                             {
                                 IN_GAME_MAIN_CAMERA.isPausing = false;
-                                if (IN_GAME_MAIN_CAMERA.cameraMode == CAMERA_TYPE.TPS)
+                                if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS)
                                 {
                                     Screen.showCursor = false;
                                     Screen.lockCursor = true;
@@ -4030,7 +4030,7 @@ public partial class FengGameManagerMKII
                         }
                         else if (GUI.Button(new Rect(num7 + 645f, num8 + 465f, 40f, 25f), "Quit"))
                         {
-                            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+                            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                             {
                                 Time.timeScale = 1f;
                             }
@@ -4041,7 +4041,7 @@ public partial class FengGameManagerMKII
 
                             Screen.lockCursor = false;
                             Screen.showCursor = true;
-                            IN_GAME_MAIN_CAMERA.gametype = GAMETYPE.STOP;
+                            IN_GAME_MAIN_CAMERA.GameType = GameType.NotInRoom;
                             gameStart = false;
                             GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().menuOn = false;
                             DestroyAllExistingCloths();
@@ -4050,7 +4050,7 @@ public partial class FengGameManagerMKII
                         }
                     }
                 }
-                else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+                else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                 {
                     if (Time.timeScale <= 0.1f)
                     {
@@ -4089,7 +4089,7 @@ public partial class FengGameManagerMKII
                             PhotonNetwork.Disconnect();
                             Screen.lockCursor = false;
                             Screen.showCursor = true;
-                            IN_GAME_MAIN_CAMERA.gametype = GAMETYPE.STOP;
+                            IN_GAME_MAIN_CAMERA.GameType = GameType.NotInRoom;
                             gameStart = false;
                             GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().menuOn = false;
                             DestroyAllExistingCloths();

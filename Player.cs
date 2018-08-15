@@ -160,6 +160,8 @@ public class Player
     public bool IsMasterClient => Equals(PhotonNetwork.networkingPeer.mMasterClient, this);
     public static Player Self => PhotonNetwork.networkingPeer?.mLocalActor;
 
+    public HERO Hero { get; set; }
+    
     public string name // Friend name? 
     {
         get => this.nameField;

@@ -5,7 +5,7 @@ public class BTN_choose_titan : MonoBehaviour
 {
     private void OnClick()
     {
-        if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.PVP_AHSS)
+        if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpAHSS)
         {
             string id = "AHSS";
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[0], true);
@@ -33,7 +33,7 @@ public class BTN_choose_titan : MonoBehaviour
         }
         else
         {
-            if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.PVP_CAPTURE)
+            if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpCapture)
             {
                 FengGameManagerMKII.instance.checkpoint = GameObject.Find("PVPchkPtT");
             }

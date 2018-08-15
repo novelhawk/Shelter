@@ -1,31 +1,25 @@
+using System;
+using Mod;
 using UnityEngine;
 
 public class CheckBoxCamera : MonoBehaviour
 {
-    public new CAMERA_TYPE camera;
+    public new CameraType camera;
 
     private void OnSelectionChange(bool yes)
     {
-        if (yes)
-        {
-            IN_GAME_MAIN_CAMERA.cameraMode = this.camera;
-            PlayerPrefs.SetString("cameraType", this.camera.ToString().ToUpper());
-        }
+        if (!yes)
+            return;
+        
+        IN_GAME_MAIN_CAMERA.cameraMode = this.camera;
+        PlayerPrefs.SetString("cameraType", this.camera.ToString().ToUpper());
     }
 
     private void Start()
     {
-        if (PlayerPrefs.HasKey("cameraType"))
-        {
-            if (this.camera.ToString().ToUpper() == PlayerPrefs.GetString("cameraType").ToUpper())
-            {
-                GetComponent<UICheckbox>().isChecked = true;
-            }
-            else
-            {
-                GetComponent<UICheckbox>().isChecked = false;
-            }
-        }
+        if (!PlayerPrefs.HasKey("cameraType")) 
+            return;
+        
+        GetComponent<UICheckbox>().isChecked = camera.ToString().EqualsIgnoreCase(PlayerPrefs.GetString("cameraType"));
     }
 }
-

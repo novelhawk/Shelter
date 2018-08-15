@@ -51,7 +51,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
         this.attackChkOnce = false;
         this.sweepSmokeObject.GetComponent<ParticleSystem>().enableEmission = true;
         this.sweepSmokeObject.GetComponent<ParticleSystem>().Play();
-        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
         {
             if (FengGameManagerMKII.LAN)
             {
@@ -80,13 +80,13 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     public void BlowPlayer(GameObject player, Transform neck)
     {
         Vector3 vector = -(neck.position + transform.forward * 50f - player.transform.position);
-        switch (IN_GAME_MAIN_CAMERA.gametype)
+        switch (IN_GAME_MAIN_CAMERA.GameType)
         {
-            case GAMETYPE.SINGLE:
+            case GameType.Singleplayer:
                 player.GetComponent<HERO>().BlowAway(vector.normalized * 20f + Vector3.up * 1f);
                 break;
             
-            case GAMETYPE.MULTIPLAYER when PhotonNetwork.isMasterClient:
+            case GameType.Multiplayer when PhotonNetwork.isMasterClient:
                 player.GetComponent<HERO>().photonView.RPC("blowAway", PhotonTargets.All, 
                     vector.normalized * 20f + Vector3.up * 1f);
                 break;
@@ -251,7 +251,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     private void crossFade(string aniName, float time)
     {
         animation.CrossFade(aniName, time);
-        if (!FengGameManagerMKII.LAN && IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
+        if (!FengGameManagerMKII.LAN && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
             object[] parameters = new object[] { aniName, time };
             photonView.RPC("netCrossFade", PhotonTargets.Others, parameters);
@@ -303,14 +303,14 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
         if (hitHero != null)
         {
             Vector3 position = transform.Find("Amarture/Core/Controller_Body/hip/spine/chest").position;
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
             {
                 if (!hitHero.GetComponent<HERO>().HasDied())
                 {
                     hitHero.GetComponent<HERO>().die((hitHero.transform.position - position) * 15f * 4f, false);
                 }
             }
-            else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+            else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
             {
                 if (FengGameManagerMKII.LAN)
                 {
@@ -401,7 +401,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                 {
                     WWW link = new WWW(url);
                     yield return link;
-                    Texture2D iteratorVariable4 = RCextensions.loadimage(link, mipmap, 1000000);
+                    Texture2D iteratorVariable4 = RCextensions.LoadImageRC(link, mipmap, 1000000);
                     link.Dispose();
                     if (!FengGameManagerMKII.linkHash[2].ContainsKey(url))
                     {
@@ -440,7 +440,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     {
         this.neckSteamObject.GetComponent<ParticleSystem>().Stop();
         this.neckSteamObject.GetComponent<ParticleSystem>().Play();
-        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
         {
             if (FengGameManagerMKII.LAN)
             {
@@ -508,7 +508,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     private void playAnimation(string aniName)
     {
         animation.Play(aniName);
-        if (!FengGameManagerMKII.LAN && IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
+        if (!FengGameManagerMKII.LAN && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
             object[] parameters = new object[] { aniName };
             photonView.RPC("netPlayAnimation", PhotonTargets.Others, parameters);
@@ -519,7 +519,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     {
         animation.Play(aniName);
         animation[aniName].normalizedTime = normalizedTime;
-        if (!FengGameManagerMKII.LAN && IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
+        if (!FengGameManagerMKII.LAN && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
             object[] parameters = new object[] { aniName, normalizedTime };
             photonView.RPC("netPlayAnimationAt", PhotonTargets.Others, parameters);
@@ -529,7 +529,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     private void playSound(string sndname)
     {
         this.PlaysoundRPC(sndname);
-        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
         {
             if (FengGameManagerMKII.LAN)
             {
@@ -789,7 +789,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                     transform.position = new Vector3(30f, 0f, 784f);
                     Instantiate(Resources.Load("FX/ThunderCT"), transform.position + Vector3.up * 350f, Quaternion.Euler(270f, 0f, 0f));
                     Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().flashBlind();
-                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+                    if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                     {
                         this.idle();
                     }
@@ -820,7 +820,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                             {
                                 this.killPlayer(gameObject);
                             }
-                            if (gameObject.tag == "erenHitbox" && this.attackAnimation == "combo_3" && IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && (!FengGameManagerMKII.LAN ? PhotonNetwork.isMasterClient : Network.isServer))
+                            if (gameObject.tag == "erenHitbox" && this.attackAnimation == "combo_3" && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && (!FengGameManagerMKII.LAN ? PhotonNetwork.isMasterClient : Network.isServer))
                             {
                                 gameObject.transform.root.gameObject.GetComponent<TITAN_EREN>().hitByFTByServer(3);
                             }
@@ -839,7 +839,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                     {
                         this.sweepSmokeObject.GetComponent<ParticleSystem>().enableEmission = false;
                         this.sweepSmokeObject.GetComponent<ParticleSystem>().Stop();
-                        if (!(IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.MULTIPLAYER || FengGameManagerMKII.LAN))
+                        if (!(IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer || FengGameManagerMKII.LAN))
                         {
                             photonView.RPC("stopSweepSmoke", PhotonTargets.Others, new object[0]);
                         }
@@ -855,11 +855,11 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                         this.attackChkOnce = true;
                         this.door_broken.SetActive(true);
                         this.door_closed.SetActive(false);
-                        if (!(IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.MULTIPLAYER || FengGameManagerMKII.LAN))
+                        if (!(IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer || FengGameManagerMKII.LAN))
                         {
                             photonView.RPC("changeDoor", PhotonTargets.OthersBuffered, new object[0]);
                         }
-                        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+                        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                         {
                             if (FengGameManagerMKII.LAN)
                             {
@@ -891,7 +891,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                     {
                         GameObject obj4;
                         this.attackChkOnce = true;
-                        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+                        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                         {
                             if (FengGameManagerMKII.LAN)
                             {
@@ -924,7 +924,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                     if (!this.attackChkOnce && animation[this.actionName].normalizedTime >= this.attackCheckTime)
                     {
                         this.attackChkOnce = true;
-                        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+                        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                         {
                             if (FengGameManagerMKII.LAN)
                             {
@@ -948,7 +948,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                     }
                     if (animation[this.actionName].normalizedTime >= 1f)
                     {
-                        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+                        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                         {
                             if (FengGameManagerMKII.LAN)
                             {
@@ -983,7 +983,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                         }
                         if (this.hasDie)
                         {
-                            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+                            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                             {
                                 Destroy(gameObject);
                             }

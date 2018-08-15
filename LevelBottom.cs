@@ -13,7 +13,7 @@ public class LevelBottom : MonoBehaviour
             {
                 if (other.gameObject.GetComponent<HERO>() != null)
                 {
-                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+                    if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                     {
                         if (other.gameObject.GetPhotonView().isMine)
                         {

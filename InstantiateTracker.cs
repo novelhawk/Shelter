@@ -66,7 +66,7 @@ public class InstantiateTracker
             case "fx/boom5":
             case "fx/rockthrow":
             case "fx/bite":
-                if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).PlayerTitansAllowed || RCSettings.infectionMode > 0 || IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.BOSS_FIGHT_CT)
+                if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).PlayerTitansAllowed || RCSettings.infectionMode > 0 || IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight)
                 {
                     return this.Instantiated(player, GameResource.effect);
                 }
@@ -149,7 +149,7 @@ public class InstantiateTracker
             case "fx/colossal_steam_dmg":
             case "fx/colossal_steam":
             case "fx/boom1_ct_kick":
-                if (!PhotonNetwork.isMasterClient || IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.BOSS_FIGHT_CT)
+                if (!PhotonNetwork.isMasterClient || IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight)
                 {
                     return this.Instantiated(player, GameResource.effect);
                 }
@@ -157,7 +157,7 @@ public class InstantiateTracker
                 return false;
 
             case "rock":
-                if (!PhotonNetwork.isMasterClient || IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.BOSS_FIGHT_CT)
+                if (!PhotonNetwork.isMasterClient || IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight)
                 {
                     return this.Instantiated(player, GameResource.general);
                 }
@@ -179,7 +179,7 @@ public class InstantiateTracker
                 int num4;
                 if (!PhotonNetwork.isMasterClient)
                 {
-                    if (FengGameManagerMKII.masterRC && IN_GAME_MAIN_CAMERA.gamemode != GAMEMODE.BOSS_FIGHT_CT)
+                    if (FengGameManagerMKII.masterRC && IN_GAME_MAIN_CAMERA.GameMode != GameMode.BossFight)
                     {
                         num4 = 0;
                         foreach (TITAN titan in FengGameManagerMKII.instance.GetTitans())
@@ -196,9 +196,9 @@ public class InstantiateTracker
                     }
                     break;
                 }
-                if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).PlayerTitansAllowed || RCSettings.infectionMode > 0 || IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.BOSS_FIGHT_CT || FengGameManagerMKII.instance.restartingTitan)
+                if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).PlayerTitansAllowed || RCSettings.infectionMode > 0 || IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight || FengGameManagerMKII.instance.restartingTitan)
                 {
-                    if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.BOSS_FIGHT_CT)
+                    if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight)
                     {
                         break;
                     }

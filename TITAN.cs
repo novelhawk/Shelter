@@ -123,7 +123,7 @@ public class TITAN : Photon.MonoBehaviour
 
     private void attack(string type)
     {
-        this.state = TitanState.attack;
+        this.state = TitanState.Attacking;
         this.attacked = false;
         this.isAlarm = true;
         if (this.attackAnimation == type)
@@ -326,7 +326,7 @@ public class TITAN : Photon.MonoBehaviour
 
     private void attack2(string type)
     {
-        this.state = TitanState.attack;
+        this.state = TitanState.Attacking;
         this.attacked = false;
         this.isAlarm = true;
         if (this.attackAnimation == type)
@@ -538,12 +538,12 @@ public class TITAN : Photon.MonoBehaviour
     {
         if (!this.hasDie && this.abnormalType != AbnormalType.TYPE_CRAWLER)
         {
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
             {
                 object[] parameters = new object[] { 0f };
                 photonView.RPC("laugh", PhotonTargets.All, parameters);
             }
-            else if (this.state == TitanState.idle || this.state == TitanState.turn || this.state == TitanState.chase)
+            else if (this.state == TitanState.Idle || this.state == TitanState.Turning || this.state == TitanState.Chasing)
             {
                 this.Laugh(0f);
             }
@@ -588,7 +588,7 @@ public class TITAN : Photon.MonoBehaviour
         obj2.transform.parent = this.baseTransform.Find("AABB");
         obj2.transform.localPosition = new Vector3(0f, 0f, 0f);
         this.MultiplayerManager = FengGameManagerMKII.instance;
-        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine)
+        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine)
         {
             this.baseGameObjectTransform = gameObject.transform;
         }
@@ -596,7 +596,7 @@ public class TITAN : Photon.MonoBehaviour
 
     private void chase()
     {
-        this.state = TitanState.chase;
+        this.state = TitanState.Chasing;
         this.isAlarm = true;
         this.crossFade(this.runAnimation, 0.5f);
     }
@@ -662,7 +662,7 @@ public class TITAN : Photon.MonoBehaviour
     private void crossFade(string aniName, float time)
     {
         animation.CrossFade(aniName, time);
-        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
+        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
             object[] parameters = new object[] { aniName, time };
             photonView.RPC("netCrossFade", PhotonTargets.Others, parameters);
@@ -710,7 +710,7 @@ public class TITAN : Photon.MonoBehaviour
 
     public void dieBlow(Vector3 attacker, float hitPauseTime)
     {
-        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
         {
             this.dieBlowFunc(attacker, hitPauseTime);
             if (GameObject.FindGameObjectsWithTag("titan").Length <= 1)
@@ -807,7 +807,7 @@ public class TITAN : Photon.MonoBehaviour
     {
         if (this.abnormalType != AbnormalType.TYPE_CRAWLER)
         {
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
             {
                 this.dieHeadBlowFunc(attacker, hitPauseTime);
                 if (GameObject.FindGameObjectsWithTag("titan").Length <= 1)
@@ -838,7 +838,7 @@ public class TITAN : Photon.MonoBehaviour
             animation[this.hitAnimation].speed = 0f;
             FengGameManagerMKII.instance.OneTitanDown(string.Empty, false);
             this.needFreshCorePosition = true;
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
             {
                 obj2 = PhotonNetwork.Instantiate("bloodExplore", this.head.position + Vector3.up * 1f * this.myLevel, Quaternion.Euler(270f, 0f, 0f), 0);
             }
@@ -847,7 +847,7 @@ public class TITAN : Photon.MonoBehaviour
                 obj2 = (GameObject) Instantiate(Resources.Load("bloodExplore"), this.head.position + Vector3.up * 1f * this.myLevel, Quaternion.Euler(270f, 0f, 0f));
             }
             obj2.transform.localScale = transform.localScale;
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
             {
                 obj2 = PhotonNetwork.Instantiate("bloodsplatter", this.head.position, Quaternion.Euler(270f + this.neck.rotation.eulerAngles.x, this.neck.rotation.eulerAngles.y, this.neck.rotation.eulerAngles.z), 0);
             }
@@ -857,7 +857,7 @@ public class TITAN : Photon.MonoBehaviour
             }
             obj2.transform.localScale = transform.localScale;
             obj2.transform.parent = this.neck;
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
             {
                 obj2 = PhotonNetwork.Instantiate("FX/justSmoke", this.neck.position, Quaternion.Euler(270f, 0f, 0f), 0);
             }
@@ -907,7 +907,7 @@ public class TITAN : Photon.MonoBehaviour
 
     private void eat()
     {
-        this.state = TitanState.eat;
+        this.state = TitanState.Eating;
         this.attacked = false;
         if (this.isGrabHandLeft)
         {
@@ -923,10 +923,10 @@ public class TITAN : Photon.MonoBehaviour
 
     private void eatSet(GameObject grabTarget)
     {
-        if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.MULTIPLAYER || !photonView.isMine) || !grabTarget.GetComponent<HERO>().IsGrabbed)
+        if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && (IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer || !photonView.isMine) || !grabTarget.GetComponent<HERO>().IsGrabbed)
         {
             this.GrabToRight();
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
             {
                 photonView.RPC("grabToRight", PhotonTargets.Others, new object[0]);
                 object[] parameters = new object[] { "grabbed" };
@@ -944,10 +944,10 @@ public class TITAN : Photon.MonoBehaviour
 
     private void eatSetL(GameObject grabTarget)
     {
-        if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.MULTIPLAYER || !photonView.isMine) || !grabTarget.GetComponent<HERO>().IsGrabbed)
+        if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && (IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer || !photonView.isMine) || !grabTarget.GetComponent<HERO>().IsGrabbed)
         {
             this.GrabToLeft();
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
             {
                 photonView.RPC("grabToLeft", PhotonTargets.Others, new object[0]);
                 object[] parameters = new object[] { "grabbed" };
@@ -1253,7 +1253,7 @@ public class TITAN : Photon.MonoBehaviour
         {
             GameObject myHero = this.myHero;
             this.myHero = obj2;
-            if (myHero != this.myHero && IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
+            if (myHero != this.myHero && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
             {
                 if (this.myHero == null)
                 {
@@ -1298,7 +1298,7 @@ public class TITAN : Photon.MonoBehaviour
         {
             GameObject myHero = this.myHero;
             this.myHero = obj2;
-            if (myHero != this.myHero && IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
+            if (myHero != this.myHero && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
             {
                 if (this.myHero == null)
                 {
@@ -1319,7 +1319,7 @@ public class TITAN : Photon.MonoBehaviour
     {
         GameObject myHero = this.myHero;
         this.myHero = this.getNearestHero();
-        if (this.myHero != myHero && IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
+        if (this.myHero != myHero && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
             if (this.myHero == null)
             {
@@ -1339,7 +1339,7 @@ public class TITAN : Photon.MonoBehaviour
     {
         GameObject myHero = this.myHero;
         this.myHero = this.getNearestHero2();
-        if (this.myHero != myHero && IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
+        if (this.myHero != myHero && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
             if (this.myHero == null)
             {
@@ -1357,7 +1357,7 @@ public class TITAN : Photon.MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!(!IN_GAME_MAIN_CAMERA.isPausing || IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE ? IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && !photonView.isMine : true))
+        if (!(!IN_GAME_MAIN_CAMERA.isPausing || IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer ? IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && !photonView.isMine : true))
         {
             this.baseRigidBody.AddForce(new Vector3(0f, -this.gravity * this.baseRigidBody.mass, 0f));
             if (this.needFreshCorePosition)
@@ -1374,7 +1374,7 @@ public class TITAN : Photon.MonoBehaviour
                 }
                 this.oldCorePosition = this.baseTransform.position - this.baseTransform.Find("Amarture/Core").position;
             }
-            else if (!(this.state != TitanState.attack || !this.isAttackMoveByCore ? this.state != TitanState.hit : false))
+            else if (!(this.state != TitanState.Attacking || !this.isAttackMoveByCore ? this.state != TitanState.Hitting : false))
             {
                 Vector3 vector2 = this.baseTransform.position - this.baseTransform.Find("Amarture/Core").position - this.oldCorePosition;
                 this.baseRigidBody.velocity = vector2 / Time.deltaTime + Vector3.up * this.baseRigidBody.velocity.y;
@@ -1409,7 +1409,7 @@ public class TITAN : Photon.MonoBehaviour
             }
             else
             {
-                if (this.nonAI && !IN_GAME_MAIN_CAMERA.isPausing && (this.state == TitanState.idle || this.state == TitanState.attack && this.attackAnimation == "jumper_1"))
+                if (this.nonAI && !IN_GAME_MAIN_CAMERA.isPausing && (this.state == TitanState.Idle || this.state == TitanState.Attacking && this.attackAnimation == "jumper_1"))
                 {
                     Vector3 zero = Vector3.zero;
                     if (this.controller.targetDirection != -874f)
@@ -1432,7 +1432,7 @@ public class TITAN : Photon.MonoBehaviour
                             zero = this.baseTransform.forward * this.speed * Mathf.Sqrt(this.myLevel);
                         }
                         this.baseGameObjectTransform.rotation = Quaternion.Lerp(this.baseGameObjectTransform.rotation, Quaternion.Euler(0f, this.controller.targetDirection, 0f), this.speed * 0.15f * Time.deltaTime);
-                        if (this.state == TitanState.idle)
+                        if (this.state == TitanState.Idle)
                         {
                             if (this.controller.isWALKDown || flag2)
                             {
@@ -1458,11 +1458,11 @@ public class TITAN : Photon.MonoBehaviour
                                 if (obj2 != null)
                                 {
                                     Vector3 position = this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest").position;
-                                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+                                    if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                                     {
                                         obj2.GetComponent<HERO>().die((obj2.transform.position - position) * 15f * this.myLevel, false);
                                     }
-                                    else if (!(IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.MULTIPLAYER || !photonView.isMine || obj2.GetComponent<HERO>().HasDied()))
+                                    else if (!(IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer || !photonView.isMine || obj2.GetComponent<HERO>().HasDied()))
                                     {
                                         obj2.GetComponent<HERO>().markDie();
                                         object[] parameters = new object[] { (obj2.transform.position - position) * 15f * this.myLevel, true, !this.nonAI ? -1 : photonView.viewID, name, true };
@@ -1476,7 +1476,7 @@ public class TITAN : Photon.MonoBehaviour
                             }
                         }
                     }
-                    else if (this.state == TitanState.idle)
+                    else if (this.state == TitanState.Idle)
                     {
                         if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
                         {
@@ -1491,7 +1491,7 @@ public class TITAN : Photon.MonoBehaviour
                         }
                         zero = Vector3.zero;
                     }
-                    if (this.state == TitanState.idle)
+                    if (this.state == TitanState.Idle)
                     {
                         Vector3 velocity = this.baseRigidBody.velocity;
                         Vector3 force = zero - velocity;
@@ -1500,7 +1500,7 @@ public class TITAN : Photon.MonoBehaviour
                         force.y = 0f;
                         this.baseRigidBody.AddForce(force, ForceMode.VelocityChange);
                     }
-                    else if (this.state == TitanState.attack && this.attackAnimation == "jumper_0")
+                    else if (this.state == TitanState.Attacking && this.attackAnimation == "jumper_0")
                     {
                         Vector3 vector7 = this.baseRigidBody.velocity;
                         Vector3 vector8 = zero * 0.8f - vector7;
@@ -1510,7 +1510,7 @@ public class TITAN : Photon.MonoBehaviour
                         this.baseRigidBody.AddForce(vector8, ForceMode.VelocityChange);
                     }
                 }
-                if (!(this.abnormalType == AbnormalType.TYPE_I || this.abnormalType == AbnormalType.TYPE_JUMPER ? this.nonAI || this.state != TitanState.attack || !(this.attackAnimation == "jumper_0") : true))
+                if (!(this.abnormalType == AbnormalType.TYPE_I || this.abnormalType == AbnormalType.TYPE_JUMPER ? this.nonAI || this.state != TitanState.Attacking || !(this.attackAnimation == "jumper_0") : true))
                 {
                     Vector3 vector9 = this.baseTransform.forward * this.speed * this.myLevel * 0.5f;
                     Vector3 vector10 = this.baseRigidBody.velocity;
@@ -1524,7 +1524,7 @@ public class TITAN : Photon.MonoBehaviour
                     vector11.y = 0f;
                     this.baseRigidBody.AddForce(vector11, ForceMode.VelocityChange);
                 }
-                if (this.state == TitanState.chase || this.state == TitanState.wander || this.state == TitanState.to_check_point || this.state == TitanState.to_pvp_pt || this.state == TitanState.random_run)
+                if (this.state == TitanState.Chasing || this.state == TitanState.Wandering || this.state == TitanState.GoingToCheckpoint || this.state == TitanState.GoingToPVP || this.state == TitanState.RunningRandomly)
                 {
                     Vector3 vector12 = this.baseTransform.forward * this.speed;
                     Vector3 vector13 = this.baseRigidBody.velocity;
@@ -1541,7 +1541,7 @@ public class TITAN : Photon.MonoBehaviour
                             this.stuckTime = 2f;
                             this.stuckTurnAngle = UnityEngine.Random.Range(0, 2) * 140f - 70f;
                         }
-                        if (this.state == TitanState.chase && this.myHero != null && this.myDistance > this.attackDistance && this.myDistance < 150f)
+                        if (this.state == TitanState.Chasing && this.myHero != null && this.myDistance > this.attackDistance && this.myDistance < 150f)
                         {
                             float num = 0.05f;
                             if (this.myDifficulty > 1)
@@ -1562,11 +1562,11 @@ public class TITAN : Photon.MonoBehaviour
                         }
                     }
                     float current = 0f;
-                    if (this.state == TitanState.wander)
+                    if (this.state == TitanState.Wandering)
                     {
                         current = this.baseTransform.rotation.eulerAngles.y - 90f;
                     }
-                    else if (this.state == TitanState.to_check_point || this.state == TitanState.to_pvp_pt || this.state == TitanState.random_run)
+                    else if (this.state == TitanState.GoingToCheckpoint || this.state == TitanState.GoingToPVP || this.state == TitanState.RunningRandomly)
                     {
                         Vector3 vector16 = this.targetCheckPt - this.baseTransform.position;
                         current = -Mathf.Atan2(vector16.z, vector16.x) * 57.29578f;
@@ -1784,7 +1784,7 @@ public class TITAN : Photon.MonoBehaviour
 
     private void getDown()
     {
-        this.state = TitanState.down;
+        this.state = TitanState.Down;
         this.isAlarm = true;
         this.playAnimation("sit_hunt_down");
         this.getdownTime = UnityEngine.Random.Range(3f, 5f);
@@ -1842,7 +1842,7 @@ public class TITAN : Photon.MonoBehaviour
 
     private void grab(string type)
     {
-        this.state = TitanState.grab;
+        this.state = TitanState.Grabbing;
         this.attacked = false;
         this.isAlarm = true;
         this.attackAnimation = type;
@@ -1970,13 +1970,13 @@ public class TITAN : Photon.MonoBehaviour
     {
         if (!this.hasDie)
         {
-            if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE)
+            if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer)
             {
                 if (photonView.isMine)
                 {
                     this.targetHeadRotation = this.head.rotation;
                     bool flag = false;
-                    if (this.abnormalType != AbnormalType.TYPE_CRAWLER && this.state != TitanState.attack && this.state != TitanState.down && this.state != TitanState.hit && (this.state != TitanState.recover && this.state != TitanState.eat) && this.state != TitanState.hit_eye && !this.hasDie && this.myDistance < 100f && this.myHero != null)
+                    if (this.abnormalType != AbnormalType.TYPE_CRAWLER && this.state != TitanState.Attacking && this.state != TitanState.Down && this.state != TitanState.Hitting && (this.state != TitanState.Recovering && this.state != TitanState.Eating) && this.state != TitanState.Blinded && !this.hasDie && this.myDistance < 100f && this.myHero != null)
                     {
                         Vector3 vector = this.myHero.transform.position - transform.position;
                         this.angle = -Mathf.Atan2(vector.z, vector.x) * 57.29578f;
@@ -2000,7 +2000,7 @@ public class TITAN : Photon.MonoBehaviour
                         object[] objArray2 = new object[] { false };
                         photonView.RPC("setIfLookTarget", PhotonTargets.Others, objArray2);
                     }
-                    if (this.state != TitanState.attack && this.state != TitanState.hit && this.state != TitanState.hit_eye)
+                    if (this.state != TitanState.Attacking && this.state != TitanState.Hitting && this.state != TitanState.Blinded)
                     {
                         this.oldHeadRotation = Quaternion.Lerp(this.oldHeadRotation, this.targetHeadRotation, Time.deltaTime * 10f);
                     }
@@ -2032,7 +2032,7 @@ public class TITAN : Photon.MonoBehaviour
             else
             {
                 this.targetHeadRotation = this.head.rotation;
-                if (this.abnormalType != AbnormalType.TYPE_CRAWLER && this.state != TitanState.attack && this.state != TitanState.down && this.state != TitanState.hit && (this.state != TitanState.recover && this.state != TitanState.hit_eye) && !this.hasDie && this.myDistance < 100f && this.myHero != null)
+                if (this.abnormalType != AbnormalType.TYPE_CRAWLER && this.state != TitanState.Attacking && this.state != TitanState.Down && this.state != TitanState.Hitting && (this.state != TitanState.Recovering && this.state != TitanState.Blinded) && !this.hasDie && this.myDistance < 100f && this.myHero != null)
                 {
                     Vector3 vector15 = this.myHero.transform.position - transform.position;
                     this.angle = -Mathf.Atan2(vector15.z, vector15.x) * 57.29578f;
@@ -2043,7 +2043,7 @@ public class TITAN : Photon.MonoBehaviour
                     num9 = Mathf.Clamp(num9, -40f, 30f);
                     this.targetHeadRotation = Quaternion.Euler(this.head.rotation.eulerAngles.x + num9, this.head.rotation.eulerAngles.y + num7, this.head.rotation.eulerAngles.z);
                 }
-                if (this.state != TitanState.attack && this.state != TitanState.hit && this.state != TitanState.hit_eye)
+                if (this.state != TitanState.Attacking && this.state != TitanState.Hitting && this.state != TitanState.Blinded)
                 {
                     this.oldHeadRotation = Quaternion.Lerp(this.oldHeadRotation, this.targetHeadRotation, Time.deltaTime * 10f);
                 }
@@ -2064,13 +2064,13 @@ public class TITAN : Photon.MonoBehaviour
     {
         if (!this.hasDie)
         {
-            if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE)
+            if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer)
             {
                 if (photonView.isMine)
                 {
                     this.targetHeadRotation = this.head.rotation;
                     bool flag2 = false;
-                    if (this.abnormalType != AbnormalType.TYPE_CRAWLER && this.state != TitanState.attack && this.state != TitanState.down && this.state != TitanState.hit && (this.state != TitanState.recover && this.state != TitanState.eat) && this.state != TitanState.hit_eye && !this.hasDie && this.myDistance < 100f && this.myHero != null)
+                    if (this.abnormalType != AbnormalType.TYPE_CRAWLER && this.state != TitanState.Attacking && this.state != TitanState.Down && this.state != TitanState.Hitting && (this.state != TitanState.Recovering && this.state != TitanState.Eating) && this.state != TitanState.Blinded && !this.hasDie && this.myDistance < 100f && this.myHero != null)
                     {
                         Vector3 vector = this.myHero.transform.position - transform.position;
                         this.angle = -Mathf.Atan2(vector.z, vector.x) * 57.29578f;
@@ -2094,7 +2094,7 @@ public class TITAN : Photon.MonoBehaviour
                         object[] objArray3 = new object[] { false };
                         photonView.RPC("setIfLookTarget", PhotonTargets.Others, objArray3);
                     }
-                    if (this.state == TitanState.attack || this.state == TitanState.hit || this.state == TitanState.hit_eye)
+                    if (this.state == TitanState.Attacking || this.state == TitanState.Hitting || this.state == TitanState.Blinded)
                     {
                         this.oldHeadRotation = Quaternion.Lerp(this.oldHeadRotation, this.targetHeadRotation, Time.deltaTime * 20f);
                     }
@@ -2135,7 +2135,7 @@ public class TITAN : Photon.MonoBehaviour
             else
             {
                 this.targetHeadRotation = this.head.rotation;
-                if (this.abnormalType != AbnormalType.TYPE_CRAWLER && this.state != TitanState.attack && this.state != TitanState.down && this.state != TitanState.hit && (this.state != TitanState.recover && this.state != TitanState.hit_eye) && !this.hasDie && this.myDistance < 100f && this.myHero != null)
+                if (this.abnormalType != AbnormalType.TYPE_CRAWLER && this.state != TitanState.Attacking && this.state != TitanState.Down && this.state != TitanState.Hitting && (this.state != TitanState.Recovering && this.state != TitanState.Blinded) && !this.hasDie && this.myDistance < 100f && this.myHero != null)
                 {
                     Vector3 vector3 = this.myHero.transform.position - transform.position;
                     this.angle = -Mathf.Atan2(vector3.z, vector3.x) * 57.29578f;
@@ -2146,7 +2146,7 @@ public class TITAN : Photon.MonoBehaviour
                     num9 = Mathf.Clamp(num9, -40f, 30f);
                     this.targetHeadRotation = Quaternion.Euler(this.head.rotation.eulerAngles.x + num9, this.head.rotation.eulerAngles.y + num7, this.head.rotation.eulerAngles.z);
                 }
-                if (this.state == TitanState.attack || this.state == TitanState.hit || this.state == TitanState.hit_eye)
+                if (this.state == TitanState.Attacking || this.state == TitanState.Hitting || this.state == TitanState.Blinded)
                 {
                     this.oldHeadRotation = Quaternion.Lerp(this.oldHeadRotation, this.targetHeadRotation, Time.deltaTime * 20f);
                 }
@@ -2165,7 +2165,7 @@ public class TITAN : Photon.MonoBehaviour
 
     private void hit(string animationName, Vector3 attacker, float hitPauseTime)
     {
-        this.state = TitanState.hit;
+        this.state = TitanState.Hitting;
         this.hitAnimation = animationName;
         this.hitPause = hitPauseTime;
         this.playAnimation(this.hitAnimation);
@@ -2181,7 +2181,7 @@ public class TITAN : Photon.MonoBehaviour
 
     public void hitAnkle()
     {
-        if (!this.hasDie && this.state != TitanState.down)
+        if (!this.hasDie && this.state != TitanState.Down)
         {
             if (this.grabbedTarget != null)
             {
@@ -2194,7 +2194,7 @@ public class TITAN : Photon.MonoBehaviour
     [RPC]
     public void HitAnkleRPC(int viewID)
     {
-        if (!this.hasDie && this.state != TitanState.down)
+        if (!this.hasDie && this.state != TitanState.Down)
         {
             PhotonView view = PhotonView.Find(viewID);
             if (view != null)
@@ -2244,7 +2244,7 @@ public class TITAN : Photon.MonoBehaviour
     {
         if (this.abnormalType != AbnormalType.TYPE_CRAWLER)
         {
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
             {
                 this.hit("hit_eren_L", attacker, hitPauseTime);
             }
@@ -2273,7 +2273,7 @@ public class TITAN : Photon.MonoBehaviour
     {
         if (this.abnormalType != AbnormalType.TYPE_CRAWLER)
         {
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
             {
                 this.hit("hit_eren_R", attacker, hitPauseTime);
             }
@@ -2319,7 +2319,7 @@ public class TITAN : Photon.MonoBehaviour
                 this.sbtime += 0.4f;
             }
         }
-        this.state = TitanState.idle;
+        this.state = TitanState.Idle;
         if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
         {
             this.crossFade("crawler_idle", 0.2f);
@@ -2342,7 +2342,7 @@ public class TITAN : Photon.MonoBehaviour
     {
         if (target != null)
         {
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
             {
                 if (!target.GetComponent<HERO>().HasDied())
                 {
@@ -2359,7 +2359,7 @@ public class TITAN : Photon.MonoBehaviour
                     }
                 }
             }
-            else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+            else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
             {
                 target.GetComponent<HERO>().die2(hand);
             }
@@ -2368,9 +2368,9 @@ public class TITAN : Photon.MonoBehaviour
 
     private void justHitEye()
     {
-        if (this.state != TitanState.hit_eye)
+        if (this.state != TitanState.Blinded)
         {
-            if (this.state != TitanState.down && this.state != TitanState.sit)
+            if (this.state != TitanState.Down && this.state != TitanState.Sit)
             {
                 this.playAnimation("hit_eye");
             }
@@ -2378,7 +2378,7 @@ public class TITAN : Photon.MonoBehaviour
             {
                 this.playAnimation("sit_hit_eye");
             }
-            this.state = TitanState.hit_eye;
+            this.state = TitanState.Blinded;
         }
     }
 
@@ -2432,7 +2432,7 @@ public class TITAN : Photon.MonoBehaviour
 
     public void DoLateUpdate()
     {
-        if (!IN_GAME_MAIN_CAMERA.isPausing || IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE)
+        if (!IN_GAME_MAIN_CAMERA.isPausing || IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer)
         {
             if (this.baseAnimation.IsPlaying("run_walk"))
             {
@@ -2489,10 +2489,10 @@ public class TITAN : Photon.MonoBehaviour
     [RPC]
     private void Laugh(float sbtime = 0f)
     {
-        if (this.state == TitanState.idle || this.state == TitanState.turn || this.state == TitanState.chase)
+        if (this.state == TitanState.Idle || this.state == TitanState.Turning || this.state == TitanState.Chasing)
         {
             this.sbtime = sbtime;
-            this.state = TitanState.laugh;
+            this.state = TitanState.Laughing;
             this.crossFade("laugh", 0.2f);
         }
     }
@@ -2501,7 +2501,7 @@ public class TITAN : Photon.MonoBehaviour
     {
         this.skin = 86;
         this.eye = false;
-        if (!(IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine ? (int) FengGameManagerMKII.settings[1] != 1 : true))
+        if (!(IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine ? (int) FengGameManagerMKII.settings[1] != 1 : true))
         {
             int index = (int) UnityEngine.Random.Range(86f, 90f);
             int num2 = index - 60;
@@ -2517,7 +2517,7 @@ public class TITAN : Photon.MonoBehaviour
                 this.eye = true;
             }
             GetComponent<TITAN_SETUP>().setVar(this.skin, this.eye);
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
             {
                 StartCoroutine(this.loadskinE(body, eye));
             }
@@ -2554,7 +2554,7 @@ public class TITAN : Photon.MonoBehaviour
                     {
                         WWW link = new WWW(eye);
                         yield return link;
-                        Texture2D iteratorVariable4 = RCextensions.loadimage(link, mipmap, 200000);
+                        Texture2D iteratorVariable4 = RCextensions.LoadImageRC(link, mipmap, 200000);
                         link.Dispose();
                         if (!FengGameManagerMKII.linkHash[0].ContainsKey(eye))
                         {
@@ -2582,7 +2582,7 @@ public class TITAN : Photon.MonoBehaviour
                 {
                     WWW iteratorVariable5 = new WWW(body);
                     yield return iteratorVariable5;
-                    Texture2D iteratorVariable6 = RCextensions.loadimage(iteratorVariable5, mipmap, 1000000);
+                    Texture2D iteratorVariable6 = RCextensions.LoadImageRC(iteratorVariable5, mipmap, 1000000);
                     iteratorVariable5.Dispose();
                     if (!FengGameManagerMKII.linkHash[2].ContainsKey(body))
                     {
@@ -2943,7 +2943,7 @@ public class TITAN : Photon.MonoBehaviour
     private void playAnimation(string aniName)
     {
         animation.Play(aniName);
-        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
+        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
             object[] parameters = new object[] { aniName };
             photonView.RPC("netPlayAnimation", PhotonTargets.Others, parameters);
@@ -2954,7 +2954,7 @@ public class TITAN : Photon.MonoBehaviour
     {
         animation.Play(aniName);
         animation[aniName].normalizedTime = normalizedTime;
-        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
+        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
             object[] parameters = new object[] { aniName, normalizedTime };
             photonView.RPC("netPlayAnimationAt", PhotonTargets.Others, parameters);
@@ -3040,7 +3040,7 @@ public class TITAN : Photon.MonoBehaviour
 
     public void randomRun(Vector3 targetPt, float r)
     {
-        this.state = TitanState.random_run;
+        this.state = TitanState.RunningRandomly;
         this.targetCheckPt = targetPt;
         this.targetR = r;
         this.random_run_time = UnityEngine.Random.Range(1f, 2f);
@@ -3049,14 +3049,14 @@ public class TITAN : Photon.MonoBehaviour
 
     private void recover()
     {
-        this.state = TitanState.recover;
+        this.state = TitanState.Recovering;
         this.playAnimation("idle_recovery");
         this.getdownTime = UnityEngine.Random.Range(2f, 5f);
     }
 
     private void recoverpt()
     {
-        this.state = TitanState.recover;
+        this.state = TitanState.Recovering;
         this.playAnimation("idle_recovery");
         this.getdownTime = UnityEngine.Random.Range(1.8f, 2.5f);
     }
@@ -3072,7 +3072,7 @@ public class TITAN : Photon.MonoBehaviour
 
     private void remainSitdown()
     {
-        this.state = TitanState.sit;
+        this.state = TitanState.Sit;
         this.playAnimation("sit_idle");
         this.getdownTime = UnityEngine.Random.Range(10f, 30f);
     }
@@ -3087,7 +3087,7 @@ public class TITAN : Photon.MonoBehaviour
     {
         int num = 0;
         float num2 = 0.02f * (IN_GAME_MAIN_CAMERA.difficulty + 1);
-        if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.PVP_AHSS)
+        if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpAHSS)
         {
             num2 = 100f;
         }
@@ -3148,11 +3148,11 @@ public class TITAN : Photon.MonoBehaviour
             }
             else
             {
-                if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE && this.getPunkNumber() >= 3)
+                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer && this.getPunkNumber() >= 3)
                 {
                     num = 1;
                 }
-                if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.SURVIVE_MODE)
+                if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.SurviveMode)
                 {
                     int wave = FengGameManagerMKII.instance.wave;
                     if (wave != 5 && wave != 10 && wave != 15 && wave != 20)
@@ -3162,12 +3162,12 @@ public class TITAN : Photon.MonoBehaviour
                 }
             }
         }
-        if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && photonView.isMine)
+        if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
         {
             object[] parameters = new object[] { num };
             photonView.RPC("netSetAbnormalType", PhotonTargets.AllBuffered, parameters);
         }
-        else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+        else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
         {
             this.NetSetAbnormalType(num);
         }
@@ -3175,10 +3175,10 @@ public class TITAN : Photon.MonoBehaviour
 
     public void setAbnormalType2(AbnormalType type, bool forceCrawler)
     {
-        bool flag = RCSettings.spawnMode > 0 || (int) FengGameManagerMKII.settings[91] == 1 && IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient || FengGameManagerMKII.Level.StartsWith("Custom");
+        bool flag = RCSettings.spawnMode > 0 || (int) FengGameManagerMKII.settings[91] == 1 && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient || FengGameManagerMKII.Level.StartsWith("Custom");
         int num = 0;
         float num2 = 0.02f * (IN_GAME_MAIN_CAMERA.difficulty + 1);
-        if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.PVP_AHSS)
+        if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpAHSS)
         {
             num2 = 100f;
         }
@@ -3255,11 +3255,11 @@ public class TITAN : Photon.MonoBehaviour
             }
             else
             {
-                if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE && this.getPunkNumber() >= 3)
+                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer && this.getPunkNumber() >= 3)
                 {
                     num = 1;
                 }
-                if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.SURVIVE_MODE)
+                if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.SurviveMode)
                 {
                     int wave = FengGameManagerMKII.instance.wave;
                     if (wave != 5 && wave != 10 && wave != 15 && wave != 20)
@@ -3273,12 +3273,12 @@ public class TITAN : Photon.MonoBehaviour
                 num = 4;
             }
         }
-        if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && photonView.isMine)
+        if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
         {
             object[] parameters = new object[] { num };
             photonView.RPC("netSetAbnormalType", PhotonTargets.AllBuffered, parameters);
         }
-        else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+        else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
         {
             this.NetSetAbnormalType(num);
         }
@@ -3390,7 +3390,7 @@ public class TITAN : Photon.MonoBehaviour
             }
             this.chaseDistance *= 1.3f;
         }
-        if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.ENDLESS_TITAN || IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.SURVIVE_MODE)
+        if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.EndlessTitan || IN_GAME_MAIN_CAMERA.GameMode == GameMode.SurviveMode)
         {
             this.chaseDistance = 999999f;
         }
@@ -3469,7 +3469,7 @@ public class TITAN : Photon.MonoBehaviour
             }
             this.chaseDistance *= 1.3f;
         }
-        if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.ENDLESS_TITAN || IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.SURVIVE_MODE)
+        if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.EndlessTitan || IN_GAME_MAIN_CAMERA.GameMode == GameMode.SurviveMode)
         {
             this.chaseDistance = 999999f;
         }
@@ -3490,13 +3490,13 @@ public class TITAN : Photon.MonoBehaviour
     private void setmyLevel()
     {
         animation.cullingType = AnimationCullingType.BasedOnRenderers;
-        if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && photonView.isMine)
+        if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
         {
             object[] parameters = new object[] { this.myLevel, FengGameManagerMKII.instance.difficulty, UnityEngine.Random.Range(0, 4) };
             photonView.RPC("netSetLevel", PhotonTargets.AllBuffered, parameters);
             animation.cullingType = AnimationCullingType.AlwaysAnimate;
         }
-        else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+        else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
         {
             this.setLevel2(this.myLevel, IN_GAME_MAIN_CAMERA.difficulty, UnityEngine.Random.Range(0, 4));
         }
@@ -3547,7 +3547,7 @@ public class TITAN : Photon.MonoBehaviour
 
     private void sitdown()
     {
-        this.state = TitanState.sit;
+        this.state = TitanState.Sit;
         this.playAnimation("sit_down");
         this.getdownTime = UnityEngine.Random.Range(10f, 30f);
     }
@@ -3566,7 +3566,7 @@ public class TITAN : Photon.MonoBehaviour
         this.head = this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck/head");
         this.neck = this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck");
         this.oldHeadRotation = this.head.rotation;
-        if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.MULTIPLAYER || photonView.isMine)
+        if (IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer || photonView.isMine)
         {
             if (!this.hasSetLevel)
             {
@@ -3694,7 +3694,7 @@ public class TITAN : Photon.MonoBehaviour
 
     public void toCheckPoint(Vector3 targetPt, float r)
     {
-        this.state = TitanState.to_check_point;
+        this.state = TitanState.GoingToCheckpoint;
         this.targetCheckPt = targetPt;
         this.targetR = r;
         this.crossFade(this.runAnimation, 0.5f);
@@ -3702,7 +3702,7 @@ public class TITAN : Photon.MonoBehaviour
 
     public void toPVPCheckPoint(Vector3 targetPt, float r)
     {
-        this.state = TitanState.to_pvp_pt;
+        this.state = TitanState.GoingToPVP;
         this.targetCheckPt = targetPt;
         this.targetR = r;
         this.crossFade(this.runAnimation, 0.5f);
@@ -3734,1004 +3734,1004 @@ public class TITAN : Photon.MonoBehaviour
         d = Mathf.Clamp(d, -120f, 120f);
         this.turnDeg = d;
         this.desDeg = gameObject.transform.rotation.eulerAngles.y + this.turnDeg;
-        this.state = TitanState.turn;
+        this.state = TitanState.Turning;
     }
 
     public void DoUpdate()
     {
-        if ((!IN_GAME_MAIN_CAMERA.isPausing || IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE) && this.myDifficulty >= 0 && (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE || photonView.isMine))
+        if ((IN_GAME_MAIN_CAMERA.isPausing && IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer) ||
+            this.myDifficulty < 0 || (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && !photonView.isMine)) 
+            return;
+        
+        this.explode();
+        if (!this.nonAI)
         {
-            this.explode();
-            if (!this.nonAI)
+            if (this.activeRad < int.MaxValue && (this.state == TitanState.Idle || this.state == TitanState.Wandering || this.state == TitanState.Chasing))
             {
-                if (this.activeRad < 2147483647 && (this.state == TitanState.idle || this.state == TitanState.wander || this.state == TitanState.chase))
+                if (this.checkPoints.Count > 1)
                 {
-                    if (this.checkPoints.Count > 1)
+                    if (Vector3.Distance((Vector3) this.checkPoints[0], this.baseTransform.position) > this.activeRad)
                     {
-                        if (Vector3.Distance((Vector3) this.checkPoints[0], this.baseTransform.position) > this.activeRad)
-                        {
-                            this.toCheckPoint((Vector3) this.checkPoints[0], 10f);
-                        }
-                    }
-                    else if (Vector3.Distance(this.spawnPt, this.baseTransform.position) > this.activeRad)
-                    {
-                        this.toCheckPoint(this.spawnPt, 10f);
+                        this.toCheckPoint((Vector3) this.checkPoints[0], 10f);
                     }
                 }
-                if (this.whoHasTauntMe != null)
+                else if (Vector3.Distance(this.spawnPt, this.baseTransform.position) > this.activeRad)
                 {
-                    this.tauntTime -= Time.deltaTime;
-                    if (this.tauntTime <= 0f)
-                    {
-                        this.whoHasTauntMe = null;
-                    }
-                    this.myHero = this.whoHasTauntMe;
-                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && PhotonNetwork.isMasterClient)
-                    {
-                        object[] parameters = new object[] { this.myHero.GetPhotonView().viewID };
-                        photonView.RPC("setMyTarget", PhotonTargets.Others, parameters);
-                    }
+                    this.toCheckPoint(this.spawnPt, 10f);
                 }
             }
-            if (this.hasDie)
+            if (this.whoHasTauntMe != null)
             {
-                this.dieTime += Time.deltaTime;
-                if (this.dieTime > 2f && !this.hasDieSteam)
+                this.tauntTime -= Time.deltaTime;
+                if (this.tauntTime <= 0f)
                 {
-                    this.hasDieSteam = true;
-                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+                    this.whoHasTauntMe = null;
+                }
+                this.myHero = this.whoHasTauntMe;
+                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
+                {
+                    photonView.RPC("setMyTarget", PhotonTargets.Others, myHero.GetPhotonView().viewID);
+                }
+            }
+        }
+        if (this.hasDie)
+        {
+            this.dieTime += Time.deltaTime;
+            if (this.dieTime > 2f && !this.hasDieSteam)
+            {
+                this.hasDieSteam = true;
+                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
+                {
+                    GameObject obj2 = (GameObject) Instantiate(Resources.Load("FX/FXtitanDie1"));
+                    obj2.transform.position = this.baseTransform.Find("Amarture/Core/Controller_Body/hip").position;
+                    obj2.transform.localScale = this.baseTransform.localScale;
+                }
+                else if (photonView.isMine)
+                {
+                    PhotonNetwork.Instantiate("FX/FXtitanDie1", this.baseTransform.Find("Amarture/Core/Controller_Body/hip").position, Quaternion.Euler(-90f, 0f, 0f), 0).transform.localScale = this.baseTransform.localScale;
+                }
+            }
+            if (this.dieTime > 5f)
+            {
+                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
+                {
+                    GameObject obj3 = (GameObject) Instantiate(Resources.Load("FX/FXtitanDie"));
+                    obj3.transform.position = this.baseTransform.Find("Amarture/Core/Controller_Body/hip").position;
+                    obj3.transform.localScale = this.baseTransform.localScale;
+                    Destroy(gameObject);
+                }
+                else if (photonView.isMine)
+                {
+                    PhotonNetwork.Instantiate("FX/FXtitanDie", this.baseTransform.Find("Amarture/Core/Controller_Body/hip").position, Quaternion.Euler(-90f, 0f, 0f), 0).transform.localScale = this.baseTransform.localScale;
+                    PhotonNetwork.Destroy(gameObject);
+                    this.myDifficulty = -1;
+                }
+            }
+        }
+        else
+        {
+            if (this.state == TitanState.Hitting)
+            {
+                if (this.hitPause > 0f)
+                {
+                    this.hitPause -= Time.deltaTime;
+                    if (this.hitPause <= 0f)
                     {
-                        GameObject obj2 = (GameObject) Instantiate(Resources.Load("FX/FXtitanDie1"));
-                        obj2.transform.position = this.baseTransform.Find("Amarture/Core/Controller_Body/hip").position;
-                        obj2.transform.localScale = this.baseTransform.localScale;
-                    }
-                    else if (photonView.isMine)
-                    {
-                        PhotonNetwork.Instantiate("FX/FXtitanDie1", this.baseTransform.Find("Amarture/Core/Controller_Body/hip").position, Quaternion.Euler(-90f, 0f, 0f), 0).transform.localScale = this.baseTransform.localScale;
+                        this.baseAnimation[this.hitAnimation].speed = 1f;
+                        this.hitPause = 0f;
                     }
                 }
-                if (this.dieTime > 5f)
+                if (this.baseAnimation[this.hitAnimation].normalizedTime >= 1f)
                 {
-                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
-                    {
-                        GameObject obj3 = (GameObject) Instantiate(Resources.Load("FX/FXtitanDie"));
-                        obj3.transform.position = this.baseTransform.Find("Amarture/Core/Controller_Body/hip").position;
-                        obj3.transform.localScale = this.baseTransform.localScale;
-                        Destroy(gameObject);
-                    }
-                    else if (photonView.isMine)
-                    {
-                        PhotonNetwork.Instantiate("FX/FXtitanDie", this.baseTransform.Find("Amarture/Core/Controller_Body/hip").position, Quaternion.Euler(-90f, 0f, 0f), 0).transform.localScale = this.baseTransform.localScale;
-                        PhotonNetwork.Destroy(gameObject);
-                        this.myDifficulty = -1;
-                    }
+                    this.idle(0f);
+                }
+            }
+            if (!this.nonAI)
+            {
+                if (this.myHero == null)
+                {
+                    this.findNearestHero2();
+                }
+                if (!(this.state != TitanState.Idle && this.state != TitanState.Chasing && this.state != TitanState.Wandering || (this.whoHasTauntMe != null || UnityEngine.Random.Range(0, 100) >= 10)))
+                {
+                    this.findNearestFacingHero2();
+                }
+                if (this.myHero == null)
+                {
+                    this.myDistance = float.MaxValue;
+                }
+                else
+                {
+                    this.myDistance = Mathf.Sqrt((this.myHero.transform.position.x - this.baseTransform.position.x) * (this.myHero.transform.position.x - this.baseTransform.position.x) + (this.myHero.transform.position.z - this.baseTransform.position.z) * (this.myHero.transform.position.z - this.baseTransform.position.z));
                 }
             }
             else
             {
-                if (this.state == TitanState.hit)
+                if (this.stamina < this.maxStamina)
                 {
-                    if (this.hitPause > 0f)
+                    if (this.baseAnimation.IsPlaying("idle"))
                     {
-                        this.hitPause -= Time.deltaTime;
-                        if (this.hitPause <= 0f)
-                        {
-                            this.baseAnimation[this.hitAnimation].speed = 1f;
-                            this.hitPause = 0f;
-                        }
+                        this.stamina += Time.deltaTime * 30f;
                     }
-                    if (this.baseAnimation[this.hitAnimation].normalizedTime >= 1f)
+                    if (this.baseAnimation.IsPlaying("crawler_idle"))
                     {
-                        this.idle(0f);
+                        this.stamina += Time.deltaTime * 35f;
+                    }
+                    if (this.baseAnimation.IsPlaying("run_walk"))
+                    {
+                        this.stamina += Time.deltaTime * 10f;
                     }
                 }
-                if (!this.nonAI)
+                if (this.baseAnimation.IsPlaying("run_abnormal_1"))
                 {
-                    if (this.myHero == null)
-                    {
-                        this.findNearestHero2();
-                    }
-                    if (!(this.state == TitanState.idle || this.state == TitanState.chase || this.state == TitanState.wander ? this.whoHasTauntMe != null || UnityEngine.Random.Range(0, 100) >= 10 : true))
-                    {
-                        this.findNearestFacingHero2();
-                    }
-                    if (this.myHero == null)
-                    {
-                        this.myDistance = float.MaxValue;
-                    }
-                    else
-                    {
-                        this.myDistance = Mathf.Sqrt((this.myHero.transform.position.x - this.baseTransform.position.x) * (this.myHero.transform.position.x - this.baseTransform.position.x) + (this.myHero.transform.position.z - this.baseTransform.position.z) * (this.myHero.transform.position.z - this.baseTransform.position.z));
-                    }
+                    this.stamina -= Time.deltaTime * 5f;
                 }
-                else
+                if (this.baseAnimation.IsPlaying("crawler_run"))
                 {
-                    if (this.stamina < this.maxStamina)
-                    {
-                        if (this.baseAnimation.IsPlaying("idle"))
-                        {
-                            this.stamina += Time.deltaTime * 30f;
-                        }
-                        if (this.baseAnimation.IsPlaying("crawler_idle"))
-                        {
-                            this.stamina += Time.deltaTime * 35f;
-                        }
-                        if (this.baseAnimation.IsPlaying("run_walk"))
-                        {
-                            this.stamina += Time.deltaTime * 10f;
-                        }
-                    }
-                    if (this.baseAnimation.IsPlaying("run_abnormal_1"))
-                    {
-                        this.stamina -= Time.deltaTime * 5f;
-                    }
-                    if (this.baseAnimation.IsPlaying("crawler_run"))
-                    {
-                        this.stamina -= Time.deltaTime * 15f;
-                    }
-                    if (this.stamina < 0f)
-                    {
-                        this.stamina = 0f;
-                    }
-                    if (!IN_GAME_MAIN_CAMERA.isPausing)
-                    {
-                        GameObject.Find("stamina_titan").transform.localScale = new Vector3(this.stamina, 16f);
-                    }
+                    this.stamina -= Time.deltaTime * 15f;
                 }
-                if (this.state == TitanState.laugh)
+                if (this.stamina < 0f)
                 {
-                    if (this.baseAnimation["laugh"].normalizedTime >= 1f)
-                    {
-                        this.idle(2f);
-                    }
+                    this.stamina = 0f;
                 }
-                else if (this.state != TitanState.idle)
+                if (!IN_GAME_MAIN_CAMERA.isPausing)
                 {
-                    if (this.state == TitanState.attack)
+                    GameObject.Find("stamina_titan").transform.localScale = new Vector3(this.stamina, 16f);
+                }
+            }
+            if (this.state == TitanState.Laughing)
+            {
+                if (this.baseAnimation["laugh"].normalizedTime >= 1f)
+                {
+                    this.idle(2f);
+                }
+            }
+            else if (this.state != TitanState.Idle)
+            {
+                if (this.state == TitanState.Attacking)
+                {
+                    if (this.attackAnimation == "combo")
                     {
-                        if (this.attackAnimation == "combo")
+                        if (this.nonAI)
                         {
-                            if (this.nonAI)
+                            if (this.controller.isAttackDown)
                             {
-                                if (this.controller.isAttackDown)
-                                {
-                                    this.nonAIcombo = true;
-                                }
-                                if (!(this.nonAIcombo || this.baseAnimation["attack_" + this.attackAnimation].normalizedTime < 0.385f))
-                                {
-                                    this.idle(0f);
-                                    return;
-                                }
+                                this.nonAIcombo = true;
                             }
-                            if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 0.11f && this.baseAnimation["attack_" + this.attackAnimation].normalizedTime <= 0.16f)
-                            {
-                                GameObject obj5 = this.checkIfHitHand(this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R/hand_R_001"));
-                                if (obj5 != null)
-                                {
-                                    Vector3 position = this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest").position;
-                                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
-                                    {
-                                        obj5.GetComponent<HERO>().die((obj5.transform.position - position) * 15f * this.myLevel, false);
-                                    }
-                                    else if (!(IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.MULTIPLAYER || !photonView.isMine || obj5.GetComponent<HERO>().HasDied()))
-                                    {
-                                        obj5.GetComponent<HERO>().markDie();
-                                        object[] objArray3 = new object[] { (obj5.transform.position - position) * 15f * this.myLevel, false, !this.nonAI ? -1 : photonView.viewID, name, true };
-                                        obj5.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray3);
-                                    }
-                                }
-                            }
-                            if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 0.27f && this.baseAnimation["attack_" + this.attackAnimation].normalizedTime <= 0.32f)
-                            {
-                                GameObject obj6 = this.checkIfHitHand(this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L/hand_L_001"));
-                                if (obj6 != null)
-                                {
-                                    Vector3 vector3 = this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest").position;
-                                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
-                                    {
-                                        obj6.GetComponent<HERO>().die((obj6.transform.position - vector3) * 15f * this.myLevel, false);
-                                    }
-                                    else if (!(IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.MULTIPLAYER || !photonView.isMine || obj6.GetComponent<HERO>().HasDied()))
-                                    {
-                                        obj6.GetComponent<HERO>().markDie();
-                                        object[] objArray4 = new object[] { (obj6.transform.position - vector3) * 15f * this.myLevel, false, !this.nonAI ? -1 : photonView.viewID, name, true };
-                                        obj6.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray4);
-                                    }
-                                }
-                            }
-                        }
-                        if (this.attackCheckTimeA != 0f && this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= this.attackCheckTimeA && this.baseAnimation["attack_" + this.attackAnimation].normalizedTime <= this.attackCheckTimeB)
-                        {
-                            if (this.leftHandAttack)
-                            {
-                                GameObject obj7 = this.checkIfHitHand(this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L/hand_L_001"));
-                                if (obj7 != null)
-                                {
-                                    Vector3 vector4 = this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest").position;
-                                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
-                                    {
-                                        obj7.GetComponent<HERO>().die((obj7.transform.position - vector4) * 15f * this.myLevel, false);
-                                    }
-                                    else if (!(IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.MULTIPLAYER || !photonView.isMine || obj7.GetComponent<HERO>().HasDied()))
-                                    {
-                                        obj7.GetComponent<HERO>().markDie();
-                                        object[] objArray5 = new object[] { (obj7.transform.position - vector4) * 15f * this.myLevel, false, !this.nonAI ? -1 : photonView.viewID, name, true };
-                                        obj7.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray5);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                GameObject obj8 = this.checkIfHitHand(this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R/hand_R_001"));
-                                if (obj8 != null)
-                                {
-                                    Vector3 vector5 = this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest").position;
-                                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
-                                    {
-                                        obj8.GetComponent<HERO>().die((obj8.transform.position - vector5) * 15f * this.myLevel, false);
-                                    }
-                                    else if (!(IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.MULTIPLAYER || !photonView.isMine || obj8.GetComponent<HERO>().HasDied()))
-                                    {
-                                        obj8.GetComponent<HERO>().markDie();
-                                        object[] objArray6 = new object[] { (obj8.transform.position - vector5) * 15f * this.myLevel, false, !this.nonAI ? -1 : photonView.viewID, name, true };
-                                        obj8.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray6);
-                                    }
-                                }
-                            }
-                        }
-                        if (!this.attacked && this.attackCheckTime != 0f && this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= this.attackCheckTime)
-                        {
-                            GameObject obj9;
-                            this.attacked = true;
-                            this.fxPosition = this.baseTransform.Find("ap_" + this.attackAnimation).position;
-                            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
-                            {
-                                obj9 = PhotonNetwork.Instantiate("FX/" + this.fxName, this.fxPosition, this.fxRotation, 0);
-                            }
-                            else
-                            {
-                                obj9 = (GameObject) Instantiate(Resources.Load("FX/" + this.fxName), this.fxPosition, this.fxRotation);
-                            }
-                            if (this.nonAI)
-                            {
-                                obj9.transform.localScale = this.baseTransform.localScale * 1.5f;
-                                if (obj9.GetComponent<EnemyfxIDcontainer>() != null)
-                                {
-                                    obj9.GetComponent<EnemyfxIDcontainer>().myOwnerViewID = photonView.viewID;
-                                }
-                            }
-                            else
-                            {
-                                obj9.transform.localScale = this.baseTransform.localScale;
-                            }
-                            if (obj9.GetComponent<EnemyfxIDcontainer>() != null)
-                            {
-                                obj9.GetComponent<EnemyfxIDcontainer>().titanName = name;
-                            }
-                            float b = 1f - Vector3.Distance(this.currentCamera.transform.position, obj9.transform.position) * 0.05f;
-                            b = Mathf.Min(1f, b);
-                            this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(b, b, 0.95f);
-                        }
-                        if (this.attackAnimation == "throw")
-                        {
-                            if (!this.attacked && this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 0.11f)
-                            {
-                                this.attacked = true;
-                                Transform transform = this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R/hand_R_001");
-                                if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
-                                {
-                                    this.throwRock = PhotonNetwork.Instantiate("FX/rockThrow", transform.position, transform.rotation, 0);
-                                }
-                                else
-                                {
-                                    this.throwRock = (GameObject) Instantiate(Resources.Load("FX/rockThrow"), transform.position, transform.rotation);
-                                }
-                                this.throwRock.transform.localScale = this.baseTransform.localScale;
-                                Transform transform1 = this.throwRock.transform;
-                                transform1.position -= this.throwRock.transform.forward * 2.5f * this.myLevel;
-                                if (this.throwRock.GetComponent<EnemyfxIDcontainer>() != null)
-                                {
-                                    if (this.nonAI)
-                                    {
-                                        this.throwRock.GetComponent<EnemyfxIDcontainer>().myOwnerViewID = photonView.viewID;
-                                    }
-                                    this.throwRock.GetComponent<EnemyfxIDcontainer>().titanName = name;
-                                }
-                                this.throwRock.transform.parent = transform;
-                                if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
-                                {
-                                    object[] objArray7 = new object[] { photonView.viewID, this.baseTransform.localScale, this.throwRock.transform.localPosition, this.myLevel };
-                                    this.throwRock.GetPhotonView().RPC("initRPC", PhotonTargets.Others, objArray7);
-                                }
-                            }
-                            if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 0.11f)
-                            {
-                                float y = Mathf.Atan2(this.myHero.transform.position.x - this.baseTransform.position.x, this.myHero.transform.position.z - this.baseTransform.position.z) * 57.29578f;
-                                this.baseGameObjectTransform.rotation = Quaternion.Euler(0f, y, 0f);
-                            }
-                            if (this.throwRock != null && this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 0.62f)
-                            {
-                                Vector3 vector6;
-                                float num3 = 1f;
-                                float num4 = -20f;
-                                if (this.myHero != null)
-                                {
-                                    vector6 = (this.myHero.transform.position - this.throwRock.transform.position) / num3 + this.myHero.rigidbody.velocity;
-                                    float num5 = this.myHero.transform.position.y + 2f * this.myLevel;
-                                    float num6 = num5 - this.throwRock.transform.position.y;
-                                    vector6 = new Vector3(vector6.x, num6 / num3 - 0.5f * num4 * num3, vector6.z);
-                                }
-                                else
-                                {
-                                    vector6 = this.baseTransform.forward * 60f + Vector3.up * 10f;
-                                }
-                                this.throwRock.GetComponent<RockThrow>().launch(vector6);
-                                this.throwRock.transform.parent = null;
-                                this.throwRock = null;
-                            }
-                        }
-                        if (this.attackAnimation == "jumper_0" || this.attackAnimation == "crawler_jump_0")
-                        {
-                            if (!this.attacked)
-                            {
-                                if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 0.68f)
-                                {
-                                    this.attacked = true;
-                                    if (this.myHero == null || this.nonAI)
-                                    {
-                                        float num7 = 120f;
-                                        Vector3 vector7 = this.baseTransform.forward * this.speed + Vector3.up * num7;
-                                        if (this.nonAI && this.abnormalType == AbnormalType.TYPE_CRAWLER)
-                                        {
-                                            num7 = 100f;
-                                            float a = this.speed * 2.5f;
-                                            a = Mathf.Min(a, 100f);
-                                            vector7 = this.baseTransform.forward * a + Vector3.up * num7;
-                                        }
-                                        this.baseRigidBody.velocity = vector7;
-                                    }
-                                    else
-                                    {
-                                        float num18;
-                                        float num9 = this.myHero.rigidbody.velocity.y;
-                                        float num10 = -20f;
-                                        float gravity = this.gravity;
-                                        float num12 = this.neck.position.y;
-                                        float num13 = (num10 - gravity) * 0.5f;
-                                        float num14 = num9;
-                                        float num15 = this.myHero.transform.position.y - num12;
-                                        float num16 = Mathf.Abs((Mathf.Sqrt(num14 * num14 - 4f * num13 * num15) - num14) / (2f * num13));
-                                        Vector3 vector8 = this.myHero.transform.position + this.myHero.rigidbody.velocity * num16 + Vector3.up * 0.5f * num10 * num16 * num16;
-                                        float num17 = vector8.y;
-                                        if (num15 < 0f || num17 - num12 < 0f)
-                                        {
-                                            num18 = 60f;
-                                            float num19 = this.speed * 2.5f;
-                                            num19 = Mathf.Min(num19, 100f);
-                                            Vector3 vector9 = this.baseTransform.forward * num19 + Vector3.up * num18;
-                                            this.baseRigidBody.velocity = vector9;
-                                            return;
-                                        }
-                                        float num20 = num17 - num12;
-                                        float num21 = Mathf.Sqrt(2f * num20 / this.gravity);
-                                        num18 = this.gravity * num21;
-                                        num18 = Mathf.Max(30f, num18);
-                                        Vector3 vector10 = (vector8 - this.baseTransform.position) / num16;
-                                        this.abnorma_jump_bite_horizon_v = new Vector3(vector10.x, 0f, vector10.z);
-                                        Vector3 velocity = this.baseRigidBody.velocity;
-                                        Vector3 force = new Vector3(this.abnorma_jump_bite_horizon_v.x, velocity.y, this.abnorma_jump_bite_horizon_v.z) - velocity;
-                                        this.baseRigidBody.AddForce(force, ForceMode.VelocityChange);
-                                        this.baseRigidBody.AddForce(Vector3.up * num18, ForceMode.VelocityChange);
-                                        float num22 = Vector2.Angle(new Vector2(this.baseTransform.position.x, this.baseTransform.position.z), new Vector2(this.myHero.transform.position.x, this.myHero.transform.position.z));
-                                        num22 = Mathf.Atan2(this.myHero.transform.position.x - this.baseTransform.position.x, this.myHero.transform.position.z - this.baseTransform.position.z) * 57.29578f;
-                                        this.baseGameObjectTransform.rotation = Quaternion.Euler(0f, num22, 0f);
-                                    }
-                                }
-                                else
-                                {
-                                    this.baseRigidBody.velocity = Vector3.zero;
-                                }
-                            }
-                            if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 1f)
-                            {
-                                Debug.DrawLine(this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck/head").position + Vector3.up * 1.5f * this.myLevel, this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck/head").position + Vector3.up * 1.5f * this.myLevel + Vector3.up * 3f * this.myLevel, Color.green);
-                                Debug.DrawLine(this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck/head").position + Vector3.up * 1.5f * this.myLevel, this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck/head").position + Vector3.up * 1.5f * this.myLevel + Vector3.forward * 3f * this.myLevel, Color.green);
-                                GameObject obj10 = this.checkIfHitHead(this.head, 3f);
-                                if (obj10 != null)
-                                {
-                                    Vector3 vector13 = this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest").position;
-                                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
-                                    {
-                                        obj10.GetComponent<HERO>().die((obj10.transform.position - vector13) * 15f * this.myLevel, false);
-                                    }
-                                    else if (!(IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.MULTIPLAYER || !photonView.isMine || obj10.GetComponent<HERO>().HasDied()))
-                                    {
-                                        obj10.GetComponent<HERO>().markDie();
-                                        object[] objArray8 = new object[] { (obj10.transform.position - vector13) * 15f * this.myLevel, true, !this.nonAI ? -1 : photonView.viewID, name, true };
-                                        obj10.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray8);
-                                    }
-                                    if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
-                                    {
-                                        this.attackAnimation = "crawler_jump_1";
-                                    }
-                                    else
-                                    {
-                                        this.attackAnimation = "jumper_1";
-                                    }
-                                    this.playAnimation("attack_" + this.attackAnimation);
-                                }
-                                if (Mathf.Abs(this.baseRigidBody.velocity.y) < 0.5f || this.baseRigidBody.velocity.y < 0f || this.IsGrounded())
-                                {
-                                    if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
-                                    {
-                                        this.attackAnimation = "crawler_jump_1";
-                                    }
-                                    else
-                                    {
-                                        this.attackAnimation = "jumper_1";
-                                    }
-                                    this.playAnimation("attack_" + this.attackAnimation);
-                                }
-                            }
-                        }
-                        else if (this.attackAnimation == "jumper_1" || this.attackAnimation == "crawler_jump_1")
-                        {
-                            if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 1f && this.grounded)
-                            {
-                                GameObject obj11;
-                                if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
-                                {
-                                    this.attackAnimation = "crawler_jump_2";
-                                }
-                                else
-                                {
-                                    this.attackAnimation = "jumper_2";
-                                }
-                                this.crossFade("attack_" + this.attackAnimation, 0.1f);
-                                this.fxPosition = this.baseTransform.position;
-                                if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
-                                {
-                                    obj11 = PhotonNetwork.Instantiate("FX/boom2", this.fxPosition, this.fxRotation, 0);
-                                }
-                                else
-                                {
-                                    obj11 = (GameObject) Instantiate(Resources.Load("FX/boom2"), this.fxPosition, this.fxRotation);
-                                }
-                                obj11.transform.localScale = this.baseTransform.localScale * 1.6f;
-                                float num23 = 1f - Vector3.Distance(this.currentCamera.transform.position, obj11.transform.position) * 0.05f;
-                                num23 = Mathf.Min(1f, num23);
-                                this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(num23, num23, 0.95f);
-                            }
-                        }
-                        else if (this.attackAnimation == "jumper_2" || this.attackAnimation == "crawler_jump_2")
-                        {
-                            if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 1f)
+                            if (!(this.nonAIcombo || this.baseAnimation["attack_" + this.attackAnimation].normalizedTime < 0.385f))
                             {
                                 this.idle(0f);
-                            }
-                        }
-                        else if (this.baseAnimation.IsPlaying("tired"))
-                        {
-                            if (this.baseAnimation["tired"].normalizedTime >= 1f + Mathf.Max(this.attackEndWait * 2f, 3f))
-                            {
-                                this.idle(UnityEngine.Random.Range(this.attackWait - 1f, 3f));
-                            }
-                        }
-                        else if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 1f + this.attackEndWait)
-                        {
-                            if (this.nextAttackAnimation != null)
-                            {
-                                this.attack2(this.nextAttackAnimation);
-                            }
-                            else if (this.attackAnimation == "quick_turn_l" || this.attackAnimation == "quick_turn_r")
-                            {
-                                this.baseTransform.rotation = Quaternion.Euler(this.baseTransform.rotation.eulerAngles.x, this.baseTransform.rotation.eulerAngles.y + 180f, this.baseTransform.rotation.eulerAngles.z);
-                                this.idle(UnityEngine.Random.Range(0.5f, 1f));
-                                this.playAnimation("idle");
-                            }
-                            else if (this.abnormalType == AbnormalType.TYPE_I || this.abnormalType == AbnormalType.TYPE_JUMPER)
-                            {
-                                this.attackCount++;
-                                if (this.attackCount > 3 && this.attackAnimation == "abnormal_getup")
-                                {
-                                    this.attackCount = 0;
-                                    this.crossFade("tired", 0.5f);
-                                }
-                                else
-                                {
-                                    this.idle(UnityEngine.Random.Range(this.attackWait - 1f, 3f));
-                                }
-                            }
-                            else
-                            {
-                                this.idle(UnityEngine.Random.Range(this.attackWait - 1f, 3f));
-                            }
-                        }
-                    }
-                    else if (this.state == TitanState.grab)
-                    {
-                        if (this.baseAnimation["grab_" + this.attackAnimation].normalizedTime >= this.attackCheckTimeA && this.baseAnimation["grab_" + this.attackAnimation].normalizedTime <= this.attackCheckTimeB && this.grabbedTarget == null)
-                        {
-                            GameObject grabTarget = this.checkIfHitHand(this.currentGrabHand);
-                            if (grabTarget != null)
-                            {
-                                if (this.isGrabHandLeft)
-                                {
-                                    this.eatSetL(grabTarget);
-                                    this.grabbedTarget = grabTarget;
-                                }
-                                else
-                                {
-                                    this.eatSet(grabTarget);
-                                    this.grabbedTarget = grabTarget;
-                                }
-                            }
-                        }
-                        if (this.baseAnimation["grab_" + this.attackAnimation].normalizedTime >= 1f)
-                        {
-                            if (this.grabbedTarget != null)
-                            {
-                                this.eat();
-                            }
-                            else
-                            {
-                                this.idle(UnityEngine.Random.Range(this.attackWait - 1f, 2f));
-                            }
-                        }
-                    }
-                    else if (this.state == TitanState.eat)
-                    {
-                        if (!(this.attacked || this.baseAnimation[this.attackAnimation].normalizedTime < 0.48f))
-                        {
-                            this.attacked = true;
-                            this.justEatHero(this.grabbedTarget, this.currentGrabHand);
-                        }
-                        if (this.grabbedTarget != null)
-                        {
-                        }
-                        if (this.baseAnimation[this.attackAnimation].normalizedTime >= 1f)
-                        {
-                            this.idle(0f);
-                        }
-                    }
-                    else if (this.state == TitanState.chase)
-                    {
-                        if (this.myHero == null)
-                        {
-                            this.idle(0f);
-                        }
-                        else if (!this.longRangeAttackCheck2())
-                        {
-                            if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.PVP_CAPTURE && this.PVPfromCheckPt != null && this.myDistance > this.chaseDistance)
-                            {
-                                this.idle(0f);
-                            }
-                            else if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
-                            {
-                                Vector3 vector14 = this.myHero.transform.position - this.baseTransform.position;
-                                float current = -Mathf.Atan2(vector14.z, vector14.x) * 57.29578f;
-                                float f = -Mathf.DeltaAngle(current, this.baseGameObjectTransform.rotation.eulerAngles.y - 90f);
-                                if (this.myDistance < this.attackDistance * 3f && UnityEngine.Random.Range(0f, 1f) < 0.1f && Mathf.Abs(f) < 90f && this.myHero.transform.position.y < this.neck.position.y + 30f * this.myLevel && this.myHero.transform.position.y > this.neck.position.y + 10f * this.myLevel)
-                                {
-                                    this.attack2("crawler_jump_0");
-                                }
-                                else
-                                {
-                                    GameObject obj13 = this.checkIfHitCrawlerMouth(this.head, 2.2f);
-                                    if (obj13 != null)
-                                    {
-                                        Vector3 vector15 = this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest").position;
-                                        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
-                                        {
-                                            obj13.GetComponent<HERO>().die((obj13.transform.position - vector15) * 15f * this.myLevel, false);
-                                        }
-                                        else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && photonView.isMine)
-                                        {
-                                            if (obj13.GetComponent<TITAN_EREN>() != null)
-                                            {
-                                                obj13.GetComponent<TITAN_EREN>().hitByTitan();
-                                            }
-                                            else if (!obj13.GetComponent<HERO>().HasDied())
-                                            {
-                                                obj13.GetComponent<HERO>().markDie();
-                                                object[] objArray9 = new object[] { (obj13.transform.position - vector15) * 15f * this.myLevel, true, !this.nonAI ? -1 : photonView.viewID, name, true };
-                                                obj13.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray9);
-                                            }
-                                        }
-                                    }
-                                    if (this.myDistance < this.attackDistance && UnityEngine.Random.Range(0f, 1f) < 0.02f)
-                                    {
-                                        this.idle(UnityEngine.Random.Range(0.05f, 0.2f));
-                                    }
-                                }
-                            }
-                            else if (this.abnormalType == AbnormalType.TYPE_JUMPER && (this.myDistance > this.attackDistance && this.myHero.transform.position.y > this.head.position.y + 4f * this.myLevel || this.myHero.transform.position.y > this.head.position.y + 4f * this.myLevel) && Vector3.Distance(this.baseTransform.position, this.myHero.transform.position) < 1.5f * this.myHero.transform.position.y)
-                            {
-                                this.attack2("jumper_0");
-                            }
-                            else if (this.myDistance < this.attackDistance)
-                            {
-                                this.idle(UnityEngine.Random.Range(0.05f, 0.2f));
-                            }
-                        }
-                    }
-                    else if (this.state == TitanState.wander)
-                    {
-                        float num26 = 0f;
-                        float num27 = 0f;
-                        if (this.myDistance < this.chaseDistance || this.whoHasTauntMe != null)
-                        {
-                            Vector3 vector16 = this.myHero.transform.position - this.baseTransform.position;
-                            num26 = -Mathf.Atan2(vector16.z, vector16.x) * 57.29578f;
-                            num27 = -Mathf.DeltaAngle(num26, this.baseGameObjectTransform.rotation.eulerAngles.y - 90f);
-                            if (this.isAlarm || Mathf.Abs(num27) < 90f)
-                            {
-                                this.chase();
-                                return;
-                            }
-                            if (!(this.isAlarm || this.myDistance >= this.chaseDistance * 0.1f))
-                            {
-                                this.chase();
                                 return;
                             }
                         }
-                        if (UnityEngine.Random.Range(0f, 1f) < 0.01f)
+                        if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 0.11f && this.baseAnimation["attack_" + this.attackAnimation].normalizedTime <= 0.16f)
                         {
-                            this.idle(0f);
-                        }
-                    }
-                    else if (this.state == TitanState.turn)
-                    {
-                        this.baseGameObjectTransform.rotation = Quaternion.Lerp(this.baseGameObjectTransform.rotation, Quaternion.Euler(0f, this.desDeg, 0f), Time.deltaTime * Mathf.Abs(this.turnDeg) * 0.015f);
-                        if (this.baseAnimation[this.turnAnimation].normalizedTime >= 1f)
-                        {
-                            this.idle(0f);
-                        }
-                    }
-                    else if (this.state == TitanState.hit_eye)
-                    {
-                        if (this.baseAnimation.IsPlaying("sit_hit_eye") && this.baseAnimation["sit_hit_eye"].normalizedTime >= 1f)
-                        {
-                            this.remainSitdown();
-                        }
-                        else if (this.baseAnimation.IsPlaying("hit_eye") && this.baseAnimation["hit_eye"].normalizedTime >= 1f)
-                        {
-                            if (this.nonAI)
+                            GameObject obj5 = this.checkIfHitHand(this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R/hand_R_001"));
+                            if (obj5 != null)
                             {
-                                this.idle(0f);
-                            }
-                            else
-                            {
-                                this.attack2("combo_1");
-                            }
-                        }
-                    }
-                    else if (this.state == TitanState.to_check_point)
-                    {
-                        if (this.checkPoints.Count <= 0 && this.myDistance < this.attackDistance)
-                        {
-                            string decidedAction = string.Empty;
-                            string[] attackStrategy = this.GetAttackStrategy();
-                            if (attackStrategy != null)
-                            {
-                                decidedAction = attackStrategy[UnityEngine.Random.Range(0, attackStrategy.Length)];
-                            }
-                            if (this.executeAttack2(decidedAction))
-                            {
-                                return;
-                            }
-                        }
-                        if (Vector3.Distance(this.baseTransform.position, this.targetCheckPt) < this.targetR)
-                        {
-                            if (this.checkPoints.Count > 0)
-                            {
-                                if (this.checkPoints.Count == 1)
+                                Vector3 position = this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest").position;
+                                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                                 {
-                                    if (IN_GAME_MAIN_CAMERA.gamemode == GAMEMODE.BOSS_FIGHT_CT)
-                                    {
-                                        this.MultiplayerManager.GameLose();
-                                        this.checkPoints = new ArrayList();
-                                        this.idle(0f);
-                                    }
+                                    obj5.GetComponent<HERO>().die((obj5.transform.position - position) * 15f * this.myLevel, false);
                                 }
-                                else
+                                else if (!(IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer || !photonView.isMine || obj5.GetComponent<HERO>().HasDied()))
                                 {
-                                    if (this.checkPoints.Count == 4)
-                                    {
-                                        this.MultiplayerManager.SendChatContentInfo("<color=#A8FF24>*WARNING!* An abnormal titan is approaching the north gate!</color>");
-                                    }
-                                    Vector3 vector17 = (Vector3) this.checkPoints[0];
-                                    this.targetCheckPt = vector17;
-                                    this.checkPoints.RemoveAt(0);
-                                }
-                            }
-                            else
-                            {
-                                this.idle(0f);
-                            }
-                        }
-                    }
-                    else if (this.state == TitanState.to_pvp_pt)
-                    {
-                        if (this.myDistance < this.chaseDistance * 0.7f)
-                        {
-                            this.chase();
-                        }
-                        if (Vector3.Distance(this.baseTransform.position, this.targetCheckPt) < this.targetR)
-                        {
-                            this.idle(0f);
-                        }
-                    }
-                    else if (this.state == TitanState.random_run)
-                    {
-                        this.random_run_time -= Time.deltaTime;
-                        if (Vector3.Distance(this.baseTransform.position, this.targetCheckPt) < this.targetR || this.random_run_time <= 0f)
-                        {
-                            this.idle(0f);
-                        }
-                    }
-                    else if (this.state == TitanState.down)
-                    {
-                        this.getdownTime -= Time.deltaTime;
-                        if (this.baseAnimation.IsPlaying("sit_hunt_down") && this.baseAnimation["sit_hunt_down"].normalizedTime >= 1f)
-                        {
-                            this.playAnimation("sit_idle");
-                        }
-                        if (this.getdownTime <= 0f)
-                        {
-                            this.crossFade("sit_getup", 0.1f);
-                        }
-                        if (this.baseAnimation.IsPlaying("sit_getup") && this.baseAnimation["sit_getup"].normalizedTime >= 1f)
-                        {
-                            this.idle(0f);
-                        }
-                    }
-                    else if (this.state == TitanState.sit)
-                    {
-                        this.getdownTime -= Time.deltaTime;
-                        this.angle = 0f;
-                        this.between2 = 0f;
-                        if (this.myDistance < this.chaseDistance || this.whoHasTauntMe != null)
-                        {
-                            if (this.myDistance < 50f)
-                            {
-                                this.isAlarm = true;
-                            }
-                            else
-                            {
-                                Vector3 vector18 = this.myHero.transform.position - this.baseTransform.position;
-                                this.angle = -Mathf.Atan2(vector18.z, vector18.x) * 57.29578f;
-                                this.between2 = -Mathf.DeltaAngle(this.angle, this.baseGameObjectTransform.rotation.eulerAngles.y - 90f);
-                                if (Mathf.Abs(this.between2) < 100f)
-                                {
-                                    this.isAlarm = true;
+                                    obj5.GetComponent<HERO>().markDie();
+                                    object[] objArray3 = new object[] { (obj5.transform.position - position) * 15f * this.myLevel, false, !this.nonAI ? -1 : photonView.viewID, name, true };
+                                    obj5.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray3);
                                 }
                             }
                         }
-                        if (this.baseAnimation.IsPlaying("sit_down") && this.baseAnimation["sit_down"].normalizedTime >= 1f)
+                        if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 0.27f && this.baseAnimation["attack_" + this.attackAnimation].normalizedTime <= 0.32f)
                         {
-                            this.playAnimation("sit_idle");
-                        }
-                        if (!(this.getdownTime <= 0f || this.isAlarm ? !this.baseAnimation.IsPlaying("sit_idle") : true))
-                        {
-                            this.crossFade("sit_getup", 0.1f);
-                        }
-                        if (this.baseAnimation.IsPlaying("sit_getup") && this.baseAnimation["sit_getup"].normalizedTime >= 1f)
-                        {
-                            this.idle(0f);
-                        }
-                    }
-                    else if (this.state == TitanState.recover)
-                    {
-                        this.getdownTime -= Time.deltaTime;
-                        if (this.getdownTime <= 0f)
-                        {
-                            this.idle(0f);
-                        }
-                        if (this.baseAnimation.IsPlaying("idle_recovery") && this.baseAnimation["idle_recovery"].normalizedTime >= 1f)
-                        {
-                            this.idle(0f);
-                        }
-                    }
-                }
-                else if (this.nonAI)
-                {
-                    if (!IN_GAME_MAIN_CAMERA.isPausing)
-                    {
-                        this.pt();
-                        if (this.abnormalType != AbnormalType.TYPE_CRAWLER)
-                        {
-                            if (this.controller.isAttackDown && this.stamina > 25f)
+                            GameObject obj6 = this.checkIfHitHand(this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L/hand_L_001"));
+                            if (obj6 != null)
                             {
-                                this.stamina -= 25f;
-                                this.attack2("combo_1");
-                            }
-                            else if (this.controller.isAttackIIDown && this.stamina > 50f)
-                            {
-                                this.stamina -= 50f;
-                                this.attack2("abnormal_jump");
-                            }
-                            else if (this.controller.isJumpDown && this.stamina > 15f)
-                            {
-                                this.stamina -= 15f;
-                                this.attack2("jumper_0");
-                            }
-                        }
-                        else if (this.controller.isAttackDown && this.stamina > 40f)
-                        {
-                            this.stamina -= 40f;
-                            this.attack2("crawler_jump_0");
-                        }
-                        if (this.controller.isSuicide)
-                        {
-                            this.suicide();
-                        }
-                    }
-                }
-                else if (this.sbtime > 0f)
-                {
-                    this.sbtime -= Time.deltaTime;
-                }
-                else
-                {
-                    if (!this.isAlarm)
-                    {
-                        if (this.abnormalType != AbnormalType.TYPE_PUNK && this.abnormalType != AbnormalType.TYPE_CRAWLER && UnityEngine.Random.Range(0f, 1f) < 0.005f)
-                        {
-                            this.sitdown();
-                            return;
-                        }
-                        if (UnityEngine.Random.Range(0f, 1f) < 0.02f)
-                        {
-                            this.wander(0f);
-                            return;
-                        }
-                        if (UnityEngine.Random.Range(0f, 1f) < 0.01f)
-                        {
-                            this.turn(UnityEngine.Random.Range(30, 120));
-                            return;
-                        }
-                        if (UnityEngine.Random.Range(0f, 1f) < 0.01f)
-                        {
-                            this.turn(UnityEngine.Random.Range(-30, -120));
-                            return;
-                        }
-                    }
-                    this.angle = 0f;
-                    this.between2 = 0f;
-                    if (this.myDistance < this.chaseDistance || this.whoHasTauntMe != null)
-                    {
-                        Vector3 vector = this.myHero.transform.position - this.baseTransform.position;
-                        this.angle = -Mathf.Atan2(vector.z, vector.x) * 57.29578f;
-                        this.between2 = -Mathf.DeltaAngle(this.angle, this.baseGameObjectTransform.rotation.eulerAngles.y - 90f);
-                        if (this.myDistance >= this.attackDistance)
-                        {
-                            if (this.isAlarm || Mathf.Abs(this.between2) < 90f)
-                            {
-                                this.chase();
-                                return;
-                            }
-                            if (!(this.isAlarm || this.myDistance >= this.chaseDistance * 0.1f))
-                            {
-                                this.chase();
-                                return;
+                                Vector3 vector3 = this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest").position;
+                                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
+                                {
+                                    obj6.GetComponent<HERO>().die((obj6.transform.position - vector3) * 15f * this.myLevel, false);
+                                }
+                                else if (!(IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer || !photonView.isMine || obj6.GetComponent<HERO>().HasDied()))
+                                {
+                                    obj6.GetComponent<HERO>().markDie();
+                                    object[] objArray4 = new object[] { (obj6.transform.position - vector3) * 15f * this.myLevel, false, !this.nonAI ? -1 : photonView.viewID, name, true };
+                                    obj6.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray4);
+                                }
                             }
                         }
                     }
-                    if (!this.longRangeAttackCheck2())
+                    if (this.attackCheckTimeA != 0f && this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= this.attackCheckTimeA && this.baseAnimation["attack_" + this.attackAnimation].normalizedTime <= this.attackCheckTimeB)
                     {
-                        if (this.myDistance < this.chaseDistance)
+                        if (this.leftHandAttack)
                         {
-                            if (this.abnormalType == AbnormalType.TYPE_JUMPER && (this.myDistance > this.attackDistance || this.myHero.transform.position.y > this.head.position.y + 4f * this.myLevel) && Mathf.Abs(this.between2) < 120f && Vector3.Distance(this.baseTransform.position, this.myHero.transform.position) < 1.5f * this.myHero.transform.position.y)
+                            GameObject obj7 = this.checkIfHitHand(this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L/hand_L_001"));
+                            if (obj7 != null)
                             {
-                                this.attack2("jumper_0");
-                                return;
-                            }
-                            if (this.abnormalType == AbnormalType.TYPE_CRAWLER && this.myDistance < this.attackDistance * 3f && Mathf.Abs(this.between2) < 90f && this.myHero.transform.position.y < this.neck.position.y + 30f * this.myLevel && this.myHero.transform.position.y > this.neck.position.y + 10f * this.myLevel)
-                            {
-                                this.attack2("crawler_jump_0");
-                                return;
-                            }
-                        }
-                        if (this.abnormalType == AbnormalType.TYPE_PUNK && this.myDistance < 90f && Mathf.Abs(this.between2) > 90f)
-                        {
-                            if (UnityEngine.Random.Range(0f, 1f) < 0.4f)
-                            {
-                                this.randomRun(this.baseTransform.position + new Vector3(UnityEngine.Random.Range(-50f, 50f), UnityEngine.Random.Range(-50f, 50f), UnityEngine.Random.Range(-50f, 50f)), 10f);
-                            }
-                            if (UnityEngine.Random.Range(0f, 1f) < 0.2f)
-                            {
-                                this.recover();
-                            }
-                            else if (UnityEngine.Random.Range(0, 2) == 0)
-                            {
-                                this.attack2("quick_turn_l");
-                            }
-                            else
-                            {
-                                this.attack2("quick_turn_r");
+                                Vector3 vector4 = this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest").position;
+                                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
+                                {
+                                    obj7.GetComponent<HERO>().die((obj7.transform.position - vector4) * 15f * this.myLevel, false);
+                                }
+                                else if (!(IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer || !photonView.isMine || obj7.GetComponent<HERO>().HasDied()))
+                                {
+                                    obj7.GetComponent<HERO>().markDie();
+                                    object[] objArray5 = new object[] { (obj7.transform.position - vector4) * 15f * this.myLevel, false, !this.nonAI ? -1 : photonView.viewID, name, true };
+                                    obj7.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray5);
+                                }
                             }
                         }
                         else
                         {
-                            if (this.myDistance < this.attackDistance)
+                            GameObject obj8 = this.checkIfHitHand(this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R/hand_R_001"));
+                            if (obj8 != null)
+                            {
+                                Vector3 vector5 = this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest").position;
+                                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
+                                {
+                                    obj8.GetComponent<HERO>().die((obj8.transform.position - vector5) * 15f * this.myLevel, false);
+                                }
+                                else if (!(IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer || !photonView.isMine || obj8.GetComponent<HERO>().HasDied()))
+                                {
+                                    obj8.GetComponent<HERO>().markDie();
+                                    object[] objArray6 = new object[] { (obj8.transform.position - vector5) * 15f * this.myLevel, false, !this.nonAI ? -1 : photonView.viewID, name, true };
+                                    obj8.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray6);
+                                }
+                            }
+                        }
+                    }
+                    if (!this.attacked && this.attackCheckTime != 0f && this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= this.attackCheckTime)
+                    {
+                        GameObject obj9;
+                        this.attacked = true;
+                        this.fxPosition = this.baseTransform.Find("ap_" + this.attackAnimation).position;
+                        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
+                        {
+                            obj9 = PhotonNetwork.Instantiate("FX/" + this.fxName, this.fxPosition, this.fxRotation, 0);
+                        }
+                        else
+                        {
+                            obj9 = (GameObject) Instantiate(Resources.Load("FX/" + this.fxName), this.fxPosition, this.fxRotation);
+                        }
+                        if (this.nonAI)
+                        {
+                            obj9.transform.localScale = this.baseTransform.localScale * 1.5f;
+                            if (obj9.GetComponent<EnemyfxIDcontainer>() != null)
+                            {
+                                obj9.GetComponent<EnemyfxIDcontainer>().myOwnerViewID = photonView.viewID;
+                            }
+                        }
+                        else
+                        {
+                            obj9.transform.localScale = this.baseTransform.localScale;
+                        }
+                        if (obj9.GetComponent<EnemyfxIDcontainer>() != null)
+                        {
+                            obj9.GetComponent<EnemyfxIDcontainer>().titanName = name;
+                        }
+                        float b = 1f - Vector3.Distance(this.currentCamera.transform.position, obj9.transform.position) * 0.05f;
+                        b = Mathf.Min(1f, b);
+                        this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(b, b, 0.95f);
+                    }
+                    if (this.attackAnimation == "throw")
+                    {
+                        if (!this.attacked && this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 0.11f)
+                        {
+                            this.attacked = true;
+                            Transform transform = this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R/hand_R_001");
+                            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
+                            {
+                                this.throwRock = PhotonNetwork.Instantiate("FX/rockThrow", transform.position, transform.rotation, 0);
+                            }
+                            else
+                            {
+                                this.throwRock = (GameObject) Instantiate(Resources.Load("FX/rockThrow"), transform.position, transform.rotation);
+                            }
+                            this.throwRock.transform.localScale = this.baseTransform.localScale;
+                            Transform transform1 = this.throwRock.transform;
+                            transform1.position -= this.throwRock.transform.forward * 2.5f * this.myLevel;
+                            if (this.throwRock.GetComponent<EnemyfxIDcontainer>() != null)
+                            {
+                                if (this.nonAI)
+                                {
+                                    this.throwRock.GetComponent<EnemyfxIDcontainer>().myOwnerViewID = photonView.viewID;
+                                }
+                                this.throwRock.GetComponent<EnemyfxIDcontainer>().titanName = name;
+                            }
+                            this.throwRock.transform.parent = transform;
+                            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
+                            {
+                                object[] objArray7 = new object[] { photonView.viewID, this.baseTransform.localScale, this.throwRock.transform.localPosition, this.myLevel };
+                                this.throwRock.GetPhotonView().RPC("initRPC", PhotonTargets.Others, objArray7);
+                            }
+                        }
+                        if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 0.11f)
+                        {
+                            float y = Mathf.Atan2(this.myHero.transform.position.x - this.baseTransform.position.x, this.myHero.transform.position.z - this.baseTransform.position.z) * 57.29578f;
+                            this.baseGameObjectTransform.rotation = Quaternion.Euler(0f, y, 0f);
+                        }
+                        if (this.throwRock != null && this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 0.62f)
+                        {
+                            Vector3 vector6;
+                            float num3 = 1f;
+                            float num4 = -20f;
+                            if (this.myHero != null)
+                            {
+                                vector6 = (this.myHero.transform.position - this.throwRock.transform.position) / num3 + this.myHero.rigidbody.velocity;
+                                float num5 = this.myHero.transform.position.y + 2f * this.myLevel;
+                                float num6 = num5 - this.throwRock.transform.position.y;
+                                vector6 = new Vector3(vector6.x, num6 / num3 - 0.5f * num4 * num3, vector6.z);
+                            }
+                            else
+                            {
+                                vector6 = this.baseTransform.forward * 60f + Vector3.up * 10f;
+                            }
+                            this.throwRock.GetComponent<RockThrow>().launch(vector6);
+                            this.throwRock.transform.parent = null;
+                            this.throwRock = null;
+                        }
+                    }
+                    if (this.attackAnimation == "jumper_0" || this.attackAnimation == "crawler_jump_0")
+                    {
+                        if (!this.attacked)
+                        {
+                            if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 0.68f)
+                            {
+                                this.attacked = true;
+                                if (this.myHero == null || this.nonAI)
+                                {
+                                    float num7 = 120f;
+                                    Vector3 vector7 = this.baseTransform.forward * this.speed + Vector3.up * num7;
+                                    if (this.nonAI && this.abnormalType == AbnormalType.TYPE_CRAWLER)
+                                    {
+                                        num7 = 100f;
+                                        float a = this.speed * 2.5f;
+                                        a = Mathf.Min(a, 100f);
+                                        vector7 = this.baseTransform.forward * a + Vector3.up * num7;
+                                    }
+                                    this.baseRigidBody.velocity = vector7;
+                                }
+                                else
+                                {
+                                    float num18;
+                                    float num9 = this.myHero.rigidbody.velocity.y;
+                                    float num10 = -20f;
+                                    float gravity = this.gravity;
+                                    float num12 = this.neck.position.y;
+                                    float num13 = (num10 - gravity) * 0.5f;
+                                    float num14 = num9;
+                                    float num15 = this.myHero.transform.position.y - num12;
+                                    float num16 = Mathf.Abs((Mathf.Sqrt(num14 * num14 - 4f * num13 * num15) - num14) / (2f * num13));
+                                    Vector3 vector8 = this.myHero.transform.position + this.myHero.rigidbody.velocity * num16 + Vector3.up * 0.5f * num10 * num16 * num16;
+                                    float num17 = vector8.y;
+                                    if (num15 < 0f || num17 - num12 < 0f)
+                                    {
+                                        num18 = 60f;
+                                        float num19 = this.speed * 2.5f;
+                                        num19 = Mathf.Min(num19, 100f);
+                                        Vector3 vector9 = this.baseTransform.forward * num19 + Vector3.up * num18;
+                                        this.baseRigidBody.velocity = vector9;
+                                        return;
+                                    }
+                                    float num20 = num17 - num12;
+                                    float num21 = Mathf.Sqrt(2f * num20 / this.gravity);
+                                    num18 = this.gravity * num21;
+                                    num18 = Mathf.Max(30f, num18);
+                                    Vector3 vector10 = (vector8 - this.baseTransform.position) / num16;
+                                    this.abnorma_jump_bite_horizon_v = new Vector3(vector10.x, 0f, vector10.z);
+                                    Vector3 velocity = this.baseRigidBody.velocity;
+                                    Vector3 force = new Vector3(this.abnorma_jump_bite_horizon_v.x, velocity.y, this.abnorma_jump_bite_horizon_v.z) - velocity;
+                                    this.baseRigidBody.AddForce(force, ForceMode.VelocityChange);
+                                    this.baseRigidBody.AddForce(Vector3.up * num18, ForceMode.VelocityChange);
+                                    float num22 = Vector2.Angle(new Vector2(this.baseTransform.position.x, this.baseTransform.position.z), new Vector2(this.myHero.transform.position.x, this.myHero.transform.position.z));
+                                    num22 = Mathf.Atan2(this.myHero.transform.position.x - this.baseTransform.position.x, this.myHero.transform.position.z - this.baseTransform.position.z) * 57.29578f;
+                                    this.baseGameObjectTransform.rotation = Quaternion.Euler(0f, num22, 0f);
+                                }
+                            }
+                            else
+                            {
+                                this.baseRigidBody.velocity = Vector3.zero;
+                            }
+                        }
+                        if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 1f)
+                        {
+                            Debug.DrawLine(this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck/head").position + Vector3.up * 1.5f * this.myLevel, this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck/head").position + Vector3.up * 1.5f * this.myLevel + Vector3.up * 3f * this.myLevel, Color.green);
+                            Debug.DrawLine(this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck/head").position + Vector3.up * 1.5f * this.myLevel, this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck/head").position + Vector3.up * 1.5f * this.myLevel + Vector3.forward * 3f * this.myLevel, Color.green);
+                            GameObject obj10 = this.checkIfHitHead(this.head, 3f);
+                            if (obj10 != null)
+                            {
+                                Vector3 vector13 = this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest").position;
+                                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
+                                {
+                                    obj10.GetComponent<HERO>().die((obj10.transform.position - vector13) * 15f * this.myLevel, false);
+                                }
+                                else if (!(IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer || !photonView.isMine || obj10.GetComponent<HERO>().HasDied()))
+                                {
+                                    obj10.GetComponent<HERO>().markDie();
+                                    object[] objArray8 = new object[] { (obj10.transform.position - vector13) * 15f * this.myLevel, true, !this.nonAI ? -1 : photonView.viewID, name, true };
+                                    obj10.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray8);
+                                }
+                                if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+                                {
+                                    this.attackAnimation = "crawler_jump_1";
+                                }
+                                else
+                                {
+                                    this.attackAnimation = "jumper_1";
+                                }
+                                this.playAnimation("attack_" + this.attackAnimation);
+                            }
+                            if (Mathf.Abs(this.baseRigidBody.velocity.y) < 0.5f || this.baseRigidBody.velocity.y < 0f || this.IsGrounded())
                             {
                                 if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
                                 {
-                                    if (this.myHero.transform.position.y + 3f <= this.neck.position.y + 20f * this.myLevel && UnityEngine.Random.Range(0f, 1f) < 0.1f)
+                                    this.attackAnimation = "crawler_jump_1";
+                                }
+                                else
+                                {
+                                    this.attackAnimation = "jumper_1";
+                                }
+                                this.playAnimation("attack_" + this.attackAnimation);
+                            }
+                        }
+                    }
+                    else if (this.attackAnimation == "jumper_1" || this.attackAnimation == "crawler_jump_1")
+                    {
+                        if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 1f && this.grounded)
+                        {
+                            GameObject obj11;
+                            if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+                            {
+                                this.attackAnimation = "crawler_jump_2";
+                            }
+                            else
+                            {
+                                this.attackAnimation = "jumper_2";
+                            }
+                            this.crossFade("attack_" + this.attackAnimation, 0.1f);
+                            this.fxPosition = this.baseTransform.position;
+                            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
+                            {
+                                obj11 = PhotonNetwork.Instantiate("FX/boom2", this.fxPosition, this.fxRotation, 0);
+                            }
+                            else
+                            {
+                                obj11 = (GameObject) Instantiate(Resources.Load("FX/boom2"), this.fxPosition, this.fxRotation);
+                            }
+                            obj11.transform.localScale = this.baseTransform.localScale * 1.6f;
+                            float num23 = 1f - Vector3.Distance(this.currentCamera.transform.position, obj11.transform.position) * 0.05f;
+                            num23 = Mathf.Min(1f, num23);
+                            this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(num23, num23, 0.95f);
+                        }
+                    }
+                    else if (this.attackAnimation == "jumper_2" || this.attackAnimation == "crawler_jump_2")
+                    {
+                        if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 1f)
+                        {
+                            this.idle(0f);
+                        }
+                    }
+                    else if (this.baseAnimation.IsPlaying("tired"))
+                    {
+                        if (this.baseAnimation["tired"].normalizedTime >= 1f + Mathf.Max(this.attackEndWait * 2f, 3f))
+                        {
+                            this.idle(UnityEngine.Random.Range(this.attackWait - 1f, 3f));
+                        }
+                    }
+                    else if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 1f + this.attackEndWait)
+                    {
+                        if (this.nextAttackAnimation != null)
+                        {
+                            this.attack2(this.nextAttackAnimation);
+                        }
+                        else if (this.attackAnimation == "quick_turn_l" || this.attackAnimation == "quick_turn_r")
+                        {
+                            this.baseTransform.rotation = Quaternion.Euler(this.baseTransform.rotation.eulerAngles.x, this.baseTransform.rotation.eulerAngles.y + 180f, this.baseTransform.rotation.eulerAngles.z);
+                            this.idle(UnityEngine.Random.Range(0.5f, 1f));
+                            this.playAnimation("idle");
+                        }
+                        else if (this.abnormalType == AbnormalType.TYPE_I || this.abnormalType == AbnormalType.TYPE_JUMPER)
+                        {
+                            this.attackCount++;
+                            if (this.attackCount > 3 && this.attackAnimation == "abnormal_getup")
+                            {
+                                this.attackCount = 0;
+                                this.crossFade("tired", 0.5f);
+                            }
+                            else
+                            {
+                                this.idle(UnityEngine.Random.Range(this.attackWait - 1f, 3f));
+                            }
+                        }
+                        else
+                        {
+                            this.idle(UnityEngine.Random.Range(this.attackWait - 1f, 3f));
+                        }
+                    }
+                }
+                else if (this.state == TitanState.Grabbing)
+                {
+                    if (this.baseAnimation["grab_" + this.attackAnimation].normalizedTime >= this.attackCheckTimeA && this.baseAnimation["grab_" + this.attackAnimation].normalizedTime <= this.attackCheckTimeB && this.grabbedTarget == null)
+                    {
+                        GameObject grabTarget = this.checkIfHitHand(this.currentGrabHand);
+                        if (grabTarget != null)
+                        {
+                            if (this.isGrabHandLeft)
+                            {
+                                this.eatSetL(grabTarget);
+                                this.grabbedTarget = grabTarget;
+                            }
+                            else
+                            {
+                                this.eatSet(grabTarget);
+                                this.grabbedTarget = grabTarget;
+                            }
+                        }
+                    }
+                    if (this.baseAnimation["grab_" + this.attackAnimation].normalizedTime >= 1f)
+                    {
+                        if (this.grabbedTarget != null)
+                        {
+                            this.eat();
+                        }
+                        else
+                        {
+                            this.idle(UnityEngine.Random.Range(this.attackWait - 1f, 2f));
+                        }
+                    }
+                }
+                else if (this.state == TitanState.Eating)
+                {
+                    if (!(this.attacked || this.baseAnimation[this.attackAnimation].normalizedTime < 0.48f))
+                    {
+                        this.attacked = true;
+                        this.justEatHero(this.grabbedTarget, this.currentGrabHand);
+                    }
+                    if (this.grabbedTarget != null)
+                    {
+                    }
+                    if (this.baseAnimation[this.attackAnimation].normalizedTime >= 1f)
+                    {
+                        this.idle(0f);
+                    }
+                }
+                else if (this.state == TitanState.Chasing)
+                {
+                    if (this.myHero == null)
+                    {
+                        this.idle(0f);
+                    }
+                    else if (!this.longRangeAttackCheck2())
+                    {
+                        if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpCapture && this.PVPfromCheckPt != null && this.myDistance > this.chaseDistance)
+                        {
+                            this.idle(0f);
+                        }
+                        else if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+                        {
+                            Vector3 vector14 = this.myHero.transform.position - this.baseTransform.position;
+                            float current = -Mathf.Atan2(vector14.z, vector14.x) * 57.29578f;
+                            float f = -Mathf.DeltaAngle(current, this.baseGameObjectTransform.rotation.eulerAngles.y - 90f);
+                            if (this.myDistance < this.attackDistance * 3f && UnityEngine.Random.Range(0f, 1f) < 0.1f && Mathf.Abs(f) < 90f && this.myHero.transform.position.y < this.neck.position.y + 30f * this.myLevel && this.myHero.transform.position.y > this.neck.position.y + 10f * this.myLevel)
+                            {
+                                this.attack2("crawler_jump_0");
+                            }
+                            else
+                            {
+                                GameObject obj13 = this.checkIfHitCrawlerMouth(this.head, 2.2f);
+                                if (obj13 != null)
+                                {
+                                    Vector3 vector15 = this.baseTransform.Find("Amarture/Core/Controller_Body/hip/spine/chest").position;
+                                    if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                                     {
-                                        this.chase();
+                                        obj13.GetComponent<HERO>().die((obj13.transform.position - vector15) * 15f * this.myLevel, false);
                                     }
-                                    return;
-                                }
-                                string str = string.Empty;
-                                string[] strArray = this.GetAttackStrategy();
-                                if (strArray != null)
-                                {
-                                    str = strArray[UnityEngine.Random.Range(0, strArray.Length)];
-                                }
-                                if (!(this.abnormalType == AbnormalType.TYPE_JUMPER || this.abnormalType == AbnormalType.TYPE_I ? Mathf.Abs(this.between2) <= 40f : true))
-                                {
-                                    if (str.Contains("grab") || str.Contains("kick") || str.Contains("slap") || str.Contains("bite"))
+                                    else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
                                     {
-                                        if (UnityEngine.Random.Range(0, 100) < 30)
+                                        if (obj13.GetComponent<TITAN_EREN>() != null)
                                         {
-                                            this.turn(this.between2);
-                                            return;
+                                            obj13.GetComponent<TITAN_EREN>().hitByTitan();
+                                        }
+                                        else if (!obj13.GetComponent<HERO>().HasDied())
+                                        {
+                                            obj13.GetComponent<HERO>().markDie();
+                                            object[] objArray9 = new object[] { (obj13.transform.position - vector15) * 15f * this.myLevel, true, !this.nonAI ? -1 : photonView.viewID, name, true };
+                                            obj13.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray9);
                                         }
                                     }
-                                    else if (UnityEngine.Random.Range(0, 100) < 90)
+                                }
+                                if (this.myDistance < this.attackDistance && UnityEngine.Random.Range(0f, 1f) < 0.02f)
+                                {
+                                    this.idle(UnityEngine.Random.Range(0.05f, 0.2f));
+                                }
+                            }
+                        }
+                        else if (this.abnormalType == AbnormalType.TYPE_JUMPER && (this.myDistance > this.attackDistance && this.myHero.transform.position.y > this.head.position.y + 4f * this.myLevel || this.myHero.transform.position.y > this.head.position.y + 4f * this.myLevel) && Vector3.Distance(this.baseTransform.position, this.myHero.transform.position) < 1.5f * this.myHero.transform.position.y)
+                        {
+                            this.attack2("jumper_0");
+                        }
+                        else if (this.myDistance < this.attackDistance)
+                        {
+                            this.idle(UnityEngine.Random.Range(0.05f, 0.2f));
+                        }
+                    }
+                }
+                else if (this.state == TitanState.Wandering)
+                {
+                    float num26 = 0f;
+                    float num27 = 0f;
+                    if (this.myDistance < this.chaseDistance || this.whoHasTauntMe != null)
+                    {
+                        Vector3 vector16 = this.myHero.transform.position - this.baseTransform.position;
+                        num26 = -Mathf.Atan2(vector16.z, vector16.x) * 57.29578f;
+                        num27 = -Mathf.DeltaAngle(num26, this.baseGameObjectTransform.rotation.eulerAngles.y - 90f);
+                        if (this.isAlarm || Mathf.Abs(num27) < 90f)
+                        {
+                            this.chase();
+                            return;
+                        }
+                        if (!(this.isAlarm || this.myDistance >= this.chaseDistance * 0.1f))
+                        {
+                            this.chase();
+                            return;
+                        }
+                    }
+                    if (UnityEngine.Random.Range(0f, 1f) < 0.01f)
+                    {
+                        this.idle(0f);
+                    }
+                }
+                else if (this.state == TitanState.Turning)
+                {
+                    this.baseGameObjectTransform.rotation = Quaternion.Lerp(this.baseGameObjectTransform.rotation, Quaternion.Euler(0f, this.desDeg, 0f), Time.deltaTime * Mathf.Abs(this.turnDeg) * 0.015f);
+                    if (this.baseAnimation[this.turnAnimation].normalizedTime >= 1f)
+                    {
+                        this.idle(0f);
+                    }
+                }
+                else if (this.state == TitanState.Blinded)
+                {
+                    if (this.baseAnimation.IsPlaying("sit_hit_eye") && this.baseAnimation["sit_hit_eye"].normalizedTime >= 1f)
+                    {
+                        this.remainSitdown();
+                    }
+                    else if (this.baseAnimation.IsPlaying("hit_eye") && this.baseAnimation["hit_eye"].normalizedTime >= 1f)
+                    {
+                        if (this.nonAI)
+                        {
+                            this.idle(0f);
+                        }
+                        else
+                        {
+                            this.attack2("combo_1");
+                        }
+                    }
+                }
+                else if (this.state == TitanState.GoingToCheckpoint)
+                {
+                    if (this.checkPoints.Count <= 0 && this.myDistance < this.attackDistance)
+                    {
+                        string decidedAction = string.Empty;
+                        string[] attackStrategy = this.GetAttackStrategy();
+                        if (attackStrategy != null)
+                        {
+                            decidedAction = attackStrategy[UnityEngine.Random.Range(0, attackStrategy.Length)];
+                        }
+                        if (this.executeAttack2(decidedAction))
+                        {
+                            return;
+                        }
+                    }
+                    if (Vector3.Distance(this.baseTransform.position, this.targetCheckPt) < this.targetR)
+                    {
+                        if (this.checkPoints.Count > 0)
+                        {
+                            if (this.checkPoints.Count == 1)
+                            {
+                                if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight)
+                                {
+                                    this.MultiplayerManager.GameLose();
+                                    this.checkPoints = new ArrayList();
+                                    this.idle(0f);
+                                }
+                            }
+                            else
+                            {
+                                if (this.checkPoints.Count == 4)
+                                {
+                                    this.MultiplayerManager.SendChatContentInfo("<color=#A8FF24>*WARNING!* An abnormal titan is approaching the north gate!</color>");
+                                }
+                                Vector3 vector17 = (Vector3) this.checkPoints[0];
+                                this.targetCheckPt = vector17;
+                                this.checkPoints.RemoveAt(0);
+                            }
+                        }
+                        else
+                        {
+                            this.idle(0f);
+                        }
+                    }
+                }
+                else if (this.state == TitanState.GoingToPVP)
+                {
+                    if (this.myDistance < this.chaseDistance * 0.7f)
+                    {
+                        this.chase();
+                    }
+                    if (Vector3.Distance(this.baseTransform.position, this.targetCheckPt) < this.targetR)
+                    {
+                        this.idle(0f);
+                    }
+                }
+                else if (this.state == TitanState.RunningRandomly)
+                {
+                    this.random_run_time -= Time.deltaTime;
+                    if (Vector3.Distance(this.baseTransform.position, this.targetCheckPt) < this.targetR || this.random_run_time <= 0f)
+                    {
+                        this.idle(0f);
+                    }
+                }
+                else if (this.state == TitanState.Down)
+                {
+                    this.getdownTime -= Time.deltaTime;
+                    if (this.baseAnimation.IsPlaying("sit_hunt_down") && this.baseAnimation["sit_hunt_down"].normalizedTime >= 1f)
+                    {
+                        this.playAnimation("sit_idle");
+                    }
+                    if (this.getdownTime <= 0f)
+                    {
+                        this.crossFade("sit_getup", 0.1f);
+                    }
+                    if (this.baseAnimation.IsPlaying("sit_getup") && this.baseAnimation["sit_getup"].normalizedTime >= 1f)
+                    {
+                        this.idle(0f);
+                    }
+                }
+                else if (this.state == TitanState.Sit)
+                {
+                    this.getdownTime -= Time.deltaTime;
+                    this.angle = 0f;
+                    this.between2 = 0f;
+                    if (this.myDistance < this.chaseDistance || this.whoHasTauntMe != null)
+                    {
+                        if (this.myDistance < 50f)
+                        {
+                            this.isAlarm = true;
+                        }
+                        else
+                        {
+                            Vector3 vector18 = this.myHero.transform.position - this.baseTransform.position;
+                            this.angle = -Mathf.Atan2(vector18.z, vector18.x) * 57.29578f;
+                            this.between2 = -Mathf.DeltaAngle(this.angle, this.baseGameObjectTransform.rotation.eulerAngles.y - 90f);
+                            if (Mathf.Abs(this.between2) < 100f)
+                            {
+                                this.isAlarm = true;
+                            }
+                        }
+                    }
+                    if (this.baseAnimation.IsPlaying("sit_down") && this.baseAnimation["sit_down"].normalizedTime >= 1f)
+                    {
+                        this.playAnimation("sit_idle");
+                    }
+                    if (!(this.getdownTime <= 0f || this.isAlarm ? !this.baseAnimation.IsPlaying("sit_idle") : true))
+                    {
+                        this.crossFade("sit_getup", 0.1f);
+                    }
+                    if (this.baseAnimation.IsPlaying("sit_getup") && this.baseAnimation["sit_getup"].normalizedTime >= 1f)
+                    {
+                        this.idle(0f);
+                    }
+                }
+                else if (this.state == TitanState.Recovering)
+                {
+                    this.getdownTime -= Time.deltaTime;
+                    if (this.getdownTime <= 0f)
+                    {
+                        this.idle(0f);
+                    }
+                    if (this.baseAnimation.IsPlaying("idle_recovery") && this.baseAnimation["idle_recovery"].normalizedTime >= 1f)
+                    {
+                        this.idle(0f);
+                    }
+                }
+            }
+            else if (this.nonAI)
+            {
+                if (!IN_GAME_MAIN_CAMERA.isPausing)
+                {
+                    this.pt();
+                    if (this.abnormalType != AbnormalType.TYPE_CRAWLER)
+                    {
+                        if (this.controller.isAttackDown && this.stamina > 25f)
+                        {
+                            this.stamina -= 25f;
+                            this.attack2("combo_1");
+                        }
+                        else if (this.controller.isAttackIIDown && this.stamina > 50f)
+                        {
+                            this.stamina -= 50f;
+                            this.attack2("abnormal_jump");
+                        }
+                        else if (this.controller.isJumpDown && this.stamina > 15f)
+                        {
+                            this.stamina -= 15f;
+                            this.attack2("jumper_0");
+                        }
+                    }
+                    else if (this.controller.isAttackDown && this.stamina > 40f)
+                    {
+                        this.stamina -= 40f;
+                        this.attack2("crawler_jump_0");
+                    }
+                    if (this.controller.isSuicide)
+                    {
+                        this.suicide();
+                    }
+                }
+            }
+            else if (this.sbtime > 0f)
+            {
+                this.sbtime -= Time.deltaTime;
+            }
+            else
+            {
+                if (!this.isAlarm)
+                {
+                    if (this.abnormalType != AbnormalType.TYPE_PUNK && this.abnormalType != AbnormalType.TYPE_CRAWLER && UnityEngine.Random.Range(0f, 1f) < 0.005f)
+                    {
+                        this.sitdown();
+                        return;
+                    }
+                    if (UnityEngine.Random.Range(0f, 1f) < 0.02f)
+                    {
+                        this.wander(0f);
+                        return;
+                    }
+                    if (UnityEngine.Random.Range(0f, 1f) < 0.01f)
+                    {
+                        this.turn(UnityEngine.Random.Range(30, 120));
+                        return;
+                    }
+                    if (UnityEngine.Random.Range(0f, 1f) < 0.01f)
+                    {
+                        this.turn(UnityEngine.Random.Range(-30, -120));
+                        return;
+                    }
+                }
+                this.angle = 0f;
+                this.between2 = 0f;
+                if (this.myDistance < this.chaseDistance || this.whoHasTauntMe != null)
+                {
+                    Vector3 vector = this.myHero.transform.position - this.baseTransform.position;
+                    this.angle = -Mathf.Atan2(vector.z, vector.x) * 57.29578f;
+                    this.between2 = -Mathf.DeltaAngle(this.angle, this.baseGameObjectTransform.rotation.eulerAngles.y - 90f);
+                    if (this.myDistance >= this.attackDistance)
+                    {
+                        if (this.isAlarm || Mathf.Abs(this.between2) < 90f)
+                        {
+                            this.chase();
+                            return;
+                        }
+                        if (!(this.isAlarm || this.myDistance >= this.chaseDistance * 0.1f))
+                        {
+                            this.chase();
+                            return;
+                        }
+                    }
+                }
+                if (!this.longRangeAttackCheck2())
+                {
+                    if (this.myDistance < this.chaseDistance)
+                    {
+                        if (this.abnormalType == AbnormalType.TYPE_JUMPER && (this.myDistance > this.attackDistance || this.myHero.transform.position.y > this.head.position.y + 4f * this.myLevel) && Mathf.Abs(this.between2) < 120f && Vector3.Distance(this.baseTransform.position, this.myHero.transform.position) < 1.5f * this.myHero.transform.position.y)
+                        {
+                            this.attack2("jumper_0");
+                            return;
+                        }
+                        if (this.abnormalType == AbnormalType.TYPE_CRAWLER && this.myDistance < this.attackDistance * 3f && Mathf.Abs(this.between2) < 90f && this.myHero.transform.position.y < this.neck.position.y + 30f * this.myLevel && this.myHero.transform.position.y > this.neck.position.y + 10f * this.myLevel)
+                        {
+                            this.attack2("crawler_jump_0");
+                            return;
+                        }
+                    }
+                    if (this.abnormalType == AbnormalType.TYPE_PUNK && this.myDistance < 90f && Mathf.Abs(this.between2) > 90f)
+                    {
+                        if (UnityEngine.Random.Range(0f, 1f) < 0.4f)
+                        {
+                            this.randomRun(this.baseTransform.position + new Vector3(UnityEngine.Random.Range(-50f, 50f), UnityEngine.Random.Range(-50f, 50f), UnityEngine.Random.Range(-50f, 50f)), 10f);
+                        }
+                        if (UnityEngine.Random.Range(0f, 1f) < 0.2f)
+                        {
+                            this.recover();
+                        }
+                        else if (UnityEngine.Random.Range(0, 2) == 0)
+                        {
+                            this.attack2("quick_turn_l");
+                        }
+                        else
+                        {
+                            this.attack2("quick_turn_r");
+                        }
+                    }
+                    else
+                    {
+                        if (this.myDistance < this.attackDistance)
+                        {
+                            if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+                            {
+                                if (this.myHero.transform.position.y + 3f <= this.neck.position.y + 20f * this.myLevel && UnityEngine.Random.Range(0f, 1f) < 0.1f)
+                                {
+                                    this.chase();
+                                }
+                                return;
+                            }
+                            string str = string.Empty;
+                            string[] strArray = this.GetAttackStrategy();
+                            if (strArray != null)
+                            {
+                                str = strArray[UnityEngine.Random.Range(0, strArray.Length)];
+                            }
+                            if (!(this.abnormalType == AbnormalType.TYPE_JUMPER || this.abnormalType == AbnormalType.TYPE_I ? Mathf.Abs(this.between2) <= 40f : true))
+                            {
+                                if (str.Contains("grab") || str.Contains("kick") || str.Contains("slap") || str.Contains("bite"))
+                                {
+                                    if (UnityEngine.Random.Range(0, 100) < 30)
                                     {
                                         this.turn(this.between2);
                                         return;
                                     }
                                 }
-                                if (this.executeAttack2(str))
-                                {
-                                    return;
-                                }
-                                if (this.abnormalType == AbnormalType.NORMAL)
-                                {
-                                    if (UnityEngine.Random.Range(0, 100) < 30 && Mathf.Abs(this.between2) > 45f)
-                                    {
-                                        this.turn(this.between2);
-                                        return;
-                                    }
-                                }
-                                else if (Mathf.Abs(this.between2) > 45f)
+                                else if (UnityEngine.Random.Range(0, 100) < 90)
                                 {
                                     this.turn(this.between2);
                                     return;
                                 }
                             }
-                            if (this.PVPfromCheckPt != null)
+                            if (this.executeAttack2(str))
                             {
-                                if (this.PVPfromCheckPt.state == CheckPointState.Titan)
+                                return;
+                            }
+                            if (this.abnormalType == AbnormalType.NORMAL)
+                            {
+                                if (UnityEngine.Random.Range(0, 100) < 30 && Mathf.Abs(this.between2) > 45f)
                                 {
-                                    GameObject chkPtNext;
-                                    if (UnityEngine.Random.Range(0, 100) > 48)
+                                    this.turn(this.between2);
+                                    return;
+                                }
+                            }
+                            else if (Mathf.Abs(this.between2) > 45f)
+                            {
+                                this.turn(this.between2);
+                                return;
+                            }
+                        }
+                        if (this.PVPfromCheckPt != null)
+                        {
+                            if (this.PVPfromCheckPt.state == CheckPointState.Titan)
+                            {
+                                GameObject chkPtNext;
+                                if (UnityEngine.Random.Range(0, 100) > 48)
+                                {
+                                    chkPtNext = this.PVPfromCheckPt.chkPtNext;
+                                    if (chkPtNext != null && (chkPtNext.GetComponent<PVPcheckPoint>().state != CheckPointState.Titan || UnityEngine.Random.Range(0, 100) < 20))
                                     {
-                                        chkPtNext = this.PVPfromCheckPt.chkPtNext;
-                                        if (chkPtNext != null && (chkPtNext.GetComponent<PVPcheckPoint>().state != CheckPointState.Titan || UnityEngine.Random.Range(0, 100) < 20))
-                                        {
-                                            this.toPVPCheckPoint(chkPtNext.transform.position, 5 + UnityEngine.Random.Range(0, 10));
-                                            this.PVPfromCheckPt = chkPtNext.GetComponent<PVPcheckPoint>();
-                                        }
-                                    }
-                                    else
-                                    {
-                                        chkPtNext = this.PVPfromCheckPt.chkPtPrevious;
-                                        if (chkPtNext != null && (chkPtNext.GetComponent<PVPcheckPoint>().state != CheckPointState.Titan || UnityEngine.Random.Range(0, 100) < 5))
-                                        {
-                                            this.toPVPCheckPoint(chkPtNext.transform.position, 5 + UnityEngine.Random.Range(0, 10));
-                                            this.PVPfromCheckPt = chkPtNext.GetComponent<PVPcheckPoint>();
-                                        }
+                                        this.toPVPCheckPoint(chkPtNext.transform.position, 5 + UnityEngine.Random.Range(0, 10));
+                                        this.PVPfromCheckPt = chkPtNext.GetComponent<PVPcheckPoint>();
                                     }
                                 }
                                 else
                                 {
-                                    this.toPVPCheckPoint(this.PVPfromCheckPt.transform.position, 5 + UnityEngine.Random.Range(0, 10));
+                                    chkPtNext = this.PVPfromCheckPt.chkPtPrevious;
+                                    if (chkPtNext != null && (chkPtNext.GetComponent<PVPcheckPoint>().state != CheckPointState.Titan || UnityEngine.Random.Range(0, 100) < 5))
+                                    {
+                                        this.toPVPCheckPoint(chkPtNext.transform.position, 5 + UnityEngine.Random.Range(0, 10));
+                                        this.PVPfromCheckPt = chkPtNext.GetComponent<PVPcheckPoint>();
+                                    }
                                 }
+                            }
+                            else
+                            {
+                                this.toPVPCheckPoint(this.PVPfromCheckPt.transform.position, 5 + UnityEngine.Random.Range(0, 10));
                             }
                         }
                     }
@@ -4779,7 +4779,7 @@ public class TITAN : Photon.MonoBehaviour
 
     private void wander(float sbtime = 0f)
     {
-        this.state = TitanState.wander;
+        this.state = TitanState.Wandering;
         this.crossFade(this.runAnimation, 0.5f);
     }
 }

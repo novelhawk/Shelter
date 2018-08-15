@@ -61,6 +61,14 @@ namespace Mod
             _interfaceManager.DisableAll();
             _interfaceManager.Enable("Chat");
             _interfaceManager.Enable("Scoreboard");
+            _interfaceManager.Enable("GameInfo");
+        }
+
+        public static bool TryFind(string name, out GameObject go)
+        {
+            if ((go = GameObject.Find(name)) != null)
+                return true;
+            return false;
         }
 
         #region Static methods

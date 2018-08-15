@@ -48,7 +48,7 @@ public class TriggerColliderWeapon : MonoBehaviour
             {
                 this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.GetComponent<HERO>().slashHit.Play();
                 
-                if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                     Instantiate(Resources.Load("hitMeat"), transform.position, Quaternion.Euler(270f, 0f, 0f));
                 else
                     PhotonNetwork.Instantiate("hitMeat", transform.position, Quaternion.Euler(270f, 0f, 0f), 0);
@@ -59,7 +59,7 @@ public class TriggerColliderWeapon : MonoBehaviour
 
         if (other.gameObject.CompareTag("playerHitbox"))
         {
-            if ((BypassPVP || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).IsPvP) && IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+            if ((BypassPVP || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).IsPvP) && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
             {
                 float b = 1f - Vector3.Distance(other.gameObject.transform.position, transform.position) * 0.05f;
                 b = Mathf.Min(1f, b);
@@ -92,7 +92,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                 item.hitPosition = (transform.position + item.transform.position) * 0.5f;
                 this.currentHits.Add(item);
                 this.meatDie.Play();
-                if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                 {
                     if (item.transform.root.GetComponent<TITAN>() != null && !item.transform.root.GetComponent<TITAN>().hasDie)
                     {
@@ -221,7 +221,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                 GameObject gameObject = other.gameObject.transform.root.gameObject;
                 if (gameObject.GetComponent<FEMALE_TITAN>() != null)
                 {
-                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+                    if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                     {
                         if (!gameObject.GetComponent<FEMALE_TITAN>().hasDie)
                         {
@@ -245,7 +245,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                 }
                 else if (gameObject.GetComponent<TITAN>().abnormalType != AbnormalType.TYPE_CRAWLER)
                 {
-                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+                    if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                     {
                         if (!gameObject.GetComponent<TITAN>().hasDie)
                         {
@@ -281,7 +281,7 @@ public class TriggerColliderWeapon : MonoBehaviour
             if (obj4.GetComponent<TITAN>() != null &&
                 obj4.GetComponent<TITAN>().abnormalType != AbnormalType.TYPE_CRAWLER)
             {
-                if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                 {
                     if (!obj4.GetComponent<TITAN>().hasDie)
                     {
@@ -309,7 +309,7 @@ public class TriggerColliderWeapon : MonoBehaviour
             }
             else if (obj4.GetComponent<FEMALE_TITAN>() != null)
             {
-                if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                 {
                     if (other.gameObject.name == "ankleR")
                     {
@@ -364,7 +364,7 @@ public class TriggerColliderWeapon : MonoBehaviour
     {
         GameObject obj2;
         this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(0.2f, 0.3f, 0.95f);
-        if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE)
+        if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer)
         {
             obj2 = PhotonNetwork.Instantiate("redCross", transform.position, Quaternion.Euler(270f, 0f, 0f), 0);
         }

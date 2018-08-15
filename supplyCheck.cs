@@ -23,7 +23,7 @@ public class supplyCheck : MonoBehaviour
             {
                 if (obj2.GetComponent<HERO>() != null)
                 {
-                    if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+                    if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                     {
                         if (Vector3.Distance(obj2.transform.position, transform.position) < 1.5f)
                         {

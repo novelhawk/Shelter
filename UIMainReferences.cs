@@ -33,7 +33,6 @@ public class UIMainReferences : MonoBehaviour
             if (iteratorVariable2.error != null)
                 throw new Exception("Error on WWW request (RCAssets):" + iteratorVariable2.error);
             FengGameManagerMKII.RCassets = iteratorVariable2.assetBundle;
-            FengGameManagerMKII.isAssetLoaded = true;
         }
     }
 
@@ -49,7 +48,6 @@ public class UIMainReferences : MonoBehaviour
             GameObject target = (GameObject)Instantiate(Resources.Load("InputManagerController"));
             target.name = "InputManagerController";
             DontDestroyOnLoad(target);
-            FengGameManagerMKII.loginstate = 0;
             StartCoroutine(LoadRCAssets());
             isFirstLaunch = false;
         }

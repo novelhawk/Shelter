@@ -21,6 +21,13 @@ namespace Mod
             return builder.Replace("[-]", string.Empty).ToString();
         }
 
+        public static string MaxChars(this string str, int chars)
+        {
+            if (str.Length - 4 > chars)
+                return str.Substring(0, chars) + "...";
+            return str;
+        }
+
         public static byte[] ToBytes(this Stream input)
         {
             byte[] buffer = new byte[8 * 1024];

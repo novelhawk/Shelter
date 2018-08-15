@@ -21,7 +21,7 @@ public class EnemyCheckCollider : Photon.MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER && !transform.root.gameObject.GetPhotonView().isMine || !active_me) 
+        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && !transform.root.gameObject.GetPhotonView().isMine || !active_me) 
             return;
         
         if (other.gameObject.CompareTag("playerHitbox"))
@@ -41,12 +41,12 @@ public class EnemyCheckCollider : Photon.MonoBehaviour
                         multiplier = transform.localScale.x * gameObject.GetComponent<CapsuleCollider>().height;
                     if (multiplier > 0f)
                         multiplier = Mathf.Max(5f, 5f - vector.magnitude);
-                    switch (IN_GAME_MAIN_CAMERA.gametype)
+                    switch (IN_GAME_MAIN_CAMERA.GameType)
                     {
-                        case GAMETYPE.SINGLE:
+                        case GameType.Singleplayer:
                             component.transform.root.GetComponent<HERO>().BlowAway(vector.normalized * multiplier + Vector3.up * 1f);
                             break;
-                        case GAMETYPE.MULTIPLAYER:
+                        case GameType.Multiplayer:
                             component.transform.root.GetComponent<HERO>().photonView.RPC("blowAway", PhotonTargets.All, 
                                 vector.normalized * multiplier + Vector3.up * 1f);
                             break;

@@ -13,11 +13,11 @@ public class SelfDestroy : Photon.MonoBehaviour
         this.CountDown -= Time.deltaTime;
         if (this.CountDown <= 0f)
         {
-            if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.SINGLE)
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
             {
                 Destroy(gameObject);
             }
-            else if (IN_GAME_MAIN_CAMERA.gametype == GAMETYPE.MULTIPLAYER)
+            else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
             {
                 if (photonView != null)
                 {

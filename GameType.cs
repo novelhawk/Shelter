@@ -1,12 +1,7 @@
-using UnityEngine;
-
-[AddComponentMenu("Camera-Control/Mouse Look")]
-public enum GAMETYPE
+public enum GameType
 {
-    SINGLE,
-    SERVER,
-    CLIENT,
-    STOP,
-    MULTIPLAYER
+    Singleplayer = 0,
+    NotInRoom = 3,
+    Multiplayer = 4
 }
 

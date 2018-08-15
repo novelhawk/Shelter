@@ -14,7 +14,6 @@ public class CannonPropRegion : Photon.MonoBehaviour
         if (this.storedHero != null)
         {
             this.storedHero.myCannonRegion = null;
-            this.storedHero.ClearPopup();
         }
     }
 
@@ -45,7 +44,6 @@ public class CannonPropRegion : Photon.MonoBehaviour
             if (component != null && this.storedHero != null && component == this.storedHero)
             {
                 component.myCannonRegion = null;
-                component.ClearPopup();
                 this.storedHero = null;
             }
         }
