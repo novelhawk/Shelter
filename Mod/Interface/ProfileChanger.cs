@@ -50,10 +50,11 @@ namespace Mod.Interface
             {
                 normal = {textColor = deleteColor}
             };
-            _textField = new GUIStyle(GUI.skin.textArea)
+            _textField = new GUIStyle(GUI.skin.textField)
             {
                 normal = {textColor = Color(255, 255, 255), background = _transparent},
                 active = {background = _transparent},
+                focused = {background = _transparent},
                 hover = {background = _transparent},
                 border = new RectOffset(0, 0, 0, 0),
                 alignment = TextAnchor.MiddleLeft,
