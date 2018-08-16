@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using ExitGames.Client.Photon;
 using Mod;
 using Mod.Exceptions;
@@ -428,25 +429,35 @@ public partial class FengGameManagerMKII
     [RPC]
     public void NetShowDamage(int speed)
     {
-        GameObject t;
-        if ((t = GameObject.Find("Stylish")) != null)
-            t.GetComponent<StylishComponent>().Style(speed);
-        GameObject target = GameObject.Find("LabelScore");
-        Debug.Log("Target null?:" + target == null);
-        if (target != null)
+        if (Shelter.TryFind("Stylish", out GameObject obj))
+            obj.GetComponent<StylishComponent>().Style(speed);
+        
+        if (Shelter.TryFind("LabelScore", out obj))
         {
-            target.GetComponent<UILabel>().text = speed.ToString();
-            target.transform.localScale = Vector3.zero;
+            obj.GetComponent<UILabel>().text = speed.ToString();
+            obj.transform.localScale = Vector3.zero;
             speed = (int) (speed * 0.1f);
             speed = Mathf.Max(40, speed);
             speed = Mathf.Min(150, speed);
-            iTween.Stop(target);
-            object[] args =
-                {"x", speed, "y", speed, "z", speed, "easetype", iTween.EaseType.easeOutElastic, "time", 1f};
-            iTween.ScaleTo(target, iTween.Hash(args));
-            object[] objArray2 =
-                {"x", 0, "y", 0, "z", 0, "easetype", iTween.EaseType.easeInBounce, "time", 0.5f, "delay", 2f};
-            iTween.ScaleTo(target, iTween.Hash(objArray2));
+            iTween.Stop(obj); 
+                        
+            iTween.ScaleTo(obj, new System.Collections.Hashtable
+            {
+                {"x", speed},
+                {"y", speed},
+                {"z", speed},
+                {"easetype", iTween.EaseType.easeOutElastic},
+                {"time", 1f},
+            });
+            iTween.ScaleTo(obj, new System.Collections.Hashtable
+            {
+                {"x", 0},
+                {"y", 0},
+                {"z", 0},
+                {"easetype", iTween.EaseType.easeInBounce},
+                {"time", 0.5f},
+                {"delay", 2f},
+            });
         }
     }
 
