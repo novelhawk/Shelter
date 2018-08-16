@@ -368,25 +368,23 @@ public class Bullet : Photon.MonoBehaviour
         }
     }
 
-    private void setLinePhase0()
+    private void SetLinePhase()
     {
         if (this.master == null)
         {
-            Destroy(this.rope);
+            if (rope != null)
+                Destroy(rope);
             Destroy(gameObject);
         }
-        else if (this.nodes.Count > 0)
+        else if (this.nodes.Count > 0 && myRef != null && lineRenderer != null)
         {
             Vector3 vector = this.myRef.transform.position - (Vector3) this.nodes[0];
-            this.lineRenderer.SetVertexCount(this.nodes.Count);
+            lineRenderer.SetVertexCount(this.nodes.Count);
             for (int i = 0; i <= this.nodes.Count - 1; i++)
-            {
-                this.lineRenderer.SetPosition(i, (Vector3) this.nodes[i] + vector * Mathf.Pow(0.75f, (float)i));
-            }
+                lineRenderer.SetPosition(i, (Vector3) this.nodes[i] + vector * Mathf.Pow(0.75f, i));
+            
             if (this.nodes.Count > 1)
-            {
-                this.lineRenderer.SetPosition(1, this.myRef.transform.position);
-            }
+                lineRenderer.SetPosition(1, this.myRef.transform.position);
         }
     }
 
@@ -443,7 +441,7 @@ public class Bullet : Photon.MonoBehaviour
             }
             if (this.phase == 0)
             {
-                this.setLinePhase0();
+                this.SetLinePhase();
             }
             else if (this.phase == 1)
             {
