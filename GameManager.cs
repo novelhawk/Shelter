@@ -137,12 +137,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
 
     private Hashtable CheckGameGUI() //TODO: Remove? If it's related to gui
     {
-        int num;
-        int num2;
-        Player player;
-        int num4;
-        float num8;
-        float num9;
         Hashtable hashtable = new Hashtable();
         if ((int) settings[200] > 0)
         {
@@ -150,39 +144,30 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             settings[193] = 0;
             settings[226] = 0;
             settings[220] = 0;
-            if (!int.TryParse((string) settings[201], out num) || num > PhotonNetwork.countOfPlayers || num < 0)
-            {
+            if (!int.TryParse((string) settings[201], out var num) || num > PhotonNetwork.countOfPlayers || num < 0)
                 settings[201] = "1";
-            }
+            
             hashtable.Add("infection", num);
             if (RCSettings.infectionMode != num)
             {
                 imatitan.Clear();
-                for (num2 = 0; num2 < PhotonNetwork.playerList.Length; num2++)
-                {
-                    player = PhotonNetwork.playerList[num2];
-                    Hashtable propertiesToSet = new Hashtable
-                    {
-                        { PlayerProperty.IsTitan, 1 }
-                    };
-                    player.SetCustomProperties(propertiesToSet);
-                }
                 int length = PhotonNetwork.playerList.Length;
-                num4 = num;
-                for (num2 = 0; num2 < PhotonNetwork.playerList.Length; num2++)
+                for (var i = 0; i < length; i++)
                 {
-                    Player player2 = PhotonNetwork.playerList[num2];
-                    if (length > 0 && UnityEngine.Random.Range(0f, 1f) <= num4 / (float)length)
+                    Player player = PhotonNetwork.playerList[i];
+                    Hashtable hash = new Hashtable
                     {
-                        Hashtable hashtable3 = new Hashtable
-                        {
-                            { PlayerProperty.IsTitan, 2 }
-                        };
-                        player2.SetCustomProperties(hashtable3);
-                        imatitan.Add(player2.ID, 2);
-                        num4--;
+                        {PlayerProperty.IsTitan, 1}
+                    };
+                    
+                    if (length > 0 && UnityEngine.Random.Range(0, 1) <= i / (float) length)
+                    {
+                        hash[PlayerProperty.IsTitan] = 2;
+                        imatitan.Add(i, 2);
                     }
+
                     length--;
+                    player.SetCustomProperties(hash);
                 }
             }
         }
@@ -199,20 +184,19 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             hashtable.Add("team", (int) settings[193]);
             if (RCSettings.teamMode != (int) settings[193])
             {
-                num4 = 1;
-                for (num2 = 0; num2 < PhotonNetwork.playerList.Length; num2++)
+                int num = 1;
+                foreach (var player in PhotonNetwork.playerList)
                 {
-                    player = PhotonNetwork.playerList[num2];
-                    switch (num4)
+                    switch (num)
                     {
                         case 1:
                             photonView.RPC("setTeamRPC", player, 1);
-                            num4 = 2;
+                            num = 2;
                             break;
 
                         case 2:
                             photonView.RPC("setTeamRPC", player, 2);
-                            num4 = 1;
+                            num = 1;
                             break;
                     }
                 }
@@ -220,10 +204,9 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         }
         if ((int) settings[226] > 0)
         {
-            if (!int.TryParse((string) settings[227], out num) || num > 1000 || num < 0)
-            {
+            if (!int.TryParse((string) settings[227], out var num) || num > 1000 || num < 0)
                 settings[227] = "50";
-            }
+            
             hashtable.Add("point", num);
         }
         if ((int) settings[194] > 0)
@@ -232,7 +215,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         }
         if ((int) settings[195] > 0)
         {
-            if (!int.TryParse((string) settings[196], out num) || num > 100 || num < 0)
+            if (!int.TryParse((string) settings[196], out int num) || num > 100 || num < 0)
             {
                 settings[196] = "30";
             }
@@ -258,74 +241,63 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         }
         if ((int) settings[203] > 0)
         {
-            if (!int.TryParse((string) settings[204], out num) || num > 50 || num < 0)
-            {
+            if (!int.TryParse((string) settings[204], out var num) || num > 50 || num < 0)
                 settings[204] = "1";
-            }
+            
             hashtable.Add("titanc", num);
         }
         if ((int) settings[205] > 0)
         {
-            if (!int.TryParse((string) settings[206], out num) || num > 100000 || num < 0)
-            {
+            if (!int.TryParse((string) settings[206], out var num) || num > 100000 || num < 0)
                 settings[206] = "1000";
-            }
+            
             hashtable.Add("damage", num);
         }
         if ((int) settings[207] > 0)
         {
-            if (!float.TryParse((string) settings[208], out num8) || num8 > 100f || num8 < 0f)
+            if (!float.TryParse((string) settings[208], out var minSize) || minSize > 100f || minSize < 0f)
             {
-                settings[208] = "1.0";
+                settings[208] = "3.0";
             }
-            if (!float.TryParse((string) settings[209], out num9) || num9 > 100f || num9 < 0f)
+            if (!float.TryParse((string) settings[209], out var maxSize) || maxSize > 100f || maxSize < 0f)
             {
                 settings[209] = "3.0";
             }
             hashtable.Add("sizeMode", (int) settings[207]);
-            hashtable.Add("sizeLower", num8);
-            hashtable.Add("sizeUpper", num9);
+            hashtable.Add("sizeLower", minSize);
+            hashtable.Add("sizeUpper", maxSize);
         }
         if ((int) settings[210] > 0)
         {
-            if (!(float.TryParse((string) settings[211], out num8) && num8 >= 0f))
+            if (!(float.TryParse((string) settings[211], out var normal) && normal >= 0f))
+                settings[211] = "100.0";
+            
+            if (!(float.TryParse((string) settings[212], out var abnormal) && abnormal >= 0f))
+                settings[212] = "0.0";
+            
+            if (!float.TryParse((string)settings[213], out var jumper) && jumper >= 0f)
+                settings[213] = "0.0";
+            
+            if (!(float.TryParse((string) settings[214], out var crowler) && crowler >= 0f))
+                settings[214] = "0.0";
+            
+            if (!(float.TryParse((string) settings[215], out var punk) && punk >= 0f))
+                settings[215] = "0.0";
+            
+            if (normal + abnormal + crowler + jumper + punk > 100f)
             {
-                settings[211] = "20.0";
-            }
-            if (!(float.TryParse((string) settings[212], out num9) && num9 >= 0f))
-            {
-                settings[212] = "20.0";
-            }
-            if (!float.TryParse((string)settings[213], out _))
-            {
-                settings[213] = "20.0";
-            }
-            if (!(float.TryParse((string) settings[214], out var num11) && num11 >= 0f))
-            {
-                settings[214] = "20.0";
-            }
-            if (!(float.TryParse((string) settings[215], out var num12) && num12 >= 0f))
-            {
-                settings[215] = "20.0";
-            }
-            if (num8 + num9 + 20f + num11 + num12 > 100f)
-            {
-                settings[211] = "20.0";
-                settings[212] = "20.0";
-                settings[213] = "20.0";
-                settings[214] = "20.0";
-                settings[215] = "20.0";
-                num8 = 20f;
-                num9 = 20f;
-                num11 = 20f;
-                num12 = 20f;
+                settings[211] = normal = 100;
+                settings[212] = abnormal = 0;
+                settings[213] = jumper = 0;
+                settings[214] = crowler = 0;
+                settings[215] = punk = 0;
             }
             hashtable.Add("spawnMode", (int) settings[210]);
-            hashtable.Add("nRate", num8);
-            hashtable.Add("aRate", num9);
-            hashtable.Add("jRate", 20f);
-            hashtable.Add("cRate", num11);
-            hashtable.Add("pRate", num12);
+            hashtable.Add("nRate", normal);
+            hashtable.Add("aRate", abnormal);
+            hashtable.Add("jRate", jumper);
+            hashtable.Add("cRate", crowler);
+            hashtable.Add("pRate", punk);
         }
         if ((int) settings[216] > 0)
         {
@@ -333,10 +305,9 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         }
         if ((int) settings[217] > 0)
         {
-            if (!(int.TryParse((string) settings[218], out num) && num <= 50))
-            {
+            if (!(int.TryParse((string) settings[218], out var num) && num <= 50))
                 settings[218] = "1";
-            }
+            
             hashtable.Add("waveModeOn", (int) settings[217]);
             hashtable.Add("waveModeNum", num);
         }
@@ -350,40 +321,34 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         }
         if ((int) settings[221] > 0)
         {
-            if (!int.TryParse((string) settings[222], out num) || num > 1000000 || num < 0)
-            {
+            if (!int.TryParse((string) settings[222], out var maxWave) || maxWave > 1000000 || maxWave < 0)
                 settings[222] = "20";
-            }
-            hashtable.Add("maxwave", num);
+            
+            hashtable.Add("maxwave", maxWave);
         }
         if ((int) settings[223] > 0)
         {
-            if (!int.TryParse((string) settings[224], out num) || num > 1000000 || num < 5)
-            {
-                settings[224] = "5";
-            }
-            hashtable.Add("endless", num);
+            if (!int.TryParse((string) settings[224], out var endlessTime) || endlessTime > 1000000 || endlessTime < 5)
+                settings[224] = "1";
+            
+            hashtable.Add("endless", endlessTime);
         }
+        
         if ((string) settings[225] != string.Empty)
-        {
             hashtable.Add("motd", (string) settings[225]);
-        }
+        
         if ((int) settings[228] > 0)
-        {
             hashtable.Add("ahssReload", (int) settings[228]);
-        }
+        
         if ((int) settings[229] > 0)
-        {
             hashtable.Add("punkWaves", (int) settings[229]);
-        }
+        
         if ((int) settings[261] > 0)
-        {
             hashtable.Add("deadlycannons", (int) settings[261]);
-        }
+        
         if (RCSettings.racingStatic > 0)
-        {
             hashtable.Add("asoracing", 1);
-        }
+        
         return hashtable;
     }
 
