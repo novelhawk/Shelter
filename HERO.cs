@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using Mod;
 using Mod.Exceptions;
 using Mod.Interface;
@@ -4425,7 +4426,6 @@ public class HERO : Photon.MonoBehaviour
             LayerMask mask3 = mask2 | mask;
             if (Physics.Raycast(ray, out hit, 1E+07f, mask3.value))
             {
-                RaycastHit hit2;
                 GameObject obj9 = GameObject.Find("cross1");
                 GameObject obj10 = GameObject.Find("cross2");
                 obj9.transform.localPosition = Input.mousePosition;
@@ -4435,7 +4435,7 @@ public class HERO : Photon.MonoBehaviour
                 vector = hit.point - this.transform.position;
                 float magnitude = vector.magnitude;
                 GameObject obj11 = GameObject.Find("LabelDistance");
-                string str = magnitude <= 1000f ? ((int) magnitude).ToString() : "???";
+                string str = magnitude.ToString("0");
                 obj11.GetComponent<UILabel>().text = str;
                 if (magnitude > 120f)
                 {
@@ -4462,7 +4462,7 @@ public class HERO : Photon.MonoBehaviour
                 vector5.Normalize();
                 vector4 = vector4 * 1000000f;
                 vector5 = vector5 * 1000000f;
-                if (Physics.Linecast(this.transform.position + vector2, this.transform.position + vector2 + vector4, out hit2, mask3.value))
+                if (Physics.Linecast(this.transform.position + vector2, this.transform.position + vector2 + vector4, out var hit2, mask3.value))
                 {
                     GameObject obj12 = GameObject.Find("crossL1");
                     obj12.transform.localPosition = this.currentCamera.WorldToScreenPoint(hit2.point);
@@ -4549,7 +4549,7 @@ public class HERO : Photon.MonoBehaviour
                 vector = hit.point - this.baseTransform.position;
                 float magnitude = vector.magnitude;
                 GameObject obj11 = this.LabelDistance;
-                string str = magnitude <= 1000f ? ((int) magnitude).ToString() : "???";
+                string str = magnitude.ToString("0");
                 if ((int) FengGameManagerMKII.settings[189] == 1)
                 {
                     str = str + "\n" + this.currentSpeed.ToString("F1") + " u/s";
