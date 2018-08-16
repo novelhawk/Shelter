@@ -24,9 +24,11 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Mod\Resources\*" />
+    <None Remove="Mod\Resources\*\Config\*" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Mod\Resources\*" />
+    <EmbeddedResource Include="Mod\Resources\Config\*" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp-firstpass">

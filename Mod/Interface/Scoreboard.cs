@@ -6,7 +6,7 @@ namespace Mod.Interface
 {
     public class Scoreboard : Gui
     {
-        private const string EntryLayout = "<color=#672A42>[<b><color=#DC3052>{0}</color></b>] {10}{1}{2} <b><color=#6E8EEB>{3}</color></b>{9}  <color=#31A5E4>{4}</color>|<color=#31A5E4>{5}</color>|<color=#31A5E4>{6}</color>|<color=#31A5E4>{6}</color>|<color=#31A5E4>{7}</color>|<color=#31A5E4>{8}</color></color>";
+        private const string EntryLayout = "<color=#672A42>[<b><color=#DC3052>{0}</color></b>] {10}{1}{2} <b><color=#6E8EEB>{3}</color></b>{9}  <color=#31A5E4>{4}k</color>|<color=#31A5E4>{5}d</color>|<color=#31A5E4>max {6}</color>|<color=#31A5E4>tot {7}</color>|<color=#31A5E4>avg {8}</color></color>";
 
         protected override void Render()
         {
@@ -72,7 +72,7 @@ namespace Mod.Interface
                 mod = "|<b><color=#00FF11>RC</color></b>| ";
 
             int averangeDmg = player.Properties.Kills > 0 ? (int) Math.Floor((decimal)player.Properties.TotalDamage / player.Properties.Kills) : 0;
-            
+
             return string.Format(EntryLayout,
                 player.ID, 
                 mod,

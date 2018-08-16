@@ -5,7 +5,7 @@ namespace Mod
 {
     public class ProfileFile
     {
-        public static readonly string Location = Shelter.ModDirectory + "profiles.json";
+        public const string Name = "profiles.json";
         private List<Profile> _profiles;
         
         [JsonProperty("selected")]
@@ -17,15 +17,15 @@ namespace Mod
             get => _profiles;
             set
             {
-                for (int i = value.Count - 1; i >= 0; i--)
-                {
-                    if (!IsValid(value[i]))
-                    {
-                        value.RemoveAt(i);
-                        if (i < Selected)
-                            Selected--;
-                    }
-                }
+//                for (int i = value.Count - 1; i >= 0; i--)
+//                {
+//                    if (!IsValid(value[i]))
+//                    {
+//                        value.RemoveAt(i);
+//                        if (i < Selected)
+//                            Selected--;
+//                    }
+//                }
                 
                 
                 _profiles = value;
@@ -34,7 +34,7 @@ namespace Mod
 
         public Profile SelectedProfile => Profiles[Selected];
 
-        private static bool IsValid(Profile profile)
+        private static bool IsValid(Profile profile) //TODO: Make a validator
         {
             return true;
         }

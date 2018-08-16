@@ -2,7 +2,7 @@
 
 namespace Mod
 {
-    public struct Profile
+    public class Profile
     {
 //        public string HexName { get; }
 //        public Hero Character { get; set; }

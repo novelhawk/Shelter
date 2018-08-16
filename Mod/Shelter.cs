@@ -5,6 +5,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using ExitGames.Client.Photon;
+using Mod.Animation;
 using Mod.Discord;
 using Mod.Interface;
 using UnityEngine;
@@ -22,6 +24,7 @@ namespace Mod
         public static Profile Profile => _profileManager.ProfileFile.SelectedProfile; 
         private static InterfaceManager _interfaceManager;
         private static CommandManager _commandManager;
+        private static AnimationManager _animationManager;
         private static ProfileManager _profileManager;
 //        private static DiscordRpc _discord;        
 
@@ -29,12 +32,14 @@ namespace Mod
         {
             if (!Directory.Exists(ModDirectory))
                 Directory.CreateDirectory(ModDirectory);
+            gameObject.AddComponent<AnimationTest>();
         }
         
         public void InitComponents()
         {
             _interfaceManager = new InterfaceManager();
             _profileManager = new ProfileManager();
+            _animationManager = new AnimationManager();
 //            _discord = new DiscordRpc();;
         }
 
@@ -99,6 +104,7 @@ namespace Mod
         #endregion
 
         public static ProfileManager ProfileManager => _profileManager;
+        public static AnimationManager AnimationManager => _animationManager;
         public static InterfaceManager InterfaceManager => _interfaceManager;
         public static CommandManager CommandManager => _commandManager;
     }
