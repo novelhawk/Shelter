@@ -4074,7 +4074,6 @@ public partial class FengGameManagerMKII
                         num7 = Screen.width / 2f;
                         num8 = Screen.height / 2f;
                         GUI.backgroundColor = new Color(0.08f, 0.3f, 0.4f, 1f);
-                        GUI.DrawTexture(new Rect(0f, 0f, Screen.width, Screen.height), textureBackgroundBlack);
                         GUI.DrawTexture(new Rect(num7 - 98f, num8 - 48f, 196f, 146f), textureBackgroundBlue);
                         GUI.Box(new Rect(num7 - 100f, num8 - 50f, 200f, 150f), string.Empty);
                         int length = Player.Self.Properties.CurrentLevel.Length;
