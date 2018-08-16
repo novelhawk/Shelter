@@ -654,59 +654,64 @@ public partial class FengGameManagerMKII
 
     public void OnPhotonPlayerPropertiesChanged(object[] playerAndUpdatedProps)
     {
-        if (playerAndUpdatedProps != null && playerAndUpdatedProps.Length >= 2 &&
-            (Player) playerAndUpdatedProps[0] == Player.Self)
-        {
-            Hashtable hashtable = (Hashtable) playerAndUpdatedProps[1];
+        if (playerAndUpdatedProps == null || playerAndUpdatedProps.Length < 2 || !(playerAndUpdatedProps[1] is Hashtable hashtable))
+            return;
+        
+        Player player = playerAndUpdatedProps[0] as Player;
+        if (player == null)
+            return;
 
-            if (hashtable.ContainsKey(PlayerProperty.Name) &&
-                Shelter.Profile.Name != (string) hashtable[PlayerProperty.Name])
+        if (player.Hero != null)
+            player.Hero.UpdateName(player.Properties.Name);
+            
+        if (player != Player.Self) 
+            return;
+
+//        if (hashtable.ContainsKey(PlayerProperty.Name) && Shelter.Profile.Name != (string) hashtable[PlayerProperty.Name])
+//        {
+//            Player.Self.SetCustomProperties(new Hashtable
+//            {
+//                {PlayerProperty.Name, Shelter.Profile.Name}
+//            });
+//        } TODO: Add anti name change
+
+        if (hashtable.ContainsKey("statACL") || hashtable.ContainsKey("statBLA") ||
+            hashtable.ContainsKey("statGAS") || hashtable.ContainsKey("statSPD"))
+        {
+            int num = player.Properties.Acceleration;
+            int num2 = player.Properties.Blade;
+            int num3 = player.Properties.Gas;
+            int num4 = player.Properties.Speed;
+            if (num > 150)
             {
-                Player.Self.SetCustomProperties(new Hashtable
+                player.SetCustomProperties(new Hashtable
                 {
-                    {PlayerProperty.Name, Shelter.Profile.Name}
+                    {PlayerProperty.Acceleration, 100}
                 });
             }
 
-            if (hashtable.ContainsKey("statACL") || hashtable.ContainsKey("statBLA") ||
-                hashtable.ContainsKey("statGAS") || hashtable.ContainsKey("statSPD"))
+            if (num2 > 125)
             {
-                Player player = Player.Self;
-                int num = player.Properties.Acceleration;
-                int num2 = player.Properties.Blade;
-                int num3 = player.Properties.Gas;
-                int num4 = player.Properties.Speed;
-                if (num > 150)
+                player.SetCustomProperties(new Hashtable
                 {
-                    Player.Self.SetCustomProperties(new Hashtable
-                    {
-                        {PlayerProperty.Acceleration, 100}
-                    });
-                }
+                    {PlayerProperty.Blade, 100}
+                });
+            }
 
-                if (num2 > 125)
+            if (num3 > 150)
+            {
+                player.SetCustomProperties(new Hashtable
                 {
-                    Player.Self.SetCustomProperties(new Hashtable
-                    {
-                        {PlayerProperty.Blade, 100}
-                    });
-                }
+                    {PlayerProperty.Gas, 100}
+                });
+            }
 
-                if (num3 > 150)
+            if (num4 > 140)
+            {
+                player.SetCustomProperties(new Hashtable
                 {
-                    Player.Self.SetCustomProperties(new Hashtable
-                    {
-                        {PlayerProperty.Gas, 100}
-                    });
-                }
-
-                if (num4 > 140)
-                {
-                    Player.Self.SetCustomProperties(new Hashtable
-                    {
-                        {PlayerProperty.Speed, 100}
-                    });
-                }
+                    {PlayerProperty.Speed, 100}
+                });
             }
         }
     }
@@ -741,22 +746,6 @@ public partial class FengGameManagerMKII
             foreach (HERO hero in Heroes)
                 if (hero != null)
                     hero.DoUpdate();
-
-            //TODO: Make tags look smaller from distance
-            foreach (HERO hero in Heroes)
-            {
-                //hero.myNetWorkName.GetComponent<UILabel>().text
-                if (hero != null &&
-                    !hero.photonView.isMine &&
-                    !hero.IsGrabbed &&
-                    !hero.HasDied() &&
-                    hero.myNetWorkName != null &&
-                    hero.myNetWorkName.GetComponent<UILabel>() != null)
-                {
-                    hero.myNetWorkName.GetComponent<UILabel>().transform.localScale = new Vector3(14, 14, 14);
-                }
-                    
-            }
             
             foreach (Bullet bullet in Hooks)
                 if (bullet != null)

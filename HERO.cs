@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Mod;
 using Mod.Exceptions;
 using Mod.Interface;
+using Newtonsoft.Json.Schema;
 using UnityEngine;
 using Xft;
 
@@ -2126,23 +2127,34 @@ public class HERO : Photon.MonoBehaviour
         Destroy(gameObject);
     }
 
+    private void UpdateNameScale()
+    {
+        if (Player.Self.Properties.IsDead != false || Player.Self.Hero == null || photonView.isMine)
+        {
+            myNetWorkName.transform.localScale = new Vector3(14, 14, 14);
+            return;
+        }
+
+        var dist = Vector3.Distance(Player.Self.Hero.transform.position, transform.position);
+        var size = 14 + -8 * Mathf.Clamp01(dist / 300);
+        
+        myNetWorkName.transform.localScale = new Vector3(size, size, size);
+    }
+
     public void DoLateUpdate()
     {
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && this.myNetWorkName != null)
         {
+            UpdateNameScale();
+            
             if (this.titanForm && this.eren_titan != null)
-            {
-                this.myNetWorkName.transform.localPosition = Vector3.up * Screen.height * 2f;
-            }
+                this.myNetWorkName.transform.localPosition = Vector3.up * Screen.height * 1.5f;
+
             Vector3 start = new Vector3(this.baseTransform.position.x, this.baseTransform.position.y + 2f, this.baseTransform.position.z);
-            GameObject maincamera = this.maincamera;
             LayerMask mask = 1 << LayerMask.NameToLayer("Ground");
             LayerMask mask2 = 1 << LayerMask.NameToLayer("EnemyBox");
-            LayerMask mask3 = mask2 | mask;
-            if (Vector3.Angle(maincamera.transform.forward, start - maincamera.transform.position) > 90f || Physics.Linecast(start, maincamera.transform.position, mask3))
-            {
-                this.myNetWorkName.transform.localPosition = Vector3.up * Screen.height * 2f;
-            }
+            if (Vector3.Angle(maincamera.transform.forward, start - maincamera.transform.position) > 90f || Physics.Linecast(start, maincamera.transform.position, mask2 | mask))
+                this.myNetWorkName.transform.localPosition = Vector3.up * Screen.height * 1.5f;
             else
             {
                 Vector2 vector2 = this.maincamera.GetComponent<Camera>().WorldToScreenPoint(start);
@@ -4681,7 +4693,7 @@ public class HERO : Photon.MonoBehaviour
         if ((sprite = cachedSprites["blader1"]) != null)
             sprite.color = color;
 
-        for (int i = 0; i < 4; i++)
+        for (int i = 0; i < 5; i++)
         {
             if ((sprite = cachedSprites["bladel" + (i + 1)]) != null)
                 sprite.enabled = currentBladeNum > i;
@@ -4857,7 +4869,7 @@ public class HERO : Photon.MonoBehaviour
             {
                 UILabel component = this.myNetWorkName.GetComponent<UILabel>();
                 string text = component.text;
-                string[] strArray2 = new string[] { text, "[FFFF00]", str, "\n[FFFFFF]", photonView.owner.Properties.Name };
+                string[] strArray2 = { text, "[FFFF00]", str, "\n[FFFFFF]", photonView.owner.Properties.Name };
                 component.text = string.Concat(strArray2);
             }
             else
@@ -4973,7 +4985,15 @@ public class HERO : Photon.MonoBehaviour
         this.myHorse.GetComponent<Horse>().unmounted();
         this.isMounted = false;
     }
-    
+
+    public void UpdateName(string name)
+    {
+        if (networkView == null || myNetWorkName.GetComponent<UILabel>() == null) 
+            return;
+
+        myNetWorkName.GetComponent<UILabel>().text = name;
+    }
+
     public void DoUpdate()
     {
         if (!IN_GAME_MAIN_CAMERA.isPausing)
