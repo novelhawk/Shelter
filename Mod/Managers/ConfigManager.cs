@@ -111,7 +111,7 @@ namespace Mod.Managers
                     throw new NullReferenceException(); //TODO
                 using (var ms = new MemoryStream())
                 {
-                    using (var fs = new FileStream(Shelter.ModDirectory + _file, FileMode.Create, FileAccess.Write, FileShare.Read))
+                    using (var fs = File.Open(Shelter.ModDirectory + _file, FileMode.Create, FileAccess.Write, FileShare.Read))
                     {
                         byte[] buffer = new byte[512];
 
@@ -125,8 +125,10 @@ namespace Mod.Managers
                         fs.Flush();
                         ms.Flush();
 
-                        return ReadFile();
-//                        return Encoding.UTF8.GetString(ms.ToArray()); TODO: Make single step
+                        byte[] content = ms.ToArray();
+                        if (content.Length >= 3 && content[0] == 0xEF && content[1] == 0xBB && content[2] == 0xBF)
+                            return Encoding.UTF8.GetString(content, 3, content.Length - 3);
+                        return Encoding.UTF8.GetString(content);
                     }
                 }
             }
