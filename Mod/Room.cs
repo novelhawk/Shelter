@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Xml.Schema;
 using ExitGames.Client.Photon;
 using Mod.Interface;
 using UnityEngine;
@@ -169,19 +170,15 @@ namespace Mod
         public bool Join() => PhotonNetwork.JoinRoom(FullName);
         public string ToString(int alpha)
         {
-            var aa = alpha.ToString("X2");
-            StringBuilder str = new StringBuilder();
-            str.Append("<color=#5D334B" + aa + ">");
+            StringBuilder builder = new StringBuilder();
+            builder.AppendFormat("<color=#5D334B{0:X2}>", alpha);
             if (IsProtected)
-                str.Append("<color=#034C94" + aa + ">[</color><color=#1191D1" + aa + ">PW</color><color=#034C94" + aa + ">]</color> ");
-            str.Append(Name.RemoveColors());
-            str.Append(" || ");
-            str.Append(Map.Name);
-            str.Append(" || ");
-            str.Append(IsJoinable ? "<color=#00FF00" + aa + ">" : "<color=#FF0000" + aa + ">");
-            str.Append(_currentPlayers + "/" + _maxPlayers);
-            str.Append("</color></color>");
-            return str.ToString();
+                builder.AppendFormat("<color=#034C94{0:X2}>[</color><color=#1191D1{0:X2}>PW</color><color=#034C94{0:X2}>]</color> ", alpha);
+            builder.AppendFormat("{0} || {1} || ", Name.RemoveColors(), Map.Name);
+            builder.AppendFormat("<color=#{1}{0:X2}>", alpha, IsJoinable ? "00FF00" : "FF0000");
+            builder.AppendFormat("{0}/{1}", _currentPlayers, _maxPlayers);
+            builder.Append("</color></color>");
+            return builder.ToString();
         }
 
 
@@ -197,6 +194,8 @@ namespace Mod
         public bool IsJoinable => _currentPlayers < _maxPlayers;
         public bool IsProtected => _roomPassword.Length > 0;
 
+        public int Players => _currentPlayers;
+        
         public static int CurrentPlayers
         {
             get
