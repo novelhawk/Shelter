@@ -1,6 +1,7 @@
 ﻿using System;
-using Mod.Discord.IO;
-using Mod.Discord.Logging;
+using DiscordRPC;
+using DiscordRPC.IO;
+using DiscordRPC.Logging;
 
 namespace Mod.Discord
 {
