@@ -14,9 +14,9 @@ namespace Mod
         {
             get
             {
-                if (!(this[PlayerProperty.IsTitan] is bool isTitan))
+                if (!(this[PlayerProperty.IsTitan] is int isTitan))
                     return PlayerType.Unknown;
-                if (isTitan)
+                if (isTitan == 2)
                     return PlayerType.Titan;
                 return PlayerType.Human;
             }
