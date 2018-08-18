@@ -43,13 +43,13 @@ public class Player
 
     public void SendPrivateMessage(string message)
     {
-        Chat.ReceivePrivateMessage(Self, message);
-        FengGameManagerMKII.instance.photonView.RPC("Chat", this, $"<color=#1068D4>PM<color=#108CD4>></color></color> <color=#{Chat.SystemColor}>{HexName}: {message}</color>", string.Empty);
+        Chat.AddMessage($"<color=#1068D4>TO<color=#108CD4>></color></color> <color=#{Chat.SystemColor}>{HexName}: {message}</color>");
+        Chat.SendMessage($"<color=#1068D4>PM<color=#108CD4>></color></color> <color=#{Chat.SystemColor}>{Self.HexName}: {message}</color>", this);
     }
     
-    public static Player Find(int ID)
+    public static Player Find(int id)
     {
-        return PhotonNetwork.playerList.FirstOrDefault(player => player.ID == ID);
+        return PhotonNetwork.playerList.FirstOrDefault(player => player.ID == id);
     }
 
     public static bool TryParse(string idStr, out Player player)
