@@ -18,7 +18,7 @@ namespace Mod.Commands
             if (!Player.TryParse(replyTo, out Player player))
                 throw new PlayerNotFoundException(replyTo);
             
-            player.SendPrivateMessage(Regex.Match(Chat.Message, @"[\\\/]\w+\s(.*)").Groups[1].Value);
+            player.SendPrivateMessage(Regex.Match(Chat.LastMessage, @"[\\\/]\w+\s(.*)").Groups[1].Value);
         }
     }
 }

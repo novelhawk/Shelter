@@ -12,42 +12,35 @@ namespace Mod.Interface
     public class Chat : Gui
     {
         public const string SystemColor = "04F363";
-        private Texture2D _mBackground;
-        private Texture2D _mWhiteTexture;
-        private Texture2D _mGreyTexture;
-        private bool _mWriting;
-        private Vector2 _mScroll;
-        private GUIStyle _mInputStyle;
+        private Texture2D _background;
+        private Texture2D _whiteTexture;
+        private Texture2D _greyTexture;
+        private GUIStyle _inputField;
+        private GUIStyle _chat;
+        private Vector2 _scroll;
+        private bool _isWriting;
 
-        private static readonly List<ChatMessage> Messages = new List<ChatMessage>();
-        public static string Message { get; private set; } = string.Empty;
+        public static readonly List<ChatMessage> Messages = new List<ChatMessage>();
+        public static string LastMessage { get; private set; } = string.Empty;
 
         #region Static methods
-
-        public static void SendMessage(object sender, object message, PhotonTargets target)
+        
+        public static int SendMessage(object sender, object message, PhotonTargets target)
         {
+            if (target == PhotonTargets.All)
+                target = PhotonTargets.Others;
             FengGameManagerMKII.instance.photonView.RPC("Chat", target, message, sender.ToString());
+            return AddMessage(message, Player.Self);
         }
 
-        public static void SendMessage(object sender, object message, Player player)
+        public static int SendMessage(object sender, object message, Player player)
         {
             FengGameManagerMKII.instance.photonView.RPC("Chat", player, message, sender.ToString());
+            return AddMessage(message, Player.Self);
         }
 
-        public static void SendMessage(object message, PhotonTargets target = PhotonTargets.All)
-        {
-            SendMessage(string.Empty, message, target);
-        }
-
-        public static void SendMessage(object message, Player player)
-        {
-            SendMessage(string.Empty, message, player);
-        }
-
-        public static void SendMessageAsPlayer(object message) //TODO: todo
-        {
-            FengGameManagerMKII.instance.photonView.RPC("Chat", PhotonTargets.All, CustomFormat(message.ToString()), string.Empty);
-        }
+        public static int SendMessage(object message, PhotonTargets target = PhotonTargets.All) => SendMessage(string.Empty, message, target);
+        public static int SendMessage(object message, Player player) => SendMessage(string.Empty, message, player);
 
         private static string CustomFormat(string message)
         {
@@ -60,29 +53,42 @@ namespace Mod.Interface
             return format.Replace("$(friendName)", Shelter.Profile.FriendName);
         }
 
-        public static void AddMessage(object message)
+        public static void EditMessage(int? id, object message, Player sender, bool foremost)
         {
-            Messages.Insert(0, new ChatMessage(message).CheckHTMLTags());
+            if (id == null) return;
+            var old = Messages[id.Value];
+            Messages[id.Value] = new ChatMessage($"<color=#{SystemColor}>{message}</color>", sender, old.Time) {IsForemost = foremost};
         }
 
-        public static void ReceiveMessageFromPlayer(Player sender, object message)
+        public static void EditMessage(int? id, object message, bool foremost)
         {
-            Messages.Insert(0, new ChatMessage($"{sender.HexName}: {message}", sender).CheckHTMLTags());
+            if (id == null) return;
+            var old = Messages[id.Value];
+            Messages[id.Value] = new ChatMessage($"<color=#{SystemColor}>{message}</color>", null  , old.Time) {IsForemost = foremost};
         }
 
-        public static void ReceivePrivateMessage(Player sender, object message)
+        public static int ReceivePrivateMessage(object message, Player sender)
         {
-            Messages.Insert(0, new ChatMessage($"<color=#1068D4>PM<color=#108CD4>></color></color> <color=#{SystemColor}>{sender.HexName}: {message}</color>", sender).CheckHTMLTags());
+            Messages.Add(new ChatMessage($"<color=#1068D4>PM<color=#108CD4>></color></color> <color=#{SystemColor}>{sender.HexName}: {message}</color>", sender));
+            return Messages.Count - 1;
         }
 
-        public static void ReceiveMessage(Player sender, object message)
+        public static int AddMessage(object message, Player sender)
         {
-            Messages.Insert(0, new ChatMessage($"{message}", sender).CheckHTMLTags());
+            Messages.Add(new ChatMessage(message, sender));
+            return Messages.Count - 1;
         }
 
-        public static void System(object message)
+        public static int AddMessage(object message)
         {
-            AddMessage($"<color=#{SystemColor}>{message}</color>");
+            Messages.Add(new ChatMessage(message));
+            return Messages.Count - 1;
+        }
+
+        public static int System(object message, bool foremost = false)
+        {
+            Messages.Add(new ChatMessage($"<color=#{SystemColor}>{message}</color>") {IsForemost = foremost});
+            return Messages.Count - 1;
         } 
         
         public static void Clear()
@@ -94,17 +100,23 @@ namespace Mod.Interface
 
         protected override void OnShow()
         {
-            _mBackground = Texture(0, 0, 0, 100);
-            _mWhiteTexture = Texture(255, 255, 255);
-            _mGreyTexture = Texture(136, 136, 136);
+            _background = Texture(0, 0, 0, 100);
+            _whiteTexture = Texture(255, 255, 255);
+            _greyTexture = Texture(136, 136, 136);
+
+            _chat = new GUIStyle
+            {
+                alignment = TextAnchor.LowerLeft,
+                normal = {textColor = Color(255, 255, 255)}
+            };
         }
 
         protected override void Render()
         {
             // Works in OnShow() for ProfileChanger. TODO: Move it to OnShow
-            _mInputStyle = new GUIStyle(GUI.skin.textArea) // It creates a new instance every frame. Anyone does it so i don't think it's that much of performance loss. (GUI.skin is available only in OnGUI)
+            _inputField = new GUIStyle(GUI.skin.textArea) // It creates a new instance every frame. Anyone does it so i don't think it's that much of performance loss. (GUI.skin is available only in OnGUI)
             {
-                hover = { background = _mGreyTexture, textColor = Color(0, 0, 0) }, // Used as 'normal'
+                hover = { background = _greyTexture, textColor = Color(0, 0, 0) }, // Used as 'normal'
                 border = new RectOffset(0, 0, 0, 0),
                 padding = new RectOffset(0, 0, 0, 0),
                 margin = new RectOffset(0, 0, 0, 0)
@@ -114,17 +126,17 @@ namespace Mod.Interface
             {
                 if (GUI.GetNameOfFocusedControl() == "ChatInput")
                 {
-                    if (Message.StartsWith("/") || Message.StartsWith("\\"))
+                    Match match = Regex.Match(LastMessage, @"[\\\/](\w+)(?:\s+(.*))?.*?");
+                    if (match.Success)
                     {
-                        Match match = Regex.Match(Message, @"[\\\/](\w+)(?:\s+(.*))?.*?");
-                        Command cmd = Shelter.CommandManager.GetCommand(match.Groups[1].Value); //Core.CommandManager.FirstOrDefault(cmds => cmds.Commands.FirstOrDefault(x => x.EqualsIgnoreCase(match.Groups[1].Value)) != null);
+                        Command cmd = Shelter.CommandManager.GetCommand(match.Groups[1].Value);
 
                         if (cmd == null)
                         {
                             System("Command not found.");
-                            Message = string.Empty;
+                            LastMessage = string.Empty;
                             GUI.FocusControl(string.Empty);
-                            _mWriting = !_mWriting;
+                            _isWriting = !_isWriting;
                             return;
                         }
 
@@ -134,39 +146,46 @@ namespace Mod.Interface
                         if (CommandManager.Execute(cmd, args) != null)
                         {
                             Notify.New("UNHANDLED ERROR", $"Unexpected error running {cmd.CommandName}!\nPlease report the bug to the developer", 10000);
-                            System("Exception thrown on " + cmd.CommandName/*Shelter.Lang.Get("message.commandexecutionerror.text", match.Groups[1].Value)*/);
-                            Shelter.Log(/*Shelter.Lang.Get("message.exeptionthrown.text", e.GetType().Name), ErrorType.Warning*/);
+                            System("Exception thrown on " + cmd.CommandName);
 
                         }
                     }
-                    else if (Message != string.Empty)
-                        SendMessageAsPlayer(Message);
+                    else if (LastMessage != string.Empty)
+                    {
+                        SendMessage(CustomFormat(LastMessage));
+                    }
 
-                    Message = string.Empty;
+                    LastMessage = string.Empty;
                     GUI.FocusControl(string.Empty);
                 }
-                _mScroll = new Vector2(0, 0);
+                _scroll = new Vector2(0, 0);
                 _mRealScroll = new Vector2(0, 0);
-                _mWriting = !_mWriting;
+                _isWriting = !_isWriting;
             }
 
             SmartRect rect;
-            if (_mWriting)
+            List<ChatMessage> messages = Messages.OrderBy(x => x.IsForemost).ToList();
+            if (_isWriting)
             {
-                GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), _mBackground);
+                GUI.DrawTexture(new Rect(0, 0, Screen.width, Screen.height), _background);
 
                 GUI.SetNextControlName(string.Empty);
-                rect = new SmartRect(2, Screen.height - 30f - _mScroll.y, Screen.width - 2f, 20);
-                foreach (ChatMessage chatMessage in Messages)
+                rect = new SmartRect(2, Screen.height - 30f - _scroll.y, Screen.width - 2f, 20);
+                for (var i = Messages.Count - 1; i >= 0; i--)
                 {
-                    rect.OY(-15);
-                    if (rect.Y > Screen.height - 25) continue;
-                    GUI.Label(rect, $"{(chatMessage.LocalOnly? "" : $"[{chatMessage.Sender.ID}] ")}{chatMessage.Message}", new GUIStyle { alignment = TextAnchor.LowerLeft, normal = { textColor = Color(255, 255, 255) } });
+                    ChatMessage chatMessage = messages[i];
+                    foreach (var content in chatMessage.Message.Split('\n'))
+                    {
+                        rect.OY(-15);
+                        if (rect.Y > Screen.height - 25) continue;
+                        GUI.Label(rect, $"{(chatMessage.LocalOnly ? "" : $"[{chatMessage.Sender.ID}] ")}{content}",
+                            _chat);
+                    }
                 }
 
-                GUI.DrawTexture(new Rect(2, Screen.height - 23, 500 + 2, 17), _mWhiteTexture);
+                GUI.DrawTexture(new Rect(2, Screen.height - 23, 500 + 2, 17), _whiteTexture);
                 GUI.SetNextControlName("ChatInput");
-                Message = GUI.TextField(new Rect(3, Screen.height - 22, 500, 15), Message, _mInputStyle);
+                LastMessage = GUI.TextField(new Rect(3, Screen.height - 22, 500, 15), LastMessage, _inputField);
                 GUI.FocusControl("ChatInput");
                 return;
             }
@@ -174,12 +193,22 @@ namespace Mod.Interface
             GUI.SetNextControlName(string.Empty);
 
             rect = new SmartRect(2, Screen.height - 25f, Screen.width / 3.5f, 20);
-            foreach (ChatMessage chatMessage in Messages)
+            for (var i = Messages.Count - 1; i >= 0; i--)
             {
-                if (Shelter.Stopwatch.ElapsedMilliseconds - 10000f <= chatMessage.Time)
-                    GUI.Label(rect, $"{(chatMessage.LocalOnly ? "" : $"[{chatMessage.Sender.ID}] ")}{chatMessage.Message}", new GUIStyle { alignment = TextAnchor.LowerLeft, normal = { textColor = Color(255, 255, 255) } });
-                rect.OY(-15);
+                ChatMessage chatMessage = messages[i];
+                if (chatMessage.IsForemost || Shelter.Stopwatch.ElapsedMilliseconds - 10000f <= chatMessage.Time)
+                {
+                    foreach (var content in chatMessage.Message.Split('\n'))
+                    {
+                        if (content == string.Empty)
+                            continue;
+                        GUI.Label(rect, $"{(chatMessage.LocalOnly ? "" : $"[{chatMessage.Sender.ID}] ")}{content}",
+                            _chat);
+                        rect.OY(-15);
+                    }
+                }
             }
+
             //TODO: Remove messages after excessive spam
         }
 
@@ -188,7 +217,7 @@ namespace Mod.Interface
         private Vector2 _mRealScroll;
         protected void Update()
         {
-            if (!_mWriting) 
+            if (!_isWriting) 
                 return;
             
             const int moveBy = 50;
@@ -203,21 +232,21 @@ namespace Mod.Interface
                 _animation = .3f;
             }
 
-            if (_mScroll != _mRealScroll || _animation != 0f)
+            if (_scroll != _mRealScroll || _animation != 0f)
             {
-                _mScroll = Vector2.Lerp(_mScroll, _mRealScroll, 1f - _animation * 10 / 3);
+                _scroll = Vector2.Lerp(_scroll, _mRealScroll, 1f - _animation * 10 / 3);
                 _animation -= Time.deltaTime;
 
-                if (_mScroll == _mRealScroll || _animation <= 0f)
+                if (_scroll == _mRealScroll || _animation <= 0f)
                     _animation = 0f;
             }
         }
 
         protected override void OnHide()
         {
-            Destroy(_mBackground);
-            Destroy(_mGreyTexture);
-            Destroy(_mWhiteTexture);
+            Destroy(_background);
+            Destroy(_greyTexture);
+            Destroy(_whiteTexture);
         }
     }
 }

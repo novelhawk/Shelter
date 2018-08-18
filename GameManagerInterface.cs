@@ -4052,24 +4052,7 @@ public partial class FengGameManagerMKII
                 }
                 else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                 {
-                    if (Time.timeScale <= 0.1f)
-                    {
-                        num7 = Screen.width / 2f;
-                        num8 = Screen.height / 2f;
-                        GUI.backgroundColor = new Color(0.08f, 0.3f, 0.4f, 1f);
-                        GUI.DrawTexture(new Rect(num7 - 98f, num8 - 48f, 196f, 96f), textureBackgroundBlue);
-                        GUI.Box(new Rect(num7 - 100f, num8 - 50f, 200f, 100f), string.Empty);
-                        if (pauseWaitTime <= 3f)
-                        {
-                            GUI.Label(new Rect(num7 - 43f, num8 - 15f, 200f, 22f), "Unpausing in:");
-                            GUI.Label(new Rect(num7 - 8f, num8 + 5f, 200f, 22f), pauseWaitTime.ToString("F1"));
-                        }
-                        else
-                        {
-                            GUI.Label(new Rect(num7 - 43f, num8 - 10f, 200f, 22f), "Game Paused.");
-                        }
-                    }
-                    else if (!(logicLoaded && customLevelLoaded))
+                    if (!(logicLoaded && customLevelLoaded))
                     {
                         num7 = Screen.width / 2f;
                         num8 = Screen.height / 2f;

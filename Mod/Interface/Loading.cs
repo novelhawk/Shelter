@@ -24,7 +24,7 @@ namespace Mod.Interface
                 Shelter.InterfaceManager.Disable(typeof(Loading));
         }
 
-        protected virtual void Update()
+        private void Update()
         {
             rotAngle += Time.deltaTime * 250;
         }
@@ -36,10 +36,10 @@ namespace Mod.Interface
 
         protected override void Render()
         {
-            Rect rect = new Rect(Screen.width - 79, Screen.height - 79, 69, 69);
+            windowRect = new Rect(Screen.width - 79, Screen.height - 79, 69, 69);
 
-            GUIUtility.RotateAroundPivot(rotAngle, new Vector2(rect.x + rect.width / 2f, rect.y + rect.height / 2f));
-            GUI.DrawTexture(new Rect(rect.x, rect.y, rect.height, rect.width), texture);
+            GUIUtility.RotateAroundPivot(rotAngle, new Vector2(windowRect.x + windowRect.width / 2f, windowRect.y + windowRect.height / 2f));
+            GUI.DrawTexture(windowRect, texture);
         }
 
         protected override void OnHide()

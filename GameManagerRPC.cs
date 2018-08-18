@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Runtime.Remoting.Messaging;
+using System.Security.AccessControl;
 using ExitGames.Client.Photon;
 using Mod;
 using Mod.Exceptions;
@@ -65,21 +66,22 @@ public partial class FengGameManagerMKII
     public int wave = 1;
 
     [RPC]
-    private void RequireStatus()
+    private void RequireStatus(PhotonMessageInfo info)
     {
-        object[] parameters =
-            {humanScore, titanScore, wave, highestwave, roundTime, timeTotalServer, startRacing, endRacing};
-        photonView.RPC("refreshStatus", PhotonTargets.Others, parameters);
-        object[] objArray2 = {PVPhumanScore, PVPtitanScore};
-        photonView.RPC("refreshPVPStatus", PhotonTargets.Others, objArray2);
-        object[] objArray3 = {teamScores};
-        photonView.RPC("refreshPVPStatus_AHSS", PhotonTargets.Others, objArray3);
+        if (!Player.Self.IsMasterClient)
+            throw new NotAllowedException(nameof(RequireStatus), info);
+        
+        photonView.RPC("refreshStatus", PhotonTargets.Others, humanScore, titanScore, wave, highestwave, roundTime, timeTotalServer, startRacing, endRacing);
+        photonView.RPC("refreshPVPStatus", PhotonTargets.Others, PVPhumanScore, PVPtitanScore);
+        photonView.RPC("refreshPVPStatus_AHSS", PhotonTargets.Others, teamScores);
     }
 
     [RPC]
-    private void RefreshStatus(int score1, int score2, int wav, int highestWav, float time1, float time2,
-        bool startRacin, bool endRacin)
+    private void RefreshStatus(int score1, int score2, int wav, int highestWav, float time1, float time2, bool startRacin, bool endRacin, PhotonMessageInfo info)
     {
+        if (!info.sender.IsMasterClient)
+            throw new NotAllowedException(nameof(RefreshStatus), info);
+        
         humanScore = score1;
         titanScore = score2;
         wave = wav;
@@ -88,22 +90,26 @@ public partial class FengGameManagerMKII
         timeTotalServer = time2;
         startRacing = startRacin;
         endRacing = endRacin;
-        if (startRacing && GameObject.Find("door") != null)
-        {
-            GameObject.Find("door").SetActive(false);
-        }
+        if (startRacing && Shelter.TryFind("door", out GameObject door))
+            door.SetActive(false);
     }
 
     [RPC]
-    private void RefreshPVPStatus(int score1, int score2)
+    private void RefreshPVPStatus(int score1, int score2, PhotonMessageInfo info)
     {
+        if (!info.sender.IsMasterClient && IN_GAME_MAIN_CAMERA.GameMode != GameMode.PvpCapture)
+            throw new NotAllowedException(nameof(RefreshPVPStatus), info);
+        
         PVPhumanScore = score1;
         PVPtitanScore = score2;
     }
 
     [RPC]
-    private void RefreshPVPStatus_AHSS(int[] score1)
+    private void RefreshPVPStatus_AHSS(int[] score1, PhotonMessageInfo info)
     {
+        if (!info.sender.IsMasterClient)
+            throw new NotAllowedException(nameof(RefreshStatus), info);
+        
         print(score1);
         teamScores = score1;
     }
@@ -111,17 +117,23 @@ public partial class FengGameManagerMKII
     [RPC]
     public void PauseRPC(bool pause, PhotonMessageInfo info)
     {
-        if (info.sender.IsMasterClient)
+        if (!info.sender.IsMasterClient)
+            throw new NotAllowedException(nameof(PauseRPC), info);
+        
+        if (pause)
         {
-            if (pause)
-            {
-                pauseWaitTime = 100000f;
-                Time.timeScale = 1E-06f;
-            }
+            pauseWaitTime = 100000f;
+            _timeSincePause = 0f;
+            Time.timeScale = 1E-06f;
+            _pauseMessageId = Mod.Interface.Chat.SendMessage($"{info.sender.HexName} paused the game.");
+        }
+        else
+        {
+            pauseWaitTime = 3f;
+            if (!_pauseMessageId.HasValue)
+                Mod.Interface.Chat.SendMessage($"{info.sender.HexName} unpaused the game.");
             else
-            {
-                pauseWaitTime = 3f;
-            }
+                Mod.Interface.Chat.EditMessage(_pauseMessageId, $"{info.sender.HexName} unpaused the game.", false);
         }
     }
 
@@ -132,50 +144,40 @@ public partial class FengGameManagerMKII
         {
             if (info.sender != view.owner)
                 throw new NotAllowedException(nameof(LabelRPC), info);
-
-            HERO hero = PhotonView.Find(viewId).gameObject.GetComponent<HERO>();
-            if (hero != null)
-            {
-                if (info.sender.Properties.Guild != string.Empty)
-                    hero.myNetWorkName.GetComponent<UILabel>().text = "[FFFF00]" + info.sender.Properties.Guild + "\n[FFFFFF]" + info.sender.Properties.Name;
-                else
-                    hero.myNetWorkName.GetComponent<UILabel>().text = info.sender.Properties.Name;
-            }
+            
+            // This is already done automatically in HERO
         }
     }
 
     [RPC]
-    public void OneTitanDown(string name1, bool onPlayerLeave)
+    public void OneTitanDown(string titanType, bool onPlayerLeave)
     {
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || PhotonNetwork.isMasterClient)
         {
             if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpCapture)
             {
-                if (name1 != string.Empty)
+                if (titanType != string.Empty)
                 {
-                    if (name1 == "Titan")
+                    switch (titanType)
                     {
-                        PVPhumanScore++;
-                    }
-                    else if (name1 == "Aberrant")
-                    {
-                        PVPhumanScore += 2;
-                    }
-                    else if (name1 == "Jumper")
-                    {
-                        PVPhumanScore += 3;
-                    }
-                    else if (name1 == "Crawler")
-                    {
-                        PVPhumanScore += 4;
-                    }
-                    else if (name1 == "Female Titan")
-                    {
-                        PVPhumanScore += 10;
-                    }
-                    else
-                    {
-                        PVPhumanScore += 3;
+                        case "Titan":
+                            PVPhumanScore++;
+                            break;
+                        case "Aberrant":
+                            PVPhumanScore += 2;
+                            break;
+                        case "Jumper":
+                            PVPhumanScore += 3;
+                            break;
+                        case "Crawler":
+                            PVPhumanScore += 4;
+                            break;
+                        case "Female Titan":
+                            PVPhumanScore += 10;
+                            break;
+                        default:
+                            PVPhumanScore += 3;
+                            break;
                     }
                 }
 
@@ -185,103 +187,83 @@ public partial class FengGameManagerMKII
             }
             else if (IN_GAME_MAIN_CAMERA.GameMode != GameMode.CaveFight)
             {
-                if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.KillTitan)
+                switch (IN_GAME_MAIN_CAMERA.GameMode)
                 {
-                    if (!IsAnyTitanAlive)
-                    {
-                        GameWin();
-                        Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
-                    }
-                }
-                else if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.SurviveMode)
-                {
-                    if (!IsAnyTitanAlive)
-                    {
-                        wave++;
-                        if (!(LevelInfoManager.GetInfo(Level).RespawnMode != RespawnMode.NEWROUND &&
-                              (!Level.StartsWith("Custom") || RCSettings.gameType != 1) ||
-                              IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer))
-                        {
-                            foreach (Player player in PhotonNetwork.playerList)
-                            {
-                                if (player.Properties.PlayerType != PlayerType.Titan)
-                                {
-                                    photonView.RPC("respawnHeroInNewRound", player);
-                                }
-                            }
-                        }
-
-                        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
-                        {
-                            SendChatContentInfo("<color=#A8FF24>Wave : " + wave + "</color>");
-                        }
-
-                        if (wave > highestwave)
-                        {
-                            highestwave = wave;
-                        }
-
-                        if (PhotonNetwork.isMasterClient)
-                        {
-                            RequireStatus();
-                        }
-
-                        if (!((RCSettings.maxWave != 0 || wave <= 20) &&
-                              (RCSettings.maxWave <= 0 || wave <= RCSettings.maxWave)))
+                    case GameMode.KillTitan:
+                        if (!IsAnyTitanAlive)
                         {
                             GameWin();
+                            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
                         }
-                        else
+
+                        break;
+                    case GameMode.SurviveMode:
+                        if (!IsAnyTitanAlive)
                         {
-                            int abnormal = 90;
-                            if (difficulty == 1)
+                            wave++;
+                            if (!(LevelInfoManager.GetInfo(Level).RespawnMode != RespawnMode.NEWROUND &&
+                                  (!Level.StartsWith("Custom") || RCSettings.gameType != 1) ||
+                                  IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer))
                             {
-                                abnormal = 70;
+                                foreach (Player player in PhotonNetwork.playerList)
+                                {
+                                    if (player.Properties.PlayerType != PlayerType.Titan)
+                                    {
+                                        photonView.RPC("respawnHeroInNewRound", player);
+                                    }
+                                }
                             }
 
-                            if (!LevelInfoManager.GetInfo(Level).HasPunk)
+                            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                             {
-                                SpawnTitanCustom("titanRespawn", abnormal, wave + 2, false);
+                                SendChatContentInfo("<color=#A8FF24>Wave : " + wave + "</color>");
                             }
-                            else if (wave == 5)
+
+                            if (wave > highestwave)
+                                highestwave = wave;
+
+                            if (PhotonNetwork.isMasterClient)
+                                RequireStatus(null);
+
+                            if (!((RCSettings.maxWave != 0 || wave <= 20) && (RCSettings.maxWave <= 0 || wave <= RCSettings.maxWave)))
                             {
-                                SpawnTitanCustom("titanRespawn", abnormal, 1, true);
-                            }
-                            else if (wave == 10)
-                            {
-                                SpawnTitanCustom("titanRespawn", abnormal, 2, true);
-                            }
-                            else if (wave == 15)
-                            {
-                                SpawnTitanCustom("titanRespawn", abnormal, 3, true);
-                            }
-                            else if (wave == 20)
-                            {
-                                SpawnTitanCustom("titanRespawn", abnormal, 4, true);
+                                GameWin();
                             }
                             else
                             {
-                                SpawnTitanCustom("titanRespawn", abnormal, wave + 2, false);
+                                int abnormal = 90;
+                                if (difficulty == 1)
+                                    abnormal = 70;
+
+                                if (!LevelInfoManager.GetInfo(Level).HasPunk)
+                                    SpawnTitanCustom("titanRespawn", abnormal, wave + 2, false);
+                                else if (wave == 5)
+                                    SpawnTitanCustom("titanRespawn", abnormal, 1, true);
+                                else if (wave == 10)
+                                    SpawnTitanCustom("titanRespawn", abnormal, 2, true);
+                                else if (wave == 15)
+                                    SpawnTitanCustom("titanRespawn", abnormal, 3, true);
+                                else if (wave == 20)
+                                    SpawnTitanCustom("titanRespawn", abnormal, 4, true);
+                                else
+                                    SpawnTitanCustom("titanRespawn", abnormal, wave + 2, false);
                             }
                         }
-                    }
-                }
-                else if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.EndlessTitan)
-                {
-                    if (!onPlayerLeave)
-                    {
-                        humanScore++;
-                        int num2 = 90;
-                        if (difficulty == 1)
-                        {
-                            num2 = 70;
-                        }
 
-                        SpawnTitanCustom("titanRespawn", num2, 1, false);
-                    }
-                }
-                else if (LevelInfoManager.GetInfo(Level).EnemyNumber != -1)
-                {
+                        break;
+                    case GameMode.EndlessTitan:
+                        if (!onPlayerLeave)
+                        {
+                            humanScore++;
+                            int num2 = 90;
+                            if (difficulty == 1)
+                            {
+                                num2 = 70;
+                            }
+
+                            SpawnTitanCustom("titanRespawn", num2, 1, false);
+                        }
+                        break;
                 }
             }
         }
@@ -309,25 +291,25 @@ public partial class FengGameManagerMKII
     [RPC]
     private void NetGameLose(int score, PhotonMessageInfo info)
     {
+        if (!info.sender.IsMasterClient && !info.sender.isLocal)
+            throw new NotAllowedException(nameof(NetGameLose), info, false); //TODO: Change to true when sure it doesn't get called by the game
+
+        
         isLosing = true;
         titanScore = score;
         gameEndCD = gameEndTotalCDtime;
+        _endingMessageId = Mod.Interface.Chat.System("Game is restarting soon.");
         if ((int) settings[244] == 1)
         {
-            Mod.Interface.Chat.System("<color=#FFC000>(" + roundTime.ToString("F2") +
-                                      ")</color> Round ended (game lose).");
-        }
-
-        if (!(info.sender == PhotonNetwork.masterClient || info.sender.isLocal) && PhotonNetwork.isMasterClient)
-        {
-            Mod.Interface.Chat.System("Round end sent from Player " + info.sender.ID);
+            Mod.Interface.Chat.System($"<color=#FFC000>({roundTime:F2})</color> Round ended (game lose).");
         }
     }
 
     [RPC]
     private void RestartGameByClient(PhotonMessageInfo info)
     {
-        throw new NotAllowedException(nameof(RestartGameByClient), info);
+        if (!Player.Self.IsMasterClient)
+            throw new NotAllowedException(nameof(RestartGameByClient), info);    
     }
 
     [RPC]
@@ -335,27 +317,24 @@ public partial class FengGameManagerMKII
     {
         humanScore = score;
         isWinning = true;
-        if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpAHSS)
+        switch (IN_GAME_MAIN_CAMERA.GameMode)
         {
-            teamWinner = score;
-            teamScores[teamWinner - 1]++;
-            gameEndCD = gameEndTotalCDtime;
-        }
-        else if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.Racing)
-        {
-            if (RCSettings.racingStatic == 1)
-            {
+            case GameMode.PvpAHSS:
+                teamWinner = score;
+                teamScores[teamWinner - 1]++;
+                gameEndCD = gameEndTotalCDtime;
+                break;
+            case GameMode.Racing when RCSettings.racingStatic == 1:
                 gameEndCD = 1000f;
-            }
-            else
-            {
+                break;
+            case GameMode.Racing:
                 gameEndCD = 20f;
-            }
+                break;
+            default:
+                gameEndCD = gameEndTotalCDtime;
+                break;
         }
-        else
-        {
-            gameEndCD = gameEndTotalCDtime;
-        }
+        _endingMessageId = Mod.Interface.Chat.System("Game is restarting soon.");
 
         if ((int) settings[244] == 1)
         {
@@ -372,51 +351,52 @@ public partial class FengGameManagerMKII
     [RPC]
     public void SomeOneIsDead(int id = -1)
     {
-        if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpCapture)
+        switch (IN_GAME_MAIN_CAMERA.GameMode)
         {
-            if (id != 0)
-            {
-                PVPtitanScore += 2;
-            }
+            case GameMode.PvpCapture:
+                if (id != 0)
+                {
+                    PVPtitanScore += 2;
+                }
 
-            CheckPVPPoints();
-            object[] parameters = {PVPhumanScore, PVPtitanScore};
-            photonView.RPC("refreshPVPStatus", PhotonTargets.Others, parameters);
-        }
-        else if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.EndlessTitan)
-        {
-            titanScore++;
-        }
-        else if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.KillTitan ||
-                 IN_GAME_MAIN_CAMERA.GameMode == GameMode.SurviveMode ||
-                 IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight ||
-                 IN_GAME_MAIN_CAMERA.GameMode == GameMode.Trost)
-        {
-            if (IsAnyPlayerAlive())
-            {
-                GameLose();
-            }
-        }
-        else if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpAHSS && RCSettings.pvpMode == 0 &&
-                 RCSettings.bombMode == 0)
-        {
-            if (IsAnyPlayerAlive())
-            {
-                GameLose();
-                teamWinner = 0;
-            }
+                CheckPVPPoints();
+                object[] parameters = {PVPhumanScore, PVPtitanScore};
+                photonView.RPC("refreshPVPStatus", PhotonTargets.Others, parameters);
+                break;
+            
+            case GameMode.EndlessTitan:
+                titanScore++;
+                break;
+            
+            case GameMode.KillTitan:
+            case GameMode.SurviveMode:
+            case GameMode.BossFight:
+            case GameMode.Trost:
+                if (!IsAnyPlayerAlive())
+                    GameLose();
+                break;
+            
+            case GameMode.PvpAHSS when RCSettings.pvpMode == 0 && RCSettings.bombMode == 0:
+                if (!IsAnyPlayerAlive())
+                {
+                    GameLose();
+                    teamWinner = 0;
+                    return;
+                }
 
-            if (IsAnyTeamMemberAlive(1))
-            {
-                teamWinner = 2;
-                GameWin();
-            }
+                if (IsAnyTeamMemberAlive(1))
+                {
+                    teamWinner = 2;
+                    GameWin();
+                    return;
+                }
 
-            if (IsAnyTeamMemberAlive(2))
-            {
-                teamWinner = 1;
-                GameWin();
-            }
+                if (IsAnyTeamMemberAlive(2))
+                {
+                    teamWinner = 1;
+                    GameWin();
+                }
+                break;
         }
     }
 
@@ -427,8 +407,11 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
-    public void NetShowDamage(int speed)
+    public void NetShowDamage(int speed, PhotonMessageInfo info)
     {
+        if (info != null && !info.sender.IsMasterClient && !info.sender.isLocal)
+            throw new NotAllowedException(nameof(NetShowDamage), info, false);
+            
         if (Shelter.TryFind("Stylish", out GameObject obj))
             obj.GetComponent<StylishComponent>().Style(speed);
         
@@ -611,32 +594,11 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
-    private void ShowResult(string text0, string text1, string text2, string text3, string text4, string text6,
-        PhotonMessageInfo t)
+    private void ShowResult(string t1, string t2, string t3, string t4, string t5, string t6, PhotonMessageInfo info)
     {
-        if (!(gameTimesUp || !t.sender.IsMasterClient))
-        {
-            gameTimesUp = true;
-            GameObject obj2 = GameObject.Find("UI_IN_GAME");
-            NGUITools.SetActive(obj2.GetComponent<UIReferArray>().panels[0], false);
-            NGUITools.SetActive(obj2.GetComponent<UIReferArray>().panels[1], false);
-            NGUITools.SetActive(obj2.GetComponent<UIReferArray>().panels[2], true);
-            NGUITools.SetActive(obj2.GetComponent<UIReferArray>().panels[3], false);
-            GameObject.Find("LabelName").GetComponent<UILabel>().text = text0;
-            GameObject.Find("LabelKill").GetComponent<UILabel>().text = text1;
-            GameObject.Find("LabelDead").GetComponent<UILabel>().text = text2;
-            GameObject.Find("LabelMaxDmg").GetComponent<UILabel>().text = text3;
-            GameObject.Find("LabelTotalDmg").GetComponent<UILabel>().text = text4;
-            GameObject.Find("LabelResultTitle").GetComponent<UILabel>().text = text6;
-            Screen.lockCursor = false;
-            Screen.showCursor = true;
-            IN_GAME_MAIN_CAMERA.GameType = GameType.NotInRoom;
-            gameStart = false;
-        }
-        else if (!(t.sender.IsMasterClient || !Player.Self.IsMasterClient))
-        {
-            KickPlayerRC(t.sender, true, "false game end.");
-        }
+        if (!info.sender.IsMasterClient)
+            throw new NotAllowedException(nameof(ShowResult), info);
+        throw new NotAllowedException(nameof(ShowResult), info, false);
     }
 
     [RPC]
@@ -659,10 +621,10 @@ public partial class FengGameManagerMKII
     [RPC]
     private void Chat(string content, string sender, PhotonMessageInfo info)
     {
-        if (sender == string.Empty)
-            Mod.Interface.Chat.ReceiveMessage(info.sender, content);
-        else
-            Mod.Interface.Chat.ReceiveMessageFromPlayer(info.sender, content);
+        if (sender != string.Empty)
+            Mod.Interface.Chat.AddMessage($"{info.sender.HexName}: {content}", info.sender);
+        else 
+            Mod.Interface.Chat.AddMessage(content, info.sender);
     }
 
     [RPC]
@@ -850,7 +812,6 @@ public partial class FengGameManagerMKII
     [RPC]
     private void ChatPM(string sender, string content, PhotonMessageInfo info) //TODO: Customize PMs message
     {
-        Mod.Interface.Chat.ReceivePrivateMessage(info.sender,
-            $"<color=#1068D4>PM</color><color=#108CD4>></color> <color=#{Mod.Interface.Chat.SystemColor}>{info.sender.HexName}: {content}</color>");
+        Mod.Interface.Chat.ReceivePrivateMessage($"<color=#1068D4>PM</color><color=#108CD4>></color> <color=#{Mod.Interface.Chat.SystemColor}>{info.sender.HexName}: {content}</color>", info.sender);
     }
 }

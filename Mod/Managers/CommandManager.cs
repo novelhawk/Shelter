@@ -38,7 +38,7 @@ namespace Mod.Managers
         public Command GetCommand(string commandName)
         {
             for (var i = 0; i < this.Count; i++)
-                if (this[i].CommandName.EqualsIgnoreCase(commandName) || this[i].Aliases.ContainsIgnoreCase(commandName))
+                if (this[i].CommandName.EqualsIgnoreCase(commandName) || this[i].Aliases.AnyEqualsIgnoreCase(commandName))
                     return this[i];
             return null;
         }

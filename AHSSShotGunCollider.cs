@@ -92,7 +92,7 @@ public class AHSSShotGunCollider : MonoBehaviour
                     // Single
                     case GameType.Singleplayer when titan != null && !titan.hasDie:
                         
-                        FengGameManagerMKII.instance.NetShowDamage(damage);
+                        FengGameManagerMKII.instance.NetShowDamage(damage, null);
                         if (damage > item.transform.root.GetComponent<TITAN>().myLevel * 100f)
                         {
                             item.transform.root.GetComponent<TITAN>().die();

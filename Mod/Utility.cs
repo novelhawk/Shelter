@@ -13,7 +13,7 @@ namespace Mod
             tagName = tagName.ToLower();
             switch (tagName)
             {
-                case "size": // It doesnt get buggy even if you don't insert any number
+//                case "size": // It doesnt get buggy even if you don't insert any number
                 case "color": // Couldn't find any instance of it bugging out with all sorts of args
                 case "i":
                 case "b":
@@ -22,8 +22,6 @@ namespace Mod
                     return false;
             }
         }
-
-        public static ChatMessage CheckHTMLTags(this ChatMessage chatMessage) => new ChatMessage(CheckHTMLTags(chatMessage.Message), chatMessage.Sender);
 
         public static string CheckHTMLTags(string text)
         {

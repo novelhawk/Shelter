@@ -16,7 +16,7 @@ namespace Mod.Commands
             if (!Player.TryParse(args[0], out Player player))
                 throw new PlayerNotFoundException(args[0]);
             
-            player.SendPrivateMessage(Regex.Match(Chat.Message, @"[\\\/]\w+\s\d+\s(.*)").Groups[1].Value); //TODO: Add private message and reply
+            player.SendPrivateMessage(Regex.Match(Chat.LastMessage, @"[\\\/]\w+\s\d+\s(.*)").Groups[1].Value); //TODO: Add private message and reply
             CommandReply.replyTo = player.ID;
         }
     }

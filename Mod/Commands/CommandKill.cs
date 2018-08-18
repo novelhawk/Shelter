@@ -13,7 +13,7 @@ namespace Mod.Commands
         {
             if (args.Length < 1)
                 throw new CommandArgumentException(CommandName, "/kill [id|all|titans] [msg]");
-            string msg = Regex.Match(Chat.Message, @"[\\\/]\w+\s(?:\d+|\w+)\s(.*)").Groups[1].Value;
+            string msg = Regex.Match(Chat.LastMessage, @"[\\\/]\w+\s(?:\d+|\w+)\s(.*)").Groups[1].Value;
             if (string.IsNullOrEmpty(msg))
                 msg = "<color=#ffffff>Server</color> ";
 
