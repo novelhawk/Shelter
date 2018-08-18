@@ -43,9 +43,6 @@
     <Reference Include="Boo.Lang">
       <HintPath>D:\Attack on Titan\Assemblies\Boo.Lang.dll</HintPath>
     </Reference>
-    <Reference Include="DiscordRPC, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null">
-      <HintPath>..\..\Assemblies\DiscordRPC.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Security">
       <HintPath>D:\Attack on Titan\Assemblies\Mono.Security.dll</HintPath>
     </Reference>
