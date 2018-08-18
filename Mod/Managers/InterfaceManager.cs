@@ -17,6 +17,7 @@ namespace Mod.Managers
             _interfaces.AddRange(new Gui[]
             {
                 go.AddComponent<Notify>(),
+                go.AddComponent<Connecting>(),
                 go.AddComponent<Scoreboard>(),
                 go.AddComponent<Chat>(),
                 go.AddComponent<Loading>(),
