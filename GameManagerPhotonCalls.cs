@@ -251,7 +251,7 @@ public partial class FengGameManagerMKII
                 {
                     if (info.Gamemode == GameMode.Trost)
                     {
-                        if (!IsAnyPlayerAlive())
+                        if (IsAnyPlayerAlive())
                         {
                             PhotonNetwork
                                 .Instantiate("TITAN_EREN_trost", new Vector3(-200f, 0f, -194f),
@@ -278,7 +278,7 @@ public partial class FengGameManagerMKII
                     }
                     else if (info.Gamemode == GameMode.BossFight)
                     {
-                        if (!IsAnyPlayerAlive())
+                        if (IsAnyPlayerAlive())
                         {
                             PhotonNetwork.Instantiate("COLOSSAL_TITAN", -Vector3.up * 10000f,
                                 Quaternion.Euler(0f, 180f, 0f), 0);
@@ -449,7 +449,6 @@ public partial class FengGameManagerMKII
             }
             else
             {
-                //TODO: Wasn't the limit 125 on all?
                 if (player.Properties.Acceleration > 150 || player.Properties.Blade > 125 ||
                     player.Properties.Gas > 150 || player.Properties.Speed > 140)
                 {
@@ -467,36 +466,24 @@ public partial class FengGameManagerMKII
                     StartCoroutine(CustomLevelEnumerator(new List<Player> {player}));
                 }
 
-                ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
+                Hashtable hashtable = new Hashtable();
                 if (RCSettings.bombMode == 1)
-                {
                     hashtable.Add("bomb", 1);
-                }
 
                 if (RCSettings.globalDisableMinimap == 1)
-                {
                     hashtable.Add("globalDisableMinimap", 1);
-                }
 
                 if (RCSettings.teamMode > 0)
-                {
                     hashtable.Add("team", RCSettings.teamMode);
-                }
 
                 if (RCSettings.pointMode > 0)
-                {
                     hashtable.Add("point", RCSettings.pointMode);
-                }
 
                 if (RCSettings.disableRock > 0)
-                {
                     hashtable.Add("rock", RCSettings.disableRock);
-                }
 
                 if (RCSettings.explodeMode > 0)
-                {
                     hashtable.Add("explode", RCSettings.explodeMode);
-                }
 
                 if (RCSettings.healthMode > 0)
                 {
@@ -506,24 +493,16 @@ public partial class FengGameManagerMKII
                 }
 
                 if (RCSettings.infectionMode > 0)
-                {
                     hashtable.Add("infection", RCSettings.infectionMode);
-                }
 
                 if (RCSettings.banEren == 1)
-                {
                     hashtable.Add("eren", RCSettings.banEren);
-                }
 
                 if (RCSettings.moreTitans > 0)
-                {
                     hashtable.Add("titanc", RCSettings.moreTitans);
-                }
 
                 if (RCSettings.damageMode > 0)
-                {
                     hashtable.Add("damage", RCSettings.damageMode);
-                }
 
                 if (RCSettings.sizeMode > 0)
                 {
@@ -549,66 +528,44 @@ public partial class FengGameManagerMKII
                 }
 
                 if (RCSettings.friendlyMode > 0)
-                {
                     hashtable.Add("friendly", 1);
-                }
 
                 if (RCSettings.pvpMode > 0)
-                {
                     hashtable.Add("pvp", RCSettings.pvpMode);
-                }
 
                 if (RCSettings.maxWave > 0)
-                {
                     hashtable.Add("maxwave", RCSettings.maxWave);
-                }
 
                 if (RCSettings.endlessMode > 0)
-                {
                     hashtable.Add("endless", RCSettings.endlessMode);
-                }
 
                 if (RCSettings.motd != string.Empty)
-                {
                     hashtable.Add("motd", RCSettings.motd);
-                }
 
                 if (RCSettings.horseMode > 0)
-                {
                     hashtable.Add("horse", RCSettings.horseMode);
-                }
 
                 if (RCSettings.ahssReload > 0)
-                {
                     hashtable.Add("ahssReload", RCSettings.ahssReload);
-                }
 
                 if (RCSettings.punkWaves > 0)
-                {
                     hashtable.Add("punkWaves", RCSettings.punkWaves);
-                }
 
                 if (RCSettings.deadlyCannons > 0)
-                {
                     hashtable.Add("deadlycannons", RCSettings.deadlyCannons);
-                }
 
                 if (RCSettings.racingStatic > 0)
-                {
                     hashtable.Add("asoracing", RCSettings.racingStatic);
-                }
 
                 if (ignoreList != null && ignoreList.Count > 0)
-                {
                     photonView1.RPC("ignorePlayerArray", player, ignoreList.ToArray());
-                }
 
                 photonView1.RPC("settingRPC", player, hashtable);
                 photonView1.RPC("setMasterRC", player);
                 if (Time.timeScale <= 0.1f && pauseWaitTime > 3f)
                 {
                     photonView1.RPC("pauseRPC", player, true);
-                    Mod.Interface.Chat.SendMessage("<color=#FFCC00>MasterClient has paused the game.</color>");
+                    Mod.Interface.Chat.SendMessage("MasterClient has paused the game", player);
                 }
             }
         }
@@ -623,9 +580,7 @@ public partial class FengGameManagerMKII
         }
 
         if (ignoreList.Contains(player.ID))
-        {
             ignoreList.Remove(player.ID);
-        }
 
         InstantiateTracker.instance.TryRemovePlayer(player.ID);
         if (PhotonNetwork.isMasterClient)
@@ -658,31 +613,18 @@ public partial class FengGameManagerMKII
             return;
         
         Player player = playerAndUpdatedProps[0] as Player;
-        if (player == null)
-            return;
+        if (player == null) return;
 
-        if (player.Hero != null)
-            player.Hero.UpdateName(player.Properties.Name);
-            
-        if (player != Player.Self) 
-            return;
+        if (player.Hero != null && (hashtable.ContainsKey(PlayerProperty.Name) || hashtable.ContainsKey(PlayerProperty.Guild)))
+            player.Hero.UpdateName(player.Properties);
 
-//        if (hashtable.ContainsKey(PlayerProperty.Name) && Shelter.Profile.Name != (string) hashtable[PlayerProperty.Name])
-//        {
-//            Player.Self.SetCustomProperties(new Hashtable
-//            {
-//                {PlayerProperty.Name, Shelter.Profile.Name}
-//            });
-//        } TODO: Add anti name change
+        //TODO: Add anti name change
 
-        if (hashtable.ContainsKey("statACL") || hashtable.ContainsKey("statBLA") ||
-            hashtable.ContainsKey("statGAS") || hashtable.ContainsKey("statSPD"))
+        if (player != Player.Self) return;
+        if (hashtable.ContainsKey(PlayerProperty.Acceleration) || hashtable.ContainsKey(PlayerProperty.Blade) ||
+            hashtable.ContainsKey(PlayerProperty.Gas) || hashtable.ContainsKey(PlayerProperty.Speed))
         {
-            int num = player.Properties.Acceleration;
-            int num2 = player.Properties.Blade;
-            int num3 = player.Properties.Gas;
-            int num4 = player.Properties.Speed;
-            if (num > 150)
+            if (player.Properties.Acceleration > 150)
             {
                 player.SetCustomProperties(new Hashtable
                 {
@@ -690,7 +632,7 @@ public partial class FengGameManagerMKII
                 });
             }
 
-            if (num2 > 125)
+            if (player.Properties.Blade > 125)
             {
                 player.SetCustomProperties(new Hashtable
                 {
@@ -698,7 +640,7 @@ public partial class FengGameManagerMKII
                 });
             }
 
-            if (num3 > 150)
+            if (player.Properties.Gas > 150)
             {
                 player.SetCustomProperties(new Hashtable
                 {
@@ -706,7 +648,7 @@ public partial class FengGameManagerMKII
                 });
             }
 
-            if (num4 > 140)
+            if (player.Properties.Speed > 140)
             {
                 player.SetCustomProperties(new Hashtable
                 {
@@ -806,7 +748,7 @@ public partial class FengGameManagerMKII
         levelCache = new List<string[]>();
         titanSpawners = new List<TitanSpawner>();
         restartCount = new List<float>();
-        
+        ignoreList = new List<int>();
         
         groundList = new List<GameObject>();
         noRestart = false;

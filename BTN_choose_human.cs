@@ -8,9 +8,7 @@ public class BTN_choose_human : MonoBehaviour
 {
     private static bool IsEveryoneDead()
     {
-        if (PhotonNetwork.playerList.Any(player => player.Properties.Alive != null && player.Properties.Alive.Value && player.Properties.PlayerType == PlayerType.Human))
-            return false;
-        return true;
+        return !PhotonNetwork.playerList.Any(player => player.Properties.PlayerType == PlayerType.Human && player.Properties.Alive == true);
     }
 
     private void OnClick()
@@ -24,7 +22,7 @@ public class BTN_choose_human : MonoBehaviour
         }
         if (!PhotonNetwork.isMasterClient && FengGameManagerMKII.instance.roundTime > 60f)
         {
-            if (!IsEveryoneDead())
+            if (IsEveryoneDead())
             {
                 FengGameManagerMKII.instance.SpawnPlayerAfterGameEnd(selection);
             }
@@ -36,7 +34,7 @@ public class BTN_choose_human : MonoBehaviour
         }
         else if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight || IN_GAME_MAIN_CAMERA.GameMode == GameMode.Trost || IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpCapture)
         {
-            if (IsEveryoneDead())
+            if (!IsEveryoneDead())
             {
                 FengGameManagerMKII.instance.SpawnPlayerAfterGameEnd(selection);
                 FengGameManagerMKII.instance.photonView.RPC("restartGameByClient", PhotonTargets.MasterClient, new object[0]);
