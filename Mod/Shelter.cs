@@ -5,12 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using ExitGames.Client.Photon;
-using Mod.Animation;
-using Mod.Discord;
-using Mod.Interface;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
 using Random = UnityEngine.Random;
 
 namespace Mod
