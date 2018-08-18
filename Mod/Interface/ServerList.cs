@@ -71,7 +71,7 @@ namespace Mod.Interface
 
         protected override void Render()
         {
-            if (Event.current.type == EventType.KeyDown && Event.current.keyCode == KeyCode.F6)
+            if (Event.current.type == EventType.KeyDown)
                 GUI.FocusControl("Search");
 
             GUI.DrawTexture(windowRect = new Rect(Screen.width / 2f - width/2, Screen.height / 2f - height/2, width, height), background);
@@ -90,8 +90,8 @@ namespace Mod.Interface
                     continue;
                 GUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
-                if (GUILayout.Button(room.ToString(Alpha.ToInt()), buttonStyle) && room.IsJoinable)
-                    room.Join();
+                if (GUILayout.Button(room.ToString(Alpha.ToInt()), buttonStyle))
+                    Connecting.ConnectTo(room);
                 GUILayout.FlexibleSpace();
                 GUILayout.EndHorizontal();
             }
