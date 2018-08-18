@@ -1,4 +1,5 @@
 using System.Collections;
+using Mod.Interface;
 using UnityEngine;
 
 public class TriggerColliderWeapon : MonoBehaviour
@@ -70,7 +71,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                     HERO hero = component.transform.root.GetComponent<HERO>();
                     
                     var view = transform.root.gameObject.GetPhotonView();
-                    if (!view.isMine && (hero.myTeam != this.myTeam && !hero.isInvincible() || BypassPVP) && !hero.IsGrabbed && !hero.HasDied())
+                    if (!component.transform.root.gameObject.GetPhotonView().isMine && (hero.myTeam != this.myTeam && !hero.isInvincible() || BypassPVP) && !hero.IsGrabbed && !hero.HasDied())
                     {
                         hero.markDie();
                         Vector3 vector2 = component.transform.root.position - transform.position;
@@ -78,7 +79,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                             vector2.normalized * b * 1000f + Vector3.up * 50f,  // force : Vector3
                             false,                                              // isBite : bool
                             view.viewID,                                        // viewID : int
-                            PhotonView.Find(view.viewID).owner.Properties.Name, // titanName : string
+                            view.owner.Properties.Name,                         // titanName : string
                             false);                                             // killByTitan : bool
                     }
                 }
@@ -103,7 +104,7 @@ public class TriggerColliderWeapon : MonoBehaviour
 
                         item.transform.root.GetComponent<TITAN>().die();
                         napeMeat(currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity, item.transform.root);
-                        FengGameManagerMKII.instance.NetShowDamage(damage);
+                        FengGameManagerMKII.instance.NetShowDamage(damage, null);
                         FengGameManagerMKII.instance.PlayerKillInfoSingleplayerUpdate(damage);
                     }
                 }
