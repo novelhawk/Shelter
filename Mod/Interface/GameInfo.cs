@@ -18,8 +18,6 @@ namespace Mod.Interface
                 alignment = TextAnchor.UpperRight,
                 fontSize = 12
             };
-            
-            windowRect = new Rect(0, 0, Screen.width, Screen.height);
         }
 
         protected override void Render()
@@ -68,7 +66,7 @@ namespace Mod.Interface
 
             output.Append("</color>");
             
-            GUI.Label(windowRect, output.ToString(), _text);
+            GUI.Label(new Rect(0, 0, Screen.width, Screen.height), output.ToString(), _text); // TODO: Change rect to `windowRect` and update it in a OnResize event
         }
 
         private void Update()
