@@ -58,6 +58,8 @@ namespace Mod.Interface
                 mod = "|<b><color=#0089FF>Hawk</color></b>| ";
             else if (player.Has("HawkUser"))
                 mod = "|<b><color=#00B7FF>HawkUser</color></b>| ";
+            else if (player.Has(PlayerProperty.Shelter))
+                mod = "|<b><color=#13ACFF>Shelter</color></b>| ";
             else if (player.Has("AlphaX"))
                 mod = "|<b><color=#00D5FF>AlphaX</color></b>| ";
             else if (player.Has("Alpha"))

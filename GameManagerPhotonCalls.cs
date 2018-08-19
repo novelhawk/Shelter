@@ -66,7 +66,9 @@ public partial class FengGameManagerMKII
             {PlayerProperty.Dead, true},
             {PlayerProperty.IsTitan, 0},
             {PlayerProperty.RCTeam, 0},
-            {PlayerProperty.CurrentLevel, string.Empty}
+            {PlayerProperty.CurrentLevel, string.Empty},
+            {PlayerProperty.Shelter, "http://github.com/ITALIA195/Shelter"},
+            {PlayerProperty.UUID, nameof(NotImplementedException)}
         });
         humanScore = 0;
         titanScore = 0;

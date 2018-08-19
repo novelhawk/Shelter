@@ -1,5 +1,8 @@
 public static class PlayerProperty
 {
+    public const string Shelter = "shelter";
+    public const string UUID = "uuid";
+    
     public const string Name = "name";
     public const string Guild = "guildName";
     
