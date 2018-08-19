@@ -34,29 +34,25 @@ namespace Mod.Interface
                 output.AppendFormat(" Ping: {0}", PhotonNetwork.GetPing());
             output.Append("\n");
 
-            output.AppendFormat("Map: {0}", FengGameManagerMKII.Level);
+            output.AppendFormat("Map: {0}\n", FengGameManagerMKII.Level);
             
-            output.Append("\n");
             switch (IN_GAME_MAIN_CAMERA.GameType)
             {
                 case GameType.Singleplayer:
                     var speed = Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity.magnitude; //TODO: Show in new gui
                     _maxSpeed = Mathf.Max(_maxSpeed, speed);
-                    output.AppendFormat("Speed: Current {0} Max {1}", speed, _maxSpeed);
+                    output.AppendFormat("Speed: Current {0} Max {1}\n", speed, _maxSpeed);
                     break;
                 case GameType.Multiplayer:
                     var room = PhotonNetwork.Room;
-                    output.AppendFormat("{0} ({1}/{2})", room.Name.HexColor(), Room.CurrentPlayers, room.MaxPlayers);
+                    output.AppendFormat("{0} ({1}/{2})\n", room.Name.HexColor(), Room.CurrentPlayers, room.MaxPlayers);
                     break;
             }
-            output.Append("\n");
-
-            output.AppendFormat("Titans: {0}", GameObject.FindGameObjectsWithTag("titan")?.Length ?? 0);
             
-            output.Append("\n");
-
+            output.AppendFormat("Titans: {0}\n", GameObject.FindGameObjectsWithTag("titan")?.Length ?? 0);
+            
             output.AppendFormat("FPS: {0:0}", _fps);
-
+            
             output.Append("</color>");
             
             GUI.Label(new Rect(0, 0, Screen.width, Screen.height), output.ToString(), _text); // TODO: Change rect to `windowRect` and update it in a OnResize event
