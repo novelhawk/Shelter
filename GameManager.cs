@@ -131,7 +131,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             }
             if ((int) settings[244] == 1)
             {
-                Mod.Interface.Chat.System("<color=#FFC000>(" + roundTime.ToString("F2") + ")</color> Round Start.");
+                Mod.Interface.Chat.System($"<color=#FFC000>({roundTime:F2})</color> Round Start.");
             }
         }
         isFirstLoad = false;
@@ -930,7 +930,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 } 
                 else if (_endingMessageId.HasValue)
                 {
-                    Mod.Interface.Chat.EditMessage(_endingMessageId, $"Restart failed.", false);
+                    Mod.Interface.Chat.EditMessage(_endingMessageId, "Restart failed.", false);
                     _endingMessageId = null;
                 }
                 timeElapse += Time.deltaTime;

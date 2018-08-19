@@ -37,17 +37,9 @@ namespace Mod
                 Render();
         }
 
-        protected virtual void OnShow()
-        {
-        }
-
-        protected virtual void Render()
-        {
-        }
-
-        protected virtual void OnHide()
-        {
-        }
+        protected virtual void OnShow() { }
+        protected virtual void Render() { }
+        protected virtual void OnHide() { }
 
         protected static Texture2D Texture(byte r, byte g, byte b, byte a = 255)
         {

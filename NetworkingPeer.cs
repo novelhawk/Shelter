@@ -1983,10 +1983,9 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 PhotonMessageInfo info = new PhotonMessageInfo(sender, networkTime, photonView);
                 photonView.ExecuteOnSerialize(pStream, info);
             }
-            else if (photonView.observed is Transform)
+            else if (photonView.observed is Transform observed)
             {
                 object[] objArray2 = data[(byte) 1] as object[];
-                Transform observed = (Transform) photonView.observed;
                 if (objArray2.Length >= 1 && objArray2[0] != null)
                 {
                     observed.localPosition = (Vector3) objArray2[0];
@@ -2000,10 +1999,9 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                     observed.localScale = (Vector3) objArray2[2];
                 }
             }
-            else if (photonView.observed is Rigidbody)
+            else if (photonView.observed is Rigidbody rigidbody)
             {
                 object[] objArray3 = data[(byte) 1] as object[];
-                Rigidbody rigidbody = (Rigidbody) photonView.observed;
                 if (objArray3.Length >= 1 && objArray3[0] != null)
                 {
                     rigidbody.velocity = (Vector3) objArray3[0];
