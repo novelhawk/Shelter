@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Mod.Interface;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -50,18 +51,18 @@ namespace Mod
             _commandManager?.Dispose();
             _commandManager = null;
             _interfaceManager.DisableAll();
-            _interfaceManager.Enable("Background");
-            _interfaceManager.Enable("Loading");
-            _interfaceManager.Enable("MainMenu");
+            _interfaceManager.Enable(nameof(Background));
+            _interfaceManager.Enable(nameof(Loading));
+            _interfaceManager.Enable(nameof(MainMenu));
         }
 
         public static void OnJoinedGame()
         {
             _commandManager = new CommandManager();
             _interfaceManager.DisableAll();
-            _interfaceManager.Enable("Chat");
-            _interfaceManager.Enable("Scoreboard");
-            _interfaceManager.Enable("GameInfo");
+            _interfaceManager.Enable(nameof(Chat));
+            _interfaceManager.Enable(nameof(Scoreboard));
+            _interfaceManager.Enable(nameof(GameInfo));
         }
 
         public static bool TryFind(string name, out GameObject go)

@@ -9,11 +9,12 @@ namespace Mod.Interface
         private float rotAngle;
         private Texture2D texture;
 
+        // ReSharper disable once Unity.InvalidStaticModifier Unity.InvalidParameters
         public static void Start(string id)
         {
             if (!loadings.Contains(id))
                 loadings.Enqueue(id);
-            Shelter.InterfaceManager.Enable(typeof(Loading));
+            Shelter.InterfaceManager.Enable(nameof(Loading));
         }
 
         public static void Stop(string id)
@@ -21,7 +22,7 @@ namespace Mod.Interface
             if (loadings.Contains(id))
                 loadings.Dequeue();
             if (loadings.Count <= 0)
-                Shelter.InterfaceManager.Disable(typeof(Loading));
+                Shelter.InterfaceManager.Disable(nameof(Loading));
         }
 
         private void Update()

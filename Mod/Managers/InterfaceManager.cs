@@ -38,17 +38,7 @@ namespace Mod.Managers
                 return true;
             return false;
         }
-
-        public void Enable(Type gui)
-        {
-            Enable(gui.Name);
-        }
-
-        public void Disable(Type gui)
-        {
-            Disable(gui.Name);
-        }   
-
+        
         public void Enable(string name)
         {
             Gui gui = _interfaces.FirstOrDefault(g => g.Name == name);

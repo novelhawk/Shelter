@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using Newtonsoft.Json;
+using UnityEngine;
 
 namespace Mod.Interface
 {
@@ -46,23 +47,23 @@ namespace Mod.Interface
             GUI.Label(rect.Set(145, 347, 166, 40), "Create", IsVisible("CreateRoom") ? selected : text);
             if (GUI.Button(rect.OY(-10), string.Empty, GUIStyle.none))
             {
-                Enable("CreateRoom");
-                Disable("ServerList");
-                Disable("ProfileChanger");
+                Enable(nameof(CreateRoom));
+                Disable(nameof(ServerList));
+                Disable(nameof(ProfileChanger));
             }
             GUI.Label(rect.Set(143, 370, 167, 40), "Server list", IsVisible("ServerList") ? selected : text);
             if (GUI.Button(rect.OY(-10), string.Empty, GUIStyle.none))
             {
-                Enable("ServerList");
-                Disable("CreateRoom");
-                Disable("ProfileChanger");
+                Enable(nameof(ServerList));
+                Disable(nameof(CreateRoom));
+                Disable(nameof(ProfileChanger));
             }
             GUI.Label(rect.Set(143, 393, 167, 40), "Profile", IsVisible("ProfileChanger") ? selected : text);
             if (GUI.Button(rect.OY(-10), string.Empty, GUIStyle.none))
             {
-                Enable("ProfileChanger");
-                Disable("CreateRoom");
-                Disable("ServerList");
+                Enable(nameof(ProfileChanger));
+                Disable(nameof(CreateRoom));
+                Disable(nameof(ServerList));
             }
             GUI.matrix = Matrix4x4.identity;
 

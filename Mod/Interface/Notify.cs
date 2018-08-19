@@ -20,7 +20,7 @@ namespace Mod.Interface
         public static void New(string title, string message, long duration, float height = 100)
         {
             Notifications.Enqueue(new Notification(title, message, duration, height));
-            Shelter.InterfaceManager.Enable(typeof(Notify));
+            Shelter.InterfaceManager.Enable(nameof(Notify));
         }
 
         protected override void OnShow()
