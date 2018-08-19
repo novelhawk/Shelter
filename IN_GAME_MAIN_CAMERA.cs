@@ -808,26 +808,13 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                     return;
                 }
             }
-            if (this.inputManager.isInputDown[InputCode.pause])
+            if (this.inputManager.isInputDown[InputCode.MenuKey])
             {
-                if (isPausing)
-                {
-                    if (this.main_object != null)
-                    {
-                        Vector3 position = transform.position;
-                        position = this.head == null ? this.main_object.transform.position : this.head.transform.position;
-                        position += Vector3.up * this.heightMulti;
-                        transform.position = Vector3.Lerp(transform.position, position - transform.forward * 5f, 0.2f);
-                    }
-                    return;
-                }
                 isPausing = !isPausing;
                 if (isPausing)
                 {
                     if (GameType == GameType.Singleplayer)
-                    {
                         Time.timeScale = 0f;
-                    }
                     GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().menuOn = true;
                     Screen.showCursor = true;
                     Screen.lockCursor = false;
