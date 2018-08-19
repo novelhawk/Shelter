@@ -126,7 +126,7 @@ namespace Mod.Interface
             {
                 if (GUI.GetNameOfFocusedControl() == "ChatInput")
                 {
-                    Match match = Regex.Match(LastMessage, @"[\\\/](\w+)(?:\s+(.*))?.*?");
+                    Match match = Regex.Match(LastMessage, @"^[\\\/](\w+)(?:\s+(.*))?.*?");
                     if (match.Success)
                     {
                         Command cmd = Shelter.CommandManager.GetCommand(match.Groups[1].Value);
