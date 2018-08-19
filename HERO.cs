@@ -4987,7 +4987,7 @@ public class HERO : Photon.MonoBehaviour
 
     public void UpdateName(PlayerProperties props)
     {
-        if (networkView == null || myNetWorkName.GetComponent<UILabel>() == null) 
+        if (photonView == null || myNetWorkName.GetComponent<UILabel>() == null) 
             return;
 
         if (string.IsNullOrEmpty(props.Guild)) 
