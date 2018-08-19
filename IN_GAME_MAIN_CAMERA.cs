@@ -398,26 +398,42 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 //        }
         if (usingTitan && GameType != GameType.Singleplayer)
         {
-            Vector3 vector = new Vector3(0f, 9999f, 0f);
-            GameObject.Find("skill_cd_bottom").transform.localPosition = vector;
-            GameObject.Find("skill_cd_armin").transform.localPosition = vector;
-            GameObject.Find("skill_cd_eren").transform.localPosition = vector;
-            GameObject.Find("skill_cd_jean").transform.localPosition = vector;
-            GameObject.Find("skill_cd_levi").transform.localPosition = vector;
-            GameObject.Find("skill_cd_marco").transform.localPosition = vector;
-            GameObject.Find("skill_cd_mikasa").transform.localPosition = vector;
-            GameObject.Find("skill_cd_petra").transform.localPosition = vector;
-            GameObject.Find("skill_cd_sasha").transform.localPosition = vector;
-            GameObject.Find("GasUI").transform.localPosition = vector;
-            GameObject.Find("stamina_titan").transform.localPosition = new Vector3(-160f, (int)(-Screen.height * 0.5f + 15f), 0f);
-            GameObject.Find("stamina_titan_bottom").transform.localPosition = new Vector3(-160f, (int)(-Screen.height * 0.5f + 15f), 0f);
+            Vector3 vector = new Vector3(0f, 4000, 0f);
+            if (Shelter.TryFind("skill_cd_bottom", out obj))
+                obj.transform.localPosition = vector;
+            if (Shelter.TryFind("skill_cd_armin", out obj))
+                obj.transform.localPosition = vector;
+            if (Shelter.TryFind("skill_cd_eren", out obj))
+                obj.transform.localPosition = vector;
+            if (Shelter.TryFind("skill_cd_jean", out obj))
+                obj.transform.localPosition = vector;
+            if (Shelter.TryFind("skill_cd_levi", out obj))
+                obj.transform.localPosition = vector;
+            if (Shelter.TryFind("skill_cd_marco", out obj))
+                obj.transform.localPosition = vector;
+            if (Shelter.TryFind("skill_cd_mikasa", out obj))
+                obj.transform.localPosition = vector;
+            if (Shelter.TryFind("skill_cd_petra", out obj))
+                obj.transform.localPosition = vector;
+            if (Shelter.TryFind("skill_cd_sasha", out obj))
+                obj.transform.localPosition = vector;
+            if (Shelter.TryFind("GasUI", out obj))
+                obj.transform.localPosition = vector;
+            if (Shelter.TryFind("stamina_titan", out obj))
+                obj.transform.localPosition = new Vector3(-160f, (int)(-Screen.height * 0.5f + 15f), 0f);
+            if (Shelter.TryFind("stamina_titan_bottom", out obj))
+                obj.transform.localPosition = new Vector3(-160f, (int)(-Screen.height * 0.5f + 15f), 0f);
         }
         else
         {
-            GameObject.Find("skill_cd_bottom").transform.localPosition = new Vector3(0f, (int)(-Screen.height * 0.5f + 5f), 0f);
-            GameObject.Find("GasUI").transform.localPosition = GameObject.Find("skill_cd_bottom").transform.localPosition;
-            GameObject.Find("stamina_titan").transform.localPosition = new Vector3(0f, 9999f, 0f);
-            GameObject.Find("stamina_titan_bottom").transform.localPosition = new Vector3(0f, 9999f, 0f);
+            if (Shelter.TryFind("skill_cd_bottom", out obj))
+                obj.transform.localPosition = new Vector3(0f, (int)(-Screen.height * 0.5f + 5f), 0f);
+            if (Shelter.TryFind("GasUI", out obj))
+                obj.transform.localPosition = GameObject.Find("skill_cd_bottom").transform.localPosition;
+            if (Shelter.TryFind("stamina_titan", out obj))
+                obj.transform.localPosition = new Vector3(0f, 4000, 0f);
+            if (Shelter.TryFind("stamina_titan_bottom", out obj))
+                obj.transform.localPosition = new Vector3(0f, 4000, 0f);
         }
         if (this.main_object != null && this.main_object.GetComponent<HERO>() != null)
         {
