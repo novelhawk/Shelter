@@ -448,7 +448,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         }
         if (stereoType == STEREO_3D_TYPE.SIDE_BY_SIDE)
         {
-            gameObject.GetComponent<Camera>().aspect = 1280f / 1080;
+            gameObject.GetComponent<Camera>().aspect = 1.777778F;
         }
         this.createSnapShotRT2();
     }
