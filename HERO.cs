@@ -121,7 +121,7 @@ public class HERO : Photon.MonoBehaviour
     public Transform myCannonBase;
     public Transform myCannonPlayer;
     public CannonPropRegion myCannonRegion;
-    public GROUP myGroup;
+    public Group myGroup;
     private GameObject myHorse;
     public GameObject myNetWorkName;
     public float myScale = 1f;
@@ -4139,7 +4139,7 @@ public class HERO : Photon.MonoBehaviour
             this.gunDummy.name = "gunDummy";
             this.gunDummy.transform.position = transform.position;
             this.gunDummy.transform.rotation = transform.rotation;
-            this.myGroup = GROUP.A;
+            this.myGroup = Group.AHSS;
             this.setTeam(2);
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine)
             {
@@ -4279,7 +4279,7 @@ public class HERO : Photon.MonoBehaviour
             this.gunDummy.name = "gunDummy";
             this.gunDummy.transform.position = this.baseTransform.position;
             this.gunDummy.transform.rotation = this.baseTransform.rotation;
-            this.myGroup = GROUP.A;
+            this.myGroup = Group.AHSS;
             this.setTeam2(2);
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine)
             {
@@ -4925,11 +4925,7 @@ public class HERO : Photon.MonoBehaviour
         this.bombImmune = false;
     }
 
-    private void suicide()
-    {
-    }
-
-    private void suicide2()
+    private void Suicide()
     {
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer)
         {
@@ -5027,6 +5023,11 @@ public class HERO : Photon.MonoBehaviour
                     }
                     if (this.State == HeroState.Grab && !this.useGun)
                     {
+                        if (this.inputManager.isInputDown[InputCode.restart])
+                        {
+                            if (titanWhoGrabMe.GetComponent())                            
+                        }
+                        
                         if (this.skillId == "jean")
                         {
                             if (this.State != HeroState.Attack && (this.inputManager.isInputDown[InputCode.attack0] || this.inputManager.isInputDown[InputCode.attack1]) && this.escapeTimes > 0 && !this.baseAnimation.IsPlaying("grabbed_jean"))
@@ -5100,13 +5101,17 @@ public class HERO : Photon.MonoBehaviour
                             }
                         }
                     }
-                    else if (!this.titanForm && !this.isCannon)
+                    else if (!titanForm && !isCannon)
                     {
-                        Boolean ReflectorVariable2;
-                        Boolean ReflectorVariable1;
-                        Boolean ReflectorVariable0;
+                        if (this.inputManager.isInputDown[InputCode.restart])
+                            this.Suicide();
+                        
+                        bool ReflectorVariable2;
+                        bool ReflectorVariable1;
+                        bool ReflectorVariable0;
                         this.bufferUpdate();
                         this.updateExt();
+                        
                         if (!this.grounded && this.State != HeroState.AirDodge)
                         {
                             if ((int) FengGameManagerMKII.settings[181] == 1)
@@ -5173,10 +5178,6 @@ public class HERO : Photon.MonoBehaviour
                             if (this.inputManager.isInputDown[InputCode.flare3])
                             {
                                 this.shootFlare(3);
-                            }
-                            if (this.inputManager.isInputDown[InputCode.restart])
-                            {
-                                this.suicide2();
                             }
                             if (this.myHorse != null && this.isMounted && FengGameManagerMKII.inputRC.isInputHorseDown(InputCodeRC.horseMount))
                             {

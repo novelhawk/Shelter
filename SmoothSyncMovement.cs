@@ -28,6 +28,7 @@ public class SmoothSyncMovement : Photon.MonoBehaviour
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
+        //TODO: Anti
         if (stream.isWriting)
         {
             stream.SendNext(transform.position);

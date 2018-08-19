@@ -86,7 +86,7 @@ public class TITAN : Photon.MonoBehaviour
     public FengGameManagerMKII MultiplayerManager;
     public int myDifficulty;
     public float myDistance;
-    public GROUP myGroup = GROUP.T;
+    public Group myGroup = Group.Titan;
     public GameObject myHero;
     public float myLevel = 1f;
     public TitanTrigger myTitanTrigger;

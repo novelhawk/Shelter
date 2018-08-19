@@ -145,9 +145,9 @@ namespace Mod.Interface
 
                         if (CommandManager.Execute(cmd, args) != null)
                         {
-                            Notify.New("UNHANDLED ERROR", $"Unexpected error running {cmd.CommandName}!\nPlease report the bug to the developer", 10000);
+                            Notify.New("UNHANDLED ERROR", $"Unexpected error running {cmd.CommandName}!\nPlease report the bug on github", 10000);
                             System("Exception thrown on " + cmd.CommandName);
-
+                            System("Please report the bug on discord or on github");
                         }
                     }
                     else if (LastMessage != string.Empty)
