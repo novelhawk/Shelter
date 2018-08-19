@@ -1212,16 +1212,13 @@ public class HERO : Photon.MonoBehaviour
                             this.hookSomeOne = false;
                         }
                     }
-                    else if (this.hookBySomeOne && this.badGuy != null)
+                    else if (this.hookBySomeOne)
                     {
-                        if (this.badGuy != null)
+                        if (this.badGuy != null && IN_GAME_MAIN_CAMERA.GameMode != GameMode.Racing)
                         {
                             Vector3 vector3 = this.badGuy.transform.position - this.baseTransform.position;
-                            float f = vector3.magnitude;
-                            if (f > 5f)
-                            {
-                                this.baseRigidBody.AddForce(vector3.normalized * Mathf.Pow(f, 0.15f) * 0.2f, ForceMode.Impulse);
-                            }
+                            if (vector3.magnitude > 5f)
+                                this.baseRigidBody.AddForce(vector3.normalized * Mathf.Pow(vector3.magnitude, 0.15f) * 0.2f, ForceMode.Impulse);
                         }
                         else
                         {
@@ -3842,19 +3839,22 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void RPCHookedByHuman(int hooker, Vector3 hookPosition)
+    private void RPCHookedByHuman(int hooker, Vector3 hookPosition, PhotonMessageInfo info)
     {
-        this.hookBySomeOne = true;
-        this.badGuy = PhotonView.Find(hooker).gameObject;
-        if (Vector3.Distance(hookPosition, transform.position) < 15f)
+        if (!PhotonView.TryParse(hooker, out PhotonView view))
+            throw new NotAllowedException(nameof(RPCHookedByHuman), info, false);
+        
+        if (Vector3.Distance(hookPosition, transform.position) < 15f && IN_GAME_MAIN_CAMERA.GameMode == GameMode.Racing)
         {
+            this.badGuy = view.gameObject;
+            this.hookBySomeOne = true;
+            
             this.launchForce = PhotonView.Find(hooker).gameObject.transform.position - transform.position;
             rigidbody.AddForce(-rigidbody.velocity * 0.9f, ForceMode.VelocityChange);
             float num = Mathf.Pow(this.launchForce.magnitude, 0.1f);
             if (this.grounded)
-            {
-                rigidbody.AddForce(Vector3.up * Mathf.Min((float)(this.launchForce.magnitude * 0.2f), (float)10f), ForceMode.Impulse);
-            }
+                rigidbody.AddForce(Vector3.up * Mathf.Min(this.launchForce.magnitude * 0.2f, 10f), ForceMode.Impulse);
+            
             rigidbody.AddForce(this.launchForce * num * 0.1f, ForceMode.Impulse);
             if (this.State != HeroState.Grab)
             {
@@ -3874,7 +3874,7 @@ public class HERO : Photon.MonoBehaviour
         {
             this.hookBySomeOne = false;
             this.badGuy = null;
-            PhotonView.Find(hooker).RPC("hookFail", PhotonView.Find(hooker).owner, new object[0]);
+            view.RPC("hookFail", view.owner);
         }
     }
 

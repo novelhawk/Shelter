@@ -128,8 +128,7 @@ public class Bullet : Photon.MonoBehaviour
                 {
                     if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                     {
-                        object[] objArray3 = new object[] { hit.collider.transform.root.gameObject.GetPhotonView().viewID };
-                        photonView.RPC("tieMeToOBJ", PhotonTargets.Others, objArray3);
+                        photonView.RPC("tieMeToOBJ", PhotonTargets.Others, hit.collider.transform.root.gameObject.GetPhotonView().viewID);
                     }
                     this.master.GetComponent<HERO>().hookToHuman(hit.collider.transform.root.gameObject, transform.position);
                     transform.parent = hit.collider.transform;

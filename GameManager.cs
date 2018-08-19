@@ -354,17 +354,11 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         return hashtable;
     }
 
-    private static bool IsAnyTitanAlive
-    {
-        get
-        {
-            Mod.Interface.Chat.System(nameof(IsAnyTitanAlive));
-            return GameObject.FindGameObjectsWithTag("titan")
-                .Any(x => (x.GetComponent<TITAN>() != null && !x.GetComponent<TITAN>().hasDie) ||
-                          (x.GetComponent<FEMALE_TITAN>() != null && !x.GetComponent<FEMALE_TITAN>().hasDie) ||
-                          (x.GetComponent<COLOSSAL_TITAN>() != null && !x.GetComponent<COLOSSAL_TITAN>().hasDie));
-        }
-    }
+    private static bool IsAnyTitanAlive => 
+        GameObject.FindGameObjectsWithTag("titan")
+            .Any(x => (x.GetComponent<TITAN>() != null && !x.GetComponent<TITAN>().hasDie) ||
+                      (x.GetComponent<FEMALE_TITAN>() != null && !x.GetComponent<FEMALE_TITAN>().hasDie) ||
+                      (x.GetComponent<COLOSSAL_TITAN>() != null && !x.GetComponent<COLOSSAL_TITAN>().hasDie));
 
     public void CheckPVPPoints()
     {
@@ -1928,12 +1922,14 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         return (GameObject) RCassets.Load(key);
     }
 
-    public bool IsAnyPlayerAlive() => PhotonNetwork.playerList.Any(player => player.Properties.PlayerType == PlayerType.Human && player.Properties.Alive == true);
+    public bool IsAnyPlayerAlive() =>
+        PhotonNetwork.playerList.Any(player => player.Properties.PlayerType == PlayerType.Human && player.Properties.Alive == true);
 
-    public bool IsAnyTeamMemberAlive(int team) => PhotonNetwork.playerList.Any(player =>
-        player.Properties.PlayerType == PlayerType.Human &&
-        player.Properties.Team == team &&
-        player.Properties.Alive == true);
+    public bool IsAnyTeamMemberAlive(int team) =>
+        PhotonNetwork.playerList.Any(player =>
+            player.Properties.PlayerType == PlayerType.Human &&
+            player.Properties.Team == team &&
+            player.Properties.Alive == true);
 
     public void KickPlayerRC(Player player, bool ban, string reason)
     {
