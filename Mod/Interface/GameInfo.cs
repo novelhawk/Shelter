@@ -24,14 +24,6 @@ namespace Mod.Interface
         {
             if (!PhotonNetwork.inRoom)
                 return;
-
-            // Multiplayer Ping: 99
-            // The barbies lover (1/5)
-            
-            // Singleplayer Map: The City I
-            // Speed
-            
-            
             
             StringBuilder output = new StringBuilder();
 
@@ -45,16 +37,17 @@ namespace Mod.Interface
             output.AppendFormat("Map: {0}", FengGameManagerMKII.Level);
             
             output.Append("\n");
-            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
+            switch (IN_GAME_MAIN_CAMERA.GameType)
             {
-                var room = PhotonNetwork.Room;
-                output.AppendFormat("{0} ({1}/{2})", room.Name.HexColor(), Room.CurrentPlayers, room.MaxPlayers);
-            }
-            else
-            {
-                var speed = Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity.magnitude; //TODO: Show in new gui
-                _maxSpeed = Mathf.Max(_maxSpeed, speed);
-                output.AppendFormat("Speed: Current {0} Max {1}", speed, _maxSpeed);
+                case GameType.Singleplayer:
+                    var speed = Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity.magnitude; //TODO: Show in new gui
+                    _maxSpeed = Mathf.Max(_maxSpeed, speed);
+                    output.AppendFormat("Speed: Current {0} Max {1}", speed, _maxSpeed);
+                    break;
+                case GameType.Multiplayer:
+                    var room = PhotonNetwork.Room;
+                    output.AppendFormat("{0} ({1}/{2})", room.Name.HexColor(), Room.CurrentPlayers, room.MaxPlayers);
+                    break;
             }
             output.Append("\n");
 
