@@ -258,9 +258,8 @@ public class HERO : Photon.MonoBehaviour
     [RPC]
     public void BlowAway(Vector3 force, PhotonMessageInfo info = null)
     {
-        //BUG: Player titans use blowaway (Need to check)
-        if (info != null && !info.sender.isLocal && !info.sender.IsMasterClient) // This allows MC to blowAway need TODO: To check for force valididy
-            throw new NotAllowedException(nameof(BlowAway), info, false);
+        if (info != null && !info.sender.isLocal && !info.sender.IsMasterClient && info.sender.Properties.PlayerType != PlayerType.Titan) // This allows MC to blowAway need TODO: To check for force valididy
+            throw new NotAllowedException(nameof(BlowAway), info);
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine)
         {
             rigidbody.AddForce(force, ForceMode.Impulse);
@@ -4986,12 +4985,15 @@ public class HERO : Photon.MonoBehaviour
         this.isMounted = false;
     }
 
-    public void UpdateName(string name)
+    public void UpdateName(PlayerProperties props)
     {
         if (networkView == null || myNetWorkName.GetComponent<UILabel>() == null) 
             return;
 
-        myNetWorkName.GetComponent<UILabel>().text = name;
+        if (string.IsNullOrEmpty(props.Guild)) 
+            myNetWorkName.GetComponent<UILabel>().text = props.Name;
+        else  
+            myNetWorkName.GetComponent<UILabel>().text = $"{props.Guild}\n{props.Name}";
     }
 
     public void DoUpdate()
@@ -6270,8 +6272,11 @@ public class HERO : Photon.MonoBehaviour
     [RPC]
     private void WhoIsMyErenTitan(int id)
     {
-        this.eren_titan = PhotonView.Find(id).gameObject;
-        this.titanForm = true;
+        if (PhotonView.TryParse(id, out PhotonView view))
+        {
+            this.eren_titan = view.gameObject;
+            this.titanForm = true;
+        }
     }
 
     public bool IsGrabbed => this.State == HeroState.Grab;
