@@ -419,7 +419,8 @@ public class Bullet : Photon.MonoBehaviour
     [RPC]
     private void TieMeToOBJ(int id)
     {
-        transform.parent = PhotonView.Find(id).gameObject.transform;
+        if (PhotonView.TryParse(id, out PhotonView view))
+            transform.parent = view.gameObject.transform;
     }
 
     public void DoUpdate()
