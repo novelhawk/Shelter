@@ -66,7 +66,7 @@ public class InstantiateTracker
             case "fx/boom5":
             case "fx/rockthrow":
             case "fx/bite":
-                if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).PlayerTitansAllowed || RCSettings.infectionMode > 0 || IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight)
+                if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).PlayerTitansNotAllowed || RCSettings.infectionMode > 0 || IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight)
                 {
                     return this.Instantiated(player, GameResource.effect);
                 }
@@ -196,7 +196,7 @@ public class InstantiateTracker
                     }
                     break;
                 }
-                if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).PlayerTitansAllowed || RCSettings.infectionMode > 0 || IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight || FengGameManagerMKII.instance.restartingTitan)
+                if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).PlayerTitansNotAllowed || RCSettings.infectionMode > 0 || IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight || FengGameManagerMKII.instance.restartingTitan)
                 {
                     if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight)
                     {

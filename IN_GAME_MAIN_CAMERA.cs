@@ -401,6 +401,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             Vector3 vector = new Vector3(0f, 4000, 0f);
             if (Shelter.TryFind("skill_cd_bottom", out obj))
                 obj.transform.localPosition = vector;
+            
             if (Shelter.TryFind("skill_cd_armin", out obj))
                 obj.transform.localPosition = vector;
             if (Shelter.TryFind("skill_cd_eren", out obj))
@@ -417,8 +418,10 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 obj.transform.localPosition = vector;
             if (Shelter.TryFind("skill_cd_sasha", out obj))
                 obj.transform.localPosition = vector;
+            
             if (Shelter.TryFind("GasUI", out obj))
                 obj.transform.localPosition = vector;
+            
             if (Shelter.TryFind("stamina_titan", out obj))
                 obj.transform.localPosition = new Vector3(-160f, (int)(-Screen.height * 0.5f + 15f), 0f);
             if (Shelter.TryFind("stamina_titan_bottom", out obj))
@@ -428,8 +431,10 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         {
             if (Shelter.TryFind("skill_cd_bottom", out obj))
                 obj.transform.localPosition = new Vector3(0f, (int)(-Screen.height * 0.5f + 5f), 0f);
+            
             if (Shelter.TryFind("GasUI", out obj))
                 obj.transform.localPosition = GameObject.Find("skill_cd_bottom").transform.localPosition;
+            
             if (Shelter.TryFind("stamina_titan", out obj))
                 obj.transform.localPosition = new Vector3(0f, 4000, 0f);
             if (Shelter.TryFind("stamina_titan_bottom", out obj))

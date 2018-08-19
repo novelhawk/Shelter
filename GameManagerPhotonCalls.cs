@@ -390,7 +390,7 @@ public partial class FengGameManagerMKII
             }
 
             ResetSettings(false);
-            if (!LevelInfoManager.GetInfo(Level).PlayerTitansAllowed)
+            if (!LevelInfoManager.GetInfo(Level).PlayerTitansNotAllowed)
             {
                 ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
                 {

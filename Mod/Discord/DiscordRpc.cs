@@ -1,5 +1,4 @@
-﻿//using System;
-//using DiscordRPC;
+﻿//using DiscordRPC;
 //using DiscordRPC.IO;
 //using DiscordRPC.Logging;
 //
@@ -32,37 +31,18 @@
 //            _client.OnSpectate += (sender, args) => UnityEngine.Debug.Log("OnSpectate");
 //            _client.OnJoinRequested += (sender, args) => UnityEngine.Debug.Log("OnJoinRequested");
 //            
-//            _client.Initialize();
-//            Test();
-//        }
-//
-//        public void Test()
-//        {
 //            _client.SetPresence(new RichPresence
 //            {
 //                Details = "TEST1",
-//                State = "TEST2",
-//                Timestamps = new Timestamps
-//                {
-//                    Start = DateTime.Now
-//                },
-//                Assets = new Assets
-//                {
-//                    LargeImageKey = "hehexd",
-//                    SmallImageKey = "hehexd"
-//                }
+//                State = "TEST2"
 //            });
+//
+//            _client.Initialize();
 //        }
 //
-//        private long _lastUpdate;
 //        public void Update()
 //        {
-//            if (Shelter.Stopwatch.ElapsedMilliseconds - _lastUpdate < 500) 
-//                return;
-//            
-//            UnityEngine.Debug.Log(_client.CurrentUser.Username);
 //            _client?.Invoke();
-//            _lastUpdate = Shelter.Stopwatch.ElapsedMilliseconds;
 //        }
 //    }
 //}

@@ -185,24 +185,8 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         {
             hashtable.Add("team", (int) settings[193]);
             if (RCSettings.teamMode != (int) settings[193])
-            {
-                int num = 1;
-                foreach (var player in PhotonNetwork.playerList)
-                {
-                    switch (num)
-                    {
-                        case 1:
-                            photonView.RPC("setTeamRPC", player, 1);
-                            num = 2;
-                            break;
-
-                        case 2:
-                            photonView.RPC("setTeamRPC", player, 2);
-                            num = 1;
-                            break;
-                    }
-                }
-            }
+                for (int i = 0; i < PhotonNetwork.playerList.Length; i++)
+                    photonView.RPC("setTeamRPC", PhotonNetwork.playerList[i], i % 2 + 1);
         }
         if ((int) settings[226] > 0)
         {
@@ -218,9 +202,8 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         if ((int) settings[195] > 0)
         {
             if (!int.TryParse((string) settings[196], out int num) || num > 100 || num < 0)
-            {
                 settings[196] = "30";
-            }
+            
             hashtable.Add("explode", num);
         }
         if ((int) settings[197] > 0)
@@ -374,137 +357,101 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         }
     }
 
+    public static bool IsValidImageUrl(string url)
+    {
+        var regex = Regex.Match(url, @"(?:https?:\/\/)?(?:www\.)?.+?(\w+)\.\w+\/[^\?]+\.(?:png|jpg|gif|jpeg)(\?.*)?");
+        if (!regex.Success) return false;
+        switch (regex.Groups[1].Value)
+        {
+            case "imgur":
+                return true;
+            default:
+                Mod.Interface.Chat.System(regex.Groups[1].Value + " is not an allowed domain.");
+                return false;
+        }
+    }
+
     private IEnumerator ClearLevelEnumerator(string[] skybox)
     {
-        string key = skybox[6];
         bool mipmap = true;
-        bool iteratorVariable2 = false;
+        bool unloadAssets = false;
         if ((int)settings[63] == 1)
-        {
             mipmap = false;
-        }
+        
         if (skybox[0] != string.Empty || skybox[1] != string.Empty || skybox[2] != string.Empty || skybox[3] != string.Empty || skybox[4] != string.Empty || skybox[5] != string.Empty)
         {
             string iteratorVariable3 = string.Join(",", skybox);
             if (!linkHash[1].ContainsKey(iteratorVariable3))
             {
-                iteratorVariable2 = true;
-                Material material = UnityEngine.Camera.main.GetComponent<Skybox>().material;
-                string url = skybox[0];
-                string iteratorVariable6 = skybox[1];
-                string iteratorVariable7 = skybox[2];
-                string iteratorVariable8 = skybox[3];
-                string iteratorVariable9 = skybox[4];
-                string iteratorVariable10 = skybox[5];
-                if (url.EndsWith(".jpg") || url.EndsWith(".png") || url.EndsWith(".jpeg")) //TODO: Check for validity of ip
+                unloadAssets = true;
+                Material material = Camera.main.GetComponent<Skybox>().material;
+
+                string[] skyboxSide = {"_FrontTex", "_BackTex", "_LeftTex", "_RightTex", "_UpTex", "_DownTex"};
+                for (int i = 0; i < 6; i++)
                 {
-                    WWW link = new WWW(url);
-                    yield return link;
-                    Texture2D texture = RCextensions.LoadImageRC(link, mipmap, 500000);
-                    link.Dispose();
-                    material.SetTexture("_FrontTex", texture);
+                    var url = skybox[i];
+                    if (!IsValidImageUrl(url))
+                        continue;
+                    using (WWW req = new WWW(url))
+                    {
+                        yield return req;
+                        material.SetTexture(skyboxSide[i], RCextensions.LoadImageRC(req, mipmap, 500000));
+                    }
                 }
-                if (iteratorVariable6.EndsWith(".jpg") || iteratorVariable6.EndsWith(".png") || iteratorVariable6.EndsWith(".jpeg"))
-                {
-                    WWW iteratorVariable13 = new WWW(iteratorVariable6);
-                    yield return iteratorVariable13;
-                    Texture2D iteratorVariable14 = RCextensions.LoadImageRC(iteratorVariable13, mipmap, 500000);
-                    iteratorVariable13.Dispose();
-                    material.SetTexture("_BackTex", iteratorVariable14);
-                }
-                if (iteratorVariable7.EndsWith(".jpg") || iteratorVariable7.EndsWith(".png") || iteratorVariable7.EndsWith(".jpeg"))
-                {
-                    WWW iteratorVariable15 = new WWW(iteratorVariable7);
-                    yield return iteratorVariable15;
-                    Texture2D iteratorVariable16 = RCextensions.LoadImageRC(iteratorVariable15, mipmap, 500000);
-                    iteratorVariable15.Dispose();
-                    material.SetTexture("_LeftTex", iteratorVariable16);
-                }
-                if (iteratorVariable8.EndsWith(".jpg") || iteratorVariable8.EndsWith(".png") || iteratorVariable8.EndsWith(".jpeg"))
-                {
-                    WWW iteratorVariable17 = new WWW(iteratorVariable8);
-                    yield return iteratorVariable17;
-                    Texture2D iteratorVariable18 = RCextensions.LoadImageRC(iteratorVariable17, mipmap, 500000);
-                    iteratorVariable17.Dispose();
-                    material.SetTexture("_RightTex", iteratorVariable18);
-                }
-                if (iteratorVariable9.EndsWith(".jpg") || iteratorVariable9.EndsWith(".png") || iteratorVariable9.EndsWith(".jpeg"))
-                {
-                    WWW iteratorVariable19 = new WWW(iteratorVariable9);
-                    yield return iteratorVariable19;
-                    Texture2D iteratorVariable20 = RCextensions.LoadImageRC(iteratorVariable19, mipmap, 500000);
-                    iteratorVariable19.Dispose();
-                    material.SetTexture("_UpTex", iteratorVariable20);
-                }
-                if (iteratorVariable10.EndsWith(".jpg") || iteratorVariable10.EndsWith(".png") || iteratorVariable10.EndsWith(".jpeg"))
-                {
-                    WWW iteratorVariable21 = new WWW(iteratorVariable10);
-                    yield return iteratorVariable21;
-                    Texture2D iteratorVariable22 = RCextensions.LoadImageRC(iteratorVariable21, mipmap, 500000);
-                    iteratorVariable21.Dispose();
-                    material.SetTexture("_DownTex", iteratorVariable22);
-                }
-                UnityEngine.Camera.main.GetComponent<Skybox>().material = material;
+                
+                Camera.main.GetComponent<Skybox>().material = material;
                 linkHash[1].Add(iteratorVariable3, material);
                 skyMaterial = material;
             }
             else
             {
-                UnityEngine.Camera.main.GetComponent<Skybox>().material = (Material)linkHash[1][iteratorVariable3];
+                Camera.main.GetComponent<Skybox>().material = (Material)linkHash[1][iteratorVariable3];
                 skyMaterial = (Material)linkHash[1][iteratorVariable3];
             }
         }
-        if (key.EndsWith(".jpg") || key.EndsWith(".png") || key.EndsWith(".jpeg"))
+        string grassUrl = skybox[6];
+        if (IsValidImageUrl(grassUrl))
         {
-            foreach (GameObject iteratorVariable23 in groundList)
+            foreach (GameObject ground in groundList)
             {
-                if (iteratorVariable23 != null && iteratorVariable23.renderer != null)
+                if (ground != null && ground.renderer != null)
                 {
-                    foreach (Renderer iteratorVariable24 in iteratorVariable23.GetComponentsInChildren<Renderer>())
+                    foreach (Renderer groundRenderer in ground.GetComponentsInChildren<Renderer>())
                     {
-                        if (!linkHash[0].ContainsKey(key))
+                        if (!linkHash[0].ContainsKey(grassUrl))
                         {
-                            WWW iteratorVariable25 = new WWW(key);
-                            yield return iteratorVariable25;
-                            Texture2D iteratorVariable26 = RCextensions.LoadImageRC(iteratorVariable25, mipmap, 200000);
-                            iteratorVariable25.Dispose();
-                            if (!linkHash[0].ContainsKey(key))
+                            using (WWW www = new WWW(grassUrl))
                             {
-                                iteratorVariable2 = true;
-                                iteratorVariable24.material.mainTexture = iteratorVariable26;
-                                linkHash[0].Add(key, iteratorVariable24.material);
-                                iteratorVariable24.material = (Material)linkHash[0][key];
+                                yield return www;
+                                groundRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                             }
-                            else
-                            {
-                                iteratorVariable24.material = (Material)linkHash[0][key];
-                            }
+                            unloadAssets = true;
+                            linkHash[0].Add(grassUrl, groundRenderer.material);
                         }
                         else
                         {
-                            iteratorVariable24.material = (Material)linkHash[0][key];
+                            groundRenderer.material = (Material)linkHash[0][grassUrl];
                         }
                     }
                 }
             }
         }
-        else if (key.ToLower() == "transparent")
+        else if (grassUrl.EqualsIgnoreCase("transparent"))
         {
-            foreach (GameObject obj2 in groundList)
+            foreach (GameObject ground in groundList)
             {
-                if (obj2 != null && obj2.renderer != null)
+                if (ground != null && ground.renderer != null)
                 {
-                    foreach (Renderer renderer1 in obj2.GetComponentsInChildren<Renderer>())
+                    foreach (Renderer renderer1 in ground.GetComponentsInChildren<Renderer>())
                     {
                         renderer1.enabled = false;
                     }
                 }
             }
         }
-        if (iteratorVariable2)
-        {
+        
+        if (unloadAssets)
             UnloadAssets();
-        }
     }
 
     public void CompileScript(string str)

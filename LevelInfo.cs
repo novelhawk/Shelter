@@ -13,7 +13,7 @@ public struct LevelInfo
     public bool IsPvP { get; set; }
     public RespawnMode RespawnMode { get; set; }
     public bool Supply { get; set; }
-    public bool PlayerTitansAllowed { get; set; }
+    public bool PlayerTitansNotAllowed { get; set; }
     public GameMode Gamemode { get; set; }
 }
 
