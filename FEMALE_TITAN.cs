@@ -1537,7 +1537,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                     {
                         for (int i = 0; i < 15; i++)
                         {
-                            FengGameManagerMKII.instance.RandomSpawnOneTitan("titanRespawn", 50).GetComponent<TITAN>().beTauntedBy(gameObject, 20f);
+                            FengGameManagerMKII.instance.RandomSpawnOneTitan("titanRespawn", 50).GetComponent<TITAN>().GetTaunted(gameObject, 20f);
                         }
                     }
                 }

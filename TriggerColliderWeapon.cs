@@ -250,7 +250,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                     {
                         if (!gameObject.GetComponent<TITAN>().hasDie)
                         {
-                            gameObject.GetComponent<TITAN>().hitEye();
+                            gameObject.GetComponent<TITAN>().HitEye();
                         }
                     }
                     else if (!PhotonNetwork.isMasterClient)

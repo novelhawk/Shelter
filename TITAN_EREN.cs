@@ -520,7 +520,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
         {
             if (Vector3.Distance(obj2.transform.position, transform.position) < distance && obj2.GetComponent<TITAN>() != null)
             {
-                obj2.GetComponent<TITAN>().beTauntedBy(gameObject, tauntTime);
+                obj2.GetComponent<TITAN>().GetTaunted(gameObject, tauntTime);
             }
             if (obj2.GetComponent<FEMALE_TITAN>() != null)
             {
@@ -1112,14 +1112,14 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                         if (this.attackAnimation == "attack_combo_002")
                                         {
                                             this.hitPause = 0.05f;
-                                            colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().hitL(transform.position, this.hitPause);
+                                            colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().HitLeft(transform.position, this.hitPause);
                                             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(1f, 0.03f, 0.95f);
                                         }
                                         else if (this.attackAnimation == "attack_combo_001")
                                         {
                                             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(1.2f, 0.04f, 0.95f);
                                             this.hitPause = 0.08f;
-                                            colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().hitR(transform.position, this.hitPause);
+                                            colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().HitRight(transform.position, this.hitPause);
                                         }
                                         else if (this.attackAnimation == "attack_combo_003")
                                         {
@@ -1141,7 +1141,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                             }
                                             else
                                             {
-                                                colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().hitR(transform.position, this.hitPause);
+                                                colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().HitRight(transform.position, this.hitPause);
                                             }
                                         }
                                         this.hitTargets.Add(colliderArray[i].gameObject.transform.root);

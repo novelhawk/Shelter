@@ -181,7 +181,7 @@ public class AHSSShotGunCollider : MonoBehaviour
                 else if (eye.GetComponent<TITAN>() != null && eye.GetComponent<TITAN>().abnormalType != AbnormalType.TYPE_CRAWLER && !eye.GetComponent<TITAN>().hasDie)
                 {
                     if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
-                        eye.GetComponent<TITAN>().hitEye();
+                        eye.GetComponent<TITAN>().HitEye();
                     else if (!PhotonNetwork.isMasterClient)
                         eye.GetComponent<TITAN>().photonView.RPC("hitEyeRPC", PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID);
                     else if (!eye.GetComponent<TITAN>().hasDie)

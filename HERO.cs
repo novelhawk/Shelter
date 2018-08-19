@@ -3562,7 +3562,7 @@ public class HERO : Photon.MonoBehaviour
         {
             if (Vector3.Distance(obj2.transform.position, transform.position) < 50f && Vector3.Angle(obj2.transform.forward, transform.position - obj2.transform.position) < 90f && obj2.GetComponent<TITAN>() != null)
             {
-                obj2.GetComponent<TITAN>().beLaughAttacked();
+                obj2.GetComponent<TITAN>().StartLaughing();
             }
         }
     }
@@ -3622,7 +3622,7 @@ public class HERO : Photon.MonoBehaviour
         {
             if (Vector3.Distance(obj2.transform.position, transform.position) < distance && obj2.GetComponent<TITAN>() != null)
             {
-                obj2.GetComponent<TITAN>().beTauntedBy(gameObject, tauntTime);
+                obj2.GetComponent<TITAN>().GetTaunted(gameObject, tauntTime);
             }
         }
     }
@@ -5025,7 +5025,7 @@ public class HERO : Photon.MonoBehaviour
                     {
                         if (this.inputManager.isInputDown[InputCode.restart])
                         {
-                            if (titanWhoGrabMe.GetComponent())                            
+                            Suicide(); //TODO: Check if PT and give kill to him
                         }
                         
                         if (this.skillId == "jean")
@@ -5753,7 +5753,7 @@ public class HERO : Photon.MonoBehaviour
                                             {
                                                 if (Vector3.Distance(obj3.transform.position, this.baseTransform.position) < 50f && Vector3.Angle(obj3.transform.forward, this.baseTransform.position - obj3.transform.position) < 90f && obj3.GetComponent<TITAN>() != null)
                                                 {
-                                                    obj3.GetComponent<TITAN>().beLaughAttacked();
+                                                    obj3.GetComponent<TITAN>().StartLaughing();
                                                 }
                                             }
                                         }

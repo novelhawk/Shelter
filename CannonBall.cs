@@ -126,11 +126,11 @@ public class CannonBall : Photon.MonoBehaviour
                         }
                         else if (Random.Range(0f, 1f) < 0.5f)
                         {
-                            titan.hitL(transform.position, 0.05f);
+                            titan.HitLeft(transform.position, 0.05f);
                         }
                         else
                         {
-                            titan.hitR(transform.position, 0.05f);
+                            titan.HitRight(transform.position, 0.05f);
                         }
                         this.destroyMe();
                     }
