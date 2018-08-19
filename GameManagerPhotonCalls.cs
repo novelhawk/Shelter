@@ -90,6 +90,16 @@ public partial class FengGameManagerMKII
 
     public void OnLeftRoom()
     {
+        if (_endingMessageId.HasValue)
+            Mod.Interface.Chat.EditMessage(_endingMessageId, "Restart aborted: You left the room", false);
+        _endingMessageId = null;
+        if (_racingMessageId.HasValue)
+            Mod.Interface.Chat.EditMessage(_endingMessageId, "Racing aborted: You left the room", false);
+        _racingMessageId = null;
+        if (_pauseMessageId.HasValue)
+            Mod.Interface.Chat.EditMessage(_endingMessageId, "Pause aborted: You left the room", false);
+        _pauseMessageId = null;
+        
         Shelter.OnMainMenu();
 
         if (Application.loadedLevel != 0)
