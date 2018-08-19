@@ -4219,150 +4219,34 @@ public class HERO : Photon.MonoBehaviour
 
     public void shootFlare(int type)
     {
-        bool flag = false;
-        if (type == 1 && this.flare1CD == 0f)
+        switch (type)
         {
-            this.flare1CD = this.flareTotalCD;
-            flag = true;
+            case 1 when this.flare1CD == 0f:
+                this.flare1CD = this.flareTotalCD;
+                break;
+            case 2 when this.flare2CD == 0f:
+                this.flare2CD = this.flareTotalCD;
+                break;
+            case 3 when this.flare3CD == 0f:
+                this.flare3CD = this.flareTotalCD;
+                break;
+            default: 
+                return;
         }
-        if (type == 2 && this.flare2CD == 0f)
-        {
-            this.flare2CD = this.flareTotalCD;
-            flag = true;
-        }
-        if (type == 3 && this.flare3CD == 0f)
-        {
-            this.flare3CD = this.flareTotalCD;
-            flag = true;
-        }
-        if (flag)
-        {
-            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
-            {
-                GameObject obj2 = (GameObject) Instantiate(Resources.Load("FX/flareBullet" + type), transform.position, transform.rotation);
-                obj2.GetComponent<FlareMovement>().dontShowHint();
-                Destroy(obj2, 25f);
-            }
-            else
-            {
-                PhotonNetwork.Instantiate("FX/flareBullet" + type, transform.position, transform.rotation, 0).GetComponent<FlareMovement>().dontShowHint();
-            }
-        }
-    }
 
-    private void showAimUI()
-    {
-        Vector3 vector;
-        if (Screen.showCursor)
+        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
         {
-            GameObject obj2 = GameObject.Find("cross1");
-            GameObject obj3 = GameObject.Find("cross2");
-            GameObject obj4 = GameObject.Find("crossL1");
-            GameObject obj5 = GameObject.Find("crossL2");
-            GameObject obj6 = GameObject.Find("crossR1");
-            GameObject obj7 = GameObject.Find("crossR2");
-            GameObject obj8 = GameObject.Find("LabelDistance");
-            vector = Vector3.up * 10000f;
-            obj7.transform.localPosition = vector;
-            obj6.transform.localPosition = vector;
-            obj5.transform.localPosition = vector;
-            obj4.transform.localPosition = vector;
-            obj8.transform.localPosition = vector;
-            obj3.transform.localPosition = vector;
-            obj2.transform.localPosition = vector;
+            GameObject obj2 = (GameObject) Instantiate(Resources.Load("FX/flareBullet" + type), transform.position, transform.rotation);
+            obj2.GetComponent<FlareMovement>().dontShowHint();
+            Destroy(obj2, 25f);
         }
         else
         {
-            RaycastHit hit;
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            LayerMask mask = 1 << LayerMask.NameToLayer("Ground");
-            LayerMask mask2 = 1 << LayerMask.NameToLayer("EnemyBox");
-            LayerMask mask3 = mask2 | mask;
-            if (Physics.Raycast(ray, out hit, 1E+07f, mask3.value))
-            {
-                GameObject obj9 = GameObject.Find("cross1");
-                GameObject obj10 = GameObject.Find("cross2");
-                obj9.transform.localPosition = Input.mousePosition;
-                Transform transform = obj9.transform;
-                transform.localPosition -= new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f);
-                obj10.transform.localPosition = obj9.transform.localPosition;
-                vector = hit.point - this.transform.position;
-                float magnitude = vector.magnitude;
-                GameObject obj11 = GameObject.Find("LabelDistance");
-                string str = magnitude.ToString("0");
-                obj11.GetComponent<UILabel>().text = str;
-                if (magnitude > 120f)
-                {
-                    Transform transform2 = obj9.transform;
-                    transform2.localPosition += Vector3.up * 10000f;
-                    obj11.transform.localPosition = obj10.transform.localPosition;
-                }
-                else
-                {
-                    Transform transform3 = obj10.transform;
-                    transform3.localPosition += Vector3.up * 10000f;
-                    obj11.transform.localPosition = obj9.transform.localPosition;
-                }
-                Transform transform4 = obj11.transform;
-                transform4.localPosition -= new Vector3(0f, 15f, 0f);
-                Vector3 vector2 = new Vector3(0f, 0.4f, 0f);
-                vector2 -= this.transform.right * 0.3f;
-                Vector3 vector3 = new Vector3(0f, 0.4f, 0f);
-                vector3 += this.transform.right * 0.3f;
-                float num3 = hit.distance <= 50f ? hit.distance * 0.05f : hit.distance * 0.3f;
-                Vector3 vector4 = hit.point - this.transform.right * num3 - (this.transform.position + vector2);
-                Vector3 vector5 = hit.point + this.transform.right * num3 - (this.transform.position + vector3);
-                vector4.Normalize();
-                vector5.Normalize();
-                vector4 = vector4 * 1000000f;
-                vector5 = vector5 * 1000000f;
-                if (Physics.Linecast(this.transform.position + vector2, this.transform.position + vector2 + vector4, out var hit2, mask3.value))
-                {
-                    GameObject obj12 = GameObject.Find("crossL1");
-                    obj12.transform.localPosition = this.currentCamera.WorldToScreenPoint(hit2.point);
-                    Transform transform5 = obj12.transform;
-                    transform5.localPosition -= new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f);
-                    obj12.transform.localRotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(obj12.transform.localPosition.y - (Input.mousePosition.y - Screen.height * 0.5f), obj12.transform.localPosition.x - (Input.mousePosition.x - Screen.width * 0.5f)) * 57.29578f + 180f);
-                    GameObject obj13 = GameObject.Find("crossL2");
-                    obj13.transform.localPosition = obj12.transform.localPosition;
-                    obj13.transform.localRotation = obj12.transform.localRotation;
-                    if (hit2.distance > 120f)
-                    {
-                        Transform transform6 = obj12.transform;
-                        transform6.localPosition += Vector3.up * 10000f;
-                    }
-                    else
-                    {
-                        Transform transform7 = obj13.transform;
-                        transform7.localPosition += Vector3.up * 10000f;
-                    }
-                }
-                if (Physics.Linecast(this.transform.position + vector3, this.transform.position + vector3 + vector5, out hit2, mask3.value))
-                {
-                    GameObject obj14 = GameObject.Find("crossR1");
-                    obj14.transform.localPosition = this.currentCamera.WorldToScreenPoint(hit2.point);
-                    Transform transform8 = obj14.transform;
-                    transform8.localPosition -= new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f);
-                    obj14.transform.localRotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(obj14.transform.localPosition.y - (Input.mousePosition.y - Screen.height * 0.5f), obj14.transform.localPosition.x - (Input.mousePosition.x - Screen.width * 0.5f)) * 57.29578f);
-                    GameObject obj15 = GameObject.Find("crossR2");
-                    obj15.transform.localPosition = obj14.transform.localPosition;
-                    obj15.transform.localRotation = obj14.transform.localRotation;
-                    if (hit2.distance > 120f)
-                    {
-                        Transform transform9 = obj14.transform;
-                        transform9.localPosition += Vector3.up * 10000f;
-                    }
-                    else
-                    {
-                        Transform transform10 = obj15.transform;
-                        transform10.localPosition += Vector3.up * 10000f;
-                    }
-                }
-            }
+            PhotonNetwork.Instantiate("FX/flareBullet" + type, transform.position, transform.rotation, 0).GetComponent<FlareMovement>().dontShowHint();
         }
     }
 
-    private void showAimUI2()
+    private void DrawReticle() // TODO: Add custom cursor
     {
         Vector3 vector;
         if (Screen.showCursor)
@@ -5983,12 +5867,12 @@ public class HERO : Photon.MonoBehaviour
                             this.showSkillCD();
                             this.ShowFlareCD();
                             this.UpdateUsageUI();
-                            this.showAimUI2();
+                            this.DrawReticle();
                         }
                     }
                     else if (this.isCannon && !IN_GAME_MAIN_CAMERA.isPausing)
                     {
-                        this.showAimUI2();
+                        this.DrawReticle();
                         this.calcSkillCD();
                         this.showSkillCD();
                     }
