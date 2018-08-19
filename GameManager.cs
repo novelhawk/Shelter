@@ -378,7 +378,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         if ((int)settings[63] == 1)
             mipmap = false;
         
-        if (skybox[0] != string.Empty || skybox[1] != string.Empty || skybox[2] != string.Empty || skybox[3] != string.Empty || skybox[4] != string.Empty || skybox[5] != string.Empty)
+        if (skybox.Length >= 6)
         {
             string iteratorVariable3 = string.Join(",", skybox);
             if (!linkHash[1].ContainsKey(iteratorVariable3))
