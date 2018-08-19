@@ -1,4 +1,6 @@
-﻿using UnityEngine;
+﻿using System.Linq;
+using System.Runtime.InteropServices;
+using UnityEngine;
 
 namespace Mod.Interface
 {
@@ -15,14 +17,17 @@ namespace Mod.Interface
             _room = room;
             Shelter.InterfaceManager.Enable(nameof(Connecting));
         }
-        
+
         private void Update()
         {
             if (!Shelter.InterfaceManager.IsVisible(nameof(Connecting)))
                 return;
-            
+
+            if (!Room.List.Contains(_room))
+                _room = Room.List.FirstOrDefault(x => x.FullName == _room.FullName);
+                    
             _rotation += Time.deltaTime * 250;
-            if (_room.Players < _room.MaxPlayers)
+            if (_room != null && _room.Players < _room.MaxPlayers)
             {
                 PhotonNetwork.JoinRoom(_room.FullName);
                 Disable();
@@ -43,6 +48,9 @@ namespace Mod.Interface
 
         protected override void Render()
         {
+            if (_room == null)
+                return;
+            
             windowRect = new Rect(Screen.width / 2f - 200, Screen.height - 60, 400, 60);
             GUI.DrawTexture(windowRect, _background);
 
