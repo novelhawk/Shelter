@@ -684,7 +684,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
         this.state = "wait";
         Transform transform = this.transform;
         transform.position += -Vector3.up * 10000f;
-        if (FengGameManagerMKII.LAN)
+        if (!FengGameManagerMKII.LAN)
         {
             GetComponent<PhotonView>().enabled = false;
         }
