@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.Remoting.Metadata;
 using Mod;
 using Mod.Exceptions;
 using Mod.Interface;
@@ -492,13 +493,21 @@ public class HERO : Photon.MonoBehaviour
             this.cachedSprites = new Dictionary<string, UISprite>();
             foreach (var o in FindObjectsOfType(typeof(GameObject)))
             {
-                var obj2 = (GameObject) o;
-                if (obj2.GetComponent<UISprite>() != null && obj2.activeInHierarchy)
+                var sprite = (GameObject) o;
+                if (sprite.GetComponent<UISprite>() != null && sprite.activeInHierarchy)
                 {
-                    string name = obj2.name;
-                    if (!(!name.Contains("blade") && !name.Contains("bullet") && !name.Contains("gas") && !name.Contains("flare") && !name.Contains("skill_cd") || this.cachedSprites.ContainsKey(name)))
+                    string spriteName = sprite.name;
+                    
+                    // (name.Contains("blade") || name.Contains("bullet") || name.Contains("gas") || name.Contains("flare") || name.Contains("skill_cd")) && !cachedSprites.ContainsKey(name) )
+                    
+                    
+                    if ((spriteName.Contains("blade") ||
+                         spriteName.Contains("bullet") ||
+                         spriteName.Contains("gas") || 
+                         spriteName.Contains("flare") || 
+                         spriteName.Contains("skill_cd")) && !cachedSprites.ContainsKey(spriteName))
                     {
-                        this.cachedSprites.Add(name, obj2.GetComponent<UISprite>());
+                        this.cachedSprites.Add(spriteName, sprite.GetComponent<UISprite>());
                     }
                 }
             }
@@ -4046,17 +4055,40 @@ public class HERO : Photon.MonoBehaviour
         }
     }
 
-    public void setStat()
+    private void SetRacingUI()
+    {
+        switch (IN_GAME_MAIN_CAMERA.GameMode) //TODO: Add setting
+        {
+            case GameMode.Racing:
+                GameObject.Find("skill_cd_bottom").transform.localPosition = new Vector3(0, 4000, 0);
+                skillCD = GameObject.Find("skill_cd_" + this.skillIDHUD);
+                
+                GameObject.Find("GasUI").transform.localPosition = new Vector3(0, 4000, 0);
+                GameObject.Find("gasR").transform.position = new Vector3(Screen.width / 2f - 50, -Screen.height / 2f + 50, 0);
+                GameObject.Find("gasR1").transform.position = new Vector3(Screen.width / 2f - 50, -Screen.height / 2f + 50, 0);
+                break;
+            
+            default:
+                GameObject.Find("skill_cd_bottom").transform.localPosition = new Vector3(0f, -Screen.height * 0.5f + 10f, 0f);
+                this.skillCD = GameObject.Find("skill_cd_" + this.skillIDHUD);
+                this.skillCD.transform.localPosition = new Vector3(0f, -Screen.height * 0.5f + 10f, 0f);
+                GameObject.Find("GasUI").transform.localPosition = GameObject.Find("skill_cd_bottom").transform.localPosition;
+                GameObject.Find("gasR").transform.position = new Vector3(0, -1, 0);
+                GameObject.Find("gasR1").transform.position = new Vector3(0, -1, 0);
+                break;
+        }
+    }
+
+    public void setStat2()
     {
         this.skillCDLast = 1.5f;
-        this.skillId = this.setup.myCostume.stat.SkillName;
-        if (this.skillId == "levi")
-        {
-            this.skillCDLast = 3.5f;
-        }
         this.customAnimationSpeed();
+        this.skillId = this.setup.myCostume.stat.SkillName;
         switch (this.skillId)
         {
+            case "levi":
+                this.skillCDLast = 3.5f;
+                break;
             case "armin":
                 this.skillCDLast = 5f;
                 break;
@@ -4067,216 +4099,52 @@ public class HERO : Photon.MonoBehaviour
                 this.skillCDLast = 0.001f;
                 break;
             case "eren":
-                this.skillCDLast = 120f;
-                switch (IN_GAME_MAIN_CAMERA.GameType)
+                this.skillCDLast = 240;
+                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                 {
-                    case GameType.Multiplayer when !LevelInfoManager.GetInfo(FengGameManagerMKII.Level).PlayerTitansAllowed && LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Gamemode != GameMode.Racing && LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Gamemode != GameMode.PvpCapture && LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Gamemode != GameMode.Trost:
-                        int num = 0;
-                        foreach (Player player in PhotonNetwork.playerList)
-                        {
-                            if (player.Properties.PlayerType == PlayerType.Human && player.Properties.Character.ToUpper() == "EREN")
-                            {
-                                num++;
-                            }
-                        }
-                        if (num > 1)
-                        {
-                            this.skillId = "petra";
-                            this.skillCDLast = 1f;
-                        }
-
-                        break;
-                    case GameType.Multiplayer:
+                    var level = LevelInfoManager.GetInfo(FengGameManagerMKII.Level);
+                    if (level.PlayerTitansNotAllowed || 
+                        level.Gamemode == GameMode.Racing || 
+                        level.Gamemode == GameMode.PvpCapture || 
+                        level.Gamemode == GameMode.Trost)
+                    {
                         this.skillId = "petra";
                         this.skillCDLast = 1f;
-                        break;
+                    }
                 }
 
                 break;
+            case "sasha":
+                this.skillCDLast = 20f;
+                break;
+            case "petra":
+                this.skillCDLast = 3.5f;
+                break;
         }
 
-        if (this.skillId == "sasha")
-        {
-            this.skillCDLast = 20f;
-        }
-        if (this.skillId == "petra")
-        {
-            this.skillCDLast = 3.5f;
-        }
-        this.skillCDDuration = this.skillCDLast;
-        this.speed = this.setup.myCostume.stat.Speed / 10f;
-        this.totalGas = this.currentGas = this.setup.myCostume.stat.Gas;
-        this.totalBladeSta = this.currentBladeSta = this.setup.myCostume.stat.Blade;
-        rigidbody.mass = 0.5f - (this.setup.myCostume.stat.Acceleration - 100) * 0.001f;
-        GameObject.Find("skill_cd_bottom").transform.localPosition = new Vector3(0f, -Screen.height * 0.5f + 5f, 0f);
-        this.skillCD = GameObject.Find("skill_cd_" + this.skillId);
-        this.skillCD.transform.localPosition = GameObject.Find("skill_cd_bottom").transform.localPosition;
-        GameObject.Find("GasUI").transform.localPosition = GameObject.Find("skill_cd_bottom").transform.localPosition;
-        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine)
-        {
-            GameObject.Find("bulletL").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletR").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletL1").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletR1").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletL2").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletR2").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletL3").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletR3").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletL4").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletR4").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletL5").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletR5").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletL6").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletR6").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletL7").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletR7").GetComponent<UISprite>().enabled = false;
-        }
-        if (this.setup.myCostume.uniform_type == UniformType.CasualAHSS)
-        {
-            this.standAnimation = "AHSS_stand_gun";
-            this.useGun = true;
-            this.gunDummy = new GameObject();
-            this.gunDummy.name = "gunDummy";
-            this.gunDummy.transform.position = transform.position;
-            this.gunDummy.transform.rotation = transform.rotation;
-            this.myGroup = Group.AHSS;
-            this.setTeam(2);
-            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine)
-            {
-                GameObject.Find("bladeCL").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("bladeCR").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("bladel1").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("blader1").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("bladel2").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("blader2").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("bladel3").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("blader3").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("bladel4").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("blader4").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("bladel5").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("blader5").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("bulletL").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletR").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletL1").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletR1").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletL2").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletR2").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletL3").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletR3").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletL4").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletR4").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletL5").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletR5").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletL6").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletR6").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletL7").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletR7").GetComponent<UISprite>().enabled = true;
-                this.skillCD.transform.localPosition = Vector3.up * 5000f;
-            }
-        }
-        else if (this.setup.myCostume.sex == Sex.Female)
-        {
-            this.standAnimation = "stand";
-            this.setTeam(1);
-        }
-        else
-        {
-            this.standAnimation = "stand_levi";
-            this.setTeam(1);
-        }
-    }
-
-    public void setStat2()
-    {
-        this.skillCDLast = 1.5f;
-        this.skillId = this.setup.myCostume.stat.SkillName;
-        if (this.skillId == "levi")
-        {
-            this.skillCDLast = 3.5f;
-        }
-        this.customAnimationSpeed();
-        if (this.skillId == "armin")
-        {
-            this.skillCDLast = 5f;
-        }
-        if (this.skillId == "marco")
-        {
-            this.skillCDLast = 10f;
-        }
-        if (this.skillId == "jean")
-        {
-            this.skillCDLast = 0.001f;
-        }
-        if (this.skillId == "eren")
-        {
-            this.skillCDLast = 120f;
-            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
-            {
-                if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).PlayerTitansAllowed || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Gamemode == GameMode.Racing || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Gamemode == GameMode.PvpCapture || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Gamemode == GameMode.Trost)
-                {
-                    this.skillId = "petra";
-                    this.skillCDLast = 1f;
-                }
-                else
-                {
-                    int num = 0;
-                    foreach (Player player in PhotonNetwork.playerList)
-                    {
-                        if (player.Properties.PlayerType == PlayerType.Human && player.Properties.Character.ToUpper() == "EREN")
-                        {
-                            num++;
-                        }
-                    }
-                    if (num > 1)
-                    {
-                        this.skillId = "petra";
-                        this.skillCDLast = 1f;
-                    }
-                }
-            }
-        }
-        if (this.skillId == "sasha")
-        {
-            this.skillCDLast = 20f;
-        }
-        if (this.skillId == "petra")
-        {
-            this.skillCDLast = 3.5f;
-        }
         this.bombInit();
         this.speed = this.setup.myCostume.stat.Speed / 10f;
         this.totalGas = this.currentGas = this.setup.myCostume.stat.Gas;
         this.totalBladeSta = this.currentBladeSta = this.setup.myCostume.stat.Blade;
         this.baseRigidBody.mass = 0.5f - (this.setup.myCostume.stat.Acceleration - 100) * 0.001f;
-        GameObject.Find("skill_cd_bottom").transform.localPosition = new Vector3(0f, -Screen.height * 0.5f + 5f, 0f);
-        this.skillCD = GameObject.Find("skill_cd_" + this.skillIDHUD);
-        this.skillCD.transform.localPosition = GameObject.Find("skill_cd_bottom").transform.localPosition;
-        GameObject.Find("GasUI").transform.localPosition = GameObject.Find("skill_cd_bottom").transform.localPosition;
+        
+        SetRacingUI();
+        
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine)
         {
             GameObject.Find("bulletL").GetComponent<UISprite>().enabled = false;
             GameObject.Find("bulletR").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletL1").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletR1").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletL2").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletR2").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletL3").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletR3").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletL4").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletR4").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletL5").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletR5").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletL6").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletR6").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletL7").GetComponent<UISprite>().enabled = false;
-            GameObject.Find("bulletR7").GetComponent<UISprite>().enabled = false;
+            for (int i = 1; i <= 7; i++)
+            {
+                GameObject.Find($"bulletL{i}").GetComponent<UISprite>().enabled = false;
+                GameObject.Find($"bulletR{i}").GetComponent<UISprite>().enabled = false;
+            }
         }
         if (this.setup.myCostume.uniform_type == UniformType.CasualAHSS)
         {
             this.standAnimation = "AHSS_stand_gun";
             this.useGun = true;
-            this.gunDummy = new GameObject();
-            this.gunDummy.name = "gunDummy";
+            this.gunDummy = new GameObject("gunDummy");
             this.gunDummy.transform.position = this.baseTransform.position;
             this.gunDummy.transform.rotation = this.baseTransform.rotation;
             this.myGroup = Group.AHSS;
@@ -4285,32 +4153,19 @@ public class HERO : Photon.MonoBehaviour
             {
                 GameObject.Find("bladeCL").GetComponent<UISprite>().enabled = false;
                 GameObject.Find("bladeCR").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("bladel1").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("blader1").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("bladel2").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("blader2").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("bladel3").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("blader3").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("bladel4").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("blader4").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("bladel5").GetComponent<UISprite>().enabled = false;
-                GameObject.Find("blader5").GetComponent<UISprite>().enabled = false;
+                for (int i = 1; i <= 5; i++)
+                {
+                    GameObject.Find($"bladel{i}").GetComponent<UISprite>().enabled = false;
+                    GameObject.Find($"blader{i}").GetComponent<UISprite>().enabled = false;
+                }
+                
                 GameObject.Find("bulletL").GetComponent<UISprite>().enabled = true;
                 GameObject.Find("bulletR").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletL1").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletR1").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletL2").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletR2").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletL3").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletR3").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletL4").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletR4").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletL5").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletR5").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletL6").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletR6").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletL7").GetComponent<UISprite>().enabled = true;
-                GameObject.Find("bulletR7").GetComponent<UISprite>().enabled = true;
+                for (int i = 1; i <= 7; i++)
+                {
+                    GameObject.Find($"bulletL{i}").GetComponent<UISprite>().enabled = true;
+                    GameObject.Find($"bulletR{i}").GetComponent<UISprite>().enabled = true;
+                }
                 if (this.skillId != "bomb")
                 {
                     this.skillCD.transform.localPosition = Vector3.up * 5000f;
@@ -4775,7 +4630,7 @@ public class HERO : Photon.MonoBehaviour
             this.skillCDDuration = 3.5f;
         }
     }
-
+    
     private void Start()
     {
         FengGameManagerMKII.instance.Heroes.Add(this);
