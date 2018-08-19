@@ -5,6 +5,7 @@ public static class PlayerProperty
     
     public const string Name = "name";
     public const string Guild = "guildName";
+    public const byte FriendName = 255;
     
     public const string Team = "team";
     public const string RCTeam = "RCteam";
