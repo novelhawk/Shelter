@@ -816,6 +816,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         return 0;
     }
 
+    private int? _racingMessageId;
     private int? _endingMessageId;
     private int? _pauseMessageId;
     private void Core()
@@ -959,39 +960,54 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                     {
-                        if (!startRacing && isWinning && timeTotalServer >= 5f)
+                        if (timeTotalServer < 5f)
                         {
+                            if (!_racingMessageId.HasValue)
+                                _racingMessageId = Mod.Interface.Chat.System("Race is starting soon");
+                            Mod.Interface.Chat.EditMessage(_racingMessageId, $"Race is starting in {5 - timeTotalServer:0.00}", true);
+                        }
+                        else if (!startRacing && isWinning)
+                        {
+                            Mod.Interface.Chat.EditMessage(_racingMessageId, "Race started.", false);
+                            _racingMessageId = null;
                             startRacing = true;
                             endRacing = false;
-                            GameObject.Find("door").SetActive(false);
+                            if (Shelter.TryFind("door", out GameObject door))
+                                door.SetActive(false);
                         }
                     }
                     else
                     {
-                        if (!(roundTime < 20f))
+                        if (roundTime < 20f)
                         {
-                            if (!startRacing)
-                            {
-                                startRacing = true;
-                                endRacing = false;
-                                if (Shelter.TryFind("door", out GameObject obj))
-                                    obj.SetActive(false);
+                            if (!_racingMessageId.HasValue)
+                                _racingMessageId = Mod.Interface.Chat.System("Race is starting soon");
+                            Mod.Interface.Chat.EditMessage(_racingMessageId, $"Race is starting in {20 - roundTime:0.00}", true);
+                        }
+                        else if (!startRacing)
+                        {
+                            Mod.Interface.Chat.EditMessage(_racingMessageId, "Race started.", false);
+                            _racingMessageId = null;
 
-                                if (racingDoors != null && customLevelLoaded)
-                                {
-                                    foreach (GameObject door in racingDoors)
-                                        door.SetActive(false);
+                            startRacing = true;
+                            endRacing = false;
+                            if (Shelter.TryFind("door", out GameObject obj))
+                                obj.SetActive(false);
 
-                                    racingDoors = null;
-                                }
-                            }
-                            else if (racingDoors != null && customLevelLoaded)
+                            if (racingDoors != null && customLevelLoaded)
                             {
                                 foreach (GameObject door in racingDoors)
                                     door.SetActive(false);
 
                                 racingDoors = null;
                             }
+                        }
+                        else if (racingDoors != null && customLevelLoaded)
+                        {
+                            foreach (GameObject door in racingDoors)
+                                door.SetActive(false);
+
+                            racingDoors = null;
                         }
                     }
                     if (Camera.main != null && Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver && !needChooseSide && customLevelLoaded)
