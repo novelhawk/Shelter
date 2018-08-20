@@ -1,3 +1,4 @@
+using System.Drawing.Text;
 using Mod;
 using UnityEngine;
 
@@ -103,25 +104,36 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         this.CreateMinimap();
     }
 
-    private void camareMovement()
+    private void OnApplicationFocus(bool hasFocus)
     {
-        this.distanceOffsetMulti = cameraDistance * (200f - camera.fieldOfView) / 150f;
-        this.transform.position = this.head == null ? this.main_object.transform.position : this.head.transform.position;
-        Transform transform = this.transform;
+        Screen.showCursor = !hasFocus;
+    }
+
+    private void CameraMovement()
+    {
+        distanceOffsetMulti = cameraDistance * (200f - camera.fieldOfView) / 150f;
+        transform.position = this.head == null ? this.main_object.transform.position : this.head.transform.position;
         transform.position += Vector3.up * this.heightMulti;
-        Transform transform2 = this.transform;
-        transform2.position -= Vector3.up * (0.6f - cameraDistance) * 2f;
+        transform.position -= Vector3.up * (0.6f - cameraDistance) * 2f;
+
+        if (Screen.showCursor)
+        {
+            transform.position -= this.transform.forward * this.distance * this.distanceMulti * this.distanceOffsetMulti;
+            if (cameraDistance < 0.65f)
+                transform.position += this.transform.right * Mathf.Max((0.6f - cameraDistance) * 2f, 0.65f);
+            return;
+        }
+
         if (cameraMode == CameraType.Stop)
         {
-            if (Input.GetKey(KeyCode.Mouse1))
+            if (Input.GetKey(KeyCode.Mouse2))
             {
                 float angle = Input.GetAxis("Mouse X") * 10f * this.getSensitivityMulti();
                 float num2 = -Input.GetAxis("Mouse Y") * 10f * this.getSensitivityMulti() * this.getReverse();
                 this.transform.RotateAround(this.transform.position, Vector3.up, angle);
                 this.transform.RotateAround(this.transform.position, this.transform.right, num2);
             }
-            Transform transform3 = this.transform;
-            transform3.position -= this.transform.forward * this.distance * this.distanceMulti * this.distanceOffsetMulti;
+            transform.position -= this.transform.forward * this.distance * this.distanceMulti * this.distanceOffsetMulti;
         }
         else if (cameraMode == CameraType.Original)
         {
@@ -138,8 +150,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             }
             float x = 140f * (Screen.height * 0.6f - Input.mousePosition.y) / Screen.height * 0.5f;
             this.transform.rotation = Quaternion.Euler(x, this.transform.rotation.eulerAngles.y, this.transform.rotation.eulerAngles.z);
-            Transform transform4 = this.transform;
-            transform4.position -= this.transform.forward * this.distance * this.distanceMulti * this.distanceOffsetMulti;
+            transform.position -= this.transform.forward * this.distance * this.distanceMulti * this.distanceOffsetMulti;
         }
         else if (cameraMode == CameraType.TPS)
         {
@@ -156,14 +167,10 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             {
                 this.transform.RotateAround(this.transform.position, this.transform.right, num6);
             }
-            Transform transform5 = this.transform;
-            transform5.position -= this.transform.forward * this.distance * this.distanceMulti * this.distanceOffsetMulti;
+            transform.position -= this.transform.forward * this.distance * this.distanceMulti * this.distanceOffsetMulti;
         }
         if (cameraDistance < 0.65f)
-        {
-            Transform transform6 = this.transform;
-            transform6.position += this.transform.right * Mathf.Max((float)((0.6f - cameraDistance) * 2f), (float)0.65f);
-        }
+            transform.position += this.transform.right * Mathf.Max((0.6f - cameraDistance) * 2f, 0.65f);
     }
 
     public void CameraMovementLive(HERO hero)
@@ -827,7 +834,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 Screen.lockCursor = !Screen.lockCursor;
                 Screen.lockCursor = !Screen.lockCursor;
             }
-            if (this.inputManager.isInputDown[InputCode.fullscreen])
+            if (this.inputManager.isInputDown[InputCode.fullscreen] && !Screen.showCursor)
             {
                 Screen.fullScreen = !Screen.fullScreen;
                 if (Screen.fullScreen)
@@ -839,7 +846,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                     Screen.SetResolution(Screen.currentResolution.width, Screen.currentResolution.height, true);
                 }
                 this.needSetHUD = true;
-                Minimap.OnScreenResolutionChanged();
+                Minimap.OnScreenResolutionChanged(); //TODO: Call OnResize in all GUIs
             }
             if (this.inputManager.isInputDown[InputCode.restart])
             {
@@ -870,10 +877,6 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                     {
                         Screen.showCursor = false;
                     }
-                }
-                if (this.inputManager.isInputDown[InputCode.hideCursor])
-                {
-                    Screen.showCursor = !Screen.showCursor;
                 }
                 if (this.inputManager.isInputDown[InputCode.focus])
                 {
@@ -913,12 +916,12 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                     }
                     else
                     {
-                        this.camareMovement();
+                        this.CameraMovement();
                     }
                 }
                 else
                 {
-                    this.camareMovement();
+                    this.CameraMovement();
                 }
                 if (triggerAutoLock && this.lockTarget != null)
                 {
