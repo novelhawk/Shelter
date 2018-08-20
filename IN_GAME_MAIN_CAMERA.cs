@@ -137,15 +137,14 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         }
         else if (cameraMode == CameraType.Original)
         {
-            float num3 = 0f;
             if (Input.mousePosition.x < Screen.width * 0.4f)
             {
-                num3 = -((Screen.width * 0.4f - Input.mousePosition.x) / Screen.width * 0.4f) * this.getSensitivityMultiWithDeltaTime() * 150f;
+                float num3 = -((Screen.width * 0.4f - Input.mousePosition.x) / Screen.width * 0.4f) * this.getSensitivityMultiWithDeltaTime() * 150f;
                 this.transform.RotateAround(this.transform.position, Vector3.up, num3);
             }
             else if (Input.mousePosition.x > Screen.width * 0.6f)
             {
-                num3 = (Input.mousePosition.x - Screen.width * 0.6f) / Screen.width * 0.4f * this.getSensitivityMultiWithDeltaTime() * 150f;
+                float num3 = (Input.mousePosition.x - Screen.width * 0.6f) / Screen.width * 0.4f * this.getSensitivityMultiWithDeltaTime() * 150f;
                 this.transform.RotateAround(this.transform.position, Vector3.up, num3);
             }
             float x = 140f * (Screen.height * 0.6f - Input.mousePosition.y) / Screen.height * 0.5f;
@@ -154,10 +153,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         }
         else if (cameraMode == CameraType.TPS)
         {
-            if (!this.inputManager.menuOn)
-            {
-                Screen.lockCursor = true;
-            }
+            Screen.lockCursor = true;
             float num5 = Input.GetAxis("Mouse X") * 10f * this.getSensitivityMulti();
             float num6 = -Input.GetAxis("Mouse Y") * 10f * this.getSensitivityMulti() * this.getReverse();
             this.transform.RotateAround(this.transform.position, Vector3.up, num5);
@@ -839,7 +835,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 Screen.fullScreen = !Screen.fullScreen;
                 if (Screen.fullScreen)
                 {
-                    Screen.SetResolution(960, 600, false);
+                    Screen.SetResolution(1280, 720, false);
                 }
                 else
                 {

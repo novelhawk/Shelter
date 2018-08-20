@@ -25,10 +25,12 @@ namespace Mod
             Visible = false;
         }
 
-        protected void Switch(string gui)
+        protected void Toggle()
         {
-            Disable();
-            Shelter.InterfaceManager.Enable(gui);
+            if (Visible)
+                Disable();
+            else
+                Enable();
         }
 
         private void OnGUI()
@@ -41,7 +43,7 @@ namespace Mod
         protected virtual void Render() { }
         protected virtual void OnHide() { }
 
-        protected static Texture2D Texture(byte r, byte g, byte b, byte a = 255)
+        public static Texture2D Texture(byte r, byte g, byte b, byte a = 255)
         {
             Texture2D texture = new Texture2D(1, 1);
             texture.SetPixel(1, 1, Color(r, g, b, a));

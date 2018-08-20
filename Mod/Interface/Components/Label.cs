@@ -1,10 +1,12 @@
-﻿using System.CodeDom;
+﻿using System;
+using Mod.Events.EventArgs;
 using UnityEngine;
 
 namespace Mod.Interface.Components
 {
-    public class Label
+    public class Label : IComponent
     {
+        public string ID { get; set; }
         public string Text { get; set; }
         public Rect Position { get; set; }
         
@@ -47,5 +49,8 @@ namespace Mod.Interface.Components
         {
             GUI.Label(Position, Text, GUIStyle);
         }
+
+        public event EventHandler<MouseEventArgs> MouseDown;
+        public event EventHandler<MouseEventArgs> MouseUp;
     }
 }

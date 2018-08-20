@@ -1,7 +1,11 @@
-﻿namespace Mod.Interface.Components
+﻿using System;
+using Mod.Events.EventArgs;
+
+namespace Mod.Interface.Components
 {
-    public class IComponent
+    public interface IComponent
     {
-        
+        event EventHandler<MouseEventArgs> MouseDown;
+        event EventHandler<MouseEventArgs> MouseUp;
     }
 }

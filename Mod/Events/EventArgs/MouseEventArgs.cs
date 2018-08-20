@@ -2,7 +2,7 @@
 
 namespace Mod.Events.EventArgs
 {
-    public class MouseDownEventArgs : System.EventArgs
+    public class MouseEventArgs : System.EventArgs
     {
         public float X { get; set; }
         public float Y { get; set; }
