@@ -1,22 +1,41 @@
 ﻿using System;
 using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
+using Animator = Mod.Animation.Animator;
 
 namespace Mod.Interface
 {
     public class Scoreboard : Gui
     {
         private const string EntryLayout = "<color=#672A42>[<b><color=#DC3052>{0}</color></b>] {10}{1}{2} <b><color=#6E8EEB>{3}</color></b>{9}  <color=#31A5E4>{4}k</color>|<color=#31A5E4>{5}d</color>|<color=#31A5E4>max {6}</color>|<color=#31A5E4>tot {7}</color>|<color=#31A5E4>avg {8}</color></color>";
+        private Animator _animator;
+        private float _lastAnimationUpdate;
+
+        protected override void OnShow()
+        {
+            _animator = new Animator(Shelter.Animation, 20);
+        }
 
         protected override void Render()
         {
             if (!PhotonNetwork.inRoom) return;
             SmartRect rect = new SmartRect(0, -14, Screen.width * 0.35f, 20);
             foreach (var player in PhotonNetwork.playerList.OrderBy(x => x.ID).ToList())
-                GUI.Label(rect.OY(15), Entry(player));
+                GUI.Label(rect.OY(15), Entry(player, _animator.LastColor.ToHex()));
+            
+            if (Time.time - _lastAnimationUpdate < 0.05f)
+                return;
+            _animator.ComputeNext();
+            _lastAnimationUpdate = Time.time;
         }
 
-        private static string Entry(Player player)
+        protected override void OnHide()
+        {
+            _animator = null;
+        }
+
+        private static string Entry(Player player, string color)
         {
             string playerName = player.Properties.Name.Trim() == string.Empty ? "Unknown" : player.HexName, humanType;
             int type;
@@ -59,7 +78,7 @@ namespace Mod.Interface
             else if (player.Has("HawkUser"))
                 mod = "|<b><color=#00B7FF>HawkUser</color></b>| ";
             else if (player.Has(PlayerProperty.Shelter))
-                mod = "|<b><color=#13ACFF>Shelter</color></b>| ";
+                mod = $"|<b><color=#{color}>Shelter</color></b>| "; //13ACFF
             else if (player.Has("AlphaX"))
                 mod = "|<b><color=#00D5FF>AlphaX</color></b>| ";
             else if (player.Has("Alpha"))

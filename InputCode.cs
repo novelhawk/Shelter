@@ -15,7 +15,7 @@ public class InputCode
     public static int jump = 4;
     public static int left = 2;
     public static int leftRope = 6;
-    public static int pause = 15;
+    public static int MenuKey = 15;
     public static int reload = 18;
     public static int restart = 14;
     public static int right = 3;
