@@ -18,6 +18,8 @@ namespace Mod.Managers
             {
                 go.AddComponent<Notify>(),
                 go.AddComponent<Connecting>(),
+                go.AddComponent<Navigator>(),
+                go.AddComponent<InGameMenu>(),
                 go.AddComponent<Scoreboard>(),
                 go.AddComponent<Chat>(),
                 go.AddComponent<Loading>(),
