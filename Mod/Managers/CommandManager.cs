@@ -1,38 +1,32 @@
 ﻿using System;
 using Mod.Commands;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.InteropServices;
 using Mod.Exceptions;
 using Mod.Interface;
+using UnityEngine;
 
 namespace Mod.Managers
 {
-    public class CommandManager : List<Command>, IDisposable
+    public sealed class CommandManager : List<Command>, IDisposable
     {
         public CommandManager()
         {
-            AddRange(new Command[]
+            // Slower method but it's easier to add commands
+            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
-                new CommandBan(), 
-                new CommandClear(), 
-                new CommandCloth(), 
-                new CommandIgnore(), 
-                new CommandKick(), 
-                new CommandKill(), 
-                new CommandMasterClient(), 
-                new CommandPause(), 
-                new CommandPrivateMessage(), 
-                new CommandProperties(), 
-                new CommandReply(), 
-                new CommandResetkd(), 
-                new CommandRestart(), 
-                new CommandRevive(), 
-                new CommandRoom(), 
-                new CommandRules(), 
-                new CommandSpectate(), 
-                new CommandSpectateMode(), 
-                new CommandTeleport(), 
-                new CommandTest(), 
-            });
+                if (!assembly.FullName.Contains("Assembly-CSharp, ")) //Assembly-CSharp, Version=3.6.2.0, Culture=neutral, PublicKeyToken=null
+                    continue;
+                foreach (var type in assembly.GetTypes())
+                {
+                    if (type.Namespace != "Mod.Commands")
+                        continue;
+
+                    if (type.GetConstructor(Type.EmptyTypes)?.Invoke(new object[0]) is Command cmd)
+                        Add(cmd);
+                }
+            }
         }
 
         public Command GetCommand(string commandName)
