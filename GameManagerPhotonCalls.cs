@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using Mod;
+using Mod.Discord;
 using Mod.Interface;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
@@ -42,6 +43,7 @@ public partial class FengGameManagerMKII
     public void OnJoinedRoom()
     {
         Shelter.OnJoinedGame();
+        DiscordRpc.SendInGameMulti();
         var room = PhotonNetwork.Room;
         Mod.Interface.Chat.System("Joined " + room.Name.RemoveColors());
         maxPlayers = room.MaxPlayers;
@@ -452,6 +454,8 @@ public partial class FengGameManagerMKII
 
     public void OnPhotonPlayerConnected(Player player)
     {
+        DiscordRpc.SendInGameMulti();
+        
         if (PhotonNetwork.isMasterClient)
         {
             PhotonView photonView1 = photonView;
@@ -585,6 +589,8 @@ public partial class FengGameManagerMKII
 
     public void OnPhotonPlayerDisconnected(Player player)
     {
+        DiscordRpc.SendInGameMulti();
+        
         if (!gameTimesUp)
         {
             OneTitanDown(string.Empty, true);
