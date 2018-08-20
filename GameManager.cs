@@ -5658,6 +5658,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         {
             "Shelter",
             "Interface",
+            "Modules",
             "MainCamera_Mono",
             "PhotonMono",
             "EventSystem",
