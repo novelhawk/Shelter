@@ -5,8 +5,11 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Mod.Animation;
 using Mod.Interface;
 using UnityEngine;
+using AnimationInfo = Mod.Animation.AnimationInfo;
+using Animator = Mod.Animation.Animator;
 using Random = UnityEngine.Random;
 
 namespace Mod
@@ -17,7 +20,8 @@ namespace Mod
         public static readonly Assembly Assembly = Assembly.GetExecutingAssembly();
         public static readonly Stopwatch Stopwatch = Stopwatch.StartNew();
         public static List<Profile> Profiles => _profileManager.ProfileFile.Profiles;
-        public static Profile Profile => _profileManager.ProfileFile.SelectedProfile; 
+        public static Profile Profile => _profileManager.ProfileFile.SelectedProfile;
+        private static AnimationInfo _animation;
         private static InterfaceManager _interfaceManager;
         private static CommandManager _commandManager;
         private static AnimationManager _animationManager;
@@ -29,6 +33,8 @@ namespace Mod
             if (!Directory.Exists(ModDirectory))
                 Directory.CreateDirectory(ModDirectory);
             gameObject.AddComponent<AnimationTest>();
+
+            _animation = new AnimationInfo(AnimationType.Cycle, AnimationInfo.Rainbow);
         }
         
         public void InitComponents()
@@ -51,6 +57,7 @@ namespace Mod
             _commandManager?.Dispose();
             _commandManager = null;
             _interfaceManager.DisableAll();
+//            _interfaceManager.Enable(nameof(InGameMenu));
             _interfaceManager.Enable(nameof(Background));
             _interfaceManager.Enable(nameof(Loading));
             _interfaceManager.Enable(nameof(MainMenu));
@@ -99,6 +106,8 @@ namespace Mod
 
         #endregion
 
+        public static AnimationInfo Animation => _animation;
+        
         public static ProfileManager ProfileManager => _profileManager;
         public static AnimationManager AnimationManager => _animationManager;
         public static InterfaceManager InterfaceManager => _interfaceManager;

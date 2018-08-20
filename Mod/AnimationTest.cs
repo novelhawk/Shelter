@@ -26,7 +26,7 @@ namespace Mod
                 _animator = new Animator(Shelter.AnimationManager.Animation, 10);
             Player.Self.SetCustomProperties(new Hashtable
             {
-                {PlayerProperty.Name, _animator.Name}
+                {PlayerProperty.Name, _animator.Current}
             });
                 
             _animator.ComputeNext();

@@ -9,15 +9,20 @@ namespace Mod.Animation
 {
     public class Animator
     {
-        private readonly string[] _colors;
-        private readonly AnimationInfo _animation;
+        private readonly AnimationType _type;
+        private readonly AnimationColor[] _colors;
+        private readonly string _text;
 
         private string _lastCompute;
+        private AnimationColor _lastColor;
 
-        public Animator(AnimationInfo animation, int shades)
+        public Animator(AnimationInfo animation, int shades) : this(null, animation, shades) { }
+
+        public Animator(string text, AnimationInfo animation, int shades)
         {
-            _animation = animation;
-            if (animation.Type != AnimationType.Fader)
+            _text = text;
+            _type = animation.Type;
+            if (_type != AnimationType.Fader)
                 _colors = CreateFade(animation.Colors, shades);
             else
                 _colors = GetColors(Shelter.Profile.Name);
@@ -28,7 +33,8 @@ namespace Mod.Animation
             throw new NotImplementedException();
         }
 
-        public string Name
+        public AnimationColor LastColor => _lastColor;
+        public string Current
         {
             get
             {
@@ -42,19 +48,17 @@ namespace Mod.Animation
         private int _index;
         public void ComputeNext()
         {
-            switch (_animation.Type)
+            switch (_type)
             {
                 case AnimationType.Cycle:
-                    _lastCompute = $"[{GetColor(0)}]{Shelter.Profile.Name}";
+                    _lastCompute = $"[{GetColor(0)}]{_text ?? Shelter.Profile.Name}";
                     break;
                 case AnimationType.Fader:
-                    _lastCompute = LeftToRight(Shelter.Profile.Name);
-                    break;
                 case AnimationType.LeftToRight:
-                    _lastCompute = LeftToRight(Shelter.Profile.Name);
+                    _lastCompute = LeftToRight(_text ?? Shelter.Profile.Name);
                     break;
                 case AnimationType.RightToLeft:
-                    _lastCompute = RightToLeft(Shelter.Profile.Name);
+                    _lastCompute = RightToLeft(_text ?? Shelter.Profile.Name);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -85,12 +89,12 @@ namespace Mod.Animation
             if (offset > _colors.Length - 1)
                 offset %= _colors.Length;
 
-            return _colors[offset];
+            return (_lastColor = _colors[offset]).ToHex();
         }
 
-        private static string[] CreateFade(IList<AnimationColor> colors, int shades)
+        private static AnimationColor[] CreateFade(IList<AnimationColor> colors, int shades)
         {
-            var list = new List<string>(colors.Count * shades);
+            var list = new List<AnimationColor>(colors.Count * shades);
             for (var i = 0; i < colors.Count; i++)
             {
                 AnimationColor color = colors[0];
@@ -98,15 +102,15 @@ namespace Mod.Animation
                     color = colors[i + 1];
 
                 for (var j = 0; j < shades; j++)
-                    list.Add(AnimationColor.Lerp(colors[i], color, 1f / shades * j).ToHex());
+                    list.Add(AnimationColor.Lerp(colors[i], color, 1f / shades * j));
             }
             return list.ToArray();
         }
         
-        private static string[] GetColors(string name)
+        private static AnimationColor[] GetColors(string name)
         {
             MatchCollection matches = Regex.Matches(name, @"\[([A-Fa-f0-9]{6})\]");
-            return matches.Cast<Match>().Select(match => match.Groups[1].Value).ToArray();
+            return matches.Cast<Match>().Select(match => new AnimationColor(match.Groups[1].Value)).ToArray();
         }
     }
 }

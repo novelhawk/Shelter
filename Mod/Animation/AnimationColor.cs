@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using System.Globalization;
+using Mono.Security.X509.Extensions;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Mod.Animation
@@ -17,6 +19,19 @@ namespace Mod.Animation
         [JsonProperty("a", NullValueHandling = NullValueHandling.Ignore)]
         public byte A { get; set; }
 
+        public AnimationColor(string hex)
+        {
+            R = G = B = A = 0;
+            if (byte.TryParse(hex.Substring(0, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte r))
+                R = r;
+            if (byte.TryParse(hex.Substring(2, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte b))
+                B = b;
+            if (byte.TryParse(hex.Substring(4, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte g))
+                G = g;
+            if (byte.TryParse(hex.Substring(6, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte a))
+                A = a;
+        }
+        
         public AnimationColor(byte r, byte g, byte b, byte a)
         {
             R = r;
