@@ -1,5 +1,7 @@
 using System.Collections;
+using Mod;
 using Mod.Interface;
+using Mod.Modules;
 using UnityEngine;
 
 public class TriggerColliderWeapon : MonoBehaviour
@@ -35,7 +37,6 @@ public class TriggerColliderWeapon : MonoBehaviour
         obj2.rigidbody.AddTorque(new Vector3(Random.Range(-100, 100), Random.Range(-100, 100), Random.Range(-100, 100)), ForceMode.Impulse);
     }
 
-    public const bool BypassPVP = true;    
     private void OnTriggerStay(Collider other)
     {
         if (!active_me)
@@ -60,7 +61,7 @@ public class TriggerColliderWeapon : MonoBehaviour
 
         if (other.gameObject.CompareTag("playerHitbox"))
         {
-            if ((BypassPVP || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).IsPvP) && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
+            if ((Shelter.ModuleManager.Enabled(nameof(ModulePVPEverywhere)) || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).IsPvP) && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
             {
                 float b = 1f - Vector3.Distance(other.gameObject.transform.position, transform.position) * 0.05f;
                 b = Mathf.Min(1f, b);
@@ -71,7 +72,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                     HERO hero = component.transform.root.GetComponent<HERO>();
                     
                     var view = transform.root.gameObject.GetPhotonView();
-                    if (!component.transform.root.gameObject.GetPhotonView().isMine && (hero.myTeam != this.myTeam && !hero.isInvincible() || BypassPVP) && !hero.IsGrabbed && !hero.HasDied())
+                    if (!component.transform.root.gameObject.GetPhotonView().isMine && (hero.myTeam != this.myTeam && !hero.isInvincible() || Shelter.ModuleManager.Enabled(nameof(ModulePVPEverywhere))) && !hero.IsGrabbed && !hero.HasDied())
                     {
                         hero.markDie();
                         Vector3 vector2 = component.transform.root.position - transform.position;

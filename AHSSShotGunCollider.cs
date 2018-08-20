@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using Mod;
+using Mod.Modules;
 using UnityEngine;
 
 public class AHSSShotGunCollider : MonoBehaviour
@@ -32,7 +34,6 @@ public class AHSSShotGunCollider : MonoBehaviour
     }
 
 
-    private const bool BypassPVP = true;
     private void OnTriggerStay(Collider other)
     {
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && !transform.root.gameObject.GetPhotonView().isMine || !active_me) 
@@ -41,7 +42,7 @@ public class AHSSShotGunCollider : MonoBehaviour
         
         if (other.gameObject.CompareTag("playerHitbox"))
         {
-            if (BypassPVP || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).IsPvP)
+            if (Shelter.ModuleManager.Enabled(nameof(ModulePVPEverywhere)) || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).IsPvP)
             {
                 float b = 1f - Vector3.Distance(other.gameObject.transform.position, transform.position) * 0.05f;
                 b = Mathf.Min(1f, b);
@@ -50,7 +51,7 @@ public class AHSSShotGunCollider : MonoBehaviour
                     component.transform.root != null)
                 {
                     var hero = component.transform.root.GetComponent<HERO>();
-                    if (!component.transform.root.gameObject.GetPhotonView().isMine && (hero.myTeam != this.myTeam || BypassPVP) && 
+                    if (!component.transform.root.gameObject.GetPhotonView().isMine && (hero.myTeam != this.myTeam || Shelter.ModuleManager.Enabled(nameof(ModulePVPEverywhere))) && 
                         !hero.isInvincible() && !hero.HasDied() && !hero.IsGrabbed)
                     {
                         hero.markDie();
