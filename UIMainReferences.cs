@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Mod;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIMainReferences : MonoBehaviour
 {
@@ -38,6 +39,11 @@ public class UIMainReferences : MonoBehaviour
 
     private void Start()
     {
+        const float aspectRatio = 1920f / 1080;
+        if (Mathf.Abs((float) Screen.width / Screen.height - aspectRatio) > float.Epsilon)
+            Screen.SetResolution((int)(Screen.height * aspectRatio), Screen.height, Screen.fullScreen);
+        
+        
         if (isFirstLaunch)
         {
             GameObject go = new GameObject("Shelter");
