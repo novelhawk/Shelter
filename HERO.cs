@@ -6,6 +6,7 @@ using System.Runtime.Remoting.Metadata;
 using Mod;
 using Mod.Exceptions;
 using Mod.Interface;
+using Mod.Modules;
 using Newtonsoft.Json.Schema;
 using UnityEngine;
 using Xft;
@@ -2135,7 +2136,7 @@ public class HERO : Photon.MonoBehaviour
 
     private void UpdateNameScale()
     {
-        if (Player.Self.Properties.IsDead != false || Player.Self.Hero == null || photonView.isMine)
+        if (Player.Self.Properties.IsDead != false || Player.Self.Hero == null || photonView.isMine || !Shelter.ModuleManager.Enabled(nameof(UpdateNameScale)))
         {
             myNetWorkName.transform.localScale = new Vector3(14, 14, 14);
             return;
@@ -4057,9 +4058,9 @@ public class HERO : Photon.MonoBehaviour
 
     private void SetRacingUI()
     {
-        switch (IN_GAME_MAIN_CAMERA.GameMode) //TODO: Add setting
+        switch (IN_GAME_MAIN_CAMERA.GameMode)
         {
-            case GameMode.Racing:
+            case GameMode.Racing when Shelter.ModuleManager.Enabled(nameof(ModuleRacingInterface)):
                 GameObject.Find("skill_cd_bottom").transform.localPosition = new Vector3(0, 4000, 0);
                 skillCD = GameObject.Find("skill_cd_" + this.skillIDHUD);
                 
@@ -4073,8 +4074,6 @@ public class HERO : Photon.MonoBehaviour
                 this.skillCD = GameObject.Find("skill_cd_" + this.skillIDHUD);
                 this.skillCD.transform.localPosition = new Vector3(0f, -Screen.height * 0.5f + 10f, 0f);
                 GameObject.Find("GasUI").transform.localPosition = GameObject.Find("skill_cd_bottom").transform.localPosition;
-                GameObject.Find("gasR").transform.position = new Vector3(0, -1, 0);
-                GameObject.Find("gasR1").transform.position = new Vector3(0, -1, 0);
                 break;
         }
     }
@@ -4932,7 +4931,7 @@ public class HERO : Photon.MonoBehaviour
                                 this.salute();
                                 return;
                             }
-                            if (!this.isMounted && (this.inputManager.isInputDown[InputCode.attack0] || this.inputManager.isInputDown[InputCode.attack1]) && !this.useGun)
+                            if (!this.isMounted && (this.inputManager.isInputDown[InputCode.attack0] || this.inputManager.isInputDown[InputCode.attack1]) && !Screen.showCursor && !this.useGun)
                             {
                                 bool flag3 = false;
                                 if (this.inputManager.isInputDown[InputCode.attack1])
@@ -5182,7 +5181,7 @@ public class HERO : Photon.MonoBehaviour
                                     this.sparks.enableEmission = false;
                                 }
                             }
-                            if (this.useGun)
+                            if (this.useGun && !Screen.showCursor)
                             {
                                 if (this.inputManager.isInput[InputCode.attack1])
                                 {
