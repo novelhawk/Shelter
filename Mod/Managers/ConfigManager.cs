@@ -43,7 +43,6 @@ namespace Mod.Managers
 
         public string InvalidateCurrentFile()
         {
-            Debug.Log(Shelter.ModDirectory + _file);
             if (File.Exists(Shelter.ModDirectory + _file))
                 File.Delete(Shelter.ModDirectory + _file);
 //                File.Move(Shelter.ModDirectory + _file, ProfileFile.Name + ".broken." + Shelter.Stopwatch.ElapsedMilliseconds % 100);

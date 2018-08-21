@@ -22,10 +22,19 @@ namespace Mod.Animation
         {
             _text = text;
             _type = animation.Type;
-            if (_type != AnimationType.Fader)
-                _colors = CreateFade(animation.Colors, shades);
-            else
-                _colors = GetColors(Shelter.Profile.Name);
+            switch (_type)
+            {
+                case AnimationType.Fader:
+                    _colors = GetColors(Shelter.Profile.Name);
+                    break;
+                case AnimationType.Cycle:
+                case AnimationType.LeftToRight:
+                case AnimationType.RightToLeft:
+                    _colors = CreateFade(animation.Colors, shades);
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public bool IsValidAnimation()

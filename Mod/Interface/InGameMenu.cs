@@ -11,6 +11,7 @@ namespace Mod.Interface
         private Texture2D _background;
         private Texture2D _topBar;
         private GUIStyle _menuItem;
+        private GUIStyle _menuValue;
         private GUIStyle _menuCategory;
         private GUIStyle _menuEntry;
         private GUIStyle _selectedEntry;
@@ -42,6 +43,27 @@ namespace Mod.Interface
                 fontSize = 13,
                 alignment = TextAnchor.MiddleLeft
             };
+            _menuValue = new GUIStyle(_menuItem)
+            {
+                alignment = TextAnchor.MiddleRight
+            };
+        }
+
+        private void Update()
+        {
+            if (!Visible && Input.GetKeyDown(KeyCode.P))
+                Enable();
+            if (Visible && Input.GetKeyDown(KeyCode.Escape))
+                Disable();
+        }
+
+        private bool EnableDisableButton(Rect rect, string text, bool value)
+        {
+            GUI.Label(rect, text, _menuItem);
+            GUI.Label(rect, value ? "Enabled" : "Disabled", _menuValue);
+            if (GUI.Button(rect, string.Empty, GUIStyle.none))
+                return !value;
+            return value;
         }
 
         protected override void Render()
@@ -76,6 +98,7 @@ namespace Mod.Interface
                 case SubMenu.Keyboard:
                     break;
                 case SubMenu.GameSettings:
+                    DoGameSettings();
                     break;
                 case SubMenu.Skins:
                     break;
@@ -92,31 +115,66 @@ namespace Mod.Interface
             _lastAnimationUpdate = Time.time;
         }
         
-        
-
         private void DoGeneral()
         {
             const float columns = 3;
             const float betweenSpace = 60;
             
-            float width = (windowRect.width - 50) / columns - (betweenSpace * columns - 1) / columns;
+            float width = (windowRect.width - betweenSpace * (columns + 1)) / columns;
             
             SmartRect category = new SmartRect(windowRect.x + 15, windowRect.y + 60, width, windowRect.height - 75);
             GUI.Label(category, "Graphics", _menuCategory);
             
             SmartRect item = new SmartRect(category.X, category.Y + 20, category.Width, 17);
-            GUI.Label(item, "Skin gas", _menuItem);
-            GUI.Label(item.OY(item.Height + 5), "Skin gas", _menuItem);
-            GUI.Label(item.OY(item.Height + 5), "Wind effect", _menuItem);
-            GUI.Label(item.OY(item.Height + 10), "VSync", _menuItem);
-            GUI.Label(item.OY(item.Height + 5), "FPS Cap", _menuItem);
-            GUI.Label(item.OY(item.Height + 10), "Texture Quality", _menuItem);
-            GUI.Label(item.OY(item.Height + 5), "Mipmapping", _menuItem);
+            EnableDisableButton(item, "Skin gas", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Weapon trail", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Wind effect", true);
+            EnableDisableButton(item.OY(item.Height + 10), "VSync", true);
+            EnableDisableButton(item.OY(item.Height + 5), "FPS Cap", true);
+            EnableDisableButton(item.OY(item.Height + 10), "Texture Quality", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Mipmapping", true);
             
-            
-            GUI.Label(category.OX(width + betweenSpace), "None", _menuCategory);
-            GUI.Label(category.OX(width + betweenSpace), "Other", _menuCategory);
+            GUI.Label(category.OX(width * 2 + betweenSpace * 3), "Other", _menuCategory);
+            item = new SmartRect(category.X, category.Y + 20, category.Width, 17);
+            EnableDisableButton(item, "Volume", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Mouse Speed", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Camera Distance", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Camera Tilt", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Invert Mouse", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Speedmeter", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Minimap", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Game feed", true);
+        }
 
+        private void DoGameSettings()
+        {
+            const float columns = 3;
+            const float betweenSpace = 60;
+            
+            float width = (windowRect.width - betweenSpace * (columns + 1)) / columns;
+            
+            SmartRect category = new SmartRect(windowRect.x + 15, windowRect.y + 60, width, windowRect.height - 75);
+            GUI.Label(category, "Graphics", _menuCategory);
+            
+            SmartRect item = new SmartRect(category.X, category.Y + 20, category.Width, 17);
+            EnableDisableButton(item, "Skin gas", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Weapon trail", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Wind effect", true);
+            EnableDisableButton(item.OY(item.Height + 10), "VSync", true);
+            EnableDisableButton(item.OY(item.Height + 5), "FPS Cap", true);
+            EnableDisableButton(item.OY(item.Height + 10), "Texture Quality", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Mipmapping", true);
+            
+            GUI.Label(category.OX(width * 2 + betweenSpace * 3), "Other", _menuCategory);
+            item = new SmartRect(category.X, category.Y + 20, category.Width, 17);
+            EnableDisableButton(item, "Volume", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Mouse Speed", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Camera Distance", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Camera Tilt", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Invert Mouse", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Speedmeter", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Minimap", true);
+            EnableDisableButton(item.OY(item.Height + 5), "Game feed", true);
         }
         
 
