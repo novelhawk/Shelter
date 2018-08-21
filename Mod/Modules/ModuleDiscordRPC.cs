@@ -24,7 +24,7 @@ namespace Mod.Modules
             };
             handlers.errorCallback += (a, b) =>
             {
-                Debug.Log("errorCallback");
+                Debug.Log($"errorCallback({a}, {b})");
             };
             handlers.joinCallback += (a) =>
             {

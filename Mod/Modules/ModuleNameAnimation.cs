@@ -15,7 +15,7 @@ namespace Mod.Modules
         public override bool IsAbusive => false;
         public override bool HasGUI => true;
 
-        private int _updatesPerSecond = 3;
+        private float _updatesPerSecond = 3;
         private int _shades = 25;
 
         private Animator _animator;
@@ -51,14 +51,21 @@ namespace Mod.Modules
                 GUILayout.Label("[THIS UI IS WIP]");
                 GUILayout.Label("Animation:");
                 GUILayout.Label($"Shades: {_shades}");
-                _shades = (int) GUILayout.HorizontalSlider(_shades, 1, 50);
+                _shades = (int) GUILayout.HorizontalSlider(_shades, 1, 100);
                 GUILayout.Label($"UpdatesPerSecond: {_updatesPerSecond}");
-                _updatesPerSecond = (int) GUILayout.HorizontalSlider(_updatesPerSecond, 1, 100); //TODO: Color viewer and Animation selector
-                if (GUILayout.Button("Apply shades"))
+                _updatesPerSecond = GUILayout.HorizontalSlider(_updatesPerSecond, 1, 100); //TODO: Color viewer and Animation selector
+
+                for (var i = 0; i < Shelter.AnimationManager.Animations.Count; i++)
                 {
-                    _animator = new Animator(Shelter.AnimationManager.Animation, _shades);
-                    _animator.ComputeNext();
+                    var anim = Shelter.AnimationManager.Animations[i];
+                    if (GUILayout.Button(anim.Name))
+                    {
+                        Shelter.AnimationManager.Selected = i;
+                        _animator = new Animator(anim, _shades);
+                        _animator.ComputeNext();
+                    }
                 }
+
                 GUILayout.EndArea();
             };
         }

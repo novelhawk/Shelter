@@ -36,6 +36,11 @@ namespace Mod.Managers
             set => _animationFile.Enabled = value;
         }
 
+        public int Selected
+        {
+            get => _animationFile.Selected;
+            set => _animationFile.Selected = value;
+        }
         public AnimationInfo Animation => _animationFile.Animations[_animationFile.Selected];
         public List<AnimationInfo> Animations => _animationFile.Animations;
     }
