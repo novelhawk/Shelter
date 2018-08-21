@@ -22,8 +22,8 @@ namespace Mod.Managers
                     if (type.Namespace != "Mod.Modules")
                         continue;
 
-                    if (obj.AddComponent(type) is Module module)
-                        _modules.Add(module);
+                    if (type.IsSubclassOf(typeof(Module)))
+                        _modules.Add(obj.AddComponent(type) as Module);
                 }
             }
             Object.DontDestroyOnLoad(obj);

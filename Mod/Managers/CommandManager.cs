@@ -23,8 +23,8 @@ namespace Mod.Managers
                     if (type.Namespace != "Mod.Commands")
                         continue;
 
-                    if (type.GetConstructor(Type.EmptyTypes)?.Invoke(new object[0]) is Command cmd)
-                        Add(cmd);
+                    if (type.IsSubclassOf(typeof(Command)))
+                        Add(type.GetConstructor(Type.EmptyTypes)?.Invoke(new object[0]) as Command);
                 }
             }
         }
