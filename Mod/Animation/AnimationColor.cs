@@ -66,6 +66,8 @@ namespace Mod.Animation
             return $"{R:X2}{G:X2}{B:X2}{A:X2}";
         }
 
+        public static AnimationColor Random => new AnimationColor(UnityEngine.Random.Range(0, 255), UnityEngine.Random.Range(0, 255), UnityEngine.Random.Range(0, 255), 255);
+
         public static AnimationColor Lerp(AnimationColor a, AnimationColor b, float t)
         {
             return new AnimationColor(a.R + (b.R - a.R) * t, a.G + (b.G - a.G) * t, a.B + (b.B - a.B) * t, a.A + (b.A - a.A) * t);
