@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Diagnostics.SymbolStore;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Mod.Interface;
+using Mod.Keybinds;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Object = System.Object;
@@ -770,7 +772,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         {
             if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && needChooseSide)
             {
-                if (inputManager.isInputDown[InputCode.flare1])
+                if (Shelter.InputManager.IsDown(Mod.Keybinds.InputAction.RedFlare)) //TODO: Automatically show on room join
                 {
                     if (NGUITools.GetActive(ui.GetComponent<UIReferArray>().panels[3])) //TODO: Remove UI_IN_GAME
                     {
@@ -795,7 +797,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                         UnityEngine.Camera.main.GetComponent<MouseLook>().disable = true;
                     }
                 }
-                if (inputManager.isInputDown[15] && !inputManager.menuOn)
+                if (Shelter.InputManager.IsDown(InputAction.MenuKey) && !inputManager.menuOn)
                 {
                     Screen.showCursor = true;
                     Screen.lockCursor = false;
@@ -4087,34 +4089,41 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
 
     public void RestartGame(bool masterclientSwitched = false)
     {
-        if (!gameTimesUp)
-        {
-            PVPtitanScore = 0;
-            PVPhumanScore = 0;
-            startRacing = false;
-            endRacing = false;
-            checkpoint = null;
-            timeElapse = 0f;
-            roundTime = 0f;
-            isWinning = false;
-            isLosing = false;
-            isPlayer1Winning = false;
-            isPlayer2Winning = false;
-            wave = 1;
-            myRespawnTime = 0f;
-            killInfoGO = new ArrayList();
-            racingResult = new ArrayList();
-            isRestarting = true;
-            DestroyAllExistingCloths();
-            PhotonNetwork.DestroyAll();
-            Hashtable hash = CheckGameGUI();
-            photonView.RPC("settingRPC", PhotonTargets.Others, hash);
-            photonView.RPC("RPCLoadLevel", PhotonTargets.All);
-            SetGameSettings(hash);
-            
-            if (masterclientSwitched)
-                SendChatContentInfo("<color=#A8FF24>MasterClient has switched to</color> " + Shelter.Profile.HexName);
-        }
+        if (_endingMessageId.HasValue)
+            Mod.Interface.Chat.EditMessage(_endingMessageId, "Restart aborted: Room restarted", false);
+        _endingMessageId = null;
+        if (_racingMessageId.HasValue)
+            Mod.Interface.Chat.EditMessage(_endingMessageId, "Racing aborted: Room restarted", false);
+        _racingMessageId = null;
+        if (_pauseMessageId.HasValue)
+            Mod.Interface.Chat.EditMessage(_endingMessageId, "Pause aborted: Room restarted", false); //TODO: Check
+        _pauseMessageId = null;
+
+        PVPtitanScore = 0;
+        PVPhumanScore = 0;
+        startRacing = false;
+        endRacing = false;
+        checkpoint = null;
+        timeElapse = 0f;
+        roundTime = 0f;
+        isWinning = false;
+        isLosing = false;
+        isPlayer1Winning = false;
+        isPlayer2Winning = false;
+        wave = 1;
+        myRespawnTime = 0f;
+        killInfoGO = new ArrayList();
+        racingResult = new ArrayList();
+        isRestarting = true;
+        DestroyAllExistingCloths();
+        PhotonNetwork.DestroyAll();
+        Hashtable hash = CheckGameGUI();
+        photonView.RPC("settingRPC", PhotonTargets.Others, hash);
+        photonView.RPC("RPCLoadLevel", PhotonTargets.All);
+        SetGameSettings(hash);
+        
+        if (masterclientSwitched)
+            SendChatContentInfo("<color=#A8FF24>MasterClient has switched to</color> " + Shelter.Profile.HexName);
     }
     
     public void RestartSingleplayer()
