@@ -1,4 +1,5 @@
 ﻿using System;
+using Mod.Keybinds;
 using Mod.Managers;
 using UnityEngine;
 
@@ -109,10 +110,8 @@ namespace Mod.Interface
                     _searchQuery += Input.inputString;
             }
 
-            if (Input.GetKeyDown(KeyCode.RightControl))
-            {
+            if (Shelter.InputManager.IsDown(InputAction.OpenNavigator))
                 Toggle();
-            }
         }
 
         protected override void OnHide()

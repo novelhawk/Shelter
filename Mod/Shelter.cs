@@ -27,6 +27,7 @@ namespace Mod
         private static AnimationInfo _animation;
         private static InterfaceManager _interfaceManager;
         private static CommandManager _commandManager;
+        private static InputManager _inputManager;
         private static AnimationManager _animationManager;
         private static ModuleManager _moduleManager;
         private static ProfileManager _profileManager;
@@ -43,6 +44,7 @@ namespace Mod
         {
             _interfaceManager = new InterfaceManager();
             _profileManager = new ProfileManager();
+            _inputManager = new InputManager();
             _animationManager = new AnimationManager();
             _moduleManager = new ModuleManager();
         }
@@ -76,7 +78,8 @@ namespace Mod
             _commandManager = new CommandManager();
             _interfaceManager.DisableAll();
             _interfaceManager.Enable(nameof(Chat));
-            _interfaceManager.Enable(nameof(Scoreboard));
+            if (_moduleManager.Enabled(nameof(ModuleShowScoreboard)))
+                _interfaceManager.Enable(nameof(Scoreboard));
             if (_moduleManager.Enabled(nameof(ModuleShowGameInfo)))
                 _interfaceManager.Enable(nameof(GameInfo));
             DiscordApi.UpdatePresence(new DiscordApi.RichPresence
@@ -130,6 +133,7 @@ namespace Mod
 
         public static ModuleManager ModuleManager => _moduleManager;
         public static ProfileManager ProfileManager => _profileManager;
+        public static InputManager InputManager => _inputManager;
         public static AnimationManager AnimationManager => _animationManager;
         public static InterfaceManager InterfaceManager => _interfaceManager;
         public static CommandManager CommandManager => _commandManager;

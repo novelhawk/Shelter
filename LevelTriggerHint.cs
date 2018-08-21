@@ -1,3 +1,6 @@
+using System;
+using Mod;
+using Mod.Keybinds;
 using UnityEngine;
 
 public class LevelTriggerHint : MonoBehaviour
@@ -26,8 +29,11 @@ public class LevelTriggerHint : MonoBehaviour
             {
                 case HintType.MOVE:
                 {
-                    string[] textArray1 = new string[] { "Hello soldier!\nWelcome to Attack On Titan Tribute Game!\n Press [F7D358]", GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.up], GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.left], GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.down], GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.right], "[-] to Move." };
-                    this.content = string.Concat(textArray1);
+                    this.content =
+                        string.Format(
+                            "Hello soldier!\nWelcome to Attack On Titan Tribute Game!\n Press [F7D358]{0}{1}{2}{3}[-] to Move.",
+                            Shelter.InputManager[Mod.Keybinds.InputAction.Forward], Shelter.InputManager[Mod.Keybinds.InputAction.Left],
+                            Shelter.InputManager[Mod.Keybinds.InputAction.Back], Shelter.InputManager[Mod.Keybinds.InputAction.Right]);
                     break;
                 }
                 case HintType.TELE:
@@ -36,42 +42,45 @@ public class LevelTriggerHint : MonoBehaviour
 
                 case HintType.CAMA:
                 {
-                    string[] textArray2 = new string[] { "Press [F7D358]", GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.camera], "[-] to change camera mode\nPress [F7D358]", GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.hideCursor], "[-] to hide or show the cursor." };
-                    this.content = string.Concat(textArray2);
+                    this.content = $"Press [F7D358]{Shelter.InputManager[Mod.Keybinds.InputAction.ChangeCamera]}[-] to change camera mode";
                     break;
                 }
                 case HintType.JUMP:
-                    this.content = "Press [F7D358]" + GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.jump] + "[-] to Jump.";
+                    this.content = $"Press [F7D358]{Shelter.InputManager[Mod.Keybinds.InputAction.Jump]}[-] to Jump.";
                     break;
 
                 case HintType.JUMP2:
-                    this.content = "Press [F7D358]" + GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.up] + "[-] towards a wall to perform a wall-run.";
+                    this.content = $"Press [F7D358]{Shelter.InputManager[Mod.Keybinds.InputAction.Forward]}[-] towards a wall to perform a wall-run.";
                     break;
 
                 case HintType.HOOK:
                 {
-                    string[] textArray3 = new string[] { "Press and Hold[F7D358] ", GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.leftRope], "[-] or [F7D358]", GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.rightRope], "[-] to launch your grapple.\nNow Try hooking to the [>3<] box. " };
-                    this.content = string.Concat(textArray3);
+                    this.content = string.Format(
+                        "Press and Hold[F7D358] {0}[-] or [F7D358]{1}[-] to launch your grapple.\nNow Try hooking to the [>3<] box.",
+                        Shelter.InputManager[Mod.Keybinds.InputAction.LeftHook],
+                        Shelter.InputManager[Mod.Keybinds.InputAction.RightHook]);
                     break;
                 }
                 case HintType.HOOK2:
                 {
-                    string[] textArray4 = new string[] { "Press and Hold[F7D358] ", GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.bothRope], "[-] to launch both of your grapples at the same Time.\n\nNow aim between the two black blocks. \nYou will see the mark '<' and '>' appearing on the blocks. \nThen press ", GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.bothRope], " to hook the blocks." };
-                    this.content = string.Concat(textArray4);
+                    this.content = string.Format(
+                        "Press and Hold[F7D358] {0}[-] to launch both of your grapples at the same Time.\n\nNow aim between the two black blocks. \nYou will see the mark \'<\' and \'>\' appearing on the blocks. \nThen press again {0} to hook the blocks.",
+                        Shelter.InputManager[Mod.Keybinds.InputAction.BothHooks]);
                     break;
                 }
                 case HintType.SUPPLY:
-                    this.content = "Press [F7D358]" + GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.reload] + "[-] to reload your blades.\n Move to the supply station to refill your gas and blades.";
+                    this.content = $"Press [F7D358]{Shelter.InputManager[Mod.Keybinds.InputAction.Reload]}[-] to reload your blades.\n Move to the supply station to refill your gas and blades.";
                     break;
 
                 case HintType.DODGE:
-                    this.content = "Press [F7D358]" + GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.dodge] + "[-] to Dodge.";
+                    this.content = $"Press [F7D358]{Shelter.InputManager[Mod.Keybinds.InputAction.Dodge]}[-] to Dodge.";
                     break;
 
                 case HintType.ATTACK:
                 {
-                    string[] textArray5 = new string[] { "Press [F7D358]", GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.attack0], "[-] to Attack. \nPress [F7D358]", GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().inputString[InputCode.attack1], "[-] to use special attack.\n***You can only kill a titan by slashing his [FA5858]NAPE[-].***\n\n" };
-                    this.content = string.Concat(textArray5);
+                    this.content = string.Format(
+                        "Press [F7D358]{0}[-] to Attack. \nPress [F7D358]{1}[-] to use special attack.\nYou can only kill a titan by slashing his [FA5858]neck[-].\n\n",
+                        Shelter.InputManager[Mod.Keybinds.InputAction.Attack], Shelter.InputManager[Mod.Keybinds.InputAction.Special]);
                     break;
                 }
             }

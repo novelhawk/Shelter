@@ -1,3 +1,5 @@
+using Mod;
+using Mod.Keybinds;
 using UnityEngine;
 
 public class SpectatorMovement : MonoBehaviour
@@ -18,15 +20,15 @@ public class SpectatorMovement : MonoBehaviour
             float num2;
             float num3;
             float speed = this.speed;
-            if (this.inputManager.isInput[InputCode.jump])
+            if (Shelter.InputManager.IsKeyPressed(InputAction.Jump))
             {
                 speed *= 3f;
             }
-            if (this.inputManager.isInput[InputCode.up])
+            if (Shelter.InputManager.IsKeyPressed(InputAction.Forward))
             {
                 num2 = 1f;
             }
-            else if (this.inputManager.isInput[InputCode.down])
+            else if (Shelter.InputManager.IsKeyPressed(InputAction.Back))
             {
                 num2 = -1f;
             }
@@ -34,11 +36,11 @@ public class SpectatorMovement : MonoBehaviour
             {
                 num2 = 0f;
             }
-            if (this.inputManager.isInput[InputCode.left])
+            if (Shelter.InputManager.IsKeyPressed(InputAction.Left))
             {
                 num3 = -1f;
             }
-            else if (this.inputManager.isInput[InputCode.right])
+            else if (Shelter.InputManager.IsKeyPressed(InputAction.Right))
             {
                 num3 = 1f;
             }
@@ -63,11 +65,11 @@ public class SpectatorMovement : MonoBehaviour
             {
                 transform.position -= this.transform.right * speed * Time.deltaTime;
             }
-            if (this.inputManager.isInput[InputCode.leftRope])
+            if (Shelter.InputManager.IsKeyPressed(InputAction.LeftHook))
             {
                 transform.position -= this.transform.up * speed * Time.deltaTime;
             }
-            else if (this.inputManager.isInput[InputCode.rightRope])
+            else if (Shelter.InputManager.IsKeyPressed(InputAction.RightHook))
             {
                 transform.position += this.transform.up * speed * Time.deltaTime;
             }

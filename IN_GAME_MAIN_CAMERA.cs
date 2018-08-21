@@ -1,5 +1,6 @@
 using System.Drawing.Text;
 using Mod;
+using Mod.Keybinds;
 using UnityEngine;
 
 public class IN_GAME_MAIN_CAMERA : MonoBehaviour
@@ -761,7 +762,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         {
             if (GameType != GameType.Singleplayer && this.gameOver)
             {
-                if (this.inputManager.isInputDown[InputCode.attack1])
+                if (Shelter.InputManager.IsDown(InputAction.Special))
                 {
                     if (this.spectatorMode)
                     {
@@ -772,7 +773,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                         this.setSpectorMode(true);
                     }
                 }
-                if (this.inputManager.isInputDown[InputCode.flare1])
+                if (Shelter.InputManager.IsDown(InputAction.GreenFlare))
                 {
                     this.currentPeekPlayerIndex++;
                     int length = GameObject.FindGameObjectsWithTag("Player").Length;
@@ -787,7 +788,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                         this.lockAngle = false;
                     }
                 }
-                if (this.inputManager.isInputDown[InputCode.flare2])
+                if (Shelter.InputManager.IsDown(InputAction.RedFlare))
                 {
                     this.currentPeekPlayerIndex--;
                     int num2 = GameObject.FindGameObjectsWithTag("Player").Length;
@@ -811,7 +812,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                     return;
                 }
             }
-            if (this.inputManager.isInputDown[InputCode.MenuKey])
+            if (Shelter.InputManager.IsDown(InputAction.MenuKey))
             {
                 isPausing = !isPausing;
                 if (isPausing)
@@ -830,7 +831,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 Screen.lockCursor = !Screen.lockCursor;
                 Screen.lockCursor = !Screen.lockCursor;
             }
-            if (this.inputManager.isInputDown[InputCode.fullscreen] && !Screen.showCursor)
+            if (Shelter.InputManager.IsDown(InputAction.ToggleFullscreen) && !Screen.showCursor)
             {
                 Screen.fullScreen = !Screen.fullScreen;
                 if (Screen.fullScreen)
@@ -844,14 +845,14 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 this.needSetHUD = true;
                 Minimap.OnScreenResolutionChanged(); //TODO: Call OnResize in all GUIs
             }
-            if (this.inputManager.isInputDown[InputCode.restart])
+            if (Shelter.InputManager.IsDown(InputAction.Suicide))
             {
                 this.reset();
             }
             if (this.main_object != null)
             {
                 RaycastHit hit;
-                if (this.inputManager.isInputDown[InputCode.camera])
+                if (Shelter.InputManager.IsDown(InputAction.ChangeCamera))
                 {
                     if (cameraMode == CameraType.Original)
                     {
@@ -874,7 +875,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                         Screen.showCursor = false;
                     }
                 }
-                if (this.inputManager.isInputDown[InputCode.focus])
+                if (Shelter.InputManager.IsDown(InputAction.LockTitan))
                 {
                     triggerAutoLock = !triggerAutoLock;
                     if (triggerAutoLock)

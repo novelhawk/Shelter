@@ -1,7 +1,14 @@
-﻿namespace Mod.Keybinds
+﻿using Newtonsoft.Json;
+using UnityEngine;
+
+namespace Mod.Keybinds
 {
-    public class Keybind
+    public struct Keybind
     {
+        [JsonProperty("action")]
+        public InputAction Action { get; set; }
         
+        [JsonProperty("key")]
+        public KeyCode Key { get; set; }
     }
 }

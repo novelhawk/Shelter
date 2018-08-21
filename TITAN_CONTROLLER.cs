@@ -1,3 +1,5 @@
+using Mod;
+using Mod.Keybinds;
 using UnityEngine;
 
 public class TITAN_CONTROLLER : MonoBehaviour
@@ -179,7 +181,7 @@ public class TITAN_CONTROLLER : MonoBehaviour
             {
                 this.isJumpDown = true;
             }
-            if (this.inputManager.GetComponent<FengCustomInputs>().isInputDown[InputCode.restart])
+            if (Shelter.InputManager.IsDown(InputAction.Suicide))
             {
                 this.isSuicide = true;
             }

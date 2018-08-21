@@ -1,7 +1,90 @@
-﻿namespace Mod.Resources.Config
-{
-    public class inputs_json
-    {
-        
-    }
-}
+﻿[
+  {
+    "action": "Attack",
+    "key": "Mouse0"
+  },
+  {
+    "action": "Special",
+    "key": "Mouse1"
+  },
+  {
+    "action": "BothHooks",
+    "key": "F"
+  },
+  {
+    "action": "ChangeCamera",
+    "key": "C"
+  },
+  {
+    "action": "Dodge",
+    "key": "LeftControl"
+  },
+  {
+    "action": "RedFlare",
+    "key": "Alpha1"
+  },
+  {
+    "action": "GreenFlare",
+    "key": "Alpha2"
+  },
+  {
+    "action": "BlackFlare",
+    "key": "Alpha3"
+  },
+  {
+    "action": "LockTitan",
+    "key": "Space"
+  },
+  {
+    "action": "ToggleFullscreen",
+    "key": "Backspace"
+  },
+  {
+    "action": "LeftHook",
+    "key": "Q"
+  },
+  {
+    "action": "RightHook",
+    "key": "E"
+  },
+  {
+    "action": "MenuKey",
+    "key": "P"
+  },
+  {
+    "action": "Reload",
+    "key": "R"
+  },
+  {
+    "action": "Suicide",
+    "key": "T"
+  },
+  {
+    "action": "Salute",
+    "key": "N"
+  },
+  {
+    "action": "Forward",
+    "key": "W"
+  },
+  {
+    "action": "Back",
+    "key": "S"
+  } ,
+  {
+    "action": "Right",
+    "key": "D"
+  },
+  {
+    "action": "Left",
+    "key": "A"
+  },
+  {
+    "action": "Jump",
+    "key": "LeftShift"
+  },
+  {
+    "action": "OpenNavigator",
+    "key": "RightControl"
+  }
+]

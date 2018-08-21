@@ -1,4 +1,6 @@
 using System.Collections;
+using Mod;
+using Mod.Keybinds;
 using UnityEngine;
 
 public class TITAN_EREN : Photon.MonoBehaviour
@@ -153,11 +155,11 @@ public class TITAN_EREN : Photon.MonoBehaviour
                     float z = 0f;
                     if (!IN_GAME_MAIN_CAMERA.isTyping)
                     {
-                        if (this.inputManager.isInput[InputCode.up])
+                        if (Shelter.InputManager.IsKeyPressed(InputAction.Forward))
                         {
                             z = 1f;
                         }
-                        else if (this.inputManager.isInput[InputCode.down])
+                        else if (Shelter.InputManager.IsKeyPressed(InputAction.Back))
                         {
                             z = -1f;
                         }
@@ -165,11 +167,11 @@ public class TITAN_EREN : Photon.MonoBehaviour
                         {
                             z = 0f;
                         }
-                        if (this.inputManager.isInput[InputCode.left])
+                        if (Shelter.InputManager.IsKeyPressed(InputAction.Left))
                         {
                             x = -1f;
                         }
-                        else if (this.inputManager.isInput[InputCode.right])
+                        else if (Shelter.InputManager.IsKeyPressed(InputAction.Right))
                         {
                             x = 1f;
                         }
@@ -937,12 +939,12 @@ public class TITAN_EREN : Photon.MonoBehaviour
                         }
                         if (this.grounded && !this.isAttack && !animation.IsPlaying("jump_land") && !this.isAttack && !animation.IsPlaying("born"))
                         {
-                            if (this.inputManager.isInputDown[InputCode.attack0] || this.inputManager.isInputDown[InputCode.attack1])
+                            if (Shelter.InputManager.IsDown(InputAction.Attack) || Shelter.InputManager.IsDown(InputAction.Special))
                             {
                                 bool flag = false;
-                                if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.Stop && this.inputManager.isInput[InputCode.down] || this.inputManager.isInputDown[InputCode.attack1])
+                                if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.Stop && Shelter.InputManager.IsKeyPressed(InputAction.Back) || Shelter.InputManager.IsDown(InputAction.Special))
                                 {
-                                    if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.Stop && this.inputManager.isInputDown[InputCode.attack1] && this.inputManager.inputKey[11] == KeyCode.Mouse1)
+                                    if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.Stop && Shelter.InputManager.IsDown(InputAction.Special) && this.inputManager.inputKey[11] == KeyCode.Mouse1)
                                     {
                                         flag = true;
                                     }
@@ -980,7 +982,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                     this.hitTargets = new ArrayList();
                                 }
                             }
-                            if (this.inputManager.isInputDown[InputCode.salute])
+                            if (Shelter.InputManager.IsDown(InputAction.Salute))
                             {
                                 this.crossFade("born", 0.1f);
                                 animation["born"].normalizedTime = 0.28f;
@@ -989,14 +991,14 @@ public class TITAN_EREN : Photon.MonoBehaviour
                         }
                         if (!this.isAttack)
                         {
-                            if ((this.grounded || animation.IsPlaying("idle")) && (!animation.IsPlaying("jump_start") && !animation.IsPlaying("jump_air")) && !animation.IsPlaying("jump_land") && this.inputManager.isInput[InputCode.bothRope])
+                            if ((this.grounded || animation.IsPlaying("idle")) && (!animation.IsPlaying("jump_start") && !animation.IsPlaying("jump_air")) && !animation.IsPlaying("jump_land") && Shelter.InputManager.IsDown(InputAction.BothHooks))
                             {
                                 this.crossFade("jump_start", 0.1f);
                             }
                         }
                         else
                         {
-                            if (animation[this.attackAnimation].time >= 0.1f && this.inputManager.isInputDown[InputCode.attack0])
+                            if (animation[this.attackAnimation].time >= 0.1f && Shelter.InputManager.IsDown(InputAction.Attack))
                             {
                                 this.isNextAttack = true;
                             }

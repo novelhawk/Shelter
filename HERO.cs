@@ -6,6 +6,7 @@ using System.Runtime.Remoting.Metadata;
 using Mod;
 using Mod.Exceptions;
 using Mod.Interface;
+using Mod.Keybinds;
 using Mod.Modules;
 using Newtonsoft.Json.Schema;
 using UnityEngine;
@@ -665,7 +666,7 @@ public class HERO : Photon.MonoBehaviour
                 this.rTapTime = -1f;
             }
         }
-        if (this.inputManager.isInputDown[InputCode.up])
+        if (Shelter.InputManager.IsDown(InputAction.Forward))
         {
             if (this.uTapTime == -1f)
             {
@@ -676,7 +677,7 @@ public class HERO : Photon.MonoBehaviour
                 this.dashU = true;
             }
         }
-        if (this.inputManager.isInputDown[InputCode.down])
+        if (Shelter.InputManager.IsDown(InputAction.Back))
         {
             if (this.dTapTime == -1f)
             {
@@ -687,7 +688,7 @@ public class HERO : Photon.MonoBehaviour
                 this.dashD = true;
             }
         }
-        if (this.inputManager.isInputDown[InputCode.left])
+        if (Shelter.InputManager.IsDown(InputAction.Left))
         {
             if (this.lTapTime == -1f)
             {
@@ -698,7 +699,7 @@ public class HERO : Photon.MonoBehaviour
                 this.dashL = true;
             }
         }
-        if (this.inputManager.isInputDown[InputCode.right])
+        if (Shelter.InputManager.IsDown(InputAction.Right))
         {
             if (this.rTapTime == -1f)
             {
@@ -715,19 +716,19 @@ public class HERO : Photon.MonoBehaviour
     {
         if (FengGameManagerMKII.inputRC.isInputHuman(InputCodeRC.dash))
         {
-            if (this.inputManager.isInput[InputCode.up])
+            if (Shelter.InputManager.IsDown(InputAction.Forward))
             {
                 this.dashU = true;
             }
-            else if (this.inputManager.isInput[InputCode.down])
+            else if (Shelter.InputManager.IsDown(InputAction.Back))
             {
                 this.dashD = true;
             }
-            else if (this.inputManager.isInput[InputCode.left])
+            else if (Shelter.InputManager.IsDown(InputAction.Left))
             {
                 this.dashL = true;
             }
-            else if (this.inputManager.isInput[InputCode.right])
+            else if (Shelter.InputManager.IsDown(InputAction.Right))
             {
                 this.dashR = true;
             }
@@ -985,11 +986,11 @@ public class HERO : Photon.MonoBehaviour
             {
                 float num;
                 float num2;
-                if (this.inputManager.isInput[InputCode.up])
+                if (Shelter.InputManager.IsDown(InputAction.Forward))
                 {
                     num = 1f;
                 }
-                else if (this.inputManager.isInput[InputCode.down])
+                else if (Shelter.InputManager.IsDown(InputAction.Back))
                 {
                     num = -1f;
                 }
@@ -997,11 +998,11 @@ public class HERO : Photon.MonoBehaviour
                 {
                     num = 0f;
                 }
-                if (this.inputManager.isInput[InputCode.left])
+                if (Shelter.InputManager.IsDown(InputAction.Left))
                 {
                     num2 = -1f;
                 }
-                else if (this.inputManager.isInput[InputCode.right])
+                else if (Shelter.InputManager.IsDown(InputAction.Right))
                 {
                     num2 = 1f;
                 }
@@ -1035,11 +1036,11 @@ public class HERO : Photon.MonoBehaviour
             {
                 float num;
                 float num2;
-                if (this.inputManager.isInput[InputCode.up])
+                if (Shelter.InputManager.IsDown(InputAction.Forward))
                 {
                     num = 1f;
                 }
-                else if (this.inputManager.isInput[InputCode.down])
+                else if (Shelter.InputManager.IsDown(InputAction.Back))
                 {
                     num = -1f;
                 }
@@ -1047,11 +1048,11 @@ public class HERO : Photon.MonoBehaviour
                 {
                     num = 0f;
                 }
-                if (this.inputManager.isInput[InputCode.left])
+                if (Shelter.InputManager.IsDown(InputAction.Left))
                 {
                     num2 = -1f;
                 }
-                else if (this.inputManager.isInput[InputCode.right])
+                else if (Shelter.InputManager.IsDown(InputAction.Right))
                 {
                     num2 = 1f;
                 }
@@ -1239,11 +1240,11 @@ public class HERO : Photon.MonoBehaviour
                     float z = 0f;
                     if (!IN_GAME_MAIN_CAMERA.isTyping)
                     {
-                        if (this.inputManager.isInput[InputCode.up])
+                        if (Shelter.InputManager.IsKeyPressed(InputAction.Forward))
                         {
                             z = 1f;
                         }
-                        else if (this.inputManager.isInput[InputCode.down])
+                        else if (Shelter.InputManager.IsKeyPressed(InputAction.Back))
                         {
                             z = -1f;
                         }
@@ -1251,11 +1252,11 @@ public class HERO : Photon.MonoBehaviour
                         {
                             z = 0f;
                         }
-                        if (this.inputManager.isInput[InputCode.left])
+                        if (Shelter.InputManager.IsKeyPressed(InputAction.Left))
                         {
                             x = -1f;
                         }
-                        else if (this.inputManager.isInput[InputCode.right])
+                        else if (Shelter.InputManager.IsKeyPressed(InputAction.Right))
                         {
                             x = 1f;
                         }
@@ -1281,7 +1282,7 @@ public class HERO : Photon.MonoBehaviour
                             {
                                 to = to * 2f;
                             }
-                            if (Vector3.Angle(this.baseRigidBody.velocity, to) > 90f && this.inputManager.isInput[InputCode.jump])
+                            if (Vector3.Angle(this.baseRigidBody.velocity, to) > 90f && Shelter.InputManager.IsKeyPressed(InputAction.Jump))
                             {
                                 flag3 = true;
                                 flag2 = true;
@@ -1324,7 +1325,7 @@ public class HERO : Photon.MonoBehaviour
                             {
                                 vector5 = vector5 * 2f;
                             }
-                            if (Vector3.Angle(this.baseRigidBody.velocity, vector5) > 90f && this.inputManager.isInput[InputCode.jump])
+                            if (Vector3.Angle(this.baseRigidBody.velocity, vector5) > 90f && Shelter.InputManager.IsKeyPressed(InputAction.Jump))
                             {
                                 flag4 = true;
                                 flag2 = true;
@@ -1650,7 +1651,7 @@ public class HERO : Photon.MonoBehaviour
                                 this.playAnimation("air_rise");
                             }
                         }
-                        else if (!(this.State != HeroState.Idle || !this.isPressDirectionTowardsHero(x, z) || this.inputManager.isInput[InputCode.jump] || this.inputManager.isInput[InputCode.leftRope] || this.inputManager.isInput[InputCode.rightRope] || this.inputManager.isInput[InputCode.bothRope] || !this.IsFrontGrounded() || this.baseAnimation.IsPlaying("wallrun") || this.baseAnimation.IsPlaying("dodge")))
+                        else if (!(this.State != HeroState.Idle || !this.isPressDirectionTowardsHero(x, z) || Shelter.InputManager.IsKeyPressed(InputAction.Jump) || Shelter.InputManager.IsKeyPressed(InputAction.LeftHook) || Shelter.InputManager.IsKeyPressed(InputAction.RightHook) || Shelter.InputManager.IsKeyPressed(InputAction.BothHooks) || !this.IsFrontGrounded() || this.baseAnimation.IsPlaying("wallrun") || this.baseAnimation.IsPlaying("dodge")))
                         {
                             this.crossFade("wallrun", 0.1f);
                             this.wallRunTime = 0f;
@@ -1695,7 +1696,7 @@ public class HERO : Photon.MonoBehaviour
                                 this.facingDirection = num12;
                                 this.targetRotation = Quaternion.Euler(0f, this.facingDirection, 0f);
                             }
-                            if (!flag3 && !flag4 && !this.isMounted && this.inputManager.isInput[InputCode.jump] && this.currentGas > 0f)
+                            if (!flag3 && !flag4 && !this.isMounted && Shelter.InputManager.IsKeyPressed(InputAction.Jump) && this.currentGas > 0f)
                             {
                                 if (x != 0f || z != 0f)
                                 {
@@ -4748,14 +4749,14 @@ public class HERO : Photon.MonoBehaviour
                     }
                     if (this.State == HeroState.Grab && !this.useGun)
                     {
-                        if (this.inputManager.isInputDown[InputCode.restart])
+                        if (Shelter.InputManager.IsDown(InputAction.Suicide))
                         {
                             Suicide(); //TODO: Check if PT and give kill to him
                         }
                         
                         if (this.skillId == "jean")
                         {
-                            if (this.State != HeroState.Attack && (this.inputManager.isInputDown[InputCode.attack0] || this.inputManager.isInputDown[InputCode.attack1]) && this.escapeTimes > 0 && !this.baseAnimation.IsPlaying("grabbed_jean"))
+                            if (this.State != HeroState.Attack && (Shelter.InputManager.IsDown(InputAction.Attack) || Shelter.InputManager.IsDown(InputAction.Special)) && this.escapeTimes > 0 && !this.baseAnimation.IsPlaying("grabbed_jean"))
                             {
                                 this.playAnimation("grabbed_jean");
                                 this.baseAnimation["grabbed_jean"].time = 0f;
@@ -4791,7 +4792,7 @@ public class HERO : Photon.MonoBehaviour
                                 this.calcSkillCD();
                                 this.calcFlareCD();
                             }
-                            if (this.inputManager.isInputDown[InputCode.attack1])
+                            if (Shelter.InputManager.IsDown(InputAction.Special))
                             {
                                 bool flag2 = false;
                                 if (this.skillCDDuration > 0f || flag2)
@@ -4828,7 +4829,7 @@ public class HERO : Photon.MonoBehaviour
                     }
                     else if (!titanForm && !isCannon)
                     {
-                        if (this.inputManager.isInputDown[InputCode.restart])
+                        if (Shelter.InputManager.IsDown(InputAction.Suicide))
                             this.Suicide();
                         
                         bool ReflectorVariable2;
@@ -4874,7 +4875,7 @@ public class HERO : Photon.MonoBehaviour
                         }
                         if (this.grounded && (this.State == HeroState.Idle || this.State == HeroState.Slide))
                         {
-                            if (!(!this.inputManager.isInputDown[InputCode.jump] || this.baseAnimation.IsPlaying("jump") || this.baseAnimation.IsPlaying("horse_geton")))
+                            if (!(!Shelter.InputManager.IsKeyPressed(InputAction.Jump) || this.baseAnimation.IsPlaying("jump") || this.baseAnimation.IsPlaying("horse_geton")))
                             {
                                 this.idle();
                                 this.crossFade("jump", 0.1f);
@@ -4884,7 +4885,7 @@ public class HERO : Photon.MonoBehaviour
                             {
                                 this.getOnHorse();
                             }
-                            if (!(!this.inputManager.isInputDown[InputCode.dodge] || this.baseAnimation.IsPlaying("jump") || this.baseAnimation.IsPlaying("horse_geton")))
+                            if (!(!Shelter.InputManager.IsDown(InputAction.Dodge) || this.baseAnimation.IsPlaying("jump") || this.baseAnimation.IsPlaying("horse_geton")))
                             {
                                 this.dodge2(false);
                                 return;
@@ -4892,15 +4893,15 @@ public class HERO : Photon.MonoBehaviour
                         }
                         if (this.State == HeroState.Idle)
                         {
-                            if (this.inputManager.isInputDown[InputCode.flare1])
+                            if (Shelter.InputManager.IsDown(InputAction.GreenFlare))
                             {
                                 this.shootFlare(1);
                             }
-                            if (this.inputManager.isInputDown[InputCode.flare2])
+                            if (Shelter.InputManager.IsDown(InputAction.RedFlare))
                             {
                                 this.shootFlare(2);
                             }
-                            if (this.inputManager.isInputDown[InputCode.flare3])
+                            if (Shelter.InputManager.IsDown(InputAction.BlackFlare))
                             {
                                 this.shootFlare(3);
                             }
@@ -4908,20 +4909,20 @@ public class HERO : Photon.MonoBehaviour
                             {
                                 this.getOffHorse();
                             }
-                            if ((animation.IsPlaying(this.standAnimation) || !this.grounded) && this.inputManager.isInputDown[InputCode.reload] && (!this.useGun || RCSettings.ahssReload != 1 || this.grounded))
+                            if ((animation.IsPlaying(this.standAnimation) || !this.grounded) && Shelter.InputManager.IsDown(InputAction.Reload) && (!this.useGun || RCSettings.ahssReload != 1 || this.grounded))
                             {
                                 this.changeBlade();
                                 return;
                             }
-                            if (this.baseAnimation.IsPlaying(this.standAnimation) && this.inputManager.isInputDown[InputCode.salute])
+                            if (this.baseAnimation.IsPlaying(this.standAnimation) && Shelter.InputManager.IsDown(InputAction.Salute))
                             {
                                 this.salute();
                                 return;
                             }
-                            if (!this.isMounted && (this.inputManager.isInputDown[InputCode.attack0] || this.inputManager.isInputDown[InputCode.attack1]) && !Screen.showCursor && !this.useGun)
+                            if (!this.isMounted && (Shelter.InputManager.IsKeyPressed(InputAction.Attack) || Shelter.InputManager.IsDown(InputAction.Special)) && !Screen.showCursor && !this.useGun)
                             {
                                 bool flag3 = false;
-                                if (this.inputManager.isInputDown[InputCode.attack1])
+                                if (Shelter.InputManager.IsDown(InputAction.Special))
                                 {
                                     if (this.skillCDDuration > 0f || flag3)
                                     {
@@ -5059,15 +5060,15 @@ public class HERO : Photon.MonoBehaviour
                                         }
                                     }
                                 }
-                                else if (this.inputManager.isInputDown[InputCode.attack0])
+                                else if (Shelter.InputManager.IsKeyPressed(InputAction.Attack))
                                 {
                                     if (this.needLean)
                                     {
-                                        if (this.inputManager.isInput[InputCode.left])
+                                        if (Shelter.InputManager.IsKeyPressed(InputAction.Left))
                                         {
                                             this.attackAnimation = UnityEngine.Random.Range(0, 100) >= 50 ? "attack1_hook_l1" : "attack1_hook_l2";
                                         }
-                                        else if (this.inputManager.isInput[InputCode.right])
+                                        else if (Shelter.InputManager.IsKeyPressed(InputAction.Right))
                                         {
                                             this.attackAnimation = UnityEngine.Random.Range(0, 100) >= 50 ? "attack1_hook_r1" : "attack1_hook_r2";
                                         }
@@ -5080,11 +5081,11 @@ public class HERO : Photon.MonoBehaviour
                                             this.attackAnimation = UnityEngine.Random.Range(0, 100) >= 50 ? "attack1_hook_r1" : "attack1_hook_r2";
                                         }
                                     }
-                                    else if (this.inputManager.isInput[InputCode.left])
+                                    else if (Shelter.InputManager.IsKeyPressed(InputAction.Left))
                                     {
                                         this.attackAnimation = "attack2";
                                     }
-                                    else if (this.inputManager.isInput[InputCode.right])
+                                    else if (Shelter.InputManager.IsKeyPressed(InputAction.Right))
                                     {
                                         this.attackAnimation = "attack1";
                                     }
@@ -5170,12 +5171,12 @@ public class HERO : Photon.MonoBehaviour
                             }
                             if (this.useGun && !Screen.showCursor)
                             {
-                                if (this.inputManager.isInput[InputCode.attack1])
+                                if (Shelter.InputManager.IsDown(InputAction.Special))
                                 {
                                     this.leftArmAim = true;
                                     this.rightArmAim = true;
                                 }
-                                else if (this.inputManager.isInput[InputCode.attack0])
+                                else if (Shelter.InputManager.IsKeyPressed(InputAction.Attack))
                                 {
                                     if (this.leftGunHasBullet)
                                     {
@@ -5215,7 +5216,7 @@ public class HERO : Photon.MonoBehaviour
                                 bool flag4 = false;
                                 bool flag5 = false;
                                 bool flag6 = false;
-                                if (this.inputManager.isInputUp[InputCode.attack1] && this.skillId != "bomb")
+                                if (Shelter.InputManager.IsUp(InputAction.Special) && this.skillId != "bomb")
                                 {
                                     if (this.leftGunHasBullet && this.rightGunHasBullet)
                                     {
@@ -5238,7 +5239,7 @@ public class HERO : Photon.MonoBehaviour
                                         flag6 = true;
                                     }
                                 }
-                                if (flag6 || this.inputManager.isInputUp[InputCode.attack0])
+                                if (flag6 || Shelter.InputManager.IsUp(InputAction.Attack))
                                 {
                                     if (this.grounded)
                                     {
@@ -5311,7 +5312,7 @@ public class HERO : Photon.MonoBehaviour
                         {
                             if (!this.useGun)
                             {
-                                if (!this.inputManager.isInput[InputCode.attack0])
+                                if (!Shelter.InputManager.IsKeyPressed(InputAction.Attack))
                                 {
                                     this.buttonAttackRelease = true;
                                 }
@@ -5729,7 +5730,7 @@ public class HERO : Photon.MonoBehaviour
                                 this.idle();
                             }
                         }
-                        if (this.inputManager.isInput[InputCode.leftRope])
+                        if (Shelter.InputManager.IsKeyPressed(InputAction.LeftHook))
                         {
                             ReflectorVariable0 = true;
                         }
@@ -5737,7 +5738,7 @@ public class HERO : Photon.MonoBehaviour
                         {
                             ReflectorVariable0 = false;
                         }
-                        if (!(ReflectorVariable0 ? ((this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.State == HeroState.Grab) && this.State != HeroState.Idle) : true))
+                        if (!(!ReflectorVariable0 || ((this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.State == HeroState.Grab) && this.State != HeroState.Idle)))
                         {
                             if (this.bulletLeft != null)
                             {
@@ -5761,7 +5762,7 @@ public class HERO : Photon.MonoBehaviour
                         {
                             this.QHold = false;
                         }
-                        if (this.inputManager.isInput[InputCode.rightRope])
+                        if (Shelter.InputManager.IsKeyPressed(InputAction.RightHook))
                         {
                             ReflectorVariable1 = true;
                         }
@@ -5769,7 +5770,7 @@ public class HERO : Photon.MonoBehaviour
                         {
                             ReflectorVariable1 = false;
                         }
-                        if (!(ReflectorVariable1 ? ((this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.State == HeroState.Grab) && this.State != HeroState.Idle) : true))
+                        if (!(!ReflectorVariable1 || (this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.State == HeroState.Grab) && this.State != HeroState.Idle))
                         {
                             if (this.bulletRight != null)
                             {
@@ -5793,7 +5794,7 @@ public class HERO : Photon.MonoBehaviour
                         {
                             this.EHold = false;
                         }
-                        if (this.inputManager.isInput[InputCode.bothRope])
+                        if (Shelter.InputManager.IsKeyPressed(InputAction.BothHooks))
                         {
                             ReflectorVariable2 = true;
                         }
@@ -5801,18 +5802,17 @@ public class HERO : Photon.MonoBehaviour
                         {
                             ReflectorVariable2 = false;
                         }
-                        if (!(ReflectorVariable2 ? ((this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.State == HeroState.Grab) && this.State != HeroState.Idle) : true))
+                        if (!(!ReflectorVariable2 || ((this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.State == HeroState.Grab) && this.State != HeroState.Idle)))
                         {
                             this.QHold = true;
                             this.EHold = true;
                             if (this.bulletLeft == null && this.bulletRight == null)
                             {
-                                RaycastHit hit6;
                                 Ray ray6 = Camera.main.ScreenPointToRay(Input.mousePosition);
                                 LayerMask mask16 = 1 << LayerMask.NameToLayer("Ground");
                                 LayerMask mask17 = 1 << LayerMask.NameToLayer("EnemyBox");
                                 LayerMask mask18 = mask17 | mask16;
-                                if (Physics.Raycast(ray6, out hit6, 1000000f, mask18.value))
+                                if (Physics.Raycast(ray6, out var hit6, 1000000f, mask18.value))
                                 {
                                     this.launchLeftRope(hit6, false, 0);
                                     this.launchRightRope(hit6, false, 0);
@@ -5877,7 +5877,7 @@ public class HERO : Photon.MonoBehaviour
     {
         if (this.skillId == "bomb")
         {
-            if (this.inputManager.isInputDown[InputCode.attack1] && this.skillCDDuration <= 0f)
+            if (Shelter.InputManager.IsDown(InputAction.Special) && this.skillCDDuration <= 0f)
             {
                 if (!(this.myBomb == null || this.myBomb.disabled))
                 {
@@ -5906,11 +5906,11 @@ public class HERO : Photon.MonoBehaviour
             {
                 this.bombTime += Time.deltaTime;
                 bool flag2 = false;
-                if (this.inputManager.isInputUp[InputCode.attack1])
+                if (Shelter.InputManager.IsUp(InputAction.Special))
                 {
                     this.detonate = true;
                 }
-                else if (this.inputManager.isInputDown[InputCode.attack1] && this.detonate)
+                else if (Shelter.InputManager.IsDown(InputAction.Special) && this.detonate)
                 {
                     this.detonate = false;
                     flag2 = true;
@@ -5954,10 +5954,12 @@ public class HERO : Photon.MonoBehaviour
 
     public void useBlade(int amount = 0)
     {
+        if (Shelter.ModuleManager.Enabled(nameof(ModuleInfiniteBlade)))
+            return;
+
         if (amount == 0)
-        {
             amount = 1;
-        }
+        
         amount *= 2;
         if (this.currentBladeSta > 0f)
         {
@@ -5981,18 +5983,16 @@ public class HERO : Photon.MonoBehaviour
 
     private void useGas(float amount = 0)
     {
+        if (Shelter.ModuleManager.Enabled(nameof(ModuleInfiniteGas)))
+            return;
+        
         if (amount == 0f)
-        {
             amount = this.useGasSpeed;
-        }
+        
         if (this.currentGas > 0f)
-        {
             this.currentGas -= amount;
-            if (this.currentGas < 0f)
-            {
-                this.currentGas = 0f;
-            }
-        }
+        if (this.currentGas < 0f)
+            this.currentGas = 0f;
     }
 
     [RPC]
