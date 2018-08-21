@@ -874,13 +874,13 @@ public class TITAN : Photon.MonoBehaviour
 
     private void FindNeareastHero()
     {
-        GameObject myHero = this.myHero;
+        GameObject oldHero = this.myHero;
         this.myHero = this.GetNearestHero();
-        if (this.myHero != myHero && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
+        if (this.myHero != oldHero && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
             if (this.myHero == null)
                 photonView.RPC("setMyTarget", PhotonTargets.Others, -1);
-            else
+            else 
                 photonView.RPC("setMyTarget", PhotonTargets.Others, myHero.GetPhotonView().viewID);
         }
         this.oldHeadRotation = this.head.rotation;
@@ -1312,20 +1312,21 @@ public class TITAN : Photon.MonoBehaviour
 
     private GameObject GetNearestHero()
     {
-        GameObject obj2 = null;
-        float positiveInfinity = float.PositiveInfinity;
-        Vector3 position = this.baseTransform.position;
-        foreach (HERO hero in this.MultiplayerManager.GetPlayers())
+        GameObject returnPlayer = null;
+        float lowestDistance = float.PositiveInfinity;
+        foreach (HERO hero in MultiplayerManager.GetPlayers())
         {
-            GameObject gameObject = hero.gameObject;
-            float num2 = Vector3.Distance(gameObject.transform.position, position);
-            if (num2 < positiveInfinity)
+            if (hero == null)
+                continue;
+            
+            float distance = Vector3.Distance(hero.gameObject.transform.position, baseTransform.position);
+            if (distance < lowestDistance)
             {
-                obj2 = gameObject;
-                positiveInfinity = num2;
+                returnPlayer = hero.gameObject;
+                lowestDistance = distance;
             }
         }
-        return obj2;
+        return returnPlayer;
     }
 
     private static int PunkNumber => 
