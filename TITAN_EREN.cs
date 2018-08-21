@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using Mod;
 using Mod.Keybinds;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class TITAN_EREN : Photon.MonoBehaviour
 {
@@ -45,7 +47,6 @@ public class TITAN_EREN : Photon.MonoBehaviour
     public bool rockLift;
     private int rockPhase;
     public float speed = 80f;
-    private float sqrt2 = Mathf.Sqrt(2f);
     private int stepSoundPhase = 2;
     private Vector3 targetCheckPt;
     private float waitCounter;
@@ -833,7 +834,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
         {
             this.currentCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
             this.oldCorePosition = transform.position - transform.Find("Amarture/Core").position;
-            this.myR = this.sqrt2 * 6f;
+            this.myR = Mathf.Sqrt(2) * 6f;
             animation["hit_annie_1"].speed = 0.8f;
             animation["hit_annie_2"].speed = 0.7f;
             animation["hit_annie_3"].speed = 0.7f;

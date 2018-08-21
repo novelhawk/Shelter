@@ -26,18 +26,6 @@ namespace Mod.Modules
             {
                 Debug.Log($"errorCallback({a}, {b})");
             };
-            handlers.joinCallback += (a) =>
-            {
-                Debug.Log("joinCallback");
-            };
-            handlers.spectateCallback += (a) =>
-            {
-                Debug.Log("spectateCallback");
-            };
-            handlers.requestCallback += (ref DiscordApi.JoinRequest a) =>
-            {
-                Debug.Log("requestCallback");
-            };
             DiscordApi.Initialize("378900623875244042", ref handlers, true, null);
         }
 

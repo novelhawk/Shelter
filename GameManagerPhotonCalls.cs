@@ -693,6 +693,9 @@ public partial class FengGameManagerMKII
 
     private void Update()
     {
+        if (Shelter.InputManager.IsDown(InputAction.MenuKey))
+            _isVisible = !_isVisible;
+        
         //        if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && GameObject.Find("LabelNetworkStatus") != null)
         //        {
         //            GameObject.Find("LabelNetworkStatus").GetComponent<UILabel>().text = PhotonNetwork.connectionStatesDetailed.ToString();
