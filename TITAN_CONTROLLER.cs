@@ -20,7 +20,6 @@ public class TITAN_CONTROLLER : MonoBehaviour
     public bool grabfrontr;
     public bool grabnapel;
     public bool grabnaper;
-    public FengCustomInputs inputManager;
     public bool isAttackDown;
     public bool isAttackIIDown;
     public bool isHorse;
@@ -32,7 +31,6 @@ public class TITAN_CONTROLLER : MonoBehaviour
 
     private void Start()
     {
-        this.inputManager = GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>();
         this.currentCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
         {

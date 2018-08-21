@@ -18,7 +18,6 @@ public partial class FengGameManagerMKII
     public float distanceSlider;
     public bool gameStart;
     public List<GameObject> groundList;
-    public FengCustomInputs inputManager;
     public bool isFirstLoad;
     public bool isPlayer1Winning;
     public bool isPlayer2Winning;

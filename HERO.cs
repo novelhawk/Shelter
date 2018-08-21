@@ -91,7 +91,6 @@ public class HERO : Photon.MonoBehaviour
     public GameObject hookRefR2;
     private bool hookSomeOne;
     private GameObject hookTarget;
-//    public FengCustomInputs inputManager;
     private float invincible = 3f;
     public bool isCannon;
     private bool isLaunchLeft;

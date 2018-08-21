@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using Mod;
 using Mod.Discord;
 using Mod.Interface;
+using Mod.Keybinds;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -115,7 +116,7 @@ public partial class FengGameManagerMKII
             gameStart = false;
             Screen.lockCursor = false;
             Screen.showCursor = true;
-            inputManager.menuOn = false;
+            _isVisible = false;
             DestroyAllExistingCloths();
             Destroy(GameObject.Find("MultiplayerManager"));
             Application.LoadLevel("menu");

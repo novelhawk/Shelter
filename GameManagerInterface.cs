@@ -359,7 +359,7 @@ public partial class FengGameManagerMKII
                         Screen.lockCursor = false;
                         Screen.showCursor = true;
                         IN_GAME_MAIN_CAMERA.GameType = GameType.NotInRoom;
-                        inputManager.menuOn = false;
+                        _isVisible = false;
                         Destroy(GameObject.Find("MultiplayerManager"));
                         Application.LoadLevel("menu");
                     }
@@ -1463,7 +1463,7 @@ public partial class FengGameManagerMKII
             {
                 float num7;
                 float num8;
-                if (inputManager != null && inputManager.menuOn)
+                if (_isVisible)
                 {
                     Screen.showCursor = true;
                     Screen.lockCursor = false;
@@ -3184,13 +3184,11 @@ public partial class FengGameManagerMKII
                                                     num18 -= 15;
                                                 }
 
-                                                if (GUI.Button(
-                                                    new Rect(num7 + num48, num8 + 86f + num18 * 25f, 120f, 20f),
-                                                    inputManager.getKeyRC(num13), "box"))
-                                                {
-                                                    settings[100] = num13 + 1;
-                                                    inputManager.setNameRC(num13, "waiting...");
-                                                }
+//                                                if (GUI.Button(new Rect(num7 + num48, num8 + 86f + num18 * 25f, 120f, 20f), inputManager.getKeyRC(num13), "box"))
+//                                                {
+//                                                    settings[100] = num13 + 1;
+//                                                    inputManager.setNameRC(num13, "waiting...");
+//                                                }
                                             }
 
                                             if (GUI.Button(new Rect(num7 + 500f, num8 + 261f, 120f, 20f),
@@ -3348,7 +3346,7 @@ public partial class FengGameManagerMKII
                                                             num23 = num13 + 1;
                                                             if ((int) settings[100] == num23)
                                                             {
-                                                                inputManager.setKeyRC(num13, str4);
+//                                                                inputManager.setKeyRC(num13, str4);
                                                                 settings[100] = 0;
                                                             }
                                                         }
@@ -3990,7 +3988,7 @@ public partial class FengGameManagerMKII
                         }
                         else if (GUI.Button(new Rect(num7 + 500f, num8 + 465f, 60f, 25f), "Default"))
                         {
-                            GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().setToDefault();
+                            throw new NotImplementedException();
                         }
                         else if (GUI.Button(new Rect(num7 + 565f, num8 + 465f, 75f, 25f), "Continue"))
                         {
@@ -3998,13 +3996,12 @@ public partial class FengGameManagerMKII
                             {
                                 Time.timeScale = 1f;
                             }
+                            _isVisible = false;
 
                             if (!UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled)
                             {
                                 Screen.showCursor = true;
                                 Screen.lockCursor = true;
-                                GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().menuOn =
-                                    false;
                                 UnityEngine.Camera.main.GetComponent<SpectatorMovement>().disable = false;
                                 UnityEngine.Camera.main.GetComponent<MouseLook>().disable = false;
                             }
@@ -4022,10 +4019,6 @@ public partial class FengGameManagerMKII
                                     Screen.lockCursor = false;
                                 }
 
-                                GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().menuOn =
-                                    false;
-                                GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>()
-                                    .justUPDATEME();
                             }
                         }
                         else if (GUI.Button(new Rect(num7 + 645f, num8 + 465f, 40f, 25f), "Quit"))
@@ -4043,7 +4036,6 @@ public partial class FengGameManagerMKII
                             Screen.showCursor = true;
                             IN_GAME_MAIN_CAMERA.GameType = GameType.NotInRoom;
                             gameStart = false;
-                            GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().menuOn = false;
                             DestroyAllExistingCloths();
                             Destroy(GameObject.Find("MultiplayerManager"));
                             Application.LoadLevel("menu");
@@ -4073,7 +4065,6 @@ public partial class FengGameManagerMKII
                             Screen.showCursor = true;
                             IN_GAME_MAIN_CAMERA.GameType = GameType.NotInRoom;
                             gameStart = false;
-                            GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().menuOn = false;
                             DestroyAllExistingCloths();
                             Destroy(GameObject.Find("MultiplayerManager"));
                             Application.LoadLevel("menu");
@@ -4083,6 +4074,8 @@ public partial class FengGameManagerMKII
             }
         }
     }
+
+    private bool _isVisible;
 
     #endregion
 }

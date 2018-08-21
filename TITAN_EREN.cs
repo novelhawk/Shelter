@@ -23,7 +23,6 @@ public class TITAN_EREN : Photon.MonoBehaviour
     private string hitAnimation;
     private float hitPause;
     private ArrayList hitTargets;
-//    public FengCustomInputs inputManager;
     private bool isAttack;
     public bool isHit;
     private bool isHitWhileCarryingRock;

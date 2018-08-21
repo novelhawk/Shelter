@@ -31,7 +31,6 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     public float height = 5f;
     public float heightDamping = 2f;
     private float heightMulti;
-    public FengCustomInputs inputManager;
     public static int invertY = 1;
     public static bool isCheating;
     public static bool isPausing;
@@ -687,7 +686,6 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         isPausing = false;
         sensitivityMulti = PlayerPrefs.GetFloat("MouseSensitivity");
         invertY = PlayerPrefs.GetInt("invertMouseY");
-        this.inputManager = GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>();
         this.SetDayLight(dayLight);
         this.locker = GameObject.Find("locker");
         if (PlayerPrefs.HasKey("cameraTilt"))
@@ -819,7 +817,6 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 {
                     if (GameType == GameType.Singleplayer)
                         Time.timeScale = 0f;
-                    GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>().menuOn = true;
                     Screen.showCursor = true;
                     Screen.lockCursor = false;
                 }

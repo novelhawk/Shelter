@@ -5,7 +5,6 @@ using UnityEngine;
 public class SpectatorMovement : MonoBehaviour
 {
     public bool disable;
-    public FengCustomInputs inputManager;
 
     private void Update()
     {
