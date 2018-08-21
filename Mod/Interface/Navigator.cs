@@ -7,11 +7,15 @@ namespace Mod.Interface
 {
     public class Navigator : Gui
     {
+        private Module _module;
         private Action<Rect> _currentGUI;
         private GUIStyle _textStyle;
         private GUIStyle _buttonText;
         private GUIStyle _buttonMenu;
+        private GUIStyle _moduleName;
+        private GUIStyle _moduleDescription;
         private Texture2D _background;
+        private Texture2D _moduleBackground;
         private Texture2D _verticalLine;
         private Texture2D _enabledTexture;
         private Texture2D _disabledTexture;
@@ -23,6 +27,7 @@ namespace Mod.Interface
             Screen.lockCursor = false;
             
             _background = Texture(0, 0, 0, 85);
+            _moduleBackground = Texture(255, 255, 255, 120);
             _enabledTexture = Texture(100, 220, 255);
             _disabledTexture = Texture(0, 20, 0, 80);
             _verticalLine = Texture(127, 127, 127);
@@ -44,6 +49,17 @@ namespace Mod.Interface
                 normal = { textColor = Color(0, 149, 255) },
                 fontSize = 18
             };
+            _moduleName = new GUIStyle
+            {
+                fontSize = 20,
+                normal = {textColor = Color(255, 82, 241)},
+                alignment = TextAnchor.MiddleCenter
+            };
+            _moduleDescription = new GUIStyle
+            {
+                fontSize = 14,
+                alignment = TextAnchor.MiddleCenter
+            };
             _searchQuery = string.Empty;
             _currentGUI = null;
         }
@@ -56,7 +72,10 @@ namespace Mod.Interface
             Rect rect = new Rect(Screen.width / 2f - width / 2f, Screen.height / 2f - height / 2f, width, height);
             if (_currentGUI != null)
             {
-                _currentGUI.Invoke(new Rect(Screen.width / 2f - 640, Screen.height / 2f - 360, 1280, 720));
+                GUI.DrawTexture(rect = new Rect(Screen.width / 2f - 640, Screen.height / 2f - 360, 1280, 720), _moduleBackground);
+                GUI.Label(new Rect(rect.x + 30, rect.y + 10, rect.width - 60, 30), _module.Name, _moduleName);
+                GUI.Label(new Rect(rect.x + 30, rect.y + 40, rect.width - 60, 30), _module.Description, _moduleDescription);
+                _currentGUI.Invoke(new Rect(rect.x + 30, rect.y + 80, rect.width - 60, rect.height - 100));
                 return;
             }
             
@@ -85,7 +104,10 @@ namespace Mod.Interface
                     GUI.DrawTexture(new Rect(rect.X + rect.Width - 30, rect.Y + 5, 1, rect.Height - 10), _verticalLine);
                     GUI.Label(new Rect(rect.X + rect.Width - 25 - 10, rect.Y, 25, rect.Height), "▼", _buttonMenu);
                     if (GUI.Button(new Rect(rect.X + rect.Width - 30, rect.Y, 30, rect.Height), string.Empty, GUIStyle.none))
+                    {
                         _currentGUI = module.GetGUI();
+                        _module = module;
+                    }
                 }
                 
                 if (GUI.Button(new Rect(rect.X, rect.Y, rect.Width - 30, rect.Height), string.Empty, GUIStyle.none))
