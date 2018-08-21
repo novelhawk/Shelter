@@ -2136,11 +2136,11 @@ public class HERO : Photon.MonoBehaviour
 
     private void UpdateNameScale()
     {
-        if (Player.Self.Properties.IsDead != false || Player.Self.Hero == null || photonView.isMine || !Shelter.ModuleManager.Enabled(nameof(UpdateNameScale)))
+        if (Player.Self.Properties.IsDead != false || Player.Self.Hero == null || photonView.isMine || !Shelter.ModuleManager.Enabled(nameof(ModuleNameScaling)))
         {
             myNetWorkName.transform.localScale = new Vector3(14, 14, 14);
             return;
-        }
+        } 
 
         var dist = Vector3.Distance(Player.Self.Hero.transform.position, transform.position);
         var size = 14 + -8 * Mathf.Clamp01(dist / 300);
@@ -3153,25 +3153,14 @@ public class HERO : Photon.MonoBehaviour
     [RPC]
     private void NetContinueAnimation()
     {
-        IEnumerator enumerator = animation.GetEnumerator();
-        try
+        foreach (AnimationState current in animation)
         {
-            while (enumerator.MoveNext())
-            {
-                AnimationState current = (AnimationState) enumerator.Current;
-                if (current != null && current.speed == 1f)
-                {
-                    return;
-                }
-                current.speed = 1f;
-            }
-        }
-        finally
-        {
-            if (enumerator is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
+            if (current == null)
+                continue;
+            if (current.speed == 1f)
+                return; // Should it be continue; ?
+            
+            current.speed = 1f;
         }
         this.playAnimation(this.currentPlayingClipName());
     }
@@ -3181,9 +3170,7 @@ public class HERO : Photon.MonoBehaviour
     {
         this.currentAnimation = aniName;
         if (animation != null)
-        {
             animation.CrossFade(aniName, time);
-        }
     }
 
     [RPC]
@@ -4020,9 +4007,9 @@ public class HERO : Photon.MonoBehaviour
     {
         this.myTeam = val;
         TriggerColliderWeapon colliderWeapon;
-        if ((colliderWeapon = checkBoxLeft.GetComponent<TriggerColliderWeapon>()) != null)
+        if (checkBoxLeft != null && (colliderWeapon = checkBoxLeft.GetComponent<TriggerColliderWeapon>()) != null)
             colliderWeapon.myTeam = val;
-        if ((colliderWeapon = checkBoxRight.GetComponent<TriggerColliderWeapon>()) != null)
+        if (checkBoxRight != null && (colliderWeapon = checkBoxRight.GetComponent<TriggerColliderWeapon>()) != null)
             colliderWeapon.myTeam = val;
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
