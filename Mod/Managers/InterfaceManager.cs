@@ -40,6 +40,11 @@ namespace Mod.Managers
                 return true;
             return false;
         }
+
+        public Gui GetGUI(string name)
+        {
+            return _interfaces.FirstOrDefault(g => g.Name == name);
+        }
         
         public void Enable(string name)
         {
