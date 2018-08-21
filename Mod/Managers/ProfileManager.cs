@@ -26,7 +26,7 @@ namespace Mod.Managers
             _profileFile = _file.Deserialize();
             
             if (_profileFile.Profiles.Count < 1)
-                _file.Deserialize(_file.InvalidateCurrentFile());
+                _profileFile = _file.Deserialize(_file.InvalidateCurrentFile());
 
             if (_profileFile.Selected > _profileFile.Profiles.Count - 1)
                 _profileFile.Selected = 0;
