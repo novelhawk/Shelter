@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Mod;
 using UnityEngine;
 
 public class FEMALE_TITAN : Photon.MonoBehaviour
@@ -1226,7 +1227,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     [RPC]
     public void LoadskinRPC(string url)
     {
-        if ((int) FengGameManagerMKII.settings[1] == 1 && (url.EndsWith(".jpg") || url.EndsWith(".png") || url.EndsWith(".jpeg")))
+        if ((int) FengGameManagerMKII.settings[1] == 1 && Utility.IsValidImageUrl(url))
         {
             StartCoroutine(loadskinE(url));
         }

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Mod;
 using UnityEngine;
 
 public class TITAN : Photon.MonoBehaviour
@@ -1868,7 +1869,7 @@ public class TITAN : Photon.MonoBehaviour
             string body = (string) FengGameManagerMKII.settings[index];
             string eye = (string) FengGameManagerMKII.settings[num2];
             this.skin = index;
-            if (eye.EndsWith(".jpg") || eye.EndsWith(".png") || eye.EndsWith(".jpeg"))
+            if (Utility.IsValidImageUrl(eye))
             {
                 this.eye = true;
             }
@@ -1891,78 +1892,61 @@ public class TITAN : Photon.MonoBehaviour
             yield return null;
         }
         bool mipmap = true;
-        bool iteratorVariable1 = false;
+        bool unloadAssets = false;
         if ((int)FengGameManagerMKII.settings[63] == 1)
-        {
             mipmap = false;
-        }
-        foreach (Renderer iteratorVariable2 in this.GetComponentsInChildren<Renderer>())
+        
+        foreach (Renderer myRenderer in this.GetComponentsInChildren<Renderer>())
         {
-            if (iteratorVariable2.name.Contains("eye"))
+            if (myRenderer.name.Contains("eye"))
             {
                 if (eye.ToLower() == "transparent")
                 {
-                    iteratorVariable2.enabled = false;
+                    myRenderer.enabled = false;
                 }
-                else if (eye.EndsWith(".jpg") || eye.EndsWith(".png") || eye.EndsWith(".jpeg"))
+                else if (Utility.IsValidImageUrl(eye))
                 {
                     if (!FengGameManagerMKII.linkHash[0].ContainsKey(eye))
                     {
-                        WWW link = new WWW(eye);
-                        yield return link;
-                        Texture2D iteratorVariable4 = RCextensions.LoadImageRC(link, mipmap, 200000);
-                        link.Dispose();
-                        if (!FengGameManagerMKII.linkHash[0].ContainsKey(eye))
+                        unloadAssets = true;
+                        myRenderer.material.mainTextureScale = new Vector2(myRenderer.material.mainTextureScale.x * 4f, myRenderer.material.mainTextureScale.y * 8f);
+                        myRenderer.material.mainTextureOffset = new Vector2(0f, 0f);
+                        using (WWW link = new WWW(eye))
                         {
-                            iteratorVariable1 = true;
-                            iteratorVariable2.material.mainTextureScale = new Vector2(iteratorVariable2.material.mainTextureScale.x * 4f, iteratorVariable2.material.mainTextureScale.y * 8f);
-                            iteratorVariable2.material.mainTextureOffset = new Vector2(0f, 0f);
-                            iteratorVariable2.material.mainTexture = iteratorVariable4;
-                            FengGameManagerMKII.linkHash[0].Add(eye, iteratorVariable2.material);
-                            iteratorVariable2.material = (Material)FengGameManagerMKII.linkHash[0][eye];
+                            yield return link;
+                            myRenderer.material.mainTexture = RCextensions.LoadImageRC(link, mipmap, 200000);
                         }
-                        else
-                        {
-                            iteratorVariable2.material = (Material)FengGameManagerMKII.linkHash[0][eye];
-                        }
+                        FengGameManagerMKII.linkHash[0].Add(eye, myRenderer.material);
+                        myRenderer.material = (Material)FengGameManagerMKII.linkHash[0][eye];
                     }
                     else
                     {
-                        iteratorVariable2.material = (Material)FengGameManagerMKII.linkHash[0][eye];
+                        myRenderer.material = (Material)FengGameManagerMKII.linkHash[0][eye];
                     }
                 }
             }
-            else if (iteratorVariable2.name == "hair" && (body.EndsWith(".jpg") || body.EndsWith(".png") || body.EndsWith(".jpeg")))
+            else if (myRenderer.name == "hair" && Utility.IsValidImageUrl(body))
             {
                 if (!FengGameManagerMKII.linkHash[2].ContainsKey(body))
                 {
-                    WWW iteratorVariable5 = new WWW(body);
-                    yield return iteratorVariable5;
-                    Texture2D iteratorVariable6 = RCextensions.LoadImageRC(iteratorVariable5, mipmap, 1000000);
-                    iteratorVariable5.Dispose();
-                    if (!FengGameManagerMKII.linkHash[2].ContainsKey(body))
+                    unloadAssets = true;
+                    myRenderer.material = this.mainMaterial.GetComponent<SkinnedMeshRenderer>().material;
+                    using (WWW iteratorVariable5 = new WWW(body))
                     {
-                        iteratorVariable1 = true;
-                        iteratorVariable2.material = this.mainMaterial.GetComponent<SkinnedMeshRenderer>().material;
-                        iteratorVariable2.material.mainTexture = iteratorVariable6;
-                        FengGameManagerMKII.linkHash[2].Add(body, iteratorVariable2.material);
-                        iteratorVariable2.material = (Material)FengGameManagerMKII.linkHash[2][body];
+                        yield return iteratorVariable5;
+                        myRenderer.material.mainTexture = RCextensions.LoadImageRC(iteratorVariable5, mipmap, 1000000);
                     }
-                    else
-                    {
-                        iteratorVariable2.material = (Material)FengGameManagerMKII.linkHash[2][body];
-                    }
+                    FengGameManagerMKII.linkHash[2].Add(body, myRenderer.material);
+                    myRenderer.material = (Material)FengGameManagerMKII.linkHash[2][body];
                 }
                 else
                 {
-                    iteratorVariable2.material = (Material)FengGameManagerMKII.linkHash[2][body];
+                    myRenderer.material = (Material)FengGameManagerMKII.linkHash[2][body];
                 }
             }
         }
-        if (iteratorVariable1)
-        {
+        if (unloadAssets)
             FengGameManagerMKII.instance.UnloadAssets();
-        }
     }
 
     [RPC]

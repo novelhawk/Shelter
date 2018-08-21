@@ -22,6 +22,20 @@ namespace Mod
                     return false;
             }
         }
+        
+        public static bool IsValidImageUrl(string url)
+        {
+            var regex = Regex.Match(url, @"(?:https?:\/\/)?(?:www\.)?.+?(\w+)\.\w+\/[^\?]+\.(?:png|jpg|gif|jpeg)(\?.*)?");
+            if (!regex.Success) return false;
+            switch (regex.Groups[1].Value)
+            {
+                case "imgur":
+                    return true;
+                default:
+                    Mod.Interface.Chat.System(regex.Groups[1].Value + " is not an allowed domain.");
+                    return false;
+            }
+        }
 
         public static string CheckHTMLTags(string text)
         {

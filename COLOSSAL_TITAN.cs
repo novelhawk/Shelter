@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using Mod;
 using UnityEngine;
 
 public class COLOSSAL_TITAN : Photon.MonoBehaviour
@@ -430,7 +431,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     [RPC]
     public void LoadskinRPC(string url)
     {
-        if ((int) FengGameManagerMKII.settings[1] == 1 && (url.EndsWith(".jpg") || url.EndsWith(".png") || url.EndsWith(".jpeg")))
+        if ((int) FengGameManagerMKII.settings[1] == 1 && Utility.IsValidImageUrl(url))
         {
             StartCoroutine(this.loadskinE(url));
         }

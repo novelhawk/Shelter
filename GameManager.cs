@@ -90,7 +90,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     private void Cache()
     {
         ClothFactory.ClearClothCache();
-        inputManager = GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>();
         chatRoom = GameObject.Find("Chatroom").GetComponent<InRoomChat>();
         playersRPC.Clear();
         titanSpawners.Clear();
@@ -359,20 +358,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         }
     }
 
-    public static bool IsValidImageUrl(string url)
-    {
-        var regex = Regex.Match(url, @"(?:https?:\/\/)?(?:www\.)?.+?(\w+)\.\w+\/[^\?]+\.(?:png|jpg|gif|jpeg)(\?.*)?");
-        if (!regex.Success) return false;
-        switch (regex.Groups[1].Value)
-        {
-            case "imgur":
-                return true;
-            default:
-                Mod.Interface.Chat.System(regex.Groups[1].Value + " is not an allowed domain.");
-                return false;
-        }
-    }
-
     private IEnumerator ClearLevelEnumerator(string[] skybox)
     {
         bool mipmap = true;
@@ -392,7 +377,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 for (int i = 0; i < 6; i++)
                 {
                     var url = skybox[i];
-                    if (!IsValidImageUrl(url))
+                    if (!Utility.IsValidImageUrl(url))
                         continue;
                     using (WWW req = new WWW(url))
                     {
@@ -412,7 +397,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             }
         }
         string grassUrl = skybox[6];
-        if (IsValidImageUrl(grassUrl))
+        if (Utility.IsValidImageUrl(grassUrl))
         {
             foreach (GameObject ground in groundList)
             {
@@ -797,13 +782,13 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                         UnityEngine.Camera.main.GetComponent<MouseLook>().disable = true;
                     }
                 }
-                if (Shelter.InputManager.IsDown(InputAction.MenuKey) && !inputManager.menuOn)
+                if (Shelter.InputManager.IsDown(InputAction.MenuKey) && !_isVisible)
                 {
                     Screen.showCursor = true;
                     Screen.lockCursor = false;
                     UnityEngine.Camera.main.GetComponent<SpectatorMovement>().disable = true;
                     UnityEngine.Camera.main.GetComponent<MouseLook>().disable = true;
-                    inputManager.menuOn = true;
+                    _isVisible = true;
                 }
             }
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
@@ -2544,167 +2529,106 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         }
     }
 
-    private IEnumerator LoadSkinEnumerator(string n, string url, string url2, string[] skybox)
+    private IEnumerator LoadSkinEnumerator(string digits, string treeSkins, string planeSkins, string[] skybox)
     {
         bool mipmap = true;
-        bool iteratorVariable1 = false;
+        bool unloadAssets = false;
         if ((int)settings[63] == 1)
-        {
             mipmap = false;
-        }
-        if (skybox.Length > 5 && (skybox[0] != string.Empty || skybox[1] != string.Empty || skybox[2] != string.Empty || skybox[3] != string.Empty || skybox[4] != string.Empty || skybox[5] != string.Empty))
+        
+        if (skybox.Length >= 6)
         {
-            string key = string.Join(",", skybox);
-            if (!linkHash[1].ContainsKey(key))
+            string iteratorVariable3 = string.Join(",", skybox);
+            if (!linkHash[1].ContainsKey(iteratorVariable3))
             {
-                iteratorVariable1 = true;
-                Material material = UnityEngine.Camera.main.GetComponent<Skybox>().material;
-                string iteratorVariable4 = skybox[0];
-                string iteratorVariable5 = skybox[1];
-                string iteratorVariable6 = skybox[2];
-                string iteratorVariable7 = skybox[3];
-                string iteratorVariable8 = skybox[4];
-                string iteratorVariable9 = skybox[5];
-                if (iteratorVariable4.EndsWith(".jpg") || iteratorVariable4.EndsWith(".png") || iteratorVariable4.EndsWith(".jpeg"))
+                unloadAssets = true;
+                Material material = Camera.main.GetComponent<Skybox>().material;
+
+                string[] skyboxSide = {"_FrontTex", "_BackTex", "_LeftTex", "_RightTex", "_UpTex", "_DownTex"};
+                for (int i = 0; i < 6; i++)
                 {
-                    WWW link = new WWW(iteratorVariable4);
-                    yield return link;
-                    Texture2D texture = RCextensions.LoadImageRC(link, mipmap, 500000);
-                    link.Dispose();
-                    texture.wrapMode = TextureWrapMode.Clamp;
-                    material.SetTexture("_FrontTex", texture);
+                    var url = skybox[i];
+                    if (!Utility.IsValidImageUrl(url))
+                        continue;
+                    using (WWW req = new WWW(url))
+                    {
+                        yield return req;
+                        material.SetTexture(skyboxSide[i], RCextensions.LoadImageRC(req, mipmap, 500000));
+                    }
                 }
-                if (iteratorVariable5.EndsWith(".jpg") || iteratorVariable5.EndsWith(".png") || iteratorVariable5.EndsWith(".jpeg"))
-                {
-                    WWW iteratorVariable12 = new WWW(iteratorVariable5);
-                    yield return iteratorVariable12;
-                    Texture2D iteratorVariable13 = RCextensions.LoadImageRC(iteratorVariable12, mipmap, 500000);
-                    iteratorVariable12.Dispose();
-                    iteratorVariable13.wrapMode = TextureWrapMode.Clamp;
-                    material.SetTexture("_BackTex", iteratorVariable13);
-                }
-                if (iteratorVariable6.EndsWith(".jpg") || iteratorVariable6.EndsWith(".png") || iteratorVariable6.EndsWith(".jpeg"))
-                {
-                    WWW iteratorVariable14 = new WWW(iteratorVariable6);
-                    yield return iteratorVariable14;
-                    Texture2D iteratorVariable15 = RCextensions.LoadImageRC(iteratorVariable14, mipmap, 500000);
-                    iteratorVariable14.Dispose();
-                    iteratorVariable15.wrapMode = TextureWrapMode.Clamp;
-                    material.SetTexture("_LeftTex", iteratorVariable15);
-                }
-                if (iteratorVariable7.EndsWith(".jpg") || iteratorVariable7.EndsWith(".png") || iteratorVariable7.EndsWith(".jpeg"))
-                {
-                    WWW iteratorVariable16 = new WWW(iteratorVariable7);
-                    yield return iteratorVariable16;
-                    Texture2D iteratorVariable17 = RCextensions.LoadImageRC(iteratorVariable16, mipmap, 500000);
-                    iteratorVariable16.Dispose();
-                    iteratorVariable17.wrapMode = TextureWrapMode.Clamp;
-                    material.SetTexture("_RightTex", iteratorVariable17);
-                }
-                if (iteratorVariable8.EndsWith(".jpg") || iteratorVariable8.EndsWith(".png") || iteratorVariable8.EndsWith(".jpeg"))
-                {
-                    WWW iteratorVariable18 = new WWW(iteratorVariable8);
-                    yield return iteratorVariable18;
-                    Texture2D iteratorVariable19 = RCextensions.LoadImageRC(iteratorVariable18, mipmap, 500000);
-                    iteratorVariable18.Dispose();
-                    iteratorVariable19.wrapMode = TextureWrapMode.Clamp;
-                    material.SetTexture("_UpTex", iteratorVariable19);
-                }
-                if (iteratorVariable9.EndsWith(".jpg") || iteratorVariable9.EndsWith(".png") || iteratorVariable9.EndsWith(".jpeg"))
-                {
-                    WWW iteratorVariable20 = new WWW(iteratorVariable9);
-                    yield return iteratorVariable20;
-                    Texture2D iteratorVariable21 = RCextensions.LoadImageRC(iteratorVariable20, mipmap, 500000);
-                    iteratorVariable20.Dispose();
-                    iteratorVariable21.wrapMode = TextureWrapMode.Clamp;
-                    material.SetTexture("_DownTex", iteratorVariable21);
-                }
-                UnityEngine.Camera.main.GetComponent<Skybox>().material = material;
+                
+                Camera.main.GetComponent<Skybox>().material = material;
+                linkHash[1].Add(iteratorVariable3, material);
                 skyMaterial = material;
-                linkHash[1].Add(key, material);
             }
             else
             {
-                UnityEngine.Camera.main.GetComponent<Skybox>().material = (Material)linkHash[1][key];
-                skyMaterial = (Material)linkHash[1][key];
+                Camera.main.GetComponent<Skybox>().material = (Material)linkHash[1][iteratorVariable3];
+                skyMaterial = (Material)linkHash[1][iteratorVariable3];
             }
         }
         if (LevelInfoManager.GetInfo(Level).LevelName.Contains("Forest"))
         {
-            string[] iteratorVariable22 = url.Split(',');
-            string[] iteratorVariable23 = url2.Split(',');
+            string[] url = treeSkins.Split(',');
+            string[] url2 = planeSkins.Split(',');
+            
             int startIndex = 0;
-            foreach (object iteratorVariable261 in FindObjectsOfType(typeof(GameObject)))
+            foreach (UnityEngine.Object o in FindObjectsOfType(typeof(GameObject)))
             {
-                var iteratorVariable26 = (GameObject)iteratorVariable261;
-                if (iteratorVariable26 != null)
+                if (o is GameObject currentGameObject)
                 {
-                    if (iteratorVariable26.name.Contains("TREE") && n.Length > startIndex + 1)
+                    if (currentGameObject.name.Contains("TREE") && digits.Length > startIndex + 1)
                     {
-                        string s = n.Substring(startIndex, 1);
-                        string iteratorVariable30 = n.Substring(startIndex + 1, 1);
-                        if (int.TryParse(s, out var iteratorVariable27) && int.TryParse(iteratorVariable30, out var iteratorVariable28) && iteratorVariable27 >= 0 && iteratorVariable27 < 8 && iteratorVariable28 >= 0 && iteratorVariable28 < 8 && iteratorVariable22.Length >= 8 && iteratorVariable23.Length >= 8 && iteratorVariable22[iteratorVariable27] != null && iteratorVariable23[iteratorVariable28] != null)
+                        string number = digits.Substring(startIndex, 1);
+                        string number2 = digits.Substring(startIndex + 1, 1);
+                        if (int.TryParse(number, out var i) && int.TryParse(number2, out var x) && i >= 0 && i < 8 && x >= 0 && x < 8 && url.Length >= 8 && url2.Length >= 8 && url[i] != null && url2[x] != null)
                         {
-                            string iteratorVariable31 = iteratorVariable22[iteratorVariable27];
-                            string iteratorVariable32 = iteratorVariable23[iteratorVariable28];
-                            foreach (Renderer iteratorVariable33 in iteratorVariable26.GetComponentsInChildren<Renderer>())
+                            string currentUrl = url[i];
+                            string planes = url2[x];
+                            foreach (Renderer iteratorVariable33 in currentGameObject.GetComponentsInChildren<Renderer>())
                             {
                                 if (iteratorVariable33.name.Contains("Cube"))
                                 {
-                                    if (iteratorVariable31.EndsWith(".jpg") || iteratorVariable31.EndsWith(".png") || iteratorVariable31.EndsWith(".jpeg"))
+                                    if (Utility.IsValidImageUrl(currentUrl))
                                     {
-                                        if (!linkHash[2].ContainsKey(iteratorVariable31))
+                                        if (!linkHash[2].ContainsKey(currentUrl))
                                         {
-                                            WWW iteratorVariable34 = new WWW(iteratorVariable31);
-                                            yield return iteratorVariable34;
-                                            Texture2D iteratorVariable35 = RCextensions.LoadImageRC(iteratorVariable34, mipmap, 1000000);
-                                            iteratorVariable34.Dispose();
-                                            if (!linkHash[2].ContainsKey(iteratorVariable31))
+                                            unloadAssets = true;
+                                            using (WWW www = new WWW(currentUrl))
                                             {
-                                                iteratorVariable1 = true;
-                                                iteratorVariable33.material.mainTexture = iteratorVariable35;
-                                                linkHash[2].Add(iteratorVariable31, iteratorVariable33.material);
-                                                iteratorVariable33.material = (Material)linkHash[2][iteratorVariable31];
+                                                yield return www;
+                                                iteratorVariable33.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 1000000);
                                             }
-                                            else
-                                            {
-                                                iteratorVariable33.material = (Material)linkHash[2][iteratorVariable31];
-                                            }
+                                            linkHash[2].Add(currentUrl, iteratorVariable33.material);
+                                            iteratorVariable33.material = (Material)linkHash[2][currentUrl];
                                         }
                                         else
                                         {
-                                            iteratorVariable33.material = (Material)linkHash[2][iteratorVariable31];
+                                            iteratorVariable33.material = (Material)linkHash[2][currentUrl];
                                         }
                                     }
                                 }
                                 else if (iteratorVariable33.name.Contains("Plane_031"))
                                 {
-                                    if (iteratorVariable32.EndsWith(".jpg") || iteratorVariable32.EndsWith(".png") || iteratorVariable32.EndsWith(".jpeg"))
+                                    if (Utility.IsValidImageUrl(planes))
                                     {
-                                        if (!linkHash[0].ContainsKey(iteratorVariable32))
+                                        if (!linkHash[0].ContainsKey(planes))
                                         {
-                                            WWW iteratorVariable36 = new WWW(iteratorVariable32);
-                                            yield return iteratorVariable36;
-                                            Texture2D iteratorVariable37 = RCextensions.LoadImageRC(iteratorVariable36, mipmap, 200000);
-                                            iteratorVariable36.Dispose();
-                                            if (!linkHash[0].ContainsKey(iteratorVariable32))
+                                            unloadAssets = true;
+                                            using (WWW www = new WWW(planes))
                                             {
-                                                iteratorVariable1 = true;
-                                                iteratorVariable33.material.mainTexture = iteratorVariable37;
-                                                linkHash[0].Add(iteratorVariable32, iteratorVariable33.material);
-                                                iteratorVariable33.material = (Material)linkHash[0][iteratorVariable32];
+                                                yield return www;
+                                                iteratorVariable33.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                                             }
-                                            else
-                                            {
-                                                iteratorVariable33.material = (Material)linkHash[0][iteratorVariable32];
-                                            }
+                                            linkHash[0].Add(planes, iteratorVariable33.material);
+                                            iteratorVariable33.material = (Material)linkHash[0][planes];
                                         }
                                         else
                                         {
-                                            iteratorVariable33.material = (Material)linkHash[0][iteratorVariable32];
+                                            iteratorVariable33.material = (Material)linkHash[0][planes];
                                         }
                                     }
-                                    else if (iteratorVariable32.ToLower() == "transparent")
+                                    else if (planes.ToLower() == "transparent")
                                     {
                                         iteratorVariable33.enabled = false;
                                     }
@@ -2713,40 +2637,33 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                         }
                         startIndex += 2;
                     }
-                    else if (iteratorVariable26.name.Contains("Cube_001") && iteratorVariable26.transform.parent.gameObject.tag != "Player" && iteratorVariable23.Length > 8 && iteratorVariable23[8] != null)
+                    else if (currentGameObject.name.Contains("Cube_001") && !currentGameObject.transform.parent.gameObject.CompareTag("Player") && url2.Length > 8 && url2[8] != null)
                     {
-                        string iteratorVariable38 = iteratorVariable23[8];
-                        if (iteratorVariable38.EndsWith(".jpg") || iteratorVariable38.EndsWith(".png") || iteratorVariable38.EndsWith(".jpeg"))
+                        string currentUrl = url2[8];
+                        if (Utility.IsValidImageUrl(currentUrl))
                         {
-                            foreach (Renderer iteratorVariable39 in iteratorVariable26.GetComponentsInChildren<Renderer>())
+                            foreach (Renderer iteratorVariable39 in currentGameObject.GetComponentsInChildren<Renderer>())
                             {
-                                if (!linkHash[0].ContainsKey(iteratorVariable38))
+                                if (!linkHash[0].ContainsKey(currentUrl))
                                 {
-                                    WWW iteratorVariable40 = new WWW(iteratorVariable38);
-                                    yield return iteratorVariable40;
-                                    Texture2D iteratorVariable41 = RCextensions.LoadImageRC(iteratorVariable40, mipmap, 200000);
-                                    iteratorVariable40.Dispose();
-                                    if (!linkHash[0].ContainsKey(iteratorVariable38))
+                                    unloadAssets = true;
+                                    using (WWW www = new WWW(currentUrl))
                                     {
-                                        iteratorVariable1 = true;
-                                        iteratorVariable39.material.mainTexture = iteratorVariable41;
-                                        linkHash[0].Add(iteratorVariable38, iteratorVariable39.material);
-                                        iteratorVariable39.material = (Material)linkHash[0][iteratorVariable38];
+                                        yield return www;
+                                        iteratorVariable39.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                                     }
-                                    else
-                                    {
-                                        iteratorVariable39.material = (Material)linkHash[0][iteratorVariable38];
-                                    }
+                                    linkHash[0].Add(currentUrl, iteratorVariable39.material);
+                                    iteratorVariable39.material = (Material)linkHash[0][currentUrl];
                                 }
                                 else
                                 {
-                                    iteratorVariable39.material = (Material)linkHash[0][iteratorVariable38];
+                                    iteratorVariable39.material = (Material)linkHash[0][currentUrl];
                                 }
                             }
                         }
-                        else if (iteratorVariable38.ToLower() == "transparent")
+                        else if (currentUrl.ToLower() == "transparent")
                         {
-                            foreach (Renderer renderer1 in iteratorVariable26.GetComponentsInChildren<Renderer>())
+                            foreach (Renderer renderer1 in currentGameObject.GetComponentsInChildren<Renderer>())
                             {
                                 renderer1.enabled = false;
                             }
@@ -2757,157 +2674,128 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         }
         else if (LevelInfoManager.GetInfo(Level).LevelName.Contains("City"))
         {
-            string[] iteratorVariable42 = url.Split(',');
-            string[] iteratorVariable43 = url2.Split(',');
-            int iteratorVariable45 = 0;
-            var iteratorVariable46 = FindObjectsOfType(typeof(GameObject));
-            foreach (object iteratorVariable471 in iteratorVariable46)
+            string[] trees = treeSkins.Split(',');
+            string[] planes = planeSkins.Split(',');
+            int index = 0;
+            var gameObjects = FindObjectsOfType(typeof(GameObject));
+            foreach (UnityEngine.Object o in gameObjects)
             {
-                var iteratorVariable47 = (GameObject) iteratorVariable471;
-                if (iteratorVariable47 != null && iteratorVariable47.name.Contains("Cube_") && iteratorVariable47.transform.parent.gameObject.tag != "Player")
+                if (o is GameObject go && go.name.Contains("Cube_") && !go.transform.parent.gameObject.CompareTag("Player"))
                 {
-                    if (iteratorVariable47.name.EndsWith("001"))
+                    if (go.name.EndsWith("001"))
                     {
-                        if (iteratorVariable43.Length > 0 && iteratorVariable43[0] != null)
+                        if (planes.Length > 0 && planes[0] != null)
                         {
-                            string iteratorVariable48 = iteratorVariable43[0];
-                            if (iteratorVariable48.EndsWith(".jpg") || iteratorVariable48.EndsWith(".png") || iteratorVariable48.EndsWith(".jpeg"))
+                            string url = planes[0];
+                            if (Utility.IsValidImageUrl(url))
                             {
-                                foreach (Renderer iteratorVariable49 in iteratorVariable47.GetComponentsInChildren<Renderer>())
+                                foreach (Renderer myRenderer in go.GetComponentsInChildren<Renderer>())
                                 {
-                                    if (!linkHash[0].ContainsKey(iteratorVariable48))
+                                    if (!linkHash[0].ContainsKey(url))
                                     {
-                                        WWW iteratorVariable50 = new WWW(iteratorVariable48);
-                                        yield return iteratorVariable50;
-                                        Texture2D iteratorVariable51 = RCextensions.LoadImageRC(iteratorVariable50, mipmap, 200000);
-                                        iteratorVariable50.Dispose();
-                                        if (!linkHash[0].ContainsKey(iteratorVariable48))
+                                        unloadAssets = true;
+                                        using (WWW www = new WWW(url))
                                         {
-                                            iteratorVariable1 = true;
-                                            iteratorVariable49.material.mainTexture = iteratorVariable51;
-                                            linkHash[0].Add(iteratorVariable48, iteratorVariable49.material);
-                                            iteratorVariable49.material = (Material)linkHash[0][iteratorVariable48];
+                                            yield return www;
+                                            myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                                         }
-                                        else
-                                        {
-                                            iteratorVariable49.material = (Material)linkHash[0][iteratorVariable48];
-                                        }
+                                        linkHash[0].Add(url, myRenderer.material);
+                                        myRenderer.material = (Material)linkHash[0][url];
                                     }
                                     else
                                     {
-                                        iteratorVariable49.material = (Material)linkHash[0][iteratorVariable48];
+                                        myRenderer.material = (Material)linkHash[0][url];
                                     }
                                 }
                             }
-                            else if (iteratorVariable48.ToLower() == "transparent")
+                            else if (url.ToLower() == "transparent")
                             {
-                                foreach (Renderer renderer1 in iteratorVariable47.GetComponentsInChildren<Renderer>())
+                                foreach (Renderer renderer1 in go.GetComponentsInChildren<Renderer>())
                                 {
                                     renderer1.enabled = false;
                                 }
                             }
                         }
                     }
-                    else if (iteratorVariable47.name.EndsWith("006") || iteratorVariable47.name.EndsWith("007") || iteratorVariable47.name.EndsWith("015") || iteratorVariable47.name.EndsWith("000") || iteratorVariable47.name.EndsWith("002") && iteratorVariable47.transform.position.x == 0f && iteratorVariable47.transform.position.y == 0f && iteratorVariable47.transform.position.z == 0f)
+                    else if (go.name.EndsWith("006") || go.name.EndsWith("007") || go.name.EndsWith("015") || go.name.EndsWith("000") || go.name.EndsWith("002") && go.transform.position.x == 0f && go.transform.position.y == 0f && go.transform.position.z == 0f)
                     {
-                        if (iteratorVariable43.Length > 0 && iteratorVariable43[1] != null)
+                        if (planes.Length > 0 && planes[1] != null)
                         {
-                            string iteratorVariable52 = iteratorVariable43[1];
-                            if (iteratorVariable52.EndsWith(".jpg") || iteratorVariable52.EndsWith(".png") || iteratorVariable52.EndsWith(".jpeg"))
+                            string url = planes[1];
+                            if (Utility.IsValidImageUrl(url))
                             {
-                                foreach (Renderer iteratorVariable53 in iteratorVariable47.GetComponentsInChildren<Renderer>())
+                                foreach (Renderer myRenderer in go.GetComponentsInChildren<Renderer>())
                                 {
-                                    if (!linkHash[0].ContainsKey(iteratorVariable52))
+                                    if (!linkHash[0].ContainsKey(url))
                                     {
-                                        WWW iteratorVariable54 = new WWW(iteratorVariable52);
-                                        yield return iteratorVariable54;
-                                        Texture2D iteratorVariable55 = RCextensions.LoadImageRC(iteratorVariable54, mipmap, 200000);
-                                        iteratorVariable54.Dispose();
-                                        if (!linkHash[0].ContainsKey(iteratorVariable52))
+                                        unloadAssets = true;
+                                        using (WWW www = new WWW(url))
                                         {
-                                            iteratorVariable1 = true;
-                                            iteratorVariable53.material.mainTexture = iteratorVariable55;
-                                            linkHash[0].Add(iteratorVariable52, iteratorVariable53.material);
-                                            iteratorVariable53.material = (Material)linkHash[0][iteratorVariable52];
+                                            yield return www;
+                                            myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                                         }
-                                        else
-                                        {
-                                            iteratorVariable53.material = (Material)linkHash[0][iteratorVariable52];
-                                        }
+                                        linkHash[0].Add(url, myRenderer.material);
+                                        myRenderer.material = (Material)linkHash[0][url];
                                     }
                                     else
                                     {
-                                        iteratorVariable53.material = (Material)linkHash[0][iteratorVariable52];
+                                        myRenderer.material = (Material)linkHash[0][url];
                                     }
                                 }
                             }
                         }
                     }
-                    else if (iteratorVariable47.name.EndsWith("005") || iteratorVariable47.name.EndsWith("003") || iteratorVariable47.name.EndsWith("002") && (iteratorVariable47.transform.position.x != 0f || iteratorVariable47.transform.position.y != 0f || iteratorVariable47.transform.position.z != 0f) && n.Length > iteratorVariable45)
+                    else if (go.name.EndsWith("005") || go.name.EndsWith("003") || go.name.EndsWith("002") && (go.transform.position.x != 0f || go.transform.position.y != 0f || go.transform.position.z != 0f) && digits.Length > index)
                     {
-                        string iteratorVariable57 = n.Substring(iteratorVariable45, 1);
-                        if (int.TryParse(iteratorVariable57, out var iteratorVariable56) && iteratorVariable56 >= 0 && iteratorVariable56 < 8 && iteratorVariable42.Length >= 8 && iteratorVariable42[iteratorVariable56] != null)
+                        string iteratorVariable57 = digits.Substring(index, 1);
+                        if (int.TryParse(iteratorVariable57, out var iteratorVariable56) && iteratorVariable56 >= 0 && iteratorVariable56 < 8 && trees.Length >= 8 && trees[iteratorVariable56] != null)
                         {
-                            string iteratorVariable58 = iteratorVariable42[iteratorVariable56];
-                            if (iteratorVariable58.EndsWith(".jpg") || iteratorVariable58.EndsWith(".png") || iteratorVariable58.EndsWith(".jpeg"))
+                            string url = trees[iteratorVariable56];
+                            if (Utility.IsValidImageUrl(url))
                             {
-                                foreach (Renderer iteratorVariable59 in iteratorVariable47.GetComponentsInChildren<Renderer>())
+                                foreach (Renderer iteratorVariable59 in go.GetComponentsInChildren<Renderer>())
                                 {
-                                    if (!linkHash[2].ContainsKey(iteratorVariable58))
+                                    if (!linkHash[2].ContainsKey(url))
                                     {
-                                        WWW iteratorVariable60 = new WWW(iteratorVariable58);
-                                        yield return iteratorVariable60;
-                                        Texture2D iteratorVariable61 = RCextensions.LoadImageRC(iteratorVariable60, mipmap, 1000000);
-                                        iteratorVariable60.Dispose();
-                                        if (!linkHash[2].ContainsKey(iteratorVariable58))
+                                        unloadAssets = true;
+                                        using (WWW iteratorVariable60 = new WWW(url))
                                         {
-                                            iteratorVariable1 = true;
-                                            iteratorVariable59.material.mainTexture = iteratorVariable61;
-                                            linkHash[2].Add(iteratorVariable58, iteratorVariable59.material);
-                                            iteratorVariable59.material = (Material)linkHash[2][iteratorVariable58];
+                                            yield return iteratorVariable60;
+                                            iteratorVariable59.material.mainTexture = RCextensions.LoadImageRC(iteratorVariable60, mipmap, 1000000);
                                         }
-                                        else
-                                        {
-                                            iteratorVariable59.material = (Material)linkHash[2][iteratorVariable58];
-                                        }
+                                        linkHash[2].Add(url, iteratorVariable59.material);
+                                        iteratorVariable59.material = (Material)linkHash[2][url];
                                     }
                                     else
                                     {
-                                        iteratorVariable59.material = (Material)linkHash[2][iteratorVariable58];
+                                        iteratorVariable59.material = (Material)linkHash[2][url];
                                     }
                                 }
                             }
                         }
-                        iteratorVariable45++;
+                        index++;
                     }
-                    else if ((iteratorVariable47.name.EndsWith("019") || iteratorVariable47.name.EndsWith("020")) && iteratorVariable43.Length > 2 && iteratorVariable43[2] != null)
+                    else if ((go.name.EndsWith("019") || go.name.EndsWith("020")) && planes.Length > 2 && planes[2] != null)
                     {
-                        string iteratorVariable62 = iteratorVariable43[2];
-                        if (iteratorVariable62.EndsWith(".jpg") || iteratorVariable62.EndsWith(".png") || iteratorVariable62.EndsWith(".jpeg"))
+                        string url = planes[2];
+                        if (Utility.IsValidImageUrl(url))
                         {
-                            foreach (Renderer iteratorVariable63 in iteratorVariable47.GetComponentsInChildren<Renderer>())
+                            foreach (Renderer myRenderer in go.GetComponentsInChildren<Renderer>())
                             {
-                                if (!linkHash[2].ContainsKey(iteratorVariable62))
+                                if (!linkHash[2].ContainsKey(url))
                                 {
-                                    WWW iteratorVariable64 = new WWW(iteratorVariable62);
-                                    yield return iteratorVariable64;
-                                    Texture2D iteratorVariable65 = RCextensions.LoadImageRC(iteratorVariable64, mipmap, 1000000);
-                                    iteratorVariable64.Dispose();
-                                    if (!linkHash[2].ContainsKey(iteratorVariable62))
+                                    unloadAssets = true;
+                                    using (WWW www = new WWW(url))
                                     {
-                                        iteratorVariable1 = true;
-                                        iteratorVariable63.material.mainTexture = iteratorVariable65;
-                                        linkHash[2].Add(iteratorVariable62, iteratorVariable63.material);
-                                        iteratorVariable63.material = (Material)linkHash[2][iteratorVariable62];
+                                        yield return www;
+                                        myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 1000000);
                                     }
-                                    else
-                                    {
-                                        iteratorVariable63.material = (Material)linkHash[2][iteratorVariable62];
-                                    }
+                                    linkHash[2].Add(url, myRenderer.material);
+                                    myRenderer.material = (Material)linkHash[2][url];
                                 }
                                 else
                                 {
-                                    iteratorVariable63.material = (Material)linkHash[2][iteratorVariable62];
+                                    myRenderer.material = (Material)linkHash[2][url];
                                 }
                             }
                         }
@@ -2916,22 +2804,20 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             }
         }
         Minimap.TryRecaptureInstance();
-        if (iteratorVariable1)
+        if (unloadAssets)
         {
             UnloadAssets();
         }
     }
 
-    private string QualityToString(int textureType)
+    private string QualityToString(int textureType) //TODO: Use an enum 
     {
         if (textureType == 0)
-        {
             return "High";
-        }
+        
         if (textureType == 1)
-        {
             return "Med";
-        }
+        
         return "Low";
     }
 

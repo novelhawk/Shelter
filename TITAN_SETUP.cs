@@ -1,4 +1,5 @@
 using System.Collections;
+using Mod;
 using UnityEngine;
 
 public class TITAN_SETUP : Photon.MonoBehaviour
@@ -40,40 +41,38 @@ public class TITAN_SETUP : Photon.MonoBehaviour
             iteratorVariable1.transform.rotation = this.hair_go_ref.transform.rotation;
             iteratorVariable1.transform.localScale = this.hair_go_ref.transform.localScale;
             iteratorVariable1.renderer.material = CharacterMaterials.materials[this.hair.texture];
-            bool mipmap = true;
-            if ((int) FengGameManagerMKII.settings[63] == 1)
-            {
-                mipmap = false;
-            }
-            if (!hairlink.EndsWith(".jpg") && !hairlink.EndsWith(".png") && !hairlink.EndsWith(".jpeg"))
+            bool mipmap = (int) FengGameManagerMKII.settings[63] != 1;
+            if (Utility.IsValidImageUrl(hairlink))
             {
                 if (hairlink.ToLower() == "transparent")
                 {
                     iteratorVariable1.renderer.enabled = false;
                 }
-            }
-            else if (!FengGameManagerMKII.linkHash[0].ContainsKey(hairlink))
-            {
-                WWW link = new WWW(hairlink);
-                yield return link;
-                Texture2D iteratorVariable4 = RCextensions.LoadImageRC(link, mipmap, 200000);
-                link.Dispose();
-                if (FengGameManagerMKII.linkHash[0].ContainsKey(hairlink))
+
+                else if (!FengGameManagerMKII.linkHash[0].ContainsKey(hairlink))
                 {
-                    iteratorVariable1.renderer.material = (Material) FengGameManagerMKII.linkHash[0][hairlink];
+                    if (FengGameManagerMKII.linkHash[0].ContainsKey(hairlink))
+                    {
+                        iteratorVariable1.renderer.material = (Material) FengGameManagerMKII.linkHash[0][hairlink];
+                    }
+                    else
+                    {
+                        using (WWW www = new WWW(hairlink))
+                        {
+                            yield return www;
+                            iteratorVariable1.renderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);;
+                        }
+                        iteratorVariable0 = true;
+                        FengGameManagerMKII.linkHash[0].Add(hairlink, iteratorVariable1.renderer.material);
+                        iteratorVariable1.renderer.material = (Material) FengGameManagerMKII.linkHash[0][hairlink];
+                    }
                 }
                 else
                 {
-                    iteratorVariable0 = true;
-                    iteratorVariable1.renderer.material.mainTexture = iteratorVariable4;
-                    FengGameManagerMKII.linkHash[0].Add(hairlink, iteratorVariable1.renderer.material);
                     iteratorVariable1.renderer.material = (Material) FengGameManagerMKII.linkHash[0][hairlink];
                 }
             }
-            else
-            {
-                iteratorVariable1.renderer.material = (Material) FengGameManagerMKII.linkHash[0][hairlink];
-            }
+
             this.part_hair = iteratorVariable1;
         }
         if (eye >= 0)
@@ -155,36 +154,26 @@ public class TITAN_SETUP : Photon.MonoBehaviour
             {
                 eye = 0;
             }
-            bool flag2 = false;
-            if (hairlink.EndsWith(".jpg") || hairlink.EndsWith(".png") || hairlink.EndsWith(".jpeg"))
+            bool valid = Utility.IsValidImageUrl(hairlink);
+            switch (IN_GAME_MAIN_CAMERA.GameType)
             {
-                flag2 = true;
-            }
-            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
-            {
-                if (flag2)
-                {
-                    objArray2 = new object[] { num, eye, hairlink };
-                    photonView.RPC("setHairRPC2", PhotonTargets.AllBuffered, objArray2);
-                }
-                else
-                {
+                case GameType.Multiplayer when photonView.isMine && valid:
+                    photonView.RPC("setHairRPC2", PhotonTargets.AllBuffered, num, eye, hairlink);
+                    break;
+                
+                case GameType.Multiplayer when photonView.isMine:
                     color = HeroCostume.costume[Random.Range(0, HeroCostume.costume.Length - 5)].hair_color;
-                    objArray2 = new object[] { num, eye, color.r, color.g, color.b };
-                    photonView.RPC("setHairPRC", PhotonTargets.AllBuffered, objArray2);
-                }
-            }
-            else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
-            {
-                if (flag2)
-                {
+                    photonView.RPC("setHairPRC", PhotonTargets.AllBuffered, num, eye, color.r, color.g, color.b);
+                    break;
+                
+                case GameType.Singleplayer when valid:
                     StartCoroutine(this.LoadskinE(num, eye, hairlink));
-                }
-                else
-                {
+                    break;
+                
+                case GameType.Singleplayer:
                     color = HeroCostume.costume[Random.Range(0, HeroCostume.costume.Length - 5)].hair_color;
                     this.SetHairPRC(num, eye, color.r, color.g, color.b);
-                }
+                    break;
             }
         }
         else

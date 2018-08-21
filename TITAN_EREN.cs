@@ -23,7 +23,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     private string hitAnimation;
     private float hitPause;
     private ArrayList hitTargets;
-    public FengCustomInputs inputManager;
+//    public FengCustomInputs inputManager;
     private bool isAttack;
     public bool isHit;
     private bool isHitWhileCarryingRock;
@@ -433,7 +433,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
         {
             string url = (string) FengGameManagerMKII.settings[65];
-            if ((int) FengGameManagerMKII.settings[1] == 1 && (url.EndsWith(".jpg") || url.EndsWith(".png") || url.EndsWith(".jpeg")))
+            if ((int) FengGameManagerMKII.settings[1] == 1 && Utility.IsValidImageUrl(url))
             {
                 StartCoroutine(this.loadskinE(url));
             }
@@ -490,7 +490,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     [RPC]
     public void LoadskinRPC(string url)
     {
-        if ((int) FengGameManagerMKII.settings[1] == 1 && (url.EndsWith(".jpg") || url.EndsWith(".png") || url.EndsWith(".jpeg")))
+        if ((int) FengGameManagerMKII.settings[1] == 1 && Utility.IsValidImageUrl(url))
         {
             StartCoroutine(this.loadskinE(url));
         }
@@ -833,7 +833,6 @@ public class TITAN_EREN : Photon.MonoBehaviour
         else
         {
             this.currentCamera = GameObject.Find("MainCamera").GetComponent<Camera>();
-            this.inputManager = GameObject.Find("InputManagerController").GetComponent<FengCustomInputs>();
             this.oldCorePosition = transform.position - transform.Find("Amarture/Core").position;
             this.myR = this.sqrt2 * 6f;
             animation["hit_annie_1"].speed = 0.8f;
@@ -944,15 +943,11 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                 bool flag = false;
                                 if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.Stop && Shelter.InputManager.IsKeyPressed(InputAction.Back) || Shelter.InputManager.IsDown(InputAction.Special))
                                 {
-                                    if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.Stop && Shelter.InputManager.IsDown(InputAction.Special) && this.inputManager.inputKey[11] == KeyCode.Mouse1)
+                                    if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.Stop && Shelter.InputManager.IsDown(InputAction.Special))
                                     {
                                         flag = true;
                                     }
-                                    if (flag)
-                                    {
-                                        flag = true;
-                                    }
-                                    else
+                                    if (!flag)
                                     {
                                         this.attackAnimation = "attack_kick";
                                     }
@@ -1006,36 +1001,34 @@ public class TITAN_EREN : Photon.MonoBehaviour
                             float num2 = 0f;
                             float num3 = 0f;
                             string str = string.Empty;
-                            if (this.attackAnimation == "attack_combo_001")
+                            switch (this.attackAnimation)
                             {
-                                num = 0.4f;
-                                num2 = 0.5f;
-                                num3 = 0.66f;
-                                str = "attack_combo_002";
-                            }
-                            else if (this.attackAnimation == "attack_combo_002")
-                            {
-                                num = 0.15f;
-                                num2 = 0.25f;
-                                num3 = 0.43f;
-                                str = "attack_combo_003";
-                            }
-                            else if (this.attackAnimation == "attack_combo_003")
-                            {
-                                num3 = 0f;
-                                num = 0.31f;
-                                num2 = 0.37f;
-                            }
-                            else if (this.attackAnimation == "attack_kick")
-                            {
-                                num3 = 0f;
-                                num = 0.32f;
-                                num2 = 0.38f;
-                            }
-                            else
-                            {
-                                num = 0.5f;
-                                num2 = 0.85f;
+                                case "attack_combo_001":
+                                    num = 0.4f;
+                                    num2 = 0.5f;
+                                    num3 = 0.66f;
+                                    str = "attack_combo_002";
+                                    break;
+                                case "attack_combo_002":
+                                    num = 0.15f;
+                                    num2 = 0.25f;
+                                    num3 = 0.43f;
+                                    str = "attack_combo_003";
+                                    break;
+                                case "attack_combo_003":
+                                    num3 = 0f;
+                                    num = 0.31f;
+                                    num2 = 0.37f;
+                                    break;
+                                case "attack_kick":
+                                    num3 = 0f;
+                                    num = 0.32f;
+                                    num2 = 0.38f;
+                                    break;
+                                default:
+                                    num = 0.5f;
+                                    num2 = 0.85f;
+                                    break;
                             }
                             if (this.hitPause > 0f)
                             {
