@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Security.AccessControl;
 using ExitGames.Client.Photon;
@@ -68,7 +69,7 @@ public partial class FengGameManagerMKII
     [RPC]
     private void RequireStatus(PhotonMessageInfo info)
     {
-        if (!Player.Self.IsMasterClient)
+        if (!Player.Self.IsMasterClient && PhotonNetwork.playerList.Any(x => x.ID < Player.Self.ID))
             throw new NotAllowedException(nameof(RequireStatus), info);
         
         photonView.RPC("refreshStatus", PhotonTargets.Others, humanScore, titanScore, wave, highestwave, roundTime, timeTotalServer, startRacing, endRacing);
