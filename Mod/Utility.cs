@@ -27,9 +27,11 @@ namespace Mod
         {
             var regex = Regex.Match(url, @"(?:https?:\/\/)?(?:www\.)?.+?(\w+)\.\w+\/[^\?]+\.(?:png|jpg|gif|jpeg)(\?.*)?");
             if (!regex.Success) return false;
-            switch (regex.Groups[1].Value)
+            switch (regex.Groups[1].Value) //BUG: Uppercase breaks it
             {
                 case "imgur":
+                case "tinypic":
+                case "discordapp":
                     return true;
                 default:
                     Mod.Interface.Chat.System(regex.Groups[1].Value + " is not an allowed domain.");
