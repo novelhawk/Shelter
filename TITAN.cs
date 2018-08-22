@@ -2284,17 +2284,13 @@ public class TITAN : Photon.MonoBehaviour
         {
             this.Attack("anti_AE_low_l");
         }
-        if (this.controller.chopr)
+        if (this.controller.choptr)
         {
-            this.Attack("anti_AE_low_r");
+            this.Attack("anti_AE_r");
         }
         if (this.controller.choptl)
         {
             this.Attack("anti_AE_l");
-        }
-        if (this.controller.choptr)
-        {
-            this.Attack("anti_AE_r");
         }
         if (this.controller.cover && this.stamina > 75f)
         {
@@ -2370,96 +2366,6 @@ public class TITAN : Photon.MonoBehaviour
     {
         this.myLevel = level;
         this.setmyLevel();
-    }
-
-    public void setAbnormalType(AbnormalType type, bool forceCrawler = false)
-    {
-        int num = 0;
-        float num2 = 0.02f * (IN_GAME_MAIN_CAMERA.difficulty + 1);
-        if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpAHSS)
-        {
-            num2 = 100f;
-        }
-        if (type == AbnormalType.NORMAL)
-        {
-            if (UnityEngine.Random.Range(0f, 1f) < num2)
-            {
-                num = 4;
-            }
-            else
-            {
-                num = 0;
-            }
-        }
-        else if (type == AbnormalType.TYPE_I)
-        {
-            if (UnityEngine.Random.Range(0f, 1f) < num2)
-            {
-                num = 4;
-            }
-            else
-            {
-                num = 1;
-            }
-        }
-        else if (type == AbnormalType.TYPE_JUMPER)
-        {
-            if (UnityEngine.Random.Range(0f, 1f) < num2)
-            {
-                num = 4;
-            }
-            else
-            {
-                num = 2;
-            }
-        }
-        else if (type == AbnormalType.TYPE_CRAWLER)
-        {
-            num = 3;
-            if (GameObject.Find("Crawler") != null && UnityEngine.Random.Range(0, 1000) > 5)
-            {
-                num = 2;
-            }
-        }
-        else if (type == AbnormalType.TYPE_PUNK)
-        {
-            num = 4;
-        }
-        if (forceCrawler)
-        {
-            num = 3;
-        }
-        if (num == 4)
-        {
-            if (!LevelInfoManager.GetInfo(FengGameManagerMKII.Level).HasPunk)
-            {
-                num = 1;
-            }
-            else
-            {
-                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer && PunkNumber >= 3)
-                {
-                    num = 1;
-                }
-                if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.SurviveMode)
-                {
-                    int wave = FengGameManagerMKII.instance.wave;
-                    if (wave != 5 && wave != 10 && wave != 15 && wave != 20)
-                    {
-                        num = 1;
-                    }
-                }
-            }
-        }
-        if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
-        {
-            object[] parameters = new object[] { num };
-            photonView.RPC("netSetAbnormalType", PhotonTargets.AllBuffered, parameters);
-        }
-        else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
-        {
-            this.NetSetAbnormalType(num);
-        }
     }
 
     public void setAbnormalType2(AbnormalType type, bool forceCrawler)
