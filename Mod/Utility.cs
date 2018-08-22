@@ -25,16 +25,18 @@ namespace Mod
         
         public static bool IsValidImageUrl(string url)
         {
-            var regex = Regex.Match(url, @"(?:https?:\/\/)?(?:www\.)?.+?(\w+)\.\w+\/[^\?]+\.(?:png|jpg|gif|jpeg)(\?.*)?");
+            var regex = Regex.Match(url, @"(?:https?:\/\/)?(?:www\.)?.*?(\w+)\.\w+\/[^\?]+\.(?:png|jpg|gif|jpeg)(\?.*)?");
             if (!regex.Success) return false;
             switch (regex.Groups[1].Value) //BUG: Uppercase breaks it
             {
                 case "imgur":
                 case "tinypic":
                 case "discordapp":
+                case "postimg":
+                case "staticflickr":
                     return true;
                 default:
-                    Mod.Interface.Chat.System(regex.Groups[1].Value + " is not an allowed domain.");
+                    Mod.Interface.Chat.System($"{regex.Groups[1].Value} ({url}) is not an allowed domain.");
                     return false;
             }
         }
