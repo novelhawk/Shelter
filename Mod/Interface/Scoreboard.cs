@@ -85,6 +85,8 @@ namespace Mod.Interface
                 mod = "|<b><color=#00FFF3>Alpha</color></b>| ";
             else if (player.Has("coin") || player.Has("UPublica2") || player.Has("Hats") || player.Has(string.Empty))
                 mod = "|<b><color=#00FFD5>Universe</color></b>| ";
+            else if (player.Has("CyanMod"))
+                mod = "|<b><color=#00FFFF>Cyan</color></b>| ";
             else if (player.Has("PBCheater"))
                 mod = "|<b><color=#00FFAF>PedoBear</color></b>| ";
             else if (player.Has("SRC"))
