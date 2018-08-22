@@ -133,88 +133,10 @@ public class Minimap : MonoBehaviour
 
     private void CheckUserInput()
     {
-        if ((int)FengGameManagerMKII.settings[231] == 1 && RCSettings.globalDisableMinimap == 0)
+        if ((int) FengGameManagerMKII.settings[231] != 1 || RCSettings.globalDisableMinimap != 0)
         {
-            if (this.minimapIsCreated)
-            {
-                if (FengGameManagerMKII.inputRC.isInputHuman(InputCodeRC.mapMaximize))
-                {
-                    if (!this.maximized)
-                    {
-                        this.Maximize();
-                    }
-                }
-                else if (this.maximized)
-                {
-                    this.Minimize();
-                }
-                if (FengGameManagerMKII.inputRC.isInputHumanDown(InputCodeRC.mapToggle))
-                {
-                    this.SetEnabled(!this.isEnabled);
-                }
-                if (this.maximized)
-                {
-                    bool flag2 = false;
-                    if (FengGameManagerMKII.inputRC.isInputHuman(InputCodeRC.mapReset))
-                    {
-                        if (this.initialPreset != null)
-                        {
-                            this.ManualSetCameraProperties(this.lastUsedCamera, this.initialPreset.center, this.initialPreset.orthographicSize);
-                        }
-                        else
-                        {
-                            this.AutomaticSetCameraProperties(this.lastUsedCamera);
-                        }
-                        flag2 = true;
-                    }
-                    else
-                    {
-                        float num2;
-                        float axis = Input.GetAxis("Mouse ScrollWheel");
-                        if (axis != 0f)
-                        {
-                            if (Input.GetKey(KeyCode.LeftShift))
-                            {
-                                axis *= 3f;
-                            }
-                            this.lastMinimapOrthoSize = Mathf.Max(this.lastMinimapOrthoSize + axis, 1f);
-                            flag2 = true;
-                        }
-                        if (Input.GetKey(KeyCode.UpArrow))
-                        {
-                            num2 = Time.deltaTime * ((Input.GetKey(KeyCode.LeftShift) ? 2f : 0.75f) * this.lastMinimapOrthoSize);
-                            this.lastMinimapCenter.z += num2;
-                            flag2 = true;
-                        }
-                        else if (Input.GetKey(KeyCode.DownArrow))
-                        {
-                            num2 = Time.deltaTime * ((Input.GetKey(KeyCode.LeftShift) ? 2f : 0.75f) * this.lastMinimapOrthoSize);
-                            this.lastMinimapCenter.z -= num2;
-                            flag2 = true;
-                        }
-                        if (Input.GetKey(KeyCode.RightArrow))
-                        {
-                            num2 = Time.deltaTime * ((Input.GetKey(KeyCode.LeftShift) ? 2f : 0.75f) * this.lastMinimapOrthoSize);
-                            this.lastMinimapCenter.x += num2;
-                            flag2 = true;
-                        }
-                        else if (Input.GetKey(KeyCode.LeftArrow))
-                        {
-                            num2 = Time.deltaTime * ((Input.GetKey(KeyCode.LeftShift) ? 2f : 0.75f) * this.lastMinimapOrthoSize);
-                            this.lastMinimapCenter.x -= num2;
-                            flag2 = true;
-                        }
-                    }
-                    if (flag2)
-                    {
-                        this.RecaptureMinimap(this.lastUsedCamera, this.lastMinimapCenter, this.lastMinimapOrthoSize);
-                    }
-                }
-            }
-        }
-        else if (this.isEnabled)
-        {
-            this.SetEnabled(!this.isEnabled);
+            if (this.isEnabled)
+                this.SetEnabled(!this.isEnabled);
         }
     }
 

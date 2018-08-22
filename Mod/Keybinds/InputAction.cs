@@ -24,9 +24,24 @@
         Left,
         Jump,
         OpenNavigator,
+
+        EnterCannon,
         
+        HorseJump,
         
+        TitanWalk,
+        TitanJump,
+        TitanSlam,
+        TitanDoublePunch,
+        TitanCover,
+        TitanGrabFront,
+        TitanGrabBack,
+        TitanGrabNape,
+        TitanAntiAE,
+        TitanBite,
         
+        ReelIn,
+        ReelOut,
         
         __Last
     }

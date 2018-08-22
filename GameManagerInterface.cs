@@ -512,12 +512,12 @@ public partial class FengGameManagerMKII
                                     num23 = 161;
                                 }
 
-                                if ((int) settings[100] == num23)
-                                {
-                                    settings[num23] = str4;
-                                    settings[100] = 0;
-                                    inputRC.setInputLevel(num13, str4);
-                                }
+//                                if ((int) settings[100] == num23)
+//                                {
+//                                    settings[num23] = str4;
+//                                    settings[100] = 0;
+//                                    inputRC.setInputLevel(num13, str4);
+//                                }
                             }
                         }
                     }
@@ -3295,49 +3295,49 @@ public partial class FengGameManagerMKII
                                                     {
                                                         settings[98] = str4;
                                                         settings[100] = 0;
-                                                        inputRC.setInputHuman(InputCodeRC.reelin, str4);
+//                                                        inputRC.setInputHuman(InputCodeRC.reelin, str4);
                                                     }
                                                     else if ((int) settings[100] == 99)
                                                     {
                                                         settings[99] = str4;
                                                         settings[100] = 0;
-                                                        inputRC.setInputHuman(InputCodeRC.reelout, str4);
+//                                                        inputRC.setInputHuman(InputCodeRC.reelout, str4);
                                                     }
                                                     else if ((int) settings[100] == 182)
                                                     {
                                                         settings[182] = str4;
                                                         settings[100] = 0;
-                                                        inputRC.setInputHuman(InputCodeRC.dash, str4);
+//                                                        inputRC.setInputHuman(InputCodeRC.dash, str4);
                                                     }
                                                     else if ((int) settings[100] == 232)
                                                     {
                                                         settings[232] = str4;
                                                         settings[100] = 0;
-                                                        inputRC.setInputHuman(InputCodeRC.mapMaximize, str4);
+//                                                        inputRC.setInputHuman(InputCodeRC.mapMaximize, str4);
                                                     }
                                                     else if ((int) settings[100] == 233)
                                                     {
                                                         settings[233] = str4;
                                                         settings[100] = 0;
-                                                        inputRC.setInputHuman(InputCodeRC.mapToggle, str4);
+//                                                        inputRC.setInputHuman(InputCodeRC.mapToggle, str4);
                                                     }
                                                     else if ((int) settings[100] == 234)
                                                     {
                                                         settings[234] = str4;
                                                         settings[100] = 0;
-                                                        inputRC.setInputHuman(InputCodeRC.mapReset, str4);
+//                                                        inputRC.setInputHuman(InputCodeRC.mapReset, str4);
                                                     }
                                                     else if ((int) settings[100] == 236)
                                                     {
                                                         settings[236] = str4;
                                                         settings[100] = 0;
-                                                        inputRC.setInputHuman(InputCodeRC.chat, str4);
+//                                                        inputRC.setInputHuman(InputCodeRC.chat, str4);
                                                     }
                                                     else if ((int) settings[100] == 262)
                                                     {
                                                         settings[262] = str4;
                                                         settings[100] = 0;
-                                                        inputRC.setInputHuman(InputCodeRC.liveCam, str4);
+//                                                        inputRC.setInputHuman(InputCodeRC.liveCam, str4);
                                                     }
                                                     else
                                                     {
@@ -3461,12 +3461,12 @@ public partial class FengGameManagerMKII
                                                     for (num13 = 0; num13 < 14; num13++)
                                                     {
                                                         num23 = 101 + num13;
-                                                        if ((int) settings[100] == num23)
-                                                        {
-                                                            settings[num23] = str4;
-                                                            settings[100] = 0;
-                                                            inputRC.setInputTitan(num13, str4);
-                                                        }
+//                                                        if ((int) settings[100] == num23)
+//                                                        {
+//                                                            settings[num23] = str4;
+//                                                            settings[100] = 0;
+//                                                            inputRC.setInputTitan(num13, str4);
+//                                                        }
                                                     }
                                                 }
                                             }
@@ -3571,12 +3571,12 @@ public partial class FengGameManagerMKII
                                                     for (num13 = 0; num13 < 7; num13++)
                                                     {
                                                         num23 = 237 + num13;
-                                                        if ((int) settings[100] == num23)
-                                                        {
-                                                            settings[num23] = str4;
-                                                            settings[100] = 0;
-                                                            inputRC.setInputHorse(num13, str4);
-                                                        }
+//                                                        if ((int) settings[100] == num23)
+//                                                        {
+//                                                            settings[num23] = str4;
+//                                                            settings[100] = 0;
+//                                                            inputRC.setInputHorse(num13, str4);
+//                                                        }
                                                     }
                                                 }
                                             }
@@ -3681,12 +3681,12 @@ public partial class FengGameManagerMKII
                                                     for (num13 = 0; num13 < 7; num13++)
                                                     {
                                                         num23 = 254 + num13;
-                                                        if ((int) settings[100] == num23)
-                                                        {
-                                                            settings[num23] = str4;
-                                                            settings[100] = 0;
-                                                            inputRC.setInputCannon(num13, str4);
-                                                        }
+//                                                        if ((int) settings[100] == num23)
+//                                                        {
+//                                                            settings[num23] = str4;
+//                                                            settings[100] = 0;
+//                                                            inputRC.setInputCannon(num13, str4);
+//                                                        }
                                                     }
                                                 }
                                             }

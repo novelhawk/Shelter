@@ -86,5 +86,57 @@
   {
     "action": "OpenNavigator",
     "key": "RightControl"
+  },
+  {
+    "action": "EnterCannon",
+    "key": "Q"
+  },
+  {
+    "action": "TitanDoublePunch",
+    "key": "Q"
+  },
+  {
+    "action": "TitanWalk",
+    "key": "LeftShift"
+  },
+  {
+    "action": "TitanSlam",
+    "key": "E"
+  },
+  {
+    "action": "TitanJump",
+    "key": "Space"
+  },
+  {
+    "action": "TitanCover",
+    "key": "Y"
+  },
+  {
+    "action": "TitanGrabFront",
+    "key": "R"
+  },
+  {
+    "action": "TitanGrabBack",
+    "key": "F"
+  },
+  {
+    "action": "TitanGrabNape",
+    "key": "V"
+  },
+  {
+    "action": "TitanAntiAE",
+    "key": "Mouse0"
+  },
+  {
+    "action": "TitanBite",
+    "key": "Mouse1"
+  },
+  {
+    "action": "ReelIn",
+    "key": "Mouse4"
+  },
+  {
+    "action": "ReelOut",
+    "key": "Mouse3"
   }
 ]

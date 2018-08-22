@@ -1,4 +1,6 @@
 using System;
+using Mod;
+using Mod.Keybinds;
 using UnityEngine;
 
 public class Cannon : Photon.MonoBehaviour
@@ -187,92 +189,87 @@ public class Cannon : Photon.MonoBehaviour
             transform.position = Vector3.Lerp(transform.position, this.correctPlayerPos, Time.deltaTime * this.SmoothingDelay);
             transform.rotation = Quaternion.Lerp(transform.rotation, this.correctPlayerRot, Time.deltaTime * this.SmoothingDelay);
             this.barrel.rotation = Quaternion.Lerp(this.barrel.rotation, this.correctBarrelRot, Time.deltaTime * this.SmoothingDelay);
+            return;
+        }
+
+        Vector3 vector = new Vector3(0f, -30f, 0f);
+        Vector3 position = this.ballPoint.position;
+        Vector3 vector3 = this.ballPoint.forward * 300f;
+        float num = 40f / vector3.magnitude;
+        this.myCannonLine.SetWidth(0.5f, 40f);
+        this.myCannonLine.SetVertexCount(100);
+        for (int i = 0; i < 100; i++)
+        {
+            this.myCannonLine.SetPosition(i, position);
+            position += vector3 * num + 0.5f * vector * num * num;
+            vector3 += vector * num;
+        }
+        const float speed = 20f;
+        if (this.isCannonGround)
+        {
+            if (Shelter.InputManager.IsKeyPressed(InputAction.Forward))
+            {
+                if (this.currentRot <= 32f)
+                {
+                    this.currentRot += Time.deltaTime * speed;
+                    this.barrel.Rotate(new Vector3(0f, 0f, Time.deltaTime * speed));
+                }
+            }
+            else if (Shelter.InputManager.IsKeyPressed(InputAction.Back) && this.currentRot >= -18f)
+            {
+                this.currentRot += Time.deltaTime * -speed;
+                this.barrel.Rotate(new Vector3(0f, 0f, Time.deltaTime * -speed));
+            }
+            if (Shelter.InputManager.IsKeyPressed(InputAction.Left))
+            {
+                transform.Rotate(new Vector3(0f, Time.deltaTime * -speed, 0f));
+            }
+            else if (Shelter.InputManager.IsKeyPressed(InputAction.Right))
+            {
+                transform.Rotate(new Vector3(0f, Time.deltaTime * speed, 0f));
+            }
         }
         else
         {
-            Vector3 vector = new Vector3(0f, -30f, 0f);
-            Vector3 position = this.ballPoint.position;
-            Vector3 vector3 = this.ballPoint.forward * 300f;
-            float num = 40f / vector3.magnitude;
-            this.myCannonLine.SetWidth(0.5f, 40f);
-            this.myCannonLine.SetVertexCount(100);
-            for (int i = 0; i < 100; i++)
+            if (Shelter.InputManager.IsKeyPressed(InputAction.Forward))
             {
-                this.myCannonLine.SetPosition(i, position);
-                position += vector3 * num + 0.5f * vector * num * num;
-                vector3 += vector * num;
-            }
-            float num3 = 30f;
-            if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonSlow))
-            {
-                num3 = 5f;
-            }
-            if (this.isCannonGround)
-            {
-                if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonForward))
+                if (this.currentRot >= -50f)
                 {
-                    if (this.currentRot <= 32f)
-                    {
-                        this.currentRot += Time.deltaTime * num3;
-                        this.barrel.Rotate(new Vector3(0f, 0f, Time.deltaTime * num3));
-                    }
-                }
-                else if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonBack) && this.currentRot >= -18f)
-                {
-                    this.currentRot += Time.deltaTime * -num3;
-                    this.barrel.Rotate(new Vector3(0f, 0f, Time.deltaTime * -num3));
-                }
-                if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonLeft))
-                {
-                    transform.Rotate(new Vector3(0f, Time.deltaTime * -num3, 0f));
-                }
-                else if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonRight))
-                {
-                    transform.Rotate(new Vector3(0f, Time.deltaTime * num3, 0f));
+                    this.currentRot += Time.deltaTime * -speed;
+                    this.barrel.Rotate(new Vector3(Time.deltaTime * -speed, 0f, 0f));
                 }
             }
-            else
+            else if (Shelter.InputManager.IsKeyPressed(InputAction.Back) && this.currentRot <= 40f)
             {
-                if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonForward))
-                {
-                    if (this.currentRot >= -50f)
-                    {
-                        this.currentRot += Time.deltaTime * -num3;
-                        this.barrel.Rotate(new Vector3(Time.deltaTime * -num3, 0f, 0f));
-                    }
-                }
-                else if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonBack) && this.currentRot <= 40f)
-                {
-                    this.currentRot += Time.deltaTime * num3;
-                    this.barrel.Rotate(new Vector3(Time.deltaTime * num3, 0f, 0f));
-                }
-                if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonLeft))
-                {
-                    transform.Rotate(new Vector3(0f, Time.deltaTime * -num3, 0f));
-                }
-                else if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonRight))
-                {
-                    transform.Rotate(new Vector3(0f, Time.deltaTime * num3, 0f));
-                }
+                this.currentRot += Time.deltaTime * speed;
+                this.barrel.Rotate(new Vector3(Time.deltaTime * speed, 0f, 0f));
             }
-            if (FengGameManagerMKII.inputRC.isInputCannon(InputCodeRC.cannonFire))
+            if (Shelter.InputManager.IsKeyPressed(InputAction.Left))
             {
-                this.Fire();
+                transform.Rotate(new Vector3(0f, Time.deltaTime * -speed, 0f));
             }
-            else if (FengGameManagerMKII.inputRC.isInputCannonDown(InputCodeRC.cannonMount))
+            else if (Shelter.InputManager.IsKeyPressed(InputAction.Right))
             {
-                if (this.myHero != null)
-                {
-                    this.myHero.isCannon = false;
-                    this.myHero.myCannonRegion = null;
-                    Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(this.myHero.gameObject, true, false);
-                    this.myHero.baseRigidBody.velocity = Vector3.zero;
-                    this.myHero.photonView.RPC("ReturnFromCannon", PhotonTargets.Others, new object[0]);
-                    this.myHero.skillCDLast = this.myHero.skillCDLastCannon;
-                    this.myHero.skillCDDuration = this.myHero.skillCDLast;
-                }
-                PhotonNetwork.Destroy(gameObject);
+                transform.Rotate(new Vector3(0f, Time.deltaTime * speed, 0f));
             }
+        }
+        if (Shelter.InputManager.IsKeyPressed(InputAction.Attack))
+        {
+            this.Fire();
+        }
+        else if (Shelter.InputManager.IsDown(InputAction.EnterCannon))
+        {
+            if (this.myHero != null)
+            {
+                this.myHero.isCannon = false;
+                this.myHero.myCannonRegion = null;
+                Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(this.myHero.gameObject);
+                this.myHero.baseRigidBody.velocity = Vector3.zero;
+                this.myHero.photonView.RPC("ReturnFromCannon", PhotonTargets.Others);
+                this.myHero.skillCDLast = this.myHero.skillCDLastCannon;
+                this.myHero.skillCDDuration = this.myHero.skillCDLast;
+            }
+            PhotonNetwork.Destroy(gameObject);
         }
     }
 }

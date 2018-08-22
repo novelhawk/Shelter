@@ -34,7 +34,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     private int humanScore;
     public static List<int> ignoreList;
     public static Hashtable imatitan;
-    public static InputManagerRC inputRC;
     public static FengGameManagerMKII instance;
     public static Hashtable intVariables;
     private bool isLosing;
@@ -1041,177 +1040,179 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
 
     private void CoreEditor()
     {
-        if (Input.GetKey(KeyCode.Tab))
-        {
-            GUI.FocusControl(null);
-        }
-        if (selectedObj != null)
-        {
-            float num = 0.2f;
-            if (inputRC.isInputLevel(InputCodeRC.levelSlow))
-            {
-                num = 0.04f;
-            }
-            else if (inputRC.isInputLevel(InputCodeRC.levelFast))
-            {
-                num = 0.6f;
-            }
-            if (inputRC.isInputLevel(InputCodeRC.levelForward))
-            {
-                Transform transform1 = selectedObj.transform;
-                transform1.position += num * new Vector3(UnityEngine.Camera.main.transform.forward.x, 0f, UnityEngine.Camera.main.transform.forward.z);
-            }
-            else if (inputRC.isInputLevel(InputCodeRC.levelBack))
-            {
-                Transform transform9 = selectedObj.transform;
-                transform9.position -= num * new Vector3(UnityEngine.Camera.main.transform.forward.x, 0f, UnityEngine.Camera.main.transform.forward.z);
-            }
-            if (inputRC.isInputLevel(InputCodeRC.levelLeft))
-            {
-                Transform transform10 = selectedObj.transform;
-                transform10.position -= num * new Vector3(UnityEngine.Camera.main.transform.right.x, 0f, UnityEngine.Camera.main.transform.right.z);
-            }
-            else if (inputRC.isInputLevel(InputCodeRC.levelRight))
-            {
-                Transform transform11 = selectedObj.transform;
-                transform11.position += num * new Vector3(UnityEngine.Camera.main.transform.right.x, 0f, UnityEngine.Camera.main.transform.right.z);
-            }
-            if (inputRC.isInputLevel(InputCodeRC.levelDown))
-            {
-                Transform transform12 = selectedObj.transform;
-                transform12.position -= Vector3.up * num;
-            }
-            else if (inputRC.isInputLevel(InputCodeRC.levelUp))
-            {
-                Transform transform13 = selectedObj.transform;
-                transform13.position += Vector3.up * num;
-            }
-            if (!selectedObj.name.StartsWith("misc,region"))
-            {
-                if (inputRC.isInputLevel(InputCodeRC.levelRRight))
-                {
-                    selectedObj.transform.Rotate(Vector3.up * num);
-                }
-                else if (inputRC.isInputLevel(InputCodeRC.levelRLeft))
-                {
-                    selectedObj.transform.Rotate(Vector3.down * num);
-                }
-                if (inputRC.isInputLevel(InputCodeRC.levelRCCW))
-                {
-                    selectedObj.transform.Rotate(Vector3.forward * num);
-                }
-                else if (inputRC.isInputLevel(InputCodeRC.levelRCW))
-                {
-                    selectedObj.transform.Rotate(Vector3.back * num);
-                }
-                if (inputRC.isInputLevel(InputCodeRC.levelRBack))
-                {
-                    selectedObj.transform.Rotate(Vector3.left * num);
-                }
-                else if (inputRC.isInputLevel(InputCodeRC.levelRForward))
-                {
-                    selectedObj.transform.Rotate(Vector3.right * num);
-                }
-            }
-            if (inputRC.isInputLevel(InputCodeRC.levelPlace))
-            {
-                linkHash[3].Add(
-                    selectedObj.GetInstanceID(),             //key
-                    selectedObj.name + "," +                 // Name
-                    selectedObj.transform.position.x + "," + // x 1
-                    selectedObj.transform.position.y + "," + // y 1
-                    selectedObj.transform.position.z + "," + // z 1
-                    selectedObj.transform.rotation.x + "," + // x 2
-                    selectedObj.transform.rotation.y + "," + // y 2
-                    selectedObj.transform.rotation.z + "," + // z 2
-                    selectedObj.transform.rotation.w);
-                selectedObj = null;
-                UnityEngine.Camera.main.GetComponent<MouseLook>().enabled = true;
-                Screen.lockCursor = true;
-            }
-            if (inputRC.isInputLevel(InputCodeRC.levelDelete))
-            {
-                linkHash[3].Remove(selectedObj?.GetInstanceID());
-                Destroy(selectedObj);
-                selectedObj = null;
-                UnityEngine.Camera.main.GetComponent<MouseLook>().enabled = true;
-                Screen.lockCursor = true;
-            }
-        }
-        else
-        {
-            if (Screen.lockCursor)
-            {
-                float num2 = 100f;
-                if (inputRC.isInputLevel(InputCodeRC.levelSlow))
-                {
-                    num2 = 20f;
-                }
-                else if (inputRC.isInputLevel(InputCodeRC.levelFast))
-                {
-                    num2 = 400f;
-                }
-                Transform transform7 = UnityEngine.Camera.main.transform;
-                if (inputRC.isInputLevel(InputCodeRC.levelForward))
-                {
-                    transform7.position += transform7.forward * num2 * Time.deltaTime;
-                }
-                else if (inputRC.isInputLevel(InputCodeRC.levelBack))
-                {
-                    transform7.position -= transform7.forward * num2 * Time.deltaTime;
-                }
-                if (inputRC.isInputLevel(InputCodeRC.levelLeft))
-                {
-                    transform7.position -= transform7.right * num2 * Time.deltaTime;
-                }
-                else if (inputRC.isInputLevel(InputCodeRC.levelRight))
-                {
-                    transform7.position += transform7.right * num2 * Time.deltaTime;
-                }
-                if (inputRC.isInputLevel(InputCodeRC.levelUp))
-                {
-                    transform7.position += transform7.up * num2 * Time.deltaTime;
-                }
-                else if (inputRC.isInputLevel(InputCodeRC.levelDown))
-                {
-                    transform7.position -= transform7.up * num2 * Time.deltaTime;
-                }
-            }
-            if (inputRC.isInputLevelDown(InputCodeRC.levelCursor))
-            {
-                if (Screen.lockCursor)
-                {
-                    UnityEngine.Camera.main.GetComponent<MouseLook>().enabled = false;
-                    Screen.lockCursor = false;
-                }
-                else
-                {
-                    UnityEngine.Camera.main.GetComponent<MouseLook>().enabled = true;
-                    Screen.lockCursor = true;
-                }
-            }
-            if (Input.GetKeyDown(KeyCode.Mouse0) && !Screen.lockCursor && GUIUtility.hotControl == 0 && !((Input.mousePosition.x <= 300f || Input.mousePosition.x >= Screen.width - 300f) && Screen.height - Input.mousePosition.y <= 600f))
-            {
-                if (Physics.Raycast(UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition), out var hitInfo))
-                {
-                    Transform transform8 = hitInfo.transform;
-                    if (transform8.gameObject.name.StartsWith("custom") || transform8.gameObject.name.StartsWith("base") || transform8.gameObject.name.StartsWith("racing") || transform8.gameObject.name.StartsWith("photon") || transform8.gameObject.name.StartsWith("spawnpoint") || transform8.gameObject.name.StartsWith("misc"))
-                    {
-                        selectedObj = transform8.gameObject;
-                        UnityEngine.Camera.main.GetComponent<MouseLook>().enabled = false;
-                        Screen.lockCursor = true;
-                        linkHash[3].Remove(selectedObj.GetInstanceID());
-                    }
-                    else if (transform8.parent.gameObject.name.StartsWith("custom") || transform8.parent.gameObject.name.StartsWith("base") || transform8.parent.gameObject.name.StartsWith("racing") || transform8.parent.gameObject.name.StartsWith("photon"))
-                    {
-                        selectedObj = transform8.parent.gameObject;
-                        UnityEngine.Camera.main.GetComponent<MouseLook>().enabled = false;
-                        Screen.lockCursor = true;
-                        linkHash[3].Remove(selectedObj.GetInstanceID());
-                    }
-                }
-            }
-        }
+        Debug.Log("Editor is currently WIP");
+        Application.Quit();
+//        if (Input.GetKey(KeyCode.Tab))
+//        {
+//            GUI.FocusControl(null);
+//        }
+//        if (selectedObj != null)
+//        {
+//            float num = 0.2f;
+//            if (inputRC.isInputLevel(InputCodeRC.levelSlow))
+//            {
+//                num = 0.04f;
+//            }
+//            else if (inputRC.isInputLevel(InputCodeRC.levelFast))
+//            {
+//                num = 0.6f;
+//            }
+//            if (inputRC.isInputLevel(InputCodeRC.levelForward))
+//            {
+//                Transform transform1 = selectedObj.transform;
+//                transform1.position += num * new Vector3(UnityEngine.Camera.main.transform.forward.x, 0f, UnityEngine.Camera.main.transform.forward.z);
+//            }
+//            else if (inputRC.isInputLevel(InputCodeRC.levelBack))
+//            {
+//                Transform transform9 = selectedObj.transform;
+//                transform9.position -= num * new Vector3(UnityEngine.Camera.main.transform.forward.x, 0f, UnityEngine.Camera.main.transform.forward.z);
+//            }
+//            if (inputRC.isInputLevel(InputCodeRC.levelLeft))
+//            {
+//                Transform transform10 = selectedObj.transform;
+//                transform10.position -= num * new Vector3(UnityEngine.Camera.main.transform.right.x, 0f, UnityEngine.Camera.main.transform.right.z);
+//            }
+//            else if (inputRC.isInputLevel(InputCodeRC.levelRight))
+//            {
+//                Transform transform11 = selectedObj.transform;
+//                transform11.position += num * new Vector3(UnityEngine.Camera.main.transform.right.x, 0f, UnityEngine.Camera.main.transform.right.z);
+//            }
+//            if (inputRC.isInputLevel(InputCodeRC.levelDown))
+//            {
+//                Transform transform12 = selectedObj.transform;
+//                transform12.position -= Vector3.up * num;
+//            }
+//            else if (inputRC.isInputLevel(InputCodeRC.levelUp))
+//            {
+//                Transform transform13 = selectedObj.transform;
+//                transform13.position += Vector3.up * num;
+//            }
+//            if (!selectedObj.name.StartsWith("misc,region"))
+//            {
+//                if (inputRC.isInputLevel(InputCodeRC.levelRRight))
+//                {
+//                    selectedObj.transform.Rotate(Vector3.up * num);
+//                }
+//                else if (inputRC.isInputLevel(InputCodeRC.levelRLeft))
+//                {
+//                    selectedObj.transform.Rotate(Vector3.down * num);
+//                }
+//                if (inputRC.isInputLevel(InputCodeRC.levelRCCW))
+//                {
+//                    selectedObj.transform.Rotate(Vector3.forward * num);
+//                }
+//                else if (inputRC.isInputLevel(InputCodeRC.levelRCW))
+//                {
+//                    selectedObj.transform.Rotate(Vector3.back * num);
+//                }
+//                if (inputRC.isInputLevel(InputCodeRC.levelRBack))
+//                {
+//                    selectedObj.transform.Rotate(Vector3.left * num);
+//                }
+//                else if (inputRC.isInputLevel(InputCodeRC.levelRForward))
+//                {
+//                    selectedObj.transform.Rotate(Vector3.right * num);
+//                }
+//            }
+//            if (inputRC.isInputLevel(InputCodeRC.levelPlace))
+//            {
+//                linkHash[3].Add(
+//                    selectedObj.GetInstanceID(),             //key
+//                    selectedObj.name + "," +                 // Name
+//                    selectedObj.transform.position.x + "," + // x 1
+//                    selectedObj.transform.position.y + "," + // y 1
+//                    selectedObj.transform.position.z + "," + // z 1
+//                    selectedObj.transform.rotation.x + "," + // x 2
+//                    selectedObj.transform.rotation.y + "," + // y 2
+//                    selectedObj.transform.rotation.z + "," + // z 2
+//                    selectedObj.transform.rotation.w);
+//                selectedObj = null;
+//                UnityEngine.Camera.main.GetComponent<MouseLook>().enabled = true;
+//                Screen.lockCursor = true;
+//            }
+//            if (inputRC.isInputLevel(InputCodeRC.levelDelete))
+//            {
+//                linkHash[3].Remove(selectedObj?.GetInstanceID());
+//                Destroy(selectedObj);
+//                selectedObj = null;
+//                UnityEngine.Camera.main.GetComponent<MouseLook>().enabled = true;
+//                Screen.lockCursor = true;
+//            }
+//        }
+//        else
+//        {
+//            if (Screen.lockCursor)
+//            {
+//                float num2 = 100f;
+//                if (inputRC.isInputLevel(InputCodeRC.levelSlow))
+//                {
+//                    num2 = 20f;
+//                }
+//                else if (inputRC.isInputLevel(InputCodeRC.levelFast))
+//                {
+//                    num2 = 400f;
+//                }
+//                Transform transform7 = UnityEngine.Camera.main.transform;
+//                if (inputRC.isInputLevel(InputCodeRC.levelForward))
+//                {
+//                    transform7.position += transform7.forward * num2 * Time.deltaTime;
+//                }
+//                else if (inputRC.isInputLevel(InputCodeRC.levelBack))
+//                {
+//                    transform7.position -= transform7.forward * num2 * Time.deltaTime;
+//                }
+//                if (inputRC.isInputLevel(InputCodeRC.levelLeft))
+//                {
+//                    transform7.position -= transform7.right * num2 * Time.deltaTime;
+//                }
+//                else if (inputRC.isInputLevel(InputCodeRC.levelRight))
+//                {
+//                    transform7.position += transform7.right * num2 * Time.deltaTime;
+//                }
+//                if (inputRC.isInputLevel(InputCodeRC.levelUp))
+//                {
+//                    transform7.position += transform7.up * num2 * Time.deltaTime;
+//                }
+//                else if (inputRC.isInputLevel(InputCodeRC.levelDown))
+//                {
+//                    transform7.position -= transform7.up * num2 * Time.deltaTime;
+//                }
+//            }
+//            if (inputRC.isInputLevelDown(InputCodeRC.levelCursor))
+//            {
+//                if (Screen.lockCursor)
+//                {
+//                    UnityEngine.Camera.main.GetComponent<MouseLook>().enabled = false;
+//                    Screen.lockCursor = false;
+//                }
+//                else
+//                {
+//                    UnityEngine.Camera.main.GetComponent<MouseLook>().enabled = true;
+//                    Screen.lockCursor = true;
+//                }
+//            }
+//            if (Input.GetKeyDown(KeyCode.Mouse0) && !Screen.lockCursor && GUIUtility.hotControl == 0 && !((Input.mousePosition.x <= 300f || Input.mousePosition.x >= Screen.width - 300f) && Screen.height - Input.mousePosition.y <= 600f))
+//            {
+//                if (Physics.Raycast(UnityEngine.Camera.main.ScreenPointToRay(Input.mousePosition), out var hitInfo))
+//                {
+//                    Transform transform8 = hitInfo.transform;
+//                    if (transform8.gameObject.name.StartsWith("custom") || transform8.gameObject.name.StartsWith("base") || transform8.gameObject.name.StartsWith("racing") || transform8.gameObject.name.StartsWith("photon") || transform8.gameObject.name.StartsWith("spawnpoint") || transform8.gameObject.name.StartsWith("misc"))
+//                    {
+//                        selectedObj = transform8.gameObject;
+//                        UnityEngine.Camera.main.GetComponent<MouseLook>().enabled = false;
+//                        Screen.lockCursor = true;
+//                        linkHash[3].Remove(selectedObj.GetInstanceID());
+//                    }
+//                    else if (transform8.parent.gameObject.name.StartsWith("custom") || transform8.parent.gameObject.name.StartsWith("base") || transform8.parent.gameObject.name.StartsWith("racing") || transform8.parent.gameObject.name.StartsWith("photon"))
+//                    {
+//                        selectedObj = transform8.parent.gameObject;
+//                        UnityEngine.Camera.main.GetComponent<MouseLook>().enabled = false;
+//                        Screen.lockCursor = true;
+//                        linkHash[3].Remove(selectedObj.GetInstanceID());
+//                    }
+//                }
+//            }
+//        }
     }
 
     private IEnumerator CustomLevelCache()
@@ -2165,44 +2166,13 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         objArray[261] = PlayerPrefs.GetInt("deadlyCannon", 0);
         objArray[262] = PlayerPrefs.GetString("liveCam", "Y");
         objArray[263] = 0;
-        inputRC = new InputManagerRC();
-        inputRC.setInputHuman(InputCodeRC.reelin, (string) objArray[98]);
-        inputRC.setInputHuman(InputCodeRC.reelout, (string) objArray[99]);
-        inputRC.setInputHuman(InputCodeRC.dash, (string) objArray[182]);
-        inputRC.setInputHuman(InputCodeRC.mapMaximize, (string) objArray[232]);
-        inputRC.setInputHuman(InputCodeRC.mapToggle, (string) objArray[233]);
-        inputRC.setInputHuman(InputCodeRC.mapReset, (string) objArray[234]);
-        inputRC.setInputHuman(InputCodeRC.chat, (string) objArray[236]);
-        inputRC.setInputHuman(InputCodeRC.liveCam, (string) objArray[262]);
         if (!Enum.IsDefined(typeof(KeyCode), (string) objArray[232]))
-        {
             objArray[232] = "None";
-        }
         if (!Enum.IsDefined(typeof(KeyCode), (string) objArray[233]))
-        {
             objArray[233] = "None";
-        }
         if (!Enum.IsDefined(typeof(KeyCode), (string) objArray[234]))
-        {
             objArray[234] = "None";
-        }
-        for (num = 0; num < 15; num++)
-        {
-            inputRC.setInputTitan(num, (string) objArray[101 + num]);
-        }
-        for (num = 0; num < 16; num++)
-        {
-            inputRC.setInputLevel(num, (string) objArray[117 + num]);
-        }
-        for (num = 0; num < 7; num++)
-        {
-            inputRC.setInputHorse(num, (string) objArray[237 + num]);
-        }
-        for (num = 0; num < 7; num++)
-        {
-            inputRC.setInputCannon(num, (string) objArray[254 + num]);
-        }
-        inputRC.setInputLevel(InputCodeRC.levelFast, (string) objArray[161]);
+        
         Application.targetFrameRate = -1;
         if (int.TryParse((string) objArray[184], out var num2) && num2 > 0)
         {

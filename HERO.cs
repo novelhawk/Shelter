@@ -637,100 +637,57 @@ public class HERO : Photon.MonoBehaviour
         {
             this.uTapTime += Time.deltaTime;
             if (this.uTapTime > 0.2f)
-            {
                 this.uTapTime = -1f;
-            }
         }
         if (this.dTapTime >= 0f)
         {
             this.dTapTime += Time.deltaTime;
             if (this.dTapTime > 0.2f)
-            {
                 this.dTapTime = -1f;
-            }
         }
         if (this.lTapTime >= 0f)
         {
             this.lTapTime += Time.deltaTime;
             if (this.lTapTime > 0.2f)
-            {
                 this.lTapTime = -1f;
-            }
         }
         if (this.rTapTime >= 0f)
         {
             this.rTapTime += Time.deltaTime;
             if (this.rTapTime > 0.2f)
-            {
                 this.rTapTime = -1f;
-            }
         }
         if (Shelter.InputManager.IsDown(InputAction.Forward))
         {
             if (this.uTapTime == -1f)
-            {
                 this.uTapTime = 0f;
-            }
+            
             if (this.uTapTime != 0f)
-            {
                 this.dashU = true;
-            }
         }
         if (Shelter.InputManager.IsDown(InputAction.Back))
         {
             if (this.dTapTime == -1f)
-            {
                 this.dTapTime = 0f;
-            }
+            
             if (this.dTapTime != 0f)
-            {
                 this.dashD = true;
-            }
         }
         if (Shelter.InputManager.IsDown(InputAction.Left))
         {
             if (this.lTapTime == -1f)
-            {
                 this.lTapTime = 0f;
-            }
+            
             if (this.lTapTime != 0f)
-            {
                 this.dashL = true;
-            }
         }
         if (Shelter.InputManager.IsDown(InputAction.Right))
         {
             if (this.rTapTime == -1f)
-            {
                 this.rTapTime = 0f;
-            }
+            
             if (this.rTapTime != 0f)
-            {
                 this.dashR = true;
-            }
-        }
-    }
-
-    private void checkDashRebind()
-    {
-        if (FengGameManagerMKII.inputRC.isInputHuman(InputCodeRC.dash))
-        {
-            if (Shelter.InputManager.IsDown(InputAction.Forward))
-            {
-                this.dashU = true;
-            }
-            else if (Shelter.InputManager.IsDown(InputAction.Back))
-            {
-                this.dashD = true;
-            }
-            else if (Shelter.InputManager.IsDown(InputAction.Left))
-            {
-                this.dashL = true;
-            }
-            else if (Shelter.InputManager.IsDown(InputAction.Right))
-            {
-                this.dashR = true;
-            }
         }
     }
 
@@ -1028,39 +985,25 @@ public class HERO : Photon.MonoBehaviour
 
     private void dodge2(bool offTheWall = false)
     {
-        if (!FengGameManagerMKII.inputRC.isInputHorse(InputCodeRC.horseMount) || this.myHorse == null || this.isMounted || Vector3.Distance(this.myHorse.transform.position, transform.position) >= 15f)
+        if (this.myHorse == null || this.isMounted || Vector3.Distance(this.myHorse.transform.position, transform.position) >= 15f)
         {
             this.State = HeroState.GroundDodge;
             if (!offTheWall)
             {
-                float num;
-                float num2;
+                float x = 0;
                 if (Shelter.InputManager.IsDown(InputAction.Forward))
-                {
-                    num = 1f;
-                }
+                    x = 1f;
                 else if (Shelter.InputManager.IsDown(InputAction.Back))
-                {
-                    num = -1f;
-                }
-                else
-                {
-                    num = 0f;
-                }
+                    x = -1f;
+                
+                float y = 0;
                 if (Shelter.InputManager.IsDown(InputAction.Left))
-                {
-                    num2 = -1f;
-                }
+                    y = -1f;
                 else if (Shelter.InputManager.IsDown(InputAction.Right))
-                {
-                    num2 = 1f;
-                }
-                else
-                {
-                    num2 = 0f;
-                }
-                float num3 = this.getGlobalFacingDirection(num2, num);
-                if (num2 != 0f || num != 0f)
+                    y = 1f;
+                
+                float num3 = this.getGlobalFacingDirection(y, x);
+                if (y != 0f || x != 0f)
                 {
                     this.facingDirection = num3 + 180f;
                     this.targetRotation = Quaternion.Euler(0f, this.facingDirection, 0f);
@@ -1720,11 +1663,11 @@ public class HERO : Photon.MonoBehaviour
                         this.baseRigidBody.AddForce(-this.baseRigidBody.velocity, ForceMode.VelocityChange);
                         Vector3 vector13 = (this.bulletRight.transform.position + this.bulletLeft.transform.position) * 0.5f - this.baseTransform.position;
                         float num15 = 0f;
-                        if ((int) FengGameManagerMKII.settings[97] == 1 && FengGameManagerMKII.inputRC.isInputHuman(InputCodeRC.reelin))
+                        if ((int) FengGameManagerMKII.settings[97] == 1 && Shelter.InputManager.IsKeyPressed(InputAction.ReelIn))
                         {
                             num15 = -1f;
                         }
-                        else if ((int) FengGameManagerMKII.settings[116] == 1 && FengGameManagerMKII.inputRC.isInputHuman(InputCodeRC.reelout))
+                        else if ((int) FengGameManagerMKII.settings[116] == 1 && Shelter.InputManager.IsKeyPressed(InputAction.ReelOut))
                         {
                             num15 = 1f;
                         }
@@ -1745,11 +1688,11 @@ public class HERO : Photon.MonoBehaviour
                         this.baseRigidBody.AddForce(-this.baseRigidBody.velocity, ForceMode.VelocityChange);
                         Vector3 vector15 = this.bulletLeft.transform.position - this.baseTransform.position;
                         float num18 = 0f;
-                        if ((int) FengGameManagerMKII.settings[97] == 1 && FengGameManagerMKII.inputRC.isInputHuman(InputCodeRC.reelin))
+                        if ((int) FengGameManagerMKII.settings[97] == 1 && Shelter.InputManager.IsKeyPressed(InputAction.ReelIn))
                         {
                             num18 = -1f;
                         }
-                        else if ((int) FengGameManagerMKII.settings[116] == 1 && FengGameManagerMKII.inputRC.isInputHuman(InputCodeRC.reelout))
+                        else if ((int) FengGameManagerMKII.settings[116] == 1 && Shelter.InputManager.IsKeyPressed(InputAction.ReelOut))
                         {
                             num18 = 1f;
                         }
@@ -1769,19 +1712,12 @@ public class HERO : Photon.MonoBehaviour
                         float num20 = this.currentSpeed + 0.1f;
                         this.baseRigidBody.AddForce(-this.baseRigidBody.velocity, ForceMode.VelocityChange);
                         Vector3 vector17 = this.bulletRight.transform.position - this.baseTransform.position;
-                        float num21 = 0f;
-                        if ((int) FengGameManagerMKII.settings[97] == 1 && FengGameManagerMKII.inputRC.isInputHuman(InputCodeRC.reelin))
-                        {
+                        float num21 = Input.GetAxis("Mouse ScrollWheel") * 5555f;
+                        if ((int) FengGameManagerMKII.settings[97] == 1 && Shelter.InputManager.IsKeyPressed(InputAction.ReelIn))
                             num21 = -1f;
-                        }
-                        else if ((int) FengGameManagerMKII.settings[116] == 1 && FengGameManagerMKII.inputRC.isInputHuman(InputCodeRC.reelout))
-                        {
+                        else if ((int) FengGameManagerMKII.settings[116] == 1 && Shelter.InputManager.IsKeyPressed(InputAction.ReelOut))
                             num21 = 1f;
-                        }
-                        else
-                        {
-                            num21 = Input.GetAxis("Mouse ScrollWheel") * 5555f;
-                        }
+                        
                         num21 = Mathf.Clamp(num21, -0.8f, 0.8f);
                         float num22 = 1f + num21;
                         Vector3 vector18 = Vector3.RotateTowards(vector17, this.baseRigidBody.velocity, 1.53938f * num22, 1.53938f * num22);
@@ -4236,8 +4172,6 @@ public class HERO : Photon.MonoBehaviour
     
     private void UpdateUsageUI()
     {
-        UISprite sprite;
-        
         float gasUsage = currentGas / totalGas;
         
         Color color;
@@ -4248,23 +4182,23 @@ public class HERO : Photon.MonoBehaviour
         else
             color = Color.white;
 
-        if ((sprite = cachedSprites["gasL1"]) != null)
+        if (cachedSprites.ContainsKey("gasL1")) // assuming that if key is contained value non-null
         {
-            sprite.fillAmount = gasUsage;
-            sprite.color = color;
+            cachedSprites["gasL1"].fillAmount = gasUsage;
+            cachedSprites["gasL1"].color = color;
         }
-        if ((sprite = cachedSprites["gasR1"]) != null)
+        if (cachedSprites.ContainsKey("gasR1"))
         {
-            sprite.fillAmount = gasUsage;
-            sprite.color = color;
+            cachedSprites["gasR1"].fillAmount = gasUsage;
+            cachedSprites["gasR1"].color = color;
         }
             
         if (useGun)
         {
-            if ((sprite = cachedSprites["bulletL"]) != null)
-                sprite.enabled = leftGunHasBullet;
-            if ((sprite = cachedSprites["bulletR"]) != null)
-                sprite.enabled = leftGunHasBullet;
+            if (cachedSprites.ContainsKey("bulletL"))
+                cachedSprites["bulletL"].enabled = leftGunHasBullet;
+            if (cachedSprites.ContainsKey("bulletR"))
+                cachedSprites["bulletR"].enabled = leftGunHasBullet;
             return;
         }
 
@@ -4277,22 +4211,22 @@ public class HERO : Photon.MonoBehaviour
         else
             color = Color.white;
 
-        if ((sprite = cachedSprites["bladeCL"]) != null)
-            sprite.fillAmount = bladeUsage;
-        if ((sprite = cachedSprites["bladeCR"]) != null)
-            sprite.fillAmount = bladeUsage;
+        if (cachedSprites.ContainsKey("bladeCL"))
+            cachedSprites["bladeCL"].fillAmount = bladeUsage;
+        if (cachedSprites.ContainsKey("bladeCR"))
+            cachedSprites["bladeCR"].fillAmount = bladeUsage;
         
-        if ((sprite = cachedSprites["bladel1"]) != null)
-            sprite.color = color;
-        if ((sprite = cachedSprites["blader1"]) != null)
-            sprite.color = color;
+        if (cachedSprites.ContainsKey("bladel1"))
+            cachedSprites["bladel1"].color = color;
+        if (cachedSprites.ContainsKey("blader1"))
+            cachedSprites["blader1"].color = color;
 
         for (int i = 0; i < 5; i++)
         {
-            if ((sprite = cachedSprites["bladel" + (i + 1)]) != null)
-                sprite.enabled = currentBladeNum > i;
-            if ((sprite = cachedSprites["blader" + (i + 1)]) != null)
-                sprite.enabled = currentBladeNum > i;
+            if (cachedSprites.ContainsKey("bladel" + (i + 1)))
+                cachedSprites["bladel" + (i + 1)].enabled = currentBladeNum > i;
+            if (cachedSprites.ContainsKey("blader" + (i + 1)))
+                cachedSprites["blader" + (i + 1)].enabled = currentBladeNum > i;
         }
     }
 
@@ -4610,7 +4544,7 @@ public class HERO : Photon.MonoBehaviour
                 {
                     if (this.myCannonRegion != null)
                     {
-                        if (FengGameManagerMKII.inputRC.isInputCannonDown(InputCodeRC.cannonMount))
+                        if (Shelter.InputManager.IsDown(InputAction.EnterCannon))
                         {
                             this.myCannonRegion.photonView.RPC("RequestControlRPC", PhotonTargets.MasterClient, new object[] { photonView.viewID });
                         }
@@ -4708,14 +4642,7 @@ public class HERO : Photon.MonoBehaviour
                         
                         if (!this.grounded && this.State != HeroState.AirDodge)
                         {
-                            if ((int) FengGameManagerMKII.settings[181] == 1)
-                            {
-                                this.checkDashRebind();
-                            }
-                            else
-                            {
-                                this.checkDashDoubleTap();
-                            }
+                            this.checkDashDoubleTap();
                             if (this.dashD)
                             {
                                 this.dashD = false;
@@ -4749,7 +4676,7 @@ public class HERO : Photon.MonoBehaviour
                                 this.crossFade("jump", 0.1f);
                                 this.sparks.enableEmission = false;
                             }
-                            if (!(!FengGameManagerMKII.inputRC.isInputHorseDown(InputCodeRC.horseMount) || this.baseAnimation.IsPlaying("jump") || this.baseAnimation.IsPlaying("horse_geton")) && this.myHorse != null && !this.isMounted && Vector3.Distance(this.myHorse.transform.position, transform.position) < 15f)
+                            if (!(!Shelter.InputManager.IsDown(InputAction.Dodge) || this.baseAnimation.IsPlaying("jump") || this.baseAnimation.IsPlaying("horse_geton")) && this.myHorse != null && !this.isMounted && Vector3.Distance(this.myHorse.transform.position, transform.position) < 15f)
                             {
                                 this.getOnHorse();
                             }
@@ -4773,7 +4700,7 @@ public class HERO : Photon.MonoBehaviour
                             {
                                 this.shootFlare(3);
                             }
-                            if (this.myHorse != null && this.isMounted && FengGameManagerMKII.inputRC.isInputHorseDown(InputCodeRC.horseMount))
+                            if (this.myHorse != null && this.isMounted && Shelter.InputManager.IsDown(InputAction.Dodge))
                             {
                                 this.getOffHorse();
                             }

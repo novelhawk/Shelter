@@ -887,17 +887,17 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 }
                 if (this.gameOver && this.main_object != null)
                 {
-                    if (FengGameManagerMKII.inputRC.isInputHumanDown(InputCodeRC.liveCam))
-                    {
-                        if ((int) FengGameManagerMKII.settings[263] == 0)
-                        {
-                            FengGameManagerMKII.settings[263] = 1;
-                        }
-                        else
-                        {
-                            FengGameManagerMKII.settings[263] = 0;
-                        }
-                    }
+//                    if (FengGameManagerMKII.inputRC.isInputHumanDown(InputCodeRC.liveCam))
+//                    {
+//                        if ((int) FengGameManagerMKII.settings[263] == 0)
+//                        {
+//                            FengGameManagerMKII.settings[263] = 1;
+//                        }
+//                        else
+//                        {
+//                            FengGameManagerMKII.settings[263] = 0;
+//                        }
+//                    }
                     HERO component = this.main_object.GetComponent<HERO>();
                     if (component != null && (int) FengGameManagerMKII.settings[263] == 1 && component.GetComponent<SmoothSyncMovement>().enabled && component.isPhotonCamera)
                     {
