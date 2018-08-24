@@ -2750,10 +2750,12 @@ public class TITAN : Photon.MonoBehaviour
     private void Start()
     {
         this.MultiplayerManager.Titans.Add(this);
+        
+        if (photonView.owner != null)
+            photonView.owner.Titan = this;
+        
         if (Minimap.instance != null)
-        {
             Minimap.instance.TrackGameObjectOnMinimap(gameObject, Color.yellow, false, true, Minimap.IconStyle.CIRCLE);
-        }
         this.currentCamera = GameObject.Find("MainCamera");
         this.runAnimation = "run_walk";
         this.grabTF = new GameObject();

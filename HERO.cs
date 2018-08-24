@@ -4308,8 +4308,8 @@ public class HERO : Photon.MonoBehaviour
     private void Start()
     {
         FengGameManagerMKII.instance.Heroes.Add(this);
-        if (Player.TryParse(photonView.ownerId, out Player player))
-            player.Hero = this;
+        if (photonView.owner != null)
+            photonView.owner.Hero = this;
         
         if ((LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Horse || RCSettings.horseMode == 1) && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {

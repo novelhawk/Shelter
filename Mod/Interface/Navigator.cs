@@ -94,8 +94,8 @@ namespace Mod.Interface
                 if (!string.IsNullOrEmpty(_searchQuery) && !module.Name.ContainsIgnoreCase(_searchQuery))
                     continue;
                 
-                if (module.IsAbusive)
-                    continue;
+//                if (module.IsAbusive)
+//                    continue;
 
                 if (rect.Y >= box.height)
                     continue;

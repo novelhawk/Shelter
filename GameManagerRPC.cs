@@ -621,6 +621,9 @@ public partial class FengGameManagerMKII
     [RPC]
     private void Chat(string content, string sender, PhotonMessageInfo info)
     {
+        if (string.IsNullOrEmpty(content))
+            return;
+        
         if (sender != string.Empty)
             Mod.Interface.Chat.AddMessage($"{info.sender.HexName}: {content}", info.sender);
         else 

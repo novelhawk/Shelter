@@ -161,6 +161,7 @@ public class Player
     public static Player Self => PhotonNetwork.networkingPeer?.mLocalActor;
 
     public HERO Hero { get; set; }
+    public TITAN Titan { get; set; }
     
     public string name // Friend name? 
     {

@@ -56,6 +56,11 @@ namespace Mod.Animation
             A = (byte) (color.a * 255f);
         }
 
+        public override string ToString()
+        {
+            return ToHex();
+        }
+
         public string ToHex()
         {
             return $"{R:X2}{G:X2}{B:X2}";

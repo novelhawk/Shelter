@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class ColorAffector : Affector
 {
-    protected Color[] ColorArr;
-    protected float ElapsedTime;
-    protected float GradualLen;
-    protected bool IsNodeLife;
-    protected COLOR_GRADUAL_TYPE Type;
+    private readonly Color[] ColorArr;
+    private readonly bool IsNodeLife;
+    private readonly COLOR_GRADUAL_TYPE Type;
+    private float ElapsedTime;
+    private float GradualLen;
 
     public ColorAffector(Color[] colorArr, float gradualLen, COLOR_GRADUAL_TYPE type, EffectNode node) : base(node)
     {
@@ -14,9 +14,7 @@ public class ColorAffector : Affector
         this.Type = type;
         this.GradualLen = gradualLen;
         if (this.GradualLen < 0f)
-        {
             this.IsNodeLife = true;
-        }
     }
 
     public override void Reset()
