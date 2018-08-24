@@ -7,6 +7,7 @@ namespace Mod.Commands
     public class CommandResetkd : Command
     {
         public override string CommandName => "resetkd";
+        public override string[] Aliases => new[] {"resetkda"};
 
         public override void Execute(string[] args)
         {
@@ -18,28 +19,26 @@ namespace Mod.Commands
                 {PlayerProperty.TotalDamage, 0}
             };
 
-            if (args.Length > 0 && args[0].EqualsIgnoreCase("all"))
+            if (args.Length < 1)
+            {
+                Player.Self.SetCustomProperties(hashtable);
+                Chat.System("You resetted your kd.");
+                return;
+            }
+
+            if (args[0].EqualsIgnoreCase("all"))
             {
                 foreach (Player p in PhotonNetwork.playerList)
                     p.SetCustomProperties(hashtable);
                 Chat.System("You resetted the kds of everyone.");
+                return;
             }
-            else
-            {
-                if (args.Length < 1 || args[0] == Player.Self.ID.ToString())
-                {
-                    Player.Self.SetCustomProperties(hashtable);
-                    Chat.System("You resetted your kd.");
-                }
-                else
-                {
-                    if (!Player.TryParse(args[0], out Player player))
-                        throw new PlayerNotFoundException(args[0]);
 
-                    player.SetCustomProperties(hashtable);
-                    Chat.System($"You resetted {player}'s kd");
-                }
-            }
+            if (!Player.TryParse(args[0], out Player player))
+                throw new PlayerNotFoundException(args[0]);
+
+            player.SetCustomProperties(hashtable);
+            Chat.System($"You resetted {player}'s kd");
         }
     }
 }

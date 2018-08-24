@@ -1,4 +1,5 @@
 ﻿using Mod.Exceptions;
+using Mod.Interface;
 using UnityEngine;
 
 namespace Mod.Commands
@@ -19,12 +20,16 @@ namespace Mod.Commands
 
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
             {
-                if (Equals(go.GetPhotonView().owner, player))
+                if (go.GetPhotonView().owner.ID == player.ID)
                 {
                     IN_GAME_MAIN_CAMERA.instance.main_object.transform.position = go.transform.position;
                     IN_GAME_MAIN_CAMERA.instance.main_object.transform.rotation = go.transform.rotation;
+                    Notify.New($"You teleported to {player}!", 1300, 35F);
+                    return;
                 }
             }
+            
+            Chat.System("Player is not alive!");
         }
     }
 }

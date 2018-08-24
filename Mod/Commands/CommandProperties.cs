@@ -13,7 +13,7 @@ namespace Mod.Commands
             if (args.Length < 1)
                 throw new CommandArgumentException(CommandName, "/prop [id]");
             if (!Player.TryParse(args[0], out Player player))
-                throw new PlayerNotFoundException();
+                throw new PlayerNotFoundException(args[0]);
             
             var list = player.Properties/*.Where(prop => !Player.Self.Properties.Contains(prop))*/.ToArray();
             if (list.Length > 0)

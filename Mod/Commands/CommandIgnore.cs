@@ -14,10 +14,12 @@ namespace Mod.Commands
         {
             if (args.Length < 1)
                 throw new CommandArgumentException(CommandName, "/ignore [list/add/rem] [id]");
+            
             Player player;
             switch (args[0].ToLower())
             {
                 case "list":
+                {
                     if (FengGameManagerMKII.ignoreList.Count > 0)
                     {
                         Chat.System("Ignored players:");
@@ -29,32 +31,43 @@ namespace Mod.Commands
                                 Chat.System(id);
                         }
                     }
-                    else 
+                    else
                         Chat.System("Your ignore list is empty");
+
                     break;
+                }
 
                 case "new":
                 case "add":
-                    if (args.Length < 2)
+                {
+                    if (args.Length < 2 || !int.TryParse(args[1], out int id))
                         throw new CommandArgumentException(CommandName, "/ignore [list/add/rem] [id]");
-                    if (!FengGameManagerMKII.ignoreList.Contains(args[1].ToInt()))
-                        FengGameManagerMKII.ignoreList.Add(args[1].ToInt());
 
-                    player = Player.Find(args[1].ToInt());
-                    Chat.System($"Hai ignorato {player?.ToString() ?? "#" + args[1]}.");
+                    if (!Player.TryParse(id, out player))
+                        throw new PlayerNotFoundException(id);
+                    
+                    if (!FengGameManagerMKII.ignoreList.Contains(id))
+                        FengGameManagerMKII.ignoreList.Add(id);
+                    
+                    Chat.System($"Hai ignorato {player}.");
                     break;
+                }
 
                 case "remove":
                 case "rem":
+                {
                     if (args.Length < 2)
                         throw new ArgumentException("/ignore [list/add/rem] [id]");
 
-                    player = Player.Find(args[1].ToInt());
+                    if (!Player.TryParse(args[1], out player))
+                        throw new PlayerNotFoundException(args[1]);
 
-                    if (FengGameManagerMKII.ignoreList.Contains(args[1].ToInt()))
-                        FengGameManagerMKII.ignoreList.Remove(args[1].ToInt());
-                    Chat.System($"Hai un-ignorato {player?.ToString() ?? "#" + args[1]}.");
+                    if (FengGameManagerMKII.ignoreList.Contains(player.ID))
+                        FengGameManagerMKII.ignoreList.Remove(player.ID);
+                    
+                    Chat.System($"Hai un-ignorato {player}.");
                     break;
+                }
 
                 default:
                     throw new ArgumentException("/ignore [list/add/remove] [id]");

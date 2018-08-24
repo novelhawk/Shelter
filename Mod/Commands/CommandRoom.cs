@@ -12,8 +12,8 @@ namespace Mod.Commands
         {
             if (args.Length < 2)
                 throw new CommandArgumentException(CommandName, "/room [max/time/visible/roomttl/playerttl] [arg]");
-            int num;
 
+            int num;
             var room = PhotonNetwork.Room;
             if (room == null)
             {

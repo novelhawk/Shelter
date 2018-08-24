@@ -9,9 +9,10 @@ namespace Mod.Commands
         public override void Execute(string[] args)
         {
             if (args.Length < 1)
-                throw new CommandArgumentException(CommandName, "/kick [list/id]");
+                throw new CommandArgumentException(CommandName, "/kick [id]");
             if (!Player.TryParse(args[0], out Player player))
-                    throw new PlayerNotFoundException();
+                throw new PlayerNotFoundException();
+            
             FengGameManagerMKII.instance.KickPlayerRC(player, false, string.Empty);
             Chat.System("Il player è stato kickato");
         }

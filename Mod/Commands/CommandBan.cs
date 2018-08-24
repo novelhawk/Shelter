@@ -11,7 +11,8 @@ namespace Mod.Commands
         public override void Execute(string[] args)
         {
             if (args.Length < 1)
-                throw new ArgumentException();
+                throw new CommandArgumentException(CommandName, "/ban [list/id]");
+            
             if (args[0].EqualsIgnoreCase("list"))
             {
                 if (FengGameManagerMKII.banHash.Count > 0)
@@ -24,14 +25,15 @@ namespace Mod.Commands
                 {
                     Chat.System("The banlist is empty");
                 }
+
+                return;
             }
-            else
-            {
-                if (!Player.TryParse(args[0], out Player player))
-                    throw new PlayerNotFoundException(args[0]);
-                FengGameManagerMKII.instance.KickPlayerRC(player, true, string.Empty);
-                Chat.System($"{player} has been banned");
-            }
+            
+            if (!Player.TryParse(args[0], out Player player))
+                throw new PlayerNotFoundException(args[0]);
+            
+            FengGameManagerMKII.instance.KickPlayerRC(player, true, string.Empty);
+            Chat.System($"{player} has been banned");
         }
     }
 }

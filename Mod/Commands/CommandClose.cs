@@ -12,7 +12,7 @@ namespace Mod.Commands
             if (args.Length < 1)
                 throw new CommandArgumentException(CommandName, "/close [id]");
             if (!Player.TryParse(args[0], out var player))
-                throw new PlayerNotFoundException();
+                throw new PlayerNotFoundException(args[0]);
 
             PhotonNetwork.RaiseEvent(203, null, true, new RaiseEventOptions { TargetActors = new[] { player.ID } });
             PhotonNetwork.DestroyPlayerObjects(player);

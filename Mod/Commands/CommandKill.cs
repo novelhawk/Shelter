@@ -1,4 +1,5 @@
 ﻿using System.Text.RegularExpressions;
+using Mod.Animation;
 using Mod.Exceptions;
 using Mod.Interface;
 using UnityEngine;
@@ -11,42 +12,51 @@ namespace Mod.Commands
 
         public override void Execute(string[] args)
         {
-            if (args.Length < 1)
+            var match = Regex.Match(Chat.LastMessage, @"[\\\/]\w+\s(?:\d+|\w+)\s(.*)");
+            if (!match.Success)
                 throw new CommandArgumentException(CommandName, "/kill [id|all|titans] [msg]");
-            string msg = Regex.Match(Chat.LastMessage, @"[\\\/]\w+\s(?:\d+|\w+)\s(.*)").Groups[1].Value;
+            
+            string msg = match.Groups[1].Value;
             if (string.IsNullOrEmpty(msg))
-                msg = "<color=#ffffff>Server</color> ";
+                msg = "Server";
 
-            if (args[0].EqualsIgnoreCase("all"))
+            switch (args[0].ToLower())
             {
-                foreach (var obj in GameObject.FindGameObjectsWithTag("Player"))
+                case "all":
                 {
-                    obj.GetComponent<HERO>()?.markDie();
-                    obj.GetComponent<HERO>()?.photonView.RPC("netDie2", PhotonTargets.All, -1, "[FF0000]" + msg + "[-]  ");
+                    foreach (Player player in PhotonNetwork.playerList)
+                    {
+                        if (player.Hero == null)
+                            continue;
+                        
+                        player.Hero.markDie();
+                        player.Hero.photonView.RPC("netDie2", PhotonTargets.All, -1, $"[{AnimationColor.Random}]{msg}[-]  ");
+                    }
+                    return;
                 }
-                return;
-            }
 
-            if (args[0].EqualsIgnoreCase("titans"))
-            {
-                foreach (GameObject obj in GameObject.FindGameObjectsWithTag("titan"))
-                    obj.GetComponent<TITAN>()?.photonView.RPC("netDie", PhotonTargets.All);
-                return;
-            }
-
-            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("Player"))
-            {
-                if (obj.GetComponent<HERO>() != null && obj.GetComponent<HERO>().photonView.owner.ID == args[0].ToInt())
+                case "titans":
                 {
-                    obj.GetComponent<HERO>().markDie();
-                    obj.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, -1, "[FF0000]" + msg + "[-]  ");
+                    foreach (GameObject obj in GameObject.FindGameObjectsWithTag("titan"))
+                        obj.GetComponent<TITAN>()?.photonView.RPC("netDie", PhotonTargets.All);
+                    return;
                 }
-            }
-            foreach (GameObject obj in GameObject.FindGameObjectsWithTag("titan"))
-            {
-                if (obj.GetComponent<TITAN>() != null && obj.GetComponent<TITAN>().photonView.owner.ID == args[0].ToInt())
+
+                default:
                 {
-                    obj.GetComponent<TITAN>().photonView.RPC("netDie", PhotonTargets.All);
+                    if (!Player.TryParse(args[0], out Player player))
+                        throw new PlayerNotFoundException(args[0]);
+                    if (player.isLocal)
+                        throw new TargetCannotBeLocalException("You cannot kill yourself"); // Do I want this?
+
+                    if (player.Hero != null)
+                    {
+                        player.Hero.markDie();
+                        player.Hero.photonView.RPC("netDie2", PhotonTargets.All, -1, $"[{AnimationColor.Random}]{msg}[-]  ");
+                    }
+                    if (player.Titan != null)
+                        player.Titan.photonView.RPC("netDie", PhotonTargets.All);
+                    break;
                 }
             }
         }

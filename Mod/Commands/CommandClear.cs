@@ -9,10 +9,11 @@ namespace Mod.Commands
 
         public override void Execute(string[] args)
         {
-            if (args.Length > 0) // If you add any args it will clear for you too
+            if (args.Length > 0)
                 Chat.Clear();
             for (int i = 0; i < 30; i++)
                 Chat.SendMessage(string.Empty, PhotonTargets.Others);
+            
             Chat.System($"Chat has been cleaned up by {Player.Self.HexName}");
         }
     }
