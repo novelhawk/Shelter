@@ -1476,11 +1476,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                         foreach (DictionaryEntry entry in hashtable)
                         {
                             string roomName = (string)entry.Key;
-                            Room info = new Room(roomName, (Hashtable)entry.Value);
-                            if (info.RemovedFromList)
+                            Room room = new Room(roomName, (Hashtable)entry.Value);
+                            if (room.RemovedFromList || (!room.IsOpen && room.RoomTTL > 0 && room.Players <= 0))
                                 mGameList.Remove(roomName);
                             else
-                                mGameList[roomName] = info;
+                                mGameList[roomName] = room;
                         }
 
                         Room.List = new List<Room>(mGameList.Values);
@@ -1500,7 +1500,10 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                         foreach (DictionaryEntry entry in hashtable)
                         {
                             string roomName = (string)entry.Key;
-                            mGameList[roomName] = new Room(roomName, (Hashtable)entry.Value);
+                            var room = new Room(roomName, (Hashtable) entry.Value);
+                            if (!room.IsOpen && room.RoomTTL > 0 && room.Players <= 0)
+                                continue;
+                            mGameList[roomName] = room;
                         }
                         
                         Room.List = new List<Room>(mGameList.Values);
