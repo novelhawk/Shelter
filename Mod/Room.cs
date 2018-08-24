@@ -29,6 +29,8 @@ namespace Mod
         private bool _isVisible;
         private bool _isOpen;
         private bool _doAutoCleanup;
+        private int _playerTTL;
+        private int _roomTTL;
 
         public Room(string fullName, Hashtable properties)
         {
@@ -106,7 +108,6 @@ namespace Mod
             }
         }
 
-
         public void LoadFromHashtable(Hashtable hash)
         {
             if (hash != null && hash.Count > 0)
@@ -130,6 +131,12 @@ namespace Mod
                 
                 if (hash.ContainsKey((byte) 249))
                     _doAutoCleanup = (bool) hash[(byte) 249];
+
+                if (hash.ContainsKey((byte) 235))
+                    _playerTTL = (int) hash[(byte) 235];
+
+                if (hash.ContainsKey((byte) 236))
+                    _roomTTL = (int) hash[(byte) 236];
                 
                 _properties.MergeStringKeys(hash);
             }
@@ -174,6 +181,8 @@ namespace Mod
             builder.AppendFormat("<color=#5D334B{0:X2}>", alpha);
             if (IsProtected)
                 builder.AppendFormat("<color=#034C94{0:X2}>[</color><color=#1191D1{0:X2}>PW</color><color=#034C94{0:X2}>]</color> ", alpha);
+            if (!_isOpen)
+                builder.AppendFormat("<color=#034C94{0:X2}>[</color><color=#FF0000{0:X2}>CLOSED</color><color=#034C94{0:X2}>]</color> ", alpha);
             builder.AppendFormat("{0} || {1} || ", Name.RemoveColors(), Map.Name);
             builder.AppendFormat("<color=#{1}{0:X2}>", alpha, IsJoinable ? "00FF00" : "FF0000");
             builder.AppendFormat("{0}/{1}", _currentPlayers, _maxPlayers);
@@ -226,6 +235,47 @@ namespace Mod
         }
 
         public bool RemovedFromList => _removedFromList;
+
+        public int PlayerTTL
+        {
+            get => _playerTTL;
+            set
+            {
+                if (!Equals(PhotonNetwork.Room))
+                    throw new Exception("Can't set open when not in that room."); //TODO: LOG
+                
+                if (value != _playerTTL && !PhotonNetwork.offlineMode)
+                {
+                    PhotonNetwork.networkingPeer.OpSetPropertiesOfRoom(new Hashtable
+                    {
+                        { (byte)235, value }
+                    }, true, 0);
+
+                    _playerTTL = value;
+                }
+            }
+        }
+
+        public int RoomTTL
+        {
+            get => _roomTTL;
+            set
+            {
+                if (!Equals(PhotonNetwork.Room))
+                    throw new Exception("Can't set open when not in that room."); //TODO: LOG
+                
+                if (value != _roomTTL && !PhotonNetwork.offlineMode)
+                {
+                    PhotonNetwork.networkingPeer.OpSetPropertiesOfRoom(new Hashtable
+                    {
+                        { (byte)236, value }
+                    }, true, 0);
+
+                    _roomTTL = value;
+                }
+            }
+        }
+        
         public bool DoAutoCleanup => _doAutoCleanup;
         public bool IsLocalClientInside { get; set; }
 
