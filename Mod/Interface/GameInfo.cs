@@ -8,7 +8,6 @@ namespace Mod.Interface
     {
         private GUIStyle _text;
         private float _maxSpeed;
-        private float _deltaTime;
         private float _fps;
 
         protected override void OnShow()
@@ -58,10 +57,14 @@ namespace Mod.Interface
             GUI.Label(new Rect(0, 0, Screen.width, Screen.height), output.ToString(), _text); // TODO: Change rect to `windowRect` and update it in a OnResize event
         }
 
+        private float _lastUpdate;
         private void Update()
         {
-            _deltaTime = (Time.deltaTime - _deltaTime) * 0.1f;
-            _fps = Mathf.Floor(1f / _deltaTime);
+            if (Time.time - _lastUpdate < 1)
+                return;
+            
+            _fps = (int) (1f / Time.unscaledDeltaTime);
+            _lastUpdate = Time.time;
         }
     }
 }
