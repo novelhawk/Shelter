@@ -19,7 +19,6 @@ public static class PhotonNetwork
     public static readonly int MAX_VIEW_IDS = 1000;
     internal static NetworkingPeer networkingPeer;
     private static Room offlineModeRoom = null;
-    public static EventCallback OnEventCall;
     internal static readonly PhotonHandler photonMono;
     public static ServerSettings PhotonServerSettings = (ServerSettings) Resources.Load("PhotonServerSettings", typeof(ServerSettings));
     public static float precisionForFloatSynchronization = 0.01f;

@@ -174,7 +174,7 @@ public class CustomCharacterManager : MonoBehaviour
         }
         for (index = 0; index < this.hairOption.Length; index++)
         {
-            if (this.hairOption[index] == this.setup.myCostume.hairInfo.id)
+            if (this.hairOption[index] == this.setup.myCostume.hairInfo.ID)
             {
                 this.hairId = index;
                 break;
@@ -374,19 +374,19 @@ public class CustomCharacterManager : MonoBehaviour
     {
         switch (type)
         {
-            case CreateStat.SPD:
+            case CreateStat.Speed:
                 this.setup.myCostume.stat.Speed += pt;
                 break;
 
-            case CreateStat.GAS:
+            case CreateStat.Gas:
                 this.setup.myCostume.stat.Gas += pt;
                 break;
 
-            case CreateStat.BLA:
+            case CreateStat.Blade:
                 this.setup.myCostume.stat.Blade += pt;
                 break;
 
-            case CreateStat.ACL:
+            case CreateStat.Acceleration:
                 this.setup.myCostume.stat.Acceleration += pt;
                 break;
         }
@@ -403,7 +403,6 @@ public class CustomCharacterManager : MonoBehaviour
         QualitySettings.SetQualityLevel(5, true);
         this.costumeOption = HeroCostume.costumeOption;
         this.setup = this.character.GetComponent<HERO_SETUP>();
-        this.setup.init();
         this.setup.myCostume = new HeroCostume();
         this.copyCostume(HeroCostume.costume[2], this.setup.myCostume, false);
         this.setup.myCostume.setMesh2();
@@ -506,15 +505,15 @@ public class CustomCharacterManager : MonoBehaviour
                 this.hairId = !next ? this.toPrev(this.hairId, this.hairOption.Length, 0) : this.toNext(this.hairId, this.hairOption.Length, 0);
                 if (this.sexId != 0)
                 {
-                    this.setup.myCostume.hair_mesh = CostumeHair.hairsF[this.hairOption[this.hairId]].hair;
-                    this.setup.myCostume.hair_1_mesh = CostumeHair.hairsF[this.hairOption[this.hairId]].hair_1;
-                    this.setup.myCostume.hairInfo = CostumeHair.hairsF[this.hairOption[this.hairId]];
+                    this.setup.myCostume.hair_mesh = CostumeHair.FemaleHairs[this.hairOption[this.hairId]].Texture;
+                    this.setup.myCostume.hair_1_mesh = CostumeHair.FemaleHairs[this.hairOption[this.hairId]].Clothes;
+                    this.setup.myCostume.hairInfo = CostumeHair.FemaleHairs[this.hairOption[this.hairId]];
                 }
                 else
                 {
-                    this.setup.myCostume.hair_mesh = CostumeHair.hairsM[this.hairOption[this.hairId]].hair;
-                    this.setup.myCostume.hair_1_mesh = CostumeHair.hairsM[this.hairOption[this.hairId]].hair_1;
-                    this.setup.myCostume.hairInfo = CostumeHair.hairsM[this.hairOption[this.hairId]];
+                    this.setup.myCostume.hair_mesh = CostumeHair.MaleHairs[this.hairOption[this.hairId]].Texture;
+                    this.setup.myCostume.hair_1_mesh = CostumeHair.MaleHairs[this.hairOption[this.hairId]].Clothes;
+                    this.setup.myCostume.hairInfo = CostumeHair.MaleHairs[this.hairOption[this.hairId]];
                 }
                 this.setup.createHair2();
                 this.setHairColor();
@@ -639,14 +638,14 @@ public class CustomCharacterManager : MonoBehaviour
                 this.hairId = !next ? this.toPrev(this.hairId, this.hairOption.Length, 0) : this.toNext(this.hairId, this.hairOption.Length, 0);
                 if (this.sexId == 0)
                 {
-                    this.setup.myCostume.hair_mesh = CostumeHair.hairsM[this.hairOption[this.hairId]].hair;
-                    this.setup.myCostume.hair_1_mesh = CostumeHair.hairsM[this.hairOption[this.hairId]].hair_1;
-                    this.setup.myCostume.hairInfo = CostumeHair.hairsM[this.hairOption[this.hairId]];
+                    this.setup.myCostume.hair_mesh = CostumeHair.MaleHairs[this.hairOption[this.hairId]].Texture;
+                    this.setup.myCostume.hair_1_mesh = CostumeHair.MaleHairs[this.hairOption[this.hairId]].Clothes;
+                    this.setup.myCostume.hairInfo = CostumeHair.MaleHairs[this.hairOption[this.hairId]];
                     break;
                 }
-                this.setup.myCostume.hair_mesh = CostumeHair.hairsF[this.hairOption[this.hairId]].hair;
-                this.setup.myCostume.hair_1_mesh = CostumeHair.hairsF[this.hairOption[this.hairId]].hair_1;
-                this.setup.myCostume.hairInfo = CostumeHair.hairsF[this.hairOption[this.hairId]];
+                this.setup.myCostume.hair_mesh = CostumeHair.FemaleHairs[this.hairOption[this.hairId]].Texture;
+                this.setup.myCostume.hair_1_mesh = CostumeHair.FemaleHairs[this.hairOption[this.hairId]].Clothes;
+                this.setup.myCostume.hairInfo = CostumeHair.FemaleHairs[this.hairOption[this.hairId]];
                 break;
 
             case CreatePart.Skin:
@@ -666,13 +665,14 @@ public class CustomCharacterManager : MonoBehaviour
             case CreatePart.Costume:
                 if (this.setup.myCostume.uniform_type == UniformType.CasualAHSS)
                 {
-                    if (this.setup.myCostume.sex == Sex.Female)
+                    switch (this.setup.myCostume.sex)
                     {
-                        this.costumeId = 26;
-                    }
-                    else if (this.setup.myCostume.sex == Sex.Male)
-                    {
-                        this.costumeId = 25;
+                        case Sex.Female:
+                            this.costumeId = 26;
+                            break;
+                        case Sex.Male:
+                            this.costumeId = 25;
+                            break;
                     }
                 }
                 else if (this.sexId != 0)

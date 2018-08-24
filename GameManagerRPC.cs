@@ -712,9 +712,8 @@ public partial class FengGameManagerMKII
                 case "SET 3":
                 {
                     HeroCostume costume = CostumeConverter.LocalDataToHeroCostume(slot);
-                    costume?.checkstat();
+                    costume?.ValidateHeroStats();
                     CostumeConverter.HeroCostumeToLocalData(costume, slot);
-                    component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().init();
                     if (costume != null)
                     {
                         component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().myCostume = costume;
@@ -745,7 +744,6 @@ public partial class FengGameManagerMKII
                             if (HeroCostume.costume[id].name != hero.name)
                                 id = hero.id + 1;
 
-                            component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().init();
                             component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().myCostume =
                                 HeroCostume.costume[id];
                             component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().myCostume.stat =

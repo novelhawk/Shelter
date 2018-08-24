@@ -109,7 +109,7 @@ public class CannonBall : Photon.MonoBehaviour
                     TITAN titan = gameObject.transform.root.gameObject.GetComponent<TITAN>();
                     if (titan != null)
                     {
-                        if (titan.abnormalType == AbnormalType.TYPE_CRAWLER)
+                        if (titan.abnormalType == AbnormalType.Crawler)
                         {
                             if (gameObject.name == "head")
                             {

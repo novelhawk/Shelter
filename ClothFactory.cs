@@ -3,7 +3,7 @@ using UnityEngine;
 
 public static class ClothFactory
 {
-    private static Dictionary<string, List<GameObject>> clothCache = new Dictionary<string, List<GameObject>>(CostumeHair.hairsF.Length);
+    private static Dictionary<string, List<GameObject>> clothCache = new Dictionary<string, List<GameObject>>(CostumeHair.FemaleHairs.Length);
 
     public static void ClearClothCache()
     {

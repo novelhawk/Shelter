@@ -9,7 +9,7 @@ namespace Mod.Exceptions
     {
         public NotAllowedException(byte eventId, Player sender)
         {
-            Chat.System($"NotAllowedExeption from {sender} on calling Event({eventId:X})");
+            Chat.System($"NotAllowedExeption from {sender} on calling Event({(PhotonEvent)eventId})");
             if (!FengGameManagerMKII.ignoreList.Contains(sender.ID))
                 FengGameManagerMKII.ignoreList.Add(sender.ID);
         }

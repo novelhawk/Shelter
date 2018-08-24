@@ -1,3 +1,6 @@
+using System.CodeDom;
+using Mod.Exceptions;
+using Mod.Interface;
 using UnityEngine;
 
 public class SmoothSyncMovement : Photon.MonoBehaviour
@@ -28,7 +31,6 @@ public class SmoothSyncMovement : Photon.MonoBehaviour
 
     public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
     {
-        //TODO: Anti
         if (stream.isWriting)
         {
             stream.SendNext(transform.position);
@@ -41,20 +43,20 @@ public class SmoothSyncMovement : Photon.MonoBehaviour
             {
                 stream.SendNext(Camera.main.transform.rotation);
             }
+
+            return;
         }
-        else
-        {
-            this.correctPlayerPos = (Vector3) stream.ReceiveNext();
-            this.correctPlayerRot = (Quaternion) stream.ReceiveNext();
-            if (!this.noVelocity)
-            {
-                this.correctPlayerVelocity = (Vector3) stream.ReceiveNext();
-            }
-            if (this.PhotonCamera)
-            {
-                this.correctCameraRot = (Quaternion) stream.ReceiveNext();
-            }
-        }
+
+        if (!info.sender.IsMasterClient && info.sender.ID != photonView.owner.ID)
+            throw new NotAllowedException((byte) PhotonEvent.OSR, info.sender);
+
+        this.correctPlayerPos = (Vector3) stream.ReceiveNext();
+        this.correctPlayerRot = (Quaternion) stream.ReceiveNext();
+        if (!this.noVelocity)
+            this.correctPlayerVelocity = (Vector3) stream.ReceiveNext();
+        
+        if (this.PhotonCamera)
+            this.correctCameraRot = (Quaternion) stream.ReceiveNext();
     }
 
     public void Update()

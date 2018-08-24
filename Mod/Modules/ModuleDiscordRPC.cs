@@ -14,19 +14,41 @@ namespace Mod.Modules
         protected override void OnModuleEnable()
         {
             var handlers = new DiscordApi.EventHandlers();
-            handlers.readyCallback += () =>
-            {
-                Debug.Log("readyCallback");
-            };
-            handlers.disconnectedCallback += (a, b) =>
-            {
-                Debug.Log("disconnectedCallback");
-            };
-            handlers.errorCallback += (a, b) =>
-            {
-                Debug.Log($"errorCallback({a}, {b})");
-            };
+            handlers.readyCallback += () => {};
+            handlers.disconnectedCallback += (a, b) => { }; 
+            handlers.errorCallback += (a, b) => { Debug.Log(b); };
+            handlers.joinCallback += (a) =>{};
+            handlers.requestCallback += (ref DiscordApi.JoinRequest a) => {};
+            handlers.spectateCallback += (a) => { };
+            
             DiscordApi.Initialize("378900623875244042", ref handlers, true, null);
+        }
+
+        private void OnReady()
+        {
+            Debug.Log("Discord ready!");
+        }
+
+        private void OnDisconnected(int code, string message)
+        {
+            Debug.Log($"Disconnected from rich presence");
+        }
+
+        private void OnError(int code, string message)
+        {
+            Debug.Log($"Error with rich presence");
+        }
+
+        private void OnJoin(string secret)
+        {
+        }
+
+        private void OnJoinRequest(ref DiscordApi.JoinRequest request)
+        {
+        }
+
+        private void OnSpectate(string secret)
+        {
         }
 
         protected override void OnModuleUpdate()

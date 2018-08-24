@@ -245,7 +245,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                             .HitEyeRPC(transform.root.gameObject.GetPhotonView().viewID);
                     }
                 }
-                else if (gameObject.GetComponent<TITAN>().abnormalType != AbnormalType.TYPE_CRAWLER)
+                else if (gameObject.GetComponent<TITAN>().abnormalType != AbnormalType.Crawler)
                 {
                     if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                     {
@@ -281,7 +281,7 @@ public class TriggerColliderWeapon : MonoBehaviour
             int num9 = (int) (vector10.magnitude * 10f * this.scoreMulti);
             num9 = Mathf.Max(10, num9);
             if (obj4.GetComponent<TITAN>() != null &&
-                obj4.GetComponent<TITAN>().abnormalType != AbnormalType.TYPE_CRAWLER)
+                obj4.GetComponent<TITAN>().abnormalType != AbnormalType.Crawler)
             {
                 if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                 {

@@ -331,7 +331,7 @@ public partial class FengGameManagerMKII
                         foreach (GameObject obj in objArray3)
                         {
                             SpawnTitanRaw(obj.transform.position, obj.transform.rotation).GetComponent<TITAN>()
-                                .setAbnormalType2(AbnormalType.TYPE_CRAWLER, true);
+                                .setAbnormalType2(AbnormalType.Crawler, true);
                         }
                     }
                 }
@@ -744,8 +744,6 @@ public partial class FengGameManagerMKII
         instance = this;
         ignoreList = new List<int>();
         gameObject.name = "MultiplayerManager";
-        HeroCostume.init2();
-        CharacterMaterials.init();
         DontDestroyOnLoad(gameObject);
 
         if (privateServerField == null)

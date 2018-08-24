@@ -1,5 +1,6 @@
 using System;
 using Mod;
+using Mod.Exceptions;
 using Mod.Keybinds;
 using UnityEngine;
 
@@ -82,14 +83,14 @@ public class Cannon : Photon.MonoBehaviour
     {
         if (PhotonNetwork.isMasterClient && !FengGameManagerMKII.instance.isRestarting)
         {
-            string[] strArray = this.settings.Split(new char[] { ',' });
+            string[] strArray = this.settings.Split(',');
             if (strArray[0] == "photon")
             {
                 if (strArray.Length > 15)
                 {
                     GameObject go = PhotonNetwork.Instantiate("RCAsset/" + strArray[1] + "Prop", new Vector3(Convert.ToSingle(strArray[12]), Convert.ToSingle(strArray[13]), Convert.ToSingle(strArray[14])), new Quaternion(Convert.ToSingle(strArray[15]), Convert.ToSingle(strArray[16]), Convert.ToSingle(strArray[17]), Convert.ToSingle(strArray[18])), 0);
                     go.GetComponent<CannonPropRegion>().settings = this.settings;
-                    go.GetPhotonView().RPC("SetSize", PhotonTargets.AllBuffered, new object[] { this.settings });
+                    go.GetPhotonView().RPC("SetSize", PhotonTargets.AllBuffered, this.settings);
                 }
                 else
                 {
@@ -118,65 +119,64 @@ public class Cannon : Photon.MonoBehaviour
     [RPC]
     public void SetSize(string settings, PhotonMessageInfo info)
     {
-        if (info.sender.IsMasterClient)
+        if (!info.sender.IsMasterClient) 
+            throw new NotAllowedException(nameof(SetSize), info);
+        
+        string[] strArray = settings.Split(',');
+        if (strArray.Length > 15)
         {
-            string[] strArray = settings.Split(new char[] { ',' });
-            if (strArray.Length > 15)
+            float a = 1f;
+            GameObject gameObject;
+            gameObject = this.gameObject;
+            if (strArray[2] != "default")
             {
-                float a = 1f;
-                GameObject gameObject = null;
-                gameObject = this.gameObject;
-                if (strArray[2] != "default")
+                if (strArray[2].StartsWith("transparent"))
                 {
-                    if (strArray[2].StartsWith("transparent"))
+                    if (float.TryParse(strArray[2].Substring(11), out var num2))
                     {
-                        float num2;
-                        if (float.TryParse(strArray[2].Substring(11), out num2))
+                        a = num2;
+                    }
+                    foreach (Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
+                    {
+                        renderer.material = (Material) FengGameManagerMKII.RCassets.Load("transparent");
+                        if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
                         {
-                            a = num2;
+                            renderer.material.mainTextureScale = new Vector2(renderer.material.mainTextureScale.x * Convert.ToSingle(strArray[10]), renderer.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));
                         }
-                        foreach (Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
+                    }
+                }
+                else
+                {
+                    foreach (Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
+                    {
+                        if (!renderer.name.Contains("Line Renderer"))
                         {
-                            renderer.material = (Material) FengGameManagerMKII.RCassets.Load("transparent");
+                            renderer.material = (Material) FengGameManagerMKII.RCassets.Load(strArray[2]);
                             if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
                             {
                                 renderer.material.mainTextureScale = new Vector2(renderer.material.mainTextureScale.x * Convert.ToSingle(strArray[10]), renderer.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));
                             }
                         }
                     }
-                    else
-                    {
-                        foreach (Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
-                        {
-                            if (!renderer.name.Contains("Line Renderer"))
-                            {
-                                renderer.material = (Material) FengGameManagerMKII.RCassets.Load(strArray[2]);
-                                if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
-                                {
-                                    renderer.material.mainTextureScale = new Vector2(renderer.material.mainTextureScale.x * Convert.ToSingle(strArray[10]), renderer.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));
-                                }
-                            }
-                        }
-                    }
                 }
-                float x = gameObject.transform.localScale.x * Convert.ToSingle(strArray[3]);
-                x -= 0.001f;
-                float y = gameObject.transform.localScale.y * Convert.ToSingle(strArray[4]);
-                float z = gameObject.transform.localScale.z * Convert.ToSingle(strArray[5]);
-                gameObject.transform.localScale = new Vector3(x, y, z);
-                if (strArray[6] != "0")
+            }
+            float x = gameObject.transform.localScale.x * Convert.ToSingle(strArray[3]);
+            x -= 0.001f;
+            float y = gameObject.transform.localScale.y * Convert.ToSingle(strArray[4]);
+            float z = gameObject.transform.localScale.z * Convert.ToSingle(strArray[5]);
+            gameObject.transform.localScale = new Vector3(x, y, z);
+            if (strArray[6] != "0")
+            {
+                Color color = new Color(Convert.ToSingle(strArray[7]), Convert.ToSingle(strArray[8]), Convert.ToSingle(strArray[9]), a);
+                foreach (MeshFilter filter in gameObject.GetComponentsInChildren<MeshFilter>())
                 {
-                    Color color = new Color(Convert.ToSingle(strArray[7]), Convert.ToSingle(strArray[8]), Convert.ToSingle(strArray[9]), a);
-                    foreach (MeshFilter filter in gameObject.GetComponentsInChildren<MeshFilter>())
+                    Mesh mesh = filter.mesh;
+                    Color[] colorArray = new Color[mesh.vertexCount];
+                    for (int i = 0; i < mesh.vertexCount; i++)
                     {
-                        Mesh mesh = filter.mesh;
-                        Color[] colorArray = new Color[mesh.vertexCount];
-                        for (int i = 0; i < mesh.vertexCount; i++)
-                        {
-                            colorArray[i] = color;
-                        }
-                        mesh.colors = colorArray;
+                        colorArray[i] = color;
                     }
+                    mesh.colors = colorArray;
                 }
             }
         }

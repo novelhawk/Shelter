@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class EffectController : MonoBehaviour
 {
-    protected XffectCache EffectCache;
+    private XffectCache EffectCache;
     public Transform ObjectCache;
 
-    protected Vector3 GetFaceDirection()
+    private Vector3 GetFaceDirection()
     {
         return transform.TransformDirection(Vector3.forward);
     }
@@ -13,43 +13,43 @@ public class EffectController : MonoBehaviour
     private void OnEffect(string eftname)
     {
         Xffect component;
-        if (eftname == "lightning")
+        switch (eftname)
         {
-            for (int i = 0; i < 9; i++)
-            {
+            case "lightning":
+                for (int i = 0; i < 9; i++)
+                {
+                    component = this.EffectCache.GetObject(eftname).GetComponent<Xffect>();
+                    Vector3 zero = Vector3.zero;
+                    zero.x = Random.Range(-2.2f, 2.3f);
+                    zero.z = Random.Range(-2.1f, 2.1f);
+                    component.SetEmitPosition(zero);
+                    component.Active();
+                }
+
+                break;
+            case "cyclone":
                 component = this.EffectCache.GetObject(eftname).GetComponent<Xffect>();
-                Vector3 zero = Vector3.zero;
-                zero.x = Random.Range(-2.2f, 2.3f);
-                zero.z = Random.Range(-2.1f, 2.1f);
-                component.SetEmitPosition(zero);
+                component.SetDirectionAxis(this.GetFaceDirection().normalized);
                 component.Active();
-            }
-        }
-        else if (eftname == "cyclone")
-        {
-            component = this.EffectCache.GetObject(eftname).GetComponent<Xffect>();
-            component.SetDirectionAxis(this.GetFaceDirection().normalized);
-            component.Active();
-        }
-        else if (eftname == "crystal")
-        {
-            this.EffectCache.GetObject("crystal_surround").GetComponent<Xffect>().Active();
-            component = this.EffectCache.GetObject("crystal").GetComponent<Xffect>();
-            component.SetEmitPosition(new Vector3(0f, 1.9f, 1.4f));
-            component.Active();
-            component = this.EffectCache.GetObject("crystal_lightn").GetComponent<Xffect>();
-            component.SetDirectionAxis(new Vector3(-1.5f, 1.8f, 0f));
-            component.Active();
-            component = this.EffectCache.GetObject("crystal").GetComponent<Xffect>();
-            component.SetEmitPosition(new Vector3(0f, 1.5f, -1.2f));
-            component.Active();
-            component = this.EffectCache.GetObject("crystal_lightn").GetComponent<Xffect>();
-            component.SetDirectionAxis(new Vector3(1.4f, 1.4f, 0f));
-            component.Active();
-        }
-        else
-        {
-            this.EffectCache.GetObject(eftname).GetComponent<Xffect>().Active();
+                break;
+            case "crystal":
+                this.EffectCache.GetObject("crystal_surround").GetComponent<Xffect>().Active();
+                component = this.EffectCache.GetObject("crystal").GetComponent<Xffect>();
+                component.SetEmitPosition(new Vector3(0f, 1.9f, 1.4f));
+                component.Active();
+                component = this.EffectCache.GetObject("crystal_lightn").GetComponent<Xffect>();
+                component.SetDirectionAxis(new Vector3(-1.5f, 1.8f, 0f));
+                component.Active();
+                component = this.EffectCache.GetObject("crystal").GetComponent<Xffect>();
+                component.SetEmitPosition(new Vector3(0f, 1.5f, -1.2f));
+                component.Active();
+                component = this.EffectCache.GetObject("crystal_lightn").GetComponent<Xffect>();
+                component.SetDirectionAxis(new Vector3(1.4f, 1.4f, 0f));
+                component.Active();
+                break;
+            default:
+                this.EffectCache.GetObject(eftname).GetComponent<Xffect>().Active();
+                break;
         }
     }
 

@@ -27,6 +27,10 @@ public class PhotonStream
             Debug.LogError("Error: you cannot read this stream that you are writing!");
             return null;
         }
+
+        if (currentItem > data.Count - 1)
+            return null;
+        
         object obj2 = this.data[this.currentItem];
         this.currentItem = (byte) (this.currentItem + 1);
         return obj2;

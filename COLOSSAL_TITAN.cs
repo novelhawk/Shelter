@@ -127,7 +127,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                     route = objArray3[UnityEngine.Random.Range(0, objArray3.Length)];
                 }
                 obj4.GetComponent<TITAN>().setRoute(route);
-                obj4.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_I, false);
+                obj4.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Abnormal, false);
                 obj4.GetComponent<TITAN>().activeRad = 0;
                 obj4.GetComponent<TITAN>().toCheckPoint((Vector3) obj4.GetComponent<TITAN>().checkPoints[0], 10f);
             }
@@ -150,17 +150,17 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                 }
                 if (GameObject.FindGameObjectsWithTag("titan").Length == 5)
                 {
-                    obj4.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_JUMPER, false);
+                    obj4.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Jumper, false);
                 }
                 else if (UnityEngine.Random.Range(0f, 1f) >= num2)
                 {
                     if (UnityEngine.Random.Range(0f, 1f) < num3)
                     {
-                        obj4.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_JUMPER, false);
+                        obj4.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Jumper, false);
                     }
                     else
                     {
-                        obj4.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_CRAWLER, false);
+                        obj4.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Crawler, false);
                     }
                 }
                 obj4.GetComponent<TITAN>().activeRad = 200;

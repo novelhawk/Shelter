@@ -165,10 +165,10 @@ namespace Mod.Interface
             switch (CustomButton(rect.OY(rect.Height + 3), LevelInfoManager.Levels[roomMapIndex].Name, _button))
             {
                 case 1:
-                    roomMapIndex = LevelInfoManager.Levels.Count - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
+                    roomMapIndex = LevelInfoManager.Levels.Length - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
                     break;
                 case -1:
-                    roomMapIndex = roomMapIndex == 0 ? LevelInfoManager.Levels.Count - 1 : roomMapIndex - 1;
+                    roomMapIndex = roomMapIndex == 0 ? LevelInfoManager.Levels.Length - 1 : roomMapIndex - 1;
                     break;
             }
             roomTime = GUI.TextField(rect.OY(rect.Height + 3), roomTime, _textField);
@@ -225,10 +225,10 @@ namespace Mod.Interface
             switch (CustomButton(rect.OY(rect.Height + 3), LevelInfoManager.Levels[roomMapIndex].Name, _button))
             {
                 case 1:
-                    roomMapIndex = LevelInfoManager.Levels.Count - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
+                    roomMapIndex = LevelInfoManager.Levels.Length - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
                     break;
                 case -1:
-                    roomMapIndex = roomMapIndex == 0 ? LevelInfoManager.Levels.Count - 1 : roomMapIndex - 1;
+                    roomMapIndex = roomMapIndex == 0 ? LevelInfoManager.Levels.Length - 1 : roomMapIndex - 1;
                     break;
             }
             roomMaxPlayers = GUI.TextField(rect = rect.OY(rect.Height + 3), roomMaxPlayers, _textField);

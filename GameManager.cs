@@ -990,16 +990,16 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                             switch (name1)
                             {
                                 case "spawnAbnormal":
-                                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_I, false);
+                                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Abnormal, false);
                                     break;
                                 case "spawnJumper":
-                                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_JUMPER, false);
+                                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Jumper, false);
                                     break;
                                 case "spawnCrawler":
-                                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_CRAWLER, true);
+                                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Crawler, true);
                                     break;
                                 case "spawnPunk":
-                                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_PUNK, false);
+                                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Punk, false);
                                     break;
                             }
                         }
@@ -4929,7 +4929,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             obj3.GetComponent<TITAN_CONTROLLER>().enabled = true;
             if (id == "RANDOM" && UnityEngine.Random.Range(0, 100) < 7)
             {
-                obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_CRAWLER, true);
+                obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Crawler, true);
             }
             GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().enabled = true;
             GameObject.Find("MainCamera").GetComponent<SpectatorMovement>().disable = true;
@@ -5034,9 +5034,8 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                     if (IN_GAME_MAIN_CAMERA.singleCharacter == "SET 1" || IN_GAME_MAIN_CAMERA.singleCharacter == "SET 2" || IN_GAME_MAIN_CAMERA.singleCharacter == "SET 3")
                     {
                         HeroCostume costume = CostumeConverter.LocalDataToHeroCostume(IN_GAME_MAIN_CAMERA.singleCharacter);
-                        costume?.checkstat();
+                        costume?.ValidateHeroStats();
                         CostumeConverter.HeroCostumeToLocalData(costume, IN_GAME_MAIN_CAMERA.singleCharacter);
-                        component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().init();
                         if (costume != null)
                         {
                             component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().myCostume = costume;
@@ -5063,7 +5062,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                 {
                                     index = hero.id + 1;
                                 }
-                                component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().init();
                                 component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().myCostume = HeroCostume.costume[index];
                                 component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().myCostume.stat = HeroStat.GetInfo(HeroCostume.costume[index].name);
                                 component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().setCharacterComponent();
@@ -5082,9 +5080,8 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 if (id == "SET 1" || id == "SET 2" || id == "SET 3") //TODO: Rename/Remove and use Profilesystem
                 {
                     HeroCostume costume2 = CostumeConverter.LocalDataToHeroCostume(id);
-                    costume2?.checkstat();
+                    costume2?.ValidateHeroStats();
                     CostumeConverter.HeroCostumeToLocalData(costume2, id);
-                    component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().init();
                     if (costume2 != null)
                     {
                         component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().myCostume = costume2;
@@ -5115,7 +5112,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                             {
                                 num4 = hero.id + 1;
                             }
-                            component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().init();
                             component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().myCostume = HeroCostume.costume[num4];
                             component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().myCostume.stat = HeroStat.GetInfo(HeroCostume.costume[num4].name);
                             component.main_object.GetComponent<HERO>().GetComponent<HERO_SETUP>().setCharacterComponent();
@@ -5184,7 +5180,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         GameObject obj2 = SpawnTitanRaw(position, rotation);
         if (punk)
         {
-            obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_PUNK, false);
+            obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Punk, false);
         }
         else if (UnityEngine.Random.Range(0, 100) < rate)
         {
@@ -5192,11 +5188,11 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             {
                 if (UnityEngine.Random.Range(0f, 1f) >= 0.7f && !LevelInfoManager.GetInfo(Level).NoCrawler)
                 {
-                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_CRAWLER, false);
+                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Crawler, false);
                 }
                 else
                 {
-                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_JUMPER, false);
+                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Jumper, false);
                 }
             }
         }
@@ -5204,31 +5200,31 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         {
             if (UnityEngine.Random.Range(0f, 1f) >= 0.7f && !LevelInfoManager.GetInfo(Level).NoCrawler)
             {
-                obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_CRAWLER, false);
+                obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Crawler, false);
             }
             else
             {
-                obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_JUMPER, false);
+                obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Jumper, false);
             }
         }
         else if (UnityEngine.Random.Range(0, 100) < rate)
         {
             if (UnityEngine.Random.Range(0f, 1f) >= 0.8f && !LevelInfoManager.GetInfo(Level).NoCrawler)
             {
-                obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_CRAWLER, false);
+                obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Crawler, false);
             }
             else
             {
-                obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_I, false);
+                obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Abnormal, false);
             }
         }
         else if (UnityEngine.Random.Range(0f, 1f) >= 0.8f && !LevelInfoManager.GetInfo(Level).NoCrawler)
         {
-            obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_CRAWLER, false);
+            obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Crawler, false);
         }
         else
         {
-            obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_JUMPER, false);
+            obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Jumper, false);
         }
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
         {
@@ -5280,23 +5276,23 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             switch (type)
             {
                 case 0:
-                    obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.NORMAL, false);
+                    obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Normal, false);
                     break;
 
                 case 1:
-                    obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_I, false);
+                    obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Abnormal, false);
                     break;
 
                 case 2:
-                    obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_JUMPER, false);
+                    obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Jumper, false);
                     break;
 
                 case 3:
-                    obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_CRAWLER, true);
+                    obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Crawler, true);
                     break;
 
                 case 4:
-                    obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_PUNK, false);
+                    obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Punk, false);
                     break;
             }
         }
@@ -5319,23 +5315,23 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             switch (type)
             {
                 case 0:
-                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.NORMAL, false);
+                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Normal, false);
                     break;
 
                 case 1:
-                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_I, false);
+                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Abnormal, false);
                     break;
 
                 case 2:
-                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_JUMPER, false);
+                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Jumper, false);
                     break;
 
                 case 3:
-                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_CRAWLER, true);
+                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Crawler, true);
                     break;
 
                 case 4:
-                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_PUNK, false);
+                    obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Punk, false);
                     break;
             }
         }
@@ -5443,27 +5439,27 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                     GameObject obj3 = SpawnTitanRaw(position, rotation);
                     if (num10 < nRate)
                     {
-                        obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.NORMAL, false);
+                        obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Normal, false);
                     }
                     else if (num10 >= nRate && num10 < nRate + aRate)
                     {
-                        obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_I, false);
+                        obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Abnormal, false);
                     }
                     else if (num10 >= nRate + aRate && num10 < nRate + aRate + jRate)
                     {
-                        obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_JUMPER, false);
+                        obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Jumper, false);
                     }
                     else if (num10 >= nRate + aRate + jRate && num10 < nRate + aRate + jRate + cRate)
                     {
-                        obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_CRAWLER, true);
+                        obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Crawler, true);
                     }
                     else if (num10 >= nRate + aRate + jRate + cRate && num10 < nRate + aRate + jRate + cRate + pRate)
                     {
-                        obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.TYPE_PUNK, false);
+                        obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Punk, false);
                     }
                     else
                     {
-                        obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.NORMAL, false);
+                        obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Normal, false);
                     }
                 }
                 else

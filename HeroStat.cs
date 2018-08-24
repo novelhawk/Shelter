@@ -40,21 +40,21 @@ public struct HeroStat
                 return Petra;
             case "SASHA":
                 return Sasha;
+            default:
+                return Levi;
         }
-
-        return Levi;
     }
 
     public static HeroStat CustomDefault => new HeroStat("petra", 100, 100, 100, 10);
-    public static HeroStat AHSS => new HeroStat("sasha", 100, 100, 100, 100);
-    
-    public static HeroStat Armin => new HeroStat("armin", 75, 150, 125, 85);
-    public static HeroStat Eren => new HeroStat("eren", 100, 90, 90, 100);
-    public static HeroStat Jean => new HeroStat("jean", 100, 150, 80, 100);
-    public static HeroStat Levi => new HeroStat("levi", 95, 100, 100, 150);
-    public static HeroStat Marco => new HeroStat("marco", 110, 100, 115, 95);
-    public static HeroStat Mikasa => new HeroStat("mikasa", 125, 75, 75, 135);
-    public static HeroStat Petra => new HeroStat("petra", 80, 110, 100, 140);
-    public static HeroStat Sasha => new HeroStat("sasha", 140, 100, 100, 115);
+    private static HeroStat AHSS => new HeroStat("sasha", 100, 100, 100, 100);
+
+    private static HeroStat Armin => new HeroStat("armin", 75, 150, 125, 85);
+    private static HeroStat Eren => new HeroStat("eren", 100, 90, 90, 100);
+    private static HeroStat Jean => new HeroStat("jean", 100, 150, 80, 100);
+    private static HeroStat Levi => new HeroStat("levi", 95, 100, 100, 150);
+    private static HeroStat Marco => new HeroStat("marco", 110, 100, 115, 95);
+    private static HeroStat Mikasa => new HeroStat("mikasa", 125, 75, 75, 135);
+    private static HeroStat Petra => new HeroStat("petra", 80, 110, 100, 140);
+    private static HeroStat Sasha => new HeroStat("sasha", 140, 100, 100, 115);
 }
 

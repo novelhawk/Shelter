@@ -294,8 +294,7 @@ public class InstantiateTracker
 
     public void resetPropertyTracking(int ID)
     {
-        int num;
-        if (this.TryGetPlayer(ID, out num))
+        if (this.TryGetPlayer(ID, out var num))
         {
             this.players[num].resetNameTracking();
         }

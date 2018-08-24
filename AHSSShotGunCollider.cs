@@ -179,7 +179,7 @@ public class AHSSShotGunCollider : MonoBehaviour
                     else
                         eye.GetComponent<FEMALE_TITAN>().HitEyeRPC(transform.root.gameObject.GetPhotonView().viewID);
                 }
-                else if (eye.GetComponent<TITAN>() != null && eye.GetComponent<TITAN>().abnormalType != AbnormalType.TYPE_CRAWLER && !eye.GetComponent<TITAN>().hasDie)
+                else if (eye.GetComponent<TITAN>() != null && eye.GetComponent<TITAN>().abnormalType != AbnormalType.Crawler && !eye.GetComponent<TITAN>().hasDie)
                 {
                     if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                         eye.GetComponent<TITAN>().HitEye();
@@ -198,7 +198,7 @@ public class AHSSShotGunCollider : MonoBehaviour
             GameObject obj = other.gameObject.transform.root.gameObject;
             Vector3 velocity = currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity - obj.rigidbody.velocity;
             int damage = Mathf.Max(10, (int) (velocity.magnitude * 10f * this.scoreMulti));
-            if (obj.GetComponent<TITAN>() != null && obj.GetComponent<TITAN>().abnormalType != AbnormalType.TYPE_CRAWLER && !obj.GetComponent<TITAN>().hasDie)
+            if (obj.GetComponent<TITAN>() != null && obj.GetComponent<TITAN>().abnormalType != AbnormalType.Crawler && !obj.GetComponent<TITAN>().hasDie)
             {
                 if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                     obj.GetComponent<TITAN>().hitAnkle();

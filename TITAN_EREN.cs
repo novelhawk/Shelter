@@ -1126,7 +1126,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                         {
                                             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(3f, 0.1f, 0.95f);
                                             this.hitPause = 0.2f;
-                                            if (colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().abnormalType == AbnormalType.TYPE_CRAWLER)
+                                            if (colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().abnormalType == AbnormalType.Crawler)
                                             {
                                                 colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().dieBlow(transform.position, this.hitPause);
                                             }

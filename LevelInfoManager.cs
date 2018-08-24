@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEngine;
 
 public static class LevelInfoManager
 {
-    public static readonly List<LevelInfo> Levels;
+    public static readonly LevelInfo[] Levels;
 
     static LevelInfoManager()
     {
-        Levels = new List<LevelInfo>
+        Levels = new[]
         {
             new LevelInfo
             {

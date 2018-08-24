@@ -21,8 +21,6 @@ public class HERO_ON_MENU : MonoBehaviour
     private void Start()
     {
         HERO_SETUP component = gameObject.GetComponent<HERO_SETUP>();
-        HeroCostume.init2();
-        component.init();
         component.myCostume = HeroCostume.costume[this.costumeId];
         component.setCharacterComponent();
         this.head = transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head");
@@ -41,7 +39,7 @@ public class HERO_ON_MENU : MonoBehaviour
             animation.Play("stand_levi");
             animation["stand_levi"].normalizedTime = Random.Range(0f, 1f);
         }
-        float num = 0.5f;
+        const float num = 0.5f;
         animation["stand"].speed = num;
         animation["stand_levi"].speed = num;
     }

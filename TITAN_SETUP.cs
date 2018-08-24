@@ -14,9 +14,6 @@ public class TITAN_SETUP : Photon.MonoBehaviour
 
     private void Awake()
     {
-        CostumeHair.init();
-        CharacterMaterials.init();
-        HeroCostume.init2();
         this.hair_go_ref = new GameObject();
         this.eye.transform.parent = transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck/head").transform;
         this.hair_go_ref.transform.position = this.eye.transform.position + Vector3.up * 3.5f + transform.forward * 5.2f;
@@ -31,16 +28,16 @@ public class TITAN_SETUP : Photon.MonoBehaviour
     {
         bool iteratorVariable0 = false;
         Destroy(this.part_hair);
-        this.hair = CostumeHair.hairsM[hair];
+        this.hair = CostumeHair.MaleHairs[hair];
         this.hairType = hair;
-        if (this.hair.hair != string.Empty)
+        if (this.hair.Texture != string.Empty)
         {
-            GameObject iteratorVariable1 = (GameObject) Instantiate(Resources.Load("Character/" + this.hair.hair));
+            GameObject iteratorVariable1 = (GameObject) Instantiate(Resources.Load("Character/" + this.hair.Texture));
             iteratorVariable1.transform.parent = this.hair_go_ref.transform.parent;
             iteratorVariable1.transform.position = this.hair_go_ref.transform.position;
             iteratorVariable1.transform.rotation = this.hair_go_ref.transform.rotation;
             iteratorVariable1.transform.localScale = this.hair_go_ref.transform.localScale;
-            iteratorVariable1.renderer.material = CharacterMaterials.materials[this.hair.texture];
+            iteratorVariable1.renderer.material = CharacterMaterials.materials[this.hair.Texture];
             bool mipmap = (int) FengGameManagerMKII.settings[63] != 1;
             if (Utility.IsValidImageUrl(hairlink))
             {
@@ -99,24 +96,24 @@ public class TITAN_SETUP : Photon.MonoBehaviour
     public void setHair()
     {
         Destroy(this.part_hair);
-        int index = Random.Range(0, CostumeHair.hairsM.Length);
+        int index = Random.Range(0, CostumeHair.MaleHairs.Length);
         if (index == 3)
         {
             index = 9;
         }
         this.hairType = index;
-        this.hair = CostumeHair.hairsM[index];
-        if (this.hair.hair == string.Empty)
+        this.hair = CostumeHair.MaleHairs[index];
+        if (this.hair.Texture == string.Empty)
         {
-            this.hair = CostumeHair.hairsM[9];
+            this.hair = CostumeHair.MaleHairs[9];
             this.hairType = 9;
         }
-        this.part_hair = (GameObject) Instantiate(Resources.Load("Character/" + this.hair.hair));
+        this.part_hair = (GameObject) Instantiate(Resources.Load("Character/" + this.hair.Texture));
         this.part_hair.transform.parent = this.hair_go_ref.transform.parent;
         this.part_hair.transform.position = this.hair_go_ref.transform.position;
         this.part_hair.transform.rotation = this.hair_go_ref.transform.rotation;
         this.part_hair.transform.localScale = this.hair_go_ref.transform.localScale;
-        this.part_hair.renderer.material = CharacterMaterials.materials[this.hair.texture];
+        this.part_hair.renderer.material = CharacterMaterials.materials[this.hair.Texture];
         this.part_hair.renderer.material.color = HeroCostume.costume[Random.Range(0, HeroCostume.costume.Length - 5)].hair_color;
         int id = Random.Range(1, 8);
         this.setFacialTexture(this.eye, id);
@@ -178,25 +175,25 @@ public class TITAN_SETUP : Photon.MonoBehaviour
         }
         else
         {
-            num = Random.Range(0, CostumeHair.hairsM.Length);
+            num = Random.Range(0, CostumeHair.MaleHairs.Length);
             if (num == 3)
             {
                 num = 9;
             }
             Destroy(this.part_hair);
             this.hairType = num;
-            this.hair = CostumeHair.hairsM[num];
-            if (this.hair.hair == string.Empty)
+            this.hair = CostumeHair.MaleHairs[num];
+            if (this.hair.Texture == string.Empty)
             {
-                this.hair = CostumeHair.hairsM[9];
+                this.hair = CostumeHair.MaleHairs[9];
                 this.hairType = 9;
             }
-            this.part_hair = (GameObject) Instantiate(Resources.Load("Character/" + this.hair.hair));
+            this.part_hair = (GameObject) Instantiate(Resources.Load("Character/" + this.hair.Texture));
             this.part_hair.transform.parent = this.hair_go_ref.transform.parent;
             this.part_hair.transform.position = this.hair_go_ref.transform.position;
             this.part_hair.transform.rotation = this.hair_go_ref.transform.rotation;
             this.part_hair.transform.localScale = this.hair_go_ref.transform.localScale;
-            this.part_hair.renderer.material = CharacterMaterials.materials[this.hair.texture];
+            this.part_hair.renderer.material = CharacterMaterials.materials[this.hair.Texture];
             this.part_hair.renderer.material.color = HeroCostume.costume[Random.Range(0, HeroCostume.costume.Length - 5)].hair_color;
             int id = Random.Range(1, 8);
             this.setFacialTexture(this.eye, id);
@@ -212,16 +209,16 @@ public class TITAN_SETUP : Photon.MonoBehaviour
     private void SetHairPRC(int type, int eye_type, float c1, float c2, float c3)
     {
         Destroy(this.part_hair);
-        this.hair = CostumeHair.hairsM[type];
+        this.hair = CostumeHair.MaleHairs[type];
         this.hairType = type;
-        if (this.hair.hair != string.Empty)
+        if (this.hair.Texture != string.Empty)
         {
-            GameObject obj2 = (GameObject) Instantiate(Resources.Load("Character/" + this.hair.hair));
+            GameObject obj2 = (GameObject) Instantiate(Resources.Load("Character/" + this.hair.Texture));
             obj2.transform.parent = this.hair_go_ref.transform.parent;
             obj2.transform.position = this.hair_go_ref.transform.position;
             obj2.transform.rotation = this.hair_go_ref.transform.rotation;
             obj2.transform.localScale = this.hair_go_ref.transform.localScale;
-            obj2.renderer.material = CharacterMaterials.materials[this.hair.texture];
+            obj2.renderer.material = CharacterMaterials.materials[this.hair.Texture];
             obj2.renderer.material.color = new Color(c1, c2, c3);
             this.part_hair = obj2;
         }
@@ -240,14 +237,14 @@ public class TITAN_SETUP : Photon.MonoBehaviour
     public void setPunkHair()
     {
         Destroy(this.part_hair);
-        this.hair = CostumeHair.hairsM[3];
+        this.hair = CostumeHair.MaleHairs[3];
         this.hairType = 3;
-        GameObject obj2 = (GameObject) Instantiate(Resources.Load("Character/" + this.hair.hair));
+        GameObject obj2 = (GameObject) Instantiate(Resources.Load("Character/" + this.hair.Texture));
         obj2.transform.parent = this.hair_go_ref.transform.parent;
         obj2.transform.position = this.hair_go_ref.transform.position;
         obj2.transform.rotation = this.hair_go_ref.transform.rotation;
         obj2.transform.localScale = this.hair_go_ref.transform.localScale;
-        obj2.renderer.material = CharacterMaterials.materials[this.hair.texture];
+        obj2.renderer.material = CharacterMaterials.materials[this.hair.Texture];
         switch (Random.Range(1, 4))
         {
             case 1:

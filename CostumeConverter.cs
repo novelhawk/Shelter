@@ -10,7 +10,7 @@ public static class CostumeConverter
         PlayerPrefs.SetInt(slot + PlayerProperty.CostumeID, costume.costumeId);
         PlayerPrefs.SetInt(slot + PlayerProperty.HeroCostumeID, costume.id);
         PlayerPrefs.SetInt(slot + PlayerProperty.HasCape, !costume.cape ? 0 : 1);
-        PlayerPrefs.SetInt(slot + PlayerProperty.HairInfo, costume.hairInfo.id);
+        PlayerPrefs.SetInt(slot + PlayerProperty.HairInfo, costume.hairInfo.ID);
         PlayerPrefs.SetInt(slot + PlayerProperty.EyeTextureID, costume.eye_texture_id);
         PlayerPrefs.SetInt(slot + PlayerProperty.BeardTextureId, costume.beard_texture_id);
         PlayerPrefs.SetInt(slot + PlayerProperty.GlassTextureID, costume.glass_texture_id);
@@ -37,7 +37,7 @@ public static class CostumeConverter
             {PlayerProperty.Sex, (int) costume.sex},
             {PlayerProperty.HeroCostumeID, costume.id},
             {PlayerProperty.HasCape, costume.cape},
-            {PlayerProperty.HairInfo, costume.hairInfo.id},
+            {PlayerProperty.HairInfo, costume.hairInfo.ID},
             {PlayerProperty.EyeTextureID, costume.eye_texture_id},
             {PlayerProperty.BeardTextureId, costume.beard_texture_id},
             {PlayerProperty.GlassTextureID, costume.glass_texture_id},
@@ -70,7 +70,7 @@ public static class CostumeConverter
             id = PlayerPrefs.GetInt(slot + PlayerProperty.HeroCostumeID),
             costumeId = PlayerPrefs.GetInt(slot + PlayerProperty.CostumeID),
             cape = PlayerPrefs.GetInt(slot + PlayerProperty.HasCape) == 1,
-            hairInfo = costume.sex != Sex.Male ? CostumeHair.hairsF[PlayerPrefs.GetInt(slot + PlayerProperty.HairInfo)] : CostumeHair.hairsM[PlayerPrefs.GetInt(slot + PlayerProperty.HairInfo)],
+            hairInfo = costume.sex != Sex.Male ? CostumeHair.FemaleHairs[PlayerPrefs.GetInt(slot + PlayerProperty.HairInfo)] : CostumeHair.MaleHairs[PlayerPrefs.GetInt(slot + PlayerProperty.HairInfo)],
             eye_texture_id = PlayerPrefs.GetInt(slot + PlayerProperty.EyeTextureID),
             beard_texture_id = PlayerPrefs.GetInt(slot + PlayerProperty.BeardTextureId),
             glass_texture_id = PlayerPrefs.GetInt(slot + PlayerProperty.GlassTextureID),
@@ -99,8 +99,8 @@ public static class CostumeConverter
             id = player.Properties.HeroCostumeID,
             cape = player.Properties.HasCape,
             hairInfo = player.Properties.Sex != Sex.Male
-                ? CostumeHair.hairsF[player.Properties.HairInfo]
-                : CostumeHair.hairsM[player.Properties.HairInfo],
+                ? CostumeHair.FemaleHairs[player.Properties.HairInfo]
+                : CostumeHair.MaleHairs[player.Properties.HairInfo],
             eye_texture_id = player.Properties.EyeTextureID,
             beard_texture_id = player.Properties.BeardTextureID,
             glass_texture_id = player.Properties.GlassTextureID,

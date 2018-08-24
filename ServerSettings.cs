@@ -19,8 +19,7 @@ public class ServerSettings : ScriptableObject
 
     public override string ToString()
     {
-        object[] objArray1 = new object[] { "ServerSettings: ", this.HostType, " ", this.ServerAddress };
-        return string.Concat(objArray1);
+        return $"ServerSettings: {this.HostType} {this.ServerAddress}";
     }
 
     public void UseCloud(string cloudAppid)

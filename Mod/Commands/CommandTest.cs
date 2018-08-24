@@ -16,11 +16,14 @@ namespace Mod.Commands
         
         public override void Execute(string[] args)
         {
-            FengGameManagerMKII.instance.EnterSpecMode(true);
-            Shelter.InterfaceManager.Disable(nameof(Scoreboard));
-            Shelter.InterfaceManager.Disable(nameof(GameInfo));
-                
-            
+            Chat.System(CostumeHair.FemaleHairs.Length);
+            Chat.System(CostumeHair.MaleHairs.Length);
+
+//            FengGameManagerMKII.instance.EnterSpecMode(true);
+//            Shelter.InterfaceManager.Disable(nameof(Scoreboard));
+//            Shelter.InterfaceManager.Disable(nameof(GameInfo));
+
+
 //            if (Shelter.TryFind(args[0], out GameObject obj))
 //            {
 //                var local = args[1] == "true";
@@ -37,11 +40,11 @@ namespace Mod.Commands
 //                else
 //                    obj.transform.position = new Vector3(float.Parse(args[2]), float.Parse(args[3]), float.Parse(args[4]));
 //            }
-            
-            
-            
+
+
+
 //                Object.Destroy(obj);
-            
+
 //            Chat.System($"Enabled: {Shelter.AnimationManager.Enabled}");
 //            foreach (var a in Shelter.AnimationManager.Animations)
 //            {

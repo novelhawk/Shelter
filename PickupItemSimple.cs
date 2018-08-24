@@ -28,11 +28,11 @@ public class PickupItemSimple : Photon.MonoBehaviour
     [RPC]
     public void PunPickupSimple(PhotonMessageInfo msgInfo)
     {
-        if (!this.SentPickup || !msgInfo.sender.isLocal || !gameObject.GetActive())
+        if (!this.SentPickup || !msgInfo.sender.isLocal || !gameObject.IsActive())
         {
         }
         this.SentPickup = false;
-        if (!gameObject.GetActive())
+        if (!gameObject.IsActive())
         {
             Debug.Log("Ignored PU RPC, cause item is inactive. " + gameObject);
         }

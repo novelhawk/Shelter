@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Mod.Interface;
 using UnityEngine;
 using Xft;
 
@@ -280,13 +281,13 @@ public class HERO_SETUP : MonoBehaviour
             this.part_hair.transform.position = this.part_head.transform.position;
             this.part_hair.transform.rotation = this.part_head.transform.rotation;
             this.part_hair.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head").transform;
-            this.part_hair.renderer.material = CharacterMaterials.materials[this.myCostume.hairInfo.texture];
+            this.part_hair.renderer.material = CharacterMaterials.materials[this.myCostume.hairInfo.Texture];
             this.part_hair.renderer.material.color = this.myCostume.hair_color;
         }
         if (this.myCostume.hair_1_mesh.Length > 0)
         {
             this.part_hair_1 = this.GenerateCloth(this.reference, "Character/" + this.myCostume.hair_1_mesh);
-            this.part_hair_1.renderer.material = CharacterMaterials.materials[this.myCostume.hairInfo.texture];
+            this.part_hair_1.renderer.material = CharacterMaterials.materials[this.myCostume.hairInfo.Texture];
             this.part_hair_1.renderer.material.color = this.myCostume.hair_color;
         }
     }
@@ -304,13 +305,13 @@ public class HERO_SETUP : MonoBehaviour
             this.part_hair.transform.position = this.part_head.transform.position;
             this.part_hair.transform.rotation = this.part_head.transform.rotation;
             this.part_hair.transform.parent = transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head").transform;
-            this.part_hair.renderer.material = CharacterMaterials.materials[this.myCostume.hairInfo.texture];
+            this.part_hair.renderer.material = CharacterMaterials.materials[this.myCostume.hairInfo.Texture];
             this.part_hair.renderer.material.color = this.myCostume.hair_color;
         }
         if (this.myCostume.hair_1_mesh.Length > 0 && !this.isDeadBody)
         {
             string name = "Character/" + this.myCostume.hair_1_mesh;
-            Material material = CharacterMaterials.materials[this.myCostume.hairInfo.texture];
+            Material material = CharacterMaterials.materials[this.myCostume.hairInfo.Texture];
             this.part_hair_1 = ClothFactory.GetHair(this.reference, name, material, this.myCostume.hair_color);
         }
     }
@@ -621,11 +622,6 @@ public class HERO_SETUP : MonoBehaviour
     private byte[] GetCurrentConfig()
     {
         return this.config;
-    }
-
-    public void init()
-    {
-        CharacterMaterials.init();
     }
 
     public void setCharacterComponent()

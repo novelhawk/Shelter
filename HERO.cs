@@ -2497,8 +2497,8 @@ public class HERO : Photon.MonoBehaviour
                 if (!FengGameManagerMKII.linkHash[0].ContainsKey(urls[1]))
                 {
                     unloadAssets = true;
-                    if (this.setup.myCostume.hairInfo.id >= 0)
-                        myRenderer.material = CharacterMaterials.materials[this.setup.myCostume.hairInfo.texture];
+                    if (this.setup.myCostume.hairInfo.ID >= 0)
+                        myRenderer.material = CharacterMaterials.materials[this.setup.myCostume.hairInfo.Texture];
                     
                     using (WWW www = new WWW(urls[1]))
                     {
@@ -2581,8 +2581,8 @@ public class HERO : Photon.MonoBehaviour
                     if (!FengGameManagerMKII.linkHash[0].ContainsKey(urls[1]))
                     {
                         unloadAssets = true;
-                        if (this.setup.myCostume.hairInfo.id >= 0)
-                            currentRender.material = CharacterMaterials.materials[this.setup.myCostume.hairInfo.texture];
+                        if (this.setup.myCostume.hairInfo.ID >= 0)
+                            currentRender.material = CharacterMaterials.materials[this.setup.myCostume.hairInfo.Texture];
                         
                         using (WWW www = new WWW(urls[1]))
                         {
@@ -4420,7 +4420,6 @@ public class HERO : Photon.MonoBehaviour
                 obj3.transform.position = this.baseTransform.position + Vector3.up;
                 obj3.transform.rotation = Quaternion.Euler(353f, 0f, 0f);
             }
-            this.setup.init();
             this.setup.myCostume = new HeroCostume();
             this.setup.myCostume = CostumeConverter.PhotonDataToHeroCostume(photonView.owner);
             this.setup.setCharacterComponent();
@@ -5622,22 +5621,22 @@ public class HERO : Photon.MonoBehaviour
                         }
                         if (!this.useGun)
                         {
-                            if (this.leftbladetrail.gameObject.GetActive())
+                            if (this.leftbladetrail.gameObject.IsActive())
                             {
                                 this.leftbladetrail.update();
                                 this.rightbladetrail.update();
                             }
-                            if (this.leftbladetrail2.gameObject.GetActive())
+                            if (this.leftbladetrail2.gameObject.IsActive())
                             {
                                 this.leftbladetrail2.update();
                                 this.rightbladetrail2.update();
                             }
-                            if (this.leftbladetrail.gameObject.GetActive())
+                            if (this.leftbladetrail.gameObject.IsActive())
                             {
                                 this.leftbladetrail.lateUpdate();
                                 this.rightbladetrail.lateUpdate();
                             }
-                            if (this.leftbladetrail2.gameObject.GetActive())
+                            if (this.leftbladetrail2.gameObject.IsActive())
                             {
                                 this.leftbladetrail2.lateUpdate();
                                 this.rightbladetrail2.lateUpdate();

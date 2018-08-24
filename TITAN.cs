@@ -171,7 +171,7 @@ public class TITAN : Photon.MonoBehaviour
                     break;
                 
                 case "combo_2":
-                    if (!(this.abnormalType == AbnormalType.TYPE_PUNK || this.nonAI))
+                    if (!(this.abnormalType == AbnormalType.Punk || this.nonAI))
                     {
                         this.nextAttackAnimation = "combo_3";
                     }
@@ -292,7 +292,7 @@ public class TITAN : Photon.MonoBehaviour
 
     public void StartLaughing()
     {
-        if (!this.hasDie && this.abnormalType != AbnormalType.TYPE_CRAWLER)
+        if (!this.hasDie && this.abnormalType != AbnormalType.Crawler)
         {
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
             {
@@ -439,11 +439,11 @@ public class TITAN : Photon.MonoBehaviour
     {
         if (!animation.IsPlaying("sit_idle") && !animation.IsPlaying("sit_hit_eye"))
         {
-            if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+            if (this.abnormalType == AbnormalType.Crawler)
             {
                 this.crossFade("crawler_die", 0.2f);
             }
-            else if (this.abnormalType == AbnormalType.NORMAL)
+            else if (this.abnormalType == AbnormalType.Normal)
             {
                 this.crossFade("die_front", 0.05f);
             }
@@ -559,7 +559,7 @@ public class TITAN : Photon.MonoBehaviour
 
     public void dieHeadBlow(Vector3 attacker, float hitPauseTime)
     {
-        if (this.abnormalType != AbnormalType.TYPE_CRAWLER)
+        if (this.abnormalType != AbnormalType.Crawler)
         {
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
             {
@@ -805,7 +805,7 @@ public class TITAN : Photon.MonoBehaviour
         {
             int num = 0;
             float num2 = this.myLevel * 10f;
-            if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+            if (this.abnormalType == AbnormalType.Crawler)
             {
                 if (this.dieTime >= 2f)
                 {
@@ -841,7 +841,7 @@ public class TITAN : Photon.MonoBehaviour
         GameObject obj2 = null;
         float positiveInfinity = float.PositiveInfinity;
         Vector3 position = this.baseTransform.position;
-        float num3 = this.abnormalType != AbnormalType.NORMAL ? 180f : 100f;
+        float num3 = this.abnormalType != AbnormalType.Normal ? 180f : 100f;
         foreach (HERO hero in this.MultiplayerManager.GetPlayers())
         {
             GameObject gameObject = hero.gameObject;
@@ -968,7 +968,7 @@ public class TITAN : Photon.MonoBehaviour
                         {
                             if (this.controller.isWALKDown || flag2)
                             {
-                                if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+                                if (this.abnormalType == AbnormalType.Crawler)
                                 {
                                     if (!this.baseAnimation.IsPlaying("crawler_run"))
                                     {
@@ -980,7 +980,7 @@ public class TITAN : Photon.MonoBehaviour
                                     this.crossFade("run_walk", 0.1f);
                                 }
                             }
-                            else if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+                            else if (this.abnormalType == AbnormalType.Crawler)
                             {
                                 if (!this.baseAnimation.IsPlaying("crawler_run"))
                                 {
@@ -1010,7 +1010,7 @@ public class TITAN : Photon.MonoBehaviour
                     }
                     else if (this.state == TitanState.Idle)
                     {
-                        if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+                        if (this.abnormalType == AbnormalType.Crawler)
                         {
                             if (!this.baseAnimation.IsPlaying("crawler_idle"))
                             {
@@ -1043,7 +1043,7 @@ public class TITAN : Photon.MonoBehaviour
                             break;
                     }
                 }
-                if (!(this.abnormalType == AbnormalType.TYPE_I || this.abnormalType == AbnormalType.TYPE_JUMPER ? this.nonAI || this.state != TitanState.Attacking || !(this.attackAnimation == "jumper_0") : true))
+                if (!(this.abnormalType != AbnormalType.Abnormal && this.abnormalType != AbnormalType.Jumper || this.nonAI || this.state != TitanState.Attacking || this.attackAnimation != "jumper_0"))
                 {
                     Vector3 vector9 = this.baseTransform.forward * this.speed * this.myLevel * 0.5f;
                     Vector3 vector10 = this.baseRigidBody.velocity;
@@ -1066,7 +1066,7 @@ public class TITAN : Photon.MonoBehaviour
                     vector14.z = Mathf.Clamp(vector14.z, -this.maxVelocityChange, this.maxVelocityChange);
                     vector14.y = 0f;
                     this.baseRigidBody.AddForce(vector14, ForceMode.VelocityChange);
-                    if (!this.stuck && this.abnormalType != AbnormalType.TYPE_CRAWLER && !this.nonAI)
+                    if (!this.stuck && this.abnormalType != AbnormalType.Crawler && !this.nonAI)
                     {
                         if (this.baseAnimation.IsPlaying(this.runAnimation) && this.baseRigidBody.velocity.magnitude < this.speed * 0.5f)
                         {
@@ -1081,7 +1081,7 @@ public class TITAN : Photon.MonoBehaviour
                             {
                                 num += 0.05f;
                             }
-                            if (this.abnormalType != AbnormalType.NORMAL)
+                            if (this.abnormalType != AbnormalType.Normal)
                             {
                                 num += 0.1f;
                             }
@@ -1094,7 +1094,7 @@ public class TITAN : Photon.MonoBehaviour
                             }
                         }
                     }
-                    float current = 0f;
+                    float current;
                     switch (this.state)
                     {
                         case TitanState.Wandering:
@@ -1131,7 +1131,7 @@ public class TITAN : Photon.MonoBehaviour
                     }
                     float num4 = -Mathf.DeltaAngle(current, this.baseGameObjectTransform.rotation.eulerAngles.y - 90f);
                     
-                    if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+                    if (this.abnormalType == AbnormalType.Crawler)
                         this.baseGameObjectTransform.rotation = Quaternion.Lerp(this.baseGameObjectTransform.rotation, Quaternion.Euler(0f, this.baseGameObjectTransform.rotation.eulerAngles.y + num4, 0f), this.speed * 0.3f * Time.deltaTime / this.myLevel);
                     else
                         this.baseGameObjectTransform.rotation = Quaternion.Lerp(this.baseGameObjectTransform.rotation, Quaternion.Euler(0f, this.baseGameObjectTransform.rotation.eulerAngles.y + num4, 0f), this.speed * 0.5f * Time.deltaTime / this.myLevel);
@@ -1191,9 +1191,9 @@ public class TITAN : Photon.MonoBehaviour
                 }
             }
 
-            if (this.abnormalType != AbnormalType.NORMAL && this.abnormalType != AbnormalType.TYPE_PUNK)
+            if (this.abnormalType != AbnormalType.Normal && this.abnormalType != AbnormalType.Punk)
             {
-                if (this.abnormalType != AbnormalType.TYPE_I && this.abnormalType != AbnormalType.TYPE_JUMPER)
+                if (this.abnormalType != AbnormalType.Abnormal && this.abnormalType != AbnormalType.Jumper)
                     return null;
                 
                 if (this.myDifficulty <= 0 && UnityEngine.Random.Range(0, 100) >= 50)
@@ -1215,9 +1215,9 @@ public class TITAN : Photon.MonoBehaviour
                 {
                     switch (this.abnormalType)
                     {
-                        case AbnormalType.TYPE_PUNK:
+                        case AbnormalType.Punk:
                             return new[] { "attack_kick", "attack_stomp" };
-                        case AbnormalType.NORMAL:
+                        case AbnormalType.Normal:
                             return new[] { "attack_front_ground", "attack_stomp" };
                         default: 
                             return new[] { "attack_kick" };
@@ -1227,7 +1227,7 @@ public class TITAN : Photon.MonoBehaviour
                 {
                     switch (abnormalType)
                     {
-                        case AbnormalType.NORMAL:
+                        case AbnormalType.Normal:
                             return new[] { "grab_ground_front_r", "grab_ground_front_r", "attack_stomp" };
                         default:
                             return new[] { "grab_ground_front_r", "grab_ground_front_r", "attack_abnormal_jump" };
@@ -1235,11 +1235,11 @@ public class TITAN : Photon.MonoBehaviour
                 }
                 switch (this.abnormalType)
                 {
-                    case AbnormalType.TYPE_PUNK:
+                    case AbnormalType.Punk:
                         return new[] { "attack_combo", "attack_combo", "attack_abnormal_jump" };
-                    case AbnormalType.NORMAL when this.myDifficulty > 0:
+                    case AbnormalType.Normal when this.myDifficulty > 0:
                         return new[] { "attack_front_ground", "attack_combo", "attack_combo" };
-                    case AbnormalType.NORMAL:
+                    case AbnormalType.Normal:
                         return new[] { "attack_front_ground", "attack_front_ground", "attack_front_ground", "attack_front_ground", "attack_combo" };
                     default:
                         return new[] { "attack_abnormal_jump" };
@@ -1249,9 +1249,9 @@ public class TITAN : Photon.MonoBehaviour
             {
                 switch (this.abnormalType)
                 {
-                    case AbnormalType.TYPE_PUNK:
+                    case AbnormalType.Punk:
                         return new[] { "attack_kick", "attack_stomp" };
-                    case AbnormalType.NORMAL:
+                    case AbnormalType.Normal:
                         return new[] { "attack_front_ground", "attack_stomp" };
                     default:
                         return new[] { "attack_kick" };
@@ -1261,7 +1261,7 @@ public class TITAN : Photon.MonoBehaviour
             {
                 switch (this.abnormalType)
                 {
-                    case AbnormalType.NORMAL:
+                    case AbnormalType.Normal:
                         return new[] { "grab_ground_front_l", "grab_ground_front_l", "attack_stomp" };
                     default:
                         return new[] {"grab_ground_front_l", "grab_ground_front_l", "attack_abnormal_jump"};
@@ -1269,11 +1269,11 @@ public class TITAN : Photon.MonoBehaviour
             }
             switch (this.abnormalType)
             {
-                case AbnormalType.TYPE_PUNK:
+                case AbnormalType.Punk:
                     return new[] { "attack_combo", "attack_combo", "attack_abnormal_jump" };
-                case AbnormalType.NORMAL when this.myDifficulty > 0:
+                case AbnormalType.Normal when this.myDifficulty > 0:
                     return new[] { "attack_front_ground", "attack_combo", "attack_combo" };
-                case AbnormalType.NORMAL:
+                case AbnormalType.Normal:
                     return new[] { "attack_front_ground", "attack_front_ground", "attack_front_ground", "attack_front_ground", "attack_combo" };
                 default:
                     return new[] { "attack_abnormal_jump" };
@@ -1287,7 +1287,7 @@ public class TITAN : Photon.MonoBehaviour
         {
             switch (this.abnormalType)
             {
-                case AbnormalType.NORMAL:
+                case AbnormalType.Normal:
                     return new[] { "grab_ground_back_r" };
                 default:
                     return new[] { "grab_ground_back_r" };
@@ -1296,7 +1296,7 @@ public class TITAN : Photon.MonoBehaviour
 
         switch (this.abnormalType)
         {
-            case AbnormalType.NORMAL:
+            case AbnormalType.Normal:
                 return new[] {"grab_ground_back_l"};
             default:
                 return new[] {"grab_ground_back_l"};
@@ -1443,7 +1443,7 @@ public class TITAN : Photon.MonoBehaviour
                 {
                     this.targetHeadRotation = this.head.rotation;
                     bool flag2 = false;
-                    if (this.abnormalType != AbnormalType.TYPE_CRAWLER && this.state != TitanState.Attacking && this.state != TitanState.Down && this.state != TitanState.Hitting && (this.state != TitanState.Recovering && this.state != TitanState.Eating) && this.state != TitanState.Blinded && !this.hasDie && this.myDistance < 100f && this.myHero != null)
+                    if (this.abnormalType != AbnormalType.Crawler && this.state != TitanState.Attacking && this.state != TitanState.Down && this.state != TitanState.Hitting && (this.state != TitanState.Recovering && this.state != TitanState.Eating) && this.state != TitanState.Blinded && !this.hasDie && this.myDistance < 100f && this.myHero != null)
                     {
                         Vector3 vector = this.myHero.transform.position - transform.position;
                         this.angle = -Mathf.Atan2(vector.z, vector.x) * 57.29578f;
@@ -1508,7 +1508,7 @@ public class TITAN : Photon.MonoBehaviour
             else
             {
                 this.targetHeadRotation = this.head.rotation;
-                if (this.abnormalType != AbnormalType.TYPE_CRAWLER && this.state != TitanState.Attacking && this.state != TitanState.Down && this.state != TitanState.Hitting && (this.state != TitanState.Recovering && this.state != TitanState.Blinded) && !this.hasDie && this.myDistance < 100f && this.myHero != null)
+                if (this.abnormalType != AbnormalType.Crawler && this.state != TitanState.Attacking && this.state != TitanState.Down && this.state != TitanState.Hitting && (this.state != TitanState.Recovering && this.state != TitanState.Blinded) && !this.hasDie && this.myDistance < 100f && this.myHero != null)
                 {
                     Vector3 vector3 = this.myHero.transform.position - transform.position;
                     this.angle = -Mathf.Atan2(vector3.z, vector3.x) * 57.29578f;
@@ -1613,7 +1613,7 @@ public class TITAN : Photon.MonoBehaviour
 
     public void HitLeft(Vector3 attacker, float hitPauseTime)
     {
-        if (this.abnormalType != AbnormalType.TYPE_CRAWLER)
+        if (this.abnormalType != AbnormalType.Crawler)
         {
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                 this.hit("hit_eren_L", attacker, hitPauseTime);
@@ -1635,7 +1635,7 @@ public class TITAN : Photon.MonoBehaviour
 
     public void HitRight(Vector3 attacker, float hitPauseTime)
     {
-        if (this.abnormalType != AbnormalType.TYPE_CRAWLER)
+        if (this.abnormalType != AbnormalType.Crawler)
         {
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                 this.hit("hit_eren_R", attacker, hitPauseTime);
@@ -1659,7 +1659,7 @@ public class TITAN : Photon.MonoBehaviour
     {
         this.stuck = false;
         this.sbtime = sbtime;
-        if (this.myDifficulty == 2 && (this.abnormalType == AbnormalType.TYPE_JUMPER || this.abnormalType == AbnormalType.TYPE_I))
+        if (this.myDifficulty == 2 && (this.abnormalType == AbnormalType.Jumper || this.abnormalType == AbnormalType.Abnormal))
         {
             this.sbtime = UnityEngine.Random.Range(0f, 1.5f);
         }
@@ -1668,7 +1668,7 @@ public class TITAN : Photon.MonoBehaviour
             this.sbtime = 0f;
         }
         this.sbtime = Mathf.Max(0.5f, this.sbtime);
-        if (this.abnormalType == AbnormalType.TYPE_PUNK)
+        if (this.abnormalType == AbnormalType.Punk)
         {
             this.sbtime = 0.1f;
             if (this.myDifficulty == 1)
@@ -1677,7 +1677,7 @@ public class TITAN : Photon.MonoBehaviour
             }
         }
         this.state = TitanState.Idle;
-        if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+        if (this.abnormalType == AbnormalType.Crawler)
         {
             this.crossFade("crawler_idle", 0.2f);
         }
@@ -1757,7 +1757,7 @@ public class TITAN : Photon.MonoBehaviour
                 this.healthLabel.name = "LabelNameOverHead";
                 this.healthLabel.transform.parent = transform;
                 this.healthLabel.transform.localPosition = new Vector3(0f, 20f + 1f / this.myLevel, 0f);
-                if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+                if (this.abnormalType == AbnormalType.Crawler)
                 {
                     this.healthLabel.transform.localPosition = new Vector3(0f, 10f + 1f / this.myLevel, 0f);
                 }
@@ -1960,7 +1960,7 @@ public class TITAN : Photon.MonoBehaviour
 
     private bool LongRangeAttackCheck()
     {
-        if (this.abnormalType == AbnormalType.TYPE_PUNK && this.myHero != null)
+        if (this.abnormalType == AbnormalType.Punk && this.myHero != null)
         {
             Vector3 line = this.myHero.rigidbody.velocity * Time.deltaTime * 30f;
             if (line.sqrMagnitude > 10f)
@@ -2079,40 +2079,40 @@ public class TITAN : Photon.MonoBehaviour
         }
         if (type == 0)
         {
-            this.abnormalType = AbnormalType.NORMAL;
+            this.abnormalType = AbnormalType.Normal;
             name = "Titan";
             this.runAnimation = "run_walk";
             GetComponent<TITAN_SETUP>().setHair2();
         }
         else if (type == 1)
         {
-            this.abnormalType = AbnormalType.TYPE_I;
+            this.abnormalType = AbnormalType.Abnormal;
             name = "Aberrant";
             this.runAnimation = "run_abnormal";
             GetComponent<TITAN_SETUP>().setHair2();
         }
         else if (type == 2)
         {
-            this.abnormalType = AbnormalType.TYPE_JUMPER;
+            this.abnormalType = AbnormalType.Jumper;
             name = "Jumper";
             this.runAnimation = "run_abnormal";
             GetComponent<TITAN_SETUP>().setHair2();
         }
         else if (type == 3)
         {
-            this.abnormalType = AbnormalType.TYPE_CRAWLER;
+            this.abnormalType = AbnormalType.Crawler;
             name = "Crawler";
             this.runAnimation = "crawler_run";
             GetComponent<TITAN_SETUP>().setHair2();
         }
         else if (type == 4)
         {
-            this.abnormalType = AbnormalType.TYPE_PUNK;
+            this.abnormalType = AbnormalType.Punk;
             name = "Punk";
             this.runAnimation = "run_abnormal_1";
             GetComponent<TITAN_SETUP>().setHair2();
         }
-        if (this.abnormalType == AbnormalType.TYPE_I || this.abnormalType == AbnormalType.TYPE_JUMPER || this.abnormalType == AbnormalType.TYPE_PUNK)
+        if (this.abnormalType == AbnormalType.Abnormal || this.abnormalType == AbnormalType.Jumper || this.abnormalType == AbnormalType.Punk)
         {
             this.speed = 18f;
             if (this.myLevel > 1f)
@@ -2130,7 +2130,7 @@ public class TITAN : Photon.MonoBehaviour
             this.baseAnimation["turnaround1"].speed = 2f;
             this.baseAnimation["turnaround2"].speed = 2f;
         }
-        if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+        if (this.abnormalType == AbnormalType.Crawler)
         {
             this.chaseDistance += 50f;
             this.speed = 25f;
@@ -2152,7 +2152,7 @@ public class TITAN : Photon.MonoBehaviour
         }
         if (this.nonAI)
         {
-            if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+            if (this.abnormalType == AbnormalType.Crawler)
             {
                 this.speed = Mathf.Min(70f, this.speed);
             }
@@ -2377,7 +2377,7 @@ public class TITAN : Photon.MonoBehaviour
         {
             num2 = 100f;
         }
-        if (type == AbnormalType.NORMAL)
+        if (type == AbnormalType.Normal)
         {
             if (UnityEngine.Random.Range(0f, 1f) < num2)
             {
@@ -2392,7 +2392,7 @@ public class TITAN : Photon.MonoBehaviour
                 num = 0;
             }
         }
-        else if (type == AbnormalType.TYPE_I)
+        else if (type == AbnormalType.Abnormal)
         {
             if (UnityEngine.Random.Range(0f, 1f) < num2)
             {
@@ -2407,7 +2407,7 @@ public class TITAN : Photon.MonoBehaviour
                 num = 1;
             }
         }
-        else if (type == AbnormalType.TYPE_JUMPER)
+        else if (type == AbnormalType.Jumper)
         {
             if (UnityEngine.Random.Range(0f, 1f) < num2)
             {
@@ -2422,7 +2422,7 @@ public class TITAN : Photon.MonoBehaviour
                 num = 2;
             }
         }
-        else if (type == AbnormalType.TYPE_CRAWLER)
+        else if (type == AbnormalType.Crawler)
         {
             num = 3;
             if (GameObject.Find("Crawler") != null && UnityEngine.Random.Range(0, 1000) > 5)
@@ -2434,7 +2434,7 @@ public class TITAN : Photon.MonoBehaviour
                 num = 3;
             }
         }
-        else if (type == AbnormalType.TYPE_PUNK)
+        else if (type == AbnormalType.Punk)
         {
             num = 4;
         }
@@ -2591,7 +2591,7 @@ public class TITAN : Photon.MonoBehaviour
         }
         if (this.nonAI)
         {
-            if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+            if (this.abnormalType == AbnormalType.Crawler)
             {
                 this.speed = Mathf.Min(70f, this.speed);
             }
@@ -2670,7 +2670,7 @@ public class TITAN : Photon.MonoBehaviour
         }
         if (this.nonAI)
         {
-            if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+            if (this.abnormalType == AbnormalType.Crawler)
             {
                 this.speed = Mathf.Min(70f, this.speed);
             }
@@ -2850,7 +2850,7 @@ public class TITAN : Photon.MonoBehaviour
             if (vector.magnitude < this.lagMax && !this.hasDie && Time.time - this.healthTime > 0.2f)
             {
                 this.healthTime = Time.time;
-                if (speed >= RCSettings.damageMode || this.abnormalType == AbnormalType.TYPE_CRAWLER)
+                if (speed >= RCSettings.damageMode || this.abnormalType == AbnormalType.Crawler)
                 {
                     this.currentHealth -= speed;
                 }
@@ -2905,7 +2905,7 @@ public class TITAN : Photon.MonoBehaviour
 
     private void turn(float d)
     {
-        if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+        if (this.abnormalType == AbnormalType.Crawler)
         {
             if (d > 0f)
             {
@@ -3277,7 +3277,7 @@ public class TITAN : Photon.MonoBehaviour
                                 {
                                     float num7 = 120f;
                                     Vector3 vector7 = this.baseTransform.forward * this.speed + Vector3.up * num7;
-                                    if (this.nonAI && this.abnormalType == AbnormalType.TYPE_CRAWLER)
+                                    if (this.nonAI && this.abnormalType == AbnormalType.Crawler)
                                     {
                                         num7 = 100f;
                                         float a = this.speed * 2.5f;
@@ -3346,7 +3346,7 @@ public class TITAN : Photon.MonoBehaviour
                                     object[] objArray8 = new object[] { (obj10.transform.position - vector13) * 15f * this.myLevel, true, !this.nonAI ? -1 : photonView.viewID, name, true };
                                     obj10.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray8);
                                 }
-                                if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+                                if (this.abnormalType == AbnormalType.Crawler)
                                 {
                                     this.attackAnimation = "crawler_jump_1";
                                 }
@@ -3358,7 +3358,7 @@ public class TITAN : Photon.MonoBehaviour
                             }
                             if (Mathf.Abs(this.baseRigidBody.velocity.y) < 0.5f || this.baseRigidBody.velocity.y < 0f || this.IsGrounded())
                             {
-                                if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+                                if (this.abnormalType == AbnormalType.Crawler)
                                 {
                                     this.attackAnimation = "crawler_jump_1";
                                 }
@@ -3375,7 +3375,7 @@ public class TITAN : Photon.MonoBehaviour
                         if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 1f && this.grounded)
                         {
                             GameObject obj11;
-                            if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+                            if (this.abnormalType == AbnormalType.Crawler)
                             {
                                 this.attackAnimation = "crawler_jump_2";
                             }
@@ -3425,7 +3425,7 @@ public class TITAN : Photon.MonoBehaviour
                             this.idle(UnityEngine.Random.Range(0.5f, 1f));
                             this.playAnimation("idle");
                         }
-                        else if (this.abnormalType == AbnormalType.TYPE_I || this.abnormalType == AbnormalType.TYPE_JUMPER)
+                        else if (this.abnormalType == AbnormalType.Abnormal || this.abnormalType == AbnormalType.Jumper)
                         {
                             this.attackCount++;
                             if (this.attackCount > 3 && this.attackAnimation == "abnormal_getup")
@@ -3502,7 +3502,7 @@ public class TITAN : Photon.MonoBehaviour
                         {
                             this.idle(0f);
                         }
-                        else if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+                        else if (this.abnormalType == AbnormalType.Crawler)
                         {
                             Vector3 vector14 = this.myHero.transform.position - this.baseTransform.position;
                             float current = -Mathf.Atan2(vector14.z, vector14.x) * 57.29578f;
@@ -3541,7 +3541,7 @@ public class TITAN : Photon.MonoBehaviour
                                 }
                             }
                         }
-                        else if (this.abnormalType == AbnormalType.TYPE_JUMPER && (this.myDistance > this.attackDistance && this.myHero.transform.position.y > this.head.position.y + 4f * this.myLevel || this.myHero.transform.position.y > this.head.position.y + 4f * this.myLevel) && Vector3.Distance(this.baseTransform.position, this.myHero.transform.position) < 1.5f * this.myHero.transform.position.y)
+                        else if (this.abnormalType == AbnormalType.Jumper && (this.myDistance > this.attackDistance && this.myHero.transform.position.y > this.head.position.y + 4f * this.myLevel || this.myHero.transform.position.y > this.head.position.y + 4f * this.myLevel) && Vector3.Distance(this.baseTransform.position, this.myHero.transform.position) < 1.5f * this.myHero.transform.position.y)
                         {
                             this.Attack("jumper_0");
                         }
@@ -3735,7 +3735,7 @@ public class TITAN : Photon.MonoBehaviour
                 if (!IN_GAME_MAIN_CAMERA.isPausing)
                 {
                     this.pt();
-                    if (this.abnormalType != AbnormalType.TYPE_CRAWLER)
+                    if (this.abnormalType != AbnormalType.Crawler)
                     {
                         if (this.controller.isAttackDown && this.stamina > 25f)
                         {
@@ -3772,7 +3772,7 @@ public class TITAN : Photon.MonoBehaviour
             {
                 if (!this.isAlarm)
                 {
-                    if (this.abnormalType != AbnormalType.TYPE_PUNK && this.abnormalType != AbnormalType.TYPE_CRAWLER && UnityEngine.Random.Range(0f, 1f) < 0.005f)
+                    if (this.abnormalType != AbnormalType.Punk && this.abnormalType != AbnormalType.Crawler && UnityEngine.Random.Range(0f, 1f) < 0.005f)
                     {
                         this.sitdown();
                         return;
@@ -3818,18 +3818,18 @@ public class TITAN : Photon.MonoBehaviour
                 {
                     if (this.myDistance < this.chaseDistance)
                     {
-                        if (this.abnormalType == AbnormalType.TYPE_JUMPER && (this.myDistance > this.attackDistance || this.myHero.transform.position.y > this.head.position.y + 4f * this.myLevel) && Mathf.Abs(this.between2) < 120f && Vector3.Distance(this.baseTransform.position, this.myHero.transform.position) < 1.5f * this.myHero.transform.position.y)
+                        if (this.abnormalType == AbnormalType.Jumper && (this.myDistance > this.attackDistance || this.myHero.transform.position.y > this.head.position.y + 4f * this.myLevel) && Mathf.Abs(this.between2) < 120f && Vector3.Distance(this.baseTransform.position, this.myHero.transform.position) < 1.5f * this.myHero.transform.position.y)
                         {
                             this.Attack("jumper_0");
                             return;
                         }
-                        if (this.abnormalType == AbnormalType.TYPE_CRAWLER && this.myDistance < this.attackDistance * 3f && Mathf.Abs(this.between2) < 90f && this.myHero.transform.position.y < this.neck.position.y + 30f * this.myLevel && this.myHero.transform.position.y > this.neck.position.y + 10f * this.myLevel)
+                        if (this.abnormalType == AbnormalType.Crawler && this.myDistance < this.attackDistance * 3f && Mathf.Abs(this.between2) < 90f && this.myHero.transform.position.y < this.neck.position.y + 30f * this.myLevel && this.myHero.transform.position.y > this.neck.position.y + 10f * this.myLevel)
                         {
                             this.Attack("crawler_jump_0");
                             return;
                         }
                     }
-                    if (this.abnormalType == AbnormalType.TYPE_PUNK && this.myDistance < 90f && Mathf.Abs(this.between2) > 90f)
+                    if (this.abnormalType == AbnormalType.Punk && this.myDistance < 90f && Mathf.Abs(this.between2) > 90f)
                     {
                         if (UnityEngine.Random.Range(0f, 1f) < 0.4f)
                         {
@@ -3852,7 +3852,7 @@ public class TITAN : Photon.MonoBehaviour
                     {
                         if (this.myDistance < this.attackDistance)
                         {
-                            if (this.abnormalType == AbnormalType.TYPE_CRAWLER)
+                            if (this.abnormalType == AbnormalType.Crawler)
                             {
                                 if (this.myHero.transform.position.y + 3f <= this.neck.position.y + 20f * this.myLevel && UnityEngine.Random.Range(0f, 1f) < 0.1f)
                                 {
@@ -3866,7 +3866,7 @@ public class TITAN : Photon.MonoBehaviour
                             {
                                 str = strArray[UnityEngine.Random.Range(0, strArray.Length)];
                             }
-                            if (!(this.abnormalType == AbnormalType.TYPE_JUMPER || this.abnormalType == AbnormalType.TYPE_I ? Mathf.Abs(this.between2) <= 40f : true))
+                            if (!(this.abnormalType == AbnormalType.Jumper || this.abnormalType == AbnormalType.Abnormal ? Mathf.Abs(this.between2) <= 40f : true))
                             {
                                 if (str.Contains("grab") || str.Contains("kick") || str.Contains("slap") || str.Contains("bite"))
                                 {
@@ -3886,7 +3886,7 @@ public class TITAN : Photon.MonoBehaviour
                             {
                                 return;
                             }
-                            if (this.abnormalType == AbnormalType.NORMAL)
+                            if (this.abnormalType == AbnormalType.Normal)
                             {
                                 if (UnityEngine.Random.Range(0, 100) < 30 && Mathf.Abs(this.between2) > 45f)
                                 {

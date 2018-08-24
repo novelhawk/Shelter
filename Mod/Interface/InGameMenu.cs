@@ -51,10 +51,10 @@ namespace Mod.Interface
 
         private void Update()
         {
-            if (!Visible && Input.GetKeyDown(KeyCode.P))
-                Enable();
-            if (Visible && Input.GetKeyDown(KeyCode.Escape))
-                Disable();
+//            if (!Visible && Input.GetKeyDown(KeyCode.P))
+//                Enable();
+//            if (Visible && Input.GetKeyDown(KeyCode.Escape))
+//                Disable();
         }
 
         private bool EnableDisableButton(Rect rect, string text, bool value)
