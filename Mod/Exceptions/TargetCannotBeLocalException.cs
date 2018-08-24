@@ -10,7 +10,7 @@ namespace Mod.Exceptions
         {
         }
 
-        public TargetCannotBeLocalException(string message) : base("message", 60F)
+        public TargetCannotBeLocalException(string message) : base(message, 60F)
         {
             
         }
