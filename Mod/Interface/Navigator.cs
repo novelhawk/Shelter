@@ -8,12 +8,12 @@ namespace Mod.Interface
     public class Navigator : Gui
     {
         private Module _module;
-        private Action<Rect> _currentGUI;
         private GUIStyle _textStyle;
         private GUIStyle _buttonText;
         private GUIStyle _buttonMenu;
         private GUIStyle _moduleName;
         private GUIStyle _moduleDescription;
+        private GUIStyle _moduleButton;
         private Texture2D _background;
         private Texture2D _moduleBackground;
         private Texture2D _verticalLine;
@@ -49,6 +49,10 @@ namespace Mod.Interface
                 normal = { textColor = Color(0, 149, 255) },
                 fontSize = 18
             };
+            _moduleButton = new GUIStyle(_buttonMenu)
+            {
+                alignment = TextAnchor.MiddleCenter
+            };
             _moduleName = new GUIStyle
             {
                 fontSize = 20,
@@ -61,7 +65,6 @@ namespace Mod.Interface
                 alignment = TextAnchor.MiddleCenter
             };
             _searchQuery = string.Empty;
-            _currentGUI = null;
         }
 
         protected override void Render()
@@ -70,12 +73,18 @@ namespace Mod.Interface
             int width = Screen.width / 100 * 58;
             int height = Screen.height / 100 * 90;
             Rect rect = new Rect(Screen.width / 2f - width / 2f, Screen.height / 2f - height / 2f, width, height);
-            if (_currentGUI != null)
+            if (_module != null && _module.Visible)
             {
                 GUI.DrawTexture(rect = new Rect(Screen.width / 2f - 640, Screen.height / 2f - 360, 1280, 720), _moduleBackground);
                 GUI.Label(new Rect(rect.x + 30, rect.y + 10, rect.width - 60, 30), _module.Name, _moduleName);
-                GUI.Label(new Rect(rect.x + 30, rect.y + 40, rect.width - 60, 30), _module.Description, _moduleDescription);
-                _currentGUI.Invoke(new Rect(rect.x + 30, rect.y + 80, rect.width - 60, rect.height - 100));
+                GUI.Label(new Rect(rect.x + 30, rect.y + 30, rect.width - 60, 30), _module.Description, _moduleDescription);
+                _module.Render(new Rect(rect.x + 30, rect.y + 80, rect.width - 60, rect.height - 140));
+                GUI.DrawTexture(new Rect(rect.x + 30, rect.yMax - 40, rect.width / 2f - 10 - 30, 30), _background);
+                if (GUI.Button(new Rect(rect.x + 30, rect.yMax - 40, rect.width / 2f - 10 - 30, 30), "Close", _moduleButton))
+                    _module.Close();
+                GUI.DrawTexture(new Rect(rect.x + rect.width / 2f + 10, rect.yMax - 40, rect.width / 2f - 10 - 30, 30), _module.Enabled ? _enabledTexture : _disabledTexture);
+                if (GUI.Button(new Rect(rect.x + rect.width / 2f + 10, rect.yMax - 40, rect.width / 2f - 10 - 30, 30), _module.Enabled ? "Enabled" : "Disabled", _moduleButton))
+                    _module.Toggle();
                 return;
             }
             
@@ -108,7 +117,7 @@ namespace Mod.Interface
                     GUI.Label(new Rect(rect.X + rect.Width - 25 - 10, rect.Y, 25, rect.Height), "▼", _buttonMenu);
                     if (GUI.Button(new Rect(rect.X + rect.Width - 30, rect.Y, 30, rect.Height), string.Empty, GUIStyle.none))
                     {
-                        _currentGUI = module.GetGUI();
+                        module.Open();
                         _module = module;
                     }
                 }
@@ -136,7 +145,11 @@ namespace Mod.Interface
             }
 
             if (Shelter.InputManager.IsDown(InputAction.OpenNavigator))
+            {
                 Toggle();
+                if (!Visible && _module.Visible)
+                    _module.Close();
+            }
         }
 
         protected override void OnHide()

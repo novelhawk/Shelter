@@ -51,7 +51,7 @@ namespace Mod
             return texture;
         }
 
-        protected static Color Color(byte r, byte g, int b, byte a = 255) => new Color(r/255f, g/255f, b/255f, a/255f);
+        public static Color Color(byte r, byte g, int b, byte a = 255) => new Color(r/255f, g/255f, b/255f, a/255f);
         protected static Texture2D GetImage(string image) => Shelter.GetImage(image);
         protected static void Enable(string gui) => Shelter.InterfaceManager.Enable(gui);
         protected static void Disable(string gui) => Shelter.InterfaceManager.Disable(gui);

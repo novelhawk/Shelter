@@ -11,27 +11,20 @@ namespace Mod
         public abstract string Description { get; }
         public abstract bool IsAbusive { get; }
         public abstract bool HasGUI { get; }
-        public bool Enabled => _isEnabled;
         
-        private string PlayerPref => $"MOD|{ID}";
+        public bool Enabled => _isEnabled;
+        public bool Visible;
+        
+        protected string PlayerPref => $"MOD|{ID}";
         private bool _isEnabled;
         
-        protected virtual void OnModuleEnable()
-        {
-        }
+        protected virtual void OnModuleEnable() {}
+        protected virtual void OnModuleUpdate() {}
+        protected virtual void OnModuleDisable() {}
 
-        protected virtual void OnModuleUpdate()
-        {
-        }
-
-        protected virtual void OnModuleDisable()
-        {
-        }
-
-        public virtual Action<Rect> GetGUI()
-        {
-            return null;
-        }
+        protected virtual void OnGuiOpen() {}
+        public virtual void Render(Rect windowRect) {}
+        protected virtual void OnGuiClose() {}
 
         public void Start()
         {
@@ -71,6 +64,24 @@ namespace Mod
             _isEnabled = !_isEnabled;
             PlayerPrefs.SetString(PlayerPref, _isEnabled.ToString());
             OnStatusUpdate();
+        }
+
+        public void Open()
+        {
+            if (Visible)
+                return;
+            
+            Visible = true;
+            OnGuiOpen();
+        }
+
+        public void Close()
+        {
+            if (!Visible)
+                return;
+            
+            Visible = false;
+            OnGuiClose();
         }
 
         private void OnStatusUpdate()

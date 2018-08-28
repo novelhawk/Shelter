@@ -12,36 +12,17 @@ namespace Mod.Modules
         public override bool IsAbusive => false;
         public override bool HasGUI => true;
 
-        private Gui _scoreboard;
-        private bool _showOnlyOnTab;
-        public override Action<Rect> GetGUI()
-        {
-            return rect =>
-            {
-                GUILayout.BeginArea(rect);
-                
-                GUILayout.Label("Show scoreboard only when Tab is pressed:");
-                var newValue = GUILayout.Toggle(_showOnlyOnTab, "On/Off");
-                if (newValue != _showOnlyOnTab)
-                {
-                    if (!newValue)
-                        _scoreboard.Enable();
-                    _showOnlyOnTab = newValue;
-                }
-                GUILayout.EndArea();
-            };
-        }
-
         protected override void OnModuleEnable()
         {
             _scoreboard = Shelter.InterfaceManager.GetGUI(nameof(Scoreboard));
-            if (!_showOnlyOnTab)
+            _showOnTab = PlayerPrefs.GetInt(PlayerPref + ".showOnTab", 0) == 1;
+            if (!_showOnTab)
                 _scoreboard.Enable();
         }
 
         protected override void OnModuleUpdate()
         {
-            if (!_showOnlyOnTab)
+            if (!_showOnTab)
                 return;
             
             if (Input.GetKey(KeyCode.Tab) && !_scoreboard.Visible)
@@ -54,6 +35,25 @@ namespace Mod.Modules
         {
             _scoreboard.Disable();
             _scoreboard = null;
+        }
+
+        private Gui _scoreboard;
+        private bool _showOnTab;
+        
+        public override void Render(Rect windowRect)
+        {
+            GUILayout.BeginArea(windowRect);
+            
+            GUILayout.Label("Show scoreboard only when Tab is pressed:");
+            var newValue = GUILayout.Toggle(_showOnTab, "On/Off");
+            if (newValue != _showOnTab)
+            {
+                if (!newValue)
+                    _scoreboard.Enable();
+                PlayerPrefs.SetInt(PlayerPref + ".showOnTab", _showOnTab ? 1 : 0);
+                _showOnTab = newValue;
+            }
+            GUILayout.EndArea();
         }
     }
 }

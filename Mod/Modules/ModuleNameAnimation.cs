@@ -1,7 +1,4 @@
-﻿using System;
-using System.ComponentModel;
-using ExitGames.Client.Photon;
-using Mod.Interface;
+﻿using ExitGames.Client.Photon;
 using UnityEngine;
 using Animator = Mod.Animation.Animator;
 
@@ -41,35 +38,6 @@ namespace Mod.Modules
             _lastUpdate = Time.time;
         }
 
-        public override Action<Rect> GetGUI()
-        {
-            Texture2D background = Gui.Texture(255, 255, 255, 160); // Hopefully disposed by GC.. TODO: Need proper disposal (Should be after game but on GUI close is good enough)
-            return rect =>
-            {
-                GUI.DrawTexture(rect, background);
-                GUILayout.BeginArea(rect);
-                GUILayout.Label("[THIS UI IS WIP]");
-                GUILayout.Label("Animation:");
-                GUILayout.Label($"Shades: {_shades}");
-                _shades = (int) GUILayout.HorizontalSlider(_shades, 1, 100);
-                GUILayout.Label($"UpdatesPerSecond: {_updatesPerSecond}");
-                _updatesPerSecond = GUILayout.HorizontalSlider(_updatesPerSecond, 1, 100); //TODO: Color viewer and Animation selector
-
-                for (var i = 0; i < Shelter.AnimationManager.Animations.Count; i++)
-                {
-                    var anim = Shelter.AnimationManager.Animations[i];
-                    if (GUILayout.Button(anim.Name))
-                    {
-                        Shelter.AnimationManager.Selected = i;
-                        _animator = new Animator(anim, _shades);
-                        _animator.ComputeNext();
-                    }
-                }
-
-                GUILayout.EndArea();
-            };
-        }
-
         protected override void OnModuleDisable()
         {
             _animator = null;
@@ -77,6 +45,57 @@ namespace Mod.Modules
             {
                 {PlayerProperty.Name, Shelter.Profile.Name}
             });
+        }
+
+        private Texture2D _animationButton;
+        private Texture2D _selectedAnimationButton;
+        private GUIStyle _button;
+        private GUIStyle _selectedButton;
+        private GUIStyle _sliderText;
+        protected override void OnGuiOpen()
+        {
+            _animationButton = Gui.Texture(0, 20, 0, 80);
+            _selectedAnimationButton = Gui.Texture(100, 220, 255);
+            
+            _button = new GUIStyle
+            {
+                normal = {background = _animationButton, textColor = Gui.Color(220, 90, 255)},
+                alignment = TextAnchor.MiddleCenter,
+                fontSize = 15
+            };
+            _selectedButton = new GUIStyle(_button)
+            {
+                normal = {background = _selectedAnimationButton}
+            };
+            
+            _sliderText = new GUIStyle
+            {
+                normal = {textColor = Color.black},
+                alignment = TextAnchor.MiddleCenter,
+                fontSize = 14
+            };
+        }
+
+        public override void Render(Rect windowRect)
+        {
+            SmartRect rect = new SmartRect(windowRect.x, windowRect.y - 30, windowRect.width, 30);
+            
+            for (var i = 0; i < Shelter.AnimationManager.Animations.Count; i++)
+            {
+                var anim = Shelter.AnimationManager.Animations[i];
+                if (GUI.Button(rect.OY(30), anim.Name, Shelter.AnimationManager.Selected != i ? _button : _selectedButton))
+                {
+                    Shelter.AnimationManager.Selected = i;
+                    _animator = new Animator(anim, _shades);
+                    _animator.ComputeNext();
+                }
+            }
+                
+            GUI.Label(rect.OY(40), $"Shades: {_shades}", _sliderText);
+            _shades = (int) GUI.HorizontalSlider(rect.OY(20), _shades, 1, 100);
+            
+            GUI.Label(rect.OY(20), $"UpdatesPerSecond: {_updatesPerSecond:0.00}", _sliderText);
+            _updatesPerSecond = GUI.HorizontalSlider(rect.OY(20), _updatesPerSecond, 1, 100); //TODO: Color viewer and Animation selector
         }
     }
 }
