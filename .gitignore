@@ -10,6 +10,7 @@
 *.sln.docstates
 
 # User-specific files (MonoDevelop/Xamarin Studio)
+*.unity3d
 *.userprefs
 
 # Build results

@@ -2015,108 +2015,48 @@ public partial class FengGameManagerMKII
                                             settings[188] = 1;
                                         }
 
-                                        GUI.Label(new Rect(num7 + 205f, num8 + 77f, 145f, 30f), "Randomized Pairs:",
-                                            "Label");
+                                        GUI.Label(new Rect(num7 + 205f, num8 + 77f, 145f, 30f), "Randomized Pairs:", "Label");
                                         flag12 = (int) settings[50] == 1;
                                         flag13 = GUI.Toggle(new Rect(num7 + 325f, num8 + 77f, 40f, 20f), flag12, "On");
                                         if (flag12 != flag13)
-                                        {
-                                            if (flag13)
-                                            {
-                                                settings[50] = 1;
-                                            }
-                                            else
-                                            {
-                                                settings[50] = 0;
-                                            }
-                                        }
+                                            settings[50] = flag13 ? 1 : 0;
 
                                         scroll = GUI.BeginScrollView(new Rect(num7, num8 + 115f, 712f, 340f), scroll,
                                             new Rect(num7, num8 + 115f, 700f, 475f), true, true);
                                         GUI.Label(new Rect(num7 + 79f, num8 + 117f + num44 * 0f, 150f, 20f), "Ground:",
                                             "Label");
                                         settings[49] =
-                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 1f, 227f, 20f),
-                                                (string) settings[49]);
-                                        GUI.Label(new Rect(num7 + 79f, num8 + 117f + num44 * 2f, 150f, 20f),
-                                            "Forest Trunks", "Label");
-                                        settings[33] =
-                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 3f, 227f, 20f),
-                                                (string) settings[33]);
-                                        settings[34] =
-                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 4f, 227f, 20f),
-                                                (string) settings[34]);
-                                        settings[35] =
-                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 5f, 227f, 20f),
-                                                (string) settings[35]);
-                                        settings[36] =
-                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 6f, 227f, 20f),
-                                                (string) settings[36]);
-                                        settings[37] =
-                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 7f, 227f, 20f),
-                                                (string) settings[37]);
-                                        settings[38] =
-                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 8f, 227f, 20f),
-                                                (string) settings[38]);
-                                        settings[39] =
-                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 9f, 227f, 20f),
-                                                (string) settings[39]);
-                                        settings[40] =
-                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 10f, 227f, 20f),
-                                                (string) settings[40]);
-                                        GUI.Label(new Rect(num7 + 79f, num8 + 117f + num44 * 11f, 150f, 20f),
-                                            "Forest Leaves:", "Label");
-                                        settings[41] =
-                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 12f, 227f, 20f),
-                                                (string) settings[41]);
-                                        settings[42] =
-                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 13f, 227f, 20f),
-                                                (string) settings[42]);
-                                        settings[43] =
-                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 14f, 227f, 20f),
-                                                (string) settings[43]);
-                                        settings[44] =
-                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 15f, 227f, 20f),
-                                                (string) settings[44]);
-                                        settings[45] =
-                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 16f, 227f, 20f),
-                                                (string) settings[45]);
-                                        settings[46] =
-                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 17f, 227f, 20f),
-                                                (string) settings[46]);
-                                        settings[47] =
-                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 18f, 227f, 20f),
+                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 1f, 227f, 20f), (string) settings[49]);
+                                        GUI.Label(new Rect(num7 + 79f, num8 + 117f + num44 * 2f, 150f, 20f), "Forest Trunks", "Label");
+                                        settings[33] = GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 3f, 227f, 20f), (string) settings[33]);
+                                        settings[34] = GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 4f, 227f, 20f), (string) settings[34]);
+                                        settings[35] = GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 5f, 227f, 20f), (string) settings[35]);
+                                        settings[36] = GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 6f, 227f, 20f), (string) settings[36]);
+                                        settings[37] = GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 7f, 227f, 20f), (string) settings[37]);
+                                        settings[38] = GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 8f, 227f, 20f), (string) settings[38]);
+                                        settings[39] = GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 9f, 227f, 20f), (string) settings[39]);
+                                        settings[40] = GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 10f, 227f, 20f), (string) settings[40]);
+                                        GUI.Label(new Rect(num7 + 79f, num8 + 117f + num44 * 11f, 150f, 20f), "Forest Leaves:", "Label");
+                                        settings[41] = GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 12f, 227f, 20f), (string) settings[41]);
+                                        settings[42] = GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 13f, 227f, 20f), (string) settings[42]);
+                                        settings[43] = GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 14f, 227f, 20f), (string) settings[43]);
+                                        settings[44] = GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 15f, 227f, 20f), (string) settings[44]);
+                                        settings[45] = GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 16f, 227f, 20f), (string) settings[45]);
+                                        settings[46] = GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 17f, 227f, 20f), (string) settings[46]);
+                                        settings[47] = GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 18f, 227f, 20f),
                                                 (string) settings[47]);
-                                        settings[48] =
-                                            GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 19f, 227f, 20f),
-                                                (string) settings[48]);
-                                        GUI.Label(new Rect(num7 + 379f, num8 + 117f + num44 * 0f, 150f, 20f),
-                                            "Skybox Front:", "Label");
-                                        settings[163] =
-                                            GUI.TextField(new Rect(num7 + 379f, num8 + 117f + num44 * 1f, 227f, 20f),
-                                                (string) settings[163]);
-                                        GUI.Label(new Rect(num7 + 379f, num8 + 117f + num44 * 2f, 150f, 20f),
-                                            "Skybox Back:", "Label");
-                                        settings[164] =
-                                            GUI.TextField(new Rect(num7 + 379f, num8 + 117f + num44 * 3f, 227f, 20f),
-                                                (string) settings[164]);
-                                        GUI.Label(new Rect(num7 + 379f, num8 + 117f + num44 * 4f, 150f, 20f),
-                                            "Skybox Left:", "Label");
-                                        settings[165] =
-                                            GUI.TextField(new Rect(num7 + 379f, num8 + 117f + num44 * 5f, 227f, 20f),
-                                                (string) settings[165]);
-                                        GUI.Label(new Rect(num7 + 379f, num8 + 117f + num44 * 6f, 150f, 20f),
-                                            "Skybox Right:", "Label");
-                                        settings[166] =
-                                            GUI.TextField(new Rect(num7 + 379f, num8 + 117f + num44 * 7f, 227f, 20f),
-                                                (string) settings[166]);
-                                        GUI.Label(new Rect(num7 + 379f, num8 + 117f + num44 * 8f, 150f, 20f),
-                                            "Skybox Up:", "Label");
-                                        settings[167] =
-                                            GUI.TextField(new Rect(num7 + 379f, num8 + 117f + num44 * 9f, 227f, 20f),
-                                                (string) settings[167]);
-                                        GUI.Label(new Rect(num7 + 379f, num8 + 117f + num44 * 10f, 150f, 20f),
-                                            "Skybox Down:", "Label");
+                                        settings[48] = GUI.TextField(new Rect(num7 + 79f, num8 + 117f + num44 * 19f, 227f, 20f), (string) settings[48]);
+                                        GUI.Label(new Rect(num7 + 379f, num8 + 117f + num44 * 0f, 150f, 20f), "Skybox Front:", "Label");
+                                        settings[163] = GUI.TextField(new Rect(num7 + 379f, num8 + 117f + num44 * 1f, 227f, 20f), (string) settings[163]);
+                                        GUI.Label(new Rect(num7 + 379f, num8 + 117f + num44 * 2f, 150f, 20f), "Skybox Back:", "Label");
+                                        settings[164] = GUI.TextField(new Rect(num7 + 379f, num8 + 117f + num44 * 3f, 227f, 20f), (string) settings[164]);
+                                        GUI.Label(new Rect(num7 + 379f, num8 + 117f + num44 * 4f, 150f, 20f), "Skybox Left:", "Label");
+                                        settings[165] = GUI.TextField(new Rect(num7 + 379f, num8 + 117f + num44 * 5f, 227f, 20f), (string) settings[165]);
+                                        GUI.Label(new Rect(num7 + 379f, num8 + 117f + num44 * 6f, 150f, 20f), "Skybox Right:", "Label");
+                                        settings[166] = GUI.TextField(new Rect(num7 + 379f, num8 + 117f + num44 * 7f, 227f, 20f), (string) settings[166]);
+                                        GUI.Label(new Rect(num7 + 379f, num8 + 117f + num44 * 8f, 150f, 20f), "Skybox Up:", "Label");
+                                        settings[167] = GUI.TextField(new Rect(num7 + 379f, num8 + 117f + num44 * 9f, 227f, 20f), (string) settings[167]);
+                                        GUI.Label(new Rect(num7 + 379f, num8 + 117f + num44 * 10f, 150f, 20f), "Skybox Down:", "Label");
                                         settings[168] =
                                             GUI.TextField(new Rect(num7 + 379f, num8 + 117f + num44 * 11f, 227f, 20f),
                                                 (string) settings[168]);
@@ -2129,28 +2069,15 @@ public partial class FengGameManagerMKII
                                             settings[188] = 0;
                                         }
 
-                                        GUI.Label(new Rect(num7 + 80f, num8 + 92f + num44 * 0f, 150f, 20f), "Ground:",
-                                            "Label");
-                                        settings[59] =
-                                            GUI.TextField(new Rect(num7 + 80f, num8 + 92f + num44 * 1f, 230f, 20f),
-                                                (string) settings[59]);
-                                        GUI.Label(new Rect(num7 + 80f, num8 + 92f + num44 * 2f, 150f, 20f), "Wall:",
-                                            "Label");
-                                        settings[60] =
-                                            GUI.TextField(new Rect(num7 + 80f, num8 + 92f + num44 * 3f, 230f, 20f),
-                                                (string) settings[60]);
-                                        GUI.Label(new Rect(num7 + 80f, num8 + 92f + num44 * 4f, 150f, 20f), "Gate:",
-                                            "Label");
-                                        settings[61] =
-                                            GUI.TextField(new Rect(num7 + 80f, num8 + 92f + num44 * 5f, 230f, 20f),
-                                                (string) settings[61]);
-                                        GUI.Label(new Rect(num7 + 80f, num8 + 92f + num44 * 6f, 150f, 20f), "Houses:",
-                                            "Label");
-                                        settings[51] =
-                                            GUI.TextField(new Rect(num7 + 80f, num8 + 92f + num44 * 7f, 230f, 20f),
-                                                (string) settings[51]);
-                                        settings[52] =
-                                            GUI.TextField(new Rect(num7 + 80f, num8 + 92f + num44 * 8f, 230f, 20f),
+                                        GUI.Label(new Rect(num7 + 80f, num8 + 92f + num44 * 0f, 150f, 20f), "Ground:", "Label");
+                                        settings[59] = GUI.TextField(new Rect(num7 + 80f, num8 + 92f + num44 * 1f, 230f, 20f), (string) settings[59]);
+                                        GUI.Label(new Rect(num7 + 80f, num8 + 92f + num44 * 2f, 150f, 20f), "Wall:", "Label");
+                                        settings[60] = GUI.TextField(new Rect(num7 + 80f, num8 + 92f + num44 * 3f, 230f, 20f), (string) settings[60]); 
+                                        GUI.Label(new Rect(num7 + 80f, num8 + 92f + num44 * 4f, 150f, 20f), "Gate:", "Label");
+                                        settings[61] = GUI.TextField(new Rect(num7 + 80f, num8 + 92f + num44 * 5f, 230f, 20f), (string) settings[61]);
+                                        GUI.Label(new Rect(num7 + 80f, num8 + 92f + num44 * 6f, 150f, 20f), "Houses:", "Label");
+                                        settings[51] = GUI.TextField(new Rect(num7 + 80f, num8 + 92f + num44 * 7f, 230f, 20f), (string) settings[51]);
+                                        settings[52] = GUI.TextField(new Rect(num7 + 80f, num8 + 92f + num44 * 8f, 230f, 20f),
                                                 (string) settings[52]);
                                         settings[53] =
                                             GUI.TextField(new Rect(num7 + 80f, num8 + 92f + num44 * 9f, 230f, 20f),

@@ -14,7 +14,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     public static int character = 1;
     private float closestDistance;
     private int currentPeekPlayerIndex;
-    public static DayLight dayLight = DayLight.Dawn;
+    public static DayLight DayLight = DayLight.Dawn;
     private float decay;
     public static int difficulty;
     private float distance = 10f;
@@ -335,8 +335,8 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     public void SetDayLight(DayLight val)
     {
-        dayLight = val;
-        switch (dayLight)
+        DayLight = val;
+        switch (DayLight)
         {
             case DayLight.Night:
                 GameObject obj2 = (GameObject) Instantiate(Resources.Load("flashlight"));
@@ -686,7 +686,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         isPausing = false;
         sensitivityMulti = PlayerPrefs.GetFloat("MouseSensitivity");
         invertY = PlayerPrefs.GetInt("invertMouseY");
-        this.SetDayLight(dayLight);
+        this.SetDayLight(DayLight);
         this.locker = GameObject.Find("locker");
         if (PlayerPrefs.HasKey("cameraTilt"))
         {

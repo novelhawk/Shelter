@@ -1,63 +1,57 @@
 using System;
-using System.Collections;
+using System.IO;
+using System.Threading;
 using Mod;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UIMainReferences : MonoBehaviour
 {
     public const string Version = "01042015";
-    private static bool isFirstLaunch = true;
-    public GameObject panelCredits;
-    public GameObject PanelDisconnect;
-    public GameObject panelMain;
-    public GameObject PanelMultiJoinPrivate;
-    public GameObject PanelMultiPWD;
-    public GameObject panelMultiROOM;
-    public GameObject panelMultiSet;
-    public GameObject panelMultiStart;
-    public GameObject PanelMultiWait;
-    public GameObject panelOption;
-    public GameObject panelSingleSet;
-    public GameObject PanelSnapShot;
-
-    public IEnumerator LoadRCAssets()
-    {
-        string url = Application.dataPath + "/RCAssets.unity3d";
-        if (!Application.isPlaying)
-            url = "File://" + url;
-        while (!Caching.ready)
-            yield return null;
-        using (WWW iteratorVariable2 = WWW.LoadFromCacheOrDownload(url, 1))
-        {
-            yield return iteratorVariable2;
-            if (iteratorVariable2.error != null)
-                throw new Exception("Error on WWW request (RCAssets):" + iteratorVariable2.error);
-            FengGameManagerMKII.RCassets = iteratorVariable2.assetBundle;
-        }
-    }
-
+    private static bool _done;
+    
     private void Start()
     {
-        const float aspectRatio = 1920f / 1080;
-        if (Mathf.Abs((float) Screen.width / Screen.height - aspectRatio) > float.Epsilon)
-            Screen.SetResolution((int)(Screen.height * aspectRatio), Screen.height, Screen.fullScreen);
-        
-        
-        if (isFirstLaunch)
+        if (!_done)
         {
+            _done = true;
+            
+            float aspectRatio = (float) Screen.currentResolution.width / Screen.currentResolution.height;
+            if (Mathf.Abs((float) Screen.width / Screen.height - aspectRatio) > float.Epsilon)
+                Screen.SetResolution((int)(Screen.height * aspectRatio), Screen.height, Screen.fullScreen);
+            
             GameObject go = new GameObject("Shelter");
             Shelter shelter = go.AddComponent<Shelter>();
             DontDestroyOnLoad(go);
             shelter.InitComponents();
 
-            GameObject target = (GameObject)Instantiate(Resources.Load("InputManagerController"));
-            target.name = "InputManagerController";
-            DontDestroyOnLoad(target);
-            StartCoroutine(LoadRCAssets());
-            isFirstLaunch = false;
+
+            new Thread(() =>
+            {
+                LoadAssets("RCAssets");
+            }).Start();
         }
 
         Shelter.OnMainMenu();
+    }
+
+    private static void LoadAssets(string asset)
+    {
+        using (var stream = Shelter.Assembly.GetManifestResourceStream($@"Mod.Resources.Assets.{asset}.unity3d"))
+        {
+            if (stream == null)
+                throw new NullReferenceException("Cannot find resource"); // TODO: Log
+            using (var ms = new MemoryStream())
+            {
+                byte[] buffer = new byte[8192];
+
+                int bytesRead;
+                while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
+                    ms.Write(buffer, 0, bytesRead);
+                
+                ms.Flush();
+
+                FengGameManagerMKII.RCassets = AssetBundle.CreateFromMemoryImmediate(ms.ToArray());
+            }
+        }
     }
 }

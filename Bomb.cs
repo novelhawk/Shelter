@@ -62,7 +62,7 @@ public class Bomb : Photon.MonoBehaviour
         foreach (HERO hero in FengGameManagerMKII.instance.GetPlayers())
         {
             GameObject gameObject = hero.gameObject;
-            if (Vector3.Distance(gameObject.transform.position, position) < radius && !gameObject.GetPhotonView().isMine && !hero.bombImmune)
+            if (!hero.bombImmune && Vector3.Distance(gameObject.transform.position, position) < radius && !gameObject.GetPhotonView().isMine)
             {
                 Player owner = gameObject.GetPhotonView().owner;
                 if (RCSettings.teamMode > 0)
