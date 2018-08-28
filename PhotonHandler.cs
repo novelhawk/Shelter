@@ -4,7 +4,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using Mod.Interface;
 using UnityEngine;
+using Debug = UnityEngine.Debug;
 
 internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
 {
@@ -129,8 +131,21 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
         }
         else if (PhotonNetwork.connectionStatesDetailed != PeerStates.PeerCreated && PhotonNetwork.connectionStatesDetailed != PeerStates.Disconnected && !PhotonNetwork.offlineMode && PhotonNetwork.isMessageQueueRunning)
         {
-            for (bool flag = true; PhotonNetwork.isMessageQueueRunning && flag; flag = PhotonNetwork.networkingPeer.DispatchIncomingCommands())
+            bool flag = true;
+            while (PhotonNetwork.isMessageQueueRunning && flag)
             {
+                try
+                {
+                    flag = PhotonNetwork.networkingPeer.DispatchIncomingCommands();
+                }
+                catch (Exception e)
+                {
+                    Chat.System("We probably got ping froze.");
+                    Chat.System($"{e.GetType().FullName}: {e.Message}");
+                    Debug.Log("We probably got ping froze.");
+                    Debug.LogException(e);
+                    flag = false; 
+                }
             }
             int num = (int)(Time.realtimeSinceStartup * 1000f);
             if (PhotonNetwork.isMessageQueueRunning && num > this.nextSendTickCountOnSerialize)
@@ -142,7 +157,7 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
             num = (int)(Time.realtimeSinceStartup * 1000f);
             if (num > this.nextSendTickCount)
             {
-                for (bool flag2 = true; PhotonNetwork.isMessageQueueRunning && flag2; flag2 = PhotonNetwork.networkingPeer.SendOutgoingCommands())
+                while (PhotonNetwork.isMessageQueueRunning && PhotonNetwork.networkingPeer.SendOutgoingCommands())
                 {
                 }
                 this.nextSendTickCount = num + this.updateInterval;
