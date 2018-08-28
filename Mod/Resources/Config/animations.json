@@ -1,44 +1,22 @@
-﻿{
-  "enabled": "True",
-  "selected": 0,
-  "animations": [{
-    "animationName": "MyCustomAnimation",
+﻿[
+  {
+    "animationName": "Rainbow",
     "animationType": "LeftToRight",
-    "colors": [{
-      "r": 255,
-      "g": 0,
-      "b": 0,
-      "a": 255
-    }, {
-      "r": 255,
-      "g": 127,
-      "b": 0,
-      "a": 255
-    }, {
-      "r": 255,
-      "g": 255,
-      "b": 0,
-      "a": 255
-    }, {
-      "r": 0,
-      "g": 255,
-      "b": 0,
-      "a": 255
-    }, {
-      "r": 0,
-      "g": 255,
-      "b": 255,
-      "a": 255
-    }, {
-      "r": 0,
-      "g": 0,
-      "b": 255,
-      "a": 255
-    }, {
-      "r": 139,
-      "g": 0,
-      "b": 255,
-      "a": 255
-    }]
-  }]
-}
+    "colors": ["#FF0000", "#FFA500", "#FFFF00", "#00FF00", "#0000FF", "#4b0082", "#EE82EE"]
+  },
+  {
+    "animationName": "AllColors",
+    "animationType": "LeftToRight",
+    "colors": ["#FF0000", "#FFFF00", "#FFFFFF", "#00FFFF", "#0000FF", "#000000", "#FF00FF", "#00FF00"]
+  },
+  {
+    "animationName": "BlueShades",
+    "animationType": "LeftToRight",
+    "colors": ["#00FFFF", "#0000FF"]
+  },
+  {
+    "animationName": "MagentaBlack",
+    "animationType": "LeftToRight",
+    "colors": ["#FF00FF", "#000000"]
+  }
+]

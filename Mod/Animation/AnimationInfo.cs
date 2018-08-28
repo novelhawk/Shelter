@@ -6,17 +6,6 @@ namespace Mod.Animation
 {
     public struct AnimationInfo
     {
-        public static List<AnimationColor> Rainbow => new List<AnimationColor>
-        {
-            new AnimationColor(255, 0, 0, 255), 
-            new AnimationColor(255, 127, 0, 255), 
-            new AnimationColor(255, 255, 0, 255), 
-            new AnimationColor(0, 255, 0, 255),
-            new AnimationColor(0, 255, 255, 255),
-            new AnimationColor(0, 0, 255, 255),
-            new AnimationColor(139, 0, 255, 255)
-        };
-        
         [JsonProperty("animationName")]
         public string Name { get; set; }
         

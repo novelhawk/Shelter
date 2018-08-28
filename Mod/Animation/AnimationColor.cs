@@ -1,34 +1,33 @@
-﻿using System.Globalization;
-using Mono.Security.X509.Extensions;
+﻿using System.Collections.Generic;
+using System.Globalization;
 using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Mod.Animation
 {
+    [JsonConverter(typeof(ColorConverter))]
     public struct AnimationColor
     {
-        [JsonProperty("r")]
-        public byte R { get; set; }
-        
-        [JsonProperty("g")]
-        public byte G { get; set; }
-        
-        [JsonProperty("b")]
-        public byte B { get; set; }
-        
-        [JsonProperty("a", NullValueHandling = NullValueHandling.Ignore)]
-        public byte A { get; set; }
+        public byte R { get; }
+        public byte G { get; }
+        public byte B { get; }
+        public byte A { get; }
 
         public AnimationColor(string hex)
         {
-            R = G = B = A = 0;
+            R = G = B = 0;
+            if (hex.StartsWith("#"))
+                hex = hex.Substring(1);
+            
             if (byte.TryParse(hex.Substring(0, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte r))
                 R = r;
             if (byte.TryParse(hex.Substring(2, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte b))
                 B = b;
             if (byte.TryParse(hex.Substring(4, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte g))
                 G = g;
-            if (byte.TryParse(hex.Substring(6, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte a))
+            
+            A = 255;
+            if (hex.Length > 6 && byte.TryParse(hex.Substring(6, 2), NumberStyles.HexNumber, CultureInfo.InvariantCulture, out byte a))
                 A = a;
         }
         
@@ -39,8 +38,8 @@ namespace Mod.Animation
             B = b;
             A = a;
         }
-        
-        public AnimationColor(float r, float g, float b, float a)
+
+        private AnimationColor(float r, float g, float b, float a)
         {
             R = (byte) r;
             G = (byte) g;
@@ -68,7 +67,9 @@ namespace Mod.Animation
 
         public string ToHexFull()
         {
-            return $"{R:X2}{G:X2}{B:X2}{A:X2}";
+            if (A != 255)
+                return $"{R:X2}{G:X2}{B:X2}{A:X2}";
+            return ToHex();
         }
 
         public static AnimationColor Random => new AnimationColor(UnityEngine.Random.Range(0, 255), UnityEngine.Random.Range(0, 255), UnityEngine.Random.Range(0, 255), 255);
@@ -82,5 +83,16 @@ namespace Mod.Animation
         {
             return new Color(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
         }
+        
+        public static List<AnimationColor> Rainbow => new List<AnimationColor>
+        {
+            new AnimationColor(255, 0, 0, 255), 
+            new AnimationColor(255, 127, 0, 255), 
+            new AnimationColor(255, 255, 0, 255), 
+            new AnimationColor(0, 255, 0, 255),
+            new AnimationColor(0, 255, 255, 255),
+            new AnimationColor(0, 0, 255, 255),
+            new AnimationColor(139, 0, 255, 255)
+        };
     }
 }
