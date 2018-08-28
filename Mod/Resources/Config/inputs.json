@@ -96,8 +96,8 @@
     "key": "Q"
   },
   {
-    "action": "TitanWalk",
-    "key": "LeftShift"
+    "action": "SlowMovement",
+    "key": "LeftAlt"
   },
   {
     "action": "TitanSlam",
@@ -138,5 +138,9 @@
   {
     "action": "ReelOut",
     "key": "Mouse3"
+  },
+  {
+    "action": "HorseJump",
+    "key": "Space"
   }
 ]

@@ -70,7 +70,7 @@ public class TITAN_CONTROLLER : MonoBehaviour
             
             if (Shelter.InputManager.IsKeyPressed(InputAction.HorseJump))
                 this.isAttackDown = true;
-            this.isWALKDown = Shelter.InputManager.IsKeyPressed(InputAction.Forward);
+            this.isWALKDown = Shelter.InputManager.IsKeyPressed(InputAction.SlowMovement);
         }
         else
         {
@@ -119,7 +119,7 @@ public class TITAN_CONTROLLER : MonoBehaviour
             this.bitel = Shelter.InputManager.IsDown(InputAction.TitanBite) && num6 < -7.5f;
             this.bite = Shelter.InputManager.IsDown(InputAction.TitanBite) && num6 >= -7.5f && num6 <= 7.5f;
 
-            this.isWALKDown = Shelter.InputManager.IsKeyPressed(InputAction.TitanWalk);
+            this.isWALKDown = Shelter.InputManager.IsKeyPressed(InputAction.SlowMovement);
         }
     }
 }

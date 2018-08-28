@@ -29,7 +29,8 @@
         
         HorseJump,
         
-        TitanWalk,
+        SlowMovement,
+        
         TitanJump,
         TitanSlam,
         TitanDoublePunch,

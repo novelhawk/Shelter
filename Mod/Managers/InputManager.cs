@@ -41,16 +41,25 @@ namespace Mod.Managers
 
         public bool IsKeyPressed(InputAction action)
         {
+            if (!this.ContainsKey(action))
+                throw new KeyNotFoundException($"The key \"{action}\" was not present in the dictionary");
+            
             return Input.GetKey(this[action]);
         }
 
         public bool IsUp(InputAction action)
         {
+            if (!this.ContainsKey(action))
+                throw new KeyNotFoundException($"The key \"{action}\" was not present in the dictionary");
+            
             return Input.GetKeyUp(this[action]);
         }
         
         public bool IsDown(InputAction action)
         {
+            if (!this.ContainsKey(action))
+                throw new KeyNotFoundException($"The key \"{action}\" was not present in the dictionary");
+            
             return Input.GetKeyDown(this[action]);
         }
     }
