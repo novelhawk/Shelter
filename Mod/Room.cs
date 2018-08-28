@@ -200,7 +200,7 @@ namespace Mod
         public string Password => _roomPassword;
         public int Time => _roomTime;
 
-        public bool IsJoinable => _maxPlayers == 0 || _currentPlayers < _maxPlayers;
+        public bool IsJoinable => (_maxPlayers == 0 || _currentPlayers < _maxPlayers) && _isOpen;
         public bool IsProtected => _roomPassword.Length > 0;
 
         public int Players => _currentPlayers;
