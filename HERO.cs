@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.Remoting.Metadata;
+using System.Text;
 using Mod;
 using Mod.Exceptions;
 using Mod.Interface;
@@ -4307,9 +4308,12 @@ public class HERO : Photon.MonoBehaviour
     
     private void Start()
     {
+        var player = photonView.owner;
+        if (player == null) // Should never happen
+            return;
+        
         FengGameManagerMKII.instance.Heroes.Add(this);
-        if (photonView.owner != null)
-            photonView.owner.Hero = this;
+        player.Hero = this;
         
         if ((LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Horse || RCSettings.horseMode == 1) && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
@@ -4326,94 +4330,62 @@ public class HERO : Photon.MonoBehaviour
         this.sparks.enableEmission = false;
         this.speedFXPS = this.speedFX1.GetComponent<ParticleSystem>();
         this.speedFXPS.enableEmission = false;
+        Color circleColor = Color.green;
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
         {
             if (PhotonNetwork.isMasterClient)
             {
-                int iD = photonView.owner.ID;
-                if (FengGameManagerMKII.heroHash.ContainsKey(iD))
-                {
-                    FengGameManagerMKII.heroHash[iD] = this;
-                }
+                int id = player.ID;
+                if (FengGameManagerMKII.heroHash.ContainsKey(id))
+                    FengGameManagerMKII.heroHash[id] = this;
                 else
-                {
-                    FengGameManagerMKII.heroHash.Add(iD, this);
-                }
+                    FengGameManagerMKII.heroHash.Add(id, this);
             }
-            GameObject obj2 = GameObject.Find("UI_IN_GAME");
             this.myNetWorkName = (GameObject) Instantiate(Resources.Load("UI/LabelNameOverHead"));
             this.myNetWorkName.name = "LabelNameOverHead";
-            this.myNetWorkName.transform.parent = obj2.GetComponent<UIReferArray>().panels[0].transform;
+            this.myNetWorkName.transform.parent = GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[0].transform;
             this.myNetWorkName.transform.localScale = new Vector3(14f, 14f, 14f);
             this.myNetWorkName.GetComponent<UILabel>().text = string.Empty;
+
             if (photonView.isMine)
             {
-                if (Minimap.instance != null)
-                {
-                    Minimap.instance.TrackGameObjectOnMinimap(gameObject, Color.green, false, true, Minimap.IconStyle.CIRCLE);
-                }
+                circleColor = Color.green;
                 GetComponent<SmoothSyncMovement>().PhotonCamera = true;
-                photonView.RPC("SetMyPhotonCamera", PhotonTargets.OthersBuffered, new object[] { PlayerPrefs.GetFloat("cameraDistance") + 0.3f });
+                photonView.RPC("SetMyPhotonCamera", PhotonTargets.OthersBuffered, PlayerPrefs.GetFloat("cameraDistance") + 0.3f);
             }
             else
             {
-                bool flag2 = false;
-                if (photonView.owner.Properties.RCTeam != null)
+                circleColor = Color.blue;
+                switch (player.Properties.RCTeam)
                 {
-                    switch (photonView.owner.Properties.RCTeam)
-                    {
-                        case 1:
-                            flag2 = true;
-                            if (Minimap.instance != null)
-                            {
-                                Minimap.instance.TrackGameObjectOnMinimap(gameObject, Color.cyan, false, true, Minimap.IconStyle.CIRCLE);
-                            }
-                            break;
-
-                        case 2:
-                            flag2 = true;
-                            if (Minimap.instance != null)
-                            {
-                                Minimap.instance.TrackGameObjectOnMinimap(gameObject, Color.magenta, false, true, Minimap.IconStyle.CIRCLE);
-                            }
-                            break;
-                    }
-                }
-                if (photonView.owner.Properties.IsAHSS == true)
-                {
-                    this.myNetWorkName.GetComponent<UILabel>().text = "[FF0000]AHSS\n[FFFFFF]";
-                    if (!flag2 && Minimap.instance != null)
-                    {
-                        Minimap.instance.TrackGameObjectOnMinimap(gameObject, Color.red, false, true, Minimap.IconStyle.CIRCLE);
-                    }
-                }
-                else if (!flag2 && Minimap.instance != null)
-                {
-                    Minimap.instance.TrackGameObjectOnMinimap(gameObject, Color.blue, false, true, Minimap.IconStyle.CIRCLE);
+                    case 1:
+                        circleColor = Color.cyan;
+                        break;
+                    case 2:
+                        circleColor = Color.magenta;
+                        break;
+                    default:
+                        if (player.Properties.IsAHSS == true)
+                            circleColor = Color.red;
+                        break;
                 }
             }
-            string str = photonView.owner.Properties.Guild;
-            if (str != string.Empty)
-            {
-                UILabel component = this.myNetWorkName.GetComponent<UILabel>();
-                string text = component.text;
-                string[] strArray2 = { text, "[FFFF00]", str, "\n[FFFFFF]", photonView.owner.Properties.Name };
-                component.text = string.Concat(strArray2);
-            }
-            else
-            {
-                UILabel label2 = this.myNetWorkName.GetComponent<UILabel>();
-                label2.text = label2.text + photonView.owner.Properties.Name;
-            }
+            
+            StringBuilder builder = new StringBuilder(100);
+            if (!photonView.isMine && player.Properties.IsAHSS == true)
+                builder.Append("[FF0000]AHSS\n");
+            if (!string.IsNullOrEmpty(player.Properties.Guild))
+                builder.AppendFormat("[FFFF00]{0}\n", player.Properties.Guild);
+            builder.AppendFormat("[FFFFFF]{0}", player.Properties.Name);
+            myNetWorkName.GetComponent<UILabel>().text = builder.ToString();
         }
-        else if (Minimap.instance != null)
-        {
-            Minimap.instance.TrackGameObjectOnMinimap(gameObject, Color.green, false, true, Minimap.IconStyle.CIRCLE);
-        }
+        if (Minimap.instance != null)
+            Minimap.instance.TrackGameObjectOnMinimap(gameObject, circleColor, false, true);
+        
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && !photonView.isMine)
         {
             gameObject.layer = LayerMask.NameToLayer("NetworkObject");
-            if (IN_GAME_MAIN_CAMERA.dayLight == DayLight.Night)
+            if (IN_GAME_MAIN_CAMERA.DayLight == DayLight.Night)
             {
                 GameObject obj3 = (GameObject) Instantiate(Resources.Load("flashlight"));
                 obj3.transform.parent = this.baseTransform;
@@ -4421,7 +4393,7 @@ public class HERO : Photon.MonoBehaviour
                 obj3.transform.rotation = Quaternion.Euler(353f, 0f, 0f);
             }
             this.setup.myCostume = new HeroCostume();
-            this.setup.myCostume = CostumeConverter.PhotonDataToHeroCostume(photonView.owner);
+            this.setup.myCostume = CostumeConverter.PhotonDataToHeroCostume(player);
             this.setup.setCharacterComponent();
             Destroy(this.checkBoxLeft);
             Destroy(this.checkBoxRight);
