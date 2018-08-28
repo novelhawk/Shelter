@@ -27,7 +27,7 @@ namespace Mod.Interface
                 _room = Room.List.FirstOrDefault(x => x.FullName == _room.FullName);
                     
             _rotation += Time.deltaTime * 250;
-            if (_room != null && _room.Players < _room.MaxPlayers)
+            if (_room != null && _room.IsJoinable)
             {
                 PhotonNetwork.JoinRoom(_room.FullName);
                 Disable();
