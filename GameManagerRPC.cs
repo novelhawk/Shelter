@@ -619,8 +619,9 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
-    private void Chat(string content, string sender, PhotonMessageInfo info)
+    public void Chat(string content, string sender, PhotonMessageInfo info)
     {
+        Shelter.EventManager.Fire(nameof(Chat));
         if (string.IsNullOrEmpty(content))
             return;
         
@@ -651,7 +652,7 @@ public partial class FengGameManagerMKII
     [RPC]
     private void ShowChatContent(string content, PhotonMessageInfo info) 
     {
-        throw new NotAllowedException(nameof(ShowChatContent), info, false);
+        throw new NotAllowedException(nameof(ShowChatContent), info);
     }
 
     [RPC]

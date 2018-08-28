@@ -28,6 +28,7 @@ namespace Mod
         private static InterfaceManager _interfaceManager;
         private static CommandManager _commandManager;
         private static InputManager _inputManager;
+        private static EventManager _eventManager;
         private static AnimationManager _animationManager;
         private static ModuleManager _moduleManager;
         private static ProfileManager _profileManager;
@@ -37,11 +38,12 @@ namespace Mod
             if (!Directory.Exists(ModDirectory))
                 Directory.CreateDirectory(ModDirectory);
 
-            _animation = new AnimationInfo(AnimationType.Cycle, AnimationInfo.Rainbow);
+            _animation = new AnimationInfo(AnimationType.Cycle, AnimationColor.Rainbow);
         }
         
         public void InitComponents()
         {
+            _eventManager = new EventManager();
             _interfaceManager = new InterfaceManager();
             _profileManager = new ProfileManager();
             _inputManager = new InputManager();
@@ -131,6 +133,7 @@ namespace Mod
 
         public static AnimationInfo Animation => _animation;
 
+        public static EventManager EventManager => _eventManager;
         public static ModuleManager ModuleManager => _moduleManager;
         public static ProfileManager ProfileManager => _profileManager;
         public static InputManager InputManager => _inputManager;
