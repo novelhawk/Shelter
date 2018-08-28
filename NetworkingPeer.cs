@@ -1477,7 +1477,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                         {
                             string roomName = (string)entry.Key;
                             Room room = new Room(roomName, (Hashtable)entry.Value);
-                            if (room.RemovedFromList || (!room.IsOpen && room.RoomTTL > 0 && room.Players <= 0))
+                            if (room.RemovedFromList || (!room.IsOpen && room.Players <= 0))
                                 mGameList.Remove(roomName);
                             else
                                 mGameList[roomName] = room;
@@ -1501,7 +1501,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                         {
                             string roomName = (string)entry.Key;
                             var room = new Room(roomName, (Hashtable) entry.Value);
-                            if (!room.IsOpen && room.RoomTTL > 0 && room.Players <= 0)
+                            if (!room.IsOpen && hashtable.Count > 40 || room.Players <= 0)
                                 continue;
                             mGameList[roomName] = room;
                         }
