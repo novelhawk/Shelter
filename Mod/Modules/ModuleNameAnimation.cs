@@ -82,11 +82,11 @@ namespace Mod.Modules
             
             for (var i = 0; i < Shelter.AnimationManager.Animations.Count; i++)
             {
-                var anim = Shelter.AnimationManager.Animations[i];
-                if (GUI.Button(rect.OY(30), anim.Name, Shelter.AnimationManager.Selected != i ? _button : _selectedButton))
+                var info = Shelter.AnimationManager.Animations[i];
+                if (GUI.Button(rect.OY(30), info.Name, Shelter.AnimationManager.Selected != i ? _button : _selectedButton))
                 {
                     Shelter.AnimationManager.Selected = i;
-                    _animator = new Animator(anim, _shades);
+                    _animator = new Animator(info, _shades);
                     _animator.ComputeNext();
                 }
             }
@@ -96,6 +96,12 @@ namespace Mod.Modules
             
             GUI.Label(rect.OY(20), $"UpdatesPerSecond: {_updatesPerSecond:0.00}", _sliderText);
             _updatesPerSecond = GUI.HorizontalSlider(rect.OY(20), _updatesPerSecond, 1, 100); //TODO: Color viewer and Animation selector
+        }
+
+        protected override void OnGuiClose()
+        {
+            Destroy(_animationButton);
+            Destroy(_selectedAnimationButton);
         }
     }
 }
