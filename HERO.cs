@@ -2504,6 +2504,8 @@ public class HERO : Photon.MonoBehaviour
                     using (WWW www = new WWW(urls[1]))
                     {
                         yield return www;
+                        if (www.error != null)
+                            yield break;
                         myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                     }
                     FengGameManagerMKII.linkHash[0].Add(urls[1], myRenderer.material);
@@ -2531,6 +2533,8 @@ public class HERO : Photon.MonoBehaviour
                     using (WWW www = new WWW(urls[7]))
                     {
                         yield return www;
+                        if (www.error != null)
+                            yield break;
                         myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                     }
                     myRenderer.material = (Material)FengGameManagerMKII.linkHash[0][urls[7]];
@@ -2556,6 +2560,8 @@ public class HERO : Photon.MonoBehaviour
                     using (WWW www = new WWW(urls[6]))
                     {
                         yield return www;
+                        if (www.error != null)
+                            yield break;
                         myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 500000);
                     }
 
@@ -2588,6 +2594,8 @@ public class HERO : Photon.MonoBehaviour
                         using (WWW www = new WWW(urls[1]))
                         {
                             yield return www;
+                            if (www.error != null)
+                                yield break;
                             currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
                         FengGameManagerMKII.linkHash[0].Add(urls[1], currentRender.material);
@@ -2598,7 +2606,7 @@ public class HERO : Photon.MonoBehaviour
                         currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[1]];
                     }
                 }
-                else if (urls[1].ToLower() == "transparent")
+                else if (urls[1].EqualsIgnoreCase("transparent"))
                 {
                     currentRender.enabled = false;
                 }
@@ -2615,6 +2623,8 @@ public class HERO : Photon.MonoBehaviour
                         using (WWW www = new WWW(urls[2]))
                         {
                             yield return www;
+                            if (www.error != null)
+                                yield break;
                             currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
                         FengGameManagerMKII.linkHash[0].Add(urls[2], currentRender.material);
@@ -2625,7 +2635,7 @@ public class HERO : Photon.MonoBehaviour
                         currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[2]];
                     }
                 }
-                else if (urls[2].ToLower() == "transparent")
+                else if (urls[2].EqualsIgnoreCase("transparent"))
                 {
                     currentRender.enabled = false;
                 }
@@ -2642,6 +2652,8 @@ public class HERO : Photon.MonoBehaviour
                         using (WWW www = new WWW(urls[3]))
                         {
                             yield return www;
+                            if (www.error != null)
+                                yield break;
                             currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
                         FengGameManagerMKII.linkHash[0].Add(urls[3], currentRender.material);
@@ -2652,7 +2664,7 @@ public class HERO : Photon.MonoBehaviour
                         currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[3]];
                     }
                 }
-                else if (urls[3].ToLower() == "transparent")
+                else if (urls[3].EqualsIgnoreCase("transparent"))
                 {
                     currentRender.enabled = false;
                 }
@@ -2666,10 +2678,12 @@ public class HERO : Photon.MonoBehaviour
                         unloadAssets = true;
                         currentRender.material.mainTextureScale = currentRender.material.mainTextureScale * 8f;
                         currentRender.material.mainTextureOffset = new Vector2(0f, 0f);
-                        using (WWW iteratorVariable22 = new WWW(urls[4]))
+                        using (WWW www = new WWW(urls[4]))
                         {
-                            yield return iteratorVariable22;
-                            currentRender.material.mainTexture = RCextensions.LoadImageRC(iteratorVariable22, mipmap, 200000);
+                            yield return www;
+                            if (www.error != null)
+                                yield break;
+                            currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
                         FengGameManagerMKII.linkHash[0].Add(urls[4], currentRender.material);
                         currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[4]];
@@ -2679,7 +2693,7 @@ public class HERO : Photon.MonoBehaviour
                         currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[4]];
                     }
                 }
-                else if (urls[4].ToLower() == "transparent")
+                else if (urls[4].EqualsIgnoreCase("transparent"))
                 {
                     currentRender.enabled = false;
                 }
@@ -2694,6 +2708,8 @@ public class HERO : Photon.MonoBehaviour
                         using (WWW www = new WWW(urls[5]))
                         {
                             yield return www;
+                            if (www.error != null)
+                                yield break;
                             currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
                         FengGameManagerMKII.linkHash[0].Add(urls[5], currentRender.material);
@@ -2704,7 +2720,7 @@ public class HERO : Photon.MonoBehaviour
                         currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[5]];
                     }
                 }
-                else if (urls[5].ToLower() == "transparent")
+                else if (urls[5].EqualsIgnoreCase("transparent"))
                 {
                     currentRender.enabled = false;
                 }
@@ -2716,10 +2732,12 @@ public class HERO : Photon.MonoBehaviour
                     if (!FengGameManagerMKII.linkHash[1].ContainsKey(urls[6]))
                     {
                         unloadAssets = true;
-                        using (WWW iteratorVariable26 = new WWW(urls[6]))
+                        using (WWW www = new WWW(urls[6]))
                         {
-                            yield return iteratorVariable26;
-                            currentRender.material.mainTexture = RCextensions.LoadImageRC(iteratorVariable26, mipmap, 500000);
+                            yield return www;
+                            if (www.error != null)
+                                yield break;
+                            currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 500000);
                         }
                         FengGameManagerMKII.linkHash[1].Add(urls[6], currentRender.material);
                         currentRender.material = (Material)FengGameManagerMKII.linkHash[1][urls[6]];
@@ -2729,7 +2747,7 @@ public class HERO : Photon.MonoBehaviour
                         currentRender.material = (Material)FengGameManagerMKII.linkHash[1][urls[6]];
                     }
                 }
-                else if (urls[6].ToLower() == "transparent")
+                else if (urls[6].EqualsIgnoreCase("transparent"))
                 {
                     currentRender.enabled = false;
                 }
@@ -2741,10 +2759,12 @@ public class HERO : Photon.MonoBehaviour
                     if (!FengGameManagerMKII.linkHash[0].ContainsKey(urls[7]))
                     {
                         unloadAssets = true;
-                        using (WWW iteratorVariable28 = new WWW(urls[7]))
+                        using (WWW www = new WWW(urls[7]))
                         {
-                            yield return iteratorVariable28;
-                            currentRender.material.mainTexture = RCextensions.LoadImageRC(iteratorVariable28, mipmap, 200000);
+                            yield return www;
+                            if (www.error != null)
+                                yield break;
+                            currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
                         FengGameManagerMKII.linkHash[0].Add(urls[7], currentRender.material);
                         currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[7]];
@@ -2754,7 +2774,7 @@ public class HERO : Photon.MonoBehaviour
                         currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[7]];
                     }
                 }
-                else if (urls[7].ToLower() == "transparent")
+                else if (urls[7].EqualsIgnoreCase("transparent"))
                 {
                     currentRender.enabled = false;
                 }
@@ -2769,6 +2789,8 @@ public class HERO : Photon.MonoBehaviour
                         using (WWW www = new WWW(urls[8]))
                         {
                             yield return www;
+                            if (www.error != null)
+                                yield break;
                             currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 500000);
                         }
                         FengGameManagerMKII.linkHash[1].Add(urls[8], currentRender.material);
@@ -2779,7 +2801,7 @@ public class HERO : Photon.MonoBehaviour
                         currentRender.material = (Material)FengGameManagerMKII.linkHash[1][urls[8]];
                     }
                 }
-                else if (urls[8].ToLower() == "transparent")
+                else if (urls[8].EqualsIgnoreCase("transparent"))
                 {
                     currentRender.enabled = false;
                 }
@@ -2794,6 +2816,8 @@ public class HERO : Photon.MonoBehaviour
                         using (WWW www = new WWW(urls[9]))
                         {
                             yield return www;
+                            if (www.error != null)
+                                yield break;
                             currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 500000);
                         }
                         FengGameManagerMKII.linkHash[1].Add(urls[9], currentRender.material);
@@ -2804,7 +2828,7 @@ public class HERO : Photon.MonoBehaviour
                         currentRender.material = (Material)FengGameManagerMKII.linkHash[1][urls[9]];
                     }
                 }
-                else if (urls[9].ToLower() == "transparent")
+                else if (urls[9].EqualsIgnoreCase("transparent"))
                 {
                     currentRender.enabled = false;
                 }
@@ -2816,10 +2840,12 @@ public class HERO : Photon.MonoBehaviour
                     if (!FengGameManagerMKII.linkHash[0].ContainsKey(urls[10]))
                     {
                         unloadAssets = true;
-                        using (WWW iteratorVariable34 = new WWW(urls[10]))
+                        using (WWW www = new WWW(urls[10]))
                         {
-                            yield return iteratorVariable34;
-                            currentRender.material.mainTexture = RCextensions.LoadImageRC(iteratorVariable34, mipmap, 200000);
+                            yield return www;
+                            if (www.error != null)
+                                yield break;
+                            currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
                         FengGameManagerMKII.linkHash[0].Add(urls[10], currentRender.material);
                         currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[10]];
@@ -2829,7 +2855,7 @@ public class HERO : Photon.MonoBehaviour
                         currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[10]];
                     }
                 }
-                else if (urls[10].ToLower() == "transparent")
+                else if (urls[10].EqualsIgnoreCase("transparent"))
                 {
                     currentRender.enabled = false;
                 }
@@ -2841,10 +2867,12 @@ public class HERO : Photon.MonoBehaviour
                     if (!FengGameManagerMKII.linkHash[0].ContainsKey(urls[11]))
                     {
                         unloadAssets = true;
-                        using (WWW iteratorVariable36 = new WWW(urls[11]))
+                        using (WWW www = new WWW(urls[11]))
                         {
-                            yield return iteratorVariable36;
-                            currentRender.material.mainTexture = RCextensions.LoadImageRC(iteratorVariable36, mipmap, 200000);
+                            yield return www;
+                            if (www.error != null)
+                                yield break;
+                            currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
                         FengGameManagerMKII.linkHash[0].Add(urls[11], currentRender.material);
                         currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[11]];
@@ -2854,7 +2882,7 @@ public class HERO : Photon.MonoBehaviour
                         currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[11]];
                     }
                 }
-                else if (urls[11].ToLower() == "transparent")
+                else if (urls[11].EqualsIgnoreCase("transparent"))
                 {
                     currentRender.enabled = false;
                 }
@@ -2877,6 +2905,8 @@ public class HERO : Photon.MonoBehaviour
                                 using (WWW www = new WWW(urls[0]))
                                 {
                                     yield return www;
+                                    if (www.error != null)
+                                        yield break;
                                     currentRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 500000);
                                 }
                                 FengGameManagerMKII.linkHash[1].Add(urls[0], currentRenderer.material);
@@ -2887,7 +2917,7 @@ public class HERO : Photon.MonoBehaviour
                                 currentRenderer.material = (Material)FengGameManagerMKII.linkHash[1][urls[0]];
                             }
                         }
-                        else if (urls[0].ToLower() == "transparent")
+                        else if (urls[0].EqualsIgnoreCase("transparent"))
                         {
                             currentRenderer.enabled = false;
                         }
@@ -2903,6 +2933,8 @@ public class HERO : Photon.MonoBehaviour
                 using (WWW www = new WWW(urls[12]))
                 {
                     yield return www;
+                    if (www.error != null)
+                        yield break;
                     leftbladetrail.MyMaterial.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                     rightbladetrail.MyMaterial.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                 }

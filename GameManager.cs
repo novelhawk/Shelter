@@ -380,10 +380,12 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                     var url = skybox[i];
                     if (!Utility.IsValidImageUrl(url))
                         continue;
-                    using (WWW req = new WWW(url))
+                    using (WWW www = new WWW(url))
                     {
-                        yield return req;
-                        material.SetTexture(skyboxSide[i], RCextensions.LoadImageRC(req, mipmap, 500000));
+                        yield return www;
+                        if (www.error != null)
+                            continue;
+                        material.SetTexture(skyboxSide[i], RCextensions.LoadImageRC(www, mipmap, 500000));
                     }
                 }
                 
@@ -411,6 +413,8 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                             using (WWW www = new WWW(grassUrl))
                             {
                                 yield return www;
+                                if (www.error != null)
+                                    continue;
                                 groundRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                             }
                             unloadAssets = true;
@@ -1307,7 +1311,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                     obj2 = (GameObject)Instantiate((GameObject) RCassets.Load(strArray[1]), new Vector3(Convert.ToSingle(strArray[12]), Convert.ToSingle(strArray[13]), Convert.ToSingle(strArray[14])), new Quaternion(Convert.ToSingle(strArray[15]), Convert.ToSingle(strArray[16]), Convert.ToSingle(strArray[17]), Convert.ToSingle(strArray[18])));
                     if (strArray[2] != "default")
                     {
-                        if (strArray[2].StartsWith("transparent"))
+                        if (strArray[2].EqualsIgnoreCase("transparent"))
                         {
                             if (float.TryParse(strArray[2].Substring(11), out num3))
                             {
@@ -1368,7 +1372,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                         obj2 = (GameObject)Instantiate((GameObject) Resources.Load(strArray[1]), new Vector3(Convert.ToSingle(strArray[12]), Convert.ToSingle(strArray[13]), Convert.ToSingle(strArray[14])), new Quaternion(Convert.ToSingle(strArray[15]), Convert.ToSingle(strArray[16]), Convert.ToSingle(strArray[17]), Convert.ToSingle(strArray[18])));
                         if (strArray[2] != "default")
                         {
-                            if (strArray[2].StartsWith("transparent"))
+                            if (strArray[2].EqualsIgnoreCase("transparent"))
                             {
                                 if (float.TryParse(strArray[2].Substring(11), out num3))
                                 {
@@ -2504,10 +2508,12 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                     var url = skybox[i];
                     if (!Utility.IsValidImageUrl(url))
                         continue;
-                    using (WWW req = new WWW(url))
+                    using (WWW www = new WWW(url))
                     {
-                        yield return req;
-                        material.SetTexture(skyboxSide[i], RCextensions.LoadImageRC(req, mipmap, 500000));
+                        yield return www;
+                        if (www.error != null)
+                            continue;
+                        material.SetTexture(skyboxSide[i], RCextensions.LoadImageRC(www, mipmap, 500000));
                     }
                 }
                 
@@ -2551,6 +2557,8 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                             using (WWW www = new WWW(currentUrl))
                                             {
                                                 yield return www;
+                                                if (www.error != null)
+                                                    continue;
                                                 myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 1000000);
                                             }
                                             linkHash[2].Add(currentUrl, myRenderer.material);
@@ -2572,6 +2580,8 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                             using (WWW www = new WWW(planes))
                                             {
                                                 yield return www;
+                                                if (www.error != null)
+                                                    continue;
                                                 myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                                             }
                                             linkHash[0].Add(planes, myRenderer.material);
@@ -2582,7 +2592,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                             myRenderer.material = (Material)linkHash[0][planes];
                                         }
                                     }
-                                    else if (planes.ToLower() == "transparent")
+                                    else if (planes.EqualsIgnoreCase("transparent"))
                                     {
                                         myRenderer.enabled = false;
                                     }
@@ -2604,6 +2614,8 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                     using (WWW www = new WWW(currentUrl))
                                     {
                                         yield return www;
+                                        if (www.error != null)
+                                            continue;
                                         iteratorVariable39.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                                     }
                                     linkHash[0].Add(currentUrl, iteratorVariable39.material);
@@ -2615,7 +2627,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                 }
                             }
                         }
-                        else if (currentUrl.ToLower() == "transparent")
+                        else if (currentUrl.EqualsIgnoreCase("transparent"))
                         {
                             foreach (Renderer renderer1 in currentGameObject.GetComponentsInChildren<Renderer>())
                             {
@@ -2651,6 +2663,8 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                         using (WWW www = new WWW(url))
                                         {
                                             yield return www;
+                                            if (www.error != null)
+                                                continue;
                                             myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                                         }
                                         linkHash[0].Add(url, myRenderer.material);
@@ -2662,7 +2676,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                     }
                                 }
                             }
-                            else if (url.ToLower() == "transparent")
+                            else if (url.EqualsIgnoreCase("transparent"))
                             {
                                 foreach (Renderer renderer1 in go.GetComponentsInChildren<Renderer>())
                                 {
@@ -2686,6 +2700,8 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                         using (WWW www = new WWW(url))
                                         {
                                             yield return www;
+                                            if (www.error != null)
+                                                continue;
                                             myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                                         }
                                         linkHash[0].Add(url, myRenderer.material);
@@ -2712,10 +2728,12 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                     if (!linkHash[2].ContainsKey(url))
                                     {
                                         unloadAssets = true;
-                                        using (WWW iteratorVariable60 = new WWW(url))
+                                        using (WWW www = new WWW(url))
                                         {
-                                            yield return iteratorVariable60;
-                                            iteratorVariable59.material.mainTexture = RCextensions.LoadImageRC(iteratorVariable60, mipmap, 1000000);
+                                            yield return www;
+                                            if (www.error != null)
+                                                continue;
+                                            iteratorVariable59.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 1000000);
                                         }
                                         linkHash[2].Add(url, iteratorVariable59.material);
                                         iteratorVariable59.material = (Material)linkHash[2][url];
@@ -2742,6 +2760,8 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                     using (WWW www = new WWW(url))
                                     {
                                         yield return www;
+                                        if (www.error != null)
+                                            continue;
                                         myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 1000000);
                                     }
                                     linkHash[2].Add(url, myRenderer.material);

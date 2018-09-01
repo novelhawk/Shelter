@@ -130,7 +130,7 @@ public class Cannon : Photon.MonoBehaviour
             gameObject = this.gameObject;
             if (strArray[2] != "default")
             {
-                if (strArray[2].StartsWith("transparent"))
+                if (strArray[2].EqualsIgnoreCase("transparent"))
                 {
                     if (float.TryParse(strArray[2].Substring(11), out var num2))
                     {

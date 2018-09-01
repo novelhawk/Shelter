@@ -1900,7 +1900,7 @@ public class TITAN : Photon.MonoBehaviour
         {
             if (myRenderer.name.Contains("eye"))
             {
-                if (eye.ToLower() == "transparent")
+                if (eye.EqualsIgnoreCase("transparent"))
                 {
                     myRenderer.enabled = false;
                 }
@@ -1911,10 +1911,12 @@ public class TITAN : Photon.MonoBehaviour
                         unloadAssets = true;
                         myRenderer.material.mainTextureScale = new Vector2(myRenderer.material.mainTextureScale.x * 4f, myRenderer.material.mainTextureScale.y * 8f);
                         myRenderer.material.mainTextureOffset = new Vector2(0f, 0f);
-                        using (WWW link = new WWW(eye))
+                        using (WWW www = new WWW(eye))
                         {
-                            yield return link;
-                            myRenderer.material.mainTexture = RCextensions.LoadImageRC(link, mipmap, 200000);
+                            yield return www;
+                            if (www.error != null)
+                                continue;
+                            myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
                         FengGameManagerMKII.linkHash[0].Add(eye, myRenderer.material);
                         myRenderer.material = (Material)FengGameManagerMKII.linkHash[0][eye];
@@ -1931,10 +1933,12 @@ public class TITAN : Photon.MonoBehaviour
                 {
                     unloadAssets = true;
                     myRenderer.material = this.mainMaterial.GetComponent<SkinnedMeshRenderer>().material;
-                    using (WWW iteratorVariable5 = new WWW(body))
+                    using (WWW www = new WWW(body))
                     {
-                        yield return iteratorVariable5;
-                        myRenderer.material.mainTexture = RCextensions.LoadImageRC(iteratorVariable5, mipmap, 1000000);
+                        yield return www;
+                        if (www.error != null)
+                            continue;
+                        myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 1000000);
                     }
                     FengGameManagerMKII.linkHash[2].Add(body, myRenderer.material);
                     myRenderer.material = (Material)FengGameManagerMKII.linkHash[2][body];

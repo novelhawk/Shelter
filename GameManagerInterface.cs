@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
+using Mod;
 using UnityEngine;
 
 public partial class FengGameManagerMKII
@@ -1286,7 +1287,7 @@ public partial class FengGameManagerMKII
                         float a = 1f;
                         if ((string) settings[69] != "default")
                         {
-                            if (((string) settings[69]).StartsWith("transparent"))
+                            if (((string) settings[69]).EqualsIgnoreCase("transparent"))
                             {
                                 float.TryParse(((string) settings[69]).Substring(11), out a);
                                 foreach (Renderer renderer2 in selectedObj.GetComponentsInChildren<Renderer>())
