@@ -3,6 +3,7 @@ using UnityEngine;
 using System.Linq;
 using System.Collections.Generic;
 using Mod.Interface;
+using Console = Mod.Interface.Console;
 using Object = UnityEngine.Object;
 
 namespace Mod.Managers
@@ -16,6 +17,7 @@ namespace Mod.Managers
             GameObject go = new GameObject("Interface");
             _interfaces.AddRange(new Gui[]
             {
+                go.AddComponent<Console>(),
                 go.AddComponent<Notify>(),
                 go.AddComponent<Connecting>(),
                 go.AddComponent<Navigator>(),

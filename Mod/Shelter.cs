@@ -5,13 +5,16 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using JetBrains.Annotations;
 using Mod.Animation;
 using Mod.Discord;
 using Mod.Interface;
+using Mod.Logging;
 using Mod.Modules;
 using UnityEngine;
 using AnimationInfo = Mod.Animation.AnimationInfo;
 using Animator = Mod.Animation.Animator;
+using Console = Mod.Interface.Console;
 using Random = UnityEngine.Random;
 
 namespace Mod
@@ -24,6 +27,9 @@ namespace Mod
         public static List<Profile> Profiles => _profileManager.ProfileFile.Profiles;
         public static Profile Profile => _profileManager.ProfileFile.SelectedProfile;
         public static readonly long StartTime = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
+
+        private static FileLogger _logger;
+        private static ConsoleLogger _consoleLogger;
         private static AnimationInfo _animation;
         private static InterfaceManager _interfaceManager;
         private static CommandManager _commandManager;
@@ -43,16 +49,24 @@ namespace Mod
         
         public void InitComponents()
         {
+            _logger = new FileLogger();
+            _consoleLogger = new ConsoleLogger();
             _eventManager = new EventManager();
             _interfaceManager = new InterfaceManager();
             _profileManager = new ProfileManager();
             _inputManager = new InputManager();
             _animationManager = new AnimationManager();
             _moduleManager = new ModuleManager();
+            
+            Log("Shelter mod initialized.");
         }
 
         public void Update()
         {
+            if (Input.GetKeyDown(KeyCode.Keypad0))
+                LogConsole("Test", LogLevel.Error);
+            if (Input.GetKeyDown(KeyCode.Keypad1))
+                Log("Test2");
             DiscordApi.RunCallbacks();
             if (Input.GetKeyDown(KeyCode.I) && Input.GetKey(KeyCode.LeftControl))
                 File.WriteAllLines($"GameObjects{Random.Range(0, 255)}.txt", FindObjectsOfType(typeof(GameObject)).OrderBy(x => x.GetInstanceID()).Select(x => $"{x.GetInstanceID()} - {x.name}").ToArray());
@@ -84,6 +98,8 @@ namespace Mod
                 _interfaceManager.Enable(nameof(Scoreboard));
             if (_moduleManager.Enabled(nameof(ModuleShowGameInfo)))
                 _interfaceManager.Enable(nameof(GameInfo));
+            if (_moduleManager.Enabled(nameof(ModuleShowConsole)))
+                _interfaceManager.Enable(nameof(Console));
             DiscordApi.UpdatePresence(new DiscordApi.RichPresence
             {
                 details = "In Lobby",
@@ -106,15 +122,60 @@ namespace Mod
 
         #region Static methods
 
-        public static void Log(params object[] messages)
+        [StringFormatMethod("line")]
+        public static void Log(string line, params object[] args) => Log(string.Format(line, args));
+        [StringFormatMethod("line")]
+        public static void Log(string line, LogLevel logLevel, params object[] args) => Log(string.Format(line, args), logLevel);
+        public static void Log(object obj, LogLevel logLevel = LogLevel.Info) => Log(obj as string, logLevel);
+        public static void Log(string line, LogLevel logLevel = LogLevel.Info)
         {
-            foreach (var obj in messages)
-                Log(obj);
+            if (_logger != null && line != null)
+            {
+                var elapsed = Stopwatch.Elapsed;
+                _logger.Log("{0:00}:{1:00}.{2:000} [{3}] {4}{5}", 
+                    elapsed.Minutes, elapsed.Seconds, elapsed.Milliseconds,
+                    logLevel.ToString().ToUpper(),
+                    line,
+                    Environment.NewLine);
+            }
         }
 
-        public static void Log(object msg)
+        [StringFormatMethod("line")]
+        public static void LogConsole(string line, LogLevel logLevel, params object[] args) => Log(string.Format(line, args), logLevel);
+        [StringFormatMethod("line")]
+        public static void LogConsole(string line, params object[] args) => Log(string.Format(line, args));
+        public static void LogConsole(object obj, LogLevel logLevel = LogLevel.Info) => Log(obj as string, logLevel);
+        public static void LogConsole(string line, LogLevel logLevel = LogLevel.Info)
         {
+            if (_consoleLogger != null && line != null)
+            {
+                if (logLevel == LogLevel.Info)
+                    _consoleLogger.Log("<color=#00D7FF>{0}</color>", line);
+                else
+                    _consoleLogger.Log("<color=#00D7FF>{0}</color> <i><color=#FF3600>{1}</color></i>",
+                        line,
+                        logLevel.ToString().ToUpper());
+            }
 
+            Log(line, logLevel);
+        }
+        
+        [StringFormatMethod("line")]
+        public static void WriteLine(string line, params object[] args) => WriteLine(string.Format(line, args));
+        public static void WriteLine(object obj) => WriteLine(obj as string);
+        public static void WriteLine(string line)
+        {
+            if (_logger != null && line != null)
+                _logger.Log("{0}{1}", line, Environment.NewLine);
+        }
+        
+        [StringFormatMethod("line")]
+        public static void Write(string line, params object[] args) => WriteLine(string.Format(line, args));
+        public static void Write(object obj) => WriteLine(obj as string);
+        public static void Write(string line)
+        {
+            if (_logger != null && line != null)
+                _logger.Log(line);
         }
 
         public static Texture2D GetImage(string image)
@@ -133,6 +194,7 @@ namespace Mod
 
         public static AnimationInfo Animation => _animation;
 
+        public static ConsoleLogger ConsoleLogger => _consoleLogger;
         public static EventManager EventManager => _eventManager;
         public static ModuleManager ModuleManager => _moduleManager;
         public static ProfileManager ProfileManager => _profileManager;
