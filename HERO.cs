@@ -932,9 +932,6 @@ public class HERO : Photon.MonoBehaviour
 
     private void Dodge(bool offTheWall = false)
     {
-        if (this.myHorse != null && (isMounted || Vector3.Distance(myHorse.transform.position, transform.position) < 15f)) 
-            return;
-        
         this.State = HeroState.GroundDodge;
         if (!offTheWall)
         {
@@ -4617,22 +4614,20 @@ public class HERO : Photon.MonoBehaviour
                                 return;
                             }
                         }
-                        if (this.grounded && (this.State == HeroState.Idle || this.State == HeroState.Slide))
+                        if (this.grounded && this.State == HeroState.Idle)
                         {
-                            if (!(!Shelter.InputManager.IsKeyPressed(InputAction.Jump) || this.baseAnimation.IsPlaying("jump") || this.baseAnimation.IsPlaying("horse_geton")))
+                            if (Shelter.InputManager.IsKeyPressed(InputAction.Jump) && !this.baseAnimation.IsPlaying("jump") && !this.baseAnimation.IsPlaying("horse_geton"))
                             {
                                 this.idle();
                                 this.crossFade("jump", 0.1f);
                                 this.sparks.enableEmission = false;
                             }
-                            if (!(!Shelter.InputManager.IsDown(InputAction.Dodge) || this.baseAnimation.IsPlaying("jump") || this.baseAnimation.IsPlaying("horse_geton")) && this.myHorse != null && !this.isMounted && Vector3.Distance(this.myHorse.transform.position, transform.position) < 15f)
+                            if (Shelter.InputManager.IsDown(InputAction.Dodge) && !this.baseAnimation.IsPlaying("jump") && !this.baseAnimation.IsPlaying("horse_geton"))
                             {
-                                this.getOnHorse();
-                            }
-                            if (!(!Shelter.InputManager.IsDown(InputAction.Dodge) || this.baseAnimation.IsPlaying("jump") || this.baseAnimation.IsPlaying("horse_geton")))
-                            {
-                                this.Dodge(false);
-                                return;
+                                if (this.myHorse != null && !this.isMounted && Vector3.Distance(this.myHorse.transform.position, transform.position) < 15f)
+                                    this.getOnHorse();
+                                else
+                                    this.Dodge(false);
                             }
                         }
                         if (this.State == HeroState.Idle)
