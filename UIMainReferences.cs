@@ -1,7 +1,9 @@
 using System;
+using System.Collections;
 using System.IO;
-using System.Threading;
 using Mod;
+using Mod.Interface;
+using Mod.Logging;
 using UnityEngine;
 
 public class UIMainReferences : MonoBehaviour
@@ -24,34 +26,55 @@ public class UIMainReferences : MonoBehaviour
             DontDestroyOnLoad(go);
             shelter.InitComponents();
 
-
-            new Thread(() =>
-            {
-                LoadAssets("RCAssets");
-            }).Start();
+            Application.RegisterLogCallback(UnityLogHandle);
+            
+            StartCoroutine(LoadRCAssets());
         }
 
         Shelter.OnMainMenu();
     }
-
-    private static void LoadAssets(string asset)
+    
+    private void UnityLogHandle(string log, string stacktrace, LogType type)
     {
-        using (var stream = Shelter.Assembly.GetManifestResourceStream($@"Mod.Resources.Assets.{asset}.unity3d"))
+        switch (type)
         {
-            if (stream == null)
-                throw new NullReferenceException("Cannot find resource"); // TODO: Log
-            using (var ms = new MemoryStream())
-            {
-                byte[] buffer = new byte[8192];
+            case LogType.Error:
+                Shelter.Log(log, LogLevel.Error);
+                break;
+            case LogType.Assert:
+                Shelter.Log(log, LogLevel.Error);
+                break;
+            case LogType.Warning:
+                if (!log.Contains("Behaviour is missing!"))
+                    Shelter.Log(log, LogLevel.Warning);
+                break;
+            case LogType.Log:
+                Shelter.Log(log);
+                break;
+            case LogType.Exception:
+                Shelter.Log($"{log} {stacktrace}", LogLevel.Error);
+                break;
+            default:
+                Shelter.Log($"LogLevel {type} does not exist.", LogLevel.Error);
+                throw new ArgumentOutOfRangeException(nameof(type), type, null);
+        }
+    }
 
-                int bytesRead;
-                while ((bytesRead = stream.Read(buffer, 0, buffer.Length)) > 0)
-                    ms.Write(buffer, 0, bytesRead);
-                
-                ms.Flush();
-
-                FengGameManagerMKII.RCassets = AssetBundle.CreateFromMemoryImmediate(ms.ToArray());
-            }
+    private static IEnumerator LoadRCAssets()
+    {
+        var url = "http://iishawk.it/AoTTG/RCAssets.unity3d";
+        var file = Application.dataPath + "/RCAssets.unity3d";
+        if (File.Exists(file))
+            url = "file://" + file;
+        
+        while (!Caching.ready)
+            yield return null;
+        using (WWW www = WWW.LoadFromCacheOrDownload(url, 1))
+        {
+            yield return www;
+            if (www.error != null)
+                throw new Exception("Error on WWW request (RCAssets):" + www.error);
+            FengGameManagerMKII.RCassets = www.assetBundle;
         }
     }
 }
