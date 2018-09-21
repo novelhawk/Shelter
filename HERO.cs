@@ -4580,9 +4580,6 @@ public class HERO : Photon.MonoBehaviour
                         if (Shelter.InputManager.IsDown(InputAction.Suicide))
                             this.Suicide();
                         
-                        bool ReflectorVariable2;
-                        bool ReflectorVariable1;
-                        bool ReflectorVariable0;
                         this.bufferUpdate();
                         this.updateExt();
                         
@@ -5466,15 +5463,7 @@ public class HERO : Photon.MonoBehaviour
                                 this.idle();
                             }
                         }
-                        if (Shelter.InputManager.IsKeyPressed(InputAction.LeftHook))
-                        {
-                            ReflectorVariable0 = true;
-                        }
-                        else
-                        {
-                            ReflectorVariable0 = false;
-                        }
-                        if (!(!ReflectorVariable0 || ((this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.State == HeroState.Grab) && this.State != HeroState.Idle)))
+                        if (!(!Shelter.InputManager.IsKeyPressed(InputAction.LeftHook) || ((this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.State == HeroState.Grab) && this.State != HeroState.Idle)))
                         {
                             if (this.bulletLeft != null)
                             {
@@ -5482,12 +5471,11 @@ public class HERO : Photon.MonoBehaviour
                             }
                             else
                             {
-                                RaycastHit hit4;
                                 Ray ray4 = Camera.main.ScreenPointToRay(Input.mousePosition);
                                 LayerMask mask10 = 1 << LayerMask.NameToLayer("Ground");
                                 LayerMask mask11 = 1 << LayerMask.NameToLayer("EnemyBox");
                                 LayerMask mask12 = mask11 | mask10;
-                                if (Physics.Raycast(ray4, out hit4, 10000f, mask12.value))
+                                if (Physics.Raycast(ray4, out var hit4, 10000f, mask12.value))
                                 {
                                     this.launchLeftRope(hit4, true, 0);
                                     this.rope.Play();
@@ -5498,15 +5486,7 @@ public class HERO : Photon.MonoBehaviour
                         {
                             this.QHold = false;
                         }
-                        if (Shelter.InputManager.IsKeyPressed(InputAction.RightHook))
-                        {
-                            ReflectorVariable1 = true;
-                        }
-                        else
-                        {
-                            ReflectorVariable1 = false;
-                        }
-                        if (!(!ReflectorVariable1 || (this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.State == HeroState.Grab) && this.State != HeroState.Idle))
+                        if (!(!Shelter.InputManager.IsKeyPressed(InputAction.RightHook) || (this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.State == HeroState.Grab) && this.State != HeroState.Idle))
                         {
                             if (this.bulletRight != null)
                             {
@@ -5514,12 +5494,11 @@ public class HERO : Photon.MonoBehaviour
                             }
                             else
                             {
-                                RaycastHit hit5;
                                 Ray ray5 = Camera.main.ScreenPointToRay(Input.mousePosition);
                                 LayerMask mask13 = 1 << LayerMask.NameToLayer("Ground");
                                 LayerMask mask14 = 1 << LayerMask.NameToLayer("EnemyBox");
                                 LayerMask mask15 = mask14 | mask13;
-                                if (Physics.Raycast(ray5, out hit5, 10000f, mask15.value))
+                                if (Physics.Raycast(ray5, out var hit5, 10000f, mask15.value))
                                 {
                                     this.launchRightRope(hit5, true, 0);
                                     this.rope.Play();
@@ -5530,15 +5509,7 @@ public class HERO : Photon.MonoBehaviour
                         {
                             this.EHold = false;
                         }
-                        if (Shelter.InputManager.IsKeyPressed(InputAction.BothHooks))
-                        {
-                            ReflectorVariable2 = true;
-                        }
-                        else
-                        {
-                            ReflectorVariable2 = false;
-                        }
-                        if (!(!ReflectorVariable2 || ((this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.State == HeroState.Grab) && this.State != HeroState.Idle)))
+                        if (!(!Shelter.InputManager.IsKeyPressed(InputAction.BothHooks) || ((this.baseAnimation.IsPlaying("attack3_1") || this.baseAnimation.IsPlaying("attack5") || this.baseAnimation.IsPlaying("special_petra") || this.State == HeroState.Grab) && this.State != HeroState.Idle)))
                         {
                             this.QHold = true;
                             this.EHold = true;

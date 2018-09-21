@@ -29,10 +29,10 @@ public class SpectatorMovement : MonoBehaviour
         else if (Shelter.InputManager.IsKeyPressed(InputAction.Right))
             y = 1f;
             
-        if (x > 0f)      transform.position += transform.forward * speed * Time.deltaTime;
+        if      (x > 0f) transform.position += transform.forward * speed * Time.deltaTime;
         else if (x < 0f) transform.position -= transform.forward * speed * Time.deltaTime;
         
-        if (y > 0f)      transform.position += transform.right * speed * Time.deltaTime;
+        if      (y > 0f) transform.position += transform.right * speed * Time.deltaTime;
         else if (y < 0f) transform.position -= transform.right * speed * Time.deltaTime;
         
         if (Shelter.InputManager.IsKeyPressed(InputAction.LeftHook))

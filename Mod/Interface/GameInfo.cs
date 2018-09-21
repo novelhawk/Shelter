@@ -60,7 +60,7 @@ namespace Mod.Interface
         private float _lastUpdate;
         private void Update()
         {
-            if (Time.time - _lastUpdate < 1)
+            if (Time.time - _lastUpdate < .4f)
                 return;
             
             _fps = (int) (1f / Time.unscaledDeltaTime);
