@@ -4,7 +4,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using Mod;
+using Mod.Exceptions;
 using Mod.Interface;
+using Mod.Logging;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 
@@ -36,21 +39,18 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
 
     public void DebugReturn(DebugLevel level, string message)
     {
-        if (level == DebugLevel.ERROR)
+        switch (level)
         {
-            UnityEngine.Debug.LogError(message);
-        }
-        else if (level == DebugLevel.WARNING)
-        {
-            UnityEngine.Debug.LogWarning(message);
-        }
-        else if (level == DebugLevel.INFO && PhotonNetwork.logLevel >= PhotonLogLevel.Informational)
-        {
-            UnityEngine.Debug.Log(message);
-        }
-        else if (level == DebugLevel.ALL && PhotonNetwork.logLevel == PhotonLogLevel.Full)
-        {
-            UnityEngine.Debug.Log(message);
+            case DebugLevel.ERROR:
+                Shelter.Log(message, LogLevel.Error);
+                break;
+            case DebugLevel.WARNING:
+                Shelter.Log(message, LogLevel.Warning);
+                break;
+            case DebugLevel.INFO when PhotonNetwork.logLevel >= PhotonLogLevel.Informational:
+            case DebugLevel.ALL when PhotonNetwork.logLevel == PhotonLogLevel.Full:
+                Shelter.Log(message);
+                break;
         }
     }
 
@@ -138,12 +138,12 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
                 {
                     flag = PhotonNetwork.networkingPeer.DispatchIncomingCommands();
                 }
+                catch (NotAllowedException)
+                {}
                 catch (Exception e)
                 {
-                    Chat.System("We probably got ping froze.");
-                    Chat.System($"{e.GetType().FullName}: {e.Message}");
-                    Debug.Log("We probably got ping froze.");
-                    Debug.LogException(e);
+                    Shelter.LogConsole("An {0} has been thrown in the PhotonAssembly.", e.GetType().Name);
+                    Shelter.Log("{0}: {1}\n{2}", e.GetType().FullName, e.Message, e.StackTrace);
                     flag = false; 
                 }
             }

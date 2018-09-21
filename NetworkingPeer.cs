@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using Mod.Exceptions;
 using Mod.Interface;
+using Mod.Logging;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -1609,7 +1610,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                     return;
 
                 if (photonEvent.Code < 200)
-                    Chat.System($"Received Event({photonEvent.Code}) from {sender}");
+                    throw new NotAllowedException(photonEvent.Code, sender);
                 break;
         }
     }

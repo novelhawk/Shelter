@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Diagnostics.SymbolStore;
 using System.IO;
 using System.Text;
-using Mono.Security.X509.Extensions;
+using JetBrains.Annotations;
 using UnityEngine;
 
-namespace Mod.Logger
+namespace Mod.Logging
 {
-    public class FileLogger
+    public class FileLogger : ILogger
     {
         private const string Latest = "latest.log";
-        private const string Old = "{0}_{1}_{2} {3}_{4}.log";
+        private const string Old = "{0:00}-{1:00}-{2} {3:00}-{4:00}-{5:00}.log";
         
         private readonly string _path = Application.dataPath + "/Logs/";
         private FileStream _fileStream;
@@ -20,30 +19,33 @@ namespace Mod.Logger
             if (!Directory.Exists(_path))
                 Directory.CreateDirectory(_path);
 
-//            if (File.Exists(_path + Latest))
+            if (File.Exists(_path + Latest))
+                MoveOldLogs();
                 
-            
             SafeOpenFileStream(_path + Latest);
-            Application.LogCallback = 
         }
         
-        
-        
+        private void MoveOldLogs()
+        {
+            var info = new FileInfo(_path + Latest);
+            StringBuilder builder = new StringBuilder(Old + 4);
+            for (int i = 0; i < 1 || File.Exists(builder.ToString()); i++)
+            {
+                builder.Length = 0;
+                builder.Append(DateFormat(Old, info.CreationTime));
+                if (i > 0)
+                    builder.AppendFormat(" ({0})", i);
+            }
+            
+            File.Move(_path + Latest, _path + builder);
+        }
 
-//        private void MoveOldLogs()
-//        {
-//            string line;
-//            using (var fs = File.Open(_path + Latest, FileMode.Open, FileAccess.Read, FileShare.Read))
-//            {
-//                using (StreamReader reader = new StreamReader(fs, Encoding.UTF8))
-//                {
-//                    reader.ReadLine();
-//                    line = reader.ReadLine();
-//                }
-//            }
-//            
-//            line
-//        }
+        private static string DateFormat(string line, DateTime time)
+        {
+            return string.Format(line, 
+                time.Day, time.Month, time.Year, 
+                time.Hour, time.Minute, time.Second);
+        }
 
         private void SafeOpenFileStream(string path)
         {
@@ -58,22 +60,19 @@ namespace Mod.Logger
                 Application.Quit();
             }
             
-            Log("# Shelter Mod Logs");
-            DateTime now = DateTime.Now;
-            Log("# Created {0}/{1}/{2} at {3}:{4}:{5}", 
-                now.Day, now.Month, now.Year, 
-                now.Hour, now.Minute, now.Second);
+            Log($"# Shelter Logs{Environment.NewLine}");
+            Log("{0}{1}{1}", DateFormat("# Created {0:00}/{1:00}/{2} at {3:00}:{4:00}:{5:00}", DateTime.Now), Environment.NewLine);
         }
 
-        public void Log(object obj) => Log(obj as string);
         public void Log(string line, params object[] args) => Log(string.Format(line, args));
-        public void Log(string line)
+        public void Log(string line) // Not thread-safe. Use lock if we start to use threads.
         {
-            if (_fileStream == null || line == null)
+            if (_fileStream == null)
                 return;
-            
+
             var bytes = Encoding.UTF8.GetBytes(line);
             _fileStream.Write(bytes, 0, bytes.Length);
+            _fileStream.Flush();
         }
     }
 }

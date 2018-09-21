@@ -46,7 +46,8 @@ public partial class FengGameManagerMKII
         Shelter.OnJoinedGame();
         DiscordRpc.SendInGameMulti();
         var room = PhotonNetwork.Room;
-        Mod.Interface.Chat.System("Joined " + room.Name.RemoveColors());
+        Mod.Interface.Chat.System($"Joined {room.Name.RemoveColors()}");
+        Shelter.LogConsole("Joined room {0}",  room.Name.RemoveColors());
         maxPlayers = room.MaxPlayers;
         playerList = string.Empty;
         gameTimesUp = false;
@@ -455,6 +456,7 @@ public partial class FengGameManagerMKII
 
     public void OnPhotonPlayerConnected(Player player)
     {
+        Shelter.LogConsole("{0} connected", player.ToString().RemoveColors());
         DiscordRpc.SendInGameMulti();
         
         if (PhotonNetwork.isMasterClient)
@@ -590,6 +592,7 @@ public partial class FengGameManagerMKII
 
     public void OnPhotonPlayerDisconnected(Player player)
     {
+        Shelter.LogConsole("{0} disconnected!", player.ToString().RemoveColors());
         DiscordRpc.SendInGameMulti();
         
         if (!gameTimesUp)

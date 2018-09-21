@@ -1,7 +1,10 @@
 ﻿namespace Mod.Logging
 {
-    public class LogLevel
+    public enum LogLevel
     {
-        
+        Info,
+        Warning,
+        Error,
+        Event
     }
 }
