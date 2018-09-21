@@ -930,94 +930,40 @@ public class HERO : Photon.MonoBehaviour
         }
     }
 
-    private void dodge(bool offTheWall = false)
+    private void Dodge(bool offTheWall = false)
     {
-        if (this.myHorse != null && !this.isMounted && Vector3.Distance(this.myHorse.transform.position, transform.position) < 15f)
+        if (this.myHorse != null && (isMounted || Vector3.Distance(myHorse.transform.position, transform.position) < 15f)) 
+            return;
+        
+        this.State = HeroState.GroundDodge;
+        if (!offTheWall)
         {
-            this.getOnHorse();
+            float x = 0;
+            if (Shelter.InputManager.IsKeyPressed(InputAction.Forward))
+                x = 1f;
+            else if (Shelter.InputManager.IsKeyPressed(InputAction.Back))
+                x = -1f;
+                
+            float y = 0;
+            if (Shelter.InputManager.IsKeyPressed(InputAction.Left))
+                y = -1f;
+            else if (Shelter.InputManager.IsKeyPressed(InputAction.Right))
+                y = 1f;
+
+            if (y != 0f || x != 0f)
+                facingDirection = this.getGlobalFacingDirection(y, x) + 180f;
+            else
+                facingDirection = currentCamera.transform.rotation.eulerAngles.y + 180f;
+            this.targetRotation = Quaternion.Euler(0f, facingDirection + 180f, 0f);
+
+            this.crossFade("dodge", 0.1f);
         }
         else
         {
-            this.State = HeroState.GroundDodge;
-            if (!offTheWall)
-            {
-                float num;
-                float num2;
-                if (Shelter.InputManager.IsDown(InputAction.Forward))
-                {
-                    num = 1f;
-                }
-                else if (Shelter.InputManager.IsDown(InputAction.Back))
-                {
-                    num = -1f;
-                }
-                else
-                {
-                    num = 0f;
-                }
-                if (Shelter.InputManager.IsDown(InputAction.Left))
-                {
-                    num2 = -1f;
-                }
-                else if (Shelter.InputManager.IsDown(InputAction.Right))
-                {
-                    num2 = 1f;
-                }
-                else
-                {
-                    num2 = 0f;
-                }
-                float num3 = this.getGlobalFacingDirection(num2, num);
-                if (num2 != 0f || num != 0f)
-                {
-                    this.facingDirection = num3 + 180f;
-                    this.targetRotation = Quaternion.Euler(0f, this.facingDirection, 0f);
-                }
-                this.crossFade("dodge", 0.1f);
-            }
-            else
-            {
-                this.playAnimation("dodge");
-                this.playAnimationAt("dodge", 0.2f);
-            }
-            this.sparks.enableEmission = false;
+            this.playAnimation("dodge");
+            this.playAnimationAt("dodge", 0.2f);
         }
-    }
-
-    private void dodge2(bool offTheWall = false)
-    {
-        if (this.myHorse == null || this.isMounted || Vector3.Distance(this.myHorse.transform.position, transform.position) >= 15f)
-        {
-            this.State = HeroState.GroundDodge;
-            if (!offTheWall)
-            {
-                float x = 0;
-                if (Shelter.InputManager.IsDown(InputAction.Forward))
-                    x = 1f;
-                else if (Shelter.InputManager.IsDown(InputAction.Back))
-                    x = -1f;
-                
-                float y = 0;
-                if (Shelter.InputManager.IsDown(InputAction.Left))
-                    y = -1f;
-                else if (Shelter.InputManager.IsDown(InputAction.Right))
-                    y = 1f;
-                
-                float num3 = this.getGlobalFacingDirection(y, x);
-                if (y != 0f || x != 0f)
-                {
-                    this.facingDirection = num3 + 180f;
-                    this.targetRotation = Quaternion.Euler(0f, this.facingDirection, 0f);
-                }
-                this.crossFade("dodge", 0.1f);
-            }
-            else
-            {
-                this.playAnimation("dodge");
-                this.playAnimationAt("dodge", 0.2f);
-            }
-            this.sparks.enableEmission = false;
-        }
+        this.sparks.enableEmission = false;
     }
 
     private void erenTransform()
@@ -1606,7 +1552,7 @@ public class HERO : Photon.MonoBehaviour
                             if (this.wallRunTime > 1f || z == 0f && x == 0f)
                             {
                                 this.baseRigidBody.AddForce(-this.baseTransform.forward * this.speed * 0.75f, ForceMode.Impulse);
-                                this.dodge2(true);
+                                this.Dodge(true);
                             }
                             else if (!this.IsUpFrontGrounded())
                             {
@@ -4685,7 +4631,7 @@ public class HERO : Photon.MonoBehaviour
                             }
                             if (!(!Shelter.InputManager.IsDown(InputAction.Dodge) || this.baseAnimation.IsPlaying("jump") || this.baseAnimation.IsPlaying("horse_geton")))
                             {
-                                this.dodge2(false);
+                                this.Dodge(false);
                                 return;
                             }
                         }
@@ -4717,16 +4663,13 @@ public class HERO : Photon.MonoBehaviour
                                 this.salute();
                                 return;
                             }
-                            if (!this.isMounted && (Shelter.InputManager.IsKeyPressed(InputAction.Attack) || Shelter.InputManager.IsDown(InputAction.Special)) && !Screen.showCursor && !this.useGun)
+                            if (!this.isMounted && (Shelter.InputManager.IsDown(InputAction.Attack) || Shelter.InputManager.IsDown(InputAction.Special)) && !Screen.showCursor && !this.useGun)
                             {
-                                bool flag3 = false;
+                                bool isSkillInCD = false;
                                 if (Shelter.InputManager.IsDown(InputAction.Special))
                                 {
-                                    if (this.skillCDDuration > 0f || flag3)
-                                    {
-                                        flag3 = true;
-                                    }
-                                    else
+                                    isSkillInCD = skillCDDuration > 0f;
+                                    if (!isSkillInCD)
                                     {
                                         this.skillCDDuration = this.skillCDLast;
                                         if (this.skillId == "eren")
@@ -4743,7 +4686,7 @@ public class HERO : Photon.MonoBehaviour
                                             }
                                             else
                                             {
-                                                flag3 = true;
+                                                isSkillInCD = true;
                                                 this.skillCDDuration = 0f;
                                             }
                                         }
@@ -4756,7 +4699,7 @@ public class HERO : Photon.MonoBehaviour
                                             }
                                             else
                                             {
-                                                flag3 = true;
+                                                isSkillInCD = true;
                                                 this.skillCDDuration = 0f;
                                             }
                                         }
@@ -4771,7 +4714,7 @@ public class HERO : Photon.MonoBehaviour
                                             }
                                             else
                                             {
-                                                flag3 = true;
+                                                isSkillInCD = true;
                                                 this.skillCDDuration = 0f;
                                             }
                                         }
@@ -4895,7 +4838,7 @@ public class HERO : Photon.MonoBehaviour
                                         }
                                         else
                                         {
-                                            flag3 = true;
+                                            isSkillInCD = true;
                                         }
                                     }
                                     else if (this.bulletLeft != null && this.bulletLeft.transform.parent != null)
@@ -4943,7 +4886,7 @@ public class HERO : Photon.MonoBehaviour
                                         }
                                     }
                                 }
-                                if (!flag3)
+                                if (!isSkillInCD)
                                 {
                                     this.checkBoxLeft.GetComponent<TriggerColliderWeapon>().clearHits();
                                     this.checkBoxRight.GetComponent<TriggerColliderWeapon>().clearHits();
