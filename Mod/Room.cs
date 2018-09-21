@@ -22,6 +22,8 @@ namespace Mod
         private readonly DayLight _roomDayLight;
         private readonly string _roomPassword;
         private readonly int _roomTime;
+        private int _roomUUID;
+
 
         private bool _removedFromList;
         private int _maxPlayers;
@@ -43,12 +45,12 @@ namespace Mod
             _roomName = split[0].MaxChars(100);
             _roomMap = LevelInfoManager.GetInfo(split[1]);
             _roomDifficulty = DifficultyToEnum(split[2]);
-            if (int.TryParse(split[3], out int maxPlayers))
-                _maxPlayers = maxPlayers;
+            if (int.TryParse(split[3], out int time))
+                _roomTime = time;
             _roomDayLight = DayLightToEnum(split[4]);
             _roomPassword = split[5];
-            if (int.TryParse(split[6], out int time))
-                _roomTime = time;
+            if (int.TryParse(split[6], out int uuid))
+                _roomUUID = uuid;
 
             LoadFromHashtable(properties);
         }
@@ -64,12 +66,12 @@ namespace Mod
             _roomName = split[0];
             _roomMap = LevelInfoManager.GetInfo(split[1]);
             _roomDifficulty = DifficultyToEnum(split[2]);
-            if (int.TryParse(split[3], out int maxPlayers))
-                _maxPlayers = maxPlayers;
+            if (int.TryParse(split[3], out int time))
+                _roomTime = time;
             _roomDayLight = DayLightToEnum(split[4]);
             _roomPassword = split[5];
-            if (int.TryParse(split[6], out int time))
-                _roomTime = time;
+            if (int.TryParse(split[6], out int uuid))
+                _roomUUID = uuid;
 
             if (options != null)
             {
