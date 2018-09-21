@@ -42,8 +42,6 @@
         TitanBite,
         
         ReelIn,
-        ReelOut,
-        
-        __Last
+        ReelOut
     }
 }

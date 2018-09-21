@@ -1,146 +1,43 @@
-﻿[
-  {
-    "action": "Attack",
-    "key": "Mouse0"
-  },
-  {
-    "action": "Special",
-    "key": "Mouse1"
-  },
-  {
-    "action": "BothHooks",
-    "key": "F"
-  },
-  {
-    "action": "ChangeCamera",
-    "key": "C"
-  },
-  {
-    "action": "Dodge",
-    "key": "LeftControl"
-  },
-  {
-    "action": "RedFlare",
-    "key": "Alpha1"
-  },
-  {
-    "action": "GreenFlare",
-    "key": "Alpha2"
-  },
-  {
-    "action": "BlackFlare",
-    "key": "Alpha3"
-  },
-  {
-    "action": "LockTitan",
-    "key": "Space"
-  },
-  {
-    "action": "ToggleFullscreen",
-    "key": "Backspace"
-  },
-  {
-    "action": "LeftHook",
-    "key": "Q"
-  },
-  {
-    "action": "RightHook",
-    "key": "E"
-  },
-  {
-    "action": "MenuKey",
-    "key": "P"
-  },
-  {
-    "action": "Reload",
-    "key": "R"
-  },
-  {
-    "action": "Suicide",
-    "key": "T"
-  },
-  {
-    "action": "Salute",
-    "key": "N"
-  },
-  {
-    "action": "Forward",
-    "key": "W"
-  },
-  {
-    "action": "Back",
-    "key": "S"
-  } ,
-  {
-    "action": "Right",
-    "key": "D"
-  },
-  {
-    "action": "Left",
-    "key": "A"
-  },
-  {
-    "action": "Jump",
-    "key": "LeftShift"
-  },
-  {
-    "action": "OpenNavigator",
-    "key": "RightControl"
-  },
-  {
-    "action": "EnterCannon",
-    "key": "Q"
-  },
-  {
-    "action": "TitanDoublePunch",
-    "key": "Q"
-  },
-  {
-    "action": "SlowMovement",
-    "key": "LeftAlt"
-  },
-  {
-    "action": "TitanSlam",
-    "key": "E"
-  },
-  {
-    "action": "TitanJump",
-    "key": "Space"
-  },
-  {
-    "action": "TitanCover",
-    "key": "Y"
-  },
-  {
-    "action": "TitanGrabFront",
-    "key": "R"
-  },
-  {
-    "action": "TitanGrabBack",
-    "key": "F"
-  },
-  {
-    "action": "TitanGrabNape",
-    "key": "V"
-  },
-  {
-    "action": "TitanAntiAE",
-    "key": "Mouse0"
-  },
-  {
-    "action": "TitanBite",
-    "key": "Mouse1"
-  },
-  {
-    "action": "ReelIn",
-    "key": "Mouse4"
-  },
-  {
-    "action": "ReelOut",
-    "key": "Mouse3"
-  },
-  {
-    "action": "HorseJump",
-    "key": "Space"
-  }
-]
+﻿{
+  "Attack": "Mouse0",
+  "Special": "Mouse1",
+  "BothHooks": "F",
+  "ChangeCamera": "C",
+  "Dodge": "LeftControl",
+  "RedFlare": "Alpha1",
+  "GreenFlare": "Alpha2",
+  "BlackFlare": "Alpha3",
+  "LockTitan": "Space",
+  "ToggleFullscreen": "Backspace",
+  "LeftHook": "Q",
+  "RightHook": "E",
+  "Reload": "R",
+  "Suicide": "T",
+  "Salute": "N",
+  
+  "Forward": "W",
+  "Back": "S" ,
+  "Right": "D",
+  "Left": "A",
+  "Jump": "LeftShift",
+  
+  "EnterCannon": "Q",
+  "SlowMovement": "LeftAlt",
+
+  "TitanDoublePunch": "Q",
+  "TitanSlam": "E",
+  "TitanJump": "Space",
+  "TitanCover": "Y",
+  "TitanGrabFront": "R",
+  "TitanGrabBack": "F",
+  "TitanGrabNape": "V",
+  "TitanAntiAE": "Mouse0",
+  "TitanBite": "Mouse1",
+
+  "MenuKey": "P",
+  "OpenNavigator": "RightControl",
+  
+  "ReelIn": "Mouse4",
+  "ReelOut": "Mouse3",
+  "HorseJump": "Space"
+}

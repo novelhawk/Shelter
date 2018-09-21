@@ -2,65 +2,67 @@
 using System.Linq;
 using System.Security.Permissions;
 using Mod.Keybinds;
+using Mod.Logging;
+using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Mod.Managers
 {
-    public class InputManager : Dictionary<InputAction, KeyCode>
+    public class InputManager
     {
-        private readonly ConfigManager<List<Keybind>> _file;
+        private readonly ConfigManager<Dictionary<InputAction, KeyCode>> _file;
+        private Dictionary<InputAction, KeyCode> _dictionary;
         private const string File = "inputs.json";
-        private const int KeysNumber = (int) InputAction.__Last;
+        private const int KeysNumber = 36;
 
-        public InputManager() : base(KeysNumber)
+        public InputManager()
         {
-            _file = new ConfigManager<List<Keybind>>(File);
+            _file = new ConfigManager<Dictionary<InputAction, KeyCode>>(File);
             Load();
         }
 
-        public void Load()
+        private void Load()
         {
             Load(_file.ReadFile());
-            
-            if (Count < KeysNumber)
+
+            if (_dictionary.Count < KeysNumber)
+            {
                 Load(_file.InvalidateCurrentFile());
+                Shelter.Log("Number of actions mismatch with the number of entries in {0}", LogLevel.Error, File);
+            }
         }
 
         private void Load(string json)
         {
-            Clear();
-            foreach (var entry in _file.Deserialize(json))
-                Add(entry.Action, entry.Key);
+            try
+            {
+                _dictionary = _file.Deserialize(json);
+            }
+            catch (JsonSerializationException e)
+            {
+                Load(_file.InvalidateCurrentFile());
+                Shelter.Log("File {0} was corrupted. Restoring defualt.", LogLevel.Error, File);
+            }
         }
 
         public bool Save()
         {
-            var obj = this.Select(x => new Keybind {Action = x.Key, Key = x.Value}).ToList();
-            return _file.WriteFile(_file.Serialize(obj));
+            string obj = _file.Serialize(_dictionary);
+            return _file.WriteFile(obj);
         }
 
-        public bool IsKeyPressed(InputAction action)
-        {
-            if (!this.ContainsKey(action))
-                throw new KeyNotFoundException($"The key \"{action}\" was not present in the dictionary");
-            
-            return Input.GetKey(this[action]);
-        }
+        public bool IsDown(InputAction action) => Input.GetKeyDown(_dictionary[action]);
+        public bool IsUp(InputAction action) => Input.GetKeyUp(_dictionary[action]);
+        public bool IsKeyPressed(InputAction action) => Input.GetKey(_dictionary[action]);
 
-        public bool IsUp(InputAction action)
+        public KeyCode this[InputAction action]
         {
-            if (!this.ContainsKey(action))
-                throw new KeyNotFoundException($"The key \"{action}\" was not present in the dictionary");
-            
-            return Input.GetKeyUp(this[action]);
-        }
-        
-        public bool IsDown(InputAction action)
-        {
-            if (!this.ContainsKey(action))
-                throw new KeyNotFoundException($"The key \"{action}\" was not present in the dictionary");
-            
-            return Input.GetKeyDown(this[action]);
+            get
+            {
+                if (_dictionary.ContainsKey(action))
+                    return this[action];
+                return KeyCode.None;
+            }
         }
     }
 }
