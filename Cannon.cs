@@ -220,14 +220,6 @@ public class Cannon : Photon.MonoBehaviour
                 this.currentRot += Time.deltaTime * -speed;
                 this.barrel.Rotate(new Vector3(0f, 0f, Time.deltaTime * -speed));
             }
-            if (Shelter.InputManager.IsKeyPressed(InputAction.Left))
-            {
-                transform.Rotate(new Vector3(0f, Time.deltaTime * -speed, 0f));
-            }
-            else if (Shelter.InputManager.IsKeyPressed(InputAction.Right))
-            {
-                transform.Rotate(new Vector3(0f, Time.deltaTime * speed, 0f));
-            }
         }
         else
         {
@@ -244,16 +236,13 @@ public class Cannon : Photon.MonoBehaviour
                 this.currentRot += Time.deltaTime * speed;
                 this.barrel.Rotate(new Vector3(Time.deltaTime * speed, 0f, 0f));
             }
-            if (Shelter.InputManager.IsKeyPressed(InputAction.Left))
-            {
-                transform.Rotate(new Vector3(0f, Time.deltaTime * -speed, 0f));
-            }
-            else if (Shelter.InputManager.IsKeyPressed(InputAction.Right))
-            {
-                transform.Rotate(new Vector3(0f, Time.deltaTime * speed, 0f));
-            }
         }
-        if (Shelter.InputManager.IsKeyPressed(InputAction.Attack))
+        if (Shelter.InputManager.IsKeyPressed(InputAction.Left))
+            transform.Rotate(new Vector3(0f, Time.deltaTime * -speed, 0f));
+        else if (Shelter.InputManager.IsKeyPressed(InputAction.Right))
+            transform.Rotate(new Vector3(0f, Time.deltaTime * speed, 0f));
+        
+        if (Shelter.InputManager.IsDown(InputAction.Attack))
         {
             this.Fire();
         }
