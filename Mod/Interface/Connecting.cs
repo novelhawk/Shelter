@@ -29,7 +29,7 @@ namespace Mod.Interface
             _rotation += Time.deltaTime * 250;
             if (_room != null && _room.IsJoinable)
             {
-                PhotonNetwork.JoinRoom(_room.FullName);
+                _room.Join();
                 Disable();
             }
         }
