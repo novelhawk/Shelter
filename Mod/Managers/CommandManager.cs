@@ -14,18 +14,13 @@ namespace Mod.Managers
         public CommandManager()
         {
             // Slower method but it's easier to add commands
-            foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+            foreach (var type in Shelter.Assembly.GetTypes())
             {
-                if (!assembly.FullName.Contains("Assembly-CSharp, ")) //Assembly-CSharp, Version=3.6.2.0, Culture=neutral, PublicKeyToken=null
+                if (type.Namespace != $"{nameof(Mod)}.{nameof(Commands)}")
                     continue;
-                foreach (var type in assembly.GetTypes())
-                {
-                    if (type.Namespace != "Mod.Commands")
-                        continue;
 
-                    if (type.IsSubclassOf(typeof(Command)))
-                        Add(type.GetConstructor(Type.EmptyTypes)?.Invoke(new object[0]) as Command);
-                }
+                if (type.IsSubclassOf(typeof(Command)))
+                    Add(type.GetConstructor(Type.EmptyTypes)?.Invoke(new object[0]) as Command);
             }
         }
 
