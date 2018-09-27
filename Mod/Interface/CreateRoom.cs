@@ -91,32 +91,29 @@ namespace Mod.Interface
 
         private static int CustomButton(Rect rect, string txt, GUIStyle style)
         {
+            GUI.DrawTexture(rect, style.normal.background);
+            GUI.Label(rect, txt, style);
+            
             Vector3 pos = Input.mousePosition;
-            var y1 = -(Input.mousePosition.y - Screen.height + 1);
-            bool x = rect.x <= pos.x && pos.x <= rect.x + rect.width;
-            bool y = rect.y <= y1 && y1 <= rect.y + rect.height;
-            if (x && y)
+            var y = -(Input.mousePosition.y - Screen.height + 1);
+            if (!rect.Contains(new Vector2(pos.x, y))) 
+                return 0;
+            
+            if (Event.current.type == EventType.MouseUp)
             {
-                if (GUI.Button(rect, string.Empty, GUIStyle.none)) // Make sure it register only once click per frame. TODO: Find alternative
+                switch (Event.current.button)
                 {
-                    if (Input.GetMouseButtonUp(0))
-                    {
+                    case 0:
                         GUI.DrawTexture(rect, style.active.background);
                         GUI.Label(rect, txt, style);
                         return 1;
-                    }
-                    if (Input.GetMouseButtonUp(1))
-                    {
+                    case 1:
                         GUI.DrawTexture(rect, style.active.background);
                         GUI.Label(rect, txt, style);
                         return -1;
-                    }
                 }
-                GUI.DrawTexture(rect, style.hover.background);
-                GUI.Label(rect, txt, style);
-                return 0;
             }
-            GUI.DrawTexture(rect, style.normal.background);
+            GUI.DrawTexture(rect, style.hover.background);
             GUI.Label(rect, txt, style);
             return 0;
         }
@@ -222,7 +219,7 @@ namespace Mod.Interface
             rect = new SmartRect(areaRect.x + areaRect.width / 2f + 20, areaRect.y, areaRect.width / 2f - 20, 30);
             roomName = GUI.TextField(rect, roomName, _textField);
             roomPassword = GUI.TextField(rect.OY(rect.Height + 3), roomPassword, _textField);
-            switch (CustomButton(rect.OY(rect.Height + 3), LevelInfoManager.Levels[roomMapIndex].Name, _button))
+            switch (CustomButton(rect.OY(rect.Height + 3), LevelInfoManager.Levels[roomMapIndex].Name + " " + roomMapIndex, _button))
             {
                 case 1:
                     roomMapIndex = LevelInfoManager.Levels.Length - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
