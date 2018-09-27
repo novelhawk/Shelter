@@ -5,6 +5,7 @@ using Mod.Keybinds;
 using Mod.Logging;
 using Newtonsoft.Json;
 using UnityEngine;
+using LogType = Mod.Logging.LogType;
 
 namespace Mod.Managers
 {
@@ -28,7 +29,7 @@ namespace Mod.Managers
             if (_dictionary.Count < KeysNumber)
             {
                 Load(_file.InvalidateCurrentFile());
-                Shelter.Log("Number of actions mismatch with the number of entries in {0}", LogLevel.Error, File);
+                Shelter.Log("Number of actions mismatch with the number of entries in {0}", LogType.Error, File);
             }
         }
 
@@ -41,7 +42,7 @@ namespace Mod.Managers
             catch (JsonSerializationException e)
             {
                 Load(_file.InvalidateCurrentFile());
-                Shelter.Log("File {0} was corrupted. Restoring defualt.", LogLevel.Error, File);
+                Shelter.Log("File {0} was corrupted. Restoring defualt.", LogType.Error, File);
             }
         }
 
@@ -60,7 +61,7 @@ namespace Mod.Managers
             get
             {
                 if (_dictionary.ContainsKey(action))
-                    return this[action];
+                    return _dictionary[action];
                 return KeyCode.None;
             }
         }
