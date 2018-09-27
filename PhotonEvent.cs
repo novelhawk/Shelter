@@ -1,5 +1,6 @@
 ﻿public enum PhotonEvent : byte
 {
+    ModIdentify = 101,
     RPC = 200,
     OSR1 = 201,
     OSR = 206,

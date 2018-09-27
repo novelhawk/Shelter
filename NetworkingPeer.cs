@@ -8,9 +8,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using Mod.Exceptions;
-using Mod.Interface;
-using Mod.Logging;
 using UnityEngine;
+using Component = UnityEngine.Component;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
@@ -494,121 +493,6 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     }
 
     internal GameObject DoInstantiate(Hashtable evData, Player player, GameObject resourceGameObject)
-    {
-        Vector3 zero;
-        int[] numArray;
-        object[] objArray;
-        string key = (string) evData[(byte) 0];
-        int timestamp = (int) evData[(byte) 6];
-        int instantiationId = (int) evData[(byte) 7];
-        if (evData.ContainsKey((byte) 1))
-        {
-            zero = (Vector3) evData[(byte) 1];
-        }
-        else
-        {
-            zero = Vector3.zero;
-        }
-        Quaternion identity = Quaternion.identity;
-        if (evData.ContainsKey((byte) 2))
-        {
-            identity = (Quaternion) evData[(byte) 2];
-        }
-        int item = 0;
-        if (evData.ContainsKey((byte) 3))
-        {
-            item = (int) evData[(byte) 3];
-        }
-        short num4 = 0;
-        if (evData.ContainsKey((byte) 8))
-        {
-            num4 = (short) evData[(byte) 8];
-        }
-        if (evData.ContainsKey((byte) 4))
-        {
-            numArray = (int[]) evData[(byte) 4];
-        }
-        else
-        {
-            numArray = new int[] { instantiationId };
-        }
-        if (!InstantiateTracker.instance.checkObj(key, player, numArray))
-        {
-            return null;
-        }
-        if (evData.ContainsKey((byte) 5))
-        {
-            objArray = (object[]) evData[(byte) 5];
-        }
-        else
-        {
-            objArray = null;
-        }
-        if (item != 0 && !this.allowedReceivingGroups.Contains(item))
-        {
-            return null;
-        }
-        if (resourceGameObject == null)
-        {
-            if (!UsePrefabCache || !PrefabCache.TryGetValue(key, out resourceGameObject))
-            {
-                resourceGameObject = (GameObject) Resources.Load(key, typeof(GameObject));
-                if (UsePrefabCache)
-                {
-                    PrefabCache.Add(key, resourceGameObject);
-                }
-            }
-            if (resourceGameObject == null)
-            {
-                Debug.LogError("PhotonNetwork error: Could not Instantiate the prefab [" + key + "]. Please verify you have this gameobject in a Resources folder.");
-                return null;
-            }
-        }
-        PhotonView[] photonViewsInChildren = resourceGameObject.GetPhotonViewsInChildren();
-        if (photonViewsInChildren.Length != numArray.Length)
-        {
-            throw new Exception("Error in Instantiation! The resource's PhotonView count is not the same as in incoming data.");
-        }
-        for (int i = 0; i < numArray.Length; i++)
-        {
-            photonViewsInChildren[i].viewID = numArray[i];
-            photonViewsInChildren[i].prefix = num4;
-            photonViewsInChildren[i].instantiationId = instantiationId;
-        }
-        this.StoreInstantiationData(instantiationId, objArray);
-        GameObject obj2 = (GameObject) UnityEngine.Object.Instantiate(resourceGameObject, zero, identity);
-        for (int j = 0; j < numArray.Length; j++)
-        {
-            photonViewsInChildren[j].viewID = 0;
-            photonViewsInChildren[j].prefix = -1;
-            photonViewsInChildren[j].prefixBackup = -1;
-            photonViewsInChildren[j].instantiationId = -1;
-        }
-        this.RemoveInstantiationData(instantiationId);
-        if (this.instantiatedObjects.ContainsKey(instantiationId))
-        {
-            GameObject go = this.instantiatedObjects[instantiationId];
-            string str2 = string.Empty;
-            if (go != null)
-            {
-                foreach (PhotonView view in go.GetPhotonViewsInChildren())
-                {
-                    if (view != null)
-                    {
-                        str2 = str2 + view + ", ";
-                    }
-                }
-            }
-            object[] args = new object[] { obj2, instantiationId, this.instantiatedObjects.Count, go, str2, PhotonNetwork.lastUsedViewSubId, PhotonNetwork.lastUsedViewSubIdStatic, this.photonViewList.Count };
-            Debug.LogError(string.Format("DoInstantiate re-defines a GameObject. Destroying old entry! New: '{0}' (instantiationID: {1}) Old: {3}. PhotonViews on old: {4}. instantiatedObjects.Count: {2}. PhotonNetwork.lastUsedViewSubId: {5} PhotonNetwork.lastUsedViewSubIdStatic: {6} this.photonViewList.Count {7}.)", args));
-            this.RemoveInstantiatedGO(go, true);
-        }
-        this.instantiatedObjects.Add(instantiationId, obj2);
-        obj2.SendMessage(PhotonNetworkingMessage.OnPhotonInstantiate.ToString(), new PhotonMessageInfo(player, timestamp, null), SendMessageOptions.DontRequireReceiver);
-        return obj2;
-    }
-
-    internal GameObject DoInstantiate2(Hashtable evData, Player player, GameObject resourceGameObject)
     {
         Vector3 zero;
         int[] numArray;
@@ -1313,152 +1197,128 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
     public void OnEvent(EventData photonEvent)
     {
+        if (photonEvent.Parameters.Count == 0) // Can this even happen?
+            return;
+        
         int key = -1;
-        Player sender = null;
+        Player sender = Player.Self;
         if (photonEvent.Parameters.ContainsKey(254))
         {
             key = (int)photonEvent[254];
             if (this.mActors.ContainsKey(key))
                 sender = this.mActors[key];
         }
-        else if (photonEvent.Parameters.Count == 0)
-        {
+
+        if (photonEvent.Code != (byte) PhotonEvent.PlayerLeft &&
+            sender.IsIgnored)
             return;
-        }
 
         switch ((PhotonEvent) photonEvent.Code) 
         {
+            case PhotonEvent.ModIdentify:
+                sender.Mod = CustomMod.Cyan;
+                break;
+            
             case PhotonEvent.RPC:
-                if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
-                {
-                    this.ExecuteRPC(photonEvent[245] as Hashtable, sender);
-                    break;
-                }
-                return;
+                this.ExecuteRPC(photonEvent[245] as Hashtable, sender);
+                break;
 
             case PhotonEvent.OSR1:
             case PhotonEvent.OSR:
-                if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
+            {
+                if (photonEvent[245] is Hashtable hashtable)
                 {
-                    if (photonEvent[245] is Hashtable hashtable)
+                    if (!(hashtable[(byte)0] is int networkTime))
+                        return;
+                    
+                    short correctPrefix = -1;
+                    short hashtableIndex = 1;
+                    if (hashtable.ContainsKey((byte)1))
                     {
-                        if (!(hashtable[(byte)0] is int networkTime))
+                        if (!(hashtable[(byte)1] is short prefix))
                             return;
                         
-                        short correctPrefix = -1;
-                        short hashtableIndex = 1;
-                        if (hashtable.ContainsKey((byte)1))
-                        {
-                            if (!(hashtable[(byte)1] is short prefix))
-                                return;
-                            
-                            correctPrefix = prefix;
-                            hashtableIndex = 2;
-                        }
-                        for (short i = hashtableIndex; i < hashtable.Count; i = (short)(i + 1))
-                            this.OnSerializeRead(hashtable[i] as Hashtable, sender, networkTime, correctPrefix);
+                        correctPrefix = prefix;
+                        hashtableIndex = 2;
                     }
-                    break;
+                    for (short i = hashtableIndex; i < hashtable.Count; i = (short)(i + 1))
+                        this.OnSerializeRead(hashtable[i] as Hashtable, sender, networkTime, correctPrefix);
                 }
-                return;
+                break;
+            }
+            
 
             case PhotonEvent.Instantiate:
-                if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
-                {
-                    if (photonEvent[245] is Hashtable evData)
-                        if (evData[(byte)0] is string)
-                            this.DoInstantiate2(evData, sender, null);
-                    break;
-                }
-                return;
+            {
+                if (photonEvent[245] is Hashtable data)
+                    if (data[(byte)0] is string)
+                        this.DoInstantiate(data, sender, null);
+                break;
+            }
 
-            case PhotonEvent.CloseConnection:
+            case PhotonEvent.CloseConnection: // TODO: Add reconnect
+                if (!sender.IsMasterClient)
+                    throw new NotAllowedException(photonEvent.Code, sender); 
                 break;
 
-//                if (sender != null && sender.IsMasterClient && !sender.isLocal) TODO: Add reconnect
-//                {
-//                    PhotonNetwork.LeaveRoom();
-//                }
-//                break;
-
             case PhotonEvent.RemoveInstantiatedObject:
-                if (sender != null && !FengGameManagerMKII.ignoreList.Contains(sender.ID)) // Only remote? TODO: Check 
-                {
-                    if (photonEvent[245] is Hashtable hashtable)
-                    {
-                        if (hashtable[(byte)0] is int num8)
-                        {
-                            if (instantiatedObjects.TryGetValue(num8, out var obj) && obj != null)
-                            {
-                                RemoveInstantiatedGO(obj, true);
-                            }
-                        }
-                    }
-                    break;
-                }
-                return;
+            {
+                if (photonEvent[245] is Hashtable hashtable)
+                    if (hashtable[(byte)0] is int objId)
+                        if (instantiatedObjects.TryGetValue(objId, out var obj) && obj != null)
+                            RemoveInstantiatedGO(obj, true);
+                break;
+            }
 
             case PhotonEvent.DestroyPlayerObjects:
-                if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
+            {
+                if (photonEvent[245] is Hashtable hashtable)
                 {
-                    if (photonEvent[245] is Hashtable hashtable)
-                    {
-                        if (hashtable[(byte)0] is int playerId)
-                        {
-                            if (playerId < 0 && sender != null && (sender.IsMasterClient || sender.isLocal))
-                            {
-                                this.DestroyAll(true);
-                            }
-                            else if (sender != null && (sender.IsMasterClient || sender.isLocal || playerId != Player.Self.ID))
-                            {
-                                this.DestroyPlayerObjects(playerId, true);
-                            }
-                        }
-                    }
-                    break;
+                    if (!(hashtable[(byte) 0] is int playerId))
+                        return;
+                    
+                    if (playerId < 0 && sender.IsMasterClient)
+                        this.DestroyAll(true);
+                    else if (sender.IsMasterClient || playerId != Player.Self.ID) //TODO: Can probably be abused
+                        this.DestroyPlayerObjects(playerId, true);
                 }
-                return;
+                break;
+            }
 
             case PhotonEvent.SetMasterClient:
-                {
-                    var hashtable = photonEvent[245] as Hashtable;
-
-                    if (hashtable?[(byte) 1] is int id && (sender == null || !sender.IsMasterClient ||  id != sender.ID))
-                    {
-                        if (!(sender == null || sender.IsMasterClient || sender.isLocal))
-                        {
-                            if (PhotonNetwork.isMasterClient)
-                            {
-                                FengGameManagerMKII.noRestart = true;
-                                PhotonNetwork.SetMasterClient(Player.Self);
-                                FengGameManagerMKII.instance.KickPlayerRC(sender, true, "stealing MC.");
-                            }
-                            
-                            throw new NotAllowedException(photonEvent.Code, sender);
-                        }
-
-                        if (id == mLocalActor.ID || sender == null || 
-                            sender.IsMasterClient || sender.isLocal)
-                            SetMasterClient(id, false);
-
-                        break;
-                    }
+            {
+                if (!(photonEvent[245] is Hashtable hashtable))
                     return;
-                }
-            case PhotonEvent.UpdatePlayersCounters:
-                if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
+                if (!(hashtable[(byte) 1] is int id))
+                    return;
+
+                if (!sender.IsMasterClient && !sender.IsLocal)
                 {
-                    if (photonEvent[229] is int players && 
-                        photonEvent[227] is int playersMC && 
-                        photonEvent[228] is int gameCount)
+                    if (PhotonNetwork.isMasterClient)
                     {
-                        this.mPlayersInRoomsCount = players;
-                        this.mPlayersOnMasterCount = playersMC;
-                        this.mGameCount = gameCount;
+                        FengGameManagerMKII.noRestart = true;
+                        PhotonNetwork.SetMasterClient(Player.Self);
+                        FengGameManagerMKII.instance.KickPlayerRC(sender, true, "stealing MC.");
+                        throw new NotAllowedException(photonEvent.Code, sender);
                     }
-                    break;
                 }
-                return;
+                    
+                SetMasterClient(id, false);
+                break;
+            }
+            case PhotonEvent.UpdatePlayersCounters:
+            {
+                if (photonEvent[229] is int players &&
+                    photonEvent[227] is int playersMC &&
+                    photonEvent[228] is int gameCount)
+                {
+                    this.mPlayersInRoomsCount = players;
+                    this.mPlayersOnMasterCount = playersMC;
+                    this.mGameCount = gameCount;
+                }
+
+                break;
+            }
 
             case PhotonEvent.UpdateQueuePosition:
                 if (sender != null)
@@ -1470,140 +1330,138 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 return;
 
             case PhotonEvent.RoomListUpdate:
-                if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
+            {
+                if (!(photonEvent[222] is Hashtable hashtable))
+                    return;
+                
+                foreach (DictionaryEntry entry in hashtable)
                 {
-                    if (photonEvent[222] is Hashtable hashtable)
-                    {
-                        foreach (DictionaryEntry entry in hashtable)
-                        {
-                            string roomName = (string)entry.Key;
-                            Room room = new Room(roomName, (Hashtable)entry.Value);
-                            if (room.RemovedFromList || (!room.IsOpen && room.Players <= 0))
-                                mGameList.Remove(roomName);
-                            else
-                                mGameList[roomName] = room;
-                        }
-
-                        Room.List = new List<Room>(mGameList.Values);
-                        Room.List.Sort();
-                        SendMonoMessage(PhotonNetworkingMessage.OnReceivedRoomListUpdate);
-                    }
-                    break;
+                    string roomName = (string) entry.Key;
+                    
+                    Room room = new Room(roomName, (Hashtable) entry.Value);
+                    if (!room.RemovedFromList && (room.IsOpen || room.Players > 0))
+                        mGameList[roomName] = room;
+                    else
+                        mGameList.Remove(roomName);
                 }
-                return;
+
+                Room.List = new List<Room>(mGameList.Values);
+                Room.List.Sort();
+                SendMonoMessage(PhotonNetworkingMessage.OnReceivedRoomListUpdate);
+                break;
+            }
 
             case PhotonEvent.RoomListCreated:
-                if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
+            {
+                if (!(photonEvent[222] is Hashtable hashtable))
+                    return;
+                
+                mGameList = new Dictionary<string, Room>();
+                foreach (DictionaryEntry entry in hashtable)
                 {
-                    if (photonEvent[222] is Hashtable hashtable)
-                    {
-                        mGameList = new Dictionary<string, Room>();
-                        foreach (DictionaryEntry entry in hashtable)
-                        {
-                            string roomName = (string)entry.Key;
-                            var room = new Room(roomName, (Hashtable) entry.Value);
-                            if (!room.IsOpen && hashtable.Count > 40 || room.Players <= 0)
-                                continue;
-                            mGameList[roomName] = room;
-                        }
-                        
-                        Room.List = new List<Room>(mGameList.Values);
-                        Room.List.Sort();
-                        SendMonoMessage(PhotonNetworkingMessage.OnReceivedRoomListUpdate);
-                    }
-                    break;
+                    string roomName = (string) entry.Key;
+                    
+                    var room = new Room(roomName, (Hashtable) entry.Value);
+                    mGameList[roomName] = room;
                 }
-                return;
+
+                Room.List = new List<Room>(mGameList.Values);
+                Room.List.Sort();
+                SendMonoMessage(PhotonNetworkingMessage.OnReceivedRoomListUpdate);
+                break;
+            }
 
             case PhotonEvent.PlayerJoined:
-                if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
+            {
+                if (!(photonEvent[253] is int id))
+                    return;
+                
+                if (id == 0)
                 {
-                    if (photonEvent[253] is int id)
+                    if (photonEvent[251] is Hashtable hash)
+                        ReadoutProperties(hash, null, id);
+                    return;
+                }
+
+                if (photonEvent[251] is Hashtable hashtable)
+                {
+                    if (!sender.IsLocal)
                     {
-                        if (id == 0)
+                        PlayerProperties props = new PlayerProperties(hashtable)
                         {
-                            if (photonEvent[251] is Hashtable hash)
-                                ReadoutProperties(hash, null, id);
-                            return;
+                            ["sender"] = sender
+                        };
+
+                        if (id == sender.ID)
+                        { 
+                            if (props.Acceleration > 150 || props.Blade > 125 || props.Gas > 150 || props.Speed > 140)
+                            {
+                                if (PhotonNetwork.isMasterClient)
+                                    FengGameManagerMKII.instance.KickPlayerRC(sender, true, "Illegal stats.");
+                                throw new NotAllowedException(photonEvent.Code, sender);
+                            }
                         }
 
-                        if (photonEvent[251] is Hashtable hashtable)
+                        if (props.ContainsKey("thisName")) //TODO: Add ignore and remove this if possible
                         {
-                            if (sender != null && hashtable is PlayerProperties props)
-                            {
-                                props["sender"] = sender;
-                                if (!sender.isLocal && id == sender.ID)
-                                {
-                                    if (props.Acceleration > 150 || props.Blade > 125 || props.Gas > 150 || props.Speed > 140)
-                                    {
-                                        if (PhotonNetwork.isMasterClient)
-                                            FengGameManagerMKII.instance.KickPlayerRC(sender, true, "Illegal stats.");
-                                        throw new NotAllowedException(photonEvent.Code, sender);
-                                    }
-                                }
-
-                                if (hashtable.ContainsKey("thisName")) //TODO: Add ignore and remove this if possible
-                                {
-                                    if (id != sender.ID)
-                                        InstantiateTracker.instance.resetPropertyTracking(id);
-                                    else if (!InstantiateTracker.instance.PropertiesChanged(sender))
-                                        return;
-                                }
-                            }
-                            this.ReadoutProperties(null, hashtable, id);
+                            if (id != sender.ID)
+                                InstantiateTracker.instance.resetPropertyTracking(id);
+                            else if (!InstantiateTracker.instance.PropertiesChanged(sender))
+                                return;
                         }
                     }
-                    break;
+
+                    this.ReadoutProperties(null, hashtable, id);
                 }
-                return;
+                break;
+            }
 
             case PhotonEvent.PlayerLeft:
                 this.HandleEventLeave(key);
                 break;
 
             case PhotonEvent.JoinedRoom:
-                if (sender == null || !FengGameManagerMKII.ignoreList.Contains(sender.ID))
+            {
+                var properties = photonEvent[249] as Hashtable;
+                if (photonEvent[249] == null || properties != null)
                 {
-                    var properties = photonEvent[249] as Hashtable;
-                    if (photonEvent[249] == null || properties != null)
+                    // We sent the event
+                    if (sender == null)
                     {
-                        // We sent the event
-                        if (sender == null)
-                        {
-                            // Key is not checked in any case (index 254)
-                            this.AddNewPlayer(key, new Player(mLocalActor.ID == key, key, properties)); 
-                            this.ResetPhotonViewsOnSerialize();
-                        }
+                        // Key is not checked in any case (index 254)
+                        this.AddNewPlayer(key,
+                            new Player(mLocalActor.ID == key, key, properties));
+                        this.ResetPhotonViewsOnSerialize();
+                    }
 
-                        // We joined room
-                        if (key == this.mLocalActor.ID)
+                    // We joined room
+                    if (key == this.mLocalActor.ID)
+                    {
+                        if (photonEvent[252] is int[] ids)
                         {
-                            if (photonEvent[252] is int[] ids)
+                            foreach (int id in ids)
                             {
-                                foreach (int id in ids)
-                                {
-                                    if (mLocalActor.ID != id && !mActors.ContainsKey(id))
-                                        AddNewPlayer(id, new Player(false, id, string.Empty));
-                                }
-
-                                // We created it
-                                if (this.mLastJoinType == JoinType.JoinOrCreateOnDemand && this.mLocalActor.ID == 1)
-                                {
-                                    SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom);
-                                }
-
-                                SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom);
+                                if (mLocalActor.ID != id && !mActors.ContainsKey(id))
+                                    AddNewPlayer(id, new Player(false, id, string.Empty));
                             }
 
-                            return;
+                            // We created it
+                            if (this.mLastJoinType == JoinType.JoinOrCreateOnDemand && this.mLocalActor.ID == 1)
+                            {
+                                SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom);
+                            }
+
+                            SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom);
                         }
 
-                        // Player joined room
-                        SendMonoMessage(PhotonNetworkingMessage.OnPhotonPlayerConnected, mActors[key]);
+                        return;
                     }
-                    break;
+
+                    // Player joined room
+                    SendMonoMessage(PhotonNetworkingMessage.OnPhotonPlayerConnected, mActors[key]);
                 }
-                return;
+                break;
+            }
 
             default:
                 if (sender != null && FengGameManagerMKII.ignoreList.Contains(sender.ID))
@@ -1883,11 +1741,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 switch (operationCode)
                 {
                     case 251:
-                        {
-                            Hashtable pActorProperties = (Hashtable)operationResponse[249];
-                            Hashtable gameProperties = (Hashtable)operationResponse[248];
-                            this.ReadoutProperties(gameProperties, pActorProperties, 0);
-                            goto Label_0955;
+                    {
+                        Hashtable pActorProperties = (Hashtable) operationResponse[249];
+                        Hashtable gameProperties = (Hashtable)operationResponse[248];
+                        this.ReadoutProperties(gameProperties, pActorProperties, 0);
+                        goto Label_0955;
                         }
                     case 252:
                     case 253:
@@ -1901,7 +1759,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                         Debug.LogWarning(string.Format("OperationResponse unhandled: {0}", operationResponse));
                         goto Label_0955;
                 }
-            //break;
+//            break;
         }
         this.states = PeerStates.Disconnecting;
         this.Disconnect();
@@ -2438,8 +2296,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 {
                     Hashtable actorPropertiesForActorNr = this.GetActorPropertiesForActorNr(pActorProperties, targetActorNr);
                     playerWithID.InternalCacheProperties(actorPropertiesForActorNr);
-                    object[] objArray2 = new object[] { playerWithID, actorPropertiesForActorNr };
-                    SendMonoMessage(PhotonNetworkingMessage.OnPhotonPlayerPropertiesChanged, objArray2);
+                    SendMonoMessage(PhotonNetworkingMessage.OnPhotonPlayerPropertiesChanged, playerWithID, actorPropertiesForActorNr);
                 }
             }
             else
@@ -2447,7 +2304,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 foreach (object obj2 in pActorProperties.Keys)
                 {
                     int number = (int) obj2;
-                    Hashtable properties = (Hashtable)pActorProperties[obj2];
+                    Hashtable properties = (Hashtable) pActorProperties[obj2];
                     string name = string.Empty;
                     if (properties.ContainsKey(byte.MaxValue))
                         name = properties[byte.MaxValue] as string;
@@ -2469,15 +2326,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     {
         this.mPlayerListCopy = new Player[this.mActors.Count];
         this.mActors.Values.CopyTo(this.mPlayerListCopy, 0);
-        List<Player> list = new List<Player>();
-        foreach (Player player in this.mPlayerListCopy)
-        {
-            if (!player.isLocal)
-            {
-                list.Add(player);
-            }
-        }
-        this.mOtherPlayerListCopy = list.ToArray();
+        this.mOtherPlayerListCopy = this.mPlayerListCopy.Where(player => !player.IsLocal).ToArray();
     }
 
     public void RegisterPhotonView(PhotonView netView)
@@ -2600,7 +2449,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     private void RemovePlayer(int ID, Player player)
     {
         this.mActors.Remove(ID);
-        if (!player.isLocal)
+        if (!player.IsLocal)
         {
             this.RebuildPlayerListCopies();
         }
@@ -2957,7 +2806,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         }
         else if (this.mLocalActor != null)
         {
-            this.mLocalActor.name = this.PlayerName;
+            this.mLocalActor.FriendName = this.PlayerName;
             Hashtable actorProperties = new Hashtable
             {
                 [(byte)255] = this.PlayerName
@@ -3263,7 +3112,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             {
                 if (this.mLocalActor != null)
                 {
-                    this.mLocalActor.name = value;
+                    this.mLocalActor.FriendName = value;
                 }
                 this.playername = value;
                 if (this.mCurrentGame != null)

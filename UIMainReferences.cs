@@ -1,10 +1,12 @@
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.IO;
 using Mod;
 using Mod.Interface;
 using Mod.Logging;
 using UnityEngine;
+using LogType = Mod.Logging.LogType;
 
 public class UIMainReferences : MonoBehaviour
 {
@@ -34,28 +36,28 @@ public class UIMainReferences : MonoBehaviour
         Shelter.OnMainMenu();
     }
     
-    private void UnityLogHandle(string log, string stacktrace, LogType type)
+    private void UnityLogHandle(string log, string stacktrace, UnityEngine.LogType type)
     {
         switch (type)
         {
-            case LogType.Error:
-                Shelter.Log(log, LogLevel.Error);
+            case UnityEngine.LogType.Error:
+                Shelter.Log(log, LogType.Error);
                 break;
-            case LogType.Assert:
-                Shelter.Log(log, LogLevel.Error);
+            case UnityEngine.LogType.Assert:
+                Shelter.Log(log, LogType.Error);
                 break;
-            case LogType.Warning:
+            case UnityEngine.LogType.Warning:
                 if (!log.Contains("Behaviour is missing!"))
-                    Shelter.Log(log, LogLevel.Warning);
+                    Shelter.Log(log, LogType.Warning);
                 break;
-            case LogType.Log:
+            case UnityEngine.LogType.Log:
                 Shelter.Log(log);
                 break;
-            case LogType.Exception:
-                Shelter.Log($"{log} {stacktrace}", LogLevel.Error);
+            case UnityEngine.LogType.Exception:
+                Shelter.Log($"{log} {stacktrace}", LogType.Error);
                 break;
             default:
-                Shelter.Log($"LogLevel {type} does not exist.", LogLevel.Error);
+                Shelter.Log($"LogLevel {type} does not exist.", LogType.Error);
                 throw new ArgumentOutOfRangeException(nameof(type), type, null);
         }
     }
