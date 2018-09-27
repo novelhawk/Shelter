@@ -1,5 +1,7 @@
-﻿using ExitGames.Client.Photon;
+﻿using System.Diagnostics;
+using ExitGames.Client.Photon;
 using UnityEngine;
+using UnityEngineInternal;
 
 namespace Mod
 {
@@ -7,6 +9,7 @@ namespace Mod
     public class PlayerProperties : Hashtable
     {
         public string Name => this[PlayerProperty.Name] as string ?? "Unknown";
+        public string HexName { get; set; }
         public string Guild => this[PlayerProperty.Guild] as string ?? "";
         public string FriendName => this[PlayerProperty.FriendName] as string ?? "";
 
@@ -104,6 +107,15 @@ namespace Mod
                     return Mathf.Clamp(radius, 20, 60);
                 return 40;
             }
+        }
+
+        public PlayerProperties()
+        {}
+        
+        public PlayerProperties(Hashtable hashtable) : base(hashtable.Count)
+        {
+            foreach (var entry in hashtable)
+                this[entry.Key] = entry.Value;
         }
     }
 }

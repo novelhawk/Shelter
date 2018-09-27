@@ -75,7 +75,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
     [RPC]
     public void PunPickup(PhotonMessageInfo msgInfo)
     {
-        if (msgInfo.sender.isLocal)
+        if (msgInfo.sender.IsLocal)
         {
             this.SentPickup = false;
         }
@@ -85,7 +85,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
         }
         else
         {
-            this.PickupIsMine = msgInfo.sender.isLocal;
+            this.PickupIsMine = msgInfo.sender.IsLocal;
             if (this.OnPickedUpCall != null)
             {
                 this.OnPickedUpCall.SendMessage("OnPickedUp", this);

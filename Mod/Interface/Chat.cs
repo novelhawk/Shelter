@@ -69,7 +69,7 @@ namespace Mod.Interface
 
         public static int ReceivePrivateMessage(object message, Player sender)
         {
-            Messages.Add(new ChatMessage($"<color=#1068D4>PM<color=#108CD4>></color></color> <color=#{SystemColor}>{sender.HexName}: {message}</color>", sender));
+            Messages.Add(new ChatMessage($"<color=#1068D4>PM<color=#108CD4>></color></color> <color=#{SystemColor}>{sender.Properties.HexName}: {message}</color>", sender));
             return Messages.Count - 1;
         }
 
@@ -174,12 +174,14 @@ namespace Mod.Interface
                 for (var i = Messages.Count - 1; i >= 0; i--)
                 {
                     ChatMessage chatMessage = messages[i];
-                    foreach (var content in chatMessage.Message.Split('\n'))
+                    var lines = chatMessage.Message.Split('\n');
+                    for (int j = lines.Length - 1; j >= 0; j--)
                     {
                         rect.OY(-15);
-                        if (rect.Y > Screen.height - 25) continue;
-                        GUI.Label(rect, $"{(chatMessage.LocalOnly ? "" : $"[{chatMessage.Sender.ID}] ")}{content}",
-                            _chat);
+                        if (rect.Y > Screen.height - 25) 
+                            continue;
+                        
+                        GUI.Label(rect, $"{(chatMessage.LocalOnly ? "" : $"[{chatMessage.Sender.ID}] ")}{lines[j]}", _chat);
                     }
                 }
 
@@ -198,11 +200,12 @@ namespace Mod.Interface
                 ChatMessage chatMessage = messages[i];
                 if (chatMessage.IsForemost || Shelter.Stopwatch.ElapsedMilliseconds - 10000f <= chatMessage.Time)
                 {
-                    foreach (var content in chatMessage.Message.Split('\n'))
+                    var lines = chatMessage.Message.Split('\n');
+                    for (int j = lines.Length - 1; j >= 0; j--)
                     {
-                        if (content == string.Empty)
+                        if (lines[j] == string.Empty)
                             continue;
-                        GUI.Label(rect, $"{(chatMessage.LocalOnly ? "" : $"[{chatMessage.Sender.ID}] ")}{content}",
+                        GUI.Label(rect, $"{(chatMessage.LocalOnly ? "" : $"[{chatMessage.Sender.ID}] ")}{lines[j]}",
                             _chat);
                         rect.OY(-15);
                     }

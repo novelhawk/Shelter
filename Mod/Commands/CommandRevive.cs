@@ -24,7 +24,7 @@ namespace Mod.Commands
                     if (!Player.TryParse(args[0], out Player player))
                         throw new PlayerNotFoundException(args[0]);
                     FengGameManagerMKII.instance.photonView.RPC("respawnHeroInNewRound", player);
-                    Notify.New($"{player.HexName} respawned!", 1300, 35F);
+                    Notify.New($"{player.Properties.HexName} respawned!", 1300, 35F);
                 }
             }
             else

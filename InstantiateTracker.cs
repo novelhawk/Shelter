@@ -7,7 +7,7 @@ public class InstantiateTracker
 
     public bool checkObj(string key, global::Player player, int[] viewIDS)
     {
-        if (player.IsMasterClient || player.isLocal)
+        if (player.IsMasterClient || player.IsLocal)
         {
             return true;
         }

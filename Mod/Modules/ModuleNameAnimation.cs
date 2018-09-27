@@ -12,7 +12,7 @@ namespace Mod.Modules
         public override bool IsAbusive => false;
         public override bool HasGUI => true;
 
-        private float _updatesPerSecond = 3;
+        private float _updatesPerSecond = 30;
         private int _shades = 25;
 
         private Animator _animator;
@@ -94,7 +94,7 @@ namespace Mod.Modules
             GUI.Label(rect.OY(40), $"Shades: {_shades}", _sliderText);
             _shades = (int) GUI.HorizontalSlider(rect.OY(20), _shades, 1, 100);
             
-            GUI.Label(rect.OY(20), $"UpdatesPerSecond: {_updatesPerSecond:0.00}", _sliderText);
+            GUI.Label(rect.OY(20), $"Frequency: {_updatesPerSecond:0.00} hZ", _sliderText);
             _updatesPerSecond = GUI.HorizontalSlider(rect.OY(20), _updatesPerSecond, 1, 100); //TODO: Color viewer and Animation selector
         }
 

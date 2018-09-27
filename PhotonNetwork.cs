@@ -375,7 +375,7 @@ public static class PhotonNetwork
                 viewIDs[i] = AllocateViewID(Player.Self.ID);
             }
             Hashtable evData = networkingPeer.SendInstantiate(prefabName, position, rotation, group, viewIDs, data, false);
-            return networkingPeer.DoInstantiate2(evData, networkingPeer.mLocalActor, obj2);
+            return networkingPeer.DoInstantiate(evData, networkingPeer.mLocalActor, obj2);
         }
         Debug.LogError(string.Concat(new object[] { "Failed to Instantiate prefab: ", prefabName, ". Client should be in a room. Current connectionStateDetailed: ", connectionStatesDetailed }));
         return null;
@@ -416,7 +416,7 @@ public static class PhotonNetwork
                 return null;
             }
             Hashtable evData = networkingPeer.SendInstantiate(prefabName, position, rotation, group, viewIDs, data, true);
-            return networkingPeer.DoInstantiate2(evData, networkingPeer.mLocalActor, obj2);
+            return networkingPeer.DoInstantiate(evData, networkingPeer.mLocalActor, obj2);
         }
         Debug.LogError(string.Concat(new object[] { "Failed to InstantiateSceneObject prefab: ", prefabName, ". Client should be in a room. Current connectionStateDetailed: ", connectionStatesDetailed }));
         return null;
@@ -657,7 +657,7 @@ public static class PhotonNetwork
     {
         if (VerifyCanUseNetwork())
         {
-            if (!targetPlayer.isLocal && !isMasterClient)
+            if (!targetPlayer.IsLocal && !isMasterClient)
             {
                 Debug.LogError("Error; Only the MasterClient can call RemoveRPCs for other players.");
             }
@@ -750,26 +750,6 @@ public static class PhotonNetwork
     public static bool SetMasterClient(Player masterClientPlayer)
     {
         return networkingPeer.SetMasterClient(masterClientPlayer.ID, true);
-    }
-
-    public static void SetPlayerCustomProperties(Hashtable customProperties)
-    {
-        if (customProperties == null)
-        {
-            customProperties = new Hashtable();
-            foreach (object obj2 in Player.Self.Properties.Keys)
-            {
-                customProperties[(string) obj2] = null;
-            }
-        }
-        if (Room != null && Room.IsLocalClientInside)
-        {
-            Player.Self.SetCustomProperties(customProperties);
-        }
-        else
-        {
-            Player.Self.InternalCacheProperties(customProperties);
-        }
     }
 
     public static void SetReceivingEnabled(int group, bool enabled)

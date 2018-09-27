@@ -10,14 +10,14 @@ namespace Mod.Exceptions
     {
         public NotAllowedException(byte eventId, Player sender)
         {
-            Shelter.LogConsole("NotAllowedExeption from {0} on calling Event({1})", LogLevel.Warning, sender, (PhotonEvent) eventId);
+            Shelter.LogBoth("{0} from {1} on calling Event({2})", LogType.Warning, nameof(NotAllowedException), sender, (PhotonEvent) eventId);
             if (!FengGameManagerMKII.ignoreList.Contains(sender.ID))
                 FengGameManagerMKII.ignoreList.Add(sender.ID);
         }
 
         public NotAllowedException(string rpc, PhotonMessageInfo info, bool ignore = true)
         {
-            Shelter.LogConsole("NotAllowedExeption from {0} on calling RPC({1})", LogLevel.Warning, info.sender, rpc);
+            Shelter.LogBoth("{0} from {1} on calling RPC({2})", LogType.Warning, nameof(NotAllowedException), info.sender, rpc);
             if (ignore && !FengGameManagerMKII.ignoreList.Contains(info.sender.ID))
                 FengGameManagerMKII.ignoreList.Add(info.sender.ID);
         }

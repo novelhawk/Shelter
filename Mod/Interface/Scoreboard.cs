@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEngine;
@@ -37,7 +38,7 @@ namespace Mod.Interface
 
         private static string Entry(Player player, string color)
         {
-            string playerName = player.Properties.Name.Trim() == string.Empty ? "Unknown" : player.HexName, humanType;
+            string playerName = player.Properties.Name.Trim() == string.Empty ? "Unknown" : player.Properties.HexName, humanType;
             int type;
             if (FengGameManagerMKII.ignoreList.Contains(player.ID))
                 type = 4;
@@ -73,27 +74,44 @@ namespace Mod.Interface
                     break;
             }
             var mod = string.Empty;
-            if (player.Has("AoTTG_Mod"))
-                mod = "|<b><color=#0089FF>Hawk</color></b>| ";
-            else if (player.Has("HawkUser"))
-                mod = "|<b><color=#00B7FF>HawkUser</color></b>| ";
-            else if (player.Has(PlayerProperty.Shelter))
-                mod = $"|<b><color=#{color}>Shelter</color></b>| "; //13ACFF
-            else if (player.Has("AlphaX"))
-                mod = "|<b><color=#00D5FF>AlphaX</color></b>| ";
-            else if (player.Has("Alpha"))
-                mod = "|<b><color=#00FFF3>Alpha</color></b>| ";
-            else if (player.Has("coin") || player.Has("UPublica2") || player.Has("Hats") || player.Has(string.Empty))
-                mod = "|<b><color=#00FFD5>Universe</color></b>| ";
-            else if (player.Has("CyanMod"))
-                mod = "|<b><color=#00FFFF>Cyan</color></b>| ";
-            else if (player.Has("PBCheater"))
-                mod = "|<b><color=#00FFAF>PedoBear</color></b>| ";
-            else if (player.Has("SRC"))
-                mod = "|<b><color=#00FF6F>SRC</color></b>| ";
-            else if (player.Has("RCteam"))
-                mod = "|<b><color=#00FF11>RC</color></b>| ";
-
+            switch (player.Mod)
+            {
+                case CustomMod.None:
+                    break;
+                case CustomMod.RC:
+                    mod = "|<b><color=#00FF11>RC</color></b>| ";
+                    break;
+                case CustomMod.HawkMain:
+                    mod = "|<b><color=#0089FF>Hawk</color></b>| ";
+                    break;
+                case CustomMod.HawkUser:
+                    mod = "|<b><color=#00B7FF>HawkUser</color></b>| ";
+                    break;
+                case CustomMod.Shelter:
+                    mod = $"|<b><color=#{color}>Shelter</color></b>| "; 
+                    break;
+                case CustomMod.AlphaX:
+                    mod = "|<b><color=#00D5FF>AlphaX</color></b>| ";
+                    break;
+                case CustomMod.Alpha:
+                    mod = "|<b><color=#00FFF3>Alpha</color></b>| ";
+                    break;
+                case CustomMod.Universe:
+                    mod = "|<b><color=#00FFD5>Universe</color></b>| ";
+                    break;
+                case CustomMod.Cyan:
+                    mod = "|<b><color=#00FFFF>Cyan</color></b>| ";
+                    break;
+                case CustomMod.Pedobear:
+                    mod = "|<b><color=#00FFAF>PedoBear</color></b>| ";
+                    break;
+                case CustomMod.SRC:
+                    mod = "|<b><color=#00FF6F>SRC</color></b>| ";
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+            
             int averangeDmg = player.Properties.Kills > 0 ? (int) Math.Floor((decimal)player.Properties.TotalDamage / player.Properties.Kills) : 0;
 
             return string.Format(EntryLayout,
@@ -106,7 +124,7 @@ namespace Mod.Interface
                 player.Properties.MaxDamage,
                 player.Properties.TotalDamage,
                 averangeDmg,
-                player.name != string.Empty ? " | " + player.name : "",
+                player.FriendName != string.Empty ? " | " + player.FriendName : "",
                 player.IsMasterClient ? "|<b><color=#8DFF00>MC</color></b>| " : ""
             );
         }

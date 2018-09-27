@@ -18,14 +18,14 @@ namespace Mod.Commands
             var list = player.Properties/*.Where(prop => !Player.Self.Properties.Contains(prop))*/.ToArray();
             if (list.Length > 0)
             {
-                Chat.System(player.HexName + " properties:");
+                Chat.System(player.Properties.HexName + " properties:");
                 foreach (var str in list)
                     Chat.System($"{str.Key} : {str.Value}");
 //                if (str != "sender") ??
                 return;
             }
             
-            Chat.System(player.HexName + " has no unregular properties.");
+            Chat.System(player.Properties.HexName + " has no unregular properties.");
         }
     }
 }

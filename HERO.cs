@@ -261,7 +261,7 @@ public class HERO : Photon.MonoBehaviour
     [RPC]
     public void BlowAway(Vector3 force, PhotonMessageInfo info = null)
     {
-        if (info != null && !info.sender.isLocal && !info.sender.IsMasterClient && info.sender.Properties.PlayerType != PlayerType.Titan) // This allows MC to blowAway need TODO: To check for force valididy
+        if (info != null && !info.sender.IsLocal && !info.sender.IsMasterClient && info.sender.Properties.PlayerType != PlayerType.Titan) // This allows MC to blowAway need TODO: To check for force valididy
             throw new NotAllowedException(nameof(BlowAway), info);
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine)
         {
@@ -832,7 +832,6 @@ public class HERO : Photon.MonoBehaviour
 
     private void dash(float horizontal, float vertical)
     {
-        print(this.dashTime + " " + this.currentGas);
         if (this.dashTime <= 0f && this.currentGas > 0f && !this.isMounted)
         {
             this.useGas(this.totalGas * 0.04f);
@@ -1122,34 +1121,19 @@ public class HERO : Photon.MonoBehaviour
                             this.hookBySomeOne = false;
                         }
                     }
-                    float x = 0f;
-                    float z = 0f;
+                    float z = 0;
+                    float x = 0;
                     if (!IN_GAME_MAIN_CAMERA.isTyping)
                     {
                         if (Shelter.InputManager.IsKeyPressed(InputAction.Forward))
-                        {
                             z = 1f;
-                        }
                         else if (Shelter.InputManager.IsKeyPressed(InputAction.Back))
-                        {
                             z = -1f;
-                        }
-                        else
-                        {
-                            z = 0f;
-                        }
+
                         if (Shelter.InputManager.IsKeyPressed(InputAction.Left))
-                        {
                             x = -1f;
-                        }
                         else if (Shelter.InputManager.IsKeyPressed(InputAction.Right))
-                        {
                             x = 1f;
-                        }
-                        else
-                        {
-                            x = 0f;
-                        }
                     }
                     bool flag2 = false;
                     bool flag3 = false;
@@ -1413,7 +1397,7 @@ public class HERO : Photon.MonoBehaviour
                             this.crossFade("horse_idle", 0.1f);
                             this.myHorse.GetComponent<Horse>().mounted();
                         }
-                        if (!(this.State != HeroState.Idle || this.baseAnimation.IsPlaying("dash") || this.baseAnimation.IsPlaying("wallrun") || this.baseAnimation.IsPlaying("toRoof") || this.baseAnimation.IsPlaying("horse_geton") || this.baseAnimation.IsPlaying("horse_getoff") || this.baseAnimation.IsPlaying("air_release") || this.isMounted || this.baseAnimation.IsPlaying("air_hook_l_just") && this.baseAnimation["air_hook_l_just"].normalizedTime < 1f || this.baseAnimation.IsPlaying("air_hook_r_just") && this.baseAnimation["air_hook_r_just"].normalizedTime < 1f ? this.baseAnimation["dash"].normalizedTime < 0.99f : false))
+                        if (!((this.State != HeroState.Idle || this.baseAnimation.IsPlaying("dash") || this.baseAnimation.IsPlaying("wallrun") || this.baseAnimation.IsPlaying("toRoof") || this.baseAnimation.IsPlaying("horse_geton") || this.baseAnimation.IsPlaying("horse_getoff") || this.baseAnimation.IsPlaying("air_release") || this.isMounted || this.baseAnimation.IsPlaying("air_hook_l_just") && this.baseAnimation["air_hook_l_just"].normalizedTime < 1f || this.baseAnimation.IsPlaying("air_hook_r_just") && this.baseAnimation["air_hook_r_just"].normalizedTime < 1f) && this.baseAnimation["dash"].normalizedTime < 0.99f))
                         {
                             if (!this.isLeftHandHooked && !this.isRightHandHooked && (this.baseAnimation.IsPlaying("air_hook_l") || this.baseAnimation.IsPlaying("air_hook_r") || this.baseAnimation.IsPlaying("air_hook")) && this.baseRigidBody.velocity.y > 20f)
                             {
@@ -2965,7 +2949,7 @@ public class HERO : Photon.MonoBehaviour
                 photonView.RPC("backToHumanRPC", PhotonTargets.Others);
                 return;
             }
-            if (!info.sender.isLocal && !info.sender.IsMasterClient)
+            if (!info.sender.IsLocal && !info.sender.IsMasterClient)
             {
                 if (info.sender.Properties.Name == null || info.sender.Properties.PlayerType == PlayerType.Unknown)
                 {
@@ -3098,7 +3082,7 @@ public class HERO : Photon.MonoBehaviour
                 photonView.RPC("backToHumanRPC", PhotonTargets.Others, new object[0]);
                 return;
             }
-            if (!info.sender.isLocal && !info.sender.IsMasterClient)
+            if (!info.sender.IsLocal && !info.sender.IsMasterClient)
             {
                 if (info.sender.Properties.Name == null || info.sender.Properties.PlayerType == PlayerType.Unknown)
                 {

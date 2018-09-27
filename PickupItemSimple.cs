@@ -28,7 +28,7 @@ public class PickupItemSimple : Photon.MonoBehaviour
     [RPC]
     public void PunPickupSimple(PhotonMessageInfo msgInfo)
     {
-        if (!this.SentPickup || !msgInfo.sender.isLocal || !gameObject.IsActive())
+        if (!this.SentPickup || !msgInfo.sender.IsLocal || !gameObject.IsActive())
         {
         }
         this.SentPickup = false;

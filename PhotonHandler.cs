@@ -10,6 +10,7 @@ using Mod.Interface;
 using Mod.Logging;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
+using LogType = Mod.Logging.LogType;
 
 internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
 {
@@ -42,10 +43,10 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
         switch (level)
         {
             case DebugLevel.ERROR:
-                Shelter.Log(message, LogLevel.Error);
+                Shelter.Log(message, LogType.Error);
                 break;
             case DebugLevel.WARNING:
-                Shelter.Log(message, LogLevel.Warning);
+                Shelter.Log(message, LogType.Warning);
                 break;
             case DebugLevel.INFO when PhotonNetwork.logLevel >= PhotonLogLevel.Informational:
             case DebugLevel.ALL when PhotonNetwork.logLevel == PhotonLogLevel.Full:
@@ -142,8 +143,8 @@ internal class PhotonHandler : Photon.MonoBehaviour, IPhotonPeerListener
                 {}
                 catch (Exception e)
                 {
-                    Shelter.LogConsole("An {0} has been thrown in the PhotonAssembly.", e.GetType().Name);
-                    Shelter.Log("{0}: {1}\n{2}", e.GetType().FullName, e.Message, e.StackTrace);
+                    Shelter.LogConsole("A {0} has been thrown in Photon3Unity3D.dll", LogType.Error, e.GetType().Name);
+                    Shelter.Log("{0}: {1}\n{2}", LogType.Error, e.GetType().FullName, e.Message, e.StackTrace);
                     flag = false; 
                 }
             }

@@ -15,7 +15,7 @@ namespace Mod.Commands
                 throw new CommandArgumentException(CommandName, "/tp [id]");
             if (!Player.TryParse(args[0], out Player player))
                 throw new PlayerNotFoundException(args[0]);
-            if (player.isLocal)
+            if (player.IsLocal)
                 throw new TargetCannotBeLocalException("Non puoi teletrasportarti da te stesso.");
 
             foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))

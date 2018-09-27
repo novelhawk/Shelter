@@ -56,7 +56,7 @@ public class Cannon : Photon.MonoBehaviour
                         PhotonNetwork.Destroy(component.gameObject);
                     }
                 }
-                else if (!(owner.isLocal || FengGameManagerMKII.instance.restartingMC))
+                else if (!(owner.IsLocal || FengGameManagerMKII.instance.restartingMC))
                 {
                     FengGameManagerMKII.instance.KickPlayerRC(owner, false, "spawning cannon without request.");
                 }

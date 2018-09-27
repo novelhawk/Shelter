@@ -1,6 +1,6 @@
 ﻿namespace Mod.Logging
 {
-    public enum LogLevel
+    public enum LogType
     {
         Info,
         Warning,
