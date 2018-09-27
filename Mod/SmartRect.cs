@@ -73,6 +73,8 @@ namespace Mod
         public float Y => _y;
         public float Width => _width;
         public float Height => _height;
+        public float Bottom => _height + _y;
+        public float Right => _width + _x;
 
         public static implicit operator Rect(SmartRect smartRect)
         {
