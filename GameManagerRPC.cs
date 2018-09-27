@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
 using System.Security.AccessControl;
@@ -110,7 +111,6 @@ public partial class FengGameManagerMKII
         if (!info.sender.IsMasterClient)
             throw new NotAllowedException(nameof(RefreshStatus), info);
         
-        print(score1);
         teamScores = score1;
     }
 
@@ -125,15 +125,15 @@ public partial class FengGameManagerMKII
             pauseWaitTime = 100000f;
             _timeSincePause = 0f;
             Time.timeScale = 1E-06f;
-            _pauseMessageId = Mod.Interface.Chat.SendMessage($"{info.sender.HexName} paused the game.");
+            _pauseMessageId = Mod.Interface.Chat.SendMessage($"{info.sender.Properties.HexName} paused the game.");
         }
         else
         {
             pauseWaitTime = 3f;
             if (!_pauseMessageId.HasValue)
-                Mod.Interface.Chat.SendMessage($"{info.sender.HexName} unpaused the game.");
+                Mod.Interface.Chat.SendMessage($"{info.sender.Properties.HexName} unpaused the game.");
             else
-                Mod.Interface.Chat.EditMessage(_pauseMessageId, $"{info.sender.HexName} unpaused the game.", false);
+                Mod.Interface.Chat.EditMessage(_pauseMessageId, $"{info.sender.Properties.HexName} unpaused the game.", false);
         }
     }
 
@@ -291,7 +291,7 @@ public partial class FengGameManagerMKII
     [RPC]
     private void NetGameLose(int score, PhotonMessageInfo info)
     {
-        if (!info.sender.IsMasterClient && !info.sender.isLocal)
+        if (!info.sender.IsMasterClient && !info.sender.IsLocal)
             throw new NotAllowedException(nameof(NetGameLose), info, false); //TODO: Change to true when sure it doesn't get called by the game
 
         
@@ -342,7 +342,7 @@ public partial class FengGameManagerMKII
                                       ")</color> Round ended (game win).");
         }
 
-        if (!(Equals(info.sender, PhotonNetwork.masterClient) || info.sender.isLocal))
+        if (!(Equals(info.sender, PhotonNetwork.masterClient) || info.sender.IsLocal))
         {
             Mod.Interface.Chat.System("Round end sent from Player " + info.sender.ID);
         }
@@ -409,7 +409,7 @@ public partial class FengGameManagerMKII
     [RPC]
     public void NetShowDamage(int speed, PhotonMessageInfo info)
     {
-        if (info != null && !info.sender.IsMasterClient && !info.sender.isLocal)
+        if (info != null && !info.sender.IsMasterClient && !info.sender.IsLocal)
             throw new NotAllowedException(nameof(NetShowDamage), info, false);
             
         if (Shelter.TryFind("Stylish", out GameObject obj))
@@ -621,12 +621,12 @@ public partial class FengGameManagerMKII
     [RPC]
     public void Chat(string content, string sender, PhotonMessageInfo info)
     {
-        Shelter.EventManager.Fire(nameof(Chat));
+//        Shelter.EventManager.Fire(nameof(Chat));
         if (string.IsNullOrEmpty(content))
             return;
-        
+        Shelter.LogConsole("Received a message from {0}.", info.sender);
         if (sender != string.Empty)
-            Mod.Interface.Chat.AddMessage($"{info.sender.HexName}: {content}", info.sender);
+            Mod.Interface.Chat.AddMessage($"{info.sender.Properties.HexName}: {content}", info.sender);
         else 
             Mod.Interface.Chat.AddMessage(content, info.sender);
     }
@@ -634,7 +634,7 @@ public partial class FengGameManagerMKII
     [RPC]
     private void SetTeamRPC(int setting, PhotonMessageInfo info)
     {
-        if (info.sender.IsMasterClient || info.sender.isLocal)
+        if (info.sender.IsMasterClient || info.sender.IsLocal)
         {
             SetTeam(setting);
         }
@@ -814,6 +814,6 @@ public partial class FengGameManagerMKII
     [RPC]
     private void ChatPM(string sender, string content, PhotonMessageInfo info) //TODO: Customize PMs message
     {
-        Mod.Interface.Chat.ReceivePrivateMessage($"<color=#1068D4>PM</color><color=#108CD4>></color> <color=#{Mod.Interface.Chat.SystemColor}>{info.sender.HexName}: {content}</color>", info.sender);
+        Mod.Interface.Chat.ReceivePrivateMessage($"<color=#1068D4>PM</color><color=#108CD4>></color> <color=#{Mod.Interface.Chat.SystemColor}>{info.sender.Properties.HexName}: {content}</color>", info.sender);
     }
 }
