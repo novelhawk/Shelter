@@ -20,7 +20,7 @@ namespace Mod.Commands
             {
                 Chat.System(player.Properties.HexName + " properties:");
                 foreach (var str in list)
-                    Chat.System($"{str.Key} : {str.Value}");
+                    Chat.System("{0} : {1}", str.Key, str.Value);
 //                if (str != "sender") ??
                 return;
             }

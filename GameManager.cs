@@ -132,7 +132,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             }
             if ((int) settings[244] == 1)
             {
-                Mod.Interface.Chat.System($"<color=#FFC000>({roundTime:F2})</color> Round Start.");
+                Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> Round Start.", roundTime);
             }
         }
         isFirstLoad = false;
@@ -1785,7 +1785,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 object[] parameters = { titanScore };
                 photonView.RPC("netGameLose", PhotonTargets.Others, parameters);
                 if ((int) settings[244] == 1)
-                    Mod.Interface.Chat.System($"<color=#FFC000>({roundTime:F2})</color> Round ended (game lose).");
+                    Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game lose).", roundTime);
             }
         }
     }
@@ -1808,7 +1808,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                     {
                         photonView.RPC("netGameWin", PhotonTargets.Others, 0);
                         if ((int) settings[244] == 1)
-                            Mod.Interface.Chat.System($"<color=#FFC000>({roundTime:F2})</color> Round ended (game lose).");
+                            Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game lose).", roundTime);
                     }
 
                     break;
@@ -1819,7 +1819,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                         object[] objArray3 = { teamWinner };
                         photonView.RPC("netGameWin", PhotonTargets.Others, objArray3);
                         if ((int) settings[244] == 1)
-                            Mod.Interface.Chat.System($"<color=#FFC000>({roundTime:F2})</color> Round ended (game lose).");
+                            Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game lose).", roundTime);
                     }
                     teamScores[teamWinner - 1]++;
                     break;
@@ -1830,7 +1830,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                         object[] objArray4 = { humanScore };
                         photonView.RPC("netGameWin", PhotonTargets.Others, objArray4);
                         if ((int) settings[244] == 1)
-                            Mod.Interface.Chat.System($"<color=#FFC000>({roundTime:F2})</color> Round ended (game lose).");
+                            Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game lose).", roundTime);
                     }
 
                     break;

@@ -3,6 +3,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization.Formatters;
 using System.Text.RegularExpressions;
+using JetBrains.Annotations;
 using Mod.Interface.Components;
 using Mod.Managers;
 using UnityEngine;
@@ -89,6 +90,12 @@ namespace Mod.Interface
         {
             Messages.Add(new ChatMessage($"<color=#{SystemColor}>{message}</color>") {IsForemost = foremost});
             return Messages.Count - 1;
+        } 
+        
+        [StringFormatMethod("message")]
+        public static int System(object message, params object[] args)
+        {
+            return System(string.Format(message.ToString(), args));
         } 
         
         public static void Clear()

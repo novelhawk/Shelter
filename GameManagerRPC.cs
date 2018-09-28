@@ -301,7 +301,7 @@ public partial class FengGameManagerMKII
         _endingMessageId = Mod.Interface.Chat.System("Game is restarting soon.");
         if ((int) settings[244] == 1)
         {
-            Mod.Interface.Chat.System($"<color=#FFC000>({roundTime:F2})</color> Round ended (game lose).");
+            Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game lose).", roundTime);
         }
     }
 

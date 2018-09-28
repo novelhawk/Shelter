@@ -38,7 +38,7 @@ namespace Mod.Commands
                 throw new PlayerNotFoundException(args[0]);
 
             player.SetCustomProperties(hashtable);
-            Chat.System($"You resetted {player}'s kd");
+            Chat.System("You reset {0}'s kda", player);
         }
     }
 }

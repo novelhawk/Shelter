@@ -47,7 +47,7 @@ public partial class FengGameManagerMKII
         Shelter.OnJoinedGame();
         DiscordRpc.SendInGameMulti();
         var room = PhotonNetwork.Room;
-        Mod.Interface.Chat.System($"Joined {room.Name.RemoveColors()}");
+        Mod.Interface.Chat.System("Joined {0}", room.Name.RemoveColors());
         Shelter.LogConsole("Joined room {0}",  room.Name.RemoveColors());
         maxPlayers = room.MaxPlayers;
         playerList = string.Empty;

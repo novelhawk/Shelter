@@ -19,7 +19,7 @@ namespace Mod.Commands
                 {
                     Chat.System("Banned players: ");
                     foreach (var entry in FengGameManagerMKII.banHash)
-                        Chat.System($"[{entry.Key}] {entry.Value}");
+                        Chat.System("[{0}] {1}", entry.Key, entry.Value);
                 }
                 else
                 {
@@ -33,7 +33,7 @@ namespace Mod.Commands
                 throw new PlayerNotFoundException(args[0]);
             
             FengGameManagerMKII.instance.KickPlayerRC(player, true, string.Empty);
-            Chat.System($"{player} has been banned");
+            Chat.System("{0} has been banned", player);
         }
     }
 }

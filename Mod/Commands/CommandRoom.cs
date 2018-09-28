@@ -44,21 +44,21 @@ namespace Mod.Commands
                     {
                         default:
                             FengGameManagerMKII.instance.AddTime(num * 60);
-                            Chat.System($"You added {num} minutes to the clock.");
+                            Chat.System("You added {0} minutes to the clock.", num);
                             break;
                         
                         case "s":
                         case "second":
                         case "seconds":
                             FengGameManagerMKII.instance.AddTime(num);
-                            Chat.System($"You added {num} seconds to the clock.");
+                            Chat.System("You added {0} seconds to the clock.", num);
                             break;
 
                         case "h":
                         case "hour":
                         case "hours":
                             FengGameManagerMKII.instance.AddTime(num * 3600);
-                            Chat.System($"You added {num} hours to the clock.");
+                            Chat.System("You added {0} hours to the clock.", num);
                             break;
                     }
 
@@ -68,7 +68,7 @@ namespace Mod.Commands
                     room.IsVisible = args[1].EqualsIgnoreCase("true");
                     room.IsOpen = args[1].EqualsIgnoreCase("true");
 
-                    Chat.System($"The room is now {(room.IsVisible ? "" : "in")}visible.");
+                    Chat.System("The room is now {0}.", room.IsVisible ? "visible" : "invisible");
                     break;
                 
                 case "ttl":
@@ -83,7 +83,7 @@ namespace Mod.Commands
                         throw new CommandArgumentException(CommandName, "/room ttl [number in s]");
 
                     room.RoomTTL = num;
-                    Chat.System($"Room will decay {num} seconds after all player left.");
+                    Chat.System("Room will decay {0} seconds after all player left.", num);
                     break;
                 
                 case "playerttl":
@@ -97,7 +97,7 @@ namespace Mod.Commands
                         throw new CommandArgumentException(CommandName, "/room playerttl [number in s]");
                     
                     room.PlayerTTL = num;
-                    Chat.System($"Player instance will decay {num} seconds after the player left.");
+                    Chat.System("Player instance will decay {0} seconds after the player left.", num);
                     break;
             }
         }

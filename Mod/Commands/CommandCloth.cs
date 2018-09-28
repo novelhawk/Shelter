@@ -8,7 +8,7 @@ namespace Mod.Commands
 
         public override void Execute(string[] args)
         {
-            Chat.System($"Active clothes: {ClothFactory.GetDebugInfo()}");
+            Chat.System("Active clothes: {0}", ClothFactory.GetDebugInfo());
         }
     }
 }

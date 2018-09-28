@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using Mod.Interface.Components;
+using Mod.Logging;
 
 namespace Mod
 {
@@ -36,7 +37,8 @@ namespace Mod
                 case "staticflickr":
                     return true;
                 default:
-                    Mod.Interface.Chat.System($"{regex.Groups[1].Value} ({url}) is not an allowed domain.");
+                    Shelter.LogConsole("{0} is not an allowed domain.", LogType.Warning, regex.Groups[1].Value);
+                    Shelter.Log("{0} is now an allowed domain.", LogType.Warning, url);
                     return false;
             }
         }

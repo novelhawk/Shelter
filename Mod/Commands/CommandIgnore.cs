@@ -38,9 +38,9 @@ namespace Mod.Commands
                         throw new PlayerNotFoundException(id);
                     
                     if (!player.IsIgnored)
-                        Chat.System($"Player {player} is now ignored.");
+                        Chat.System("Player {0} is now ignored.", player);
                     else
-                        Chat.System($"Player {player} was already ignored");
+                        Chat.System("Player {0} was already ignored", player);
                     
                     player.Ignore();
                     break;
@@ -56,9 +56,9 @@ namespace Mod.Commands
                         throw new PlayerNotFoundException(args[1]);
 
                     if (player.IsIgnored)
-                        Chat.System($"Player {player} is no longer ignored.");
+                        Chat.System("Player {0} is no longer ignored.", player);
                     else
-                        Chat.System($"Player {player} is not ignored.");
+                        Chat.System("Player {0} is not ignored.", player);
 
                     player.IsIgnored = false;
                     break;
