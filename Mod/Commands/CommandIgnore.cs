@@ -15,25 +15,16 @@ namespace Mod.Commands
             if (args.Length < 1)
                 throw new CommandArgumentException(CommandName, "/ignore [list/add/rem] [id]");
             
-            Player player;
             switch (args[0].ToLower())
             {
                 case "list":
                 {
-                    if (FengGameManagerMKII.ignoreList.Count > 0)
+                    Chat.System("Ignored players:");
+                    foreach (var p in PhotonNetwork.PlayerList)
                     {
-                        Chat.System("Ignored players:");
-                        foreach (var id in FengGameManagerMKII.ignoreList)
-                        {
-                            if ((player = Player.Find(id)) != null)
-                                Chat.System(player);
-                            else
-                                Chat.System(id);
-                        }
+                        if (p.IsIgnored)
+                            Chat.System(p);
                     }
-                    else
-                        Chat.System("Your ignore list is empty");
-
                     break;
                 }
 
@@ -43,13 +34,15 @@ namespace Mod.Commands
                     if (args.Length < 2 || !int.TryParse(args[1], out int id))
                         throw new CommandArgumentException(CommandName, "/ignore [list/add/rem] [id]");
 
-                    if (!Player.TryParse(id, out player))
+                    if (!Player.TryParse(id, out Player player))
                         throw new PlayerNotFoundException(id);
                     
-                    if (!FengGameManagerMKII.ignoreList.Contains(id))
-                        FengGameManagerMKII.ignoreList.Add(id);
+                    if (!player.IsIgnored)
+                        Chat.System($"Player {player} is now ignored.");
+                    else
+                        Chat.System($"Player {player} was already ignored");
                     
-                    Chat.System($"Hai ignorato {player}.");
+                    player.Ignore();
                     break;
                 }
 
@@ -59,13 +52,15 @@ namespace Mod.Commands
                     if (args.Length < 2)
                         throw new ArgumentException("/ignore [list/add/rem] [id]");
 
-                    if (!Player.TryParse(args[1], out player))
+                    if (!Player.TryParse(args[1], out Player player))
                         throw new PlayerNotFoundException(args[1]);
 
-                    if (FengGameManagerMKII.ignoreList.Contains(player.ID))
-                        FengGameManagerMKII.ignoreList.Remove(player.ID);
-                    
-                    Chat.System($"Hai un-ignorato {player}.");
+                    if (player.IsIgnored)
+                        Chat.System($"Player {player} is no longer ignored.");
+                    else
+                        Chat.System($"Player {player} is not ignored.");
+
+                    player.IsIgnored = false;
                     break;
                 }
 

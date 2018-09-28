@@ -211,8 +211,8 @@ namespace Mod
         {
             get
             {
-                if (PhotonNetwork.playerList != null)
-                    return PhotonNetwork.playerList.Length;
+                if (PhotonNetwork.PlayerList != null)
+                    return PhotonNetwork.PlayerList.Length;
                 return 0;
             }
         }

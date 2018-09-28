@@ -22,7 +22,7 @@ namespace Mod.Interface
         {
             if (!PhotonNetwork.inRoom) return;
             SmartRect rect = new SmartRect(0, -14, Screen.width * 0.35f, 20);
-            foreach (var player in PhotonNetwork.playerList.OrderBy(x => x.ID).ToList())
+            foreach (var player in PhotonNetwork.PlayerList.OrderBy(x => x.ID).ToList())
                 GUI.Label(rect.OY(15), Entry(player, _animator.LastColor.ToHex()));
             
             if (Time.time - _lastAnimationUpdate < 0.05f)
@@ -40,7 +40,7 @@ namespace Mod.Interface
         {
             string playerName = player.Properties.Name.Trim() == string.Empty ? "Unknown" : player.Properties.HexName, humanType;
             int type;
-            if (FengGameManagerMKII.ignoreList.Contains(player.ID))
+            if (player.IsIgnored)
                 type = 4;
             else if (player.Properties.Alive == false)
                 type = 3;

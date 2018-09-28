@@ -69,7 +69,7 @@ public partial class FengGameManagerMKII
     [RPC]
     private void RequireStatus(PhotonMessageInfo info)
     {
-        if (!Player.Self.IsMasterClient && PhotonNetwork.playerList.Any(x => x.ID < Player.Self.ID))
+        if (!Player.Self.IsMasterClient && PhotonNetwork.PlayerList.Any(x => x.ID < Player.Self.ID))
             throw new NotAllowedException(nameof(RequireStatus), info);
         
         photonView.RPC("refreshStatus", PhotonTargets.Others, humanScore, titanScore, wave, highestwave, roundTime, timeTotalServer, startRacing, endRacing);
@@ -205,7 +205,7 @@ public partial class FengGameManagerMKII
                                   (!Level.StartsWith("Custom") || RCSettings.gameType != 1) ||
                                   IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer))
                             {
-                                foreach (Player player in PhotonNetwork.playerList)
+                                foreach (Player player in PhotonNetwork.PlayerList)
                                 {
                                     if (player.Properties.PlayerType != PlayerType.Titan)
                                     {
@@ -498,14 +498,8 @@ public partial class FengGameManagerMKII
         if (!info.sender.IsMasterClient)
             throw new NotAllowedException(nameof(IgnorePlayer), info);
 
-        if (Player.TryParse(id, out Player player) && !ignoreList.Contains(id))
-        {
-            ignoreList.Add(player.ID);
-            PhotonNetwork.RaiseEvent(254, null, true, new RaiseEventOptions
-            {
-                TargetActors = new[] {id}
-            });
-        }
+        if (Player.TryParse(id, out Player player) && !player.IsIgnored)
+            player.Ignore();
     }
 
     [RPC]
@@ -516,16 +510,8 @@ public partial class FengGameManagerMKII
 
         foreach (int id in ids)
         {
-            if (!Player.TryParse(id, out Player _))
-                continue;
-            if (!ignoreList.Contains(id))
-            {
-                ignoreList.Add(id);
-                PhotonNetwork.RaiseEvent(254, null, true, new RaiseEventOptions
-                {
-                    TargetActors = new[] {id}
-                });
-            }
+            if (!Player.TryParse(id, out Player player) && !player.IsIgnored)
+                player.Ignore();
         }
     }
 

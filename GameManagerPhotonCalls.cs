@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Text.RegularExpressions;
 using Mod;
 using Mod.Discord;
@@ -576,8 +577,9 @@ public partial class FengGameManagerMKII
                 if (RCSettings.racingStatic > 0)
                     hashtable.Add("asoracing", RCSettings.racingStatic);
 
-                if (ignoreList != null && ignoreList.Count > 0)
-                    photonView1.RPC("ignorePlayerArray", player, ignoreList.ToArray());
+                object[] ignores = PhotonNetwork.PlayerList.Where(x => x.IsIgnored).Cast<object>().ToArray();
+                if (ignores.Length > 0)
+                    photonView1.RPC("ignorePlayerArray", player, ignores);
 
                 photonView1.RPC("settingRPC", player, hashtable);
                 photonView1.RPC("setMasterRC", player);
@@ -600,9 +602,6 @@ public partial class FengGameManagerMKII
             OneTitanDown(string.Empty, true);
             SomeOneIsDead(0);
         }
-
-        if (ignoreList.Contains(player.ID))
-            ignoreList.Remove(player.ID);
 
         InstantiateTracker.instance.TryRemovePlayer(player.ID);
         if (PhotonNetwork.isMasterClient)
@@ -745,7 +744,6 @@ public partial class FengGameManagerMKII
     private void Start()
     {
         instance = this;
-        ignoreList = new List<int>();
         gameObject.name = "MultiplayerManager";
         DontDestroyOnLoad(gameObject);
 
@@ -771,7 +769,6 @@ public partial class FengGameManagerMKII
         levelCache = new List<string[]>();
         titanSpawners = new List<TitanSpawner>();
         restartCount = new List<float>();
-        ignoreList = new List<int>();
         
         groundList = new List<GameObject>();
         noRestart = false;

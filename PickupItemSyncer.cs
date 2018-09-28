@@ -11,7 +11,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
     {
         if (this.IsWaitingForPickupInit)
         {
-            if (PhotonNetwork.playerList.Length < 2)
+            if (PhotonNetwork.PlayerList.Length < 2)
             {
                 Debug.Log("Cant ask anyone else for PickupItem spawn times.");
                 this.IsWaitingForPickupInit = false;
@@ -40,7 +40,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
     {
         Debug.Log(string.Concat(new object[] { "Joined Room. isMasterClient: ", PhotonNetwork.isMasterClient, " id: ", Player.Self.ID }));
         this.IsWaitingForPickupInit = !PhotonNetwork.isMasterClient;
-        if (PhotonNetwork.playerList.Length >= 2)
+        if (PhotonNetwork.PlayerList.Length >= 2)
         {
             Invoke("AskForPickupItemSpawnTimes", 2f);
         }

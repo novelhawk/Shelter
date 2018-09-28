@@ -34,7 +34,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     public static Hashtable heroHash;
     private int highestwave = 1;
     private int humanScore;
-    public static List<int> ignoreList;
     public static Hashtable imatitan;
     public static FengGameManagerMKII instance;
     public static Hashtable intVariables;
@@ -155,10 +154,10 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             if (RCSettings.infectionMode != num)
             {
                 imatitan.Clear();
-                int length = PhotonNetwork.playerList.Length;
+                int length = PhotonNetwork.PlayerList.Length;
                 for (var i = 0; i < length; i++)
                 {
-                    Player player = PhotonNetwork.playerList[i];
+                    Player player = PhotonNetwork.PlayerList[i];
                     Hashtable hash = new Hashtable
                     {
                         {PlayerProperty.IsTitan, 1}
@@ -187,8 +186,8 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         {
             hashtable.Add("team", (int) settings[193]);
             if (RCSettings.teamMode != (int) settings[193])
-                for (int i = 0; i < PhotonNetwork.playerList.Length; i++)
-                    photonView.RPC("setTeamRPC", PhotonNetwork.playerList[i], i % 2 + 1);
+                for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
+                    photonView.RPC("setTeamRPC", PhotonNetwork.PlayerList[i], i % 2 + 1);
         }
         if ((int) settings[226] > 0)
         {
@@ -1623,20 +1622,20 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     {
         int num;
         imatitan.Clear();
-        for (num = 0; num < PhotonNetwork.playerList.Length; num++)
+        for (num = 0; num < PhotonNetwork.PlayerList.Length; num++)
         {
-            Player player = PhotonNetwork.playerList[num];
+            Player player = PhotonNetwork.PlayerList[num];
             Hashtable propertiesToSet = new Hashtable
             {
                 { PlayerProperty.IsTitan, 1 }
             };
             player.SetCustomProperties(propertiesToSet);
         }
-        int length = PhotonNetwork.playerList.Length;
+        int length = PhotonNetwork.PlayerList.Length;
         int infectionMode = RCSettings.infectionMode;
-        for (num = 0; num < PhotonNetwork.playerList.Length; num++)
+        for (num = 0; num < PhotonNetwork.PlayerList.Length; num++)
         {
-            Player player2 = PhotonNetwork.playerList[num];
+            Player player2 = PhotonNetwork.PlayerList[num];
             if (length > 0 && UnityEngine.Random.Range(0f, 1f) <= infectionMode / (float)length)
             {
                 Hashtable hashtable2 = new Hashtable
@@ -1657,7 +1656,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     {
         if (RCSettings.pointMode > 0)
         {
-            foreach (Player player in PhotonNetwork.playerList)
+            foreach (Player player in PhotonNetwork.PlayerList)
             {
                 Hashtable propertiesToSet = new Hashtable
                 {
@@ -1864,10 +1863,10 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     }
 
     public bool IsAnyPlayerAlive() =>
-        PhotonNetwork.playerList.Any(player => player.Properties.PlayerType == PlayerType.Human && player.Properties.Alive == true);
+        PhotonNetwork.PlayerList.Any(player => player.Properties.PlayerType == PlayerType.Human && player.Properties.Alive == true);
 
     public bool IsAnyTeamMemberAlive(int team) =>
-        PhotonNetwork.playerList.Any(player =>
+        PhotonNetwork.PlayerList.Any(player =>
             player.Properties.PlayerType == PlayerType.Human &&
             player.Properties.Team == team &&
             player.Properties.Alive == true);
@@ -1885,23 +1884,17 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             PhotonNetwork.DestroyPlayerObjects(player);
             PhotonNetwork.CloseConnection(player);
             photonView.RPC("ignorePlayer", PhotonTargets.Others, player.ID);
-            if (!ignoreList.Contains(player.ID))
-            {
-                ignoreList.Add(player.ID);
-                PhotonNetwork.RaiseEvent(254, null, true, new RaiseEventOptions
-                {
-                    TargetActors = new[] { player.ID }
-                });
-            }
+            if (!player.IsIgnored)
+                player.Ignore();
+            
             if (!(!ban || banHash.ContainsKey(player.ID)))
             {
                 str = player.Properties.Name;
                 banHash.Add(player.ID, str);
             }
+            
             if (reason != string.Empty)
-            {
                 Mod.Interface.Chat.System("Player " + player.ID + " was autobanned. Reason:" + reason);
-            }
         }
     }
 
@@ -2472,9 +2465,9 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                             oldScript = currentScript;
                         }
                     }
-                    for (int i = 0; i < PhotonNetwork.playerList.Length; i++)
+                    for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
                     {
-                        Player player = PhotonNetwork.playerList[i];
+                        Player player = PhotonNetwork.PlayerList[i];
                         if (!player.IsMasterClient)
                         {
                             playersRPC.Add(player);
@@ -3918,7 +3911,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         banHash = new Hashtable();
         imatitan = new Hashtable();
         oldScript = string.Empty;
-        ignoreList = new List<int>();
         restartCount = new List<float>();
         heroHash = new Hashtable();
     }
@@ -4878,7 +4870,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             case 3:
                 int cyanTeam = 0;
                 int magentaTeam = 0;
-                foreach (Player player in PhotonNetwork.playerList)
+                foreach (Player player in PhotonNetwork.PlayerList)
                 {
                     switch (player.Properties.RCTeam)
                     {

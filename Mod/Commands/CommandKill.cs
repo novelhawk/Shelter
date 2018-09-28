@@ -24,7 +24,7 @@ namespace Mod.Commands
             {
                 case "all":
                 {
-                    foreach (Player player in PhotonNetwork.playerList)
+                    foreach (Player player in PhotonNetwork.PlayerList)
                     {
                         if (player.Hero == null)
                             continue;

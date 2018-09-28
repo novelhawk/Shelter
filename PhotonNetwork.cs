@@ -1244,7 +1244,7 @@ public static class PhotonNetwork
     [Obsolete("Use PhotonPlayer.Self")]
     public static Player player => Player.Self;
 
-    public static Player[] playerList
+    public static Player[] PlayerList
     {
         get
         {

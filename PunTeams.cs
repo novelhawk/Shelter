@@ -50,7 +50,7 @@ public class PunTeams : MonoBehaviour
             if (enumerator is IDisposable disposable)
             	disposable.Dispose();
         }
-        foreach (Player player in PhotonNetwork.playerList)
+        foreach (Player player in PhotonNetwork.PlayerList)
         {
             Team team = player.GetTeam();
             PlayersPerTeam[team].Add(player);

@@ -2944,7 +2944,7 @@ public class HERO : Photon.MonoBehaviour
     {
         if (photonView.isMine && info != null && IN_GAME_MAIN_CAMERA.GameMode != GameMode.BossFight)
         {
-            if (FengGameManagerMKII.ignoreList.Contains(info.sender.ID))
+            if (info.sender.IsIgnored)
             {
                 photonView.RPC("backToHumanRPC", PhotonTargets.Others);
                 return;
@@ -3077,7 +3077,7 @@ public class HERO : Photon.MonoBehaviour
         GameObject obj2;
         if (photonView.isMine && info != null && IN_GAME_MAIN_CAMERA.GameMode != GameMode.BossFight)
         {
-            if (FengGameManagerMKII.ignoreList.Contains(info.sender.ID))
+            if (info.sender.IsIgnored)
             {
                 photonView.RPC("backToHumanRPC", PhotonTargets.Others, new object[0]);
                 return;

@@ -15,7 +15,7 @@ namespace Mod.Commands
             {
                 if (args[0].EqualsIgnoreCase("all"))
                 {
-                    foreach (Player player in PhotonNetwork.playerList)
+                    foreach (Player player in PhotonNetwork.PlayerList)
                         FengGameManagerMKII.instance.photonView.RPC("respawnHeroInNewRound", player);
                     Notify.New("Successfully respawned all players!", 1300, 35F);
                 }

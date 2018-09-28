@@ -55,7 +55,7 @@ public class Player
     
     public static Player Find(int id)
     {
-        return PhotonNetwork.playerList.FirstOrDefault(player => player.ID == id);
+        return PhotonNetwork.PlayerList.FirstOrDefault(player => player.ID == id);
     }
 
     public static bool TryParse(string idStr, out Player player)
@@ -72,6 +72,17 @@ public class Player
         if ((player = Find(id)) != null)
             return true;
         return false;
+    }
+
+    public void Ignore()
+    {
+        _ignored = true;
+        // 254 is called by photon only right?
+        // if we de-comment check that it wasn't already ignored.
+//        PhotonNetwork.RaiseEvent(254, null, true, new RaiseEventOptions
+//        {
+//            TargetActors = new[] { _id }
+//        });
     }
 
     public Player Get(int id)
@@ -228,16 +239,11 @@ public class Player
         {
             if (_isLocal)
                 return;
-            
-            if (value != _ignored)
-            {
-                if (value)
-                    FengGameManagerMKII.ignoreList.Add(_id);
-                else
-                    FengGameManagerMKII.ignoreList.Remove(_id);
-            }
-            
-            _ignored = value; 
+
+            if (value)
+                Ignore();
+            else
+                _ignored = false; 
         }
     }
     

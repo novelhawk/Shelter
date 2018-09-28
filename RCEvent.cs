@@ -65,7 +65,7 @@ public class RCEvent
                         return;
 
                     case 1:
-                        foreach (Player player in PhotonNetwork.playerList)
+                        foreach (Player player in PhotonNetwork.PlayerList)
                         {
                             if (FengGameManagerMKII.playerVariables.ContainsKey(this.foreachVariableName))
                             {

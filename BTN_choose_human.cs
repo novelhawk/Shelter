@@ -8,7 +8,7 @@ public class BTN_choose_human : MonoBehaviour
 {
     private static bool IsEveryoneDead()
     {
-        return !PhotonNetwork.playerList.Any(player => player.Properties.PlayerType == PlayerType.Human && player.Properties.Alive == true);
+        return !PhotonNetwork.PlayerList.Any(player => player.Properties.PlayerType == PlayerType.Human && player.Properties.Alive == true);
     }
 
     private void OnClick()

@@ -28,7 +28,7 @@ namespace Mod.Commands
 
             if (args[0].EqualsIgnoreCase("all"))
             {
-                foreach (Player p in PhotonNetwork.playerList)
+                foreach (Player p in PhotonNetwork.PlayerList)
                     p.SetCustomProperties(hashtable);
                 Chat.System("You resetted the kds of everyone.");
                 return;
