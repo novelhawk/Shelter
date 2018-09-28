@@ -13,7 +13,7 @@
     UpdateQueuePosition = 228,
     RoomListUpdate = 229,
     RoomListCreated = 230,
-    PlayerJoined = 253,
+    UpdateProperties = 253,
     PlayerLeft = 254,
     JoinedRoom = 255,
 }

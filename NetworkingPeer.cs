@@ -1352,7 +1352,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 break;
             }
 
-            case PhotonEvent.PlayerJoined:
+            case PhotonEvent.UpdateProperties:
             {
                 if (!(photonEvent[253] is int id))
                     return;
@@ -1438,9 +1438,6 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             }
 
             default:
-                if (sender != null && FengGameManagerMKII.ignoreList.Contains(sender.ID))
-                    return;
-
                 if (photonEvent.Code < 200)
                     throw new NotAllowedException(photonEvent.Code, sender);
                 break;
