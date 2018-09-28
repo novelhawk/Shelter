@@ -119,7 +119,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             {
                 object one = currentContent[i];
                 object two = lastData[i];
-                if (!this.ObjectIsSameWithInprecision(one, two))
+                if (!ObjectIsSameWithInprecision(one, two))
                 {
                     return false;
                 }
@@ -362,7 +362,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             {
                 object one = objArray2[i];
                 object two = lastOnSerializeDataSent[i];
-                if (this.ObjectIsSameWithInprecision(one, two))
+                if (ObjectIsSameWithInprecision(one, two))
                 {
                     num++;
                 }
@@ -1127,70 +1127,51 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             this.loadingLevelAndPausedNetwork = false;
             PhotonNetwork.isMessageQueueRunning = true;
         }
-        List<int> list = new List<int>();
-        foreach (KeyValuePair<int, PhotonView> pair in this.photonViewList)
+
+        var counter = 0;
+        foreach (var entry in photonViewList.ToList())
         {
-            if (pair.Value == null)
+            if (entry.Value == null) // Can't we clear non-nulls too?
             {
-                list.Add(pair.Key);
+                photonViewList.Remove(entry.Key);
+                counter++;
             }
         }
-        for (int i = 0; i < list.Count; i++)
+        if (counter > 0 && PhotonNetwork.logLevel >= PhotonLogLevel.Informational)
         {
-            int key = list[i];
-            this.photonViewList.Remove(key);
-        }
-        if (list.Count > 0 && PhotonNetwork.logLevel >= PhotonLogLevel.Informational)
-        {
-            Debug.Log("New level loaded. Removed " + list.Count + " scene view IDs from last level.");
+            Debug.Log("New level loaded. Removed " + counter + " scene view IDs from last level.");
         }
     }
 
-    private bool ObjectIsSameWithInprecision(object one, object two)
+    private static bool ObjectIsSameWithInprecision(object one, object two)
     {
         if (one == null || two == null)
-        {
             return one == null && two == null;
-        }
         if (one.Equals(two))
-        {
             return true;
-        }
-        if (one is Vector3)
+        
+        switch (one)
         {
-            Vector3 target = (Vector3) one;
-            Vector3 second = (Vector3) two;
-            if (target.AlmostEquals(second, PhotonNetwork.precisionForVectorSynchronization))
-            {
-                return true;
-            }
-        }
-        else if (one is Vector2)
-        {
-            Vector2 vector3 = (Vector2) one;
-            Vector2 vector4 = (Vector2) two;
-            if (vector3.AlmostEquals(vector4, PhotonNetwork.precisionForVectorSynchronization))
-            {
-                return true;
-            }
-        }
-        else if (one is Quaternion)
-        {
-            Quaternion quaternion = (Quaternion) one;
-            Quaternion quaternion2 = (Quaternion) two;
-            if (quaternion.AlmostEquals(quaternion2, PhotonNetwork.precisionForQuaternionSynchronization))
-            {
-                return true;
-            }
-        }
-        else if (one is float)
-        {
-            float num = (float) one;
-            float num2 = (float) two;
-            if (num.AlmostEquals(num2, PhotonNetwork.precisionForFloatSynchronization))
-            {
-                return true;
-            }
+            case Vector3 target:
+                if (target.AlmostEquals((Vector3) two, PhotonNetwork.precisionForVectorSynchronization))
+                    return true;
+                break;
+            
+            case Vector2 vector3:
+                if (vector3.AlmostEquals((Vector2) two, PhotonNetwork.precisionForVectorSynchronization))
+                    return true;
+                break;
+            
+            case Quaternion quaternion:
+                if (quaternion.AlmostEquals((Quaternion) two, PhotonNetwork.precisionForQuaternionSynchronization))
+                    return true;
+                break;
+            
+            case float num:
+                if (num.AlmostEquals((float) two, PhotonNetwork.precisionForFloatSynchronization))
+                    return true;
+                break;
+            
         }
         return false;
     }
@@ -1422,34 +1403,27 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
             case PhotonEvent.JoinedRoom:
             {
+                if (!sender.IsLocal)
+                    return;
+                
                 var properties = photonEvent[249] as Hashtable;
                 if (photonEvent[249] == null || properties != null)
                 {
-                    // We sent the event
-                    if (sender == null)
-                    {
-                        // Key is not checked in any case (index 254)
-                        this.AddNewPlayer(key,
-                            new Player(mLocalActor.ID == key, key, properties));
-                        this.ResetPhotonViewsOnSerialize();
-                    }
+                    this.AddNewPlayer(key, new Player(mLocalActor.ID == key, key, properties));
+                    this.ResetPhotonViewsOnSerialize();
 
                     // We joined room
                     if (key == this.mLocalActor.ID)
                     {
+                        // We created it
+                        if (this.mLastJoinType == JoinType.JoinOrCreateOnDemand && this.mLocalActor.ID == 1)
+                            SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom);
+                        
                         if (photonEvent[252] is int[] ids)
                         {
                             foreach (int id in ids)
-                            {
                                 if (mLocalActor.ID != id && !mActors.ContainsKey(id))
                                     AddNewPlayer(id, new Player(false, id, string.Empty));
-                            }
-
-                            // We created it
-                            if (this.mLastJoinType == JoinType.JoinOrCreateOnDemand && this.mLocalActor.ID == 1)
-                            {
-                                SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom);
-                            }
 
                             SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom);
                         }
