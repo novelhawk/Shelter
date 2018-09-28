@@ -1,7 +1,9 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Drawing;
 using System.Linq;
 using System.Runtime.InteropServices;
+using JetBrains.Annotations;
 using UnityEngine;
 using Animator = Mod.Animation.Animator;
 
@@ -38,41 +40,28 @@ namespace Mod.Interface
 
         private static string Entry(Player player, string color)
         {
-            string playerName = player.Properties.Name.Trim() == string.Empty ? "Unknown" : player.Properties.HexName, humanType;
-            int type;
-            if (player.IsIgnored)
-                type = 4;
-            else if (player.Properties.Alive == false)
-                type = 3;
-            else if (player.Properties.IsAHSS == true)
-                type = 1;
-            else if (player.Properties.PlayerType == PlayerType.Titan)
-                type = 2;
-            else
-                type = 0;
+            string playerName = player.Properties.Name.Trim() == string.Empty ? "Unknown" : player.Properties.HexName;
+            string humanType;
             
-
-            switch (type)
+            if (player.IsIgnored)
+                humanType = "[<b><color=#890000>IGNORED</color></b>]";
+            else if (player.Properties.Alive == false)
+                humanType = "[<b><color=#FF3A3A>DEAD</color></b>]";
+            else if (player.Properties.IsAHSS == true)
+                humanType = "[<b><color=#C42057>A</color></b>]";
+            else switch (player.Properties.PlayerType)
             {
-                case 0:
+                case PlayerType.Human:
                     humanType = string.Empty;
                     break;
-                case 1:
-                    humanType = "[<b><color=#C42057>A</color></b>]";
-                    break;
-                case 2:
+                case PlayerType.Titan:
                     humanType = "[<b><color=#FD5079>T</color></b>]";
-                    break;
-                case 3:
-                    humanType = "[<b><color=#FF3A3A>DEAD</color></b>]";
-                    break;
-                case 4:
-                    humanType = "[<b><color=#890000>IGNORED</color></b>]";
                     break;
                 default:
                     humanType = "[<i><color=#670018>NULL</color></i>]";
                     break;
             }
+            
             var mod = string.Empty;
             switch (player.Mod)
             {
