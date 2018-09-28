@@ -60,10 +60,7 @@ public class Bullet : Photon.MonoBehaviour
         this.phase = 2;
         this.killTime = 0f;
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
-        {
-            object[] parameters = new object[] { 2 };
-            photonView.RPC("setPhase", PhotonTargets.Others, parameters);
-        }
+            photonView.RPC("setPhase", PhotonTargets.Others, 2);
     }
 
     private void FixedUpdate()
@@ -113,10 +110,8 @@ public class Bullet : Photon.MonoBehaviour
                 if (hit.collider.transform.gameObject.layer == LayerMask.NameToLayer("EnemyBox"))
                 {
                     if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
-                    {
-                        object[] parameters = new object[] { hit.collider.transform.root.gameObject.GetPhotonView().viewID };
-                        photonView.RPC("tieMeToOBJ", PhotonTargets.Others, parameters);
-                    }
+                        photonView.RPC("tieMeToOBJ", PhotonTargets.Others, hit.collider.transform.root.gameObject.GetPhotonView().viewID);
+                    
                     this.master.GetComponent<HERO>().lastHook = hit.collider.transform.root;
                     transform.parent = hit.collider.transform;
                 }
@@ -124,7 +119,7 @@ public class Bullet : Photon.MonoBehaviour
                 {
                     this.master.GetComponent<HERO>().lastHook = null;
                 }
-                else if (hit.collider.transform.gameObject.layer == LayerMask.NameToLayer("NetworkObject") && hit.collider.transform.gameObject.tag == "Player" && !this.leviMode)
+                else if (hit.collider.transform.gameObject.layer == LayerMask.NameToLayer("NetworkObject") && hit.collider.transform.gameObject.CompareTag("Player") && !this.leviMode)
                 {
                     if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                     {
@@ -265,10 +260,8 @@ public class Bullet : Photon.MonoBehaviour
             this.left = isLeft;
             if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
             {
-                object[] parameters = new object[] { hero.GetComponent<HERO>().photonView.viewID, launcher_ref };
-                photonView.RPC("myMasterIs", PhotonTargets.Others, parameters);
-                object[] objArray2 = new object[] { v, this.velocity2, this.left };
-                photonView.RPC("setVelocityAndLeft", PhotonTargets.Others, objArray2);
+                photonView.RPC("myMasterIs", PhotonTargets.Others, hero.GetComponent<HERO>().photonView.viewID, launcher_ref);
+                photonView.RPC("setVelocityAndLeft", PhotonTargets.Others, velocity2, left);
             }
             transform.position = this.myRef.transform.position;
             transform.rotation = Quaternion.LookRotation(v.normalized);

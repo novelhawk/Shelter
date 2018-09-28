@@ -35,32 +35,21 @@ public class ActiveAnimation : IgnoreTimeScale
             {
                 this.mAnim.Play(clipName);
             }
-            IEnumerator enumerator = this.mAnim.GetEnumerator();
-            try
+
+            foreach (AnimationState current in mAnim)
             {
-                while (enumerator.MoveNext())
+                if (string.IsNullOrEmpty(clipName) || current.name == clipName)
                 {
-                    AnimationState current = (AnimationState) enumerator.Current;
-                    if (string.IsNullOrEmpty(clipName) || current.name == clipName)
+                    current.speed = Mathf.Abs(current.speed) * (float) playDirection;
+                    switch (playDirection)
                     {
-                        float num = Mathf.Abs(current.speed);
-                        current.speed = num * (float) playDirection;
-                        if (playDirection == Direction.Reverse && current.time == 0f)
-                        {
+                        case Direction.Reverse when current.time == 0f:
                             current.time = current.length;
-                        }
-                        else if (playDirection == Direction.Forward && current.time == current.length)
-                        {
+                            break;
+                        case Direction.Forward when current.time == current.length:
                             current.time = 0f;
-                        }
+                            break;
                     }
-                }
-            }
-            finally
-            {
-                if (enumerator is IDisposable disposable)
-                {
-                    disposable.Dispose();
                 }
             }
             this.mLastDirection = playDirection;
@@ -115,27 +104,16 @@ public class ActiveAnimation : IgnoreTimeScale
     {
         if (this.mAnim != null)
         {
-            IEnumerator enumerator = this.mAnim.GetEnumerator();
-            try
+            foreach (AnimationState current in mAnim)
             {
-                while (enumerator.MoveNext())
+                switch (this.mLastDirection)
                 {
-                    AnimationState current = (AnimationState) enumerator.Current;
-                    if (this.mLastDirection == Direction.Reverse)
-                    {
+                    case Direction.Reverse:
                         current.time = current.length;
-                    }
-                    else if (this.mLastDirection == Direction.Forward)
-                    {
+                        break;
+                    case Direction.Forward:
                         current.time = 0f;
-                    }
-                }
-            }
-            finally
-            {
-                if (enumerator is IDisposable disposable)
-                {
-                    disposable.Dispose();
+                        break;
                 }
             }
         }
@@ -149,43 +127,27 @@ public class ActiveAnimation : IgnoreTimeScale
             if (this.mAnim != null)
             {
                 bool flag = false;
-                IEnumerator enumerator = this.mAnim.GetEnumerator();
-                try
+                foreach (AnimationState state in mAnim)
                 {
-                    while (enumerator.MoveNext())
+                    if (this.mAnim.IsPlaying(state.name))
                     {
-                        AnimationState current = (AnimationState) enumerator.Current;
-                        if (this.mAnim.IsPlaying(current.name))
+                        float num2 = state.speed * num;
+                        state.time += num2;
+                        if (num2 < 0f)
                         {
-                            float num2 = current.speed * num;
-                            current.time += num2;
-                            if (num2 < 0f)
-                            {
-                                if (current.time > 0f)
-                                {
-                                    flag = true;
-                                }
-                                else
-                                {
-                                    current.time = 0f;
-                                }
-                            }
-                            else if (current.time < current.length)
-                            {
+                            if (state.time > 0f)
                                 flag = true;
-                            }
                             else
-                            {
-                                current.time = current.length;
-                            }
+                                state.time = 0f;
                         }
-                    }
-                }
-                finally
-                {
-                    if (enumerator is IDisposable disposable)
-                    {
-                        disposable.Dispose();
+                        else if (state.time < state.length)
+                        {
+                            flag = true;
+                        }
+                        else
+                        {
+                            state.time = state.length;
+                        }
                     }
                 }
                 this.mAnim.Sample();
@@ -195,10 +157,7 @@ public class ActiveAnimation : IgnoreTimeScale
                     if (this.mNotify)
                     {
                         this.mNotify = false;
-                        if (this.onFinished != null)
-                        {
-                            this.onFinished(this);
-                        }
+                        onFinished?.Invoke(this);
                         if (this.eventReceiver != null && !string.IsNullOrEmpty(this.callWhenFinished))
                         {
                             this.eventReceiver.SendMessage(this.callWhenFinished, this, SendMessageOptions.DontRequireReceiver);
@@ -223,40 +182,22 @@ public class ActiveAnimation : IgnoreTimeScale
         {
             if (this.mAnim != null)
             {
-                IEnumerator enumerator = this.mAnim.GetEnumerator();
-                try
+                foreach (AnimationState state in mAnim)
                 {
-                    while (enumerator.MoveNext())
+                    if (this.mAnim.IsPlaying(state.name))
                     {
-                        AnimationState current = (AnimationState) enumerator.Current;
-                        if (this.mAnim.IsPlaying(current.name))
+                        if (this.mLastDirection == Direction.Forward)
                         {
-                            if (this.mLastDirection == Direction.Forward)
-                            {
-                                if (current.time < current.length)
-                                {
-                                    return true;
-                                }
-                            }
-                            else
-                            {
-                                if (this.mLastDirection != Direction.Reverse)
-                                {
-                                    return true;
-                                }
-                                if (current.time > 0f)
-                                {
-                                    return true;
-                                }
-                            }
+                            if (state.time < state.length)
+                                return true;
                         }
-                    }
-                }
-                finally
-                {
-                    if (enumerator is IDisposable disposable)
-                    {
-                        disposable.Dispose();
+                        else
+                        {
+                            if (this.mLastDirection != Direction.Reverse)
+                                return true;
+                            if (state.time > 0f)
+                                return true;
+                        }
                     }
                 }
             }

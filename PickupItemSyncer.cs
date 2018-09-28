@@ -42,7 +42,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
         this.IsWaitingForPickupInit = !PhotonNetwork.isMasterClient;
         if (PhotonNetwork.PlayerList.Length >= 2)
         {
-            Invoke("AskForPickupItemSpawnTimes", 2f);
+            Invoke(nameof(AskForPickupItemSpawnTimes), 2f);
         }
     }
 
@@ -128,9 +128,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
                     }
                 }
             }
-            Debug.Log(string.Concat(new object[] { "Sent count: ", list.Count, " now: ", time }));
-            object[] parameters = new object[] { PhotonNetwork.time, list.ToArray() };
-            photonView.RPC("PickupItemInit", targtePlayer, parameters);
+            photonView.RPC("PickupItemInit", targtePlayer, PhotonNetwork.time, list.ToArray());
         }
     }
 }

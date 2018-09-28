@@ -254,8 +254,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
         animation.CrossFade(aniName, time);
         if (!FengGameManagerMKII.LAN && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
-            object[] parameters = new object[] { aniName, time };
-            photonView.RPC("netCrossFade", PhotonTargets.Others, parameters);
+            photonView.RPC("netCrossFade", PhotonTargets.Others, aniName, time);
         }
     }
 
@@ -323,8 +322,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                 else if (!hitHero.GetComponent<HERO>().HasDied())
                 {
                     hitHero.GetComponent<HERO>().markDie();
-                    object[] parameters = new object[] { (hitHero.transform.position - position) * 15f * 4f, false, -1, "Colossal Titan", true };
-                    hitHero.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, parameters);
+                    hitHero.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, (hitHero.transform.position - position) * 15f * 4f, false, -1, "Colossal Titan", true);
                 }
             }
         }
@@ -511,8 +509,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
         animation.Play(aniName);
         if (!FengGameManagerMKII.LAN && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
-            object[] parameters = new object[] { aniName };
-            photonView.RPC("netPlayAnimation", PhotonTargets.Others, parameters);
+            photonView.RPC("netPlayAnimation", PhotonTargets.Others, aniName);
         }
     }
 
@@ -522,8 +519,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
         animation[aniName].normalizedTime = normalizedTime;
         if (!FengGameManagerMKII.LAN && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
-            object[] parameters = new object[] { aniName, normalizedTime };
-            photonView.RPC("netPlayAnimationAt", PhotonTargets.Others, parameters);
+            photonView.RPC("netPlayAnimationAt", PhotonTargets.Others, aniName, normalizedTime);
         }
     }
 
@@ -540,8 +536,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
             }
             else if (PhotonNetwork.isMasterClient)
             {
-                object[] parameters = new object[] { sndname };
-                photonView.RPC("playsoundRPC", PhotonTargets.Others, parameters);
+                photonView.RPC("playsoundRPC", PhotonTargets.Others, sndname);
             }
         }
     }
@@ -630,11 +625,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
         }
         name = "COLOSSAL_TITAN";
         this.NapeArmor = 1000;
-        bool flag = false;
-        if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).RespawnMode == RespawnMode.NEVER)
-        {
-            flag = true;
-        }
+        bool flag = LevelInfoManager.GetInfo(FengGameManagerMKII.Level).RespawnMode == RespawnMode.NEVER;
         if (IN_GAME_MAIN_CAMERA.difficulty == 0)
         {
             this.NapeArmor = !flag ? 5000 : 2000;
@@ -642,43 +633,19 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
         else if (IN_GAME_MAIN_CAMERA.difficulty == 1)
         {
             this.NapeArmor = !flag ? 8000 : 3500;
-            IEnumerator enumerator = animation.GetEnumerator();
-            try
+            foreach (AnimationState current in animation)
             {
-                while (enumerator.MoveNext())
-                {
-                    AnimationState current = (AnimationState)enumerator.Current;
-                    if (current != null)
-                        current.speed = 1.02f;
-                }
-            }
-            finally
-            {
-                if (enumerator is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
+                if (current != null)
+                    current.speed = 1.02f;
             }
         }
         else if (IN_GAME_MAIN_CAMERA.difficulty == 2)
         {
             this.NapeArmor = !flag ? 12000 : 5000;
-            IEnumerator enumerator2 = animation.GetEnumerator();
-            try
+            foreach (AnimationState current in animation)
             {
-                while (enumerator2.MoveNext())
-                {
-                    AnimationState state2 = (AnimationState)enumerator2.Current;
-                    if (state2 != null)
-                        state2.speed = 1.05f;
-                }
-            }
-            finally
-            {
-                if (enumerator2 is IDisposable disposable2)
-                {
-                    disposable2.Dispose();
-                }
+                if (current != null)
+                    current.speed = 1.05f;
             }
         }
         this.NapeArmorTotal = this.NapeArmor;

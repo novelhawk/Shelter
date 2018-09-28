@@ -27,28 +27,18 @@ public class XffectCache : MonoBehaviour
 
     private void Awake()
     {
-        IEnumerator enumerator = transform.GetEnumerator();
-        try
+        foreach (Transform current in transform)
         {
-            while (enumerator.MoveNext())
+            _objects[current.name] = new ArrayList
             {
-                Transform current = (Transform)enumerator.Current;
-                this._objects[current.name] = new ArrayList
-                {
-                    current
-                };
-                Xffect component = current.GetComponent<Xffect>();
-                if (component != null)
-                {
-                    component.Initialize();
-                }
-                current.gameObject.SetActive(false);
-            }
-        }
-        finally
-        {
-            if (enumerator is IDisposable disposable)
-                disposable.Dispose();
+                current
+            };
+            
+            Xffect component = current.GetComponent<Xffect>();
+            if (component != null)
+                component.Initialize();
+
+            current.gameObject.SetActive(false);
         }
     }
 
@@ -60,24 +50,16 @@ public class XffectCache : MonoBehaviour
             Debug.LogError(name + ": cache doesnt exist!");
             return null;
         }
-        IEnumerator enumerator = list.GetEnumerator();
-        try
+
+        foreach (Transform current in list)
         {
-            while (enumerator.MoveNext())
+            if (current != null && !current.gameObject.activeInHierarchy)
             {
-                Transform current = (Transform)enumerator.Current;
-                if (current != null && !current.gameObject.activeInHierarchy)
-                {
-                    current.gameObject.SetActive(true);
-                    return current;
-                }
+                current.gameObject.SetActive(true);
+                return current;
             }
         }
-        finally
-        {
-            if (enumerator is IDisposable disposable)
-                disposable.Dispose();
-        }
+
         return this.AddObject(name);
     }
 

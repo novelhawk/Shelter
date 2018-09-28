@@ -59,8 +59,7 @@ public class RockThrow : Photon.MonoBehaviour
                     titanName = transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().titanName;
                 }
                 Debug.Log("rock hit player " + titanName);
-                object[] parameters = new object[] { this.v.normalized * 1000f + Vector3.up * 50f, false, myOwnerViewID, titanName, true };
-                hero.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, parameters);
+                hero.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, this.v.normalized * 1000f + Vector3.up * 50f, false, myOwnerViewID, titanName, true);
             }
         }
     }
@@ -82,8 +81,7 @@ public class RockThrow : Photon.MonoBehaviour
         this.v = v1;
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
-            object[] parameters = new object[] { this.v, this.oldP };
-            photonView.RPC("launchRPC", PhotonTargets.Others, parameters);
+            photonView.RPC("launchRPC", PhotonTargets.Others, this.v, this.oldP);
         }
     }
 

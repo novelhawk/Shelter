@@ -419,8 +419,7 @@ public class TITAN : Photon.MonoBehaviour
         animation.CrossFade(aniName, time);
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
-            object[] parameters = new object[] { aniName, time };
-            photonView.RPC("netCrossFade", PhotonTargets.Others, parameters);
+            photonView.RPC("netCrossFade", PhotonTargets.Others, aniName, time);
         }
     }
 
@@ -474,8 +473,7 @@ public class TITAN : Photon.MonoBehaviour
         }
         else
         {
-            object[] parameters = new object[] { attacker, hitPauseTime };
-            photonView.RPC("dieBlowRPC", PhotonTargets.All, parameters);
+            photonView.RPC("dieBlowRPC", PhotonTargets.All, attacker, hitPauseTime);
         }
     }
 
@@ -571,8 +569,7 @@ public class TITAN : Photon.MonoBehaviour
             }
             else
             {
-                object[] parameters = new object[] { attacker, hitPauseTime };
-                photonView.RPC("dieHeadBlowRPC", PhotonTargets.All, parameters);
+                photonView.RPC("dieHeadBlowRPC", PhotonTargets.All, attacker, hitPauseTime);
             }
         }
     }
@@ -683,10 +680,8 @@ public class TITAN : Photon.MonoBehaviour
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
             {
                 photonView.RPC("grabToRight", PhotonTargets.Others, new object[0]);
-                object[] parameters = new object[] { "grabbed" };
-                grabTarget.GetPhotonView().RPC("netPlayAnimation", PhotonTargets.All, parameters);
-                object[] objArray2 = new object[] { photonView.viewID, false };
-                grabTarget.GetPhotonView().RPC("netGrabbed", PhotonTargets.All, objArray2);
+                grabTarget.GetPhotonView().RPC("netPlayAnimation", PhotonTargets.All, "grabbed");
+                grabTarget.GetPhotonView().RPC("netGrabbed", PhotonTargets.All, photonView.viewID, false);
             }
             else
             {
@@ -704,10 +699,8 @@ public class TITAN : Photon.MonoBehaviour
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
             {
                 photonView.RPC("grabToLeft", PhotonTargets.Others, new object[0]);
-                object[] parameters = new object[] { "grabbed" };
-                grabTarget.GetPhotonView().RPC("netPlayAnimation", PhotonTargets.All, parameters);
-                object[] objArray2 = new object[] { photonView.viewID, true };
-                grabTarget.GetPhotonView().RPC("netGrabbed", PhotonTargets.All, objArray2);
+                grabTarget.GetPhotonView().RPC("netPlayAnimation", PhotonTargets.All, "grabbed");
+                grabTarget.GetPhotonView().RPC("netGrabbed", PhotonTargets.All, photonView.viewID, true);
             }
             else
             {
@@ -997,8 +990,12 @@ public class TITAN : Photon.MonoBehaviour
                                     else if (!(IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer || !photonView.isMine || obj2.GetComponent<HERO>().HasDied()))
                                     {
                                         obj2.GetComponent<HERO>().markDie();
-                                        object[] parameters = new object[] { (obj2.transform.position - position) * 15f * this.myLevel, true, !this.nonAI ? -1 : photonView.viewID, name, true };
-                                        obj2.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, parameters);
+                                        obj2.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, 
+                                            (obj2.transform.position - position) * 15f * this.myLevel, 
+                                            true, 
+                                            !this.nonAI ? -1 : photonView.viewID, 
+                                            name, 
+                                            true);
                                     }
                                 }
                             }
@@ -1456,8 +1453,7 @@ public class TITAN : Photon.MonoBehaviour
                         if (!this.asClientLookTarget)
                         {
                             this.asClientLookTarget = true;
-                            object[] parameters = new object[] { true };
-                            photonView.RPC("setIfLookTarget", PhotonTargets.Others, parameters);
+                            photonView.RPC("setIfLookTarget", PhotonTargets.Others, true);
                         }
                         flag2 = true;
                     }
@@ -1706,13 +1702,11 @@ public class TITAN : Photon.MonoBehaviour
                     target.GetComponent<HERO>().markDie();
                     if (this.nonAI)
                     {
-                        object[] parameters = new object[] { photonView.viewID, name };
-                        target.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, parameters);
+                        target.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, photonView.viewID, name);
                     }
                     else
                     {
-                        object[] objArray2 = new object[] { -1, name };
-                        target.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, objArray2);
+                        target.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, -1, name);
                     }
                 }
             }
@@ -2238,8 +2232,7 @@ public class TITAN : Photon.MonoBehaviour
         animation.Play(aniName);
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
-            object[] parameters = new object[] { aniName };
-            photonView.RPC("netPlayAnimation", PhotonTargets.Others, parameters);
+            photonView.RPC("netPlayAnimation", PhotonTargets.Others, aniName);
         }
     }
 
@@ -2249,8 +2242,7 @@ public class TITAN : Photon.MonoBehaviour
         animation[aniName].normalizedTime = normalizedTime;
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
-            object[] parameters = new object[] { aniName, normalizedTime };
-            photonView.RPC("netPlayAnimationAt", PhotonTargets.Others, parameters);
+            photonView.RPC("netPlayAnimationAt", PhotonTargets.Others, aniName, normalizedTime);
         }
     }
 
@@ -2259,8 +2251,7 @@ public class TITAN : Photon.MonoBehaviour
         this.PlaysoundRPC(sndname);
         if (photonView.isMine)
         {
-            object[] parameters = new object[] { sndname };
-            photonView.RPC("playsoundRPC", PhotonTargets.Others, parameters);
+            photonView.RPC("playsoundRPC", PhotonTargets.Others, sndname);
         }
     }
 
@@ -2506,23 +2497,9 @@ public class TITAN : Photon.MonoBehaviour
         }
         float num2 = 1.4f - (this.myLevel - 0.7f) * 0.15f;
         num2 = Mathf.Clamp(num2, 0.9f, 1.5f);
-        IEnumerator enumerator = animation.GetEnumerator();
-        try
-        {
-            while (enumerator.MoveNext())
-            {
-                AnimationState current = (AnimationState) enumerator.Current;
-                if (current != null)
-                    current.speed = num2;
-            }
-        }
-        finally
-        {
-            if (enumerator is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
-        }
+        foreach (AnimationState current in animation)
+            if (current != null)
+                current.speed = num2;
         Rigidbody rigidbody = this.rigidbody;
         rigidbody.mass *= this.myLevel;
         this.rigidbody.rotation = Quaternion.Euler(0f, UnityEngine.Random.Range(0, 360), 0f);
@@ -2533,23 +2510,9 @@ public class TITAN : Photon.MonoBehaviour
         this.myDifficulty = AI;
         if (this.myDifficulty == 1 || this.myDifficulty == 2)
         {
-            IEnumerator enumerator2 = animation.GetEnumerator();
-            try
-            {
-                while (enumerator2.MoveNext())
-                {
-                    AnimationState state2 = (AnimationState) enumerator2.Current;
-                    if (state2 != null)
-                        state2.speed = num2 * 1.05f;
-                }
-            }
-            finally
-            {
-                if (enumerator2 is IDisposable disposable2)
-                {
-                    disposable2.Dispose();
-                }
-            }
+            foreach (AnimationState state2 in animation)
+                if (state2 != null)
+                    state2.speed = num2 * 1.05f;
             if (this.nonAI)
             {
                 this.speed *= 1.1f;
@@ -2562,31 +2525,11 @@ public class TITAN : Photon.MonoBehaviour
         }
         if (this.myDifficulty == 2)
         {
-            IEnumerator enumerator3 = animation.GetEnumerator();
-            try
-            {
-                while (enumerator3.MoveNext())
-                {
-                    AnimationState state3 = (AnimationState) enumerator3.Current;
-                    if (state3 != null)
-                        state3.speed = num2 * 1.05f;
-                }
-            }
-            finally
-            {
-                if (enumerator3 is IDisposable disposable3)
-                {
-                    disposable3.Dispose();
-                }
-            }
-            if (this.nonAI)
-            {
-                this.speed *= 1.1f;
-            }
-            else
-            {
-                this.speed *= 1.5f;
-            }
+            foreach (AnimationState state3 in animation)
+                if (state3 != null)
+                    state3.speed = num2 * 1.05f;
+            
+            this.speed *= nonAI ? 1.1f : 1.5f;
             this.chaseDistance *= 1.3f;
         }
         if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.EndlessTitan || IN_GAME_MAIN_CAMERA.GameMode == GameMode.SurviveMode)

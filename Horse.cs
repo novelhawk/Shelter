@@ -16,8 +16,7 @@ public class Horse : Photon.MonoBehaviour
         animation.CrossFade(aniName, time);
         if (PhotonNetwork.connected && photonView.isMine)
         {
-            object[] parameters = new object[] { aniName, time };
-            photonView.RPC("netCrossFade", PhotonTargets.Others, parameters);
+            photonView.RPC("netCrossFade", PhotonTargets.Others, aniName, time);
         }
     }
 
@@ -99,8 +98,7 @@ public class Horse : Photon.MonoBehaviour
                     if (!this.dust.GetComponent<ParticleSystem>().enableEmission)
                     {
                         this.dust.GetComponent<ParticleSystem>().enableEmission = true;
-                        object[] parameters = new object[] { true };
-                        photonView.RPC("setDust", PhotonTargets.Others, parameters);
+                        photonView.RPC("setDust", PhotonTargets.Others, true);
                     }
                 }
                 else
@@ -261,8 +259,7 @@ public class Horse : Photon.MonoBehaviour
         animation.Play(aniName);
         if (PhotonNetwork.connected && photonView.isMine)
         {
-            object[] parameters = new object[] { aniName };
-            photonView.RPC("netPlayAnimation", PhotonTargets.Others, parameters);
+            photonView.RPC("netPlayAnimation", PhotonTargets.Others, aniName);
         }
     }
 
@@ -272,8 +269,7 @@ public class Horse : Photon.MonoBehaviour
         animation[aniName].normalizedTime = normalizedTime;
         if (PhotonNetwork.connected && photonView.isMine)
         {
-            object[] parameters = new object[] { aniName, normalizedTime };
-            photonView.RPC("netPlayAnimationAt", PhotonTargets.Others, parameters);
+            photonView.RPC("netPlayAnimationAt", PhotonTargets.Others, aniName, normalizedTime);
         }
     }
 
@@ -304,8 +300,7 @@ public class Horse : Photon.MonoBehaviour
                 if (!this.dust.GetComponent<ParticleSystem>().enableEmission)
                 {
                     this.dust.GetComponent<ParticleSystem>().enableEmission = true;
-                    object[] parameters = new object[] { true };
-                    photonView.RPC("setDust", PhotonTargets.Others, parameters);
+                    photonView.RPC("setDust", PhotonTargets.Others, true);
                 }
             }
             else

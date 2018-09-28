@@ -90,8 +90,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
         animation.CrossFade(aniName, time);
         if (PhotonNetwork.connected && photonView.isMine)
         {
-            object[] parameters = new object[] { aniName, time };
-            photonView.RPC("netCrossFade", PhotonTargets.Others, parameters);
+            photonView.RPC("netCrossFade", PhotonTargets.Others, aniName, time);
         }
     }
 
@@ -364,8 +363,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
 
     public void hitByFTByServer(int phase)
     {
-        object[] parameters = new object[] { phase };
-        photonView.RPC("hitByFTRPC", PhotonTargets.All, parameters);
+        photonView.RPC("hitByFTRPC", PhotonTargets.All, phase);
     }
 
     [RPC]
@@ -386,8 +384,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                 this.crossFade("die", 0.1f);
                 this.isHitWhileCarryingRock = true;
                 FengGameManagerMKII.instance.GameLose();
-                object[] parameters = new object[] { "set" };
-                photonView.RPC("rockPlayAnimation", PhotonTargets.All, parameters);
+                photonView.RPC("rockPlayAnimation", PhotonTargets.All, "set");
             }
             else
             {
@@ -544,8 +541,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
         animation.Play(aniName);
         if (PhotonNetwork.connected && photonView.isMine)
         {
-            object[] parameters = new object[] { aniName };
-            photonView.RPC("netPlayAnimation", PhotonTargets.Others, parameters);
+            photonView.RPC("netPlayAnimation", PhotonTargets.Others, aniName);
         }
     }
 
@@ -555,8 +551,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
         animation[aniName].normalizedTime = normalizedTime;
         if (PhotonNetwork.connected && photonView.isMine)
         {
-            object[] parameters = new object[] { aniName, normalizedTime };
-            photonView.RPC("netPlayAnimationAt", PhotonTargets.Others, parameters);
+            photonView.RPC("netPlayAnimationAt", PhotonTargets.Others, aniName, normalizedTime);
         }
     }
 
@@ -565,8 +560,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
         this.PlaysoundRPC(sndname);
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer)
         {
-            object[] parameters = new object[] { sndname };
-            photonView.RPC("playsoundRPC", PhotonTargets.Others, parameters);
+            photonView.RPC("playsoundRPC", PhotonTargets.Others, sndname);
         }
     }
 
@@ -652,8 +646,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                     {
                         this.rockPhase++;
                         this.crossFade("rock_lift", 0.1f);
-                        object[] parameters = new object[] { "lift" };
-                        photonView.RPC("rockPlayAnimation", PhotonTargets.All, parameters);
+                        photonView.RPC("rockPlayAnimation", PhotonTargets.All, "lift");
                         this.waitCounter = 0f;
                         this.targetCheckPt = (Vector3) this.checkPoints[0];
                     }
@@ -1179,8 +1172,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                 {
                                     if (PhotonNetwork.isMasterClient)
                                     {
-                                        object[] parameters = new object[] { 10f, 500f };
-                                        photonView.RPC("netTauntAttack", PhotonTargets.MasterClient, parameters);
+                                        photonView.RPC("netTauntAttack", PhotonTargets.MasterClient, 10f, 500f);
                                     }
                                     else
                                     {

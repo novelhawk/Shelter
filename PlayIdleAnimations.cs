@@ -22,35 +22,22 @@ public class PlayIdleAnimations : MonoBehaviour
         }
         else
         {
-            IEnumerator enumerator = this.mAnim.GetEnumerator();
-            try
+            foreach (AnimationState current in mAnim)
             {
-                while (enumerator.MoveNext())
+                if (current == null)
+                    continue;
+                
+                if (current.clip.name == "idle")
                 {
-                    AnimationState current = (AnimationState) enumerator.Current;
-                    if (current != null && current.clip.name == "idle")
-                    {
-                        current.layer = 0;
-                        this.mIdle = current.clip;
-                        this.mAnim.Play(this.mIdle.name);
-                    }
-                    else if (current.clip.name.StartsWith("idle"))
-                    {
-                        current.layer = 1;
-                        this.mBreaks.Add(current.clip);
-                    }
+                    current.layer = 0;
+                    this.mIdle = current.clip;
+                    this.mAnim.Play(this.mIdle.name);
                 }
-            }
-            finally
-            {
-                if (enumerator is IDisposable disposable)
+                else if (current.clip.name.StartsWith("idle"))
                 {
-                    disposable.Dispose();
+                    current.layer = 1;
+                    this.mBreaks.Add(current.clip);
                 }
-            }
-            if (this.mBreaks.Count == 0)
-            {
-                Destroy(this);
             }
         }
     }

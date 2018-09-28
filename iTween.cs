@@ -918,24 +918,11 @@ public class iTween : MonoBehaviour
         args = CleanArgs(args);
         if (!args.Contains("includechildren") || ((bool) args["includechildren"]))
         {
-            IEnumerator enumerator = target.transform.GetEnumerator();
-            try
+            foreach (Transform current in target.transform)
             {
-                while (enumerator.MoveNext())
-                {
-                    Transform current = (Transform) enumerator.Current;
-                    Hashtable hashtable = (Hashtable) args.Clone();
-                    hashtable["ischild"] = true;
-                    ColorFrom(current.gameObject, hashtable);
-                }
-            }
-            finally
-            {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
-                {
-	                disposable.Dispose();
-                }
+                Hashtable hashtable = (Hashtable) args.Clone();
+                hashtable["ischild"] = true;
+                ColorFrom(current.gameObject, hashtable);
             }
         }
         if (!args.Contains("easetype"))
@@ -1024,24 +1011,11 @@ public class iTween : MonoBehaviour
         args = CleanArgs(args);
         if (!args.Contains("includechildren") || ((bool) args["includechildren"]))
         {
-            IEnumerator enumerator = target.transform.GetEnumerator();
-            try
+            foreach (Transform current in target.transform)
             {
-                while (enumerator.MoveNext())
-                {
-                    Transform current = (Transform) enumerator.Current;
-                    Hashtable hashtable = (Hashtable) args.Clone();
-                    hashtable["ischild"] = true;
-                    ColorTo(current.gameObject, hashtable);
-                }
-            }
-            finally
-            {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
-                {
-	                disposable.Dispose();
-                }
+                Hashtable hashtable = (Hashtable) args.Clone();
+                hashtable["ischild"] = true;
+                ColorTo(current.gameObject, hashtable);
             }
         }
         if (!args.Contains("easetype"))
@@ -1066,23 +1040,8 @@ public class iTween : MonoBehaviour
         Color[] colorArray = new Color[4];
         if (!args.Contains("includechildren") || ((bool) args["includechildren"]))
         {
-            IEnumerator enumerator = target.transform.GetEnumerator();
-            try
-            {
-                while (enumerator.MoveNext())
-                {
-                    Transform current = (Transform) enumerator.Current;
-                    ColorUpdate(current.gameObject, args);
-                }
-            }
-            finally
-            {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
-                {
-	                disposable.Dispose();
-                }
-            }
+            foreach (Transform current in target.transform)
+                ColorUpdate(current.gameObject, args);
         }
         if (args.Contains("time"))
         {
@@ -3721,23 +3680,8 @@ public class iTween : MonoBehaviour
         Pause(target);
         if (includechildren)
         {
-            IEnumerator enumerator = target.transform.GetEnumerator();
-            try
-            {
-                while (enumerator.MoveNext())
-                {
-                    Transform current = (Transform) enumerator.Current;
-                    Pause(current.gameObject, true);
-                }
-            }
-            finally
-            {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
-                {
-	                disposable.Dispose();
-                }
-            }
+            foreach (Transform current in target.transform)
+                Pause(current.gameObject, true);
         }
     }
 
@@ -3775,23 +3719,9 @@ public class iTween : MonoBehaviour
         }
         if (includechildren)
         {
-            IEnumerator enumerator = target.transform.GetEnumerator();
-            try
-            {
-                while (enumerator.MoveNext())
-                {
-                    Transform current = (Transform) enumerator.Current;
+            foreach (Transform current in target.transform)
+                if (current != null)
                     Pause(current.gameObject, type, true);
-                }
-            }
-            finally
-            {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
-                {
-	                disposable.Dispose();
-                }
-            }
         }
     }
 
@@ -3944,23 +3874,8 @@ public class iTween : MonoBehaviour
         Resume(target);
         if (includechildren)
         {
-            IEnumerator enumerator = target.transform.GetEnumerator();
-            try
-            {
-                while (enumerator.MoveNext())
-                {
-                    Transform current = (Transform) enumerator.Current;
-                    Resume(current.gameObject, true);
-                }
-            }
-            finally
-            {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
-                {
-	                disposable.Dispose();
-                }
-            }
+            foreach (Transform current in target.transform)
+                Resume(current.gameObject, true);
         }
     }
 
@@ -3986,29 +3901,14 @@ public class iTween : MonoBehaviour
         }
         if (includechildren)
         {
-            IEnumerator enumerator = target.transform.GetEnumerator();
-            try
-            {
-                while (enumerator.MoveNext())
-                {
-                    Transform current = (Transform) enumerator.Current;
-                    Resume(current.gameObject, type, true);
-                }
-            }
-            finally
-            {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
-                {
-	                disposable.Dispose();
-                }
-            }
+            foreach (Transform current in target.transform)
+                Resume(current.gameObject, type, true);
         }
     }
 
     private void ResumeDelay()
     {
-        base.StartCoroutine("TweenDelay");
+        base.StartCoroutine(nameof(TweenDelay));
     }
 
     private void RetrieveArgs()
@@ -4598,23 +4498,8 @@ public class iTween : MonoBehaviour
         Stop(target);
         if (includechildren)
         {
-            IEnumerator enumerator = target.transform.GetEnumerator();
-            try
-            {
-                while (enumerator.MoveNext())
-                {
-                    Transform current = (Transform) enumerator.Current;
-                    Stop(current.gameObject, true);
-                }
-            }
-            finally
-            {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
-                {
-	                disposable.Dispose();
-                }
-            }
+            foreach (Transform current in target.transform)
+                Stop(current.gameObject, true);
         }
     }
 
@@ -4640,23 +4525,8 @@ public class iTween : MonoBehaviour
         }
         if (includechildren)
         {
-            IEnumerator enumerator = target.transform.GetEnumerator();
-            try
-            {
-                while (enumerator.MoveNext())
-                {
-                    Transform current = (Transform) enumerator.Current;
-                    Stop(current.gameObject, type, true);
-                }
-            }
-            finally
-            {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
-                {
-	                disposable.Dispose();
-                }
-            }
+            foreach (Transform current in target.transform)
+                Stop(current.gameObject, type, true);
         }
     }
 
@@ -4697,23 +4567,8 @@ public class iTween : MonoBehaviour
         }
         if (includechildren)
         {
-            IEnumerator enumerator = target.transform.GetEnumerator();
-            try
-            {
-                while (enumerator.MoveNext())
-                {
-                    Transform current = (Transform) enumerator.Current;
-                    StopByName(current.gameObject, name, true);
-                }
-            }
-            finally
-            {
-                IDisposable disposable = enumerator as IDisposable;
-                if (disposable != null)
-                {
-	                disposable.Dispose();
-                }
-            }
+            foreach (Transform current in target.transform)
+                StopByName(current.gameObject, name, true);
         }
     }
 

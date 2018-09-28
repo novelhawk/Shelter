@@ -107,8 +107,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
         SetFacialTexture(this.eye, id);
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
-            object[] parameters = new object[] { this.hairType, id, this.part_hair.renderer.material.color.r, this.part_hair.renderer.material.color.g, this.part_hair.renderer.material.color.b };
-            photonView.RPC("setHairPRC", PhotonTargets.OthersBuffered, parameters);
+            photonView.RPC("setHairPRC", PhotonTargets.OthersBuffered, this.hairType, id, this.part_hair.renderer.material.color.r, this.part_hair.renderer.material.color.g, this.part_hair.renderer.material.color.b);
         }
     }
 
@@ -251,8 +250,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
         SetFacialTexture(this.eye, 0);
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
-            object[] parameters = new object[] { this.hairType, 0, this.part_hair.renderer.material.color.r, this.part_hair.renderer.material.color.g, this.part_hair.renderer.material.color.b };
-            photonView.RPC("setHairPRC", PhotonTargets.OthersBuffered, parameters);
+            photonView.RPC("setHairPRC", PhotonTargets.OthersBuffered, this.hairType, 0, this.part_hair.renderer.material.color.r, this.part_hair.renderer.material.color.g, this.part_hair.renderer.material.color.b);
         }
     }
 

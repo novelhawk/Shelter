@@ -513,8 +513,7 @@ public class RCAction
                     case 0:
                     {
                         TITAN titan2 = this.parameters[0].returnTitan(null);
-                        object[] parameters = new object[] { this.parameters[1].returnPlayer(null).ID, this.parameters[2].returnInt(null) };
-                        titan2.photonView.RPC("titanGetHit", titan2.photonView.owner, parameters);
+                        titan2.photonView.RPC("titanGetHit", titan2.photonView.owner, this.parameters[1].returnPlayer(null).ID, this.parameters[2].returnInt(null));
                         return;
                     }
                     case 1:

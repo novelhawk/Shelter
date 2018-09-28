@@ -5,51 +5,30 @@ using UnityEngine;
 
 public class PunTeams : MonoBehaviour
 {
-    public static readonly Dictionary<Team, List<Player>> PlayersPerTeam = new Dictionary<Team, List<Player>>();
+    private static readonly Dictionary<Team, List<Player>> PlayersPerTeam = new Dictionary<Team, List<Player>>();
 
     public void OnJoinedRoom()
     {
-        this.UpdateTeams();
+        UpdateTeams();
     }
 
     public void OnPhotonPlayerPropertiesChanged(object[] playerAndUpdatedProps)
     {
-        this.UpdateTeams();
+        UpdateTeams();
     }
 
     public void Start()
     {
         PlayersPerTeam.Clear(); //Just in case of multiple times called Start() (there was the initializer here)
-        IEnumerator enumerator = Enum.GetValues(typeof(Team)).GetEnumerator();
-        try
-        {
-            while (enumerator.MoveNext())
-                if (enumerator.Current != null)
-                    PlayersPerTeam[(Team)enumerator.Current] = new List<Player>();
-        }
-        finally
-        {
-            if (enumerator is IDisposable disposable)
-            {
-            	disposable.Dispose();
-            }
-        }
+        foreach (Team current in Enum.GetValues(typeof(Team)))
+            PlayersPerTeam[current] = new List<Player>();
     }
 
-    public void UpdateTeams()
+    public static void UpdateTeams()
     {
-        IEnumerator enumerator = Enum.GetValues(typeof(Team)).GetEnumerator();
-        try
-        {
-            while (enumerator.MoveNext())
-                if (enumerator.Current != null)
-                    PlayersPerTeam[(Team)enumerator.Current].Clear();
-        }
-        finally
-        {
-            if (enumerator is IDisposable disposable)
-            	disposable.Dispose();
-        }
+        foreach (Team team in Enum.GetValues(typeof(Team)))
+            PlayersPerTeam[team].Clear();
+        
         foreach (Player player in PhotonNetwork.PlayerList)
         {
             Team team = player.GetTeam();

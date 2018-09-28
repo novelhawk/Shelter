@@ -1782,8 +1782,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             gameEndCD = gameEndTotalCDtime;
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
             {
-                object[] parameters = { titanScore };
-                photonView.RPC("netGameLose", PhotonTargets.Others, parameters);
+                photonView.RPC("netGameLose", PhotonTargets.Others, titanScore);
                 if ((int) settings[244] == 1)
                     Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game lose).", roundTime);
             }
@@ -2797,8 +2796,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         }
         else
         {
-            object[] parameters = { Shelter.Profile.Name, time1 };
-            photonView.RPC("getRacingResult", PhotonTargets.MasterClient, parameters);
+            photonView.RPC("getRacingResult", PhotonTargets.MasterClient, Shelter.Profile.Name, time1);
         }
         GameWin();
     }

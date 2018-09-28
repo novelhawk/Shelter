@@ -607,8 +607,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         animation.CrossFade(aniName, time);
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
-            object[] parameters = new object[] { aniName, time };
-            photonView.RPC("netCrossFade", PhotonTargets.Others, parameters);
+            photonView.RPC("netCrossFade", PhotonTargets.Others, aniName, time);
         }
     }
 
@@ -619,10 +618,8 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
             GrabToRight();
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
             {
-                object[] parameters = new object[] { photonView.viewID, false };
-                grabTarget.GetPhotonView().RPC("netGrabbed", PhotonTargets.All, parameters);
-                object[] objArray2 = new object[] { "grabbed" };
-                grabTarget.GetPhotonView().RPC("netPlayAnimation", PhotonTargets.All, objArray2);
+                grabTarget.GetPhotonView().RPC("netGrabbed", PhotonTargets.All, photonView.viewID, false);
+                grabTarget.GetPhotonView().RPC("netPlayAnimation", PhotonTargets.All, "grabbed");
                 photonView.RPC("grabToRight", PhotonTargets.Others);
             }
             else
@@ -640,10 +637,8 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
             GrabToLeft();
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
             {
-                object[] parameters = new object[] { photonView.viewID, true };
-                grabTarget.GetPhotonView().RPC("netGrabbed", PhotonTargets.All, parameters);
-                object[] objArray2 = new object[] { "grabbed" };
-                grabTarget.GetPhotonView().RPC("netPlayAnimation", PhotonTargets.All, objArray2);
+                grabTarget.GetPhotonView().RPC("netGrabbed", PhotonTargets.All, photonView.viewID, true);
+                grabTarget.GetPhotonView().RPC("netPlayAnimation", PhotonTargets.All, "grabbed");
                 photonView.RPC("grabToLeft", PhotonTargets.Others);
             }
             else
@@ -970,8 +965,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                         getDown();
                     }
                     FengGameManagerMKII.instance.SendKillInfo(false, view.owner.Properties.Name, true, "Female Titan's ankle", dmg);
-                    object[] parameters = new object[] { dmg };
-                    FengGameManagerMKII.instance.photonView.RPC("netShowDamage", view.owner, parameters);
+                    FengGameManagerMKII.instance.photonView.RPC("netShowDamage", view.owner, dmg);
                 }
             }
         }
@@ -1010,8 +1004,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                         getDown();
                     }
                     FengGameManagerMKII.instance.SendKillInfo(false, view.owner.Properties.Name, true, "Female Titan's ankle", dmg);
-                    object[] parameters = new object[] { dmg };
-                    FengGameManagerMKII.instance.photonView.RPC("netShowDamage", view.owner, parameters);
+                    FengGameManagerMKII.instance.photonView.RPC("netShowDamage", view.owner, dmg);
                 }
             }
         }
@@ -1067,8 +1060,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
             if (!target.GetComponent<HERO>().HasDied())
             {
                 target.GetComponent<HERO>().markDie();
-                object[] parameters = new object[] { -1, "Female Titan" };
-                target.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, parameters);
+                target.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, -1, "Female Titan");
             }
         }
         else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
@@ -1097,8 +1089,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
             else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient && !hitHero.GetComponent<HERO>().HasDied())
             {
                 hitHero.GetComponent<HERO>().markDie();
-                object[] parameters = new object[] { (hitHero.transform.position - position) * 15f * 4f, false, -1, "Female Titan", true };
-                hitHero.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, parameters);
+                hitHero.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, (hitHero.transform.position - position) * 15f * 4f, false, -1, "Female Titan", true);
             }
         }
     }
@@ -1275,8 +1266,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         animation.Play(aniName);
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
-            object[] parameters = new object[] { aniName };
-            photonView.RPC("netPlayAnimation", PhotonTargets.Others, parameters);
+            photonView.RPC("netPlayAnimation", PhotonTargets.Others, aniName);
         }
     }
 
@@ -1286,8 +1276,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         animation[aniName].normalizedTime = normalizedTime;
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
-            object[] parameters = new object[] { aniName, normalizedTime };
-            photonView.RPC("netPlayAnimationAt", PhotonTargets.Others, parameters);
+            photonView.RPC("netPlayAnimationAt", PhotonTargets.Others, aniName, normalizedTime);
         }
     }
 
@@ -1296,8 +1285,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         PlaysoundRPC(sndname);
         if (Network.peerType == NetworkPeerType.Server)
         {
-            object[] parameters = new object[] { sndname };
-            photonView.RPC("playsoundRPC", PhotonTargets.Others, parameters);
+            photonView.RPC("playsoundRPC", PhotonTargets.Others, sndname);
         }
     }
 
@@ -1364,87 +1352,41 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         {
             findNearestHero();
         }
-        IEnumerator enumerator = animation.GetEnumerator();
-        try
-        {
-            while (enumerator.MoveNext())
-            {
-                AnimationState current = (AnimationState) enumerator.Current;
-                if (current != null)
-                    current.speed = 0.7f;
-            }
-        }
-        finally
-        {
-            if (enumerator is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
-        }
+        foreach (AnimationState current in animation)
+            if (current != null)
+                current.speed = 0.7f;
         animation["turn180"].speed = 0.5f;
         NapeArmor = 1000;
         AnkleLHP = 50;
         AnkleRHP = 50;
         AnkleLHPMAX = 50;
         AnkleRHPMAX = 50;
-        bool flag = false;
-        if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).RespawnMode == RespawnMode.NEVER)
+        bool flag = LevelInfoManager.GetInfo(FengGameManagerMKII.Level).RespawnMode == RespawnMode.NEVER;
+        switch (IN_GAME_MAIN_CAMERA.difficulty)
         {
-            flag = true;
-        }
-        if (IN_GAME_MAIN_CAMERA.difficulty == 0)
-        {
-            NapeArmor = !flag ? 1000 : 1000;
-            AnkleLHP = AnkleLHPMAX = !flag ? 50 : 50;
-            AnkleRHP = AnkleRHPMAX = !flag ? 50 : 50;
-        }
-        else if (IN_GAME_MAIN_CAMERA.difficulty == 1)
-        {
-            NapeArmor = !flag ? 3000 : 2500;
-            AnkleLHP = AnkleLHPMAX = !flag ? 200 : 100;
-            AnkleRHP = AnkleRHPMAX = !flag ? 200 : 100;
-            IEnumerator enumerator2 = animation.GetEnumerator();
-            try
-            {
-                while (enumerator2.MoveNext())
-                {
-                    AnimationState state2 = (AnimationState) enumerator2.Current;
+            case 0:
+                NapeArmor = 1000;
+                AnkleLHP = AnkleLHPMAX = 50;
+                AnkleRHP = AnkleRHPMAX = 50;
+                break;
+            case 1:
+                NapeArmor = !flag ? 3000 : 2500;
+                AnkleLHP = AnkleLHPMAX = !flag ? 200 : 100;
+                AnkleRHP = AnkleRHPMAX = !flag ? 200 : 100;
+                foreach (AnimationState state2 in animation)
                     if (state2 != null)
                         state2.speed = 0.7f;
-                }
-            }
-            finally
-            {
-                if (enumerator2 is IDisposable disposable2)
-                {
-                    disposable2.Dispose();
-                }
-            }
-            animation["turn180"].speed = 0.7f;
-        }
-        else if (IN_GAME_MAIN_CAMERA.difficulty == 2)
-        {
-            NapeArmor = !flag ? 6000 : 4000;
-            AnkleLHP = AnkleLHPMAX = !flag ? 1000 : 200;
-            AnkleRHP = AnkleRHPMAX = !flag ? 1000 : 200;
-            IEnumerator enumerator3 = animation.GetEnumerator();
-            try
-            {
-                while (enumerator3.MoveNext())
-                {
-                    AnimationState state3 = (AnimationState) enumerator3.Current;
+                animation["turn180"].speed = 0.7f;
+                break;
+            case 2:
+                NapeArmor = !flag ? 6000 : 4000;
+                AnkleLHP = AnkleLHPMAX = !flag ? 1000 : 200;
+                AnkleRHP = AnkleRHPMAX = !flag ? 1000 : 200;
+                foreach (AnimationState state3 in animation)
                     if (state3 != null)
                         state3.speed = 1f;
-                }
-            }
-            finally
-            {
-                if (enumerator3 is IDisposable disposable3)
-                {
-                    disposable3.Dispose();
-                }
-            }
-            animation["turn180"].speed = 0.9f;
+                animation["turn180"].speed = 0.9f;
+                break;
         }
         if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpCapture)
         {

@@ -101,23 +101,9 @@ public class EffectNode
         this.Acceleration = 0f;
         this.ElapsedTime = 0f;
         this.LastWorldPos = this.CurWorldPos = Vector3.zero;
-        IEnumerator enumerator = this.AffectorList.GetEnumerator();
-        try
-        {
-            while (enumerator.MoveNext())
-            {
-                var affector = (Affector) enumerator.Current;
-                if (affector != null)
-                    affector.Reset();
-            }
-        }
-        finally
-        {
-            if (enumerator is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
-        }
+        foreach (Affector affector in AffectorList)
+            affector?.Reset();
+        
         if (this.Type == 1)
         {
             this.Sprite.SetRotation(this.OriRotateAngle);
@@ -160,23 +146,9 @@ public class EffectNode
     public void Update()
     {
         this.ElapsedTime += Time.deltaTime;
-        IEnumerator enumerator = this.AffectorList.GetEnumerator();
-        try
-        {
-            while (enumerator.MoveNext())
-            {
-                var affector = (Affector) enumerator.Current;
-                if (affector != null)
-                    affector.Update();
-            }
-        }
-        finally
-        {
-            if (enumerator is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
-        }
+        foreach (Affector affector in AffectorList)
+            affector?.Update();
+
         this.Position += this.Velocity * Time.deltaTime;
         if (Mathf.Abs(this.Acceleration) > 0.0001)
         {

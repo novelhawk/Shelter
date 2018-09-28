@@ -182,8 +182,7 @@ public partial class FengGameManagerMKII
                 }
 
                 CheckPVPPoints();
-                object[] parameters = {PVPhumanScore, PVPtitanScore};
-                photonView.RPC("refreshPVPStatus", PhotonTargets.Others, parameters);
+                photonView.RPC("refreshPVPStatus", PhotonTargets.Others, PVPhumanScore, PVPtitanScore);
             }
             else if (IN_GAME_MAIN_CAMERA.GameMode != GameMode.CaveFight)
             {
@@ -360,8 +359,7 @@ public partial class FengGameManagerMKII
                 }
 
                 CheckPVPPoints();
-                object[] parameters = {PVPhumanScore, PVPtitanScore};
-                photonView.RPC("refreshPVPStatus", PhotonTargets.Others, parameters);
+                photonView.RPC("refreshPVPStatus", PhotonTargets.Others, PVPhumanScore, PVPtitanScore);
                 break;
             
             case GameMode.EndlessTitan:
@@ -789,10 +787,8 @@ public partial class FengGameManagerMKII
             throw new NotAllowedException(nameof(TitanGetKill), info);
 
         Damage = Mathf.Max(10, Damage);
-        object[] parameters = {Damage};
-        photonView.RPC("netShowDamage", player, parameters);
-        object[] objArray2 = {name1, false};
-        photonView.RPC("oneTitanDown", PhotonTargets.MasterClient, objArray2);
+        photonView.RPC("netShowDamage", player, Damage);
+        photonView.RPC("oneTitanDown", PhotonTargets.MasterClient, name1, false);
         SendKillInfo(false, player.Properties.Name, true, name1, Damage);
         PlayerKillInfoUpdate(player, Damage);
     }

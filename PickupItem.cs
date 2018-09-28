@@ -24,8 +24,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
     {
         if (this.PickupIsMine)
         {
-            object[] parameters = new object[] { newPosition };
-            photonView.RPC("PunRespawn", PhotonTargets.AllViaServer, parameters);
+            photonView.RPC("PunRespawn", PhotonTargets.AllViaServer, newPosition);
         }
     }
 
@@ -59,7 +58,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
         if (timeUntilRespawn > 0f)
         {
             this.TimeOfRespawn = PhotonNetwork.time + timeUntilRespawn;
-            Invoke("PunRespawn", timeUntilRespawn);
+            Invoke(nameof(PunRespawn), timeUntilRespawn);
         }
     }
 

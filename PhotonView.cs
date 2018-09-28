@@ -40,8 +40,7 @@ public class PhotonView : Photon.MonoBehaviour
             }
             else
             {
-                object[] parameters = new object[] { pStream, info };
-                this.OnSerializeMethodInfo.Invoke(this.observed, parameters);
+                this.OnSerializeMethodInfo.Invoke(this.observed, new object[] { pStream, info });
             }
         }
     }

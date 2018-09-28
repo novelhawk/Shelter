@@ -175,8 +175,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             }
             if (flag2)
             {
-                object[] parameters = new object[] { this.mMasterClient };
-                SendMonoMessage(PhotonNetworkingMessage.OnMasterClientSwitched, parameters);
+                SendMonoMessage(PhotonNetworkingMessage.OnMasterClientSwitched, this.mMasterClient);
             }
         }
     }
@@ -190,7 +189,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         for (int i = 0; i < callParameterTypes.Length; i++)
         {
             Type parameterType = methodParameters[i].ParameterType;
-            if (callParameterTypes[i] != null && !parameterType.Equals(callParameterTypes[i]))
+            if (callParameterTypes[i] != null && parameterType != callParameterTypes[i])
             {
                 return false;
             }
@@ -874,8 +873,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                             Debug.Log("Most likely the game became empty during the switch to GameServer.");
                         }
                     }
-                    object[] parameters = new object[] { operationResponse.ReturnCode, operationResponse.DebugMessage };
-                    SendMonoMessage(PhotonNetworkingMessage.OnPhotonRandomJoinFailed, parameters);
+                    SendMonoMessage(PhotonNetworkingMessage.OnPhotonRandomJoinFailed, operationResponse.ReturnCode, operationResponse.DebugMessage);
                     break;
                 }
                 case 226:
@@ -1486,8 +1484,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         {
             case 219:
                 {
-                    object[] parameters = new object[] { operationResponse };
-                    SendMonoMessage(PhotonNetworkingMessage.OnWebRpcResponse, parameters);
+                    SendMonoMessage(PhotonNetworkingMessage.OnWebRpcResponse, operationResponse);
                     goto Label_0955;
                 }
             case 220:
@@ -1946,8 +1943,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                     this.CustomAuthenticationValues.Secret = null;
                 }
                 cause = (DisconnectCause) statusCode;
-                object[] parameters = new object[] { cause };
-                SendMonoMessage(PhotonNetworkingMessage.OnFailedToConnectToPhoton, parameters);
+                SendMonoMessage(PhotonNetworkingMessage.OnFailedToConnectToPhoton, cause);
                 goto Label_04F1;
             }
             case StatusCode.Connect:
@@ -2883,8 +2879,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         }
         this.hasSwitchedMC = true;
         this.mMasterClient = this.mActors[playerId];
-        object[] parameters = new object[] { this.mMasterClient };
-        SendMonoMessage(PhotonNetworkingMessage.OnMasterClientSwitched, parameters);
+        SendMonoMessage(PhotonNetworkingMessage.OnMasterClientSwitched, mMasterClient);
         return true;
     }
 

@@ -2,6 +2,7 @@ using ExitGames.Client.Photon;
 using System;
 using System.Collections;
 using UnityEngine;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public static class Extensions
 {
@@ -56,21 +57,9 @@ public static class Extensions
     {
         if (addHash != null && !target.Equals(addHash))
         {
-            IEnumerator enumerator = addHash.Keys.GetEnumerator();
-            try
+            foreach (object current in addHash.Keys)
             {
-                while (enumerator.MoveNext())
-                {
-                    object current = enumerator.Current;
-                    target[current] = addHash[current];
-                }
-            }
-            finally
-            {
-                if (enumerator is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
+                target[current] = addHash[current];
             }
         }
     }
@@ -79,82 +68,33 @@ public static class Extensions
     {
         if (addHash != null && !target.Equals(addHash))
         {
-            IEnumerator enumerator = addHash.Keys.GetEnumerator();
-            try
+            foreach (object current in addHash.Keys)
             {
-                while (enumerator.MoveNext())
-                {
-                    object current = enumerator.Current;
-                    if (current is string)
-                    {
-                        target[current] = addHash[current];
-                    }
-                }
-            }
-            finally
-            {
-                if (enumerator is IDisposable disposable)
-                {
-                    disposable.Dispose();
-                }
+                if (current is string)
+                    target[current] = addHash[current];
             }
         }
     }
 
     public static void StripKeysWithNullValues(this IDictionary original)
     {
-        object[] objArray = new object[original.Count];
-        int num = 0;
-        IEnumerator enumerator = original.Keys.GetEnumerator();
-        try
+        var keys = new object[original.Keys.Count];
+        original.Keys.CopyTo(keys, 0);
+        for (int i = 0; i < original.Count; i++)
         {
-            while (enumerator.MoveNext())
-            {
-                object current = enumerator.Current;
-                objArray[num++] = current;
-            }
-        }
-        finally
-        {
-            if (enumerator is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
-        }
-        for (int i = 0; i < objArray.Length; i++)
-        {
-            object key = objArray[i];
+            var key = keys[i];
             if (original[key] == null)
-            {
                 original.Remove(key);
-            }
         }
     }
 
-    public static ExitGames.Client.Photon.Hashtable StripToStringKeys(this IDictionary original)
+    public static Hashtable StripToStringKeys(this IDictionary original)
     {
-        ExitGames.Client.Photon.Hashtable hashtable = new ExitGames.Client.Photon.Hashtable();
-        IDictionaryEnumerator enumerator = original.GetEnumerator();
-        try
+        Hashtable hashtable = new Hashtable();
+        foreach (DictionaryEntry current in original)
         {
-            while (enumerator.MoveNext())
-            {
-                if (enumerator.Current != null)
-                {
-                    DictionaryEntry current = (DictionaryEntry) enumerator.Current;
-                    if (current.Key is string)
-                    {
-                        hashtable[current.Key] = current.Value;
-                    }
-                }
-            }
-        }
-        finally
-        {
-            if (enumerator is IDisposable disposable)
-            {
-                disposable.Dispose();
-            }
+            if (current.Key is string key)
+                hashtable[key] = current.Value;
         }
         return hashtable;
     }

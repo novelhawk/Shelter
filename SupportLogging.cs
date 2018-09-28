@@ -68,7 +68,7 @@ public class SupportLogging : MonoBehaviour
     {
         if (this.LogTrafficStats)
         {
-            InvokeRepeating("LogStats", 10f, 10f);
+            InvokeRepeating(nameof(LogStats), 10f, 10f);
         }
     }
 }

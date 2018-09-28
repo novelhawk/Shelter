@@ -156,8 +156,7 @@ public class PVPcheckPoint : Photon.MonoBehaviour
             this.titanPt = 0f;
             this.syncPts();
             this.state = CheckPointState.Human;
-            object[] parameters = new object[] { 1 };
-            photonView.RPC("changeState", PhotonTargets.All, parameters);
+            photonView.RPC("changeState", PhotonTargets.All, 1);
             if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).LevelName != "The City I")
             {
                 this.supply = PhotonNetwork.Instantiate("aot_supply", transform.position - Vector3.up * (transform.position.y - this.getHeight(transform.position)), transform.rotation, 0);
@@ -188,8 +187,7 @@ public class PVPcheckPoint : Photon.MonoBehaviour
                 if (this.state != CheckPointState.Titan)
                 {
                     this.state = CheckPointState.Non;
-                    object[] parameters = new object[] { 0 };
-                    photonView.RPC("changeState", PhotonTargets.Others, parameters);
+                    photonView.RPC("changeState", PhotonTargets.Others, 0);
                 }
             }
         }
@@ -262,10 +260,8 @@ public class PVPcheckPoint : Photon.MonoBehaviour
 
     private void syncPts()
     {
-        object[] parameters = new object[] { this.titanPt };
-        photonView.RPC("changeTitanPt", PhotonTargets.Others, parameters);
-        object[] objArray2 = new object[] { this.humanPt };
-        photonView.RPC("changeHumanPt", PhotonTargets.Others, objArray2);
+        photonView.RPC("changeTitanPt", PhotonTargets.Others, titanPt);
+        photonView.RPC("changeHumanPt", PhotonTargets.Others, humanPt);
     }
 
     private void titanGetsPoint()

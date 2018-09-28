@@ -43,7 +43,7 @@ public class PickupItemSimple : Photon.MonoBehaviour
             if (time > 0f)
             {
                 gameObject.SetActive(false);
-                Invoke("RespawnAfter", time);
+                Invoke(nameof(RespawnAfter), time);
             }
         }
     }
