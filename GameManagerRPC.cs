@@ -298,10 +298,8 @@ public partial class FengGameManagerMKII
         titanScore = score;
         gameEndCD = gameEndTotalCDtime;
         _endingMessageId = Mod.Interface.Chat.System("Game is restarting soon.");
-        if ((int) settings[244] == 1)
-        {
+        if (settings.EnableChatFeed)
             Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game lose).", roundTime);
-        }
     }
 
     [RPC]
@@ -335,16 +333,11 @@ public partial class FengGameManagerMKII
         }
         _endingMessageId = Mod.Interface.Chat.System("Game is restarting soon.");
 
-        if ((int) settings[244] == 1)
-        {
-            Mod.Interface.Chat.System("<color=#FFC000>(" + roundTime.ToString("F2") +
-                                      ")</color> Round ended (game win).");
-        }
+        if (settings.EnableChatFeed)
+            Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game win).", roundTime);
 
         if (!(Equals(info.sender, PhotonNetwork.masterClient) || info.sender.IsLocal))
-        {
             Mod.Interface.Chat.System("Round end sent from Player " + info.sender.ID);
-        }
     }
 
     [RPC]
@@ -445,7 +438,7 @@ public partial class FengGameManagerMKII
     [RPC]
     private void LoadskinRPC(string n, string url, string url2, string[] skybox, PhotonMessageInfo info)
     {
-        if ((int) settings[2] == 1 && info.sender.IsMasterClient)
+        if (settings.EnableLevelSkins && info.sender.IsMasterClient)
         {
             StartCoroutine(LoadSkinEnumerator(n, url, url2, skybox));
         }
@@ -664,12 +657,12 @@ public partial class FengGameManagerMKII
         obj3.transform.parent = obj2.GetComponent<UIReferArray>().panels[0].transform;
         obj3.GetComponent<KillInfoComponent>().Show(t1, killer, t2, victim, dmg);
         killInfoGO.Add(obj3);
-        if ((int) settings[244] == 1)
-        {
-            string str2 = "<color=#FFC000>(" + roundTime.ToString("F2") + ")</color> " + killer.HexColor() + " killed ";
-            string newLine = str2 + victim.HexColor() + " for " + dmg + " damage.";
-            Mod.Interface.Chat.System(newLine);
-        }
+        if (settings.EnableChatFeed)
+            Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> {1} killed {2} for {3} damage.", 
+                roundTime, 
+                killer.HexColor(), 
+                victim.HexColor(), 
+                dmg);
     }
 
     [RPC]

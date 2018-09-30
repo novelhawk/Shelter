@@ -6,6 +6,7 @@ using System.Runtime.Remoting.Metadata;
 using System.Text;
 using Mod;
 using Mod.Exceptions;
+using Mod.GameSettings;
 using Mod.Interface;
 using Mod.Keybinds;
 using Mod.Managers;
@@ -334,29 +335,29 @@ public class HERO : Photon.MonoBehaviour
         this.skillCDDuration = this.skillCDLast;
         if (RCSettings.bombMode == 1)
         {
-            int num = (int) FengGameManagerMKII.settings[250];
-            int num2 = (int) FengGameManagerMKII.settings[251];
-            int num3 = (int) FengGameManagerMKII.settings[252];
-            int num4 = (int) FengGameManagerMKII.settings[253];
+            int num = FengGameManagerMKII.settings.BombRadius;
+            int num2 = FengGameManagerMKII.settings.BombRange;
+            int num3 = FengGameManagerMKII.settings.BombSpeed;
+            int num4 = FengGameManagerMKII.settings.BombCountdown;
             if (num < 0 || num > 10)
             {
                 num = 5;
-                FengGameManagerMKII.settings[250] = 5;
+                FengGameManagerMKII.settings.BombRadius = 5;
             }
             if (num2 < 0 || num2 > 10)
             {
                 num2 = 5;
-                FengGameManagerMKII.settings[251] = 5;
+                FengGameManagerMKII.settings.BombRange = 5;
             }
             if (num3 < 0 || num3 > 10)
             {
                 num3 = 5;
-                FengGameManagerMKII.settings[252] = 5;
+                FengGameManagerMKII.settings.BombSpeed = 5;
             }
             if (num4 < 0 || num4 > 10)
             {
                 num4 = 5;
-                FengGameManagerMKII.settings[253] = 5;
+                FengGameManagerMKII.settings.BombCountdown = 5;
             }
             if (num + num2 + num3 + num4 > 20)
             {
@@ -364,21 +365,22 @@ public class HERO : Photon.MonoBehaviour
                 num2 = 5;
                 num3 = 5;
                 num4 = 5;
-                FengGameManagerMKII.settings[250] = 5;
-                FengGameManagerMKII.settings[251] = 5;
-                FengGameManagerMKII.settings[252] = 5;
-                FengGameManagerMKII.settings[253] = 5;
+                FengGameManagerMKII.settings.BombRadius = 5;
+                FengGameManagerMKII.settings.BombRange = 5;
+                FengGameManagerMKII.settings.BombSpeed = 5;
+                FengGameManagerMKII.settings.BombCountdown = 5;
             }
             this.bombTimeMax = (num2 * 60f + 200f) / (num3 * 60f + 200f);
             this.bombRadius = num * 4f + 20f;
             this.bombCD = num4 * -0.4f + 5f;
             this.bombSpeed = num3 * 60f + 200f;
+            var color = FengGameManagerMKII.settings.BombColor;
             ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
             {
-                { PlayerProperty.RCBombR, (float)FengGameManagerMKII.settings[246] },
-                { PlayerProperty.RCBombG, (float)FengGameManagerMKII.settings[247] },
-                { PlayerProperty.RCBombB, (float)FengGameManagerMKII.settings[248] },
-                { PlayerProperty.RCBombA, (float)FengGameManagerMKII.settings[249] },
+                { PlayerProperty.RCBombR, color.r },
+                { PlayerProperty.RCBombG, color.g },
+                { PlayerProperty.RCBombB, color.b },
+                { PlayerProperty.RCBombA, color.a },
                 { PlayerProperty.RCBombRadius, this.bombRadius }
             };
             Player.Self.SetCustomProperties(propertiesToSet);
@@ -1012,9 +1014,6 @@ public class HERO : Photon.MonoBehaviour
         if (this.titanForm || this.isCannon || baseRigidBody == null || IN_GAME_MAIN_CAMERA.isPausing && IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer) 
             return;
         
-        Shelter.LogConsole("RB null? {0}", baseRigidBody == null);
-        Shelter.LogConsole("PhotonView null? {0}", photonView == null);
-        
         this.currentSpeed = this.baseRigidBody.velocity.magnitude;
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine)
         {
@@ -1537,19 +1536,15 @@ public class HERO : Photon.MonoBehaviour
                     float num14 = this.currentSpeed + 0.1f;
                     this.baseRigidBody.AddForce(-this.baseRigidBody.velocity, ForceMode.VelocityChange);
                     Vector3 vector13 = (this.bulletRight.transform.position + this.bulletLeft.transform.position) * 0.5f - this.baseTransform.position;
-                    float num15 = 0f;
-                    if ((int) FengGameManagerMKII.settings[97] == 1 && Shelter.InputManager.IsKeyPressed(InputAction.ReelIn))
-                    {
+                    
+                    float num15;
+                    if (FengGameManagerMKII.settings.EnableReel && Shelter.InputManager.IsKeyPressed(InputAction.ReelIn))
                         num15 = -1f;
-                    }
-                    else if ((int) FengGameManagerMKII.settings[116] == 1 && Shelter.InputManager.IsKeyPressed(InputAction.ReelOut))
-                    {
+                    else if (FengGameManagerMKII.settings.EnableReel && Shelter.InputManager.IsKeyPressed(InputAction.ReelOut))
                         num15 = 1f;
-                    }
                     else
-                    {
                         num15 = Input.GetAxis("Mouse ScrollWheel") * 5555f;
-                    }
+                    
                     num15 = Mathf.Clamp(num15, -0.8f, 0.8f);
                     float num16 = 1f + num15;
                     Vector3 vector14 = Vector3.RotateTowards(vector13, this.baseRigidBody.velocity, 1.53938f * num16, 1.53938f * num16);
@@ -1562,19 +1557,15 @@ public class HERO : Photon.MonoBehaviour
                     float num17 = this.currentSpeed + 0.1f;
                     this.baseRigidBody.AddForce(-this.baseRigidBody.velocity, ForceMode.VelocityChange);
                     Vector3 vector15 = this.bulletLeft.transform.position - this.baseTransform.position;
-                    float num18 = 0f;
-                    if ((int) FengGameManagerMKII.settings[97] == 1 && Shelter.InputManager.IsKeyPressed(InputAction.ReelIn))
-                    {
+                    
+                    float num18;
+                    if (FengGameManagerMKII.settings.EnableReel && Shelter.InputManager.IsKeyPressed(InputAction.ReelIn))
                         num18 = -1f;
-                    }
-                    else if ((int) FengGameManagerMKII.settings[116] == 1 && Shelter.InputManager.IsKeyPressed(InputAction.ReelOut))
-                    {
+                    else if (FengGameManagerMKII.settings.EnableReel && Shelter.InputManager.IsKeyPressed(InputAction.ReelOut))
                         num18 = 1f;
-                    }
                     else
-                    {
                         num18 = Input.GetAxis("Mouse ScrollWheel") * 5555f;
-                    }
+                    
                     num18 = Mathf.Clamp(num18, -0.8f, 0.8f);
                     float num19 = 1f + num18;
                     Vector3 vector16 = Vector3.RotateTowards(vector15, this.baseRigidBody.velocity, 1.53938f * num19, 1.53938f * num19);
@@ -1588,9 +1579,9 @@ public class HERO : Photon.MonoBehaviour
                     this.baseRigidBody.AddForce(-this.baseRigidBody.velocity, ForceMode.VelocityChange);
                     Vector3 vector17 = this.bulletRight.transform.position - this.baseTransform.position;
                     float num21 = Input.GetAxis("Mouse ScrollWheel") * 5555f;
-                    if ((int) FengGameManagerMKII.settings[97] == 1 && Shelter.InputManager.IsKeyPressed(InputAction.ReelIn))
+                    if (FengGameManagerMKII.settings.EnableReel && Shelter.InputManager.IsKeyPressed(InputAction.ReelIn))
                         num21 = -1f;
-                    else if ((int) FengGameManagerMKII.settings[116] == 1 && Shelter.InputManager.IsKeyPressed(InputAction.ReelOut))
+                    else if (FengGameManagerMKII.settings.EnableReel && Shelter.InputManager.IsKeyPressed(InputAction.ReelOut))
                         num21 = 1f;
                         
                     num21 = Mathf.Clamp(num21, -0.8f, 0.8f);
@@ -2258,7 +2249,7 @@ public class HERO : Photon.MonoBehaviour
     {
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine)
         {
-            if ((int) FengGameManagerMKII.settings[93] == 1)
+            if (!FengGameManagerMKII.settings.EnableWind)
             {
                 foreach (Renderer renderer in GetComponentsInChildren<Renderer>())
                 {
@@ -2268,70 +2259,16 @@ public class HERO : Photon.MonoBehaviour
                     }
                 }
             }
-            if ((int) FengGameManagerMKII.settings[0] == 1)
+            if (FengGameManagerMKII.settings.EnableHumanSkins)
             {
-                int index = 14;
-                int num3 = 4;
-                int num4 = 5;
-                int num5 = 6;
-                int num6 = 7;
-                int num7 = 8;
-                int num8 = 9;
-                int num9 = 10;
-                int num10 = 11;
-                int num11 = 12;
-                int num12 = 13;
-                int num13 = 3;
-                int num14 = 94;
-                if ((int) FengGameManagerMKII.settings[133] == 1)
-                {
-                    num13 = 134;
-                    num3 = 135;
-                    num4 = 136;
-                    num5 = 137;
-                    num6 = 138;
-                    num7 = 139;
-                    num8 = 140;
-                    num9 = 141;
-                    num10 = 142;
-                    num11 = 143;
-                    num12 = 144;
-                    index = 145;
-                    num14 = 146;
-                }
-                else if ((int) FengGameManagerMKII.settings[133] == 2)
-                {
-                    num13 = 147;
-                    num3 = 148;
-                    num4 = 149;
-                    num5 = 150;
-                    num6 = 151;
-                    num7 = 152;
-                    num8 = 153;
-                    num9 = 154;
-                    num10 = 155;
-                    num11 = 156;
-                    num12 = 157;
-                    index = 158;
-                    num14 = 159;
-                }
-                string str = (string) FengGameManagerMKII.settings[index];
-                string str2 = (string) FengGameManagerMKII.settings[num3];
-                string str3 = (string) FengGameManagerMKII.settings[num4];
-                string str4 = (string) FengGameManagerMKII.settings[num5];
-                string str5 = (string) FengGameManagerMKII.settings[num6];
-                string str6 = (string) FengGameManagerMKII.settings[num7];
-                string str7 = (string) FengGameManagerMKII.settings[num8];
-                string str8 = (string) FengGameManagerMKII.settings[num9];
-                string str9 = (string) FengGameManagerMKII.settings[num10];
-                string str10 = (string) FengGameManagerMKII.settings[num11];
-                string str11 = (string) FengGameManagerMKII.settings[num12];
-                string str12 = (string) FengGameManagerMKII.settings[num13];
-                string str13 = (string) FengGameManagerMKII.settings[num14];
-                string url = str12 + "," + str2 + "," + str3 + "," + str4 + "," + str5 + "," + str6 + "," + str7 + "," + str8 + "," + str9 + "," + str10 + "," + str11 + "," + str + "," + str13;
+                var skins = FengGameManagerMKII.settings.HumanSkin.Set;
+                StringBuilder url = new StringBuilder(skins.Length * 45);
+                foreach (var skin in skins)
+                    url.AppendFormat("{0},", skin);
+                url.Remove(url.Length - 2, 1);
                 if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                 {
-                    StartCoroutine(this.loadskinE(-1, url));
+                    StartCoroutine(this.loadskinE(-1, url.ToString()));
                 }
                 else
                 {
@@ -2340,7 +2277,7 @@ public class HERO : Photon.MonoBehaviour
                     {
                         viewID = this.myHorse.GetPhotonView().viewID;
                     }
-                    photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, new object[] { viewID, url });
+                    photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, viewID, url);
                 }
             }
         }
@@ -2352,11 +2289,11 @@ public class HERO : Photon.MonoBehaviour
             yield return null;
         
         bool unloadAssets = false;
-        bool mipmap = (int)FengGameManagerMKII.settings[63] != 1;
+        bool mipmap = FengGameManagerMKII.settings.UseMipmap;
         string[] urls = url.Split(',');
         if (urls.Length < 13)
             yield break; // Not allowed exception?
-        bool skinGas = (int)FengGameManagerMKII.settings[15] == 0;
+        bool skinGas = FengGameManagerMKII.settings.EnableGasSkin;
         bool hasHorse = LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Horse || RCSettings.horseMode == 1;
         bool isMe = IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || this.photonView.isMine;
 
@@ -2830,7 +2767,7 @@ public class HERO : Photon.MonoBehaviour
     [RPC]
     public void LoadskinRPC(int horse, string url)
     {
-        if ((int) FengGameManagerMKII.settings[0] == 1)
+        if (FengGameManagerMKII.settings.EnableHumanSkins)
         {
             StartCoroutine(this.loadskinE(horse, url));
         }
@@ -3935,16 +3872,18 @@ public class HERO : Photon.MonoBehaviour
                 vector = hit.point - this.baseTransform.position;
                 float magnitude = vector.magnitude;
                 GameObject obj11 = this.LabelDistance;
-                string str = magnitude.ToString("0");
-                if ((int) FengGameManagerMKII.settings[189] == 1)
+                switch (FengGameManagerMKII.settings.SpeedmeterType)
                 {
-                    str = str + "\n" + this.currentSpeed.ToString("F1") + " u/s";
+                    default:
+                        obj11.GetComponent<UILabel>().text = magnitude.ToString("0");
+                        break;
+                    case Speedmeter.Speed:
+                        obj11.GetComponent<UILabel>().text = $"{magnitude:0}\n{currentSpeed:F1} u/s";
+                        break;
+                    case Speedmeter.Damage:
+                        obj11.GetComponent<UILabel>().text = $"{magnitude:0}\n{currentSpeed / 100:F1}K";
+                        break;
                 }
-                else if ((int) FengGameManagerMKII.settings[189] == 2)
-                {
-                    str = str + "\n" + (this.currentSpeed / 100f).ToString("F1") + "K";
-                }
-                obj11.GetComponent<UILabel>().text = str;
                 if (magnitude > 120f)
                 {
                     Transform transform11 = obj9.transform;
@@ -4947,7 +4886,7 @@ public class HERO : Photon.MonoBehaviour
                                         if (!this.checkBoxLeft.GetComponent<TriggerColliderWeapon>().active_me)
                                         {
                                             this.checkBoxLeft.GetComponent<TriggerColliderWeapon>().active_me = true;
-                                            if ((int) FengGameManagerMKII.settings[92] == 0)
+                                            if (FengGameManagerMKII.settings.EnableWeaponTrail)
                                             {
                                                 this.leftbladetrail2.Activate();
                                                 this.rightbladetrail2.Activate();
@@ -5019,7 +4958,7 @@ public class HERO : Photon.MonoBehaviour
                                         {
                                             this.checkBoxLeft.GetComponent<TriggerColliderWeapon>().active_me = true;
                                             this.slash.Play();
-                                            if ((int) FengGameManagerMKII.settings[92] == 0)
+                                            if (FengGameManagerMKII.settings.EnableWeaponTrail)
                                             {
                                                 this.leftbladetrail2.Activate();
                                                 this.rightbladetrail2.Activate();

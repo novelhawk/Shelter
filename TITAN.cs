@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Mod;
+using Mod.GameSettings;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 public class TITAN : Photon.MonoBehaviour
 {
@@ -1852,30 +1854,28 @@ public class TITAN : Photon.MonoBehaviour
     {
         this.skin = 86;
         this.eye = false;
-        if (!(IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && !photonView.isMine || (int) FengGameManagerMKII.settings[1] != 1))
+        if ((IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine) && FengGameManagerMKII.settings.EnableTitanSkins)
         {
-            int index = (int) UnityEngine.Random.Range(86f, 90f);
-            int num2 = index - 60;
-            if ((int) FengGameManagerMKII.settings[32] == 1)
-            {
-                num2 = UnityEngine.Random.Range(26, 30);
-            }
-            string body = (string) FengGameManagerMKII.settings[index];
-            string eye = (string) FengGameManagerMKII.settings[num2];
-            this.skin = index;
-            if (Utility.IsValidImageUrl(eye))
-            {
-                this.eye = true;
-            }
-            GetComponent<TITAN_SETUP>().setVar(this.skin, this.eye);
-            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
-            {
-                StartCoroutine(this.LoadSkinEnumerator(body, eye));
-            }
+            var titanSkin = FengGameManagerMKII.settings.TitanSkin;
+            var index = Random.Range(0, titanSkin.Body.Length);
+            
+            var body = titanSkin.Body[index];
+            string eye;
+            if (FengGameManagerMKII.settings.Randomize)
+                eye = titanSkin.Eyes[Random.Range(0, titanSkin.Eyes.Length)];                
             else
-            {
-                photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, new object[] { body, eye });
-            }
+                eye = titanSkin.Eyes[index];
+            
+            this.skin += index;
+            
+            if (Utility.IsValidImageUrl(eye))
+                this.eye = true;
+            GetComponent<TITAN_SETUP>().setVar(this.skin, this.eye);
+            
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
+                StartCoroutine(this.LoadSkinEnumerator(body, eye));
+            else
+                photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, body, eye);
         }
     }
 
@@ -1885,10 +1885,8 @@ public class TITAN : Photon.MonoBehaviour
         {
             yield return null;
         }
-        bool mipmap = true;
+        bool mipmap = FengGameManagerMKII.settings.UseMipmap;
         bool unloadAssets = false;
-        if ((int)FengGameManagerMKII.settings[63] == 1)
-            mipmap = false;
         
         foreach (Renderer myRenderer in this.GetComponentsInChildren<Renderer>())
         {
@@ -1950,7 +1948,7 @@ public class TITAN : Photon.MonoBehaviour
     [RPC]
     public void LoadskinRPC(string body, string eye)
     {
-        if ((int) FengGameManagerMKII.settings[1] == 1)
+        if (FengGameManagerMKII.settings.EnableTitanSkins)
         {
             StartCoroutine(this.LoadSkinEnumerator(body, eye));
         }
@@ -2080,35 +2078,35 @@ public class TITAN : Photon.MonoBehaviour
             this.abnormalType = AbnormalType.Normal;
             name = "Titan";
             this.runAnimation = "run_walk";
-            GetComponent<TITAN_SETUP>().setHair2();
+            GetComponent<TITAN_SETUP>().SetHair();
         }
         else if (type == 1)
         {
             this.abnormalType = AbnormalType.Abnormal;
             name = "Aberrant";
             this.runAnimation = "run_abnormal";
-            GetComponent<TITAN_SETUP>().setHair2();
+            GetComponent<TITAN_SETUP>().SetHair();
         }
         else if (type == 2)
         {
             this.abnormalType = AbnormalType.Jumper;
             name = "Jumper";
             this.runAnimation = "run_abnormal";
-            GetComponent<TITAN_SETUP>().setHair2();
+            GetComponent<TITAN_SETUP>().SetHair();
         }
         else if (type == 3)
         {
             this.abnormalType = AbnormalType.Crawler;
             name = "Crawler";
             this.runAnimation = "crawler_run";
-            GetComponent<TITAN_SETUP>().setHair2();
+            GetComponent<TITAN_SETUP>().SetHair();
         }
         else if (type == 4)
         {
             this.abnormalType = AbnormalType.Punk;
             name = "Punk";
             this.runAnimation = "run_abnormal_1";
-            GetComponent<TITAN_SETUP>().setHair2();
+            GetComponent<TITAN_SETUP>().SetHair();
         }
         if (this.abnormalType == AbnormalType.Abnormal || this.abnormalType == AbnormalType.Jumper || this.abnormalType == AbnormalType.Punk)
         {
@@ -2365,7 +2363,7 @@ public class TITAN : Photon.MonoBehaviour
 
     public void setAbnormalType2(AbnormalType type, bool forceCrawler)
     {
-        bool flag = RCSettings.spawnMode > 0 || (int) FengGameManagerMKII.settings[91] == 1 && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient || FengGameManagerMKII.Level.StartsWith("Custom");
+        bool flag = RCSettings.spawnMode > 0 || FengGameManagerMKII.Level.StartsWith("Custom"); // Might be broken
         int num = 0;
         float num2 = 0.02f * (IN_GAME_MAIN_CAMERA.difficulty + 1);
         if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpAHSS)

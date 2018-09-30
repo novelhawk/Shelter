@@ -204,10 +204,8 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             Minimap.instance.myCam.enabled = false;
         }
         minimap.CreateMinimap(Minimap.instance.myCam, 512, 0.3f, info.MinimapPreset);
-        if ((int) FengGameManagerMKII.settings[231] == 0 || RCSettings.globalDisableMinimap == 1)
-        {
+        if (!FengGameManagerMKII.settings.EnableMap || RCSettings.globalDisableMinimap == 1)
             minimap.SetEnabled(false);
-        }
     }
 
     public void createSnapShotRT()
@@ -715,20 +713,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     public void TakeScreenshot(Vector3 p, int dmg, GameObject target, float startTime)
     {
-        if (int.TryParse((string) FengGameManagerMKII.settings[95], out var num))
-        {
-            if (dmg >= num)
-            {
-                this.snapShotCount = 1;
-                this.startSnapShotFrameCount = true;
-                this.snapShotTargetPosition = p;
-                this.snapShotTarget = target;
-                this.snapShotStartCountDownTime = startTime;
-                this.snapShotInterval = 0.05f + Random.Range(0f, 0.03f);
-                this.snapShotDmg = dmg;
-            }
-        }
-        else
+        if (FengGameManagerMKII.settings.SnapshotDamage != -1 && dmg >= FengGameManagerMKII.settings.SnapshotDamage)
         {
             this.snapShotCount = 1;
             this.startSnapShotFrameCount = true;
@@ -867,7 +852,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                         Screen.lockCursor = false;
                     }
                     this.verticalRotationOffset = 0f;
-                    if ((int) FengGameManagerMKII.settings[245] == 1 || this.main_object.GetComponent<HERO>() == null)
+                    if (FengGameManagerMKII.settings.InSpectatorMode || this.main_object.GetComponent<HERO>() == null)
                     {
                         Screen.showCursor = false;
                     }
@@ -898,12 +883,12 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 //                            FengGameManagerMKII.settings[263] = 0;
 //                        }
 //                    }
-                    HERO component = this.main_object.GetComponent<HERO>();
-                    if (component != null && (int) FengGameManagerMKII.settings[263] == 1 && component.GetComponent<SmoothSyncMovement>().enabled && component.isPhotonCamera)
+//                    HERO component = this.main_object.GetComponent<HERO>();
+                    /*if (component != null && (int) FengGameManagerMKII.settings[263] == 1 && component.GetComponent<SmoothSyncMovement>().enabled && component.isPhotonCamera)
                     {
                         this.CameraMovementLive(component);
                     }
-                    else if (this.lockAngle)
+                    else */if (this.lockAngle)
                     {
                         transform.rotation = Quaternion.Lerp(transform.rotation, this.main_object.transform.rotation, 0.2f);
                         transform.position = Vector3.Lerp(transform.position, this.main_object.transform.position - this.main_object.transform.forward * 5f, 0.2f);

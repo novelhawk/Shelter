@@ -228,7 +228,7 @@ public partial class FengGameManagerMKII
                 {
                     Notify.New("Join the game", "Press 1 to join the game", 2500, 50f);
                 }
-                else if ((int) settings[245] == 0)
+                else if (!settings.InSpectatorMode)
                 {
                     if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS)
                     {
@@ -358,10 +358,8 @@ public partial class FengGameManagerMKII
                         GameObject.Find("aot_supply_lava_position").transform.rotation;
                 }
 
-                if ((int) settings[245] == 1)
-                {
+                if (settings.InSpectatorMode)
                     EnterSpecMode(true);
-                }
             }
         }
     }
@@ -754,7 +752,7 @@ public partial class FengGameManagerMKII
 
         ResetGameSettings();
         banHash = new ExitGames.Client.Photon.Hashtable();
-        imatitan = new ExitGames.Client.Photon.Hashtable();
+        _infectionTitans = new ExitGames.Client.Photon.Hashtable();
         oldScript = string.Empty;
         currentLevel = string.Empty;
         if (currentScript == null)

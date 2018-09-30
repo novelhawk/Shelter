@@ -131,7 +131,7 @@ public class CannonPropRegion : Photon.MonoBehaviour
 
     public void Start()
     {
-        if ((int) FengGameManagerMKII.settings[64] >= 100)
+        if (false) //TODO: Probably broken || was `(int) settings[64] >= 100`
         {
             GetComponent<Collider>().enabled = false;
         }

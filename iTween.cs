@@ -3668,7 +3668,7 @@ public class iTween : MonoBehaviour
             if (tween.delay > 0f)
             {
                 tween.delay -= Time.time - tween.delayStarted;
-                tween.StopCoroutine("TweenDelay");
+                tween.StopCoroutine(nameof(TweenDelay));
             }
             tween.isPaused = true;
             tween.enabled = false;
@@ -3694,7 +3694,7 @@ public class iTween : MonoBehaviour
                 if (tween.delay > 0f)
                 {
                     tween.delay -= Time.time - tween.delayStarted;
-                    tween.StopCoroutine("TweenDelay");
+                    tween.StopCoroutine(nameof(TweenDelay));
                 }
                 tween.isPaused = true;
                 tween.enabled = false;
@@ -3711,7 +3711,7 @@ public class iTween : MonoBehaviour
                 if (tween.delay > 0f)
                 {
                     tween.delay -= Time.time - tween.delayStarted;
-                    tween.StopCoroutine("TweenDelay");
+                    tween.StopCoroutine(nameof(TweenDelay));
                 }
                 tween.isPaused = true;
                 tween.enabled = false;
@@ -4575,14 +4575,12 @@ public class iTween : MonoBehaviour
     private void TweenComplete()
     {
         this.isRunning = false;
+        
         if (this.percentage > 0.5f)
-        {
             this.percentage = 1f;
-        }
         else
-        {
             this.percentage = 0f;
-        }
+        
         this.apply();
         if (this.type == "value")
         {
@@ -4613,13 +4611,13 @@ public class iTween : MonoBehaviour
                 this.percentage = 0f;
                 this.runningTime = 0f;
                 this.apply();
-                base.StartCoroutine("TweenRestart");
+                base.StartCoroutine(nameof(TweenRestart));
                 break;
 
             case LoopType.pingPong:
                 this.reverse = !this.reverse;
                 this.runningTime = 0f;
-                base.StartCoroutine("TweenRestart");
+                base.StartCoroutine(nameof(TweenRestart));
                 break;
         }
     }
@@ -4783,7 +4781,7 @@ public class iTween : MonoBehaviour
                     {
                         break;
                     }
-                    this.current = this.f__this.StartCoroutine("TweenDelay");
+                    this.current = this.f__this.StartCoroutine(nameof(TweenDelay));
                     this.PC = 1;
                     return true;
 

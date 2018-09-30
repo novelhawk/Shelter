@@ -3,25 +3,17 @@ using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 using Mod.Interface.Components;
-using Mod.Logging;
+using Newtonsoft.Json;
+using UnityEngine;
+using LogType = Mod.Logging.LogType;
 
 namespace Mod
 {
     public static class Utility
     {
-        public static bool IsValidTag(string tagName)
+        public static bool GetBoolean(string key)
         {
-            tagName = tagName.ToLower();
-            switch (tagName)
-            {
-//                case "size": // It doesnt get buggy even if you don't insert any number
-                case "color": // Couldn't find any instance of it bugging out with all sorts of args
-                case "i":
-                case "b":
-                    return true;
-                default:
-                    return false;
-            }
+            return PlayerPrefs.GetInt(key, 0) != 0;
         }
         
         public static bool IsValidImageUrl(string url)
@@ -50,7 +42,7 @@ namespace Mod
             Stack<Tag> stack = new Stack<Tag>();
             foreach (Match match in Regex.Matches(text, @"<([\\\/]?)([^\/]+?)(?:=(.+?))?>"))
             {
-                if (!IsValidTag(match.Groups[2].Value))
+                if (match.Groups[2].Value.EqualsIgnoreCase("size")) // Remove size
                 {
                     builder.Replace(match.Value, string.Empty);
                     continue;
@@ -59,7 +51,7 @@ namespace Mod
                 Tag tag = new Tag(
                     match.Value,
                     match.Groups[2].Value,
-                    text.IndexOf(match.Value, StringComparison.Ordinal),
+                    text.IndexOf(match.Value, StringComparison.OrdinalIgnoreCase),
                     match.Value.Length,
                     string.IsNullOrEmpty(match.Groups[1].Value));
 

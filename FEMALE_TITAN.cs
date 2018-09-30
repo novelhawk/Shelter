@@ -1166,10 +1166,10 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
 
     public void loadskin()
     {
-        if ((int) FengGameManagerMKII.settings[1] == 1)
-        {
-            photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, (string) FengGameManagerMKII.settings[66]);
-        }
+        if (!FengGameManagerMKII.settings.EnableTitanSkins) 
+            return;
+
+        photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, FengGameManagerMKII.settings.TitanSkin.Annie);
     }
 
     public IEnumerator loadskinE(string url)
@@ -1178,12 +1178,8 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         {
             yield return null;
         }
-        bool mipmap = true;
+        bool mipmap = FengGameManagerMKII.settings.UseMipmap;
         bool iteratorVariable1 = false;
-        if ((int)FengGameManagerMKII.settings[63] == 1)
-        {
-            mipmap = false;
-        }
         foreach (Renderer iteratorVariable4 in GetComponentsInChildren<Renderer>())
         {
             if (!FengGameManagerMKII.linkHash[2].ContainsKey(url))
@@ -1218,10 +1214,10 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     [RPC]
     public void LoadskinRPC(string url)
     {
-        if ((int) FengGameManagerMKII.settings[1] == 1 && Utility.IsValidImageUrl(url))
-        {
-            StartCoroutine(loadskinE(url));
-        }
+        if (!FengGameManagerMKII.settings.EnableTitanSkins || !Utility.IsValidImageUrl(url)) 
+            return;
+        
+        StartCoroutine(loadskinE(url));
     }
 
     [RPC]

@@ -374,10 +374,10 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
 
     public void loadskin()
     {
-        if (PhotonNetwork.isMasterClient && (int) FengGameManagerMKII.settings[1] == 1)
-        {
-            photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, new object[] { (string) FengGameManagerMKII.settings[67] });
-        }
+        if (!PhotonNetwork.isMasterClient || !FengGameManagerMKII.settings.EnableTitanSkins) 
+            return;
+        
+        photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, FengGameManagerMKII.settings.TitanSkin.Colossal);
     }
 
     public IEnumerator loadskinE(string url)
@@ -386,12 +386,8 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
         {
             yield return null;
         }
-        bool mipmap = true;
+        bool mipmap = FengGameManagerMKII.settings.UseMipmap;
         bool iteratorVariable1 = false;
-        if ((int)FengGameManagerMKII.settings[63] == 1)
-        {
-            mipmap = false;
-        }
         foreach (Renderer iteratorVariable2 in this.GetComponentsInChildren<Renderer>())
         {
             if (iteratorVariable2.name.Contains("hair"))
@@ -429,7 +425,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     [RPC]
     public void LoadskinRPC(string url)
     {
-        if ((int) FengGameManagerMKII.settings[1] == 1 && Utility.IsValidImageUrl(url))
+        if (FengGameManagerMKII.settings.EnableTitanSkins && Utility.IsValidImageUrl(url))
         {
             StartCoroutine(this.loadskinE(url));
         }

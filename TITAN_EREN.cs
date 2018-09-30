@@ -427,17 +427,16 @@ public class TITAN_EREN : Photon.MonoBehaviour
 
     public void loadskin()
     {
-        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
+        string url = FengGameManagerMKII.settings.TitanSkin.Eren;
+        if (!Utility.IsValidImageUrl(url))
+            return;
+
+        if (FengGameManagerMKII.settings.EnableTitanSkins)
         {
-            string url = (string) FengGameManagerMKII.settings[65];
-            if ((int) FengGameManagerMKII.settings[1] == 1 && Utility.IsValidImageUrl(url))
-            {
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                 StartCoroutine(this.loadskinE(url));
-            }
-        }
-        else if (photonView.isMine && (int) FengGameManagerMKII.settings[1] == 1)
-        {
-            photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, new object[] { (string) FengGameManagerMKII.settings[65] });
+            else if (photonView.isMine)
+                photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, url);
         }
     }
 
@@ -447,12 +446,8 @@ public class TITAN_EREN : Photon.MonoBehaviour
         {
             yield return null;
         }
-        bool mipmap = true;
+        bool mipmap = FengGameManagerMKII.settings.UseMipmap;
         bool iteratorVariable1 = false;
-        if ((int)FengGameManagerMKII.settings[63] == 1)
-        {
-            mipmap = false;
-        }
         foreach (Renderer iteratorVariable4 in this.GetComponentsInChildren<Renderer>())
         {
             if (!FengGameManagerMKII.linkHash[2].ContainsKey(url))
@@ -487,7 +482,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     [RPC]
     public void LoadskinRPC(string url)
     {
-        if ((int) FengGameManagerMKII.settings[1] == 1 && Utility.IsValidImageUrl(url))
+        if (FengGameManagerMKII.settings.EnableTitanSkins && Utility.IsValidImageUrl(url))
         {
             StartCoroutine(this.loadskinE(url));
         }
