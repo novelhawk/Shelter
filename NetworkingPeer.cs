@@ -10,6 +10,7 @@ using System.Text;
 using Mod.Exceptions;
 using UnityEngine;
 using Component = UnityEngine.Component;
+using Debug = UnityEngine.Debug;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
@@ -1407,8 +1408,9 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 var properties = photonEvent[249] as Hashtable;
                 if (photonEvent[249] == null || properties != null)
                 {
-                    this.AddNewPlayer(key, new Player(mLocalActor.ID == key, key, properties));
-                    this.ResetPhotonViewsOnSerialize();
+                    if (!mActors.ContainsKey(key))
+                        AddNewPlayer(key, new Player(mLocalActor.ID == key, key, properties));
+                    ResetPhotonViewsOnSerialize();
 
                     // We joined room
                     if (key == this.mLocalActor.ID)
