@@ -601,7 +601,7 @@ public partial class FengGameManagerMKII
 //        Shelter.EventManager.Fire(nameof(Chat));
         if (string.IsNullOrEmpty(content))
             return;
-        Shelter.LogConsole("Received a message from {0}.", info.sender);
+        
         if (sender != string.Empty)
             Mod.Interface.Chat.AddMessage($"{info.sender.Properties.HexName}: {content}", info.sender);
         else 
