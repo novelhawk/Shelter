@@ -261,7 +261,7 @@ public class Bullet : Photon.MonoBehaviour
             if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
             {
                 photonView.RPC("myMasterIs", PhotonTargets.Others, hero.GetComponent<HERO>().photonView.viewID, launcher_ref);
-                photonView.RPC("setVelocityAndLeft", PhotonTargets.Others, velocity2, left);
+                photonView.RPC("setVelocityAndLeft", PhotonTargets.Others, v, velocity2, left);
             }
             transform.position = this.myRef.transform.position;
             transform.rotation = Quaternion.LookRotation(v.normalized);
