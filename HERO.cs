@@ -2277,7 +2277,7 @@ public class HERO : Photon.MonoBehaviour
                     {
                         viewID = this.myHorse.GetPhotonView().viewID;
                     }
-                    photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, viewID, url);
+                    photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, viewID, url.ToString());
                 }
             }
         }

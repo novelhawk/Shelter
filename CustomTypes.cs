@@ -1,5 +1,8 @@
+using System.Text;
 using ExitGames.Client.Photon;
+using Mod;
 using UnityEngine;
+using LogType = Mod.Logging.LogType;
 
 internal static class CustomTypes
 {
@@ -47,10 +50,48 @@ internal static class CustomTypes
 
     internal static void Register()
     {
-        PhotonPeer.RegisterType(typeof(Vector2), 87, new SerializeMethod(SerializeVector2), new DeserializeMethod(DeserializeVector2));
-        PhotonPeer.RegisterType(typeof(Vector3), 86, new SerializeMethod(SerializeVector3), new DeserializeMethod(DeserializeVector3));
-        PhotonPeer.RegisterType(typeof(Quaternion), 81, new SerializeMethod(SerializeQuaternion), new DeserializeMethod(DeserializeQuaternion));
-        PhotonPeer.RegisterType(typeof(Player), 80, new SerializeMethod(SerializePhotonPlayer), new DeserializeMethod(DeserializePhotonPlayer));
+        PhotonPeer.RegisterType(typeof(Vector2),       87, SerializeVector2,       DeserializeVector2);
+        PhotonPeer.RegisterType(typeof(Vector3),       86, SerializeVector3,       DeserializeVector3);
+        PhotonPeer.RegisterType(typeof(Vector4),       88, SerializeVector4,       DeserializeVector4);
+        PhotonPeer.RegisterType(typeof(Quaternion),    81, SerializeQuaternion,    DeserializeQuaternion);
+        PhotonPeer.RegisterType(typeof(Player),        80, SerializePhotonPlayer,  DeserializePhotonPlayer);
+        PhotonPeer.RegisterType(typeof(StringBuilder), 84, SerializeStringBuilder, DeserializeStringBuilder);
+    }
+
+    private static byte[] SerializeStringBuilder(object obj)
+    {
+        var builder = (StringBuilder) obj;
+        Shelter.LogBoth("We serialized a StringBuilder. That should never happen. Content: {0}", LogType.Warning, builder);
+        
+        byte[] target = new byte[builder.Length];
+        Encoding.UTF8.GetBytes(builder.ToString()).CopyTo(target, 0);
+        return target;
+    }
+
+    private static object DeserializeStringBuilder(byte[] bytes)
+    {
+        Shelter.LogBoth("We deserialized a StringBuilder. That should never happen.", LogType.Warning);
+        
+        string str;
+        Shelter.Log("Content: {0}", LogType.Warning, str = Encoding.UTF8.GetString(bytes));
+        return new StringBuilder(str);
+    }
+
+    private static object DeserializeVector4(byte[] serializedcustomobject)
+    {
+        return Vector4.zero;
+    }
+
+    private static byte[] SerializeVector4(object customobject)
+    {
+        Vector4 vector = (Vector4) customobject;
+        int targetOffset = 0;
+        byte[] target = new byte[4 * 4];
+        Protocol.Serialize(vector.x, target, ref targetOffset);
+        Protocol.Serialize(vector.y, target, ref targetOffset);
+        Protocol.Serialize(vector.z, target, ref targetOffset);
+        Protocol.Serialize(vector.w, target, ref targetOffset);
+        return target;
     }
 
     private static byte[] SerializePhotonPlayer(object customobject)
