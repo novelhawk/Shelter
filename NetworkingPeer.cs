@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using JetBrains.Annotations;
 using Mod.Exceptions;
 using UnityEngine;
 using Component = UnityEngine.Component;
@@ -1318,11 +1319,13 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 {
                     string roomName = (string) entry.Key;
                     
-                    Room room = new Room(roomName, (Hashtable) entry.Value);
-                    if (!room.RemovedFromList && (room.IsOpen || room.Players > 0))
-                        mGameList[roomName] = room;
-                    else
+                    if (!Room.TryParse(roomName, (Hashtable) entry.Value, out Room room))
+                        continue;
+                    
+                    if (room.RemovedFromList)
                         mGameList.Remove(roomName);
+                    else
+                        mGameList[roomName] = room;
                 }
 
                 Room.List = new List<Room>(mGameList.Values);
@@ -1340,8 +1343,10 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 foreach (DictionaryEntry entry in hashtable)
                 {
                     string roomName = (string) entry.Key;
+
+                    if (!Room.TryParse(roomName, (Hashtable) entry.Value, out Room room))
+                        continue;
                     
-                    var room = new Room(roomName, (Hashtable) entry.Value);
                     mGameList[roomName] = room;
                 }
 
@@ -2154,7 +2159,9 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         if (!(flag = this.server == ServerConnection.GameServer))
         {
             this.mRoomOptionsForCreate = roomOptions;
-            this.mRoomToGetInto = new Room(roomName, roomOptions);
+            if (!Room.TryParse(roomName, roomOptions, out Room room))
+                return false;
+            this.mRoomToGetInto = room;
             this.mRoomToEnterLobby = typedLobby ?? (!this.insideLobby ? null : this.lobby);
         }
         this.mLastJoinType = JoinType.CreateGame;
@@ -2249,7 +2256,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     {
         if (this.mCurrentGame != null && gameProperties != null)
         {
-            this.mCurrentGame.LoadFromHashtable(gameProperties);
+            this.mCurrentGame.LoadOptions(new RoomOptions(gameProperties));
             SendMonoMessage(PhotonNetworkingMessage.OnPhotonCustomRoomPropertiesChanged, gameProperties);
             if (PhotonNetwork.automaticallySyncScene)
             {

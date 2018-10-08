@@ -1,29 +1,29 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Xml.Schema;
+using Boo.Lang;
 using ExitGames.Client.Photon;
 using Mod.Interface;
 using UnityEngine;
+using LogType = Mod.Logging.LogType;
 
 namespace Mod
 {
     public class Room : IComparable
     {
-        public static List<Room> List;
-        
-        private readonly Hashtable _properties = new Hashtable();
+        public static System.Collections.Generic.List<Room> List;
 
-        public string FullName { get; set; }
+        private Hashtable _properties;
+        private string _fullName;
+        
         private readonly string _roomName;
         private readonly LevelInfo _roomMap;
         private readonly Difficulty _roomDifficulty;
         private readonly DayLight _roomDayLight;
         private readonly string _roomPassword;
         private readonly int _roomTime;
-        private int _roomUUID;
-
+        private readonly int _roomUUID;
 
         private bool _removedFromList;
         private int _maxPlayers;
@@ -34,56 +34,130 @@ namespace Mod
         private int _playerTTL;
         private int _roomTTL;
 
+        public Room(
+            string fullName,
+            string name,
+            LevelInfo map,
+            Difficulty difficulty, 
+            int time, 
+            DayLight daylight, 
+            string password,
+            int uuid)
+        {
+            _fullName = fullName;
+            _roomName = name;
+            _roomMap = map;
+            _roomDifficulty = difficulty;
+            _roomTime = time;
+            _roomDayLight = daylight;
+            _roomPassword = password;
+            _roomUUID = uuid;
+        }
+        
         public Room(string fullName, Hashtable properties)
         {
-            FullName = fullName;
+            _fullName = fullName;
             
             var split = fullName.Split('`');
-            if (split.Length < 6)
+            if (split.Length < 7)
                 throw new Exception("Room..ctor called with invalid arguments: " + nameof(fullName)); //TODO: LOG!
 
             _roomName = split[0].MaxChars(100);
-            _roomMap = LevelInfoManager.GetInfo(split[1]);
+            if (!LevelInfoManager.TryGet(split[1], out _roomMap))
+                Shelter.LogBoth("Couldn't parse Room({0}) map.", LogType.Warning, _roomName);
             _roomDifficulty = DifficultyToEnum(split[2]);
-            if (int.TryParse(split[3], out int time))
-                _roomTime = time;
+            if (!int.TryParse(split[3], out _roomTime))
+                Shelter.LogBoth("Couldn't parse Room({0}) time.", LogType.Warning, _roomName);
             _roomDayLight = DayLightToEnum(split[4]);
             _roomPassword = split[5];
-            if (int.TryParse(split[6], out int uuid))
-                _roomUUID = uuid;
+            if (!int.TryParse(split[6], out _roomUUID))
+                Shelter.LogBoth("Couldn't parse Room({0}) uuid.", LogType.Warning, _roomName);
 
-            LoadFromHashtable(properties);
+            LoadOptions(new RoomOptions(properties));
         }
 
         public Room(string fullName, RoomOptions options)
         {
-            FullName = fullName;
+            _fullName = fullName;
 
             var split = fullName.Split('`');
-            if (split.Length < 6)
+            if (split.Length < 7)
                 throw new Exception(); //TODO: LOG!
 
             _roomName = split[0];
-            _roomMap = LevelInfoManager.GetInfo(split[1]);
+            if (!LevelInfoManager.TryGet(split[1], out _roomMap))
+                Shelter.LogBoth("Couldn't parse Room({0}) map.", LogType.Warning, _roomName);
             _roomDifficulty = DifficultyToEnum(split[2]);
-            if (int.TryParse(split[3], out int time))
-                _roomTime = time;
+            if (!int.TryParse(split[3], out _roomTime))
+                Shelter.LogBoth("Couldn't parse Room({0}) time.", LogType.Warning, _roomName);
             _roomDayLight = DayLightToEnum(split[4]);
             _roomPassword = split[5];
-            if (int.TryParse(split[6], out int uuid))
-                _roomUUID = uuid;
+            if (!int.TryParse(split[6], out _roomUUID))
+                Shelter.LogBoth("Couldn't parse Room({0}) uuid.", LogType.Warning, _roomName);
 
-            if (options != null)
-            {
-                _removedFromList = options.RemovedFromList;
-                _maxPlayers = options.MaxPlayers;
-                _currentPlayers = options.CurrentPlayers;
-                _isVisible = options.IsVisible;
-                _isOpen = options.IsOpen;
-                _doAutoCleanup = options.DoAutoCleanup;
-            }
+            LoadOptions(options);
         }
-        
+
+        private RoomOptions Options { set => LoadOptions(value); }
+
+        public void LoadOptions(RoomOptions options)
+        {
+            if (options == null)
+                return;
+            
+            if (options.RemovedFromList != null)
+                _removedFromList = options.RemovedFromList.Value;
+            if (options.MaxPlayers != null) 
+                _maxPlayers = options.MaxPlayers.Value;
+            if (options.CurrentPlayers != null) 
+                _currentPlayers = options.CurrentPlayers.Value;
+            if (options.IsVisible != null) 
+                _isVisible = options.IsVisible.Value;
+            if (options.IsOpen != null) 
+                _isOpen = options.IsOpen.Value;
+            if (options.DoAutoCleanup != null) 
+                _doAutoCleanup = options.DoAutoCleanup.Value;
+
+            _properties = options;
+        }
+
+        public static bool TryParse(string fullName, Hashtable hashtable, out Room room) => TryParse(fullName, new RoomOptions(hashtable), out room);
+        public static bool TryParse(string fullName, RoomOptions properties, out Room room)
+        {
+            room = null;
+            
+            var split = fullName.Split('`');
+            if (split.Length != 7)
+            {
+                Shelter.Log("Room '{0}' cannot be parsed into a Room object: Parameters mismatch ({1} expected 7)", LogType.Error, fullName, split.Length);
+                return false;
+            }
+
+            if (!LevelInfoManager.TryGet(split[1], out LevelInfo map))
+                return false;
+
+            if (!int.TryParse(split[3], out int time))
+                return false;
+
+            if (!int.TryParse(split[6], out int uuid))
+                return false;
+
+            room = new Room(
+                fullName,
+                split[0].MaxChars(100),
+                map,
+                DifficultyToEnum(split[2]),
+                time,
+                DayLightToEnum(split[4]),
+                split[5],
+                uuid)
+            {
+                Options = properties
+            };
+            
+            return true;
+        }
+
         private static Difficulty DifficultyToEnum(string difficulty)
         {
             switch (difficulty.ToLowerInvariant())
@@ -110,41 +184,7 @@ namespace Mod
             }
         }
 
-        public void LoadFromHashtable(Hashtable hash)
-        {
-            if (hash != null && hash.Count > 0)
-            {
-                if (hash.ContainsKey((byte) 251))
-                    _removedFromList = (bool) hash[(byte) 251];
-                if (_removedFromList)
-                    return;
-                
-                if (hash.ContainsKey((byte) 255))
-                    _maxPlayers = (byte) hash[(byte) 255];
-                
-                if (hash.ContainsKey((byte) 253))
-                    _isOpen = (bool) hash[(byte) 253];
-                
-                if (hash.ContainsKey((byte) 254))
-                    _isVisible = (bool) hash[(byte) 254];
-                
-                if (hash.ContainsKey((byte) 252))
-                    _currentPlayers = (byte) hash[(byte) 252];
-                
-                if (hash.ContainsKey((byte) 249))
-                    _doAutoCleanup = (bool) hash[(byte) 249];
 
-                if (hash.ContainsKey((byte) 235))
-                    _playerTTL = (int) hash[(byte) 235];
-
-                if (hash.ContainsKey((byte) 236))
-                    _roomTTL = (int) hash[(byte) 236];
-                
-                _properties.MergeStringKeys(hash);
-            }
-        }
-        
-        
         public void SetCustomProperties(Hashtable propertiesToSet)
         {
             if (propertiesToSet == null) 
@@ -176,7 +216,7 @@ namespace Mod
             return 0;
         }
 
-        public bool Join() => PhotonNetwork.JoinRoom(FullName);
+        public bool Join() => PhotonNetwork.JoinRoom(_fullName);
         public string ToString(int alpha)
         {
             StringBuilder builder = new StringBuilder();
@@ -194,7 +234,13 @@ namespace Mod
 
 
         public Hashtable Properties => _properties;
-        
+
+        public string FullName
+        {
+            get => _fullName;
+            set => _fullName = value;
+        }
+
         public string Name => _roomName;
         public LevelInfo Map => _roomMap;
         public Difficulty Difficulty => _roomDifficulty;

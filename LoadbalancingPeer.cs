@@ -107,7 +107,7 @@ internal class LoadbalancingPeer : PhotonPeer
             }
             Hashtable target = new Hashtable();
             customOpParameters[248] = target;
-            target.MergeStringKeys(roomOptions.RoomProperties);
+            target.MergeStringKeys(roomOptions);
             target[(byte) 253] = roomOptions.IsOpen;
             target[(byte) 254] = roomOptions.IsVisible;
             target[(byte) 250] = new string[0];
@@ -115,7 +115,7 @@ internal class LoadbalancingPeer : PhotonPeer
             {
                 target[(byte) 255] = roomOptions.MaxPlayers;
             }
-            if (roomOptions.DoAutoCleanup)
+            if (roomOptions.DoAutoCleanup == true)
             {
                 customOpParameters[241] = true;
                 target[(byte) 249] = true;
@@ -229,7 +229,7 @@ internal class LoadbalancingPeer : PhotonPeer
                 }
                 Hashtable target = new Hashtable();
                 customOpParameters[248] = target;
-                target.MergeStringKeys(roomOptions.RoomProperties);
+                target.MergeStringKeys(roomOptions);
                 target[(byte) 253] = roomOptions.IsOpen;
                 target[(byte) 254] = roomOptions.IsVisible;
                 target[(byte) 250] = new string[0    ];
@@ -237,7 +237,7 @@ internal class LoadbalancingPeer : PhotonPeer
                 {
                     target[(byte) 255] = roomOptions.MaxPlayers;
                 }
-                if (roomOptions.DoAutoCleanup)
+                if (roomOptions.DoAutoCleanup == true)
                 {
                     customOpParameters[241] = true;
                     target[(byte) 249] = true;
