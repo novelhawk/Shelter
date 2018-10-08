@@ -24,8 +24,8 @@ namespace Mod
 
         public static string MaxChars(this string str, int chars)
         {
-            if (str.Length - 4 > chars)
-                return str.Substring(0, chars) + "...";
+            if (str.Length > chars)
+                return str.Substring(0, chars - 3) + "...";
             return str;
         }
 

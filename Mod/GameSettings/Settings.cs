@@ -1,8 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Drawing.Design;
 using System.Globalization;
+using System.Reflection;
 using ExitGames.Client.Photon;
 using Mod.GameSettings;
+using Newtonsoft.Json;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -10,109 +13,176 @@ namespace Mod.GameSettings
 {
     public class GameSettings
     {
+        [JsonProperty("enableHumanSkins")]
         public bool EnableHumanSkins;
+        [JsonProperty("enableTitanSkins")]
         public bool EnableTitanSkins;
+        [JsonProperty("enableLevelSkins")]
         public bool EnableLevelSkins;
-        public bool EnableGasSkin;
-
-        public HumanSkin HumanSkin;
-        public TitanSkin TitanSkin;
-        public ForestSkin ForestSkin;
-        public CitySkin CitySkin;
-        public CustomMapSkin CustomSkin;
-
-        public bool Randomize;
         
-        public bool IsTeam;
-        public TeamSort TeamSort;
+        [JsonProperty("enableGasSkin")]
+        public bool EnableGasSkin;
+        [JsonProperty("enableWeaponTrail")]
+        public bool EnableWeaponTrail;
+        [JsonProperty("enableWind")]
+        public bool EnableWind;
+        [JsonProperty("enableReel")]
+        public bool EnableReel;
 
-        public int Titans;
-        public int RespawnTimer;
-        public int SpawnTimer;
+        [JsonProperty("randomizeSkinParts")]
+        public bool Randomize;
+
+        [JsonProperty("humanSkin")]
+        public HumanSkin HumanSkin;
+        [JsonProperty("titanSkin")]
+        public TitanSkin TitanSkin;
+        [JsonProperty("forestSkin")]
+        public ForestSkin ForestSkin;
+        [JsonProperty("citySkin")]
+        public CitySkin CitySkin;
+        [JsonProperty("customMapSkin")]
+        public CustomMapSkin CustomSkin;
+        
+        [JsonProperty("teamSort")]
+        public TeamSort TeamSort; // Unused
+
+        [JsonProperty("titans")]
+        public int Titans; // Unused
+        [JsonProperty("respawnTimer")]
+        public int RespawnTimer; // Unused
+        [JsonProperty("spawnTimer")]
+        public int SpawnTimer; // Unused
+        [JsonProperty("customMaxTitans")]
         public int CustomMaxTitans;
         
-        public bool EnableWeaponTrail;
-        public bool EnableWind;
-        public bool EnableReel;
+        [JsonProperty("snapshotMinDamage")]
         public int SnapshotDamage;
         
+        [JsonProperty("enableVSync")]
         public bool EnableVSync;
+        [JsonProperty("fpsCap")]
         public int FPSCap;
         
+        [JsonProperty("speedmeterType")]
         public Speedmeter SpeedmeterType;
         
-        public bool IsBomb;
+        [JsonProperty("isBombMode")]
+        public bool IsBombMode;
         
-        public bool IsRockThrowEnabled;
-        
-        public bool IsExplodeMode;
+        [JsonProperty("enablePunkRockThrow")]
+        public bool EnableRockThrow;
+
+        public bool IsExplodeMode => ExplodeRadius > 0;
+        [JsonProperty("explodeRadius")]
         public int ExplodeRadius;
 
-        public bool IsHealthMode;
+        [JsonProperty("healthMode")]
+        public HealthMode HealthMode;
+        [JsonProperty("titanHealth")]
         public Range TitanHealth;
 
-        public bool IsInfectionMode;
-        public int InfectionStartTitan;
+        public bool IsInfectionMode => InfectionTitanNumber > 0;
+        [JsonProperty("infectionTitanNumber")]
+        public int InfectionTitanNumber;
 
-        public bool IsErenAllowed; // 0: true 1: false
+        [JsonProperty("allowErenTitan")]
+        public bool AllowErenTitan; // 0: true 1: false
 
-        public bool DoSpawnMoreTitans;
-        public int MoreTitansNumber;
+        public bool SpawnMoreTitans => MoreTitansNumber > 0;
+        [JsonProperty("additionalTitans")]
+        public int MoreTitansNumber; // Unused
 
-        public bool IsDamageMode;
+        public bool IsDamageMode => MinimumDamage > 0;
+        [JsonProperty("minimumDamage")]
         public int MinimumDamage;
 
-        public bool IsSizeMode;
+        public bool EnableCustomSize => TitanSize != Range.Zero;
+        [JsonProperty("titanSize")]
         public Range TitanSize;
 
-        public bool UseCustomSpawnRates;
+        public bool UseCustomSpawnRates => SpawnRates != SpawnRates.Zero;
+        [JsonProperty("spawnRates")]
         public SpawnRates SpawnRates;
 
-        public bool IsHorseAllowed;
+        [JsonProperty("enableHorse")]
+        public bool EnableHorse;
 
-        public bool IsWaveMode; // Aren't those 2 the same
+        public bool IsWaveMode => WaveNumber > 0;
+        [JsonProperty("waveNumber")]
         public int WaveNumber;
 
-        public bool IsMaxWaveMode; // Aren't those 2 the same
+        public bool IsMaxWaveMode => MaxWaveNumber > 0;
+        [JsonProperty("maxWaveNumber")]
         public int MaxWaveNumber;
 
+        [JsonProperty("friendlyMode")]
         public bool IsFriendlyMode;
+        
+        [JsonProperty("gameType")]
+        public int GameType; // Not assigned. Dunno what's that for
 
+        [JsonProperty("pvpMode")]
         public PVPMode PVPMode;
 
-        public bool IsEndless;
+        public bool IsEndless => EndlessTime >= 0;
+        [JsonProperty("endlessTime")]
         public int EndlessTime;
 
+        public bool HasMotd => Motd != string.Empty;
+        [JsonProperty("motd")]
         public string Motd;
 
-        public bool IsPointMode;
+        public bool IsPointMode => PointModeWin > 0;
+        [JsonProperty("pointModePoints")]
         public int PointModeWin;
 
+        [JsonProperty("ahssAirReload")]
         public bool AllowAirAHSSReload;
 
+        [JsonProperty("allowPunks")]
         public bool AllowPunks;
 
+        [JsonProperty("asoPreserveKDA")]
+        public bool AsoPreserveKDA;
+        [JsonProperty("enableASORacing")]
+        public bool IsASORacing;
+
+        [JsonProperty("showMap")]
         public bool EnableMap;
+        [JsonProperty("enableMap")]
         public bool IsMapAllowed;
 
+        [JsonProperty("enableChatFeed")]
         public bool EnableChatFeed;
 
         public bool InSpectatorMode;
 
+        [JsonProperty("bombColor")]
         public Color BombColor;
+        [JsonProperty("bombRadius")]
         public int BombRadius;
+        [JsonProperty("bombRange")]
         public int BombRange;
+        [JsonProperty("bombSpeed")]
         public int BombSpeed;
+        [JsonProperty("bombCountdown")]
         public int BombCountdown;
 
+        [JsonProperty("allowCannonPKs")]
         public bool AllowCannonHumanKills;
 
+        [JsonProperty("masterTextureLimit")]
         public int MasterTextureLimit;
+        [JsonProperty("useMipmap")]
         public bool UseMipmap;
         
+        [JsonProperty("volume")]
         public float Volume;
+        [JsonProperty("cameraDistance")]
         public float CameraDistance;
+        [JsonProperty("mouseSensitivity")]
         public float MouseSensitivity;
+        [JsonProperty("gameQuality")]
         public float GameQuality;
 
         public void ImportFromRC()
@@ -123,21 +193,18 @@ namespace Mod.GameSettings
 
             HumanSkin = new HumanSkin
             {
-                Set = new[] 
-                {
-                    PlayerPrefs.GetString("horse", string.Empty),
-                    PlayerPrefs.GetString("hair", string.Empty),
-                    PlayerPrefs.GetString("eye", string.Empty),
-                    PlayerPrefs.GetString("glass", string.Empty),
-                    PlayerPrefs.GetString("face", string.Empty),
-                    PlayerPrefs.GetString("skin", string.Empty),
-                    PlayerPrefs.GetString("costume", string.Empty),
-                    PlayerPrefs.GetString("logo", string.Empty),
-                    PlayerPrefs.GetString("bladel", string.Empty),
-                    PlayerPrefs.GetString("blader", string.Empty),
-                    PlayerPrefs.GetString("hoodie", string.Empty),
-                    PlayerPrefs.GetString("trailskin", string.Empty)
-                }
+                Horse = PlayerPrefs.GetString("horse", string.Empty), 
+                Hair = PlayerPrefs.GetString("hair", string.Empty),
+                Eye = PlayerPrefs.GetString("eye", string.Empty),
+                Glass = PlayerPrefs.GetString("glass", string.Empty),
+                Face = PlayerPrefs.GetString("face", string.Empty),
+                Body = PlayerPrefs.GetString("skin", string.Empty),
+                Costume = PlayerPrefs.GetString("costume", string.Empty),
+                Cape = PlayerPrefs.GetString("logo", string.Empty),
+                LeftBlade = PlayerPrefs.GetString("bladel", string.Empty),
+                RightBlade = PlayerPrefs.GetString("blader", string.Empty),
+                Hoodie = PlayerPrefs.GetString("hoodie", string.Empty),
+                Trail = PlayerPrefs.GetString("trailskin", string.Empty)
             };
 
             EnableGasSkin = Utility.GetBoolean("gasenable");
@@ -260,8 +327,6 @@ namespace Mod.GameSettings
 
             Randomize = Utility.GetBoolean("titanR") || Utility.GetBoolean("forestR");
             
-            HumanSkinSelection = PlayerPrefs.GetInt("humangui", 0);
-
             MasterTextureLimit = PlayerPrefs.GetInt("skinQ", 0); 
             UseMipmap = !Utility.GetBoolean("skinQL");
             if (!int.TryParse(PlayerPrefs.GetString("cnumber", "1"), out Titans))
@@ -279,14 +344,13 @@ namespace Mod.GameSettings
             if (!int.TryParse(PlayerPrefs.GetString("fpscap", "-1"), out FPSCap))
                 FPSCap = -1;
             SpeedmeterType = (Speedmeter) PlayerPrefs.GetInt("speedometer", 0);
-            IsBomb = Utility.GetBoolean("bombMode");
-            IsTeam = Utility.GetBoolean("teamMode");
-            IsRockThrowEnabled = Utility.GetBoolean("rockThrow");
-            IsExplodeMode = Utility.GetBoolean("explodeModeOn");
+            IsBombMode = Utility.GetBoolean("bombMode");
+            TeamSort = (TeamSort) PlayerPrefs.GetInt("teamMode", 0);
+            EnableRockThrow = Utility.GetBoolean("rockThrow");
             if (!int.TryParse(PlayerPrefs.GetString("explodeModeNum", "30"), out ExplodeRadius))
                 ExplodeRadius = 30;
             
-            IsHealthMode = Utility.GetBoolean("healthMode");
+            HealthMode = (HealthMode) PlayerPrefs.GetInt("healthMode", 0);
             if (!int.TryParse(PlayerPrefs.GetString("healthLower", "100"), out var min))
                 min = 100;
             if (!int.TryParse(PlayerPrefs.GetString("healthUpper", "200"), out var max))
@@ -294,11 +358,11 @@ namespace Mod.GameSettings
             TitanHealth = new Range(min, max);
             
             IsInfectionMode = Utility.GetBoolean("infectionModeOn");
-            if (!int.TryParse(PlayerPrefs.GetString("infectionModeNum", "1"), out InfectionStartTitan))
-                InfectionStartTitan = 1;
+            if (!int.TryParse(PlayerPrefs.GetString("infectionModeNum", "1"), out InfectionTitanNumber))
+                InfectionTitanNumber = 1;
             
-            IsErenAllowed = !Utility.GetBoolean("banEren");
-            DoSpawnMoreTitans = Utility.GetBoolean("moreTitanOn");
+            AllowErenTitan = !Utility.GetBoolean("banEren");
+            SpawnMoreTitans = Utility.GetBoolean("moreTitanOn");
             if (!int.TryParse(PlayerPrefs.GetString("moreTitanNum", "1"), out MoreTitansNumber))
                 MoreTitansNumber = 1;
             
@@ -306,7 +370,7 @@ namespace Mod.GameSettings
             if (!int.TryParse(PlayerPrefs.GetString("damageModeNum", "1000"), out MinimumDamage))
                 MinimumDamage = 1000;
             
-            IsSizeMode = Utility.GetBoolean("sizeMode");
+            EnableCustomSize = Utility.GetBoolean("sizeMode");
             if (!int.TryParse(PlayerPrefs.GetString("sizeLower", "1.0"), out min))
                 min = 3;
             if (!int.TryParse(PlayerPrefs.GetString("sizeUpper", "3.0"), out max))
@@ -320,7 +384,7 @@ namespace Mod.GameSettings
                 PlayerPrefs.GetString("jRate", "20.0"),
                 PlayerPrefs.GetString("cRate", "20.0"),
                 PlayerPrefs.GetString("pRate", "20.0"));
-            IsHorseAllowed = Utility.GetBoolean("horseMode");
+            EnableHorse = Utility.GetBoolean("horseMode");
             IsWaveMode = Utility.GetBoolean("waveModeOn");
             if (!int.TryParse(PlayerPrefs.GetString("waveModeNum", "1"), out WaveNumber))
                 WaveNumber = 1;
@@ -336,7 +400,8 @@ namespace Mod.GameSettings
             IsPointMode = Utility.GetBoolean("pointModeOn");
             if (!int.TryParse(PlayerPrefs.GetString("pointModeNum", "50"), out PointModeWin))
                 PointModeWin = 50;
-            
+
+            IsASORacing = Utility.GetBoolean("asoracing");
             AllowAirAHSSReload = Utility.GetBoolean("ahssReload");
             AllowPunks = Utility.GetBoolean("punkWaves");
             EnableMap = Utility.GetBoolean("mapOn");
@@ -369,24 +434,24 @@ namespace Mod.GameSettings
             Hashtable hashtable = new Hashtable();
             if (IsInfectionMode)
             {
-                IsBomb = false;
-                IsTeam = false;
+                IsBombMode = false;
                 IsPointMode = false;
+                TeamSort = TeamSort.Off;
                 PVPMode = PVPMode.Off;
                 
-                if (InfectionStartTitan < 0 || InfectionStartTitan > PhotonNetwork.countOfPlayers)
-                    InfectionStartTitan = 1;
+                if (InfectionTitanNumber < 0 || InfectionTitanNumber > PhotonNetwork.countOfPlayers)
+                    InfectionTitanNumber = 1;
                 
-                hashtable.Add("infection", InfectionStartTitan);
+                hashtable.Add("infection", InfectionTitanNumber);
             }
-            if (IsBomb)
+            if (IsBombMode)
                 hashtable.Add("bomb", 1);
             
             if (!EnableMap)
                 hashtable.Add("globalDisableMinimap", 1);
                     
-            if (IsTeam)
-                hashtable.Add("team", 1);
+            if (TeamSort != TeamSort.Off)
+                hashtable.Add("team", (int) TeamSort);
             
 //                if (RCSettings.teamMode != (int) settings[193])
 //                    for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
@@ -394,29 +459,29 @@ namespace Mod.GameSettings
             if (IsPointMode)
                 hashtable.Add("point", PointModeWin);
             
-            if (IsRockThrowEnabled)
+            if (EnableRockThrow)
                 hashtable.Add("rock", 1);
             
             if (IsExplodeMode)
                 hashtable.Add("explode", ExplodeRadius);
             
-            if (IsHealthMode)
+            if (HealthMode > HealthMode.Off)
             {
-                hashtable.Add("healthMode", 1);
-                hashtable.Add("healthLower", TitanHealth.Min);
-                hashtable.Add("healthUpper", TitanHealth.Max);
+                hashtable.Add("healthMode", HealthMode);
+                hashtable.Add("healthLower", (int) TitanHealth.Min);
+                hashtable.Add("healthUpper", (int) TitanHealth.Max);
             }
             
-            if (!IsErenAllowed)
+            if (!AllowErenTitan)
                 hashtable.Add("eren", 1);
             
-            if (DoSpawnMoreTitans)
+            if (SpawnMoreTitans)
                 hashtable.Add("titanc", Titans);
             
             if (IsDamageMode)
                 hashtable.Add("damage", MinimumDamage);
             
-            if (IsSizeMode)
+            if (EnableCustomSize)
             {
                 hashtable.Add("sizeMode", 1);
                 hashtable.Add("sizeLower", TitanSize.Min);
@@ -426,14 +491,14 @@ namespace Mod.GameSettings
             if (UseCustomSpawnRates)
             {
                 hashtable.Add("spawnMode", 1);
-                hashtable.Add("nRate", SpawnRates.Normal.ToString(CultureInfo.InvariantCulture));
-                hashtable.Add("aRate", SpawnRates.Aberrant.ToString(CultureInfo.InvariantCulture));
-                hashtable.Add("jRate", SpawnRates.Jumper.ToString(CultureInfo.InvariantCulture));
-                hashtable.Add("cRate", SpawnRates.Crawler.ToString(CultureInfo.InvariantCulture));
-                hashtable.Add("pRate", SpawnRates.Punk.ToString(CultureInfo.InvariantCulture));
+                hashtable.Add("nRate", SpawnRates.Normal);
+                hashtable.Add("aRate", SpawnRates.Aberrant);
+                hashtable.Add("jRate", SpawnRates.Jumper);
+                hashtable.Add("cRate", SpawnRates.Crawler);
+                hashtable.Add("pRate", SpawnRates.Punk);
             }
             
-            if (IsHorseAllowed)
+            if (EnableHorse)
                 hashtable.Add("horse", 1);
             
             if (IsWaveMode)
@@ -466,10 +531,117 @@ namespace Mod.GameSettings
             if (AllowCannonHumanKills)
                 hashtable.Add("deadlycannons", 1);
             
-            if (RCSettings.racingStatic > 0)
+            if (IsASORacing)
                 hashtable.Add("asoracing", 1);
             
             return hashtable;
+        }
+
+        public void LoadFromHashtable(Hashtable hash)
+        {
+            if (hash.ContainsKey("bomb"))
+                IsBombMode = true;
+            
+            if (hash.ContainsKey("globalDisableMinimap"))
+                IsMapAllowed = !hash.ToBool("globalDisableMinimap");
+            if (hash.ContainsKey("horse"))
+                EnableHorse = hash.ToBool("horse");
+            if (hash.ContainsKey("punkWaves"))
+                AllowPunks = hash.ToBool("punkWaves");
+            if (hash.ContainsKey("ahssReload"))
+                AllowAirAHSSReload = hash.ToBool("ahssReload");
+            if (hash.ContainsKey("team"))
+                TeamSort = (TeamSort) (int) hash["team"];
+            if (hash.ContainsKey("point"))
+                IsPointMode = hash.ToBool("point");
+            if (hash.ContainsKey("rock"))
+                EnableRockThrow = hash.ToBool("rock");
+            if (hash.ContainsKey("explode"))
+                ExplodeRadius = (int) hash["explode"];
+            if (hash.ContainsKey("healthMode") && 
+                hash.ContainsKey("healthLower") && 
+                hash.ContainsKey("healthUpper"))
+            {
+                if ((HealthMode = (HealthMode) (int) hash["healthMode"]) > HealthMode.Off)
+                {
+                    TitanHealth = new Range(
+                        (int) hash["healthLower"],
+                        (int) hash["healthUpper"]);
+                }
+            }
+            if (hash.ContainsKey("infection"))
+                IsInfectionMode = hash.ToBool("infection");
+
+            if (hash.ContainsKey("eren"))
+                AllowErenTitan = !hash.ToBool("eren");
+
+            if (hash.ContainsKey("titanc"))
+                MoreTitansNumber = (int) hash["titanc"];
+
+            if (hash.ContainsKey("damage"))
+            {
+                IsDamageMode = true;
+                MinimumDamage = (int) hash["damage"];
+            }
+            if (hash.ContainsKey("sizeMode") && 
+                hash.ContainsKey("sizeLower") && 
+                hash.ContainsKey("sizeUpper"))
+            {
+                TitanSize = new Range(
+                    (float) hash["sizeLower"],
+                    (float) hash["sizeUpper"]);
+            }
+
+            if (hash.ContainsKey("spawnMode") && hash.ContainsKey("nRate") && hash.ContainsKey("aRate") &&
+                hash.ContainsKey("jRate") && hash.ContainsKey("cRate") && hash.ContainsKey("pRate"))
+            {
+                UseCustomSpawnRates = hash.ToBool("spawnMode");
+                SpawnRates = new SpawnRates
+                {
+                    Normal = (float) hash["nRate"],
+                    Aberrant = (float) hash["aRate"],
+                    Jumper = (float) hash["jRate"],
+                    Crawler = (float) hash["cRate"],
+                    Punk = (float) hash["pRate"],
+                };
+            }
+
+            if (hash.ContainsKey("waveModeOn") && hash.ContainsKey("waveModeNum"))
+            {
+                IsWaveMode = hash.ToBool("waveModeOn");
+                WaveNumber = (int) hash["waveModeNum"];
+            }
+
+            if (hash.ContainsKey("friendly"))
+                IsFriendlyMode = hash.ToBool("friendly");
+
+            if (hash.ContainsKey("pvp"))
+                PVPMode = (PVPMode) (int) hash["pvp"];
+
+            if (hash.ContainsKey("maxwave"))
+                MaxWaveNumber = (int) hash["maxwave"];
+
+            if (hash.ContainsKey("endless"))
+            {
+                IsEndless = true;
+                EndlessTime = (int) hash["endless"];
+            }
+
+            if (hash.ContainsKey("motd"))
+                Motd = (string) hash["motd"];
+            
+            if (hash.ContainsKey("deadlycannons"))
+                AllowCannonHumanKills = hash.ToBool("deadlycannons");
+
+            if (hash.ContainsKey("asoracing"))
+            {
+                IsASORacing = true;
+            }
+        }
+
+        public void ReloadFile()
+        {
+            
         }
     }
 }
