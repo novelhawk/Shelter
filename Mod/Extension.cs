@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using ExitGames.Client.Photon;
+using Mod.Logging;
 
 namespace Mod
 {
@@ -11,6 +14,24 @@ namespace Mod
     {
         public static int ToInt(this object obj) => Convert.ToInt32(obj);
 
+        public static bool ToBool(this Hashtable hash, string key)
+        {
+            if (!hash.ContainsKey(key))
+                throw new KeyNotFoundException($"Hashtable has no key {key}.");
+
+            object obj = hash[key];
+            switch (obj)
+            {
+                case int i:
+                    return i != 0;
+                case bool ret:
+                    return ret;
+                default:
+                    Shelter.LogBoth("Couldn't parse {0} to bool. (of type {1})", LogType.Warning, key, obj.GetType().Name);
+                    return false;
+            }
+        }
+        
         public static string HexColor(this object str)
         {
             StringBuilder builder = new StringBuilder(str as string);
