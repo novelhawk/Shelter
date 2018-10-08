@@ -8,7 +8,7 @@ namespace Mod.Logging
 {
     public class FileLogger : ILogger
     {
-        private const string Latest = "latest.log";
+        public const string Latest = "latest.log";
         private const string Old = "{0:00}-{1:00}-{2} {3:00}-{4:00}-{5:00}.log";
         
         private readonly string _path = Application.dataPath + "/Logs/";
