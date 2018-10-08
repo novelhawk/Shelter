@@ -1,4 +1,6 @@
-﻿using System;
+﻿#define CUSTOMPHOTONASSEMBLY // Remove this if you don't have a custom assembly
+
+using System;
 using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using Mod.Exceptions;
@@ -21,22 +23,23 @@ namespace Mod.Commands
                 Chat.System("Cannot deserialize payload: Longer than 256 bytes.");
                 return;
             }
-
+            
+            Player player = null;
             if (hex.Contains("ID"))
             {
-                if (args.Length < 2 || !Player.TryParse(args[1], out Player player))
+                if (args.Length < 2 || !Player.TryParse(args[1], out player))
                     throw new CommandArgumentException(CommandName, "/payload [payload] [playerId] (times)");
                 
                 hex = hex.Replace("ID", player.ID.ToString("X8"));
             }
             
             var bytes = StringToBytes(hex);
-            DecryptBytes(bytes);
+//            DecryptBytes(bytes);
 
             if (args.Length < 2 || !int.TryParse(args[2], out var times))
                 times = 1;
             
-            #if CUSTOMPHOTONASSEMBLY
+#if CUSTOMPHOTONASSEMBLY
             if (!(PhotonNetwork.networkingPeer.peerBase is EnetPeer peer))
             {
                 Chat.System("Peer is not available.");
@@ -45,9 +48,11 @@ namespace Mod.Commands
             
             for (int i = 0; i < times; i++)
                 peer.CreateAndEnqueueCommand(0x6, bytes, 0x0);
-            #endif
             
-            Chat.System("Sent payload ({0} bytes) to {1} {2} times", bytes.Length, args.Length >= 2 ? args[2] : "everyone", times);
+            Chat.System("Sent payload ({0} bytes) to {1} {2} times", bytes.Length, player?.ToString() ?? "everyone", times);
+            return;
+#endif
+            Chat.System("You need a custom photon assembly in order to use this command!");
         }
 
         private static void DecryptBytes(IList<byte> bytes)
