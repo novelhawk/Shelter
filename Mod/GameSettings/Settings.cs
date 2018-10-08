@@ -5,8 +5,6 @@ namespace Mod.GameSettings
 {
     public struct Settings
     {
-        [JsonProperty("enableGasSkin")]
-        public bool EnableGasSkin;
         [JsonProperty("enableWind")]
         public bool EnableWind;
 

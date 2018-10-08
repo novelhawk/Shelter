@@ -58,8 +58,6 @@ namespace Mod.Managers
                 Trail = PlayerPrefs.GetString("trailskin", string.Empty)
             };
 
-            settings.EnableGasSkin = Utility.GetBoolean("gasenable");
-
             settings.TitanSkin = new TitanSkin
             {
                 Body = new[]

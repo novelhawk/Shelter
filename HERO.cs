@@ -2293,7 +2293,7 @@ public class HERO : Photon.MonoBehaviour
         string[] urls = url.Split(',');
         if (urls.Length < 13)
             yield break; // Not allowed exception?
-        bool skinGas = FengGameManagerMKII.settings.EnableGasSkin;
+        bool skinGas = Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins));
         bool hasHorse = LevelInfoManager.Get(FengGameManagerMKII.Level).Horse || FengGameManagerMKII.settings.EnableHorse;
         bool isMe = IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || this.photonView.isMine;
 
