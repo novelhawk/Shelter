@@ -133,7 +133,7 @@ public class Minimap : MonoBehaviour
 
     private void CheckUserInput()
     {
-        if (!FengGameManagerMKII.settings.EnableMap || RCSettings.globalDisableMinimap != 0)
+        if (!FengGameManagerMKII.settings.EnableMap || FengGameManagerMKII.settings.IsMapAllowed)
         {
             if (this.isEnabled)
                 this.SetEnabled(!this.isEnabled);

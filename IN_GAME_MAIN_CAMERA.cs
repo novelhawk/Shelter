@@ -194,7 +194,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     private void CreateMinimap()
     {
-        LevelInfo info = LevelInfoManager.GetInfo(FengGameManagerMKII.Level);
+        LevelInfo info = LevelInfoManager.Get(FengGameManagerMKII.Level);
         Minimap minimap = gameObject.AddComponent<Minimap>();
         if (Minimap.instance.myCam == null)
         {
@@ -204,7 +204,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             Minimap.instance.myCam.enabled = false;
         }
         minimap.CreateMinimap(Minimap.instance.myCam, 512, 0.3f, info.MinimapPreset);
-        if (!FengGameManagerMKII.settings.EnableMap || RCSettings.globalDisableMinimap == 1)
+        if (!FengGameManagerMKII.settings.EnableMap || !FengGameManagerMKII.settings.IsMapAllowed)
             minimap.SetEnabled(false);
     }
 
@@ -713,7 +713,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     public void TakeScreenshot(Vector3 p, int dmg, GameObject target, float startTime)
     {
-        if (FengGameManagerMKII.settings.SnapshotDamage != -1 && dmg >= FengGameManagerMKII.settings.SnapshotDamage)
+        if (FengGameManagerMKII.settings.SnapshotDamage > 0 && dmg >= FengGameManagerMKII.settings.SnapshotDamage)
         {
             this.snapShotCount = 1;
             this.startSnapShotFrameCount = true;

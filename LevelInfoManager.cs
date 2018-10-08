@@ -350,5 +350,20 @@ public static class LevelInfoManager
         };
     }
 
-    public static LevelInfo GetInfo(string name) => Levels.FirstOrDefault(info => info.Name == name);
+    public static LevelInfo Get(string name) => Levels.FirstOrDefault(info => info.Name == name);
+
+    public static bool TryGet(string name, out LevelInfo map)
+    {
+        foreach (var info in Levels)
+        {
+            if (info.Name == name)
+            {
+                map = info;
+                return true;
+            }
+        }
+        
+        map = new LevelInfo();
+        return false;
+    }
 }

@@ -61,7 +61,7 @@ public class TriggerColliderWeapon : MonoBehaviour
 
         if (other.gameObject.CompareTag("playerHitbox"))
         {
-            if ((Shelter.ModuleManager.Enabled(nameof(ModulePVPEverywhere)) || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).IsPvP) && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
+            if ((Shelter.ModuleManager.Enabled(nameof(ModulePVPEverywhere)) || LevelInfoManager.Get(FengGameManagerMKII.Level).IsPvP) && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
             {
                 float b = 1f - Vector3.Distance(other.gameObject.transform.position, transform.position) * 0.05f;
                 b = Mathf.Min(1f, b);

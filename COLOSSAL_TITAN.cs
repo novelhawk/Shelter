@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Mod;
+using Mod.GameSettings;
 using UnityEngine;
 
 public class COLOSSAL_TITAN : Photon.MonoBehaviour
@@ -589,24 +590,19 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
         }
         if (photonView.isMine)
         {
-            if (RCSettings.sizeMode > 0)
-            {
-                float sizeLower = RCSettings.sizeLower;
-                float sizeUpper = RCSettings.sizeUpper;
-                this.size = UnityEngine.Random.Range(sizeLower, sizeUpper);
-                photonView.RPC("setSize", PhotonTargets.AllBuffered, new object[] { this.size });
-            }
+            if (FengGameManagerMKII.settings.EnableCustomSize)
+                photonView.RPC("setSize", PhotonTargets.AllBuffered, FengGameManagerMKII.settings.TitanSize.Random);
+            
             this.lagMax = 150f + this.size * 3f;
             this.healthTime = 0f;
             this.maxHealth = this.NapeArmor;
-            if (RCSettings.healthMode > 0)
-            {
-                this.maxHealth = this.NapeArmor = UnityEngine.Random.Range(RCSettings.healthLower, RCSettings.healthUpper);
-            }
+            
+            if (FengGameManagerMKII.settings.HealthMode > HealthMode.Off)
+                this.maxHealth = this.NapeArmor = (int) FengGameManagerMKII.settings.TitanHealth.Random;
+            
             if (this.NapeArmor > 0)
-            {
-                photonView.RPC("labelRPC", PhotonTargets.AllBuffered, new object[] { this.NapeArmor, this.maxHealth });
-            }
+                photonView.RPC("labelRPC", PhotonTargets.AllBuffered, NapeArmor, maxHealth);
+            
             this.loadskin();
         }
         this.hasspawn = true;
@@ -621,7 +617,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
         }
         name = "COLOSSAL_TITAN";
         this.NapeArmor = 1000;
-        bool flag = LevelInfoManager.GetInfo(FengGameManagerMKII.Level).RespawnMode == RespawnMode.NEVER;
+        bool flag = LevelInfoManager.Get(FengGameManagerMKII.Level).RespawnMode == RespawnMode.NEVER;
         if (IN_GAME_MAIN_CAMERA.difficulty == 0)
         {
             this.NapeArmor = !flag ? 5000 : 2000;
@@ -703,7 +699,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
             Vector3 vector = view.gameObject.transform.position - transform.transform.position;
             if (vector.magnitude < this.lagMax && this.healthTime <= 0f)
             {
-                if (speed >= RCSettings.damageMode)
+                if (speed >= FengGameManagerMKII.settings.MinimumDamage)
                 {
                     this.NapeArmor -= speed;
                 }

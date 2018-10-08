@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Mod;
+using Mod.GameSettings;
 using UnityEngine;
 
 public class FEMALE_TITAN : Photon.MonoBehaviour
@@ -1313,19 +1314,16 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         }
         if (photonView.isMine)
         {
-            if (RCSettings.sizeMode > 0)
+            if (FengGameManagerMKII.settings.EnableCustomSize)
             {
-                float sizeLower = RCSettings.sizeLower;
-                float sizeUpper = RCSettings.sizeUpper;
-                size = UnityEngine.Random.Range(sizeLower, sizeUpper);
-                photonView.RPC("setSize", PhotonTargets.AllBuffered, size);
+                photonView.RPC("setSize", PhotonTargets.AllBuffered, FengGameManagerMKII.settings.TitanSize.Random);
             }
             lagMax = 150f + size * 3f;
             healthTime = 0f;
             maxHealth = NapeArmor;
-            if (RCSettings.healthMode > 0)
+            if (FengGameManagerMKII.settings.HealthMode > HealthMode.Off)
             {
-                maxHealth = NapeArmor = UnityEngine.Random.Range(RCSettings.healthLower, RCSettings.healthUpper);
+                maxHealth = NapeArmor = (int) FengGameManagerMKII.settings.TitanHealth.Random;
             }
             if (NapeArmor > 0)
             {
@@ -1357,7 +1355,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         AnkleRHP = 50;
         AnkleLHPMAX = 50;
         AnkleRHPMAX = 50;
-        bool flag = LevelInfoManager.GetInfo(FengGameManagerMKII.Level).RespawnMode == RespawnMode.NEVER;
+        bool flag = LevelInfoManager.Get(FengGameManagerMKII.Level).RespawnMode == RespawnMode.NEVER;
         switch (IN_GAME_MAIN_CAMERA.difficulty)
         {
             case 0:
@@ -1403,7 +1401,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
             Vector3 vector = view.gameObject.transform.position - transform.transform.position;
             if (vector.magnitude < lagMax && healthTime <= 0f)
             {
-                if (speed >= RCSettings.damageMode)
+                if (speed >= FengGameManagerMKII.settings.MinimumDamage)
                 {
                     NapeArmor -= speed;
                 }

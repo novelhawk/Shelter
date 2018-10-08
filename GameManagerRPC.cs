@@ -6,6 +6,7 @@ using System.Security.AccessControl;
 using ExitGames.Client.Photon;
 using Mod;
 using Mod.Exceptions;
+using Mod.GameSettings;
 using UnityEngine;
 
 public partial class FengGameManagerMKII
@@ -200,8 +201,8 @@ public partial class FengGameManagerMKII
                         if (!IsAnyTitanAlive)
                         {
                             wave++;
-                            if (!(LevelInfoManager.GetInfo(Level).RespawnMode != RespawnMode.NEWROUND &&
-                                  (!Level.StartsWith("Custom") || RCSettings.gameType != 1) ||
+                            if (!(LevelInfoManager.Get(Level).RespawnMode != RespawnMode.NEWROUND &&
+                                  (!Level.StartsWith("Custom") || settings.GameType != 1) ||
                                   IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer))
                             {
                                 foreach (Player player in PhotonNetwork.PlayerList)
@@ -224,7 +225,7 @@ public partial class FengGameManagerMKII
                             if (PhotonNetwork.isMasterClient)
                                 RequireStatus(null);
 
-                            if (!((RCSettings.maxWave != 0 || wave <= 20) && (RCSettings.maxWave <= 0 || wave <= RCSettings.maxWave)))
+                            if (!((settings.MaxWaveNumber != 0 || wave <= 20) && (settings.MaxWaveNumber <= 0 || wave <= settings.MaxWaveNumber)))
                             {
                                 GameWin();
                             }
@@ -234,7 +235,7 @@ public partial class FengGameManagerMKII
                                 if (difficulty == 1)
                                     abnormal = 70;
 
-                                if (!LevelInfoManager.GetInfo(Level).HasPunk)
+                                if (!LevelInfoManager.Get(Level).HasPunk)
                                     SpawnTitanCustom("titanRespawn", abnormal, wave + 2, false);
                                 else if (wave == 5)
                                     SpawnTitanCustom("titanRespawn", abnormal, 1, true);
@@ -321,7 +322,7 @@ public partial class FengGameManagerMKII
                 teamScores[teamWinner - 1]++;
                 gameEndCD = gameEndTotalCDtime;
                 break;
-            case GameMode.Racing when RCSettings.racingStatic == 1:
+            case GameMode.Racing when settings.IsASORacing:
                 gameEndCD = 1000f;
                 break;
             case GameMode.Racing:
@@ -367,7 +368,7 @@ public partial class FengGameManagerMKII
                     GameLose();
                 break;
             
-            case GameMode.PvpAHSS when RCSettings.pvpMode == 0 && RCSettings.bombMode == 0:
+            case GameMode.PvpAHSS when settings.PVPMode == PVPMode.Off && !settings.IsBombMode:
                 if (!IsAnyPlayerAlive())
                 {
                     GameLose();

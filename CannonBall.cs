@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mod.GameSettings;
 using UnityEngine;
 
 public class CannonBall : Photon.MonoBehaviour
@@ -38,7 +39,7 @@ public class CannonBall : Photon.MonoBehaviour
             {
                 collider.dmg = 0;
             }
-            if (RCSettings.deadlyCannons == 1)
+            if (FengGameManagerMKII.settings.AllowCannonHumanKills)
             {
                 foreach (HERO hero in FengGameManagerMKII.instance.GetPlayers())
                 {
@@ -46,7 +47,7 @@ public class CannonBall : Photon.MonoBehaviour
                     {
                         GameObject gameObject = hero.gameObject;
                         Player owner = gameObject.GetPhotonView().owner;
-                        if (RCSettings.teamMode > 0)
+                        if (FengGameManagerMKII.settings.TeamSort > TeamSort.Off)
                         {
                             if (Player.Self.Properties.RCTeam == 0 || Player.Self.Properties.RCTeam != owner.Properties.RCTeam)
                             {

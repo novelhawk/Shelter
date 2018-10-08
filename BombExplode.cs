@@ -1,3 +1,4 @@
+using Mod.GameSettings;
 using UnityEngine;
 
 public class BombExplode : Photon.MonoBehaviour
@@ -9,7 +10,7 @@ public class BombExplode : Photon.MonoBehaviour
         if (photonView != null)
         {
             Player owner = photonView.owner;
-            if (RCSettings.teamMode > 0)
+            if (FengGameManagerMKII.settings.TeamSort > TeamSort.Off)
             {
                 switch (owner.Properties.RCTeam)
                 {

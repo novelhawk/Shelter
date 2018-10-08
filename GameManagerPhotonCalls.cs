@@ -8,6 +8,7 @@ using Mod;
 using Mod.Discord;
 using Mod.Interface;
 using Mod.Keybinds;
+using Mod.Managers;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
@@ -172,7 +173,7 @@ public partial class FengGameManagerMKII
             NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[1], false);
             NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[2], false);
             NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[3], false);
-            LevelInfo info = LevelInfoManager.GetInfo(Level);
+            LevelInfo info = LevelInfoManager.Get(Level);
             Cache();
             LoadMapCustom();
             //TODO: Remove SetInterfacePosition
@@ -371,29 +372,29 @@ public partial class FengGameManagerMKII
             if (PhotonNetwork.isMasterClient)
             {
                 restartingMC = true;
-                if (RCSettings.infectionMode > 0)
+                if (settings.IsInfectionMode)
                 {
                     restartingTitan = true;
                 }
 
-                if (RCSettings.bombMode > 0)
+                if (settings.IsBombMode)
                 {
                     restartingBomb = true;
                 }
 
-                if (RCSettings.horseMode > 0)
+                if (settings.EnableHorse)
                 {
                     restartingHorse = true;
                 }
 
-                if (RCSettings.banEren == 0)
+                if (!settings.AllowErenTitan)
                 {
                     restartingEren = true;
                 }
             }
 
             ResetSettings(false);
-            if (!LevelInfoManager.GetInfo(Level).PlayerTitansNotAllowed)
+            if (!LevelInfoManager.Get(Level).PlayerTitansNotAllowed)
             {
                 ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
                 {
@@ -464,128 +465,38 @@ public partial class FengGameManagerMKII
             if (banHash.ContainsValue(player.Properties.Name))
             {
                 KickPlayerRC(player, false, "banned.");
+                return;
             }
-            else
+
+            if (player.Properties.Acceleration > 150 || 
+                player.Properties.Blade > 125 || 
+                player.Properties.Gas > 150 || 
+                player.Properties.Speed > 140)
             {
-                if (player.Properties.Acceleration > 150 || player.Properties.Blade > 125 ||
-                    player.Properties.Gas > 150 || player.Properties.Speed > 140)
-                {
-                    KickPlayerRC(player, true, "excessive stats.");
-                    return;
-                }
+                KickPlayerRC(player, true, "excessive stats.");
+                return;
+            }
 
-                if (RCSettings.asoPreservekdr == 1)
-                {
-                    StartCoroutine(WaitAndReloadKDR(player));
-                }
+            if (settings.AsoPreserveKDA)
+            {
+                StartCoroutine(WaitAndReloadKDR(player));
+            }
 
-                if (Level.StartsWith("Custom"))
-                {
-                    StartCoroutine(CustomLevelEnumerator(new List<Player> {player}));
-                }
+            if (Level.StartsWith("Custom"))
+            {
+                StartCoroutine(CustomLevelEnumerator(new List<Player> {player}));
+            }
 
-                Hashtable hashtable = new Hashtable();
-                if (RCSettings.bombMode == 1)
-                    hashtable.Add("bomb", 1);
+            object[] ignores = PhotonNetwork.PlayerList.Where(x => x.IsIgnored).Cast<object>().ToArray();
+            if (ignores.Length > 0)
+                photonView1.RPC("ignorePlayerArray", player, ignores);
 
-                if (RCSettings.globalDisableMinimap == 1)
-                    hashtable.Add("globalDisableMinimap", 1);
-
-                if (RCSettings.teamMode > 0)
-                    hashtable.Add("team", RCSettings.teamMode);
-
-                if (RCSettings.pointMode > 0)
-                    hashtable.Add("point", RCSettings.pointMode);
-
-                if (RCSettings.disableRock > 0)
-                    hashtable.Add("rock", RCSettings.disableRock);
-
-                if (RCSettings.explodeMode > 0)
-                    hashtable.Add("explode", RCSettings.explodeMode);
-
-                if (RCSettings.healthMode > 0)
-                {
-                    hashtable.Add("healthMode", RCSettings.healthMode);
-                    hashtable.Add("healthLower", RCSettings.healthLower);
-                    hashtable.Add("healthUpper", RCSettings.healthUpper);
-                }
-
-                if (RCSettings.infectionMode > 0)
-                    hashtable.Add("infection", RCSettings.infectionMode);
-
-                if (RCSettings.banEren == 1)
-                    hashtable.Add("eren", RCSettings.banEren);
-
-                if (RCSettings.moreTitans > 0)
-                    hashtable.Add("titanc", RCSettings.moreTitans);
-
-                if (RCSettings.damageMode > 0)
-                    hashtable.Add("damage", RCSettings.damageMode);
-
-                if (RCSettings.sizeMode > 0)
-                {
-                    hashtable.Add("sizeMode", RCSettings.sizeMode);
-                    hashtable.Add("sizeLower", RCSettings.sizeLower);
-                    hashtable.Add("sizeUpper", RCSettings.sizeUpper);
-                }
-
-                if (RCSettings.spawnMode > 0)
-                {
-                    hashtable.Add("spawnMode", RCSettings.spawnMode);
-                    hashtable.Add("nRate", RCSettings.nRate);
-                    hashtable.Add("aRate", RCSettings.aRate);
-                    hashtable.Add("jRate", RCSettings.jRate);
-                    hashtable.Add("cRate", RCSettings.cRate);
-                    hashtable.Add("pRate", RCSettings.pRate);
-                }
-
-                if (RCSettings.waveModeOn > 0)
-                {
-                    hashtable.Add("waveModeOn", 1);
-                    hashtable.Add("waveModeNum", RCSettings.waveModeNum);
-                }
-
-                if (RCSettings.friendlyMode > 0)
-                    hashtable.Add("friendly", 1);
-
-                if (RCSettings.pvpMode > 0)
-                    hashtable.Add("pvp", RCSettings.pvpMode);
-
-                if (RCSettings.maxWave > 0)
-                    hashtable.Add("maxwave", RCSettings.maxWave);
-
-                if (RCSettings.endlessMode > 0)
-                    hashtable.Add("endless", RCSettings.endlessMode);
-
-                if (RCSettings.motd != string.Empty)
-                    hashtable.Add("motd", RCSettings.motd);
-
-                if (RCSettings.horseMode > 0)
-                    hashtable.Add("horse", RCSettings.horseMode);
-
-                if (RCSettings.ahssReload > 0)
-                    hashtable.Add("ahssReload", RCSettings.ahssReload);
-
-                if (RCSettings.punkWaves > 0)
-                    hashtable.Add("punkWaves", RCSettings.punkWaves);
-
-                if (RCSettings.deadlyCannons > 0)
-                    hashtable.Add("deadlycannons", RCSettings.deadlyCannons);
-
-                if (RCSettings.racingStatic > 0)
-                    hashtable.Add("asoracing", RCSettings.racingStatic);
-
-                object[] ignores = PhotonNetwork.PlayerList.Where(x => x.IsIgnored).Cast<object>().ToArray();
-                if (ignores.Length > 0)
-                    photonView1.RPC("ignorePlayerArray", player, ignores);
-
-                photonView1.RPC("settingRPC", player, hashtable);
-                photonView1.RPC("setMasterRC", player);
-                if (Time.timeScale <= 0.1f && pauseWaitTime > 3f)
-                {
-                    photonView1.RPC("pauseRPC", player, true);
-                    Mod.Interface.Chat.SendMessage("MasterClient has paused the game", player);
-                }
+            photonView1.RPC("settingRPC", player, GameSettingsManager.EncodeToHashtable(settings));
+            photonView1.RPC("setMasterRC", player);
+            if (Time.timeScale <= 0.1f && pauseWaitTime > 3f)
+            {
+                photonView1.RPC("pauseRPC", player, true);
+                Mod.Interface.Chat.SendMessage("MasterClient has paused the game", player);
             }
         }
     }
@@ -607,7 +518,7 @@ public partial class FengGameManagerMKII
             photonView.RPC("verifyPlayerHasLeft", PhotonTargets.All, player.ID);
         }
 
-        if (RCSettings.asoPreservekdr == 1)
+        if (settings.AsoPreserveKDA)
         {
             string key = player.Properties.Name;
             if (PreservedPlayerKDR.ContainsKey(key))
@@ -756,9 +667,7 @@ public partial class FengGameManagerMKII
         oldScript = string.Empty;
         currentLevel = string.Empty;
         if (currentScript == null)
-        {
             currentScript = string.Empty;
-        }
 
         titanSpawns = new List<Vector3>();
         playerSpawnsC = new List<Vector3>();

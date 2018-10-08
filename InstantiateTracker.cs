@@ -1,3 +1,4 @@
+using Mod;
 using UnityEngine;
 
 public class InstantiateTracker
@@ -29,7 +30,7 @@ public class InstantiateTracker
         {
             case "rcasset/bombmain":
             case "rcasset/bombexplodemain":
-                if (RCSettings.bombMode <= 0)
+                if (FengGameManagerMKII.settings.IsBombMode)
                 {
                     if (!(!PhotonNetwork.isMasterClient || FengGameManagerMKII.instance.restartingBomb))
                     {
@@ -66,7 +67,7 @@ public class InstantiateTracker
             case "fx/boom5":
             case "fx/rockthrow":
             case "fx/bite":
-                if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).PlayerTitansNotAllowed || RCSettings.infectionMode > 0 || IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight)
+                if (LevelInfoManager.Get(FengGameManagerMKII.Level).PlayerTitansNotAllowed || FengGameManagerMKII.settings.IsInfectionMode || IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight)
                 {
                     return this.Instantiated(player, GameResource.effect);
                 }
@@ -104,9 +105,9 @@ public class InstantiateTracker
                 return false;
 
             case "titan_eren":
-                if (!(player.Properties.Character.ToUpper() != "EREN"))
+                if (player.Properties.Character.EqualsIgnoreCase("EREN"))
                 {
-                    if (RCSettings.banEren > 0)
+                    if (!FengGameManagerMKII.settings.AllowErenTitan)
                     {
                         if (!(!PhotonNetwork.isMasterClient || FengGameManagerMKII.instance.restartingEren))
                         {
@@ -128,9 +129,9 @@ public class InstantiateTracker
                 return this.Instantiated(player, GameResource.effect);
 
             case "hitmeatbig":
-                if (!(player.Properties.Character.ToUpper() != "EREN"))
+                if (player.Properties.Character.ToUpper() == "EREN")
                 {
-                    if (RCSettings.banEren > 0)
+                    if (!FengGameManagerMKII.settings.AllowErenTitan)
                     {
                         if (!(!PhotonNetwork.isMasterClient || FengGameManagerMKII.instance.restartingEren))
                         {
@@ -165,7 +166,7 @@ public class InstantiateTracker
                 return false;
 
             case "horse":
-                if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Horse || RCSettings.horseMode != 0)
+                if (LevelInfoManager.Get(FengGameManagerMKII.Level).Horse || FengGameManagerMKII.settings.EnableHorse)
                 {
                     return this.Instantiated(player, GameResource.general);
                 }
@@ -196,7 +197,7 @@ public class InstantiateTracker
                     }
                     break;
                 }
-                if (LevelInfoManager.GetInfo(FengGameManagerMKII.Level).PlayerTitansNotAllowed || RCSettings.infectionMode > 0 || IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight || FengGameManagerMKII.instance.restartingTitan)
+                if (LevelInfoManager.Get(FengGameManagerMKII.Level).PlayerTitansNotAllowed || FengGameManagerMKII.settings.IsInfectionMode || IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight || FengGameManagerMKII.instance.restartingTitan)
                 {
                     if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight)
                     {

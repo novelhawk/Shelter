@@ -1,4 +1,5 @@
 using System.Collections;
+using Mod.GameSettings;
 using UnityEngine;
 
 public class Bomb : Photon.MonoBehaviour
@@ -18,7 +19,7 @@ public class Bomb : Photon.MonoBehaviour
             this.correctPlayerPos = transform.position;
             this.correctPlayerRot = Quaternion.identity;
             Player owner = photonView.owner;
-            if (RCSettings.teamMode > 0)
+            if (FengGameManagerMKII.settings.TeamSort > TeamSort.Off)
             {
                 var num = owner.Properties.RCTeam;
                 switch (num)
@@ -65,7 +66,7 @@ public class Bomb : Photon.MonoBehaviour
             if (!hero.bombImmune && Vector3.Distance(gameObject.transform.position, position) < radius && !gameObject.GetPhotonView().isMine)
             {
                 Player owner = gameObject.GetPhotonView().owner;
-                if (RCSettings.teamMode > 0)
+                if (FengGameManagerMKII.settings.TeamSort > TeamSort.Off)
                 {
                     if (Player.Self.Properties.RCTeam == 0 || Player.Self.Properties.RCTeam != owner.Properties.RCTeam)
                     {

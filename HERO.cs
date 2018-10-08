@@ -333,7 +333,7 @@ public class HERO : Photon.MonoBehaviour
     {
         this.skillIDHUD = this.skillId;
         this.skillCDDuration = this.skillCDLast;
-        if (RCSettings.bombMode == 1)
+        if (FengGameManagerMKII.settings.IsBombMode)
         {
             int num = FengGameManagerMKII.settings.BombRadius;
             int num2 = FengGameManagerMKII.settings.BombRange;
@@ -558,7 +558,7 @@ public class HERO : Photon.MonoBehaviour
 
     private void changeBlade()
     {
-        if (!this.useGun || this.grounded || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Gamemode != GameMode.PvpAHSS)
+        if (!this.useGun || this.grounded || LevelInfoManager.Get(FengGameManagerMKII.Level).Gamemode != GameMode.PvpAHSS)
         {
             this.State = HeroState.ChangeBlade;
             this.throwedBlades = false;
@@ -2294,7 +2294,7 @@ public class HERO : Photon.MonoBehaviour
         if (urls.Length < 13)
             yield break; // Not allowed exception?
         bool skinGas = FengGameManagerMKII.settings.EnableGasSkin;
-        bool hasHorse = LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Horse || RCSettings.horseMode == 1;
+        bool hasHorse = LevelInfoManager.Get(FengGameManagerMKII.Level).Horse || FengGameManagerMKII.settings.EnableHorse;
         bool isMe = IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || this.photonView.isMine;
 
         Renderer myRenderer;
@@ -2975,7 +2975,7 @@ public class HERO : Photon.MonoBehaviour
                     {
                         Chat.System("Unusual Kill from ID " + info.sender.ID + " (possibly valid).");
                     }
-                    else if (RCSettings.bombMode == 0 && RCSettings.deadlyCannons == 0)
+                    else if (!FengGameManagerMKII.settings.IsBombMode && FengGameManagerMKII.settings.AllowCannonHumanKills)
                     {
                         Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                     }
@@ -3614,19 +3614,19 @@ public class HERO : Photon.MonoBehaviour
             colliderWeapon.myTeam = val;
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
-            if (RCSettings.friendlyMode > 0)
+            if (FengGameManagerMKII.settings.IsFriendlyMode)
             {
                 if (val != 1)
                     photonView.RPC("setMyTeam", PhotonTargets.AllBuffered, 1);
             }
-            else switch (RCSettings.pvpMode)
+            else switch (FengGameManagerMKII.settings.PVPMode)
             {
-                case 1:
+                case PVPMode.Teams:
                     if (photonView.owner.Properties.RCTeam.HasValue && val != photonView.owner.Properties.RCTeam)
                         photonView.RPC("setMyTeam", PhotonTargets.AllBuffered, photonView.owner.Properties.RCTeam);
                     break;
                 
-                case 2 when val != photonView.owner.ID:
+                case PVPMode.FFA when val != photonView.owner.ID:
                     photonView.RPC("setMyTeam", PhotonTargets.AllBuffered, photonView.owner.ID);
                     break;
             }
@@ -3639,7 +3639,7 @@ public class HERO : Photon.MonoBehaviour
         if (this.skillCD != null)
         {
             this.skillCD.transform.localPosition = GameObject.Find("skill_cd_bottom").transform.localPosition;
-            if (this.useGun && RCSettings.bombMode == 0)
+            if (this.useGun && !FengGameManagerMKII.settings.IsBombMode)
                 this.skillCD.transform.localPosition = Vector3.up * 5000f;
         }
     }
@@ -3689,7 +3689,7 @@ public class HERO : Photon.MonoBehaviour
                 this.skillCDLast = 240;
                 if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                 {
-                    var level = LevelInfoManager.GetInfo(FengGameManagerMKII.Level);
+                    var level = LevelInfoManager.Get(FengGameManagerMKII.Level);
                     if (level.PlayerTitansNotAllowed || 
                         level.Gamemode == GameMode.Racing || 
                         level.Gamemode == GameMode.PvpCapture || 
@@ -4108,7 +4108,7 @@ public class HERO : Photon.MonoBehaviour
         FengGameManagerMKII.instance.Heroes.Add(this);
         player.Hero = this;
         
-        if ((LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Horse || RCSettings.horseMode == 1) && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
+        if ((LevelInfoManager.Get(FengGameManagerMKII.Level).Horse || FengGameManagerMKII.settings.EnableHorse) && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
             this.myHorse = PhotonNetwork.Instantiate("horse", this.baseTransform.position + Vector3.up * 5f, this.baseTransform.rotation, 0);
             this.myHorse.GetComponent<Horse>().myHero = gameObject;
@@ -4204,7 +4204,7 @@ public class HERO : Photon.MonoBehaviour
             StartCoroutine(this.reloadSky());
         }
         this.bombImmune = false;
-        if (RCSettings.bombMode == 1)
+        if (FengGameManagerMKII.settings.IsBombMode)
         {
             this.bombImmune = true;
             StartCoroutine(this.stopImmunity());
@@ -4463,7 +4463,7 @@ public class HERO : Photon.MonoBehaviour
                             {
                                 this.getOffHorse();
                             }
-                            if ((animation.IsPlaying(this.standAnimation) || !this.grounded) && Shelter.InputManager.IsDown(InputAction.Reload) && (!this.useGun || RCSettings.ahssReload != 1 || this.grounded))
+                            if ((animation.IsPlaying(this.standAnimation) || !this.grounded) && Shelter.InputManager.IsDown(InputAction.Reload) && (!this.useGun || !FengGameManagerMKII.settings.AllowAirAHSSReload || this.grounded))
                             {
                                 this.changeBlade();
                                 return;
@@ -4853,7 +4853,7 @@ public class HERO : Photon.MonoBehaviour
                                     this.facingDirection = this.gunDummy.transform.rotation.eulerAngles.y;
                                     this.targetRotation = Quaternion.Euler(0f, this.facingDirection, 0f);
                                 }
-                                else if (flag5 && (this.grounded || LevelInfoManager.GetInfo(FengGameManagerMKII.Level).Gamemode != GameMode.PvpAHSS && RCSettings.ahssReload == 0))
+                                else if (flag5 && (this.grounded || LevelInfoManager.Get(FengGameManagerMKII.Level).Gamemode != GameMode.PvpAHSS && !FengGameManagerMKII.settings.AllowAirAHSSReload))
                                 {
                                     this.changeBlade();
                                 }

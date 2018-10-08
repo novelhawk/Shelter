@@ -11,6 +11,7 @@ using System.Text.RegularExpressions;
 using Mod.GameSettings;
 using Mod.Interface;
 using Mod.Keybinds;
+using Mod.Managers;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Object = System.Object;
@@ -64,7 +65,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     public static Hashtable RCRegions;
     public static Hashtable RCRegionTriggers;
     public static Hashtable RCVariableNames;
-    public static GameSettings settings; //TODO: Replace with a class which contains named settings
+    public static Settings settings; //TODO: Replace with a class which contains named settings
     public static Material skyMaterial;
     private bool startRacing;
     public static Hashtable stringVariables;
@@ -127,7 +128,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     SetGameSettings(GetGameSettings());
                 }
-                if (RCSettings.endlessMode > 0)
+                if (FengGameManagerMKII.settings.IsEndless)
                 {
 //                    StartCoroutine(RespawnEnumerator(RCSettings.endlessMode)); TODO: Check what the actual fuck is this and make it better
                 }
@@ -140,33 +141,8 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
 
     private Hashtable GetGameSettings()
     {
-        var rcsettings = settings.SerializeRCSettings();
-        
-        if (RCSettings.infectionMode != settings.InfectionStartTitan)
-        {
-            _infectionTitans.Clear();
-            int length = PhotonNetwork.PlayerList.Length;
-            for (var i = 0; i < length; i++)
-            {
-                Player player = PhotonNetwork.PlayerList[i];
-                Hashtable hash = new Hashtable { {PlayerProperty.IsTitan, 1} };
-                
-                if (length > 0 && UnityEngine.Random.Range(0, 1) <= i / (float) length)
-                {
-                    hash[PlayerProperty.IsTitan] = 2;
-                    _infectionTitans.Add(i, 2);
-                }
-    
-                length--;
-                player.SetCustomProperties(hash);
-            }
-        }
-
-        if (RCSettings.teamMode == 0) // Might not work
-            for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-                photonView.RPC("setTeamRPC", PhotonNetwork.PlayerList[i], i % 2 + 1);
-        
-        return rcsettings;
+        var rcsettings = GameSettingsManager.ImportRCSettings();
+        return GameSettingsManager.EncodeToHashtable(rcsettings);
     }
 
     private static bool IsAnyTitanAlive => 
@@ -633,7 +609,9 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                         CoreAdd();
                         if (Camera.main != null && IN_GAME_MAIN_CAMERA.GameMode != GameMode.Racing && UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver && !needChooseSide && !settings.InSpectatorMode)
                         {
-                            if (LevelInfoManager.GetInfo(Level).RespawnMode == RespawnMode.DEATHMATCH || RCSettings.endlessMode > 0 || !(RCSettings.bombMode != 1 && RCSettings.pvpMode <= 0 || RCSettings.pointMode <= 0))
+                            if (LevelInfoManager.Get(Level).RespawnMode == RespawnMode.DEATHMATCH || 
+                                settings.IsEndless || (settings.IsBombMode || settings.PVPMode > PVPMode.Off) && 
+                                !settings.IsPointMode)
                             {
                                 myRespawnTime += Time.deltaTime;
                                 int endlessMode = 5;
@@ -641,9 +619,9 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                                 {
                                     endlessMode = 10;
                                 }
-                                if (RCSettings.endlessMode > 0)
+                                if (settings.IsEndless)
                                 {
-                                    endlessMode = RCSettings.endlessMode;
+                                    endlessMode = 1;
                                 }
                                 myRespawnTime = 0f; //TODO: Add option to disable insta respawn
                                 Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
@@ -811,7 +789,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     TitanSpawner item = titanSpawners[i];
                     item.time -= Time.deltaTime;
-                    if (item.time <= 0f && Titans.Count + FemaleTitans.Count < Math.Min(RCSettings.titanCap, 80))
+                    if (item.time <= 0f && Titans.Count + FemaleTitans.Count < Math.Min(settings.CustomMaxTitans, 80))
                     {
                         string name1 = item.name;
                         if (name1 == "spawnAnnie")
@@ -1461,7 +1439,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             player.SetCustomProperties(propertiesToSet);
         }
         int length = PhotonNetwork.PlayerList.Length;
-        int infectionMode = RCSettings.infectionMode;
+        int infectionMode = settings.InfectionTitanNumber;
         for (num = 0; num < PhotonNetwork.PlayerList.Length; num++)
         {
             Player player2 = PhotonNetwork.PlayerList[num];
@@ -1483,7 +1461,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
 
     private void GameEndRC()
     {
-        if (RCSettings.pointMode > 0)
+        if (settings.IsPointMode)
         {
             foreach (Player player in PhotonNetwork.PlayerList)
             {
@@ -1627,7 +1605,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             switch (IN_GAME_MAIN_CAMERA.GameMode)
             {
                 case GameMode.Racing:
-                    if (RCSettings.racingStatic == 1)
+                    if (FengGameManagerMKII.settings.IsASORacing)
                         gameEndCD = 1000f;
                     else
                         gameEndCD = 20f;
@@ -1728,16 +1706,12 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
 
     private void LoadConfig()
     {
-        settings = new GameSettings();
-        settings.ImportFromRC(); // Remove
+        settings = GameSettingsManager.ImportRCSettings();
+        GameSettingsManager.ApplySettings(settings);
         
-        Application.targetFrameRate = settings.FPSCap;
-        QualitySettings.vSyncCount = settings.EnableVSync ? 1 : 0;
-        AudioListener.volume = settings.Volume;
-        distanceSlider = settings.CameraDistance;
-        mouseSlider = settings.MouseSensitivity;
-        qualitySlider = settings.GameQuality;
-        QualitySettings.masterTextureLimit = settings.MasterTextureLimit;
+//        distanceSlider = settings.CameraDistance;
+//        mouseSlider = settings.MouseSensitivity;
+//        qualitySlider = settings.GameQuality;
         
         linkHash = new[] { new Hashtable(), new Hashtable(), new Hashtable(), new Hashtable(), new Hashtable() };
         scroll = Vector2.zero;
@@ -1810,7 +1784,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 StringBuilder str3 = new StringBuilder();
                 StringBuilder randomDigits = new StringBuilder();
                 strArray3 = new[] { string.Empty, string.Empty, string.Empty, string.Empty, string.Empty, string.Empty };
-                if (LevelInfoManager.GetInfo(Level).LevelName.Contains("City"))
+                if (LevelInfoManager.Get(Level).LevelName.Contains("City"))
                 {
                     var citySkin = settings.CitySkin;
                     foreach (var house in citySkin.Houses)
@@ -1828,7 +1802,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                     for (int i = 0; i < citySkin.Skybox.Length; i++)
                         strArray3[i] = citySkin.Skybox[i];
                 }
-                else if (LevelInfoManager.GetInfo(Level).LevelName.Contains("Forest"))
+                else if (LevelInfoManager.Get(Level).LevelName.Contains("Forest"))
                 {
                     var forestSkin = settings.ForestSkin;
                     foreach (var tree in forestSkin.Trees)
@@ -1888,8 +1862,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                     customSkin.Skybox.CopyTo(strArray3, 0);
                     
                     strArray3[6] = customSkin.Ground;
-                    RCSettings.titanCap = settings.CustomMaxTitans;
-                    photonView.RPC("clearlevel", PhotonTargets.AllBuffered, strArray3, RCSettings.gameType);
+                    photonView.RPC("clearlevel", PhotonTargets.AllBuffered, strArray3, settings.GameType);
                     RCRegions.Clear();
                     if (oldScript != currentScript)
                     {
@@ -1911,7 +1884,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                         }
                         else
                         {
-                            string[] strArray4 = Regex.Replace(currentScript, @"\s+", "").Replace("\r\n", "").Replace("\n", "").Replace("\r", "").Split(';');
+                            string[] strArray4 = Regex.Replace(currentScript, @"\s+|\r\n|\n|\r", string.Empty).Split(';');
                             for (int i = 0; i < Mathf.FloorToInt(((strArray4.Length - 1) / 100f)) + 1; i++)
                             {
                                 string[] strArray5;
@@ -2062,7 +2035,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 skyMaterial = (Material)linkHash[1][iteratorVariable3];
             }
         }
-        if (LevelInfoManager.GetInfo(Level).LevelName.Contains("Forest"))
+        if (LevelInfoManager.Get(Level).LevelName.Contains("Forest"))
         {
             string[] url = treeSkins.Split(',');
             string[] url2 = planeSkins.Split(',');
@@ -2173,7 +2146,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 }
             }
         }
-        else if (LevelInfoManager.GetInfo(Level).LevelName.Contains("City"))
+        else if (LevelInfoManager.Get(Level).LevelName.Contains("City"))
         {
             string[] trees = treeSkins.Split(',');
             string[] planes = planeSkins.Split(',');
@@ -2317,17 +2290,6 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         {
             UnloadAssets();
         }
-    }
-
-    private string QualityToString(int textureType) //TODO: Use an enum 
-    {
-        if (textureType == 0)
-            return "High";
-        
-        if (textureType == 1)
-            return "Med";
-        
-        return "Low";
     }
 
     public void MultiplayerRacingFinish()
@@ -3372,51 +3334,17 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
 
     private void ResetGameSettings()
     {
-        RCSettings.bombMode = 0;
-        RCSettings.teamMode = 0;
-        RCSettings.pointMode = 0;
-        RCSettings.disableRock = 0;
-        RCSettings.explodeMode = 0;
-        RCSettings.healthMode = 0;
-        RCSettings.healthLower = 0;
-        RCSettings.healthUpper = 0;
-        RCSettings.infectionMode = 0;
-        RCSettings.banEren = 0;
-        RCSettings.moreTitans = 0;
-        RCSettings.damageMode = 0;
-        RCSettings.sizeMode = 0;
-        RCSettings.sizeLower = 0f;
-        RCSettings.sizeUpper = 0f;
-        RCSettings.spawnMode = 0;
-        RCSettings.nRate = 0f;
-        RCSettings.aRate = 0f;
-        RCSettings.jRate = 0f;
-        RCSettings.cRate = 0f;
-        RCSettings.pRate = 0f;
-        RCSettings.horseMode = 0;
-        RCSettings.waveModeOn = 0;
-        RCSettings.waveModeNum = 0;
-        RCSettings.friendlyMode = 0;
-        RCSettings.pvpMode = 0;
-        RCSettings.maxWave = 0;
-        RCSettings.endlessMode = 0;
-        RCSettings.ahssReload = 0;
-        RCSettings.punkWaves = 0;
-        RCSettings.globalDisableMinimap = 0;
-        RCSettings.motd = string.Empty;
-        RCSettings.deadlyCannons = 0;
-        RCSettings.asoPreservekdr = 0;
-        RCSettings.racingStatic = 0;
+        settings = GameSettingsManager.ImportRCSettings();
     }
 
-    private void ResetSettings(bool isLeave)
+    private void ResetSettings(bool leaving)
     {
         masterRC = false;
         Hashtable propertiesToSet = new Hashtable
         {
             { PlayerProperty.RCTeam, 0 }
         };
-        if (isLeave)
+        if (leaving)
         {
             currentLevel = string.Empty;
             propertiesToSet.Add(PlayerProperty.CurrentLevel, string.Empty);
@@ -3479,17 +3407,14 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         yield return new WaitForSeconds(waitTime);
         RestartGame();
     }
-
+  
     public void RestartGame(bool masterclientSwitched = false)
     {
-        if (_endingMessageId.HasValue)
-            Mod.Interface.Chat.EditMessage(_endingMessageId, "Restart aborted: Room restarted", false);
+        Mod.Interface.Chat.EditMessage(_endingMessageId, "Restart aborted: Room restarted", false);
         _endingMessageId = null;
-        if (_racingMessageId.HasValue)
-            Mod.Interface.Chat.EditMessage(_endingMessageId, "Racing aborted: Room restarted", false);
+        Mod.Interface.Chat.EditMessage(_racingMessageId, "Racing aborted: Room restarted", false);
         _racingMessageId = null;
-        if (_pauseMessageId.HasValue)
-            Mod.Interface.Chat.EditMessage(_endingMessageId, "Pause aborted: Room restarted", false); //TODO: Check
+        Mod.Interface.Chat.EditMessage(_pauseMessageId, "Pause aborted: Room restarted", false);
         _pauseMessageId = null;
 
         PVPtitanScore = 0;
@@ -3545,7 +3470,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         floatVariables.Clear();
         playerVariables.Clear();
         titanVariables.Clear();
-        if (RCSettings.infectionMode > 0)
+        if (settings.IsInfectionMode)
         {
             GameInfectionEnd();
         }
@@ -3989,398 +3914,12 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
 
     private void SetGameSettings(Hashtable hash)
     {
-        string str;
         restartingEren = false;
         restartingBomb = false;
         restartingHorse = false;
         restartingTitan = false;
-        if (hash.ContainsKey("bomb"))
-        {
-            if (RCSettings.bombMode != (int) hash["bomb"])
-            {
-                RCSettings.bombMode = (int) hash["bomb"];
-                Mod.Interface.Chat.System("PVP Bomb Mode enabled.");
-            }
-        }
-        else if (RCSettings.bombMode != 0)
-        {
-            RCSettings.bombMode = 0;
-            Mod.Interface.Chat.System("PVP Bomb Mode disabled.");
-            if (PhotonNetwork.isMasterClient)
-            {
-                restartingBomb = true;
-            }
-        }
-        if (hash.ContainsKey("globalDisableMinimap"))
-        {
-            if (RCSettings.globalDisableMinimap != (int) hash["globalDisableMinimap"])
-            {
-                RCSettings.globalDisableMinimap = (int) hash["globalDisableMinimap"];
-                Mod.Interface.Chat.System("Minimaps are not allowed.");
-            }
-        }
-        else if (RCSettings.globalDisableMinimap != 0)
-        {
-            RCSettings.globalDisableMinimap = 0;
-            Mod.Interface.Chat.System("Minimaps are allowed.");
-        }
-        if (hash.ContainsKey("horse"))
-        {
-            if (RCSettings.horseMode != (int) hash["horse"])
-            {
-                RCSettings.horseMode = (int) hash["horse"];
-                Mod.Interface.Chat.System("Horses enabled.");
-            }
-        }
-        else if (RCSettings.horseMode != 0)
-        {
-            RCSettings.horseMode = 0;
-            Mod.Interface.Chat.System("Horses disabled.");
-            if (PhotonNetwork.isMasterClient)
-            {
-                restartingHorse = true;
-            }
-        }
-        if (hash.ContainsKey("punkWaves"))
-        {
-            if (RCSettings.punkWaves != (int) hash["punkWaves"])
-            {
-                RCSettings.punkWaves = (int) hash["punkWaves"];
-                Mod.Interface.Chat.System("Punk override every 5 waves enabled.");
-            }
-        }
-        else if (RCSettings.punkWaves != 0)
-        {
-            RCSettings.punkWaves = 0;
-            Mod.Interface.Chat.System("Punk override every 5 waves disabled.");
-        }
-        if (hash.ContainsKey("ahssReload"))
-        {
-            if (RCSettings.ahssReload != (int) hash["ahssReload"])
-            {
-                RCSettings.ahssReload = (int) hash["ahssReload"];
-                Mod.Interface.Chat.System("AHSS Air-Reload disabled.");
-            }
-        }
-        else if (RCSettings.ahssReload != 0)
-        {
-            RCSettings.ahssReload = 0;
-            Mod.Interface.Chat.System("AHSS Air-Reload allowed.");
-        }
-        if (hash.ContainsKey("team"))
-        {
-            if (RCSettings.teamMode != (int) hash["team"])
-            {
-                RCSettings.teamMode = (int) hash["team"];
-                str = string.Empty;
-                switch (RCSettings.teamMode)
-                {
-                    case 1:
-                        str = "no sort";
-                        break;
-                    case 2:
-                        str = "locked by size";
-                        break;
-                    case 3:
-                        str = "locked by skill";
-                        break;
-                }
-                Mod.Interface.Chat.System("Team Mode enabled (" + str + ").");
-                if (Player.Self.Properties.RCTeam == 0)
-                {
-                    SetTeam(3);
-                }
-            }
-        }
-        else if (RCSettings.teamMode != 0)
-        {
-            RCSettings.teamMode = 0;
-            SetTeam(0);
-            Mod.Interface.Chat.System("Team mode disabled.");
-        }
-        if (hash.ContainsKey("point"))
-        {
-            if (RCSettings.pointMode != (int) hash["point"])
-            {
-                RCSettings.pointMode = (int) hash["point"];
-                Mod.Interface.Chat.System("Point limit enabled (" + Convert.ToString(RCSettings.pointMode) + ").");
-            }
-        }
-        else if (RCSettings.pointMode != 0)
-        {
-            RCSettings.pointMode = 0;
-            Mod.Interface.Chat.System("Point limit disabled.");
-        }
-        if (hash.ContainsKey("rock"))
-        {
-            if (RCSettings.disableRock != (int) hash["rock"])
-            {
-                RCSettings.disableRock = (int) hash["rock"];
-                Mod.Interface.Chat.System("Punk rock throwing disabled.");
-            }
-        }
-        else if (RCSettings.disableRock != 0)
-        {
-            RCSettings.disableRock = 0;
-            Mod.Interface.Chat.System("Punk rock throwing enabled.");
-        }
-        if (hash.ContainsKey("explode"))
-        {
-            if (RCSettings.explodeMode != (int) hash["explode"])
-            {
-                RCSettings.explodeMode = (int) hash["explode"];
-                Mod.Interface.Chat.System("Titan Explode Mode enabled (Radius " + Convert.ToString(RCSettings.explodeMode) + ").");
-            }
-        }
-        else if (RCSettings.explodeMode != 0)
-        {
-            RCSettings.explodeMode = 0;
-            Mod.Interface.Chat.System("Titan Explode Mode disabled.");
-        }
-        if (hash.ContainsKey("healthMode") && hash.ContainsKey("healthLower") && hash.ContainsKey("healthUpper"))
-        {
-            if (RCSettings.healthMode != (int) hash["healthMode"] || RCSettings.healthLower != (int) hash["healthLower"] || RCSettings.healthUpper != (int) hash["healthUpper"])
-            {
-                RCSettings.healthMode = (int) hash["healthMode"];
-                RCSettings.healthLower = (int) hash["healthLower"];
-                RCSettings.healthUpper = (int) hash["healthUpper"];
-                str = "Static";
-                if (RCSettings.healthMode == 2)
-                {
-                    str = "Scaled";
-                }
-                Mod.Interface.Chat.System("Titan Health (" + str + ", " + RCSettings.healthLower + " to " + RCSettings.healthUpper + ") enabled.");
-            }
-        }
-        else if (RCSettings.healthMode != 0 || RCSettings.healthLower != 0 || RCSettings.healthUpper != 0)
-        {
-            RCSettings.healthMode = 0;
-            RCSettings.healthLower = 0;
-            RCSettings.healthUpper = 0;
-            Mod.Interface.Chat.System("Titan Health disabled.");
-        }
-        if (hash.ContainsKey("infection"))
-        {
-            if (RCSettings.infectionMode != (int) hash["infection"])
-            {
-                RCSettings.infectionMode = (int) hash["infection"];
-                Player.Self.SetCustomProperties(new Hashtable
-                {
-                    { PlayerProperty.RCTeam, 0 }
-                });
-                Mod.Interface.Chat.System("Infection mode ({0}) enabled. Make sure your first character is human.", RCSettings.infectionMode);
-            }
-        }
-        else if (RCSettings.infectionMode != 0)
-        {
-            RCSettings.infectionMode = 0;
-            Player.Self.SetCustomProperties(new Hashtable
-            {
-                { PlayerProperty.IsTitan, (int) PlayerType.Human }
-            });
-            Mod.Interface.Chat.System("Infection Mode disabled.");
-            if (PhotonNetwork.isMasterClient)
-            {
-                restartingTitan = true;
-            }
-        }
-        if (hash.ContainsKey("eren"))
-        {
-            if (RCSettings.banEren != (int) hash["eren"])
-            {
-                RCSettings.banEren = (int) hash["eren"];
-                Mod.Interface.Chat.System("Anti-Eren enabled. Using eren transform will get you kicked.");
-                if (PhotonNetwork.isMasterClient)
-                {
-                    restartingEren = true;
-                }
-            }
-        }
-        else if (RCSettings.banEren != 0)
-        {
-            RCSettings.banEren = 0;
-            Mod.Interface.Chat.System("Anti-Eren disabled. Eren transform is allowed.");
-        }
-        if (hash.ContainsKey("titanc"))
-        {
-            if (RCSettings.moreTitans != (int) hash["titanc"])
-            {
-                RCSettings.moreTitans = (int) hash["titanc"];
-                Mod.Interface.Chat.System("" + Convert.ToString(RCSettings.moreTitans) + " titans will spawn each round.");
-            }
-        }
-        else if (RCSettings.moreTitans != 0)
-        {
-            RCSettings.moreTitans = 0;
-            Mod.Interface.Chat.System("Default titans will spawn each round.");
-        }
-        if (hash.ContainsKey("damage"))
-        {
-            if (RCSettings.damageMode != (int) hash["damage"])
-            {
-                RCSettings.damageMode = (int) hash["damage"];
-                Mod.Interface.Chat.System("Nape minimum damage (" + Convert.ToString(RCSettings.damageMode) + ") enabled.");
-            }
-        }
-        else if (RCSettings.damageMode != 0)
-        {
-            RCSettings.damageMode = 0;
-            Mod.Interface.Chat.System("Nape minimum damage disabled.");
-        }
-        if (hash.ContainsKey("sizeMode") && hash.ContainsKey("sizeLower") && hash.ContainsKey("sizeUpper"))
-        {
-            if (RCSettings.sizeMode != (int) hash["sizeMode"] || RCSettings.sizeLower != (float) hash["sizeLower"] || RCSettings.sizeUpper != (float) hash["sizeUpper"])
-            {
-                RCSettings.sizeMode = (int) hash["sizeMode"];
-                RCSettings.sizeLower = (float) hash["sizeLower"];
-                RCSettings.sizeUpper = (float) hash["sizeUpper"];
-                Mod.Interface.Chat.System("Custom titan size (" + RCSettings.sizeLower.ToString("F2") + "," + RCSettings.sizeUpper.ToString("F2") + ") enabled.");
-            }
-        }
-        else if (RCSettings.sizeMode != 0 || RCSettings.sizeLower != 0f || RCSettings.sizeUpper != 0f)
-        {
-            RCSettings.sizeMode = 0;
-            RCSettings.sizeLower = 0f;
-            RCSettings.sizeUpper = 0f;
-            Mod.Interface.Chat.System("Custom titan size disabled.");
-        }
-        if (hash.ContainsKey("spawnMode") && hash.ContainsKey("nRate") && hash.ContainsKey("aRate") && hash.ContainsKey("jRate") && hash.ContainsKey("cRate") && hash.ContainsKey("pRate"))
-        {
-            if (RCSettings.spawnMode != (int) hash["spawnMode"] || RCSettings.nRate != (float) hash["nRate"] || RCSettings.aRate != (float) hash["aRate"] || RCSettings.jRate != (float) hash["jRate"] || RCSettings.cRate != (float) hash["cRate"] || RCSettings.pRate != (float) hash["pRate"])
-            {
-                RCSettings.spawnMode = (int) hash["spawnMode"];
-                RCSettings.nRate = (float) hash["nRate"];
-                RCSettings.aRate = (float) hash["aRate"];
-                RCSettings.jRate = (float) hash["jRate"];
-                RCSettings.cRate = (float) hash["cRate"];
-                RCSettings.pRate = (float) hash["pRate"];
-                Mod.Interface.Chat.System("Custom spawn rate enabled (" + RCSettings.nRate.ToString("F2") + "% Normal, " + RCSettings.aRate.ToString("F2") + "% Abnormal, " + RCSettings.jRate.ToString("F2") + "% Jumper, " + RCSettings.cRate.ToString("F2") + "% Crawler, " + RCSettings.pRate.ToString("F2") + "% Punk ");
-            }
-        }
-        else if (RCSettings.spawnMode != 0 || RCSettings.nRate != 0f || RCSettings.aRate != 0f || RCSettings.jRate != 0f || RCSettings.cRate != 0f || RCSettings.pRate != 0f)
-        {
-            RCSettings.spawnMode = 0;
-            RCSettings.nRate = 0f;
-            RCSettings.aRate = 0f;
-            RCSettings.jRate = 0f;
-            RCSettings.cRate = 0f;
-            RCSettings.pRate = 0f;
-            Mod.Interface.Chat.System("Custom spawn rate disabled.");
-        }
-        if (hash.ContainsKey("waveModeOn") && hash.ContainsKey("waveModeNum"))
-        {
-            if (RCSettings.waveModeOn != (int) hash["waveModeOn"] || RCSettings.waveModeNum != (int) hash["waveModeNum"])
-            {
-                RCSettings.waveModeOn = (int) hash["waveModeOn"];
-                RCSettings.waveModeNum = (int) hash["waveModeNum"];
-                Mod.Interface.Chat.System("Custom wave mode (" + RCSettings.waveModeNum + ") enabled.");
-            }
-        }
-        else if (RCSettings.waveModeOn != 0 || RCSettings.waveModeNum != 0)
-        {
-            RCSettings.waveModeOn = 0;
-            RCSettings.waveModeNum = 0;
-            Mod.Interface.Chat.System("Custom wave mode disabled.");
-        }
-        if (hash.ContainsKey("friendly"))
-        {
-            if (RCSettings.friendlyMode != (int) hash["friendly"])
-            {
-                RCSettings.friendlyMode = (int) hash["friendly"];
-                Mod.Interface.Chat.System("PVP is prohibited.");
-            }
-        }
-        else if (RCSettings.friendlyMode != 0)
-        {
-            RCSettings.friendlyMode = 0;
-            Mod.Interface.Chat.System("PVP is allowed.");
-        }
-        if (hash.ContainsKey("pvp"))
-        {
-            if (RCSettings.pvpMode != (int) hash["pvp"])
-            {
-                RCSettings.pvpMode = (int) hash["pvp"];
-                str = string.Empty;
-                if (RCSettings.pvpMode == 1)
-                {
-                    str = "Team-Based";
-                }
-                else if (RCSettings.pvpMode == 2)
-                {
-                    str = "FFA";
-                }
-                Mod.Interface.Chat.System("Blade/AHSS PVP enabled (" + str + ").");
-            }
-        }
-        else if (RCSettings.pvpMode != 0)
-        {
-            RCSettings.pvpMode = 0;
-            Mod.Interface.Chat.System("Blade/AHSS PVP disabled.");
-        }
-        if (hash.ContainsKey("maxwave"))
-        {
-            if (RCSettings.maxWave != (int) hash["maxwave"])
-            {
-                RCSettings.maxWave = (int) hash["maxwave"];
-                Mod.Interface.Chat.System("Max wave is " + RCSettings.maxWave + ".");
-            }
-        }
-        else if (RCSettings.maxWave != 0)
-        {
-            RCSettings.maxWave = 0;
-            Mod.Interface.Chat.System("Max wave set to default.");
-        }
-        if (hash.ContainsKey("endless"))
-        {
-            if (RCSettings.endlessMode != (int) hash["endless"])
-            {
-                RCSettings.endlessMode = (int) hash["endless"];
-                Mod.Interface.Chat.System("Endless respawn enabled (" + RCSettings.endlessMode + " seconds).");
-            }
-        }
-        else if (RCSettings.endlessMode != 0)
-        {
-            RCSettings.endlessMode = 0;
-            Mod.Interface.Chat.System("Endless respawn disabled.");
-        }
-        if (hash.ContainsKey("motd"))
-        {
-            if (RCSettings.motd != (string) hash["motd"])
-            {
-                RCSettings.motd = (string) hash["motd"];
-                Mod.Interface.Chat.System("MOTD:" + RCSettings.motd + "");
-            }
-        }
-        else
-        {
-            RCSettings.motd = string.Empty;
-        }
-        if (hash.ContainsKey("deadlycannons"))
-        {
-            if (RCSettings.deadlyCannons != (int) hash["deadlycannons"])
-            {
-                RCSettings.deadlyCannons = (int) hash["deadlycannons"];
-                Mod.Interface.Chat.System("Cannons will now kill players.");
-            }
-        }
-        else if (RCSettings.deadlyCannons != 0)
-        {
-            RCSettings.deadlyCannons = 0;
-            Mod.Interface.Chat.System("Cannons will no longer kill players.");
-        }
-        if (hash.ContainsKey("asoracing"))
-        {
-            if (RCSettings.racingStatic != (int) hash["asoracing"])
-            {
-                RCSettings.racingStatic = (int) hash["asoracing"];
-                Mod.Interface.Chat.System("Racing will not restart on win.");
-            }
-        }
-        else if (RCSettings.racingStatic != 0)
-        {
-            RCSettings.racingStatic = 0;
-            Mod.Interface.Chat.System("Racing will restart on win.");
-        }
+
+        settings = GameSettingsManager.DecodeFromHashtable(hash);
     }
 
     private void SetTeam(int setting)
@@ -4723,7 +4262,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         {
             if (IN_GAME_MAIN_CAMERA.difficulty == 2)
             {
-                if (UnityEngine.Random.Range(0f, 1f) >= 0.7f && !LevelInfoManager.GetInfo(Level).NoCrawler)
+                if (UnityEngine.Random.Range(0f, 1f) >= 0.7f && !LevelInfoManager.Get(Level).NoCrawler)
                 {
                     obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Crawler, false);
                 }
@@ -4735,7 +4274,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         }
         else if (IN_GAME_MAIN_CAMERA.difficulty == 2)
         {
-            if (UnityEngine.Random.Range(0f, 1f) >= 0.7f && !LevelInfoManager.GetInfo(Level).NoCrawler)
+            if (UnityEngine.Random.Range(0f, 1f) >= 0.7f && !LevelInfoManager.Get(Level).NoCrawler)
             {
                 obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Crawler, false);
             }
@@ -4746,7 +4285,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         }
         else if (UnityEngine.Random.Range(0, 100) < rate)
         {
-            if (UnityEngine.Random.Range(0f, 1f) >= 0.8f && !LevelInfoManager.GetInfo(Level).NoCrawler)
+            if (UnityEngine.Random.Range(0f, 1f) >= 0.8f && !LevelInfoManager.Get(Level).NoCrawler)
             {
                 obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Crawler, false);
             }
@@ -4755,7 +4294,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Abnormal, false);
             }
         }
-        else if (UnityEngine.Random.Range(0f, 1f) >= 0.8f && !LevelInfoManager.GetInfo(Level).NoCrawler)
+        else if (UnityEngine.Random.Range(0f, 1f) >= 0.8f && !LevelInfoManager.Get(Level).NoCrawler)
         {
             obj2.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Crawler, false);
         }
@@ -4886,18 +4425,18 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         if (Level.StartsWith("Custom"))
         {
             moreTitans = 5;
-            if (RCSettings.gameType == 1)
+            if (settings.GameType == 1)
             {
                 moreTitans = 3;
             }
-            else if (RCSettings.gameType == 2 || RCSettings.gameType == 3)
+            else if (settings.GameType == 2 || settings.GameType == 3)
             {
                 moreTitans = 0;
             }
         }
-        if (RCSettings.moreTitans > 0 || RCSettings.moreTitans == 0 && Level.StartsWith("Custom") && RCSettings.gameType >= 2)
+        if (settings.MoreTitansNumber > 0 || settings.MoreTitansNumber == 0 && Level.StartsWith("Custom") && settings.GameType >= 2)
         {
-            moreTitans = RCSettings.moreTitans;
+            moreTitans = settings.MoreTitansNumber;
         }
         if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.SurviveMode)
         {
@@ -4908,41 +4447,31 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             else
             {
                 int waveModeNum;
-                if (RCSettings.moreTitans == 0)
+                if (settings.MoreTitansNumber == 0)
                 {
                     waveModeNum = 1;
-                    if (RCSettings.waveModeOn == 1)
+                    if (settings.IsMaxWaveMode)
                     {
-                        waveModeNum = RCSettings.waveModeNum;
+                        waveModeNum = settings.MaxWaveNumber;
                     }
                     moreTitans += (wave - 1) * (waveModeNum - 1);
                 }
-                else if (RCSettings.moreTitans > 0)
+                else if (settings.MoreTitansNumber > 0)
                 {
                     waveModeNum = 1;
-                    if (RCSettings.waveModeOn == 1)
+                    if (settings.IsWaveMode)
                     {
-                        waveModeNum = RCSettings.waveModeNum;
+                        waveModeNum = settings.WaveNumber;
                     }
                     moreTitans += (wave - 1) * waveModeNum;
                 }
             }
         }
         moreTitans = Math.Min(50, moreTitans);
-        if (RCSettings.spawnMode == 1)
+        if (settings.UseCustomSpawnRates)
         {
-            float nRate = RCSettings.nRate;
-            float aRate = RCSettings.aRate;
-            float jRate = RCSettings.jRate;
-            float cRate = RCSettings.cRate;
-            float pRate = RCSettings.pRate;
-            if (punk && RCSettings.punkWaves == 1)
+            if (punk && settings.AllowPunks)
             {
-                nRate = 0f;
-                aRate = 0f;
-                jRate = 0f;
-                cRate = 0f;
-                pRate = 100f;
                 moreTitans = rate;
             }
             for (num8 = 0; num8 < moreTitans; num8++)
@@ -4970,27 +4499,29 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                         rotation = obj2.transform.rotation;
                     }
                 }
+
+                var rates = settings.SpawnRates;
                 float num10 = UnityEngine.Random.Range(0f, 100f);
-                if (num10 <= nRate + aRate + jRate + cRate + pRate)
+                if (num10 <= rates.Normal + rates.Aberrant + rates.Jumper + rates.Crawler + rates.Punk)
                 {
                     GameObject obj3 = SpawnTitanRaw(position, rotation);
-                    if (num10 < nRate)
+                    if (num10 < rates.Normal)
                     {
                         obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Normal, false);
                     }
-                    else if (num10 >= nRate && num10 < nRate + aRate)
+                    else if (num10 >= rates.Normal && num10 < rates.Normal + rates.Aberrant)
                     {
                         obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Abnormal, false);
                     }
-                    else if (num10 >= nRate + aRate && num10 < nRate + aRate + jRate)
+                    else if (num10 >= rates.Normal + rates.Aberrant && num10 < rates.Normal + rates.Aberrant + rates.Jumper)
                     {
                         obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Jumper, false);
                     }
-                    else if (num10 >= nRate + aRate + jRate && num10 < nRate + aRate + jRate + cRate)
+                    else if (num10 >= rates.Normal + rates.Aberrant + rates.Jumper && num10 < rates.Normal + rates.Aberrant + rates.Jumper + rates.Crawler)
                     {
                         obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Crawler, true);
                     }
-                    else if (num10 >= nRate + aRate + jRate + cRate && num10 < nRate + aRate + jRate + cRate + pRate)
+                    else if (num10 >= rates.Normal + rates.Aberrant + rates.Jumper + rates.Crawler && num10 < rates.Normal + rates.Aberrant + rates.Jumper + rates.Crawler + rates.Punk)
                     {
                         obj3.GetComponent<TITAN>().setAbnormalType2(AbnormalType.Punk, false);
                     }

@@ -796,7 +796,7 @@ public class TITAN : Photon.MonoBehaviour
 
     public void Explode()
     {
-        if (RCSettings.explodeMode > 0 && this.hasDie && this.dieTime >= 1f && !this.hasExplode)
+        if (FengGameManagerMKII.settings.IsExplodeMode && this.hasDie && this.dieTime >= 1f && !this.hasExplode)
         {
             int num = 0;
             float num2 = this.myLevel * 10f;
@@ -821,7 +821,7 @@ public class TITAN : Photon.MonoBehaviour
                 PhotonNetwork.Instantiate("FX/boom1", position, Quaternion.Euler(270f, 0f, 0f), 0);
                 foreach (GameObject obj2 in GameObject.FindGameObjectsWithTag("Player"))
                 {
-                    if (Vector3.Distance(obj2.transform.position, position) < RCSettings.explodeMode)
+                    if (Vector3.Distance(obj2.transform.position, position) < FengGameManagerMKII.settings.ExplodeRadius)
                     {
                         obj2.GetComponent<HERO>().markDie();
                         obj2.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, "Server " });
@@ -1994,7 +1994,7 @@ public class TITAN : Photon.MonoBehaviour
                 Vector3 vector3 = this.myHero.transform.position + line;
                 Vector3 vector4 = vector3 - this.baseTransform.position;
                 float sqrMagnitude = vector4.sqrMagnitude;
-                if (sqrMagnitude > 8000f && sqrMagnitude < 90000f && RCSettings.disableRock == 0)
+                if (sqrMagnitude > 8000f && sqrMagnitude < 90000f && FengGameManagerMKII.settings.EnableRockThrow)
                 {
                     this.Attack("throw");
                     this.rockInterval = 2f;
@@ -2363,7 +2363,7 @@ public class TITAN : Photon.MonoBehaviour
 
     public void setAbnormalType2(AbnormalType type, bool forceCrawler)
     {
-        bool flag = RCSettings.spawnMode > 0 || FengGameManagerMKII.Level.StartsWith("Custom"); // Might be broken
+        bool flag = FengGameManagerMKII.settings.UseCustomSpawnRates || FengGameManagerMKII.Level.StartsWith("Custom"); // Might be broken
         int num = 0;
         float num2 = 0.02f * (IN_GAME_MAIN_CAMERA.difficulty + 1);
         if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpAHSS)
@@ -2437,7 +2437,7 @@ public class TITAN : Photon.MonoBehaviour
         }
         if (num == 4)
         {
-            if (!LevelInfoManager.GetInfo(FengGameManagerMKII.Level).HasPunk)
+            if (!LevelInfoManager.Get(FengGameManagerMKII.Level).HasPunk)
             {
                 num = 1;
             }
@@ -2713,11 +2713,9 @@ public class TITAN : Photon.MonoBehaviour
             if (!this.hasSetLevel)
             {
                 this.myLevel = UnityEngine.Random.Range(0.7f, 3f);
-                if (RCSettings.sizeMode > 0)
+                if (FengGameManagerMKII.settings.EnableCustomSize)
                 {
-                    float sizeLower = RCSettings.sizeLower;
-                    float sizeUpper = RCSettings.sizeUpper;
-                    this.myLevel = UnityEngine.Random.Range(sizeLower, sizeUpper);
+                    this.myLevel = FengGameManagerMKII.settings.TitanSize.Random;
                 }
                 this.hasSetLevel = true;
             }
@@ -2734,22 +2732,23 @@ public class TITAN : Photon.MonoBehaviour
                 StartCoroutine(this.reloadSky());
             }
         }
-        if (this.maxHealth == 0 && RCSettings.healthMode > 0)
+        if (this.maxHealth == 0 && FengGameManagerMKII.settings.HealthMode > HealthMode.Off)
         {
-            if (RCSettings.healthMode == 1)
+            switch (FengGameManagerMKII.settings.HealthMode)
             {
-                this.maxHealth = this.currentHealth = UnityEngine.Random.Range(RCSettings.healthLower, RCSettings.healthUpper + 1);
-            }
-            else if (RCSettings.healthMode == 2)
-            {
-                this.maxHealth = this.currentHealth = Mathf.Clamp(Mathf.RoundToInt(this.myLevel / 4f * UnityEngine.Random.Range(RCSettings.healthLower, RCSettings.healthUpper + 1)), RCSettings.healthLower, RCSettings.healthUpper);
+                case HealthMode.Fixed:
+                    this.maxHealth = this.currentHealth = (int) FengGameManagerMKII.settings.TitanHealth.Random;
+                    break;
+                case HealthMode.SizeBased:
+                    this.maxHealth = this.currentHealth = (int) FengGameManagerMKII.settings.TitanHealth.Clamp(this.myLevel / 4f * FengGameManagerMKII.settings.TitanHealth.Random);
+                    break;
             }
         }
         this.lagMax = 150f + this.myLevel * 3f;
         this.healthTime = Time.time;
         if (this.currentHealth > 0 && photonView.isMine)
         {
-            photonView.RPC("labelRPC", PhotonTargets.AllBuffered, new object[] { this.currentHealth, this.maxHealth });
+            photonView.RPC("labelRPC", PhotonTargets.AllBuffered, this.currentHealth, this.maxHealth);
         }
         this.hasExplode = false;
         this.colliderEnabled = true;
@@ -2797,13 +2796,13 @@ public class TITAN : Photon.MonoBehaviour
             if (vector.magnitude < this.lagMax && !this.hasDie && Time.time - this.healthTime > 0.2f)
             {
                 this.healthTime = Time.time;
-                if (speed >= RCSettings.damageMode || this.abnormalType == AbnormalType.Crawler)
+                if (speed >= FengGameManagerMKII.settings.MinimumDamage || this.abnormalType == AbnormalType.Crawler)
                 {
                     this.currentHealth -= speed;
                 }
                 if (this.maxHealth > 0f)
                 {
-                    photonView.RPC("labelRPC", PhotonTargets.AllBuffered, new object[] { this.currentHealth, this.maxHealth });
+                    photonView.RPC("labelRPC", PhotonTargets.AllBuffered, this.currentHealth, this.maxHealth);
                 }
                 if (this.currentHealth < 0f)
                 {
@@ -2811,7 +2810,7 @@ public class TITAN : Photon.MonoBehaviour
                     {
                         this.OnTitanDie(view);
                     }
-                    photonView.RPC("netDie", PhotonTargets.OthersBuffered, new object[0]);
+                    photonView.RPC("netDie", PhotonTargets.OthersBuffered);
                     if (this.grabbedTarget != null)
                     {
                         this.grabbedTarget.GetPhotonView().RPC("netUngrabbed", PhotonTargets.All, new object[0]);
