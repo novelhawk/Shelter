@@ -13,6 +13,7 @@ using UnityEngine;
 using Component = UnityEngine.Component;
 using Debug = UnityEngine.Debug;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using LogType = Mod.Logging.LogType;
 
 internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 {
@@ -1190,7 +1191,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 sender = this.mActors[key];
         }
 
-        if (photonEvent.Code != (byte) PhotonEvent.PlayerLeft &&
+        if (photonEvent.Code != (byte) PhotonEvent.Leave &&
             sender.IsIgnored)
             return;
 
@@ -1204,8 +1205,8 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 this.ExecuteRPC(photonEvent[245] as Hashtable, sender);
                 break;
 
-            case PhotonEvent.OSR1:
-            case PhotonEvent.OSR:
+            case PhotonEvent.SendSerialize:
+            case PhotonEvent.SendSerializeReliable:
             {
                 if (photonEvent[245] is Hashtable hashtable)
                 {
@@ -1229,7 +1230,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             }
             
 
-            case PhotonEvent.Instantiate:
+            case PhotonEvent.Instantiation:
             {
                 if (photonEvent[245] is Hashtable data)
                     if (data[(byte)0] is string)
@@ -1242,7 +1243,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                     throw new NotAllowedException(photonEvent.Code, sender); 
                 break;
 
-            case PhotonEvent.RemoveInstantiatedObject:
+            case PhotonEvent.Destroy:
             {
                 if (photonEvent[245] is Hashtable hashtable)
                     if (hashtable[(byte)0] is int objId)
@@ -1251,7 +1252,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 break;
             }
 
-            case PhotonEvent.DestroyPlayerObjects:
+            case PhotonEvent.DestroyPlayer:
             {
                 if (photonEvent[245] is Hashtable hashtable)
                 {
@@ -1287,7 +1288,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 SetMasterClient(id, false);
                 break;
             }
-            case PhotonEvent.UpdatePlayersCounters:
+            case PhotonEvent.AppStats:
             {
                 if (photonEvent[229] is int players &&
                     photonEvent[227] is int playersMC &&
@@ -1301,8 +1302,8 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 break;
             }
 
-            case PhotonEvent.UpdateQueuePosition:
-                if (sender != null)
+            case PhotonEvent.QueueState:
+                if (!sender.IsLocal)
                     throw new NotAllowedException(photonEvent.Code, sender);
                 
                 if (photonEvent.Parameters.ContainsKey(223))
@@ -1334,7 +1335,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 break;
             }
 
-            case PhotonEvent.RoomListCreated:
+            case PhotonEvent.RoomList:
             {
                 if (!(photonEvent[222] is Hashtable hashtable))
                     return;
@@ -1356,7 +1357,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 break;
             }
 
-            case PhotonEvent.UpdateProperties:
+            case PhotonEvent.PropertiesChanged:
             {
                 if (!(photonEvent[253] is int id))
                     return;
@@ -1401,11 +1402,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 break;
             }
 
-            case PhotonEvent.PlayerLeft:
+            case PhotonEvent.Leave:
                 this.HandleEventLeave(key);
                 break;
 
-            case PhotonEvent.JoinedRoom:
+            case PhotonEvent.Join:
             {
                 if (!sender.IsLocal)
                     return;
