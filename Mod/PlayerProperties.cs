@@ -1,7 +1,5 @@
-﻿using System.Diagnostics;
-using ExitGames.Client.Photon;
+﻿using ExitGames.Client.Photon;
 using UnityEngine;
-using UnityEngineInternal;
 
 namespace Mod
 {
@@ -31,7 +29,7 @@ namespace Mod
         public int TotalDamage => this[PlayerProperty.TotalDamage] as int? ?? 0;
         
         public bool? Alive => !IsDead;
-        public bool? IsDead => this[PlayerProperty.Dead] as bool?;
+        private bool? IsDead => this[PlayerProperty.Dead] as bool?;
         
         public int? RCTeam => this[PlayerProperty.RCTeam] as int?;
         public int? Team => this[PlayerProperty.Team] as int?;

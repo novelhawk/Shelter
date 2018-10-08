@@ -1932,7 +1932,7 @@ public class HERO : Photon.MonoBehaviour
 
     private void UpdateNameScale()
     {
-        if (Player.Self.Properties.IsDead != false || Player.Self.Hero == null || photonView.isMine || !Shelter.ModuleManager.Enabled(nameof(ModuleNameScaling)))
+        if (Player.Self.Properties.Alive == false || Player.Self.Hero == null || photonView.isMine || !Shelter.ModuleManager.Enabled(nameof(ModuleNameScaling)))
         {
             myNetWorkName.transform.localScale = new Vector3(14, 14, 14);
             return;
