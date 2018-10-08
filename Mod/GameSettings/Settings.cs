@@ -7,8 +7,6 @@ namespace Mod.GameSettings
     {
         [JsonProperty("enableGasSkin")]
         public bool EnableGasSkin;
-        [JsonProperty("enableWeaponTrail")]
-        public bool EnableWeaponTrail;
         [JsonProperty("enableWind")]
         public bool EnableWind;
         [JsonProperty("enableReel")]

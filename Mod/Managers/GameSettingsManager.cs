@@ -186,7 +186,6 @@ namespace Mod.Managers
             settings.SpawnTimer = 0;
             if (!int.TryParse(PlayerPrefs.GetString("cmax", "20"), out settings.CustomMaxTitans))
                 settings.CustomMaxTitans = 20;
-            settings.EnableWeaponTrail = !Utility.GetBoolean("traildisable");
             settings.EnableWind = !Utility.GetBoolean("wind"); // Might be 1: true 0: false
             if (!int.TryParse(PlayerPrefs.GetString("snapshot", "0"), out settings.SnapshotDamage))
                 settings.SnapshotDamage = 0;
