@@ -9,8 +9,6 @@ namespace Mod.GameSettings
         public bool EnableGasSkin;
         [JsonProperty("enableWind")]
         public bool EnableWind;
-        [JsonProperty("enableReel")]
-        public bool EnableReel;
 
         [JsonProperty("randomizeSkinParts")]
         public bool Randomize;

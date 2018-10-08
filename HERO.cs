@@ -1538,9 +1538,9 @@ public class HERO : Photon.MonoBehaviour
                     Vector3 vector13 = (this.bulletRight.transform.position + this.bulletLeft.transform.position) * 0.5f - this.baseTransform.position;
                     
                     float num15;
-                    if (FengGameManagerMKII.settings.EnableReel && Shelter.InputManager.IsKeyPressed(InputAction.ReelIn))
+                    if (Shelter.InputManager.IsKeyPressed(InputAction.ReelIn))
                         num15 = -1f;
-                    else if (FengGameManagerMKII.settings.EnableReel && Shelter.InputManager.IsKeyPressed(InputAction.ReelOut))
+                    else if (Shelter.InputManager.IsKeyPressed(InputAction.ReelOut))
                         num15 = 1f;
                     else
                         num15 = Input.GetAxis("Mouse ScrollWheel") * 5555f;
@@ -1559,9 +1559,9 @@ public class HERO : Photon.MonoBehaviour
                     Vector3 vector15 = this.bulletLeft.transform.position - this.baseTransform.position;
                     
                     float num18;
-                    if (FengGameManagerMKII.settings.EnableReel && Shelter.InputManager.IsKeyPressed(InputAction.ReelIn))
+                    if (Shelter.InputManager.IsKeyPressed(InputAction.ReelIn))
                         num18 = -1f;
-                    else if (FengGameManagerMKII.settings.EnableReel && Shelter.InputManager.IsKeyPressed(InputAction.ReelOut))
+                    else if (Shelter.InputManager.IsKeyPressed(InputAction.ReelOut))
                         num18 = 1f;
                     else
                         num18 = Input.GetAxis("Mouse ScrollWheel") * 5555f;
@@ -1579,9 +1579,9 @@ public class HERO : Photon.MonoBehaviour
                     this.baseRigidBody.AddForce(-this.baseRigidBody.velocity, ForceMode.VelocityChange);
                     Vector3 vector17 = this.bulletRight.transform.position - this.baseTransform.position;
                     float num21 = Input.GetAxis("Mouse ScrollWheel") * 5555f;
-                    if (FengGameManagerMKII.settings.EnableReel && Shelter.InputManager.IsKeyPressed(InputAction.ReelIn))
+                    if (Shelter.InputManager.IsKeyPressed(InputAction.ReelIn))
                         num21 = -1f;
-                    else if (FengGameManagerMKII.settings.EnableReel && Shelter.InputManager.IsKeyPressed(InputAction.ReelOut))
+                    else if (Shelter.InputManager.IsKeyPressed(InputAction.ReelOut))
                         num21 = 1f;
                         
                     num21 = Mathf.Clamp(num21, -0.8f, 0.8f);
