@@ -27,7 +27,7 @@ namespace Mod.Commands
                 if (args.Length < 2 || !Player.TryParse(args[1], out Player player))
                     throw new CommandArgumentException(CommandName, "/payload [payload] [playerId] (times)");
                 
-                hex = hex.Replace("ID", player.ID.ToString("X2"));
+                hex = hex.Replace("ID", player.ID.ToString("X8"));
             }
             
             var bytes = StringToBytes(hex);
