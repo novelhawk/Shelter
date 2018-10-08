@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using JetBrains.Annotations;
 using Mod.Animation;
 using Mod.Discord;
@@ -192,10 +193,25 @@ namespace Mod
             if (Assembly.GetManifestResourceInfo($@"Mod.Resources.{image}.png") == null) return null;
             using (var stream = Assembly.GetManifestResourceStream($@"Mod.Resources.{image}.png"))
             {
-                var texture = new Texture2D(0, 0, TextureFormat.RGBA32, false);
-                texture.LoadImage(stream.ToBytes());
-                texture.Apply();
-                return texture;
+                if (stream == null)
+                {
+                    Log("Cannot read '{0}.png' image. Internal error.", LogType.Error, image);
+                    Application.Quit();
+                    throw new Exception(); // Prevents ReSharper annotations
+                }
+                
+                byte[] buffer = new byte[8 * 1024];
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    int read;
+                    while ((read = stream.Read(buffer, 0, buffer.Length)) > 0)
+                        ms.Write(buffer, 0, read);
+                    
+                    var texture = new Texture2D(0, 0, TextureFormat.RGBA32, false);
+                    texture.LoadImage(ms.ToArray());
+                    texture.Apply();
+                    return texture;
+                }
             }
         }
 
