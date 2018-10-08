@@ -2,8 +2,11 @@
 using System.IO;
 using System.Security;
 using System.Text;
+using JetBrains.Annotations;
+using Mod.Logging;
 using Newtonsoft.Json;
 using UnityEngine;
+using LogType = Mod.Logging.LogType;
 
 namespace Mod.Managers
 {
@@ -59,21 +62,22 @@ namespace Mod.Managers
                 File.WriteAllText(Shelter.ModDirectory + _file, json, Encoding.UTF8);
                 return true;
             }
-            catch (IOException)
+            catch (IOException e)
             {
-                // log
-                throw;
+                Shelter.LogConsole("Error opening '{0}'. More details in Logs/{1}.", LogType.Error, _file, FileLogger.Latest);
+                Shelter.Log("{0} occurred while opening {1}. Reason: {2}", LogType.Error, e.GetType().Name, _file, e.Message);
             }
-            catch (SecurityException)
+            catch (SecurityException e)
             {
-                // log
-                throw;
+                Shelter.LogConsole("Cannot access file '{0}'. More details in Logs/{1}.", LogType.Error, _file, FileLogger.Latest);
+                Shelter.Log("{0} occurred while opening {1}. Reason: {2}", LogType.Error, e.GetType().Name, _file, e.Message);
             }
-            catch (UnauthorizedAccessException)
+            catch (UnauthorizedAccessException e)
             {
-                // log
-                throw;
+                Shelter.LogConsole("File '{0}' is marked as Read-Only. Cannot save changes.", LogType.Error, _file);
+                Shelter.Log("{0} occurred while opening {1}. Reason: {2}", LogType.Error, e.GetType().Name, _file, e.Message);
             }
+            return false;
         }
 
         public string ReadFile()
@@ -85,19 +89,16 @@ namespace Mod.Managers
             {
                 return File.ReadAllText(Shelter.ModDirectory + _file, Encoding.UTF8);
             }
-            catch (IOException)
+            catch (IOException e)
             {
-                // log
+                Shelter.LogConsole("Error opening '{0}'. More details in Logs/{1}.", LogType.Error, _file, FileLogger.Latest);
+                Shelter.Log("{0} occurred while opening {1}. Reason: {2}", LogType.Error, e.GetType().Name, _file, e.Message);
                 throw;
             }
-            catch (SecurityException)
+            catch (Exception e)
             {
-                // log
-                throw;
-            }
-            catch (UnauthorizedAccessException)
-            {
-                // log
+                Shelter.LogConsole("Cannot access file '{0}'. More details in Logs/{1}.", LogType.Error, _file, FileLogger.Latest);
+                Shelter.Log("{0} occurred while opening {1}. Reason: {2}", LogType.Error, e.GetType().Name, _file, e.Message);
                 throw;
             }
         }
@@ -106,8 +107,7 @@ namespace Mod.Managers
         {
             using (var stream = Shelter.Assembly.GetManifestResourceStream($@"Mod.Resources.Config.{_file}"))
             {
-                if (stream == null)
-                    throw new NullReferenceException(); //TODO
+                Shelter.Assert(stream != null);
                 using (var ms = new MemoryStream())
                 {
                     using (var fs = File.Open(Shelter.ModDirectory + _file, FileMode.Create, FileAccess.Write, FileShare.Read))
