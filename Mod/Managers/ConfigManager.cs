@@ -107,7 +107,12 @@ namespace Mod.Managers
         {
             using (var stream = Shelter.Assembly.GetManifestResourceStream($@"Mod.Resources.Config.{_file}"))
             {
-                Shelter.Assert(stream != null);
+                if (stream == null)
+                {
+                    Shelter.Log("Cannot create default '{0}'. Internal error.", LogType.Error, _file);
+                    Application.Quit();
+                    throw new Exception(); // Prevents ReSharper annotations
+                }
                 using (var ms = new MemoryStream())
                 {
                     using (var fs = File.Open(Shelter.ModDirectory + _file, FileMode.Create, FileAccess.Write, FileShare.Read))
