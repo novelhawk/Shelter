@@ -169,24 +169,6 @@ namespace Mod
                         logType.ToString().ToUpper());
             }
         }
-        
-        [StringFormatMethod("line")]
-        public static void WriteLine(string line, params object[] args) => WriteLine(string.Format(line, args));
-        public static void WriteLine(object obj) => WriteLine(obj as string);
-        public static void WriteLine(string line)
-        {
-            if (_logger != null && line != null)
-                _logger.Log("{0}{1}", line, Environment.NewLine);
-        }
-        
-        [StringFormatMethod("line")]
-        public static void Write(string line, params object[] args) => WriteLine(string.Format(line, args));
-        public static void Write(object obj) => WriteLine(obj as string);
-        public static void Write(string line)
-        {
-            if (_logger != null && line != null)
-                _logger.Log(line);
-        }
 
         public static Texture2D GetImage(string image)
         {
