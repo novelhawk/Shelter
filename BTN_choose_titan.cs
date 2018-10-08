@@ -24,12 +24,10 @@ public class BTN_choose_titan : MonoBehaviour
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[3], false);
             IN_GAME_MAIN_CAMERA.usingTitan = false;
             GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().SetInterfacePosition();
-            Hashtable hashtable = new Hashtable
+            Player.Self.SetCustomProperties(new Hashtable
             {
                 { PlayerProperty.Character, id }
-            };
-            Hashtable propertiesToSet = hashtable;
-            Player.Self.SetCustomProperties(propertiesToSet);
+            });
         }
         else
         {

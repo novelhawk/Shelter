@@ -7,6 +7,7 @@ using Mod;
 using Mod.GameSettings;
 using Mod.Modules;
 using UnityEngine;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Random = UnityEngine.Random;
 
 public class TITAN : Photon.MonoBehaviour
@@ -157,7 +158,7 @@ public class TITAN : Photon.MonoBehaviour
                     }
                     else
                     {
-                        this.attackEndWait = this.myDifficulty <= 0 ? UnityEngine.Random.Range(1f, 4f) : UnityEngine.Random.Range(0f, 1f);
+                        this.attackEndWait = this.myDifficulty <= 0 ? Random.Range(1f, 4f) : Random.Range(0f, 1f);
                     }
                     this.attackCheckTime = 0.75f;
                     this.fxName = "boom4";
@@ -504,16 +505,11 @@ public class TITAN : Photon.MonoBehaviour
                     this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(null, true, false);
                     this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(true);
                     this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
-                    ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
+                    Player.Self.SetCustomProperties(new Hashtable
                     {
-                        { PlayerProperty.Dead, true }
-                    };
-                    Player.Self.SetCustomProperties(propertiesToSet);
-                    propertiesToSet = new ExitGames.Client.Photon.Hashtable
-                    {
-                        { PlayerProperty.Deaths, (int)Player.Self.Properties.Deaths + 1 }
-                    };
-                    Player.Self.SetCustomProperties(propertiesToSet);
+                        { PlayerProperty.Dead, true },
+                        { PlayerProperty.Deaths, Player.Self.Properties.Deaths + 1 }
+                    });
                 }
             }
         }
@@ -631,16 +627,11 @@ public class TITAN : Photon.MonoBehaviour
                     this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(null, true, false);
                     this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(true);
                     this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
-                    ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
+                    Player.Self.SetCustomProperties(new Hashtable
                     {
-                        { PlayerProperty.Dead, true }
-                    };
-                    Player.Self.SetCustomProperties(propertiesToSet);
-                    propertiesToSet = new ExitGames.Client.Photon.Hashtable
-                    {
-                        { PlayerProperty.Deaths, (int)Player.Self.Properties.Deaths + 1 }
-                    };
-                    Player.Self.SetCustomProperties(propertiesToSet);
+                        { PlayerProperty.Dead, true },
+                        { PlayerProperty.Deaths, Player.Self.Properties.Deaths + 1 }
+                    });
                 }
             }
         }
@@ -1072,7 +1063,7 @@ public class TITAN : Photon.MonoBehaviour
                         {
                             this.stuck = true;
                             this.stuckTime = 2f;
-                            this.stuckTurnAngle = UnityEngine.Random.Range(0, 2) * 140f - 70f;
+                            this.stuckTurnAngle = Random.Range(0, 2) * 140f - 70f;
                         }
                         if (this.state == TitanState.Chasing && this.myHero != null && this.myDistance > this.attackDistance && this.myDistance < 150f)
                         {
@@ -1085,12 +1076,12 @@ public class TITAN : Photon.MonoBehaviour
                             {
                                 num += 0.1f;
                             }
-                            if (UnityEngine.Random.Range(0f, 1f) < num)
+                            if (Random.Range(0f, 1f) < num)
                             {
                                 this.stuck = true;
                                 this.stuckTime = 1f;
-                                float num2 = UnityEngine.Random.Range(20f, 50f);
-                                this.stuckTurnAngle = UnityEngine.Random.Range(0, 2) * num2 * 2f - num2;
+                                float num2 = Random.Range(20f, 50f);
+                                this.stuckTurnAngle = Random.Range(0, 2) * num2 * 2f - num2;
                             }
                         }
                     }
@@ -1196,13 +1187,13 @@ public class TITAN : Photon.MonoBehaviour
                 if (this.abnormalType != AbnormalType.Abnormal && this.abnormalType != AbnormalType.Jumper)
                     return null;
                 
-                if (this.myDifficulty <= 0 && UnityEngine.Random.Range(0, 100) >= 50)
+                if (this.myDifficulty <= 0 && Random.Range(0, 100) >= 50)
                     return null;
                 
                 return new[] { "attack_abnormal_jump" };
             }
             
-            if ((this.myDifficulty > 0 || UnityEngine.Random.Range(0, 1000) < 3) && Mathf.Abs(this.between2) < 60f)
+            if ((this.myDifficulty > 0 || Random.Range(0, 1000) < 3) && Mathf.Abs(this.between2) < 60f)
                 return new[] { "attack_combo" };
 
             return null;
@@ -1308,7 +1299,7 @@ public class TITAN : Photon.MonoBehaviour
         this.state = TitanState.Down;
         this.isAlarm = true;
         this.playAnimation("sit_hunt_down");
-        this.getdownTime = UnityEngine.Random.Range(3f, 5f);
+        this.getdownTime = Random.Range(3f, 5f);
     }
 
     private GameObject GetNearestHero()
@@ -1660,7 +1651,7 @@ public class TITAN : Photon.MonoBehaviour
         this.sbtime = sbtime;
         if (this.myDifficulty == 2 && (this.abnormalType == AbnormalType.Jumper || this.abnormalType == AbnormalType.Abnormal))
         {
-            this.sbtime = UnityEngine.Random.Range(0f, 1.5f);
+            this.sbtime = Random.Range(0f, 1.5f);
         }
         else if (this.myDifficulty >= 1)
         {
@@ -2038,16 +2029,11 @@ public class TITAN : Photon.MonoBehaviour
                 this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(null, true, false);
                 this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(true);
                 this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
-                ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
+                Player.Self.SetCustomProperties(new Hashtable
                 {
-                    { PlayerProperty.Dead, true }
-                };
-                Player.Self.SetCustomProperties(propertiesToSet);
-                propertiesToSet = new ExitGames.Client.Photon.Hashtable
-                {
-                    { PlayerProperty.Deaths, (int)Player.Self.Properties.Deaths + 1 }
-                };
-                Player.Self.SetCustomProperties(propertiesToSet);
+                    { PlayerProperty.Dead, true },
+                    { PlayerProperty.Deaths, Player.Self.Properties.Deaths + 1 }
+                });
             }
             this.dieAnimation();
         }
@@ -2322,7 +2308,7 @@ public class TITAN : Photon.MonoBehaviour
         this.state = TitanState.RunningRandomly;
         this.targetCheckPt = targetPt;
         this.targetR = r;
-        this.random_run_time = UnityEngine.Random.Range(1f, 2f);
+        this.random_run_time = Random.Range(1f, 2f);
         this.crossFade(this.runAnimation, 0.5f);
     }
 
@@ -2330,14 +2316,14 @@ public class TITAN : Photon.MonoBehaviour
     {
         this.state = TitanState.Recovering;
         this.playAnimation("idle_recovery");
-        this.getdownTime = UnityEngine.Random.Range(2f, 5f);
+        this.getdownTime = Random.Range(2f, 5f);
     }
 
     private void recoverpt()
     {
         this.state = TitanState.Recovering;
         this.playAnimation("idle_recovery");
-        this.getdownTime = UnityEngine.Random.Range(1.8f, 2.5f);
+        this.getdownTime = Random.Range(1.8f, 2.5f);
     }
 
     public IEnumerator reloadSky()
@@ -2353,7 +2339,7 @@ public class TITAN : Photon.MonoBehaviour
     {
         this.state = TitanState.Sit;
         this.playAnimation("sit_idle");
-        this.getdownTime = UnityEngine.Random.Range(10f, 30f);
+        this.getdownTime = Random.Range(10f, 30f);
     }
 
     public void resetLevel(float level)
@@ -2373,7 +2359,7 @@ public class TITAN : Photon.MonoBehaviour
         }
         if (type == AbnormalType.Normal)
         {
-            if (UnityEngine.Random.Range(0f, 1f) < num2)
+            if (Random.Range(0f, 1f) < num2)
             {
                 num = 4;
             }
@@ -2388,7 +2374,7 @@ public class TITAN : Photon.MonoBehaviour
         }
         else if (type == AbnormalType.Abnormal)
         {
-            if (UnityEngine.Random.Range(0f, 1f) < num2)
+            if (Random.Range(0f, 1f) < num2)
             {
                 num = 4;
             }
@@ -2403,7 +2389,7 @@ public class TITAN : Photon.MonoBehaviour
         }
         else if (type == AbnormalType.Jumper)
         {
-            if (UnityEngine.Random.Range(0f, 1f) < num2)
+            if (Random.Range(0f, 1f) < num2)
             {
                 num = 4;
             }
@@ -2419,7 +2405,7 @@ public class TITAN : Photon.MonoBehaviour
         else if (type == AbnormalType.Crawler)
         {
             num = 3;
-            if (GameObject.Find("Crawler") != null && UnityEngine.Random.Range(0, 1000) > 5)
+            if (GameObject.Find("Crawler") != null && Random.Range(0, 1000) > 5)
             {
                 num = 2;
             }
@@ -2483,7 +2469,7 @@ public class TITAN : Photon.MonoBehaviour
     {
         this.myLevel = level;
         this.myLevel = Mathf.Clamp(this.myLevel, 0.7f, 3f);
-        this.attackWait += UnityEngine.Random.Range(0f, 2f);
+        this.attackWait += Random.Range(0f, 2f);
         this.chaseDistance += this.myLevel * 10f;
         transform.localScale = new Vector3(this.myLevel, this.myLevel, this.myLevel);
         float x = Mathf.Min(Mathf.Pow(2f / this.myLevel, 0.35f), 1.25f);
@@ -2501,7 +2487,7 @@ public class TITAN : Photon.MonoBehaviour
                 current.speed = num2;
         Rigidbody rigidbody = this.rigidbody;
         rigidbody.mass *= this.myLevel;
-        this.rigidbody.rotation = Quaternion.Euler(0f, UnityEngine.Random.Range(0, 360), 0f);
+        this.rigidbody.rotation = Quaternion.Euler(0f, Random.Range(0, 360), 0f);
         if (this.myLevel > 1f)
         {
             this.speed *= Mathf.Sqrt(this.myLevel);
@@ -2553,7 +2539,7 @@ public class TITAN : Photon.MonoBehaviour
     {
         this.myLevel = level;
         this.myLevel = Mathf.Clamp(this.myLevel, 0.1f, 50f);
-        this.attackWait += UnityEngine.Random.Range(0f, 2f);
+        this.attackWait += Random.Range(0f, 2f);
         this.chaseDistance += this.myLevel * 10f;
         transform.localScale = new Vector3(this.myLevel, this.myLevel, this.myLevel);
         float x = Mathf.Min(Mathf.Pow(2f / this.myLevel, 0.35f), 1.25f);
@@ -2572,7 +2558,7 @@ public class TITAN : Photon.MonoBehaviour
         }
         Rigidbody rigidbody = this.rigidbody;
         rigidbody.mass *= this.myLevel;
-        this.rigidbody.rotation = Quaternion.Euler(0f, UnityEngine.Random.Range(0, 360), 0f);
+        this.rigidbody.rotation = Quaternion.Euler(0f, Random.Range(0, 360), 0f);
         if (this.myLevel > 1f)
         {
             this.speed *= Mathf.Sqrt(this.myLevel);
@@ -2633,13 +2619,13 @@ public class TITAN : Photon.MonoBehaviour
         animation.cullingType = AnimationCullingType.BasedOnRenderers;
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
         {
-            object[] parameters = new object[] { this.myLevel, FengGameManagerMKII.instance.difficulty, UnityEngine.Random.Range(0, 4) };
+            object[] parameters = new object[] { this.myLevel, FengGameManagerMKII.instance.difficulty, Random.Range(0, 4) };
             photonView.RPC("netSetLevel", PhotonTargets.AllBuffered, parameters);
             animation.cullingType = AnimationCullingType.AlwaysAnimate;
         }
         else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
         {
-            this.setLevel2(this.myLevel, IN_GAME_MAIN_CAMERA.difficulty, UnityEngine.Random.Range(0, 4));
+            this.setLevel2(this.myLevel, IN_GAME_MAIN_CAMERA.difficulty, Random.Range(0, 4));
         }
     }
 
@@ -2690,7 +2676,7 @@ public class TITAN : Photon.MonoBehaviour
     {
         this.state = TitanState.Sit;
         this.playAnimation("sit_down");
-        this.getdownTime = UnityEngine.Random.Range(10f, 30f);
+        this.getdownTime = Random.Range(10f, 30f);
     }
 
     private void Start()
@@ -2713,7 +2699,7 @@ public class TITAN : Photon.MonoBehaviour
         {
             if (!this.hasSetLevel)
             {
-                this.myLevel = UnityEngine.Random.Range(0.7f, 3f);
+                this.myLevel = Random.Range(0.7f, 3f);
                 if (FengGameManagerMKII.settings.EnableCustomSize)
                 {
                     this.myLevel = FengGameManagerMKII.settings.TitanSize.Random;
@@ -2974,7 +2960,7 @@ public class TITAN : Photon.MonoBehaviour
                 {
                     this.FindNeareastHero();
                 }
-                if (!(this.state != TitanState.Idle && this.state != TitanState.Chasing && this.state != TitanState.Wandering || (this.whoHasTauntMe != null || UnityEngine.Random.Range(0, 100) >= 10)))
+                if (!(this.state != TitanState.Idle && this.state != TitanState.Chasing && this.state != TitanState.Wandering || (this.whoHasTauntMe != null || Random.Range(0, 100) >= 10)))
                 {
                     this.FindNearestFacingHero();
                 }
@@ -3357,7 +3343,7 @@ public class TITAN : Photon.MonoBehaviour
                     {
                         if (this.baseAnimation["tired"].normalizedTime >= 1f + Mathf.Max(this.attackEndWait * 2f, 3f))
                         {
-                            this.idle(UnityEngine.Random.Range(this.attackWait - 1f, 3f));
+                            this.idle(Random.Range(this.attackWait - 1f, 3f));
                         }
                     }
                     else if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 1f + this.attackEndWait)
@@ -3369,7 +3355,7 @@ public class TITAN : Photon.MonoBehaviour
                         else if (this.attackAnimation == "quick_turn_l" || this.attackAnimation == "quick_turn_r")
                         {
                             this.baseTransform.rotation = Quaternion.Euler(this.baseTransform.rotation.eulerAngles.x, this.baseTransform.rotation.eulerAngles.y + 180f, this.baseTransform.rotation.eulerAngles.z);
-                            this.idle(UnityEngine.Random.Range(0.5f, 1f));
+                            this.idle(Random.Range(0.5f, 1f));
                             this.playAnimation("idle");
                         }
                         else if (this.abnormalType == AbnormalType.Abnormal || this.abnormalType == AbnormalType.Jumper)
@@ -3382,12 +3368,12 @@ public class TITAN : Photon.MonoBehaviour
                             }
                             else
                             {
-                                this.idle(UnityEngine.Random.Range(this.attackWait - 1f, 3f));
+                                this.idle(Random.Range(this.attackWait - 1f, 3f));
                             }
                         }
                         else
                         {
-                            this.idle(UnityEngine.Random.Range(this.attackWait - 1f, 3f));
+                            this.idle(Random.Range(this.attackWait - 1f, 3f));
                         }
                     }
                 }
@@ -3418,7 +3404,7 @@ public class TITAN : Photon.MonoBehaviour
                         }
                         else
                         {
-                            this.idle(UnityEngine.Random.Range(this.attackWait - 1f, 2f));
+                            this.idle(Random.Range(this.attackWait - 1f, 2f));
                         }
                     }
                 }
@@ -3454,7 +3440,7 @@ public class TITAN : Photon.MonoBehaviour
                             Vector3 vector14 = this.myHero.transform.position - this.baseTransform.position;
                             float current = -Mathf.Atan2(vector14.z, vector14.x) * 57.29578f;
                             float f = -Mathf.DeltaAngle(current, this.baseGameObjectTransform.rotation.eulerAngles.y - 90f);
-                            if (this.myDistance < this.attackDistance * 3f && UnityEngine.Random.Range(0f, 1f) < 0.1f && Mathf.Abs(f) < 90f && this.myHero.transform.position.y < this.neck.position.y + 30f * this.myLevel && this.myHero.transform.position.y > this.neck.position.y + 10f * this.myLevel)
+                            if (this.myDistance < this.attackDistance * 3f && Random.Range(0f, 1f) < 0.1f && Mathf.Abs(f) < 90f && this.myHero.transform.position.y < this.neck.position.y + 30f * this.myLevel && this.myHero.transform.position.y > this.neck.position.y + 10f * this.myLevel)
                             {
                                 this.Attack("crawler_jump_0");
                             }
@@ -3482,9 +3468,9 @@ public class TITAN : Photon.MonoBehaviour
                                         }
                                     }
                                 }
-                                if (this.myDistance < this.attackDistance && UnityEngine.Random.Range(0f, 1f) < 0.02f)
+                                if (this.myDistance < this.attackDistance && Random.Range(0f, 1f) < 0.02f)
                                 {
-                                    this.idle(UnityEngine.Random.Range(0.05f, 0.2f));
+                                    this.idle(Random.Range(0.05f, 0.2f));
                                 }
                             }
                         }
@@ -3494,7 +3480,7 @@ public class TITAN : Photon.MonoBehaviour
                         }
                         else if (this.myDistance < this.attackDistance)
                         {
-                            this.idle(UnityEngine.Random.Range(0.05f, 0.2f));
+                            this.idle(Random.Range(0.05f, 0.2f));
                         }
                     }
                 }
@@ -3518,7 +3504,7 @@ public class TITAN : Photon.MonoBehaviour
                             return;
                         }
                     }
-                    if (UnityEngine.Random.Range(0f, 1f) < 0.01f)
+                    if (Random.Range(0f, 1f) < 0.01f)
                     {
                         this.idle(0f);
                     }
@@ -3557,7 +3543,7 @@ public class TITAN : Photon.MonoBehaviour
                         string[] attackStrategy = this.GetAttackStrategy();
                         if (attackStrategy != null)
                         {
-                            decidedAction = attackStrategy[UnityEngine.Random.Range(0, attackStrategy.Length)];
+                            decidedAction = attackStrategy[Random.Range(0, attackStrategy.Length)];
                         }
                         if (this.ExecuteAttack(decidedAction))
                         {
@@ -3719,24 +3705,24 @@ public class TITAN : Photon.MonoBehaviour
             {
                 if (!this.isAlarm)
                 {
-                    if (this.abnormalType != AbnormalType.Punk && this.abnormalType != AbnormalType.Crawler && UnityEngine.Random.Range(0f, 1f) < 0.005f)
+                    if (this.abnormalType != AbnormalType.Punk && this.abnormalType != AbnormalType.Crawler && Random.Range(0f, 1f) < 0.005f)
                     {
                         this.sitdown();
                         return;
                     }
-                    if (UnityEngine.Random.Range(0f, 1f) < 0.02f)
+                    if (Random.Range(0f, 1f) < 0.02f)
                     {
                         this.wander(0f);
                         return;
                     }
-                    if (UnityEngine.Random.Range(0f, 1f) < 0.01f)
+                    if (Random.Range(0f, 1f) < 0.01f)
                     {
-                        this.turn(UnityEngine.Random.Range(30, 120));
+                        this.turn(Random.Range(30, 120));
                         return;
                     }
-                    if (UnityEngine.Random.Range(0f, 1f) < 0.01f)
+                    if (Random.Range(0f, 1f) < 0.01f)
                     {
-                        this.turn(UnityEngine.Random.Range(-30, -120));
+                        this.turn(Random.Range(-30, -120));
                         return;
                     }
                 }
@@ -3778,15 +3764,15 @@ public class TITAN : Photon.MonoBehaviour
                     }
                     if (this.abnormalType == AbnormalType.Punk && this.myDistance < 90f && Mathf.Abs(this.between2) > 90f)
                     {
-                        if (UnityEngine.Random.Range(0f, 1f) < 0.4f)
+                        if (Random.Range(0f, 1f) < 0.4f)
                         {
-                            this.randomRun(this.baseTransform.position + new Vector3(UnityEngine.Random.Range(-50f, 50f), UnityEngine.Random.Range(-50f, 50f), UnityEngine.Random.Range(-50f, 50f)), 10f);
+                            this.randomRun(this.baseTransform.position + new Vector3(Random.Range(-50f, 50f), Random.Range(-50f, 50f), Random.Range(-50f, 50f)), 10f);
                         }
-                        if (UnityEngine.Random.Range(0f, 1f) < 0.2f)
+                        if (Random.Range(0f, 1f) < 0.2f)
                         {
                             this.recover();
                         }
-                        else if (UnityEngine.Random.Range(0, 2) == 0)
+                        else if (Random.Range(0, 2) == 0)
                         {
                             this.Attack("quick_turn_l");
                         }
@@ -3801,7 +3787,7 @@ public class TITAN : Photon.MonoBehaviour
                         {
                             if (this.abnormalType == AbnormalType.Crawler)
                             {
-                                if (this.myHero.transform.position.y + 3f <= this.neck.position.y + 20f * this.myLevel && UnityEngine.Random.Range(0f, 1f) < 0.1f)
+                                if (this.myHero.transform.position.y + 3f <= this.neck.position.y + 20f * this.myLevel && Random.Range(0f, 1f) < 0.1f)
                                 {
                                     this.Chase();
                                 }
@@ -3811,19 +3797,19 @@ public class TITAN : Photon.MonoBehaviour
                             string[] strArray = this.GetAttackStrategy();
                             if (strArray != null)
                             {
-                                str = strArray[UnityEngine.Random.Range(0, strArray.Length)];
+                                str = strArray[Random.Range(0, strArray.Length)];
                             }
                             if (!(this.abnormalType == AbnormalType.Jumper || this.abnormalType == AbnormalType.Abnormal ? Mathf.Abs(this.between2) <= 40f : true))
                             {
                                 if (str.Contains("grab") || str.Contains("kick") || str.Contains("slap") || str.Contains("bite"))
                                 {
-                                    if (UnityEngine.Random.Range(0, 100) < 30)
+                                    if (Random.Range(0, 100) < 30)
                                     {
                                         this.turn(this.between2);
                                         return;
                                     }
                                 }
-                                else if (UnityEngine.Random.Range(0, 100) < 90)
+                                else if (Random.Range(0, 100) < 90)
                                 {
                                     this.turn(this.between2);
                                     return;
@@ -3835,7 +3821,7 @@ public class TITAN : Photon.MonoBehaviour
                             }
                             if (this.abnormalType == AbnormalType.Normal)
                             {
-                                if (UnityEngine.Random.Range(0, 100) < 30 && Mathf.Abs(this.between2) > 45f)
+                                if (Random.Range(0, 100) < 30 && Mathf.Abs(this.between2) > 45f)
                                 {
                                     this.turn(this.between2);
                                     return;
@@ -3852,28 +3838,28 @@ public class TITAN : Photon.MonoBehaviour
                             if (this.PVPfromCheckPt.state == CheckPointState.Titan)
                             {
                                 GameObject chkPtNext;
-                                if (UnityEngine.Random.Range(0, 100) > 48)
+                                if (Random.Range(0, 100) > 48)
                                 {
                                     chkPtNext = this.PVPfromCheckPt.chkPtNext;
-                                    if (chkPtNext != null && (chkPtNext.GetComponent<PVPcheckPoint>().state != CheckPointState.Titan || UnityEngine.Random.Range(0, 100) < 20))
+                                    if (chkPtNext != null && (chkPtNext.GetComponent<PVPcheckPoint>().state != CheckPointState.Titan || Random.Range(0, 100) < 20))
                                     {
-                                        this.toPVPCheckPoint(chkPtNext.transform.position, 5 + UnityEngine.Random.Range(0, 10));
+                                        this.toPVPCheckPoint(chkPtNext.transform.position, 5 + Random.Range(0, 10));
                                         this.PVPfromCheckPt = chkPtNext.GetComponent<PVPcheckPoint>();
                                     }
                                 }
                                 else
                                 {
                                     chkPtNext = this.PVPfromCheckPt.chkPtPrevious;
-                                    if (chkPtNext != null && (chkPtNext.GetComponent<PVPcheckPoint>().state != CheckPointState.Titan || UnityEngine.Random.Range(0, 100) < 5))
+                                    if (chkPtNext != null && (chkPtNext.GetComponent<PVPcheckPoint>().state != CheckPointState.Titan || Random.Range(0, 100) < 5))
                                     {
-                                        this.toPVPCheckPoint(chkPtNext.transform.position, 5 + UnityEngine.Random.Range(0, 10));
+                                        this.toPVPCheckPoint(chkPtNext.transform.position, 5 + Random.Range(0, 10));
                                         this.PVPfromCheckPt = chkPtNext.GetComponent<PVPcheckPoint>();
                                     }
                                 }
                             }
                             else
                             {
-                                this.toPVPCheckPoint(this.PVPfromCheckPt.transform.position, 5 + UnityEngine.Random.Range(0, 10));
+                                this.toPVPCheckPoint(this.PVPfromCheckPt.transform.position, 5 + Random.Range(0, 10));
                             }
                         }
                     }

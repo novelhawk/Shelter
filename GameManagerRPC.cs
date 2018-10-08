@@ -524,11 +524,10 @@ public partial class FengGameManagerMKII
                 titanSpawns.Clear();
                 playerSpawnsC.Clear();
                 playerSpawnsM.Clear();
-                Hashtable propertiesToSet = new Hashtable
+                Player.Self.SetCustomProperties(new Hashtable
                 {
                     {PlayerProperty.CurrentLevel, string.Empty}
-                };
-                Player.Self.SetCustomProperties(propertiesToSet);
+                });
                 customLevelLoaded = true;
                 SpawnPlayerCustomMap();
             }

@@ -32,7 +32,7 @@ public static class CostumeConverter
         if (costumeId == 26)
             costumeId = 25;
 
-        Hashtable propertiesToSet = new Hashtable
+        player.SetCustomProperties(new Hashtable
         {
             {PlayerProperty.Sex, (int) costume.sex},
             {PlayerProperty.HeroCostumeID, costume.id},
@@ -52,9 +52,7 @@ public static class CostumeConverter
             {PlayerProperty.Acceleration, costume.stat.Acceleration},
             {PlayerProperty.Skill, costume.stat.SkillName},
             {PlayerProperty.CostumeID, costumeId}
-        };
-        
-        player.SetCustomProperties(propertiesToSet);
+        });
     }
 
     public static HeroCostume LocalDataToHeroCostume(string slot)

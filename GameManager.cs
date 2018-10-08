@@ -1091,11 +1091,10 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             }
             currentLevel = currentLevel + content[content.Length - 1];
             levelCache.Add(content);
-            Hashtable propertiesToSet = new Hashtable
+            Player.Self.SetCustomProperties(new Hashtable
             {
                 { PlayerProperty.CurrentLevel, currentLevel }
-            };
-            Player.Self.SetCustomProperties(propertiesToSet);
+            });
         }
         if (!flag && !flag2)
         {
@@ -1433,11 +1432,10 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         for (num = 0; num < PhotonNetwork.PlayerList.Length; num++)
         {
             Player player = PhotonNetwork.PlayerList[num];
-            Hashtable propertiesToSet = new Hashtable
+            player.SetCustomProperties(new Hashtable
             {
                 { PlayerProperty.IsTitan, 1 }
-            };
-            player.SetCustomProperties(propertiesToSet);
+            });
         }
         int length = PhotonNetwork.PlayerList.Length;
         int infectionMode = settings.InfectionTitanNumber;
@@ -1466,14 +1464,13 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         {
             foreach (Player player in PhotonNetwork.PlayerList)
             {
-                Hashtable propertiesToSet = new Hashtable
+                player.SetCustomProperties(new Hashtable
                 {
                     { PlayerProperty.Kills, 0 },
                     { PlayerProperty.Deaths, 0 },
                     { PlayerProperty.MaxDamage, 0 },
                     { PlayerProperty.TotalDamage, 0 }
-                };
-                player.SetCustomProperties(propertiesToSet);
+                });
             }
         }
         gameEndCD = 0f;
@@ -2310,18 +2307,11 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     public void SpawnPlayerTitanAfterGameEnd(string id) // Called after choose of titan
     {
         myLastHero = id.ToUpper();
-        Hashtable hashtable = new Hashtable
+        Player.Self.SetCustomProperties(new Hashtable
         {
-            { "dead", true }
-        };
-        Hashtable propertiesToSet = hashtable;
-        Player.Self.SetCustomProperties(propertiesToSet);
-        hashtable = new Hashtable
-        {
+            { "dead", true },
             { PlayerProperty.IsTitan, 2 }
-        };
-        propertiesToSet = hashtable;
-        Player.Self.SetCustomProperties(propertiesToSet);
+        });
         if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS)
         {
             Screen.lockCursor = true;
@@ -2340,18 +2330,11 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     public void SpawnPlayerTitanAfterGameEndRC(string id)
     {
         myLastHero = id.ToUpper();
-        Hashtable hashtable = new Hashtable
+        Player.Self.SetCustomProperties(new Hashtable
         {
-            { "dead", true }
-        };
-        Hashtable propertiesToSet = hashtable;
-        Player.Self.SetCustomProperties(propertiesToSet);
-        hashtable = new Hashtable
-        {
+            { "dead", true },
             { PlayerProperty.IsTitan, 2 }
-        };
-        propertiesToSet = hashtable;
-        Player.Self.SetCustomProperties(propertiesToSet);
+        });
         if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS)
         {
             Screen.lockCursor = true;
@@ -2393,18 +2376,11 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     public void SpawnPlayerAfterGameEndRC(string id)
     {
         myLastHero = id.ToUpper();
-        Hashtable hashtable = new Hashtable
+        Player.Self.SetCustomProperties(new Hashtable
         {
-            { "dead", true }
-        };
-        Hashtable propertiesToSet = hashtable;
-        Player.Self.SetCustomProperties(propertiesToSet);
-        hashtable = new Hashtable
-        {
+            { "dead", true },
             { PlayerProperty.IsTitan, 1 }
-        };
-        propertiesToSet = hashtable;
-        Player.Self.SetCustomProperties(propertiesToSet);
+        });
         if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS)
         {
             Screen.lockCursor = true;
@@ -3341,10 +3317,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     private void ResetSettings(bool leaving)
     {
         masterRC = false;
-        Hashtable propertiesToSet = new Hashtable
-        {
-            { PlayerProperty.RCTeam, 0 }
-        };
+        Hashtable propertiesToSet = new Hashtable(6);
         if (leaving)
         {
             currentLevel = string.Empty;
@@ -3376,6 +3349,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             restartingEren = false;
             restartingBomb = false;
         }
+        propertiesToSet.Add(PlayerProperty.RCTeam, 0);
         Player.Self.SetCustomProperties(propertiesToSet);
         ResetGameSettings();
         banHash = new Hashtable();
@@ -4012,26 +3986,16 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             GameObject.Find("MainCamera").GetComponent<SpectatorMovement>().disable = true;
             GameObject.Find("MainCamera").GetComponent<MouseLook>().disable = true;
             GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
-            Hashtable hashtable = new Hashtable
+            Player.Self.SetCustomProperties( new Hashtable
             {
-                { "dead", false }
-            };
-            Hashtable propertiesToSet = hashtable;
-            Player.Self.SetCustomProperties(propertiesToSet);
-            hashtable = new Hashtable
-            {
+                { "dead", false },
                 { PlayerProperty.IsTitan, 2 }
-            };
-            propertiesToSet = hashtable;
-            Player.Self.SetCustomProperties(propertiesToSet);
+            });
+            
             if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS)
-            {
                 Screen.lockCursor = true;
-            }
             else
-            {
                 Screen.lockCursor = false;
-            }
             Screen.showCursor = true;
         }
         else
@@ -4204,18 +4168,12 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                     Transform transform1 = component.main_object.transform;
                     transform1.position += new Vector3(UnityEngine.Random.Range(-20, 20), 2f, UnityEngine.Random.Range(-20, 20));
                 }
-                Hashtable hashtable = new Hashtable
+
+                Player.Self.SetCustomProperties(new Hashtable
                 {
-                    { "dead", false }
-                };
-                Hashtable propertiesToSet = hashtable;
-                Player.Self.SetCustomProperties(propertiesToSet);
-                hashtable = new Hashtable
-                {
-                    { PlayerProperty.IsTitan, 1 }
-                };
-                propertiesToSet = hashtable;
-                Player.Self.SetCustomProperties(propertiesToSet);
+                    {"dead", false},
+                    {PlayerProperty.IsTitan, 1}
+                });
             }
             component.enabled = true;
             GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().SetInterfacePosition();
@@ -4640,14 +4598,13 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         {
             int[] numArray = PreservedPlayerKDR[key];
             PreservedPlayerKDR.Remove(key);
-            Hashtable propertiesToSet = new Hashtable
+            player.SetCustomProperties(new Hashtable
             {
                 { PlayerProperty.Kills, numArray[0] },
                 { PlayerProperty.Deaths, numArray[1] },
                 { PlayerProperty.MaxDamage, numArray[2] },
                 { PlayerProperty.TotalDamage, numArray[3] }
-            };
-            player.SetCustomProperties(propertiesToSet);
+            });
         }
     }
 

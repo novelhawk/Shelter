@@ -63,11 +63,10 @@ public class InRoomRoundTimer : MonoBehaviour
         else
         {
             this.startRoundWhenTimeIsSynced = false;
-            Hashtable propertiesToSet = new Hashtable
+            PhotonNetwork.Room.SetCustomProperties(new Hashtable
             {
                 ["st"] = PhotonNetwork.time
-            };
-            PhotonNetwork.Room.SetCustomProperties(propertiesToSet);
+            });
         }
     }
 

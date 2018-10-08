@@ -2845,18 +2845,18 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                         return;
                     }
                 }
-                Hashtable propertiesToSet = new Hashtable();
-                if (levelId is int)
+                Hashtable propertiesToSet = new Hashtable(1);
+                switch (levelId)
                 {
-                    propertiesToSet["curScn"] = (int) levelId;
-                }
-                else if (levelId is string)
-                {
-                    propertiesToSet["curScn"] = (string) levelId;
-                }
-                else
-                {
-                    Debug.LogError("Parameter levelId must be int or string!");
+                    case int i:
+                        propertiesToSet["curScn"] = i;
+                        break;
+                    case string str:
+                        propertiesToSet["curScn"] = str;
+                        break;
+                    default:
+                        Debug.LogError("Parameter levelId must be int or string!");
+                        break;
                 }
                 PhotonNetwork.Room.SetCustomProperties(propertiesToSet);
                 this.SendOutgoingCommands();

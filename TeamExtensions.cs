@@ -21,11 +21,10 @@ internal static class TeamExtensions
         }
         if (Player.Self.GetTeam() != team)
         {
-            Hashtable propertiesToSet = new Hashtable
+            Player.Self.SetCustomProperties(new Hashtable
             {
                 { "team", (byte)team }
-            };
-            Player.Self.SetCustomProperties(propertiesToSet);
+            });
         }
     }
 }

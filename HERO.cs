@@ -1,20 +1,17 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Runtime.Remoting.Metadata;
 using System.Text;
 using Mod;
 using Mod.Exceptions;
 using Mod.GameSettings;
 using Mod.Interface;
 using Mod.Keybinds;
-using Mod.Managers;
 using Mod.Modules;
-using Newtonsoft.Json.Schema;
 using UnityEngine;
 using Xft;
+using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 public class HERO : Photon.MonoBehaviour
 {
@@ -376,15 +373,14 @@ public class HERO : Photon.MonoBehaviour
             this.bombCD = num4 * -0.4f + 5f;
             this.bombSpeed = num3 * 60f + 200f;
             var color = FengGameManagerMKII.settings.BombColor;
-            ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
+            Player.Self.SetCustomProperties(new Hashtable
             {
                 { PlayerProperty.RCBombR, color.r },
                 { PlayerProperty.RCBombG, color.g },
                 { PlayerProperty.RCBombB, color.b },
                 { PlayerProperty.RCBombA, color.a },
                 { PlayerProperty.RCBombRadius, this.bombRadius }
-            };
-            Player.Self.SetCustomProperties(propertiesToSet);
+            });
             this.skillId = "bomb";
             this.skillIDHUD = "armin";
             this.skillCDLast = this.bombCD;
@@ -2918,12 +2914,11 @@ public class HERO : Photon.MonoBehaviour
         if (photonView.isMine)
         {
             PhotonNetwork.RemoveRPCs(photonView);
-            ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
+            Player.Self.SetCustomProperties(new Hashtable
             {
                 { PlayerProperty.Dead, true },
                 { PlayerProperty.Deaths, Player.Self.Properties.Deaths + 1 }
-            };
-            Player.Self.SetCustomProperties(propertiesToSet);
+            });
             FengGameManagerMKII.instance.photonView.RPC("someOneIsDead", PhotonTargets.MasterClient, titanName != string.Empty ? 1 : 0);
             if (viewID != -1)
             {
@@ -2931,11 +2926,10 @@ public class HERO : Photon.MonoBehaviour
                 if (view2 != null)
                 {
                     FengGameManagerMKII.instance.SendKillInfo(killByTitan, "[FFC000][" + info.sender.ID + "][FFFFFF]" + view2.owner.Properties.Name, false, Player.Self.Properties.Name, 0);
-                    propertiesToSet = new ExitGames.Client.Photon.Hashtable
+                    view2.owner.SetCustomProperties(new Hashtable
                     {
-                        { PlayerProperty.Kills, view2.owner.Properties.Kills + 1 }
-                    };
-                    view2.owner.SetCustomProperties(propertiesToSet);
+                        {PlayerProperty.Kills, view2.owner.Properties.Kills + 1}
+                    });
                 }
             }
             else
@@ -3033,32 +3027,26 @@ public class HERO : Photon.MonoBehaviour
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
             PhotonNetwork.RemoveRPCs(photonView);
-            ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
+            Player.Self.SetCustomProperties(new Hashtable
             {
-                { PlayerProperty.Dead, true }
-            };
-            Player.Self.SetCustomProperties(propertiesToSet);
-            propertiesToSet = new ExitGames.Client.Photon.Hashtable
-            {
-                { PlayerProperty.Deaths, (int)Player.Self.Properties.Deaths + 1 }
-            };
-            Player.Self.SetCustomProperties(propertiesToSet);
+                { PlayerProperty.Dead, true },
+                { PlayerProperty.Deaths, Player.Self.Properties.Deaths + 1 }
+            });
             if (viewID != -1)
             {
                 PhotonView view2 = PhotonView.Find(viewID);
                 if (view2 != null)
                 {
-                    FengGameManagerMKII.instance.SendKillInfo(true, "[FFC000][" + info.sender.ID + "][FFFFFF]" + view2.owner.Properties.Name, false, Player.Self.Properties.Name, 0);
-                    propertiesToSet = new ExitGames.Client.Photon.Hashtable
+                    FengGameManagerMKII.instance.SendKillInfo(true, "[FFC000][" + info?.sender.ID + "][FFFFFF]" + view2.owner.Properties.Name, false, Player.Self.Properties.Name, 0);
+                    view2.owner.SetCustomProperties(new Hashtable
                     {
                         { PlayerProperty.Kills, view2.owner.Properties.Kills + 1 }
-                    };
-                    view2.owner.SetCustomProperties(propertiesToSet);
+                    });
                 }
             }
             else
             {
-                FengGameManagerMKII.instance.SendKillInfo(true, "[FFC000][" + info.sender.ID + "][FFFFFF]" + titanName, false, Player.Self.Properties.Name, 0);
+                FengGameManagerMKII.instance.SendKillInfo(true, "[FFC000][" + info?.sender.ID + "][FFFFFF]" + titanName, false, Player.Self.Properties.Name, 0);
             }
             FengGameManagerMKII.instance.photonView.RPC("someOneIsDead", PhotonTargets.MasterClient, titanName != string.Empty ? 1 : 0);
         }
@@ -3140,16 +3128,11 @@ public class HERO : Photon.MonoBehaviour
         if (photonView.isMine)
         {
             PhotonNetwork.RemoveRPCs(photonView);
-            ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
+            Player.Self.SetCustomProperties(new Hashtable
             {
-                { PlayerProperty.Dead, true }
-            };
-            Player.Self.SetCustomProperties(propertiesToSet);
-            propertiesToSet = new ExitGames.Client.Photon.Hashtable
-            {
+                { PlayerProperty.Dead, true },
                 { PlayerProperty.Deaths, Player.Self.Properties.Deaths + 1 }
-            };
-            Player.Self.SetCustomProperties(propertiesToSet);
+            });
             FengGameManagerMKII.instance.photonView.RPC("someOneIsDead", PhotonTargets.MasterClient, titanName != string.Empty ? 1 : 0);
             if (viewID != -1)
             {
@@ -3157,16 +3140,15 @@ public class HERO : Photon.MonoBehaviour
                 if (view != null)
                 {
                     FengGameManagerMKII.instance.SendKillInfo(killByTitan, view.owner.Properties.Name, false, Player.Self.Properties.Name, 0);
-                    propertiesToSet = new ExitGames.Client.Photon.Hashtable
+                    view.owner.SetCustomProperties(new Hashtable
                     {
                         { PlayerProperty.Kills, view.owner.Properties.Kills + 1 }
-                    };
-                    view.owner.SetCustomProperties(propertiesToSet);
+                    });
                 }
             }
             else
             {
-                FengGameManagerMKII.instance.SendKillInfo(!(titanName == string.Empty), titanName, false, Player.Self.Properties.Name, 0);
+                FengGameManagerMKII.instance.SendKillInfo(titanName != string.Empty, titanName, false, Player.Self.Properties.Name, 0);
             }
         }
         if (photonView.isMine)
@@ -3774,11 +3756,10 @@ public class HERO : Photon.MonoBehaviour
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
             photonView.RPC("setMyTeam", PhotonTargets.OthersBuffered, team);
-            ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
+            Player.Self.SetCustomProperties(new Hashtable
             {
                 { PlayerProperty.Team, team }
-            };
-            Player.Self.SetCustomProperties(propertiesToSet);
+            });
         }
     }
 
@@ -3787,11 +3768,10 @@ public class HERO : Photon.MonoBehaviour
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
             photonView.RPC("setMyTeam", PhotonTargets.AllBuffered, team);
-            ExitGames.Client.Photon.Hashtable propertiesToSet = new ExitGames.Client.Photon.Hashtable
+            Player.Self.SetCustomProperties(new Hashtable
             {
                 { PlayerProperty.Team, team }
-            };
-            Player.Self.SetCustomProperties(propertiesToSet);
+            });
         }
         else
         {

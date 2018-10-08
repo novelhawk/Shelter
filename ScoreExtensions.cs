@@ -5,11 +5,10 @@ internal static class ScoreExtensions
     public static void AddScore(this Player player, int scoreToAddToCurrent)
     {
         int num = player.GetScore() + scoreToAddToCurrent;
-        Hashtable propertiesToSet = new Hashtable
+        player.SetCustomProperties(new Hashtable
         {
             ["score"] = num
-        };
-        player.SetCustomProperties(propertiesToSet);
+        });
     }
 
     public static int GetScore(this Player player)
@@ -24,11 +23,10 @@ internal static class ScoreExtensions
 
     public static void SetScore(this Player player, int newScore)
     {
-        Hashtable propertiesToSet = new Hashtable
+        player.SetCustomProperties(new Hashtable
         {
             ["score"] = newScore
-        };
-        player.SetCustomProperties(propertiesToSet);
+        });
     }
 }
 
