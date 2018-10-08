@@ -1,22 +1,72 @@
-﻿namespace Mod.GameSettings
+﻿using System;
+using JetBrains.Annotations;
+
+namespace Mod.GameSettings
 {
-    public struct Range
+    public struct Range : IEquatable<Range>
     {
-        private readonly int _min;
-        private readonly int _max;
+        public static Range Zero = new Range();
         
-        public Range(int min, int max)
+        private readonly float _min;
+        private readonly float _max;
+        
+        public Range(float min, float max)
         {
-            _min = min < max ? min : max;
-            _max = min < max ? max : min;
+            _min = min < max ? min : max; 
+            _max = min < max ? max : min; 
+        }
+        
+        public float Min => _min;
+        public float Max => _max;
+
+        public float Random => UnityEngine.Random.Range(_min, _max);
+
+        public float Clamp(float num)
+        {
+            if (num < _min)
+                return _min;
+            if (num > _max)
+                return _max;
+            return num;
+        }
+        
+        public bool Contains(float num)
+        {
+            return _min < num && num < _max;
         }
 
-        public int Min => _min;
-        public int Max => _max;
-        
         public override string ToString()
         {
-            return $"{_min}-{_max}";
+            return $"{_min:F2}-{_max:F2}";
+        }
+
+        public static bool operator ==(Range range, Range other)
+        {
+            return range.Equals(other);
+        }
+
+        public static bool operator !=(Range range, Range other)
+        {
+            return !range.Equals(other);
+        }
+        
+        public bool Equals(Range other)
+        {
+            return _min.Equals(other._min) && _max.Equals(other._max);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            return obj is Range range && Equals(range);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (_min.GetHashCode() * 397) ^ _max.GetHashCode();
+            }
         }
     }
 }
