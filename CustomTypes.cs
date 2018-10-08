@@ -21,7 +21,7 @@ internal static class CustomTypes
         Vector2 vector = new Vector2();
         if (bytes.Length < sizeof(float) * 2)
         {
-            Shelter.LogBoth("Malformed data received. Vector2 with {0} bytes", LogType.Error, bytes);
+            Shelter.LogBoth("Malformed data received. Vector2 with {0} bytes", LogType.Error, bytes.Length);
             return Vector2.zero;
         }
         int offset = 0;
@@ -35,7 +35,7 @@ internal static class CustomTypes
         Vector3 vector = new Vector3();
         if (bytes.Length < sizeof(float) * 3)
         {
-            Shelter.LogBoth("Malformed data received. Vector3 with {0} bytes", LogType.Error, bytes);
+            Shelter.LogBoth("Malformed data received. Vector3 with {0} bytes", LogType.Error, bytes.Length);
             return Vector3.zero;
         }
         int offset = 0;
@@ -47,11 +47,11 @@ internal static class CustomTypes
 
     private static object DeserializeVector4(byte[] bytes)
     {
-        Shelter.LogBoth("We deserialized a Vector4. That should never happen ({0} bytes)", LogType.Warning, bytes);
+        Shelter.LogBoth("We deserialized a Vector4. That should never happen ({0} bytes)", LogType.Warning, bytes.Length);
         Vector4 vector = new Vector4();
         if (bytes.Length < sizeof(float) * 4)
         {
-            Shelter.LogBoth("Malformed data received. Vector4 with {0} bytes", LogType.Error, bytes);
+            Shelter.LogBoth("Malformed data received. Vector4 with {0} bytes", LogType.Error, bytes.Length);
             return Vector3.zero;
         }
         int offset = 0;
@@ -66,7 +66,7 @@ internal static class CustomTypes
     {
         if (bytes.Length < sizeof(int))
         {
-            Shelter.LogBoth("Malformed data received. PhotonPlayer with {0} bytes", LogType.Error, bytes);
+            Shelter.LogBoth("Malformed data received. PhotonPlayer with {0} bytes", LogType.Error, bytes.Length);
             return Vector2.zero;
         }
         int offset = 0;
@@ -81,7 +81,7 @@ internal static class CustomTypes
         Quaternion quaternion = new Quaternion();
         if (bytes.Length < sizeof(float) * 4)
         {
-            Shelter.LogBoth("Malformed data received. Quaternion with {0} bytes", LogType.Error, bytes);
+            Shelter.LogBoth("Malformed data received. Quaternion with {0} bytes", LogType.Error, bytes.Length);
             return Vector2.zero;
         }
         int offset = 0;
