@@ -1,13 +1,5 @@
-﻿using System;
-using System.ComponentModel;
-using System.Drawing.Design;
-using System.Globalization;
-using System.Reflection;
-using ExitGames.Client.Photon;
-using Mod.GameSettings;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using UnityEngine;
-using UnityEngine.UI;
 
 namespace Mod.GameSettings
 {
@@ -147,8 +139,6 @@ namespace Mod.GameSettings
         [JsonProperty("enableASORacing")]
         public bool IsASORacing;
 
-        [JsonProperty("showMap")]
-        public bool EnableMap;
         [JsonProperty("enableMap")]
         public bool IsMapAllowed;
 

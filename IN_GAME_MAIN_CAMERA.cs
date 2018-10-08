@@ -1,6 +1,8 @@
 using System.Drawing.Text;
 using Mod;
 using Mod.Keybinds;
+using Mod.Managers;
+using Mod.Modules;
 using UnityEngine;
 
 public class IN_GAME_MAIN_CAMERA : MonoBehaviour
@@ -101,7 +103,6 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         {
             GetComponent<TiltShift>().enabled = true;
         }
-        this.CreateMinimap();
     }
 
     private void OnApplicationFocus(bool hasFocus)
@@ -192,39 +193,24 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         this.transform.rotation = Quaternion.Lerp(Camera.main.transform.rotation, hero.GetComponent<SmoothSyncMovement>().correctCameraRot, Time.deltaTime * 5f);
     }
 
-    private void CreateMinimap()
+    public void CreateMinimap()
     {
+        if (!Shelter.ModuleManager.Enabled(nameof(ModuleShowMap)) || !FengGameManagerMKII.settings.IsMapAllowed)
+            return;
+        
         LevelInfo info = LevelInfoManager.Get(FengGameManagerMKII.Level);
         Minimap minimap = gameObject.AddComponent<Minimap>();
-        if (Minimap.instance.myCam == null)
+        if (minimap.myCam == null)
         {
-            Minimap.instance.myCam = new GameObject().AddComponent<Camera>();
-            Minimap.instance.myCam.nearClipPlane = 0.3f;
-            Minimap.instance.myCam.farClipPlane = 1000f;
-            Minimap.instance.myCam.enabled = false;
+            minimap.myCam = new GameObject().AddComponent<Camera>();
+            minimap.myCam.nearClipPlane = 0.3f;
+            minimap.myCam.farClipPlane = 1000f;
+            minimap.myCam.enabled = false;
         }
-        minimap.CreateMinimap(Minimap.instance.myCam, 512, 0.3f, info.MinimapPreset);
-        if (!FengGameManagerMKII.settings.EnableMap || !FengGameManagerMKII.settings.IsMapAllowed)
-            minimap.SetEnabled(false);
+        minimap.CreateMinimap(minimap.myCam, 512, 0.3f, info.MinimapPreset);
     }
 
-    public void createSnapShotRT()
-    {
-        if (this.snapShotCamera.GetComponent<Camera>().targetTexture != null)
-        {
-            this.snapShotCamera.GetComponent<Camera>().targetTexture.Release();
-        }
-        if (QualitySettings.GetQualityLevel() > 3)
-        {
-            this.snapShotCamera.GetComponent<Camera>().targetTexture = new RenderTexture((int) (Screen.width * 0.8f), (int) (Screen.height * 0.8f), 24);
-        }
-        else
-        {
-            this.snapShotCamera.GetComponent<Camera>().targetTexture = new RenderTexture((int) (Screen.width * 0.4f), (int) (Screen.height * 0.4f), 24);
-        }
-    }
-
-    public void createSnapShotRT2()
+    private void TakeSnapshotRT()
     {
         if (this.snapshotRT != null)
         {
@@ -456,7 +442,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         {
             gameObject.GetComponent<Camera>().aspect = 1.777778F;
         }
-        this.createSnapShotRT2();
+        this.TakeSnapshotRT();
     }
 
     public GameObject setMainObject(GameObject obj, bool resetRotation = true, bool lockAngle = false)
@@ -698,7 +684,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         {
             cameraDistance = PlayerPrefs.GetFloat("cameraDistance") + 0.3f;
         }
-        this.createSnapShotRT2();
+        this.TakeSnapshotRT();
     }
 
     public void startShake(float R, float duration, float decay = 0.95f)

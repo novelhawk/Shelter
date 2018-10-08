@@ -1,10 +1,17 @@
+using System;
 using System.Collections;
+using Mod;
+using Mod.Modules;
 using UnityEngine;
 using UnityEngine.UI;
+using LogType = Mod.Logging.LogType;
+using Object = UnityEngine.Object;
 
 [DisallowMultipleComponent]
-public class Minimap : MonoBehaviour
+public class Minimap : MonoBehaviour, IDisposable
 {
+    private GameObject[] _interface;
+    
     private bool assetsInitialized = false;
     private static UnityEngine.Sprite borderSprite;
     private RectTransform borderT;
@@ -133,11 +140,8 @@ public class Minimap : MonoBehaviour
 
     private void CheckUserInput()
     {
-        if (!FengGameManagerMKII.settings.EnableMap || FengGameManagerMKII.settings.IsMapAllowed)
-        {
-            if (this.isEnabled)
-                this.SetEnabled(!this.isEnabled);
-        }
+        if (!Shelter.ModuleManager.Enabled(nameof(ModuleShowMap)) || !FengGameManagerMKII.settings.IsMapAllowed)
+            Dispose();
     }
 
     public void CreateMinimap(Camera cam, int minimapResolution = 512, float cornerSize = 0.3f, Preset mapPreset = null)
@@ -210,88 +214,57 @@ public class Minimap : MonoBehaviour
         {
             bool flag2 = SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.RGB565);
             RenderTextureFormat format = flag2 ? RenderTextureFormat.RGB565 : RenderTextureFormat.Default;
-            this.minimapRT = new RenderTexture(pixelSize, pixelSize, 16, RenderTextureFormat.RGB565);
+            this.minimapRT = new RenderTexture(pixelSize, pixelSize, 16, format);
             if (!flag2)
-            {
-                Debug.Log(SystemInfo.graphicsDeviceName + " (" + SystemInfo.graphicsDeviceVendor + ") does not support RGB565 format, the minimap will have transparency issues on certain maps");
-            }
+                Shelter.LogBoth("{0} ({1}) does not support RGB565 format, the minimap will have transparency issues on certain maps", LogType.Error, 
+                    SystemInfo.graphicsDeviceName, SystemInfo.graphicsDeviceVendor);
         }
         cam.targetTexture = this.minimapRT;
     }
 
-    private void CreateUnityUI(Texture2D map, int minimapResolution)
-    {
-        GameObject obj2 = new GameObject("Canvas");
-        obj2.AddComponent<RectTransform>();
-        this.canvas = obj2.AddComponent<Canvas>();
-        this.canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        this.scaler = obj2.AddComponent<CanvasScaler>();
-        this.scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
-        this.scaler.referenceResolution = new Vector2(900f, 600f);
-        this.scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
-        GameObject obj3 = new GameObject("CircleMask");
-        obj3.transform.SetParent(obj2.transform, false);
-        this.minimapMaskT = obj3.AddComponent<RectTransform>();
-        obj3.AddComponent<CanvasRenderer>();
-        this.minimapMaskT.anchorMin = this.minimapMaskT.anchorMax = Vector2.one;
-        float num = this.MINIMAP_CORNER_SIZE * 0.5f;
-        this.cornerPosition = new Vector2(-(num + 5f), -(num + 70f));
-        this.minimapMaskT.anchoredPosition = this.cornerPosition;
-        this.minimapMaskT.sizeDelta = new Vector2(this.MINIMAP_CORNER_SIZE, this.MINIMAP_CORNER_SIZE);
-        GameObject obj4 = new GameObject("Minimap");
-        obj4.transform.SetParent(this.minimapMaskT, false);
-        this.minimap = obj4.AddComponent<RectTransform>();
-        obj4.AddComponent<CanvasRenderer>();
-        this.minimap.anchorMin = this.minimap.anchorMax = new Vector2(0.5f, 0.5f);
-        this.minimap.anchoredPosition = Vector2.zero;
-        this.minimap.sizeDelta = this.minimapMaskT.sizeDelta;
-        Image image = obj4.AddComponent<Image>();
-        Rect rect = new Rect(0f, 0f, map.width, map.height);
-        image.sprite = UnityEngine.Sprite.Create(map, rect, new Vector3(0.5f, 0.5f));
-        image.type = Image.Type.Simple;
-    }
-
     private void CreateUnityUIRT(int minimapResolution)
     {
-        GameObject obj2 = new GameObject("Canvas");
-        obj2.AddComponent<RectTransform>();
-        this.canvas = obj2.AddComponent<Canvas>();
+        _interface = new GameObject[4];
+        
+        _interface[0] = new GameObject("Canvas");
+        _interface[0].AddComponent<RectTransform>();
+        this.canvas = _interface[0].AddComponent<Canvas>();
         this.canvas.renderMode = RenderMode.ScreenSpaceOverlay;
-        this.scaler = obj2.AddComponent<CanvasScaler>();
+        this.scaler = _interface[0].AddComponent<CanvasScaler>();
         this.scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
         this.scaler.referenceResolution = new Vector2(800f, 600f);
         this.scaler.screenMatchMode = CanvasScaler.ScreenMatchMode.MatchWidthOrHeight;
         this.scaler.matchWidthOrHeight = 1f;
-        GameObject obj3 = new GameObject("Mask");
-        obj3.transform.SetParent(obj2.transform, false);
-        this.minimapMaskT = obj3.AddComponent<RectTransform>();
-        obj3.AddComponent<CanvasRenderer>();
+        _interface[1] = new GameObject("Mask");
+        _interface[1].transform.SetParent(_interface[0].transform, false);
+        this.minimapMaskT = _interface[1].AddComponent<RectTransform>();
+        _interface[1].AddComponent<CanvasRenderer>();
         this.minimapMaskT.anchorMin = this.minimapMaskT.anchorMax = Vector2.one;
         float num = this.MINIMAP_CORNER_SIZE * 0.5f;
         this.cornerPosition = new Vector2(-(num + 5f), -(num + 70f));
         this.minimapMaskT.anchoredPosition = this.cornerPosition;
         this.minimapMaskT.sizeDelta = new Vector2(this.MINIMAP_CORNER_SIZE, this.MINIMAP_CORNER_SIZE);
-        GameObject obj4 = new GameObject("MapBorder");
-        obj4.transform.SetParent(this.minimapMaskT, false);
-        this.borderT = obj4.AddComponent<RectTransform>();
+        _interface[2] = new GameObject("MapBorder");
+        _interface[2].transform.SetParent(this.minimapMaskT, false);
+        this.borderT = _interface[2].AddComponent<RectTransform>();
         this.borderT.anchorMin = this.borderT.anchorMax = new Vector2(0.5f, 0.5f);
         this.borderT.sizeDelta = this.minimapMaskT.sizeDelta;
-        obj4.AddComponent<CanvasRenderer>();
-        Image image = obj4.AddComponent<Image>();
+        _interface[2].AddComponent<CanvasRenderer>();
+        Image image = _interface[2].AddComponent<Image>();
         image.sprite = borderSprite;
         image.type = Image.Type.Sliced;
-        GameObject obj5 = new GameObject("Minimap");
-        obj5.transform.SetParent(this.minimapMaskT, false);
-        this.minimap = obj5.AddComponent<RectTransform>();
+        _interface[3] = new GameObject("Minimap");
+        _interface[3].transform.SetParent(this.minimapMaskT, false);
+        this.minimap = _interface[3].AddComponent<RectTransform>();
         this.minimap.SetAsFirstSibling();
-        obj5.AddComponent<CanvasRenderer>();
+        _interface[3].AddComponent<CanvasRenderer>();
         this.minimap.anchorMin = this.minimap.anchorMax = new Vector2(0.5f, 0.5f);
         this.minimap.anchoredPosition = Vector2.zero;
         this.minimap.sizeDelta = this.minimapMaskT.sizeDelta;
-        RawImage image2 = obj5.AddComponent<RawImage>();
+        RawImage image2 = _interface[3].AddComponent<RawImage>();
         image2.texture = this.minimapRT;
         image2.maskable = true;
-        obj5.AddComponent<Mask>().showMaskGraphic = true;
+        _interface[3].AddComponent<Mask>().showMaskGraphic = true;
     }
 
     private Vector2 GetSizeForStyle(IconStyle style)
@@ -441,10 +414,7 @@ public class Minimap : MonoBehaviour
     public static void OnScreenResolutionChanged()
     {
         if (instance != null)
-        {
-            Minimap instance = Minimap.instance;
             instance.StartCoroutine(instance.ScreenResolutionChangedRoutine());
-        }
     }
 
     private void RecaptureMinimap()
@@ -798,6 +768,13 @@ public class Minimap : MonoBehaviour
             this.center = center;
             this.orthographicSize = orthographicSize;
         }
+    }
+
+    public void Dispose()
+    {
+        foreach (var obj in _interface)
+            Destroy(obj);
+        Destroy(this);
     }
 }
 

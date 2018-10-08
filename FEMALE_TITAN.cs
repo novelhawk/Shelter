@@ -1309,9 +1309,8 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         startMain();
         size = 4f;
         if (Minimap.instance != null)
-        {
-            Minimap.instance.TrackGameObjectOnMinimap(gameObject, Color.black, false, true, Minimap.IconStyle.CIRCLE);
-        }
+            Minimap.instance.TrackGameObjectOnMinimap(gameObject, Color.black, false, true);
+        
         if (photonView.isMine)
         {
             if (FengGameManagerMKII.settings.EnableCustomSize)
