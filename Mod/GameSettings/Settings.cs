@@ -6,38 +6,38 @@ namespace Mod.GameSettings
     public struct Settings
     {
         [JsonProperty("randomizeSkinParts")]
-        public bool Randomize;
+        public bool Randomize; // TODO: Move away
 
         [JsonProperty("humanSkin")]
-        public HumanSkin HumanSkin;
+        public HumanSkin HumanSkin; // TODO: Move away
         [JsonProperty("titanSkin")]
-        public TitanSkin TitanSkin;
+        public TitanSkin TitanSkin; // TODO: Move away
         [JsonProperty("forestSkin")]
-        public ForestSkin ForestSkin;
+        public ForestSkin ForestSkin; // TODO: Move away
         [JsonProperty("citySkin")]
-        public CitySkin CitySkin;
+        public CitySkin CitySkin; // TODO: Move away
         [JsonProperty("customMapSkin")]
-        public CustomMapSkin CustomSkin;
+        public CustomMapSkin CustomSkin; // TODO: Move away
         
         [JsonProperty("teamSort")]
-        public TeamSort TeamSort; // Unused
+        public TeamSort TeamSort;
 
         [JsonProperty("titans")]
-        public int Titans; // Unused
+        public int Titans;
         [JsonProperty("respawnTimer")]
-        public int RespawnTimer; // Unused
+        public int RespawnTimer;
         [JsonProperty("spawnTimer")]
-        public int SpawnTimer; // Unused
+        public int SpawnTimer;
         [JsonProperty("customMaxTitans")]
         public int CustomMaxTitans;
         
         [JsonProperty("snapshotMinDamage")]
-        public int SnapshotDamage;
+        public int SnapshotDamage; // TODO: Move away
         
         [JsonProperty("enableVSync")]
-        public bool EnableVSync;
+        public bool EnableVSync; // TODO: Move away
         [JsonProperty("fpsCap")]
-        public int FPSCap;
+        public int FPSCap; // TODO: Move away
         
         [JsonProperty("speedmeterType")]
         public Speedmeter SpeedmeterType;
@@ -66,7 +66,7 @@ namespace Mod.GameSettings
 
         public bool SpawnMoreTitans => MoreTitansNumber > 0;
         [JsonProperty("additionalTitans")]
-        public int MoreTitansNumber; // Unused
+        public int MoreTitansNumber;
 
         public bool IsDamageMode => MinimumDamage > 0;
         [JsonProperty("minimumDamage")]
@@ -127,36 +127,36 @@ namespace Mod.GameSettings
         public bool IsMapAllowed;
 
         [JsonProperty("enableChatFeed")]
-        public bool EnableChatFeed;
+        public bool EnableChatFeed; // TODO: Move away
 
-        public bool InSpectatorMode;
+        public bool InSpectatorMode; // TODO: Move away
 
         [JsonProperty("bombColor")]
-        public Color BombColor;
+        public Color BombColor; // TODO: Move away or Remove
         [JsonProperty("bombRadius")]
-        public int BombRadius;
+        public int BombRadius; // TODO: Move away or Remove
         [JsonProperty("bombRange")]
-        public int BombRange;
+        public int BombRange; // TODO: Move away or Remove
         [JsonProperty("bombSpeed")]
-        public int BombSpeed;
+        public int BombSpeed; // TODO: Move away or Remove
         [JsonProperty("bombCountdown")]
-        public int BombCountdown;
+        public int BombCountdown; // TODO: Move away or Remove
 
         [JsonProperty("allowCannonPKs")]
         public bool AllowCannonHumanKills;
 
         [JsonProperty("masterTextureLimit")]
-        public int MasterTextureLimit;
+        public int MasterTextureLimit; // TODO: Move away
         [JsonProperty("useMipmap")]
-        public bool UseMipmap;
+        public bool UseMipmap; // TODO: Move away
         
         [JsonProperty("volume")]
-        public float Volume;
+        public float Volume; // TODO: Move away
         [JsonProperty("cameraDistance")]
-        public float CameraDistance;
+        public float CameraDistance; // TODO: Move away
         [JsonProperty("mouseSensitivity")]
-        public float MouseSensitivity;
+        public float MouseSensitivity; // TODO: Move away
         [JsonProperty("gameQuality")]
-        public float GameQuality;
+        public float GameQuality; // TODO: Move away
     }
 }
