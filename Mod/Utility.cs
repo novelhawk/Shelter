@@ -18,7 +18,7 @@ namespace Mod
         
         public static bool IsValidImageUrl(string url)
         {
-            var regex = Regex.Match(url, @"(?:https?:\/\/)?(?:www\.)?.*?(\w+)\.\w+\/[^\?]+\.(?:png|jpg|gif|jpeg)(\?.*)?");
+            var regex = Regex.Match(url, @"https?:\/\/(?:www\.)?.*?(\w+)\.\w+\/[^\?]+\.(?:png|jpg|gif|jpeg)(\?.*)?");
             if (!regex.Success) return false;
             switch (regex.Groups[1].Value) //BUG: Uppercase breaks it
             {
