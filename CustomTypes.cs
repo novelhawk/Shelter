@@ -6,32 +6,24 @@ using LogType = Mod.Logging.LogType;
 
 internal static class CustomTypes
 {
-    private static object DeserializePhotonPlayer(byte[] bytes)
+    internal static void Register()
     {
-        int num2;
-        int offset = 0;
-        Protocol.Deserialize(out num2, bytes, ref offset);
-        if (PhotonNetwork.networkingPeer.mActors.ContainsKey(num2))
-        {
-            return PhotonNetwork.networkingPeer.mActors[num2];
-        }
-        return null;
-    }
-
-    private static object DeserializeQuaternion(byte[] bytes)
-    {
-        Quaternion quaternion = new Quaternion();
-        int offset = 0;
-        Protocol.Deserialize(out quaternion.w, bytes, ref offset);
-        Protocol.Deserialize(out quaternion.x, bytes, ref offset);
-        Protocol.Deserialize(out quaternion.y, bytes, ref offset);
-        Protocol.Deserialize(out quaternion.z, bytes, ref offset);
-        return quaternion;
+        PhotonPeer.RegisterType(typeof(Vector2),       87, SerializeVector2,       DeserializeVector2);
+        PhotonPeer.RegisterType(typeof(Vector3),       86, SerializeVector3,       DeserializeVector3);
+        PhotonPeer.RegisterType(typeof(Vector4),       88, SerializeVector4,       DeserializeVector4);
+        PhotonPeer.RegisterType(typeof(Quaternion),    81, SerializeQuaternion,    DeserializeQuaternion);
+        PhotonPeer.RegisterType(typeof(Player),        80, SerializePhotonPlayer,  DeserializePhotonPlayer);
+        PhotonPeer.RegisterType(typeof(StringBuilder), 84, SerializeStringBuilder, DeserializeStringBuilder);
     }
 
     private static object DeserializeVector2(byte[] bytes)
     {
         Vector2 vector = new Vector2();
+        if (bytes.Length < sizeof(float) * 2)
+        {
+            Shelter.LogBoth("Malformed data received. Vector2 with {0} bytes", LogType.Error, bytes);
+            return Vector2.zero;
+        }
         int offset = 0;
         Protocol.Deserialize(out vector.x, bytes, ref offset);
         Protocol.Deserialize(out vector.y, bytes, ref offset);
@@ -41,6 +33,11 @@ internal static class CustomTypes
     private static object DeserializeVector3(byte[] bytes)
     {
         Vector3 vector = new Vector3();
+        if (bytes.Length < sizeof(float) * 3)
+        {
+            Shelter.LogBoth("Malformed data received. Vector3 with {0} bytes", LogType.Error, bytes);
+            return Vector3.zero;
+        }
         int offset = 0;
         Protocol.Deserialize(out vector.x, bytes, ref offset);
         Protocol.Deserialize(out vector.y, bytes, ref offset);
@@ -48,14 +45,51 @@ internal static class CustomTypes
         return vector;
     }
 
-    internal static void Register()
+    private static object DeserializeVector4(byte[] bytes)
     {
-        PhotonPeer.RegisterType(typeof(Vector2),       87, SerializeVector2,       DeserializeVector2);
-        PhotonPeer.RegisterType(typeof(Vector3),       86, SerializeVector3,       DeserializeVector3);
-        PhotonPeer.RegisterType(typeof(Vector4),       88, SerializeVector4,       DeserializeVector4);
-        PhotonPeer.RegisterType(typeof(Quaternion),    81, SerializeQuaternion,    DeserializeQuaternion);
-        PhotonPeer.RegisterType(typeof(Player),        80, SerializePhotonPlayer,  DeserializePhotonPlayer);
-        PhotonPeer.RegisterType(typeof(StringBuilder), 84, SerializeStringBuilder, DeserializeStringBuilder);
+        Shelter.LogBoth("We deserialized a Vector4. That should never happen ({0} bytes)", LogType.Warning, bytes);
+        Vector4 vector = new Vector4();
+        if (bytes.Length < sizeof(float) * 4)
+        {
+            Shelter.LogBoth("Malformed data received. Vector4 with {0} bytes", LogType.Error, bytes);
+            return Vector3.zero;
+        }
+        int offset = 0;
+        Protocol.Deserialize(out vector.x, bytes, ref offset);
+        Protocol.Deserialize(out vector.y, bytes, ref offset);
+        Protocol.Deserialize(out vector.z, bytes, ref offset);
+        Protocol.Deserialize(out vector.w, bytes, ref offset);
+        return vector;
+    }
+
+    private static object DeserializePhotonPlayer(byte[] bytes)
+    {
+        if (bytes.Length < sizeof(int))
+        {
+            Shelter.LogBoth("Malformed data received. PhotonPlayer with {0} bytes", LogType.Error, bytes);
+            return Vector2.zero;
+        }
+        int offset = 0;
+        Protocol.Deserialize(out int id, bytes, ref offset);
+        if (PhotonNetwork.networkingPeer.mActors.ContainsKey(id))
+            return PhotonNetwork.networkingPeer.mActors[id];
+        return null;
+    }
+
+    private static object DeserializeQuaternion(byte[] bytes)
+    {
+        Quaternion quaternion = new Quaternion();
+        if (bytes.Length < sizeof(float) * 4)
+        {
+            Shelter.LogBoth("Malformed data received. Quaternion with {0} bytes", LogType.Error, bytes);
+            return Vector2.zero;
+        }
+        int offset = 0;
+        Protocol.Deserialize(out quaternion.w, bytes, ref offset);
+        Protocol.Deserialize(out quaternion.x, bytes, ref offset);
+        Protocol.Deserialize(out quaternion.y, bytes, ref offset);
+        Protocol.Deserialize(out quaternion.z, bytes, ref offset);
+        return quaternion;
     }
 
     private static byte[] SerializeStringBuilder(object obj)
@@ -72,21 +106,16 @@ internal static class CustomTypes
     {
         Shelter.LogBoth("We deserialized a StringBuilder. That should never happen.", LogType.Warning);
         
-        string str;
-        Shelter.Log("Content: {0}", LogType.Warning, str = Encoding.UTF8.GetString(bytes));
+        string str = Encoding.UTF8.GetString(bytes);
+        Shelter.Log("Content: {0}", LogType.Warning, str);
         return new StringBuilder(str);
     }
 
-    private static object DeserializeVector4(byte[] serializedcustomobject)
+    private static byte[] SerializeVector4(object obj)
     {
-        return Vector4.zero;
-    }
-
-    private static byte[] SerializeVector4(object customobject)
-    {
-        Vector4 vector = (Vector4) customobject;
+        Vector4 vector = (Vector4) obj;
         int targetOffset = 0;
-        byte[] target = new byte[4 * 4];
+        byte[] target = new byte[sizeof(float) * 4];
         Protocol.Serialize(vector.x, target, ref targetOffset);
         Protocol.Serialize(vector.y, target, ref targetOffset);
         Protocol.Serialize(vector.z, target, ref targetOffset);
@@ -94,19 +123,19 @@ internal static class CustomTypes
         return target;
     }
 
-    private static byte[] SerializePhotonPlayer(object customobject)
+    private static byte[] SerializePhotonPlayer(object obj)
     {
-        int iD = ((Player) customobject).ID;
-        byte[] target = new byte[4];
+        int id = ((Player) obj).ID;
+        byte[] target = new byte[sizeof(int)];
         int targetOffset = 0;
-        Protocol.Serialize(iD, target, ref targetOffset);
+        Protocol.Serialize(id, target, ref targetOffset);
         return target;
     }
 
     private static byte[] SerializeQuaternion(object obj)
     {
         Quaternion quaternion = (Quaternion) obj;
-        byte[] target = new byte[16];
+        byte[] target = new byte[sizeof(float) * 4];
         int targetOffset = 0;
         Protocol.Serialize(quaternion.w, target, ref targetOffset);
         Protocol.Serialize(quaternion.x, target, ref targetOffset);
@@ -115,21 +144,21 @@ internal static class CustomTypes
         return target;
     }
 
-    private static byte[] SerializeVector2(object customobject)
+    private static byte[] SerializeVector2(object obj)
     {
-        Vector2 vector = (Vector2) customobject;
-        byte[] target = new byte[8];
+        Vector2 vector = (Vector2) obj;
+        byte[] target = new byte[sizeof(float) * 2];
         int targetOffset = 0;
         Protocol.Serialize(vector.x, target, ref targetOffset);
         Protocol.Serialize(vector.y, target, ref targetOffset);
         return target;
     }
 
-    private static byte[] SerializeVector3(object customobject)
+    private static byte[] SerializeVector3(object obj)
     {
-        Vector3 vector = (Vector3) customobject;
+        Vector3 vector = (Vector3) obj;
         int targetOffset = 0;
-        byte[] target = new byte[12];
+        byte[] target = new byte[sizeof(float) * 3];
         Protocol.Serialize(vector.x, target, ref targetOffset);
         Protocol.Serialize(vector.y, target, ref targetOffset);
         Protocol.Serialize(vector.z, target, ref targetOffset);
