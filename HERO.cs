@@ -4886,7 +4886,7 @@ public class HERO : Photon.MonoBehaviour
                                         if (!this.checkBoxLeft.GetComponent<TriggerColliderWeapon>().active_me)
                                         {
                                             this.checkBoxLeft.GetComponent<TriggerColliderWeapon>().active_me = true;
-                                            if (Shelter.ModuleManager.Enabled(nameof(ModuleEnableWeaponTrail)))
+                                            if (Shelter.ModuleManager.Enabled(nameof(ModuleWeaponTrail)))
                                             {
                                                 this.leftbladetrail2.Activate();
                                                 this.rightbladetrail2.Activate();
@@ -4958,7 +4958,7 @@ public class HERO : Photon.MonoBehaviour
                                         {
                                             this.checkBoxLeft.GetComponent<TriggerColliderWeapon>().active_me = true;
                                             this.slash.Play();
-                                            if (Shelter.ModuleManager.Enabled(nameof(ModuleEnableWeaponTrail)))
+                                            if (Shelter.ModuleManager.Enabled(nameof(ModuleWeaponTrail)))
                                             {
                                                 this.leftbladetrail2.Activate();
                                                 this.rightbladetrail2.Activate();
