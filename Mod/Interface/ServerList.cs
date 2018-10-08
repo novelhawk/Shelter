@@ -61,7 +61,7 @@ namespace Mod.Interface
                 width = 1280f;
                 height = 720f;
             }
-            else if (PhotonNetwork.connectionStatesDetailed == PeerStates.JoinedLobby)
+            else if (PhotonNetwork.connectionStatesDetailed == PeerStates.JoinedLobby && PhotonNetwork.countOfRooms > 0)
             {
                 Alpha += Time.deltaTime * 100;
                 if (Alpha < 255) return;
