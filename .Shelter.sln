@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.26403.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Shelter", "Shelter.csproj", "{73E796D1-3811-4A53-97CC-53F357B2E6EC}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Photon3Unity3D", "..\..\..\C#\Photon\Photon3Unity3D\Photon3Unity3D.csproj", "{62BC69B1-C099-4177-B664-05DE989E29BE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{73E796D1-3811-4A53-97CC-53F357B2E6EC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{73E796D1-3811-4A53-97CC-53F357B2E6EC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{73E796D1-3811-4A53-97CC-53F357B2E6EC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{62BC69B1-C099-4177-B664-05DE989E29BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{62BC69B1-C099-4177-B664-05DE989E29BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{62BC69B1-C099-4177-B664-05DE989E29BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{62BC69B1-C099-4177-B664-05DE989E29BE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

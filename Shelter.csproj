@@ -17,10 +17,10 @@
     <Copyright>Copyright 2013-2018 Hawk of the Death</Copyright>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>DEBUG</DefineConstants>
+    <DefineConstants>DEBUG;DEBUG;NETFRAMEWORK;NET35;CUSTOMPHOTONASSEMBLY</DefineConstants>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>RELEASE</DefineConstants>
+    <DefineConstants>RELEASE;RELEASE;NETFRAMEWORK;NET35;CUSTOMPHOTONASSEMBLY</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Mod\Resources\*" />
@@ -46,9 +46,6 @@
     <Reference Include="Mono.Security">
       <HintPath>D:\Attack on Titan\Assemblies\Mono.Security.dll</HintPath>
     </Reference>
-    <Reference Include="Photon3Unity3D">
-      <HintPath>D:\Attack on Titan\Assemblies\Photon3Unity3D.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>D:\Attack on Titan\Assemblies\UnityEngine.dll</HintPath>
     </Reference>
@@ -65,5 +62,8 @@
   <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\C#\Photon\Photon3Unity3D\Photon3Unity3D.csproj" />
   </ItemGroup>
 </Project>
