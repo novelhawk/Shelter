@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Mod;
 using Mod.Keybinds;
+using Mod.Modules;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -431,7 +432,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
         if (!Utility.IsValidImageUrl(url))
             return;
 
-        if (FengGameManagerMKII.settings.EnableTitanSkins)
+        if (Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins)))
         {
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                 StartCoroutine(this.loadskinE(url));
@@ -482,7 +483,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     [RPC]
     public void LoadskinRPC(string url)
     {
-        if (FengGameManagerMKII.settings.EnableTitanSkins && Utility.IsValidImageUrl(url))
+        if (Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins)) && Utility.IsValidImageUrl(url))
         {
             StartCoroutine(this.loadskinE(url));
         }

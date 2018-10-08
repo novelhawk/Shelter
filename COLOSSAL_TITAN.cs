@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using Mod;
 using Mod.GameSettings;
+using Mod.Modules;
 using UnityEngine;
 
 public class COLOSSAL_TITAN : Photon.MonoBehaviour
@@ -375,7 +376,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
 
     public void loadskin()
     {
-        if (!PhotonNetwork.isMasterClient || !FengGameManagerMKII.settings.EnableTitanSkins) 
+        if (!PhotonNetwork.isMasterClient || !Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins))) 
             return;
         
         photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, FengGameManagerMKII.settings.TitanSkin.Colossal);
@@ -426,7 +427,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     [RPC]
     public void LoadskinRPC(string url)
     {
-        if (FengGameManagerMKII.settings.EnableTitanSkins && Utility.IsValidImageUrl(url))
+        if (Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins)) && Utility.IsValidImageUrl(url))
         {
             StartCoroutine(this.loadskinE(url));
         }

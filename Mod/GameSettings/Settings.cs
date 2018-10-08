@@ -5,13 +5,6 @@ namespace Mod.GameSettings
 {
     public struct Settings
     {
-        [JsonProperty("enableHumanSkins")]
-        public bool EnableHumanSkins;
-        [JsonProperty("enableTitanSkins")]
-        public bool EnableTitanSkins;
-        [JsonProperty("enableLevelSkins")]
-        public bool EnableLevelSkins;
-        
         [JsonProperty("enableGasSkin")]
         public bool EnableGasSkin;
         [JsonProperty("enableWeaponTrail")]

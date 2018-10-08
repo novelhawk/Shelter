@@ -4,9 +4,8 @@ using UnityEngine;
 
 namespace Mod.Managers
 {
-    public class GameSettingsManager
+    public static class GameSettingsManager
     {
-
         public static void ApplySettings(Settings settings)
         {
 //            if (settings.IsInfectionMode)
@@ -42,9 +41,6 @@ namespace Mod.Managers
         {
             // ReSharper disable once UseObjectOrCollectionInitializer
             Settings settings = new Settings();
-            settings.EnableHumanSkins = Utility.GetBoolean("human");
-            settings.EnableTitanSkins = Utility.GetBoolean("titan");
-            settings.EnableLevelSkins = Utility.GetBoolean("level");
 
             settings.HumanSkin = new HumanSkin
             {
@@ -264,7 +260,6 @@ namespace Mod.Managers
             settings.IsASORacing = Utility.GetBoolean("asoracing");
             settings.AllowAirAHSSReload = Utility.GetBoolean("ahssReload");
             settings.AllowPunks = Utility.GetBoolean("punkWaves");
-            settings.EnableMap = Utility.GetBoolean("mapOn");
             settings.IsMapAllowed = !Utility.GetBoolean("globalDisableMinimap");
             settings.EnableChatFeed = Utility.GetBoolean("chatfeed");
             settings.InSpectatorMode = false;
@@ -303,7 +298,7 @@ namespace Mod.Managers
             if (settings.IsBombMode)
                 hashtable.Add("bomb", 1);
             
-            if (!settings.EnableMap)
+            if (!settings.IsMapAllowed)
                 hashtable.Add("globalDisableMinimap", 1);
                     
             if (settings.TeamSort != TeamSort.Off)
@@ -398,7 +393,8 @@ namespace Mod.Managers
             Settings settings = new Settings();
             if (hash.ContainsKey("bomb"))
                 settings.IsBombMode = true;
-            
+
+            settings.IsMapAllowed = true;
             if (hash.ContainsKey("globalDisableMinimap"))
                 settings.IsMapAllowed = !hash.ToBool("globalDisableMinimap");
             if (hash.ContainsKey("horse"))
@@ -429,6 +425,7 @@ namespace Mod.Managers
             if (hash.ContainsKey("infection"))
                 settings.InfectionTitanNumber = (int) hash["infection"];
 
+            settings.AllowErenTitan = true;
             if (hash.ContainsKey("eren"))
                 settings.AllowErenTitan = !hash.ToBool("eren");
 

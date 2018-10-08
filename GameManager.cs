@@ -12,6 +12,7 @@ using Mod.GameSettings;
 using Mod.Interface;
 using Mod.Keybinds;
 using Mod.Managers;
+using Mod.Modules;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Object = System.Object;
@@ -1774,7 +1775,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             racingSpawnPointSet = false;
             racingDoors = new List<GameObject>();
             allowedToCannon = new Dictionary<int, CannonValues>();
-            if (!Level.StartsWith("Custom") && settings.EnableLevelSkins && (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || PhotonNetwork.isMasterClient))
+            if (!Level.StartsWith("Custom") && Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins)) && (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || PhotonNetwork.isMasterClient))
             {
                 var obj4 = GameObject.Find("aot_supply");
                 if (obj4 != null && Minimap.instance != null)

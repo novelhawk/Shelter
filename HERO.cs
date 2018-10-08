@@ -2259,7 +2259,7 @@ public class HERO : Photon.MonoBehaviour
                     }
                 }
             }
-            if (FengGameManagerMKII.settings.EnableHumanSkins)
+            if (Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins)))
             {
                 var skins = FengGameManagerMKII.settings.HumanSkin.Set;
                 StringBuilder url = new StringBuilder(skins.Length * 45);
@@ -2767,7 +2767,7 @@ public class HERO : Photon.MonoBehaviour
     [RPC]
     public void LoadskinRPC(int horse, string url)
     {
-        if (FengGameManagerMKII.settings.EnableHumanSkins)
+        if (Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins)))
         {
             StartCoroutine(this.loadskinE(horse, url));
         }

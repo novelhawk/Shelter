@@ -1,5 +1,6 @@
 using System.Collections;
 using Mod;
+using Mod.Modules;
 using UnityEngine;
 
 public class TITAN_SETUP : Photon.MonoBehaviour
@@ -84,7 +85,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
     public void SetHair()
     {
         int num;
-        if (FengGameManagerMKII.settings.EnableTitanSkins && (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine))
+        if (Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins)) && (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine))
         {
             var titanSkin = FengGameManagerMKII.settings.TitanSkin;
             
@@ -190,7 +191,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
     [RPC]
     public void SetHairRPC2(int hair, int eye, string hairlink)
     {
-        if (FengGameManagerMKII.settings.EnableTitanSkins)
+        if (Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins)))
         {
             StartCoroutine(this.LoadskinE(hair, eye, hairlink));
         }
