@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.Remoting.Metadata;
 using System.Text;
 using Mod;
@@ -2249,15 +2250,11 @@ public class HERO : Photon.MonoBehaviour
     {
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine)
         {
-            if (!FengGameManagerMKII.settings.EnableWind)
+            if (!Shelter.ModuleManager.Enabled(nameof(ModuleWind)))
             {
-                foreach (Renderer renderer in GetComponentsInChildren<Renderer>())
-                {
-                    if (renderer.name.Contains("speed"))
-                    {
-                        renderer.enabled = false;
-                    }
-                }
+                var windRenderer = GetComponentsInChildren<Renderer>().FirstOrDefault(x => x.name.Contains("speed"));
+                if (windRenderer != null)
+                    windRenderer.enabled = false;
             }
             if (Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins)))
             {

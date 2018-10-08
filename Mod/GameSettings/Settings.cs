@@ -5,9 +5,6 @@ namespace Mod.GameSettings
 {
     public struct Settings
     {
-        [JsonProperty("enableWind")]
-        public bool EnableWind;
-
         [JsonProperty("randomizeSkinParts")]
         public bool Randomize;
 
