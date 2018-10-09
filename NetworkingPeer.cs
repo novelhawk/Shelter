@@ -841,7 +841,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
     private void GameEnteredOnGameServer(OperationResponse operationResponse)
     {
-        if (operationResponse.ReturnCode == 0)
+        if (operationResponse.ReturnCode == ErrorCode.Ok)
         {
             this.states = PeerStates.Joined;
             this.mRoomToGetInto.IsLocalClientInside = true;
@@ -852,55 +852,42 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             this.ChangeLocalID(newID);
             this.CheckMasterClient(-1);
             if (this.mPlayernameHasToBeUpdated)
-            {
                 this.SendPlayerName();
-            }
-            switch (operationResponse.OperationCode)
-            {
-                case 227:
-                    SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom);
-                    break;
-            }
+            
+            if (operationResponse.OperationCode == OperationCode.CreateGame) 
+                SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom);
         }
         else
         {
             switch (operationResponse.OperationCode)
             {
-                case 225:
+                case OperationCode.JoinRandomGame:
                 {
                     if (PhotonNetwork.LogLevel >= PhotonLogLevel.Informational)
                     {
                         Debug.Log("Join failed on GameServer. Changing back to MasterServer. Msg: " + operationResponse.DebugMessage);
-                        if (operationResponse.ReturnCode == 32758)
-                        {
+                        if (operationResponse.ReturnCode == ErrorCode.GameDoesNotExist)
                             Debug.Log("Most likely the game became empty during the switch to GameServer.");
-                        }
                     }
                     SendMonoMessage(PhotonNetworkingMessage.OnPhotonRandomJoinFailed, operationResponse.ReturnCode, operationResponse.DebugMessage);
                     break;
                 }
-                case 226:
+                case OperationCode.JoinGame:
                 {
                     if (PhotonNetwork.LogLevel >= PhotonLogLevel.Informational)
                     {
                         Debug.Log("Join failed on GameServer. Changing back to MasterServer. Msg: " + operationResponse.DebugMessage);
-                        if (operationResponse.ReturnCode == 32758)
-                        {
+                        if (operationResponse.ReturnCode == ErrorCode.GameDoesNotExist)
                             Debug.Log("Most likely the game became empty during the switch to GameServer.");
-                        }
                     }
-                    object[] objArray2 = new object[] { operationResponse.ReturnCode, operationResponse.DebugMessage };
-                    SendMonoMessage(PhotonNetworkingMessage.OnPhotonJoinRoomFailed, objArray2);
+                    SendMonoMessage(PhotonNetworkingMessage.OnPhotonJoinRoomFailed, operationResponse.ReturnCode, operationResponse.DebugMessage);
                     break;
                 }
-                case 227:
+                case OperationCode.CreateGame:
                 {
                     if (PhotonNetwork.LogLevel >= PhotonLogLevel.Informational)
-                    {
                         Debug.Log("Create failed on GameServer. Changing back to MasterServer. Msg: " + operationResponse.DebugMessage);
-                    }
-                    object[] objArray3 = new object[] { operationResponse.ReturnCode, operationResponse.DebugMessage };
-                    SendMonoMessage(PhotonNetworkingMessage.OnPhotonCreateRoomFailed, objArray3);
+                    SendMonoMessage(PhotonNetworkingMessage.OnPhotonCreateRoomFailed, operationResponse.ReturnCode, operationResponse.DebugMessage);
                     break;
                 }
             }
@@ -911,9 +898,8 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     private Hashtable GetActorPropertiesForActorNr(Hashtable actorProperties, int actorNr)
     {
         if (actorProperties.ContainsKey(actorNr))
-        {
             return (Hashtable) actorProperties[actorNr];
-        }
+        
         return actorProperties;
     }
 
@@ -940,14 +926,12 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
     private Hashtable GetLocalActorProperties()
     {
         if (Player.Self != null)
-        {
             return Player.Self.AllProperties;
-        }
-        Hashtable hashtable = new Hashtable
+        
+        return new Hashtable
         {
-            [(byte)255] = this.PlayerName
+            [ActorProperties.PlayerName] = this.PlayerName
         };
-        return hashtable;
     }
 
     protected internal static bool GetMethod(MonoBehaviour monob, string methodType, out MethodInfo mi)
@@ -1191,24 +1175,24 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 sender = this.mActors[key];
         }
 
-        if (photonEvent.Code != (byte) PhotonEvent.Leave &&
+        if (photonEvent.Code != EventCode.Leave &&
             sender.IsIgnored)
             return;
 
-        switch ((PhotonEvent) photonEvent.Code) 
+        switch (photonEvent.Code) 
         {
-            case PhotonEvent.ModIdentify:
+            case 101: // Mod Indentify
                 sender.Mod = CustomMod.Cyan;
                 break;
             
-            case PhotonEvent.RPC:
-                this.ExecuteRPC(photonEvent[245] as Hashtable, sender);
+            case PunEvent.RPC:
+                this.ExecuteRPC(photonEvent[ParameterCode.Data] as Hashtable, sender);
                 break;
 
-            case PhotonEvent.SendSerialize:
-            case PhotonEvent.SendSerializeReliable:
+            case PunEvent.SendSerialize:
+            case PunEvent.SendSerializeReliable:
             {
-                if (photonEvent[245] is Hashtable hashtable)
+                if (photonEvent[ParameterCode.Data] is Hashtable hashtable)
                 {
                     if (!(hashtable[(byte)0] is int networkTime))
                         return;
@@ -1230,31 +1214,31 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             }
             
 
-            case PhotonEvent.Instantiation:
+            case PunEvent.Instantiation:
             {
-                if (photonEvent[245] is Hashtable data)
+                if (photonEvent[ParameterCode.Data] is Hashtable data)
                     if (data[(byte)0] is string)
                         this.DoInstantiate(data, sender, null);
                 break;
             }
 
-            case PhotonEvent.CloseConnection: // TODO: Add reconnect
+            case PunEvent.CloseConnection: // TODO: Add reconnect
                 if (!sender.IsMasterClient)
                     throw new NotAllowedException(photonEvent.Code, sender); 
                 break;
 
-            case PhotonEvent.Destroy:
+            case PunEvent.Destroy:
             {
-                if (photonEvent[245] is Hashtable hashtable)
+                if (photonEvent[ParameterCode.Data] is Hashtable hashtable)
                     if (hashtable[(byte)0] is int objId)
                         if (instantiatedObjects.TryGetValue(objId, out var obj) && obj != null)
                             RemoveInstantiatedGO(obj, true);
                 break;
             }
 
-            case PhotonEvent.DestroyPlayer:
+            case PunEvent.DestroyPlayer:
             {
-                if (photonEvent[245] is Hashtable hashtable)
+                if (photonEvent[ParameterCode.Data] is Hashtable hashtable)
                 {
                     if (!(hashtable[(byte) 0] is int playerId))
                         return;
@@ -1267,7 +1251,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 break;
             }
 
-            case PhotonEvent.SetMasterClient:
+            case PunEvent.SetMasterClient:
             {
                 if (!(photonEvent[245] is Hashtable hashtable))
                     return;
@@ -1288,11 +1272,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 SetMasterClient(id, false);
                 break;
             }
-            case PhotonEvent.AppStats:
+            case EventCode.AppStats:
             {
-                if (photonEvent[229] is int players &&
-                    photonEvent[227] is int playersMC &&
-                    photonEvent[228] is int gameCount)
+                if (photonEvent[ParameterCode.PeerCount] is int players &&
+                    photonEvent[ParameterCode.MasterPeerCount] is int playersMC &&
+                    photonEvent[ParameterCode.GameCount] is int gameCount)
                 {
                     this.mPlayersInRoomsCount = players;
                     this.mPlayersOnMasterCount = playersMC;
@@ -1302,18 +1286,18 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 break;
             }
 
-            case PhotonEvent.QueueState:
+            case EventCode.QueueState:
                 if (!sender.IsLocal)
                     throw new NotAllowedException(photonEvent.Code, sender);
                 
-                if (photonEvent.Parameters.ContainsKey(223))
-                    if (photonEvent[223] is int id)
-                        this.mQueuePosition = id;
+                if (photonEvent.Parameters.ContainsKey(ParameterCode.MatchMakingType))
+                    if (photonEvent[ParameterCode.MatchMakingType] is int type)
+                        this.mQueuePosition = type;
                 return;
 
-            case PhotonEvent.RoomListUpdate:
+            case EventCode.GameListUpdate:
             {
-                if (!(photonEvent[222] is Hashtable hashtable))
+                if (!(photonEvent[ParameterCode.GameList] is Hashtable hashtable))
                     return;
                 
                 foreach (DictionaryEntry entry in hashtable)
@@ -1335,9 +1319,9 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 break;
             }
 
-            case PhotonEvent.RoomList:
+            case EventCode.GameList:
             {
-                if (!(photonEvent[222] is Hashtable hashtable))
+                if (!(photonEvent[ParameterCode.GameList] is Hashtable hashtable))
                     return;
                 
                 mGameList = new Dictionary<string, Room>();
@@ -1357,19 +1341,19 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 break;
             }
 
-            case PhotonEvent.PropertiesChanged:
+            case EventCode.PropertiesChanged:
             {
-                if (!(photonEvent[253] is int id))
+                if (!(photonEvent[ParameterCode.TargetActorNr] is int id))
                     return;
                 
                 if (id == 0)
                 {
-                    if (photonEvent[251] is Hashtable hash)
+                    if (photonEvent[ParameterCode.Properties] is Hashtable hash)
                         ReadoutProperties(hash, null, id);
                     return;
                 }
 
-                if (photonEvent[251] is Hashtable hashtable)
+                if (photonEvent[ParameterCode.Properties] is Hashtable hashtable)
                 {
                     if (!sender.IsLocal)
                     {
@@ -1402,17 +1386,16 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 break;
             }
 
-            case PhotonEvent.Leave:
+            case EventCode.Leave:
                 this.HandleEventLeave(key);
                 break;
 
-            case PhotonEvent.Join:
+            case EventCode.Join:
             {
                 if (!sender.IsLocal)
                     return;
-                
-                var properties = photonEvent[249] as Hashtable;
-                if (photonEvent[249] == null || properties != null)
+
+                if (photonEvent[ParameterCode.PlayerProperties] is Hashtable properties)
                 {
                     if (!mActors.ContainsKey(key))
                         AddNewPlayer(key, new Player(mLocalActor.ID == key, key, properties));
@@ -1425,7 +1408,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                         if (this.mLastJoinType == JoinType.JoinOrCreateOnDemand && this.mLocalActor.ID == 1)
                             SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom);
                         
-                        if (photonEvent[252] is int[] ids)
+                        if (photonEvent[ParameterCode.ActorList] is int[] ids)
                         {
                             foreach (int id in ids)
                                 if (mLocalActor.ID != id && !mActors.ContainsKey(id))
@@ -1460,18 +1443,18 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             }
             return;
         }
-        if (operationResponse.ReturnCode == 0)
+        if (operationResponse.ReturnCode == ErrorCode.Ok)
         {
             if (PhotonNetwork.LogLevel >= PhotonLogLevel.Informational)
             {
                 Debug.Log(operationResponse.ToString());
             }
         }
-        else if (operationResponse.ReturnCode == -3)
+        else if (operationResponse.ReturnCode == ErrorCode.OperationNotAllowedInCurrentState)
         {
             Debug.LogError("Operation " + operationResponse.OperationCode + " could not be executed (yet). Wait for state JoinedLobby or ConnectedToMaster and their callbacks before calling operations. WebRPCs need a server-side configuration. Enum OperationCode helps identify the operation.");
         }
-        else if (operationResponse.ReturnCode == 32752)
+        else if (operationResponse.ReturnCode == ErrorCode.PluginReportedError)
         {
             Debug.LogError(string.Concat("Operation ", operationResponse.OperationCode, " failed in a server-side plugin. Check the configuration in the Dashboard. Message from server-plugin: ", operationResponse.DebugMessage));
         }
@@ -1487,90 +1470,91 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             }
             this.CustomAuthenticationValues.Secret = operationResponse[221] as string;
         }
-        byte operationCode = operationResponse.OperationCode;
-        switch (operationCode)
+        switch (operationResponse.OperationCode)
         {
-            case 219:
+            case OperationCode.WebRpc:
+            {
+                SendMonoMessage(PhotonNetworkingMessage.OnWebRpcResponse, operationResponse);
+                this.externalListener.OnOperationResponse(operationResponse);
+                return;
+            }
+            case OperationCode.GetRegions:
+            {
+                if (operationResponse.ReturnCode != ErrorCode.InvalidAuthentication)
                 {
-                    SendMonoMessage(PhotonNetworkingMessage.OnWebRpcResponse, operationResponse);
-                    goto Label_0955;
-                }
-            case 220:
-                {
-                    if (operationResponse.ReturnCode != 32767)
+                    string[] strArray = operationResponse[210] as string[];
+                    if (strArray == null || !(operationResponse[230] is string[] strArray2) || strArray.Length != strArray2.Length)
                     {
-                        string[] strArray = operationResponse[210] as string[];
-                        string[] strArray2 = operationResponse[230] as string[];
-                        if (strArray == null || strArray2 == null || strArray.Length != strArray2.Length)
-                        {
-                            Debug.LogError("The region arrays from Name Server are not ok. Must be non-null and same length.");
-                        }
-                        else
-                        {
-                            this.AvailableRegions = new List<Region>(strArray.Length);
-                            for (int i = 0; i < strArray.Length; i++)
-                            {
-                                string str = strArray[i];
-                                if (!string.IsNullOrEmpty(str))
-                                {
-                                    CloudRegionCode code = Region.Parse(str.ToLower());
-                                    Region item = new Region
-                                    {
-                                        Code = code,
-                                        HostAndPort = strArray2[i]
-                                    };
-                                    this.AvailableRegions.Add(item);
-                                }
-                            }
-                            if (PhotonNetwork.PhotonServerSettings.HostType == ServerSettings.HostingOption.BestRegion)
-                            {
-                                PhotonHandler.PingAvailableRegionsAndConnectToBest();
-                            }
-                        }
-                        goto Label_0955;
-                    }
-                    Debug.LogError(string.Format("The appId this client sent is unknown on the server (Cloud). Check settings. If using the Cloud, check account."));
-                    object[] objArray8 = new object[] { DisconnectCause.InvalidAuthentication };
-                    SendMonoMessage(PhotonNetworkingMessage.OnFailedToConnectToPhoton, objArray8);
-                    this.states = PeerStates.Disconnecting;
-                    this.Disconnect();
-                    return;
-                }
-            case 222:
-                {
-                    bool[] flagArray = operationResponse[1] as bool[];
-                    string[] strArray3 = operationResponse[2] as string[];
-                    if (flagArray == null || strArray3 == null || this.friendListRequested == null || flagArray.Length != this.friendListRequested.Length)
-                    {
-                        Debug.LogError("FindFriends failed to apply the result, as a required value wasn't provided or the friend list length differed from result.");
+                        Debug.LogError("The region arrays from Name Server are not ok. Must be non-null and same length.");
                     }
                     else
                     {
-                        List<FriendInfo> list = new List<FriendInfo>(this.friendListRequested.Length);
-                        for (int j = 0; j < this.friendListRequested.Length; j++)
+                        this.AvailableRegions = new List<Region>(strArray.Length);
+                        for (int i = 0; i < strArray.Length; i++)
                         {
-                            FriendInfo info = new FriendInfo
+                            string str = strArray[i];
+                            if (!string.IsNullOrEmpty(str))
                             {
-                                Name = this.friendListRequested[j],
-                                Room = strArray3[j],
-                                IsOnline = flagArray[j]
-                            };
-                            list.Insert(j, info);
+                                CloudRegionCode code = Region.Parse(str.ToLower());
+                                Region item = new Region
+                                {
+                                    Code = code,
+                                    HostAndPort = strArray2[i]
+                                };
+                                this.AvailableRegions.Add(item);
+                            }
                         }
-                        PhotonNetwork.Friends = list;
+                        if (PhotonNetwork.PhotonServerSettings.HostType == ServerSettings.HostingOption.BestRegion)
+                        {
+                            PhotonHandler.PingAvailableRegionsAndConnectToBest();
+                        }
                     }
-                    this.friendListRequested = null;
-                    this.isFetchingFriends = false;
-                    this.friendListTimestamp = Environment.TickCount;
-                    if (this.friendListTimestamp == 0)
-                    {
-                        this.friendListTimestamp = 1;
-                    }
-                    SendMonoMessage(PhotonNetworkingMessage.OnUpdatedFriendList);
-                    goto Label_0955;
+                    this.externalListener.OnOperationResponse(operationResponse);
+                    return;
                 }
-            case 225:
-                if (operationResponse.ReturnCode == 0)
+                Debug.LogError(string.Format("The appId this client sent is unknown on the server (Cloud). Check settings. If using the Cloud, check account."));
+                object[] objArray8 = new object[] { DisconnectCause.InvalidAuthentication };
+                SendMonoMessage(PhotonNetworkingMessage.OnFailedToConnectToPhoton, objArray8);
+                this.states = PeerStates.Disconnecting;
+                this.Disconnect();
+                return;
+            }
+            case OperationCode.FindFriends:
+            {
+                bool[] flagArray = operationResponse[1] as bool[];
+                string[] strArray3 = operationResponse[2] as string[];
+                if (flagArray == null || strArray3 == null || this.friendListRequested == null || flagArray.Length != this.friendListRequested.Length)
+                {
+                    Debug.LogError("FindFriends failed to apply the result, as a required value wasn't provided or the friend list length differed from result.");
+                }
+                else
+                {
+                    List<FriendInfo> list = new List<FriendInfo>(this.friendListRequested.Length);
+                    for (int j = 0; j < this.friendListRequested.Length; j++)
+                    {
+                        FriendInfo info = new FriendInfo
+                        {
+                            Name = this.friendListRequested[j],
+                            Room = strArray3[j],
+                            IsOnline = flagArray[j]
+                        };
+                        list.Insert(j, info);
+                    }
+                    PhotonNetwork.Friends = list;
+                }
+                this.friendListRequested = null;
+                this.isFetchingFriends = false;
+                this.friendListTimestamp = Environment.TickCount;
+                if (this.friendListTimestamp == 0)
+                {
+                    this.friendListTimestamp = 1;
+                }
+                SendMonoMessage(PhotonNetworkingMessage.OnUpdatedFriendList);
+                this.externalListener.OnOperationResponse(operationResponse);
+                return;
+            }
+            case OperationCode.JoinRandomGame:
+                if (operationResponse.ReturnCode == ErrorCode.Ok)
                 {
                     string str3 = (string)operationResponse[255];
                     this.mRoomToGetInto.FullName = str3;
@@ -1579,7 +1563,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 }
                 else
                 {
-                    if (operationResponse.ReturnCode != 32760)
+                    if (operationResponse.ReturnCode != ErrorCode.NoRandomMatchFound)
                     {
                         if (PhotonNetwork.LogLevel >= PhotonLogLevel.Informational)
                         {
@@ -1592,14 +1576,15 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                     }
                     SendMonoMessage(PhotonNetworkingMessage.OnPhotonRandomJoinFailed);
                 }
-                goto Label_0955;
+                this.externalListener.OnOperationResponse(operationResponse);
+                return;
 
-            case 226:
+            case OperationCode.JoinGame:
                 if (this.server == ServerConnection.GameServer)
                 {
                     this.GameEnteredOnGameServer(operationResponse);
                 }
-                else if (operationResponse.ReturnCode == 0)
+                else if (operationResponse.ReturnCode == ErrorCode.Ok)
                 {
                     this.mGameserver = (string)operationResponse[230];
                     this.DisconnectToReconnect2();
@@ -1612,12 +1597,13 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                     }
                     SendMonoMessage(PhotonNetworkingMessage.OnPhotonJoinRoomFailed);
                 }
-                goto Label_0955;
+                this.externalListener.OnOperationResponse(operationResponse);
+                return;
 
-            case 227:
+            case OperationCode.CreateGame:
                 if (this.server != ServerConnection.GameServer)
                 {
-                    if (operationResponse.ReturnCode != 0)
+                    if (operationResponse.ReturnCode != ErrorCode.Ok)
                     {
                         if (PhotonNetwork.LogLevel >= PhotonLogLevel.Informational)
                         {
@@ -1640,63 +1626,60 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 {
                     this.GameEnteredOnGameServer(operationResponse);
                 }
-                goto Label_0955;
+                this.externalListener.OnOperationResponse(operationResponse);
+                return;
 
-            case 228:
+            case OperationCode.LeaveLobby:
                 this.states = PeerStates.Authenticated;
                 this.LeftLobbyCleanup();
-                goto Label_0955;
+                this.externalListener.OnOperationResponse(operationResponse);
+                return;
 
-            case 229:
+            case OperationCode.JoinLobby:
                 this.states = PeerStates.JoinedLobby;
                 this.insideLobby = true;
                 SendMonoMessage(PhotonNetworkingMessage.OnJoinedLobby);
-                goto Label_0955;
+                this.externalListener.OnOperationResponse(operationResponse);
+                return;
 
-            case 230:
-                if (operationResponse.ReturnCode == 0)
+            case OperationCode.Authenticate:
+                if (operationResponse.ReturnCode == ErrorCode.Ok)
                 {
                     if (this.server == ServerConnection.NameServer)
                     {
                         this.MasterServerAddress = operationResponse[230] as string;
                         this.DisconnectToReconnect2();
                     }
-                    else if (this.server == ServerConnection.MasterServer)
+                    else switch (this.server)
                     {
-                        if (PhotonNetwork.autoJoinLobby)
-                        {
+                        case ServerConnection.MasterServer when PhotonNetwork.autoJoinLobby:
                             this.states = PeerStates.Authenticated;
                             this.OpJoinLobby(this.lobby);
-                        }
-                        else
-                        {
+                            break;
+                        case ServerConnection.MasterServer:
                             this.states = PeerStates.ConnectedToMaster;
                             SendMonoMessage(PhotonNetworkingMessage.OnConnectedToMaster);
-                        }
+                            break;
+                        case ServerConnection.GameServer:
+                            this.states = PeerStates.Joining;
+                            if (this.mLastJoinType == JoinType.JoinGame || this.mLastJoinType == JoinType.JoinRandomGame || this.mLastJoinType == JoinType.JoinOrCreateOnDemand)
+                                this.OpJoinRoom(this.mRoomToGetInto.FullName, this.mRoomOptionsForCreate, this.mRoomToEnterLobby, this.mLastJoinType == JoinType.JoinOrCreateOnDemand);
+                            else if (this.mLastJoinType == JoinType.CreateGame)
+                                this.OpCreateGame(this.mRoomToGetInto.FullName, this.mRoomOptionsForCreate, this.mRoomToEnterLobby);
+                            break;
                     }
-                    else if (this.server == ServerConnection.GameServer)
-                    {
-                        this.states = PeerStates.Joining;
-                        if (this.mLastJoinType == JoinType.JoinGame || this.mLastJoinType == JoinType.JoinRandomGame || this.mLastJoinType == JoinType.JoinOrCreateOnDemand)
-                        {
-                            this.OpJoinRoom(this.mRoomToGetInto.FullName, this.mRoomOptionsForCreate, this.mRoomToEnterLobby, this.mLastJoinType == JoinType.JoinOrCreateOnDemand);
-                        }
-                        else if (this.mLastJoinType == JoinType.CreateGame)
-                        {
-                            this.OpCreateGame(this.mRoomToGetInto.FullName, this.mRoomOptionsForCreate, this.mRoomToEnterLobby);
-                        }
-                    }
-                    goto Label_0955;
+                    this.externalListener.OnOperationResponse(operationResponse);
+                    return;
                 }
-                if (operationResponse.ReturnCode != -2)
+                if (operationResponse.ReturnCode != ErrorCode.InvalidOperation)
                 {
-                    if (operationResponse.ReturnCode == 32767)
+                    if (operationResponse.ReturnCode == ErrorCode.InvalidAuthentication)
                     {
                         Debug.LogError(string.Format("The appId this client sent is unknown on the server (Cloud). Check settings. If using the Cloud, check account."));
                         object[] objArray3 = new object[] { DisconnectCause.InvalidAuthentication };
                         SendMonoMessage(PhotonNetworkingMessage.OnFailedToConnectToPhoton, objArray3);
                     }
-                    else if (operationResponse.ReturnCode == 32755)
+                    else if (operationResponse.ReturnCode == ErrorCode.CustomAuthenticationFailed)
                     {
                         Debug.LogError(string.Format("Custom Authentication failed (either due to user-input or configuration or AuthParameter string format). Calling: OnCustomAuthenticationFailed()"));
                         object[] objArray4 = new object[] { operationResponse.DebugMessage };
@@ -1713,62 +1696,47 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 }
                 break;
 
-            default:
-                switch (operationCode)
+                case OperationCode.GetProperties:
                 {
-                    case 251:
-                    {
-                        Hashtable pActorProperties = (Hashtable) operationResponse[249];
-                        Hashtable gameProperties = (Hashtable)operationResponse[248];
-                        this.ReadoutProperties(gameProperties, pActorProperties, 0);
-                        goto Label_0955;
-                        }
-                    case 252:
-                    case 253:
-                        goto Label_0955;
-
-                    case 254:
-                        this.DisconnectToReconnect2();
-                        goto Label_0955;
-
-                    default:
-                        Debug.LogWarning(string.Format("OperationResponse unhandled: {0}", operationResponse));
-                        goto Label_0955;
+                    Hashtable pActorProperties = (Hashtable) operationResponse[249];
+                    Hashtable gameProperties = (Hashtable)operationResponse[248];
+                    this.ReadoutProperties(gameProperties, pActorProperties, 0);
+                    this.externalListener.OnOperationResponse(operationResponse);
+                    return;
                 }
-//            break;
+                case OperationCode.SetProperties:
+                case OperationCode.RaiseEvent:
+                    this.externalListener.OnOperationResponse(operationResponse);
+                    return;
+        
+                case OperationCode.Leave:
+                    this.DisconnectToReconnect2();
+                    this.externalListener.OnOperationResponse(operationResponse);
+                    return;
+        
+                default:
+                    Debug.LogWarning(string.Format("OperationResponse unhandled: {0}", operationResponse));
+                    this.externalListener.OnOperationResponse(operationResponse);
+                    return;
         }
         this.states = PeerStates.Disconnecting;
         this.Disconnect();
-        if (operationResponse.ReturnCode == 32757)
+        if (operationResponse.ReturnCode == ErrorCode.MaxCcuReached)
         {
-            if (PhotonNetwork.LogLevel >= PhotonLogLevel.Informational)
-            {
-                Debug.LogWarning(string.Format("Currently, the limit of users is reached for this title. Try again later. Disconnecting"));
-            }
+            Shelter.LogBoth("Currently, the limit of users is reached for this title. Try again later. Disconnecting", LogType.Warning);
             SendMonoMessage(PhotonNetworkingMessage.OnPhotonMaxCccuReached);
-            object[] objArray5 = new object[] { DisconnectCause.MaxCcuReached };
-            SendMonoMessage(PhotonNetworkingMessage.OnConnectionFail, objArray5);
+            SendMonoMessage(PhotonNetworkingMessage.OnConnectionFail, DisconnectCause.MaxCcuReached);
         }
-        else if (operationResponse.ReturnCode == 32756)
+        else if (operationResponse.ReturnCode == ErrorCode.InvalidRegion)
         {
-            if (PhotonNetwork.LogLevel >= PhotonLogLevel.Informational)
-            {
-                Debug.LogError(string.Format("The used master server address is not available with the subscription currently used. Got to Photon Cloud Dashboard or change URL. Disconnecting."));
-            }
-            object[] objArray6 = new object[] { DisconnectCause.InvalidRegion };
-            SendMonoMessage(PhotonNetworkingMessage.OnConnectionFail, objArray6);
+            Shelter.LogBoth("The used master server address is not available with the subscription currently used. Got to Photon Cloud Dashboard or change URL. Disconnecting.", LogType.Warning);
+            SendMonoMessage(PhotonNetworkingMessage.OnConnectionFail, DisconnectCause.InvalidRegion);
         }
-        else if (operationResponse.ReturnCode == 32753)
+        else if (operationResponse.ReturnCode == ErrorCode.AuthenticationTicketExpired)
         {
-            if (PhotonNetwork.LogLevel >= PhotonLogLevel.Informational)
-            {
-                Debug.LogError(string.Format("The authentication ticket expired. You need to connect (and authenticate) again. Disconnecting."));
-            }
-            object[] objArray7 = new object[] { DisconnectCause.AuthenticationTicketExpired };
-            SendMonoMessage(PhotonNetworkingMessage.OnConnectionFail, objArray7);
+            Shelter.LogBoth("The authentication ticket expired. You need to connect (and authenticate) again. Disconnecting.", LogType.Warning);
+            SendMonoMessage(PhotonNetworkingMessage.OnConnectionFail, DisconnectCause.AuthenticationTicketExpired);
         }
-    Label_0955:
-        this.externalListener.OnOperationResponse(operationResponse);
     }
 
     private void OnSerializeRead(Hashtable data, Player sender, int networkTime, short correctPrefix)
@@ -1935,8 +1903,6 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
 
     public void OnStatusChanged(StatusCode statusCode)
     {
-        Shelter.LogBoth("OnStatusChanged({0})", LogType.Info, statusCode);
-        
         DisconnectCause cause;
         switch (statusCode)
         {
@@ -1953,33 +1919,31 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
                 break;
             }
             case StatusCode.Connect:
-                if (this.states == PeerStates.ConnectingToNameServer)
+                switch (this.states)
                 {
-                    if (PhotonNetwork.LogLevel >= PhotonLogLevel.Full)
-                    {
-                        Debug.Log("Connected to NameServer.");
-                    }
-                    this.server = ServerConnection.NameServer;
-                    if (this.CustomAuthenticationValues != null)
-                    {
-                        this.CustomAuthenticationValues.Secret = null;
-                    }
+                    case PeerStates.ConnectingToNameServer:
+                        if (PhotonNetwork.LogLevel >= PhotonLogLevel.Full)
+                            Debug.Log("Connected to NameServer.");
+                        
+                        this.server = ServerConnection.NameServer;
+                        if (this.CustomAuthenticationValues != null)
+                            this.CustomAuthenticationValues.Secret = null;
+
+                        break;
+                    case PeerStates.ConnectingToGameserver:
+                        if (PhotonNetwork.LogLevel >= PhotonLogLevel.Full)
+                            Debug.Log("Connected to gameserver.");
+                        
+                        this.server = ServerConnection.GameServer;
+                        this.states = PeerStates.ConnectedToGameserver;
+                        break;
                 }
-                if (this.states == PeerStates.ConnectingToGameserver)
-                {
-                    if (PhotonNetwork.LogLevel >= PhotonLogLevel.Full)
-                    {
-                        Debug.Log("Connected to gameserver.");
-                    }
-                    this.server = ServerConnection.GameServer;
-                    this.states = PeerStates.ConnectedToGameserver;
-                }
+
                 if (this.states == PeerStates.ConnectingToMasterserver)
                 {
                     if (PhotonNetwork.LogLevel >= PhotonLogLevel.Full)
-                    {
                         Debug.Log("Connected to masterserver.");
-                    }
+                    
                     this.server = ServerConnection.MasterServer;
                     this.states = PeerStates.ConnectedToMaster;
                     if (this.IsInitialConnect)
@@ -2668,12 +2632,12 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             foreach (KeyValuePair<int, Hashtable> pair2 in dictionary)
             {
                 raiseEventOptions.InterestGroup = (byte) pair2.Key;
-                this.OpRaiseEvent(206, pair2.Value, true, raiseEventOptions);
+                this.OpRaiseEvent(PunEvent.SendSerializeReliable, pair2.Value, true, raiseEventOptions);
             }
             foreach (KeyValuePair<int, Hashtable> pair3 in dictionary2)
             {
                 raiseEventOptions.InterestGroup = (byte) pair3.Key;
-                this.OpRaiseEvent(201, pair3.Value, false, raiseEventOptions);
+                this.OpRaiseEvent(PunEvent.SendSerialize, pair3.Value, false, raiseEventOptions);
             }
         }
     }
@@ -2684,7 +2648,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         {
             [(byte)0] = -1
         };
-        this.OpRaiseEvent(207, customEventContent, true, null);
+        this.OpRaiseEvent(PunEvent.DestroyPlayer, customEventContent, true, null);
     }
 
     private void SendDestroyOfPlayer(int actorNr)
@@ -2693,7 +2657,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         {
             [(byte)0] = actorNr
         };
-        this.OpRaiseEvent(207, customEventContent, true, null);
+        this.OpRaiseEvent(PunEvent.DestroyPlayer, customEventContent, true, null);
     }
 
     internal Hashtable SendInstantiate(string prefabName, Vector3 position, Quaternion rotation, int group, int[] viewIDs, object[] data, bool isGlobalObject)
@@ -2704,35 +2668,29 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             [(byte)0] = prefabName
         };
         if (position != Vector3.zero)
-        {
             customEventContent[(byte) 1] = position;
-        }
+        
         if (rotation != Quaternion.identity)
-        {
             customEventContent[(byte) 2] = rotation;
-        }
+        
         if (group != 0)
-        {
             customEventContent[(byte) 3] = group;
-        }
+        
         if (viewIDs.Length > 1)
-        {
             customEventContent[(byte) 4] = viewIDs;
-        }
+        
         if (data != null)
-        {
             customEventContent[(byte) 5] = data;
-        }
+        
         if (this.currentLevelPrefix > 0)
-        {
             customEventContent[(byte) 8] = this.currentLevelPrefix;
-        }
+        
         customEventContent[(byte) 6] = ServerTimeInMilliSeconds;
         customEventContent[(byte) 7] = num;
         RaiseEventOptions raiseEventOptions = new RaiseEventOptions {
             CachingOption = !isGlobalObject ? EventCaching.AddToRoomCache : EventCaching.AddToRoomCacheGlobal
         };
-        this.OpRaiseEvent(202, customEventContent, true, raiseEventOptions);
+        this.OpRaiseEvent(PunEvent.Instantiation, customEventContent, true, raiseEventOptions);
         return customEventContent;
     }
 
@@ -2747,10 +2705,8 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         {
             sendMonoMessageTargets = new HashSet<GameObject>();
             Component[] componentArray = (Component[]) UnityEngine.Object.FindObjectsOfType(typeof(MonoBehaviour));
-            for (int a = 0; a < componentArray.Length; a++)
-            {
-                sendMonoMessageTargets.Add(componentArray[a].gameObject);
-            }
+            foreach (var behaviours in componentArray)
+                sendMonoMessageTargets.Add(behaviours.gameObject);
         }
         string methodName = methodString.ToString();
         foreach (GameObject obj2 in sendMonoMessageTargets)
@@ -2783,7 +2739,7 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
             this.mLocalActor.FriendName = this.PlayerName;
             Hashtable actorProperties = new Hashtable
             {
-                [(byte)255] = this.PlayerName
+                [ActorProperties.PlayerName] = this.PlayerName
             };
             if (this.mLocalActor.ID > 0)
             {
@@ -2799,10 +2755,11 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         {
             [(byte)7] = instantiateId
         };
-        RaiseEventOptions options = new RaiseEventOptions {
-            CachingOption = EventCaching.RemoveFromRoomCache
+        RaiseEventOptions options = new RaiseEventOptions
+        {
+            CachingOption = EventCaching.RemoveFromRoomCache,
+            TargetActors = new[] {actorNr}
         };
-        options.TargetActors = new int[] { actorNr };
         RaiseEventOptions raiseEventOptions = options;
         this.OpRaiseEvent(202, customEventContent, true, raiseEventOptions);
         Hashtable hashtable2 = new Hashtable

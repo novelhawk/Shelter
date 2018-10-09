@@ -34,7 +34,7 @@ namespace Mod
         private int _playerTTL;
         private int _roomTTL;
 
-        public Room(
+        private Room(
             string fullName,
             string name,
             LevelInfo map,
@@ -275,7 +275,7 @@ namespace Mod
                 {
                     PhotonNetwork.networkingPeer.OpSetPropertiesOfRoom(new Hashtable
                     {
-                        { (byte)255, (byte) Math.Min(value, 255) }
+                        { GamePropertyKey.MaxPlayers, (byte) Math.Min(value, 255) }
                     }, true, 0);
                 }
                 _maxPlayers = value;
@@ -296,7 +296,7 @@ namespace Mod
                 {
                     PhotonNetwork.networkingPeer.OpSetPropertiesOfRoom(new Hashtable
                     {
-                        { (byte)235, value }
+                        { ParameterCode.PlayerTTL, value }
                     }, true, 0);
 
                     _playerTTL = value;
@@ -316,7 +316,7 @@ namespace Mod
                 {
                     PhotonNetwork.networkingPeer.OpSetPropertiesOfRoom(new Hashtable
                     {
-                        { (byte)236, value }
+                        { ParameterCode.EmptyRoomTTL, value }
                     }, true, 0);
 
                     _roomTTL = value;
@@ -339,7 +339,7 @@ namespace Mod
                 {
                     PhotonNetwork.networkingPeer.OpSetPropertiesOfRoom(new Hashtable
                     {
-                        { (byte)254, value }
+                        { GamePropertyKey.IsVisible, value }
                     }, true, 0);
 
                     _isVisible = value;
@@ -359,7 +359,7 @@ namespace Mod
                 {
                     PhotonNetwork.networkingPeer.OpSetPropertiesOfRoom(new Hashtable
                     {
-                        { (byte)253, value }
+                        { GamePropertyKey.IsOpen, value }
                     }, true, 0);
                     
                     _isOpen = value;

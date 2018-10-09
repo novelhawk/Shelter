@@ -1,6 +1,5 @@
-using System.CodeDom;
+using Mod;
 using Mod.Exceptions;
-using Mod.Interface;
 using UnityEngine;
 
 public class SmoothSyncMovement : Photon.MonoBehaviour
@@ -48,7 +47,7 @@ public class SmoothSyncMovement : Photon.MonoBehaviour
         }
 
         if (!info.sender.IsMasterClient && info.sender.ID != photonView.owner.ID)
-            throw new NotAllowedException((byte) PhotonEvent.SendSerializeReliable, info.sender);
+            throw new NotAllowedException(PunEvent.SendSerializeReliable, info.sender);
 
         this.correctPlayerPos = (Vector3) stream.ReceiveNext();
         this.correctPlayerRot = (Quaternion) stream.ReceiveNext();
