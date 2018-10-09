@@ -8,7 +8,7 @@ using UnityEngine;
 public static class PhotonNetwork
 {
     public const bool InstantiateInRoomOnly = true;
-    public const PhotonLogLevel LogLevel = PhotonLogLevel.ErrorsOnly;
+    public static readonly PhotonLogLevel LogLevel = PhotonLogLevel.ErrorsOnly;
     public const int MaxViewIds = 1000;
     
     public static readonly ServerSettings PhotonServerSettings = (ServerSettings) Resources.Load("PhotonServerSettings", typeof(ServerSettings));
