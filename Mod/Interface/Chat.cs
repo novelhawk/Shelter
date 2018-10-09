@@ -30,18 +30,17 @@ namespace Mod.Interface
         {
             if (target == PhotonTargets.All)
                 target = PhotonTargets.Others;
-            FengGameManagerMKII.instance.photonView.RPC("Chat", target, message, sender.ToString());
+            FengGameManagerMKII.instance.photonView.RPC("Chat", target, message.ToString(), sender.ToString());
             return AddMessage(message, Player.Self);
         }
 
-        public static int SendMessage(object sender, object message, Player player)
+        public static void SendMessage(object sender, object message, Player player)
         {
-            FengGameManagerMKII.instance.photonView.RPC("Chat", player, message, sender.ToString());
-            return AddMessage(message, Player.Self);
+            FengGameManagerMKII.instance.photonView.RPC("Chat", player, message.ToString(), sender.ToString());
         }
 
         public static int SendMessage(object message, PhotonTargets target = PhotonTargets.All) => SendMessage(string.Empty, message, target);
-        public static int SendMessage(object message, Player player) => SendMessage(string.Empty, message, player);
+        public static void SendMessage(object message, Player player) => SendMessage(string.Empty, message, player);
 
         private static string CustomFormat(string message)
         {
