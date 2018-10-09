@@ -217,21 +217,6 @@ namespace Mod
         }
 
         public bool Join() => PhotonNetwork.JoinRoom(_fullName);
-        public string ToString(int alpha)
-        {
-            StringBuilder builder = new StringBuilder();
-            builder.AppendFormat("<color=#5D334B{0:X2}>", alpha);
-            if (IsProtected)
-                builder.AppendFormat("<color=#034C94{0:X2}>[</color><color=#1191D1{0:X2}>PW</color><color=#034C94{0:X2}>]</color> ", alpha);
-            if (!_isOpen)
-                builder.AppendFormat("<color=#034C94{0:X2}>[</color><color=#FF0000{0:X2}>CLOSED</color><color=#034C94{0:X2}>]</color> ", alpha);
-            builder.AppendFormat("{0} || {1} || ", Name.RemoveColors(), Map.Name);
-            builder.AppendFormat("<color=#{1}{0:X2}>", alpha, IsJoinable ? "00FF00" : "FF0000");
-            builder.AppendFormat("{0}/{1}", _currentPlayers, _maxPlayers);
-            builder.Append("</color></color>");
-            return builder.ToString();
-        }
-
 
         public Hashtable Properties => _properties;
 

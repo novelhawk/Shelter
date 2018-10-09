@@ -1,4 +1,6 @@
 ﻿using System.Linq;
+using System.Security.Permissions;
+using System.Text;
 using UnityEngine;
 
 namespace Mod.Interface
@@ -13,8 +15,8 @@ namespace Mod.Interface
         private Texture2D background;
         private Vector2 _scrollPosition;
         private string _filter = string.Empty;
-        private float width;
-        private float height;
+        private float _width;
+        private float _height;
         public static float Alpha;
 
         protected override void OnShow()
@@ -50,16 +52,16 @@ namespace Mod.Interface
 
         private void Animation()
         {
-            if (width < 1280f || height < 720f)
+            if (_width < 1280f || _height < 720f)
             {
-                if (width < 1280f)
-                    width += 1280f / 100f * 0.1f + width / 100 * .5f * Time.deltaTime * 500;
-                if (height < 720f)
-                    height += 720f / 100f * 0.1f + height / 100 * .5f * Time.deltaTime * 500;
-                if (width < 1280f || height < 720f)
+                if (_width < 1280f)
+                    _width += 1280f / 100f * 0.1f + _width / 100 * .5f * Time.deltaTime * 500;
+                if (_height < 720f)
+                    _height += 720f / 100f * 0.1f + _height / 100 * .5f * Time.deltaTime * 500;
+                if (_width < 1280f || _height < 720f)
                     return;
-                width = 1280f;
-                height = 720f;
+                _width = 1280f;
+                _height = 720f;
             }
             else if (PhotonNetwork.connectionStatesDetailed == PeerStates.JoinedLobby && PhotonNetwork.countOfRooms > 0)
             {
@@ -74,7 +76,7 @@ namespace Mod.Interface
             if (Event.current.type == EventType.KeyDown)
                 GUI.FocusControl("Search");
 
-            GUI.DrawTexture(windowRect = new Rect(Screen.width / 2f - width/2, Screen.height / 2f - height/2, width, height), background);
+            GUI.DrawTexture(windowRect = new Rect(Screen.width / 2f - _width/2, Screen.height / 2f - _height/2, _width, _height), background);
             if (Alpha < 255f)
                 Animation();
 
@@ -90,7 +92,7 @@ namespace Mod.Interface
                     continue;
                 GUILayout.BeginHorizontal();
                 GUILayout.FlexibleSpace();
-                if (GUILayout.Button(room.ToString(Alpha.ToInt()), buttonStyle))
+                if (GUILayout.Button(GetRoomName(room), buttonStyle))
                     Connecting.ConnectTo(room);
                 GUILayout.FlexibleSpace();
                 GUILayout.EndHorizontal();
@@ -99,11 +101,36 @@ namespace Mod.Interface
             GUILayout.EndArea();
         }
 
+        private string GetRoomName(Room room)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.AppendFormat("<color=#5D334B{0:X2}>", Alpha);
+            {
+                if (room.IsProtected)
+                    builder.AppendFormat("<color=#034C94{0:X2}>[</color>" +
+                                         "<color=#1191D1{0:X2}>PW</color>" +
+                                         "<color=#034C94{0:X2}>]</color> ", Alpha);
+                if (!room.IsOpen)
+                    builder.AppendFormat("<color=#034C94{0:X2}>[</color>" +
+                                         "<color=#FF0000{0:X2}>CLOSED</color>" +
+                                         "<color=#034C94{0:X2}>]</color> ", Alpha);
+                builder.Append(Name.RemoveColors());
+                builder.Append(" || ");
+                builder.Append(room.Map.Name);
+                builder.Append(" || ");
+
+                var color = room.IsJoinable ? "00FF00" : "FF0000";
+                builder.AppendFormat("<color=#{1}{0:X2}>{2}/{3}</color>", Alpha, color, Room.CurrentPlayers, room.MaxPlayers);
+            }
+            builder.Append("</color>");
+            return builder.ToString();
+        }
+        
         protected override void OnHide()
         {
             Alpha = 0f;
-            width = 0f;
-            height = 0f;
+            _width = 0f;
+            _height = 0f;
             Destroy(background);
             Destroy(buttonActive);
             Destroy(buttonHover);
