@@ -55,21 +55,21 @@ public class Player
     
     public static Player Find(int id)
     {
-        return PhotonNetwork.PlayerList.FirstOrDefault(player => player.ID == id);
+        TryParse(id, out Player player);
+        return player;
     }
 
-    public static bool TryParse(string idStr, out Player player)
+    public static bool TryParse(string id, out Player player)
     {
-        if (int.TryParse(idStr, out int id))
-            if (TryParse(id, out player))
-                return true;
+        if (int.TryParse(id, out int playerId) && TryParse(playerId, out player))
+            return true;
         player = null;
         return false;
     }
 
     public static bool TryParse(int id, out Player player)
     {
-        if ((player = Find(id)) != null)
+        if (PhotonNetwork.networkingPeer.mActors.TryGetValue(id, out player))
             return true;
         return false;
     }
@@ -83,11 +83,6 @@ public class Player
 //        {
 //            TargetActors = new[] { _id }
 //        });
-    }
-
-    public Player Get(int id)
-    {
-        return Find(id);
     }
 
     public override int GetHashCode() => ID;
