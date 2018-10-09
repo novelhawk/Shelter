@@ -4,30 +4,32 @@ using System.Collections.Generic;
 using Mod;
 using UnityEngine;
 
+// PUN Version: 1.28
 public static class PhotonNetwork
 {
+    public const bool InstantiateInRoomOnly = true;
+    public const PhotonLogLevel LogLevel = PhotonLogLevel.ErrorsOnly;
+    public const int MaxViewIds = 1000;
+    
+    public static readonly ServerSettings PhotonServerSettings = (ServerSettings) Resources.Load("PhotonServerSettings", typeof(ServerSettings));
+    private static readonly Dictionary<string, GameObject> PrefabCache = new Dictionary<string, GameObject>();
+    public static HashSet<GameObject> SendMonoMessageTargets;
     private static bool _mAutomaticallySyncScene = false;
     private static bool autoJoinLobbyField = true;
-    public static bool InstantiateInRoomOnly = true;
     private static bool isOfflineMode = false;
     internal static int lastUsedViewSubId = 0;
     internal static int lastUsedViewSubIdStatic = 0;
-    public static PhotonLogLevel logLevel = PhotonLogLevel.ErrorsOnly;
     private static bool _cleanupPlayerObjects = true;
     private static bool m_isMessageQueueRunning = true;
     internal static List<int> manuallyAllocatedViewIds = new List<int>();
-    public static readonly int MAX_VIEW_IDS = 1000;
     internal static NetworkingPeer networkingPeer;
     private static Room offlineModeRoom = null;
-    internal static readonly PhotonHandler photonMono;
-    public static ServerSettings PhotonServerSettings = (ServerSettings) Resources.Load("PhotonServerSettings", typeof(ServerSettings));
+    public static readonly PhotonHandler photonMono;
     public static float precisionForFloatSynchronization = 0.01f;
     public static float precisionForQuaternionSynchronization = 1f;
     public static float precisionForVectorSynchronization = 9.9E-05f;
-    public static Dictionary<string, GameObject> PrefabCache = new Dictionary<string, GameObject>();
     private static int sendInterval = 50;
     private static int sendIntervalOnSerialize = 100;
-    public static HashSet<GameObject> SendMonoMessageTargets;
     public const string serverSettingsAssetFile = "PhotonServerSettings";
     public const string serverSettingsAssetPath = "Assets/Photon Unity Networking/Resources/PhotonServerSettings.asset";
     public static bool UseNameServer = true;
@@ -67,10 +69,10 @@ public static class PhotonNetwork
         if (ownerId != 0)
         {
             int lastUsedViewSubId = PhotonNetwork.lastUsedViewSubId;
-            int num6 = ownerId * MAX_VIEW_IDS;
-            for (int j = 1; j < MAX_VIEW_IDS; j++)
+            int num6 = ownerId * MaxViewIds;
+            for (int j = 1; j < MaxViewIds; j++)
             {
-                lastUsedViewSubId = (lastUsedViewSubId + 1) % MAX_VIEW_IDS;
+                lastUsedViewSubId = (lastUsedViewSubId + 1) % MaxViewIds;
                 if (lastUsedViewSubId != 0)
                 {
                     int key = lastUsedViewSubId + num6;
@@ -84,10 +86,10 @@ public static class PhotonNetwork
             throw new Exception(string.Format("AllocateViewID() failed. User {0} is out of subIds, as all viewIDs are used.", ownerId));
         }
         int lastUsedViewSubIdStatic = PhotonNetwork.lastUsedViewSubIdStatic;
-        int num2 = ownerId * MAX_VIEW_IDS;
-        for (int i = 1; i < MAX_VIEW_IDS; i++)
+        int num2 = ownerId * MaxViewIds;
+        for (int i = 1; i < MaxViewIds; i++)
         {
-            lastUsedViewSubIdStatic = (lastUsedViewSubIdStatic + 1) % MAX_VIEW_IDS;
+            lastUsedViewSubIdStatic = (lastUsedViewSubIdStatic + 1) % MaxViewIds;
             if (lastUsedViewSubIdStatic != 0)
             {
                 int num4 = lastUsedViewSubIdStatic + num2;
@@ -278,7 +280,7 @@ public static class PhotonNetwork
         DestroyPlayerObjects(targetPlayer.ID);
     }
 
-    public static void DestroyPlayerObjects(int targetPlayerId)
+    private static void DestroyPlayerObjects(int targetPlayerId)
     {
         if (VerifyCanUseNetwork())
         {
@@ -305,18 +307,15 @@ public static class PhotonNetwork
             networkingPeer.states = PeerStates.Disconnecting;
             networkingPeer.OnStatusChanged(StatusCode.Disconnect);
         }
-        else if (networkingPeer != null)
+        else
         {
-            networkingPeer.Disconnect();
+            networkingPeer?.Disconnect();
         }
     }
 
     public static void FetchServerTimestamp()
     {
-        if (networkingPeer != null)
-        {
-            networkingPeer.FetchServerTimestamp();
-        }
+        networkingPeer?.FetchServerTimestamp();
     }
 
     public static bool FindFriends(string[] friendsToFind)
@@ -339,12 +338,11 @@ public static class PhotonNetwork
         return Instantiate(prefabName, position, rotation, group, null);
     }
 
-    public static GameObject Instantiate(string prefabName, Vector3 position, Quaternion rotation, int group, object[] data)
+    private static GameObject Instantiate(string prefabName, Vector3 position, Quaternion rotation, int group, object[] data)
     {
         if (connected && (!InstantiateInRoomOnly || inRoom))
         {
-            GameObject obj2;
-            if (!UsePrefabCache || !PrefabCache.TryGetValue(prefabName, out obj2))
+            if (!UsePrefabCache || !PrefabCache.TryGetValue(prefabName, out var obj2))
             {
                 if (prefabName.StartsWith("RCAsset/"))
                 {
@@ -412,7 +410,7 @@ public static class PhotonNetwork
             int[] viewIDs = AllocateSceneViewIDs(obj2.GetPhotonViewsInChildren().Length);
             if (viewIDs == null)
             {
-                Debug.LogError(string.Concat(new object[] { "Failed to InstantiateSceneObject prefab: ", prefabName, ". No ViewIDs are free to use. Max is: ", MAX_VIEW_IDS }));
+                Debug.LogError(string.Concat(new object[] { "Failed to InstantiateSceneObject prefab: ", prefabName, ". No ViewIDs are free to use. Max is: ", MaxViewIds }));
                 return null;
             }
             Hashtable evData = networkingPeer.SendInstantiate(prefabName, position, rotation, group, viewIDs, data, true);
@@ -439,12 +437,7 @@ public static class PhotonNetwork
         }
     }
 
-    public static bool JoinLobby()
-    {
-        return JoinLobby(null);
-    }
-
-    public static bool JoinLobby(TypedLobby typedLobby)
+    public static bool JoinLobby(TypedLobby typedLobby = null)
     {
         bool flag;
         if (!connected || Server != ServerConnection.MasterServer)
@@ -489,17 +482,7 @@ public static class PhotonNetwork
         return false;
     }
 
-    public static bool JoinRandomRoom()
-    {
-        return JoinRandomRoom(null, 0, MatchmakingMode.FillRoom, null, null);
-    }
-
-    public static bool JoinRandomRoom(Hashtable expectedCustomRoomProperties, byte expectedMaxPlayers)
-    {
-        return JoinRandomRoom(expectedCustomRoomProperties, expectedMaxPlayers, MatchmakingMode.FillRoom, null, null);
-    }
-
-    public static bool JoinRandomRoom(Hashtable expectedCustomRoomProperties, byte expectedMaxPlayers, MatchmakingMode matchingType, TypedLobby typedLobby, string sqlLobbyFilter)
+    public static bool JoinRandomRoom(Hashtable expectedCustomRoomProperties = null, byte expectedMaxPlayers = 0, MatchmakingMode matchingType = MatchmakingMode.FillRoom, TypedLobby typedLobby = null, string sqlLobbyFilter = null)
     {
         if (offlineMode)
         {
@@ -795,7 +778,9 @@ public static class PhotonNetwork
             }
             catch
             {
+                // ignored
             }
+
             networkingPeer = new NetworkingPeer(photonMono, string.Empty, cp);
             Debug.Log("Protocol switched to: " + cp);
         }
@@ -827,10 +812,7 @@ public static class PhotonNetwork
 
     public static AuthenticationValues AuthValues
     {
-        get
-        {
-            return networkingPeer == null ? null : networkingPeer.CustomAuthenticationValues;
-        }
+        get => networkingPeer?.CustomAuthenticationValues;
         set
         {
             if (networkingPeer != null)
@@ -842,10 +824,7 @@ public static class PhotonNetwork
 
     public static bool CleanupPlayerObjects
     {
-        get
-        {
-            return _cleanupPlayerObjects;
-        }
+        get => _cleanupPlayerObjects;
         set
         {
             if (Room != null)
@@ -861,22 +840,13 @@ public static class PhotonNetwork
 
     public static bool autoJoinLobby
     {
-        get
-        {
-            return autoJoinLobbyField;
-        }
-        set
-        {
-            autoJoinLobbyField = value;
-        }
+        get => autoJoinLobbyField;
+        set => autoJoinLobbyField = value;
     }
 
     public static bool automaticallySyncScene
     {
-        get
-        {
-            return _mAutomaticallySyncScene;
-        }
+        get => _mAutomaticallySyncScene;
         set
         {
             _mAutomaticallySyncScene = value;
@@ -931,13 +901,7 @@ public static class PhotonNetwork
         }
     }
 
-    public static bool connecting
-    {
-        get
-        {
-            return networkingPeer.IsInitialConnect && !offlineMode;
-        }
-    }
+    public static bool connecting => networkingPeer.IsInitialConnect && !offlineMode;
 
     public static ConnectionState connectionState
     {
@@ -990,44 +954,14 @@ public static class PhotonNetwork
         }
     }
 
-    public static int countOfPlayers
-    {
-        get
-        {
-            return networkingPeer.mPlayersInRoomsCount + networkingPeer.mPlayersOnMasterCount;
-        }
-    }
-
-    public static int countOfPlayersInRooms
-    {
-        get
-        {
-            return networkingPeer.mPlayersInRoomsCount;
-        }
-    }
-
-    public static int countOfPlayersOnMaster
-    {
-        get
-        {
-            return networkingPeer.mPlayersOnMasterCount;
-        }
-    }
-
-    public static int countOfRooms
-    {
-        get
-        {
-            return networkingPeer.mGameCount;
-        }
-    }
+    public static int countOfPlayers => networkingPeer.mPlayersInRoomsCount + networkingPeer.mPlayersOnMasterCount;
+    public static int countOfPlayersInRooms => networkingPeer.mPlayersInRoomsCount;
+    public static int countOfPlayersOnMaster => networkingPeer.mPlayersOnMasterCount;
+    public static int countOfRooms => networkingPeer.mGameCount;
 
     public static bool CrcCheckEnabled
     {
-        get
-        {
-            return networkingPeer.CrcEnabled;
-        }
+        get => networkingPeer.CrcEnabled;
         set
         {
             if (!connected && !connecting)
@@ -1041,56 +975,20 @@ public static class PhotonNetwork
         }
     }
 
-    public static int FriendsListAge
-    {
-        get
-        {
-            return networkingPeer == null ? 0 : networkingPeer.FriendsListAge;
-        }
-    }
+    public static int FriendsListAge => networkingPeer?.FriendsListAge ?? 0;
 
     public static string gameVersion
     {
-        get
-        {
-            return networkingPeer.mAppVersion;
-        }
-        set
-        {
-            networkingPeer.mAppVersion = value;
-        }
+        get => networkingPeer.mAppVersion;
+        set => networkingPeer.mAppVersion = value;
     }
 
-    public static bool inRoom
-    {
-        get
-        {
-            return connectionStatesDetailed == PeerStates.Joined;
-        }
-    }
-
-    public static bool insideLobby
-    {
-        get
-        {
-            return networkingPeer.insideLobby;
-        }
-    }
-
-    public static bool isMasterClient
-    {
-        get
-        {
-            return offlineMode || networkingPeer.mMasterClient == networkingPeer.mLocalActor;
-        }
-    }
-
+    public static bool inRoom => connectionStatesDetailed == PeerStates.Joined;
+    public static bool insideLobby => networkingPeer.insideLobby;
+    public static bool isMasterClient => offlineMode || networkingPeer.mMasterClient == networkingPeer.mLocalActor;
     public static bool isMessageQueueRunning
     {
-        get
-        {
-            return m_isMessageQueueRunning;
-        }
+        get => m_isMessageQueueRunning;
         set
         {
             if (value)
@@ -1102,37 +1000,15 @@ public static class PhotonNetwork
         }
     }
 
-    public static bool isNonMasterClientInRoom
-    {
-        get
-        {
-            return !isMasterClient && Room != null;
-        }
-    }
+    public static bool isNonMasterClientInRoom => !isMasterClient && Room != null;
 
     public static TypedLobby lobby
     {
-        get
-        {
-            return networkingPeer.lobby;
-        }
-        set
-        {
-            networkingPeer.lobby = value;
-        }
+        get => networkingPeer.lobby;
+        set => networkingPeer.lobby = value;
     }
 
-    public static Player masterClient
-    {
-        get
-        {
-            if (networkingPeer == null)
-            {
-                return null;
-            }
-            return networkingPeer.mMasterClient;
-        }
-    }
+    public static Player MasterClient => networkingPeer?.mMasterClient;
 
     [Obsolete("Used for compatibility with Unity networking only.")]
     public static int maxConnections
@@ -1145,18 +1021,12 @@ public static class PhotonNetwork
             }
             return Room.MaxPlayers;
         }
-        set
-        {
-            Room.MaxPlayers = value;
-        }
+        set => Room.MaxPlayers = value;
     }
 
     public static int MaxResendsBeforeDisconnect
     {
-        get
-        {
-            return networkingPeer.SentCountAllowance;
-        }
+        get => networkingPeer.SentCountAllowance;
         set
         {
             if (value < 3)
@@ -1173,22 +1043,13 @@ public static class PhotonNetwork
 
     public static bool NetworkStatisticsEnabled
     {
-        get
-        {
-            return networkingPeer.TrafficStatsEnabled;
-        }
-        set
-        {
-            networkingPeer.TrafficStatsEnabled = value;
-        }
+        get => networkingPeer.TrafficStatsEnabled;
+        set => networkingPeer.TrafficStatsEnabled = value;
     }
 
     public static bool offlineMode
     {
-        get
-        {
-            return isOfflineMode;
-        }
+        get => isOfflineMode;
         set
         {
             if (value != isOfflineMode)
@@ -1233,16 +1094,7 @@ public static class PhotonNetwork
         }
     }
 
-    public static int PacketLossByCrcCheck
-    {
-        get
-        {
-            return networkingPeer.PacketLossByCrc;
-        }
-    }
-
-    [Obsolete("Use PhotonPlayer.Self")]
-    public static Player player => Player.Self;
+    public static int PacketLossByCrcCheck => networkingPeer.PacketLossByCrc;
 
     public static Player[] PlayerList
     {
@@ -1258,23 +1110,11 @@ public static class PhotonNetwork
 
     public static string playerName
     {
-        get
-        {
-            return networkingPeer.PlayerName;
-        }
-        set
-        {
-            networkingPeer.PlayerName = value;
-        }
+        get => networkingPeer.PlayerName;
+        set => networkingPeer.PlayerName = value;
     }
 
-    public static int ResentReliableCommands
-    {
-        get
-        {
-            return networkingPeer.ResentReliableCommands;
-        }
-    }
+    public static int ResentReliableCommands => networkingPeer.ResentReliableCommands;
 
     public static Room Room //TODO: Make it into a custom class/struct with all infos
     {
@@ -1290,10 +1130,7 @@ public static class PhotonNetwork
 
     public static int sendRate
     {
-        get
-        {
-            return 1000 / sendInterval;
-        }
+        get => 1000 / sendInterval;
         set
         {
             sendInterval = 1000 / value;
@@ -1310,11 +1147,8 @@ public static class PhotonNetwork
 
     public static int sendRateOnSerialize
     {
-        get
-        {
-            return 1000 / sendIntervalOnSerialize;
-        }
-        set
+        get => 1000 / sendIntervalOnSerialize;
+        private set
         {
             if (value > sendRate)
             {
@@ -1329,21 +1163,9 @@ public static class PhotonNetwork
         }
     }
 
-    public static ServerConnection Server
-    {
-        get
-        {
-            return networkingPeer.server;
-        }
-    }
+    public static ServerConnection Server => networkingPeer.server;
 
-    public static string ServerAddress
-    {
-        get
-        {
-            return networkingPeer == null ? "<not connected>" : networkingPeer.ServerAddress;
-        }
-    }
+    public static string ServerAddress => networkingPeer == null ? "<not connected>" : networkingPeer.ServerAddress;
 
     public static double time
     {
@@ -1359,14 +1181,8 @@ public static class PhotonNetwork
 
     public static int unreliableCommandsLimit
     {
-        get
-        {
-            return networkingPeer.LimitOfUnreliableCommands;
-        }
-        set
-        {
-            networkingPeer.LimitOfUnreliableCommands = value;
-        }
+        get => networkingPeer.LimitOfUnreliableCommands;
+        set => networkingPeer.LimitOfUnreliableCommands = value;
     }
 
     public delegate void EventCallback(byte eventCode, object content, int senderId);

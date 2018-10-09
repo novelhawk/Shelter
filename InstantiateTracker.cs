@@ -12,8 +12,8 @@ public class InstantiateTracker
         {
             return true;
         }
-        int num = player.ID * PhotonNetwork.MAX_VIEW_IDS;
-        int num2 = num + PhotonNetwork.MAX_VIEW_IDS;
+        int num = player.ID * PhotonNetwork.MaxViewIds;
+        int num2 = num + PhotonNetwork.MaxViewIds;
         foreach (int num3 in viewIDS)
         {
             if (num3 <= num || num3 >= num2)

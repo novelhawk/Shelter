@@ -338,7 +338,7 @@ public partial class FengGameManagerMKII
         if (settings.EnableChatFeed)
             Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game win).", roundTime);
 
-        if (!(Equals(info.sender, PhotonNetwork.masterClient) || info.sender.IsLocal))
+        if (!(Equals(info.sender, PhotonNetwork.MasterClient) || info.sender.IsLocal))
             Mod.Interface.Chat.System("Round end sent from Player " + info.sender.ID);
     }
 

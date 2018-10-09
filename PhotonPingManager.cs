@@ -1,220 +1,165 @@
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
-using System.Runtime.CompilerServices;
 using ExitGames.Client.Photon;
+using Mod;
 using UnityEngine;
-using Debug = UnityEngine.Debug;
+using LogType = Mod.Logging.LogType;
 
 public class PhotonPingManager
 {
-    public static int Attempts = 5;
-    public static bool IgnoreInitialAttempt = true;
-    public static int MaxMilliseconsPerPing = 800;
-    private int PingsRunning;
-    public bool UseNative;
+    private const int Attempts = 5;
+    private const int MaxMilliseconsPerPing = 800; // enter a value you're sure some server can beat (have a lower rtt)
 
-    [DebuggerHidden]
+    public static Region BestRegion
+    {
+        get
+        {
+            Region result = null;
+            int bestRtt = int.MaxValue;
+            foreach (Region region in PhotonNetwork.networkingPeer.AvailableRegions)
+            {
+                if (region.Ping != 0 && region.Ping < bestRtt)
+                {
+                    bestRtt = region.Ping;
+                    result = region;
+                }
+            }
+
+            return result;
+        }
+    }
+
+    public bool Done => this.PingsRunning == 0;
+    private int PingsRunning;
+
+    /// <remarks>
+    /// Affected by frame-rate of app, as this Coroutine checks the socket for a result once per frame.
+    /// </remarks>
     public IEnumerator PingSocket(Region region)
     {
-        return new PingSocketc__IteratorB { region = region, f__this = this };
+        region.Ping = Attempts * MaxMilliseconsPerPing;
+
+        this.PingsRunning++; // TODO: Add try-catch to make sure the PingsRunning are reduced at the end and that the lib does not crash the app
+        PhotonPing ping;
+        if (PhotonHandler.PingImplementation == typeof(PingNativeDynamic))
+        {
+            Shelter.Log("Using constructor for new PingNativeDynamic()"); // it seems on android, the Activator can't find the default Constructor
+            ping = new PingNativeDynamic();
+        }
+        else if (PhotonHandler.PingImplementation == typeof(PingMono))
+        {
+            ping = new PingMono(); // using this type explicitly saves it from IL2CPP bytecode stripping
+        }
+        #if UNITY_WEBGL
+        else if (PhotonHandler.PingImplementation == typeof(PingHttp))
+        {
+            ping = new PingHttp();
+        }
+        #endif
+        else
+        {
+            ping = (PhotonPing)Activator.CreateInstance(PhotonHandler.PingImplementation);
+        }
+
+        float rttSum = 0.0f;
+        int replyCount = 0;
+
+        // all addresses for Photon region servers will contain a :port ending. this needs to be removed first.
+        // PhotonPing.StartPing() requires a plain (IP) address without port or protocol-prefix (on all but Windows 8.1 and WebGL platforms).
+
+        string regionAddress = region.HostAndPort;
+        int indexOfColon = regionAddress.LastIndexOf(':');
+        if (indexOfColon > 1)
+            regionAddress = regionAddress.Substring(0, indexOfColon);
+
+        regionAddress = ResolveHost(regionAddress);
+
+        for (int i = 0; i < Attempts; i++)
+        {
+            bool overtime = false;
+            Stopwatch sw = Stopwatch.StartNew();
+
+            try
+            {
+                ping.StartPing(regionAddress);
+            }
+            catch (Exception e)
+            {
+                Shelter.LogBoth("Exception {0} on pinging {1}.", LogType.Error, e.GetType().Name, regionAddress);
+                Shelter.Log("{0}: {1}", LogType.Error, e.GetType().Name, e.Message);
+                this.PingsRunning--;
+                break;
+            }
+
+
+            while (!ping.Done())
+            {
+                if (sw.ElapsedMilliseconds >= MaxMilliseconsPerPing)
+                {
+                    overtime = true;
+                    break;
+                }
+                yield return 0; // keep this loop tight, to avoid adding local lag to rtt.
+            }
+            int rtt = (int)sw.ElapsedMilliseconds;
+                
+            if (i != 0 && ping.Successful && !overtime)
+            {
+                rttSum += rtt;
+                replyCount++;
+                region.Ping = (int)((rttSum) / replyCount);
+                //Debug.Log("region " + region.Code + " RTT " + region.Ping + " success: " + ping.Successful + " over: " + overtime);
+            }
+
+            yield return new WaitForSeconds(0.1f);
+        }
+
+        this.PingsRunning--;
+
+        //Debug.Log("this.PingsRunning: " + this.PingsRunning + " this debug: " + ping.DebugString);
+        yield return null;
     }
 
-    public static string ResolveHost(string hostName)
+    /// <summary>
+    /// Attempts to resolve a hostname into an IP string or returns empty string if that fails.
+    /// </summary>
+    /// <param name="hostName">Hostname to resolve.</param>
+    /// <returns>IP string or empty string if resolution fails</returns>
+    private static string ResolveHost(string hostName)
     {
+        string ipv4Address = string.Empty;
+
         try
         {
-            IPAddress[] hostAddresses = Dns.GetHostAddresses(hostName);
-            if (hostAddresses.Length == 1)
+            IPAddress[] address = Dns.GetHostAddresses(hostName);
+
+            if (address.Length == 1)
+                return address[0].ToString();
+
+            // if we got more addresses, try to pick a IPv4 one
+            foreach (var ipAddress in address)
             {
-                return hostAddresses[0].ToString();
-            }
-            for (int i = 0; i < hostAddresses.Length; i++)
-            {
-                IPAddress address = hostAddresses[i];
-                if (address != null)
+                if (ipAddress != null)
                 {
-                    string str2 = address.ToString();
-                    if (str2.IndexOf('.') >= 0)
+                    // checking ipAddress.ToString() means we don't have to import System.Net.Sockets, which is not available on some platforms (Metro)
+                    if (ipAddress.ToString().Contains(":"))
                     {
-                        return str2;
+                        return ipAddress.ToString();
+                    }
+                    if (string.IsNullOrEmpty(ipv4Address))
+                    {
+                        ipv4Address = address.ToString();
                     }
                 }
             }
         }
-        catch (Exception exception)
+        catch (Exception e)
         {
-            Debug.Log("Exception caught! " + exception.Source + " Message: " + exception.Message);
-        }
-        return string.Empty;
-    }
-
-    public Region BestRegion
-    {
-        get
-        {
-            Region region = null;
-            int ping = 2147483647;
-            foreach (Region region2 in PhotonNetwork.networkingPeer.AvailableRegions)
-            {
-                Debug.Log("BestRegion checks region: " + region2);
-                if (region2.Ping != 0 && region2.Ping < ping)
-                {
-                    ping = region2.Ping;
-                    region = region2;
-                }
-            }
-            return region;
-        }
-    }
-
-    public bool Done
-    {
-        get
-        {
-            return PingsRunning == 0;
-        }
-    }
-
-    [CompilerGenerated]
-    private sealed class PingSocketc__IteratorB : IEnumerator, IDisposable, IEnumerator<object>
-    {
-        internal object Scurrent;
-        internal int SPC;
-        internal PhotonPingManager f__this;
-        internal string cleanIpOfRegion__3;
-        internal Exception e__8;
-        internal int i__5;
-        internal int indexOfColon__4;
-        internal bool overtime__6;
-        internal PhotonPing ping__0;
-        internal int replyCount__2;
-        internal int rtt__9;
-        internal float rttSum__1;
-        internal Stopwatch sw__7;
-        internal Region region;
-
-        [DebuggerHidden]
-        public void Dispose()
-        {
-            SPC = -1;
+            Shelter.LogBoth("Couldn't resolve hostname {0} (Exception {1} caught)", LogType.Error, hostName, e.GetType().Name);
         }
 
-        public bool MoveNext()
-        {
-            uint num = (uint)SPC;
-            SPC = -1;
-            switch (num)
-            {
-                case 0:
-                    region.Ping = Attempts * MaxMilliseconsPerPing;
-                    f__this.PingsRunning++;
-                    if (PhotonHandler.PingImplementation != typeof(PingNativeDynamic))
-                    {
-                        ping__0 = (PhotonPing)Activator.CreateInstance(PhotonHandler.PingImplementation);
-                        break;
-                    }
-                    Debug.Log("Using constructor for new PingNativeDynamic()");
-                    ping__0 = new PingNativeDynamic();
-                    break;
-
-                case 1:
-                //goto Label_01B9;
-
-                case 2:
-                //goto Label_0265;
-
-                case 3:
-                    SPC = -1;
-                    goto Label_02B0;
-
-                default:
-                    goto Label_02B0;
-            }
-            rttSum__1 = 0f;
-            replyCount__2 = 0;
-            cleanIpOfRegion__3 = region.HostAndPort;
-            indexOfColon__4 = cleanIpOfRegion__3.LastIndexOf(':');
-            if (indexOfColon__4 > 1)
-            {
-                cleanIpOfRegion__3 = cleanIpOfRegion__3.Substring(0, indexOfColon__4);
-            }
-            cleanIpOfRegion__3 = ResolveHost(cleanIpOfRegion__3);
-            i__5 = 0;
-            while (i__5 < Attempts)
-            {
-                overtime__6 = false;
-                sw__7 = new Stopwatch();
-                sw__7.Start();
-                try
-                {
-                    ping__0.StartPing(cleanIpOfRegion__3);
-                }
-                catch (Exception exception)
-                {
-                    e__8 = exception;
-                    Debug.Log("catched: " + e__8);
-                    f__this.PingsRunning--;
-                    break;
-                }
-                while (!ping__0.Done())
-                {
-                    if (sw__7.ElapsedMilliseconds >= MaxMilliseconsPerPing)
-                    {
-                        overtime__6 = true;
-                        break;
-                    }
-                    Scurrent = 0;
-                    SPC = 1;
-                    goto Label_02B2;
-                }
-                rtt__9 = (int)sw__7.ElapsedMilliseconds;
-                if ((!IgnoreInitialAttempt || i__5 != 0) && ping__0.Successful && !overtime__6)
-                {
-                    rttSum__1 += rtt__9;
-                    replyCount__2++;
-                    region.Ping = (int)(rttSum__1 / replyCount__2);
-                }
-                Scurrent = new WaitForSeconds(0.1f);
-                SPC = 2;
-                goto Label_02B2;
-                //i__5++;
-            }
-            f__this.PingsRunning--;
-            Scurrent = null;
-            SPC = 3;
-            goto Label_02B2;
-        Label_02B0:
-            return false;
-        Label_02B2:
-            return true;
-        }
-
-        [DebuggerHidden]
-        public void Reset()
-        {
-            throw new NotSupportedException();
-        }
-
-        object IEnumerator<object>.Current
-        {
-            [DebuggerHidden]
-            get
-            {
-                return Scurrent;
-            }
-        }
-
-        object IEnumerator.Current
-        {
-            [DebuggerHidden]
-            get
-            {
-                return Scurrent;
-            }
-        }
+        return ipv4Address;
     }
 }
-

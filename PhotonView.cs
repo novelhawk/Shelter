@@ -114,7 +114,7 @@ public class PhotonView : Photon.MonoBehaviour
     {
         if (PhotonNetwork.networkingPeer.hasSwitchedMC && target == PhotonTargets.MasterClient)
         {
-            PhotonNetwork.RPC(this, methodName, PhotonNetwork.masterClient, parameters);
+            PhotonNetwork.RPC(this, methodName, PhotonNetwork.MasterClient, parameters);
         }
         else
         {
@@ -195,13 +195,13 @@ public class PhotonView : Photon.MonoBehaviour
     {
         get
         {
-            return this.ownerId * PhotonNetwork.MAX_VIEW_IDS + this.subId;
+            return this.ownerId * PhotonNetwork.MaxViewIds + this.subId;
         }
         set
         {
             bool flag = this.didAwake && this.subId == 0;
-            this.ownerId = value / PhotonNetwork.MAX_VIEW_IDS;
-            this.subId = value % PhotonNetwork.MAX_VIEW_IDS;
+            this.ownerId = value / PhotonNetwork.MaxViewIds;
+            this.subId = value % PhotonNetwork.MaxViewIds;
             if (flag)
             {
                 PhotonNetwork.networkingPeer.RegisterPhotonView(this);

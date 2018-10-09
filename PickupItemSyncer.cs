@@ -18,7 +18,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
             }
             else
             {
-                Player next = PhotonNetwork.masterClient.GetNext();
+                Player next = PhotonNetwork.MasterClient.GetNext();
                 if (next == null || next.Equals(Player.Self))
                 {
                     next = Player.Self.GetNext();
