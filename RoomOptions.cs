@@ -7,7 +7,7 @@ public class RoomOptions : Hashtable
     public bool? DoAutoCleanup => (bool?) this[249];
     public int? CurrentPlayers => (byte?) this[252];
     public int? PlayerTTL => (int?) this[235];
-    public int? RoomTTL => (int?) this[235];
+    public int? RoomTTL => (int?) this[236];
     
     public int? MaxPlayers
     {
