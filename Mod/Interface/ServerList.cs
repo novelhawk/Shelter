@@ -101,26 +101,27 @@ namespace Mod.Interface
             GUILayout.EndArea();
         }
 
-        private string GetRoomName(Room room)
+        private static string GetRoomName(Room room)
         {
+            var alpha = ((byte) Alpha).ToString("X2");
             StringBuilder builder = new StringBuilder();
-            builder.AppendFormat("<color=#5D334B{0:X2}>", Alpha);
+            builder.AppendFormat("<color=#5D334B{0}>", alpha);
             {
                 if (room.IsProtected)
-                    builder.AppendFormat("<color=#034C94{0:X2}>[</color>" +
-                                         "<color=#1191D1{0:X2}>PW</color>" +
-                                         "<color=#034C94{0:X2}>]</color> ", Alpha);
+                    builder.AppendFormat("<color=#034C94{0}>[</color>" +
+                                         "<color=#1191D1{0}>PW</color>" +
+                                         "<color=#034C94{0}>]</color> ", alpha);
                 if (!room.IsOpen)
-                    builder.AppendFormat("<color=#034C94{0:X2}>[</color>" +
-                                         "<color=#FF0000{0:X2}>CLOSED</color>" +
-                                         "<color=#034C94{0:X2}>]</color> ", Alpha);
-                builder.Append(Name.RemoveColors());
+                    builder.AppendFormat("<color=#034C94{0}>[</color>" +
+                                         "<color=#FF0000{0}>CLOSED</color>" +
+                                         "<color=#034C94{0}>]</color> ", alpha);
+                builder.Append(room.Name.RemoveColors());
                 builder.Append(" || ");
                 builder.Append(room.Map.Name);
                 builder.Append(" || ");
 
                 var color = room.IsJoinable ? "00FF00" : "FF0000";
-                builder.AppendFormat("<color=#{1}{0:X2}>{2}/{3}</color>", Alpha, color, Room.CurrentPlayers, room.MaxPlayers);
+                builder.AppendFormat("<color=#{1}{0}>{2}/{3}</color>", alpha, color, Room.CurrentPlayers, room.MaxPlayers);
             }
             builder.Append("</color>");
             return builder.ToString();
