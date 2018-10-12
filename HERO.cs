@@ -47,10 +47,6 @@ public class HERO : Photon.MonoBehaviour
     public GameObject checkBoxRight;
     public GameObject cross1;
     public GameObject cross2;
-    public GameObject crossL1;
-    public GameObject crossL2;
-    public GameObject crossR1;
-    public GameObject crossR2;
     public string currentAnimation;
     private int currentBladeNum = 5;
     private float currentBladeSta = 100f;
@@ -488,10 +484,6 @@ public class HERO : Photon.MonoBehaviour
             this.baseAnimation = animation;
             this.cross1 = GameObject.Find("cross1");
             this.cross2 = GameObject.Find("cross2");
-            this.crossL1 = GameObject.Find("crossL1");
-            this.crossL2 = GameObject.Find("crossL2");
-            this.crossR1 = GameObject.Find("crossR1");
-            this.crossR2 = GameObject.Find("crossR2");
             this.LabelDistance = GameObject.Find("LabelDistance");
             this.cachedSprites = new Dictionary<string, UISprite>();
             foreach (var o in FindObjectsOfType(typeof(GameObject)))
@@ -3316,10 +3308,6 @@ public class HERO : Photon.MonoBehaviour
             Vector3 vector = Vector3.up * 5000f;
             this.cross1.transform.localPosition = vector;
             this.cross2.transform.localPosition = vector;
-            this.crossL1.transform.localPosition = vector;
-            this.crossL2.transform.localPosition = vector;
-            this.crossR1.transform.localPosition = vector;
-            this.crossR2.transform.localPosition = vector;
             this.LabelDistance.transform.localPosition = vector;
         }
         if (this.setup.part_cape != null)
@@ -3811,124 +3799,47 @@ public class HERO : Photon.MonoBehaviour
 
     private void DrawReticle() // TODO: Add custom cursor
     {
-        Vector3 vector;
-        if (Screen.showCursor)
+        if (Screen.showCursor) //TODO: Destroy objects instead of moving them offscreen
         {
-            GameObject obj2 = this.cross1;
-            GameObject obj3 = this.cross2;
-            GameObject obj4 = this.crossL1;
-            GameObject obj5 = this.crossL2;
-            GameObject obj6 = this.crossR1;
-            GameObject obj7 = this.crossR2;
-            GameObject labelDistance = this.LabelDistance;
-            vector = Vector3.up * 10000f;
-            obj7.transform.localPosition = vector;
-            obj6.transform.localPosition = vector;
-            obj5.transform.localPosition = vector;
-            obj4.transform.localPosition = vector;
-            labelDistance.transform.localPosition = vector;
-            obj3.transform.localPosition = vector;
-            obj2.transform.localPosition = vector;
+            Vector3 vector = Vector3.up * 10000f;
+            cross1        .transform.localPosition = vector;
+            cross2        .transform.localPosition = vector;
+            LabelDistance .transform.localPosition = vector;
         }
         else
         {
-            RaycastHit hit;
             this.checkTitan();
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            LayerMask mask = 1 << LayerMask.NameToLayer("Ground");
-            LayerMask mask2 = 1 << LayerMask.NameToLayer("EnemyBox");
-            LayerMask mask3 = mask2 | mask;
-            if (Physics.Raycast(ray, out hit, 1E+07f, mask3.value))
+            LayerMask mask = (1 << LayerMask.NameToLayer("EnemyBox")) | (1 << LayerMask.NameToLayer("Ground"));
+            if (Physics.Raycast(ray, out var hit, 1E+07f, mask.value))
             {
-                RaycastHit hit2;
-                GameObject obj9 = this.cross1;
-                GameObject obj10 = this.cross2;
-                obj9.transform.localPosition = Input.mousePosition;
-                Transform transform = obj9.transform;
-                transform.localPosition -= new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f);
-                obj10.transform.localPosition = obj9.transform.localPosition;
-                vector = hit.point - this.baseTransform.position;
-                float magnitude = vector.magnitude;
-                GameObject obj11 = this.LabelDistance;
-                switch (FengGameManagerMKII.settings.SpeedmeterType)
+                cross1.transform.localPosition =
+                    cross2.transform.localPosition = 
+                        Input.mousePosition - new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f);
+                float magnitude = (hit.point - baseTransform.position).magnitude;
+                switch (FengGameManagerMKII.settings.SpeedmeterType) //TODO: Custom Text
                 {
                     default:
-                        obj11.GetComponent<UILabel>().text = magnitude.ToString("0");
+                        LabelDistance.GetComponent<UILabel>().text = magnitude.ToString("0");
                         break;
                     case Speedmeter.Speed:
-                        obj11.GetComponent<UILabel>().text = $"{magnitude:0}\n{currentSpeed:F1} u/s";
+                        LabelDistance.GetComponent<UILabel>().text = $"{magnitude:0}\n{currentSpeed:F1} u/s";
                         break;
                     case Speedmeter.Damage:
-                        obj11.GetComponent<UILabel>().text = $"{magnitude:0}\n{currentSpeed / 100:F1}K";
+                        LabelDistance.GetComponent<UILabel>().text = $"{magnitude:0}\n{currentSpeed / 100:F1}K";
                         break;
                 }
                 if (magnitude > 120f)
                 {
-                    Transform transform11 = obj9.transform;
-                    transform11.localPosition += Vector3.up * 10000f;
-                    obj11.transform.localPosition = obj10.transform.localPosition;
+                    cross1.transform.localPosition += Vector3.up * 10000f;
+                    LabelDistance.transform.localPosition = cross2.transform.localPosition;
                 }
                 else
                 {
-                    Transform transform12 = obj10.transform;
-                    transform12.localPosition += Vector3.up * 10000f;
-                    obj11.transform.localPosition = obj9.transform.localPosition;
+                    cross2.transform.localPosition += Vector3.up * 10000f;
+                    LabelDistance.transform.localPosition = cross1.transform.localPosition;
                 }
-                Transform transform13 = obj11.transform;
-                transform13.localPosition -= new Vector3(0f, 15f, 0f);
-                Vector3 vector2 = new Vector3(0f, 0.4f, 0f);
-                vector2 -= this.baseTransform.right * 0.3f;
-                Vector3 vector3 = new Vector3(0f, 0.4f, 0f);
-                vector3 += this.baseTransform.right * 0.3f;
-                float num4 = hit.distance <= 50f ? hit.distance * 0.05f : hit.distance * 0.3f;
-                Vector3 vector4 = hit.point - this.baseTransform.right * num4 - (this.baseTransform.position + vector2);
-                Vector3 vector5 = hit.point + this.baseTransform.right * num4 - (this.baseTransform.position + vector3);
-                vector4.Normalize();
-                vector5.Normalize();
-                vector4 = vector4 * 1000000f;
-                vector5 = vector5 * 1000000f;
-                if (Physics.Linecast(this.baseTransform.position + vector2, this.baseTransform.position + vector2 + vector4, out hit2, mask3.value))
-                {
-                    GameObject obj12 = this.crossL1;
-                    obj12.transform.localPosition = this.currentCamera.WorldToScreenPoint(hit2.point);
-                    Transform transform14 = obj12.transform;
-                    transform14.localPosition -= new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f);
-                    obj12.transform.localRotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(obj12.transform.localPosition.y - (Input.mousePosition.y - Screen.height * 0.5f), obj12.transform.localPosition.x - (Input.mousePosition.x - Screen.width * 0.5f)) * 57.29578f + 180f);
-                    GameObject obj13 = this.crossL2;
-                    obj13.transform.localPosition = obj12.transform.localPosition;
-                    obj13.transform.localRotation = obj12.transform.localRotation;
-                    if (hit2.distance > 120f)
-                    {
-                        Transform transform15 = obj12.transform;
-                        transform15.localPosition += Vector3.up * 10000f;
-                    }
-                    else
-                    {
-                        Transform transform16 = obj13.transform;
-                        transform16.localPosition += Vector3.up * 10000f;
-                    }
-                }
-                if (Physics.Linecast(this.baseTransform.position + vector3, this.baseTransform.position + vector3 + vector5, out hit2, mask3.value))
-                {
-                    GameObject obj14 = this.crossR1;
-                    obj14.transform.localPosition = this.currentCamera.WorldToScreenPoint(hit2.point);
-                    Transform transform17 = obj14.transform;
-                    transform17.localPosition -= new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f);
-                    obj14.transform.localRotation = Quaternion.Euler(0f, 0f, Mathf.Atan2(obj14.transform.localPosition.y - (Input.mousePosition.y - Screen.height * 0.5f), obj14.transform.localPosition.x - (Input.mousePosition.x - Screen.width * 0.5f)) * 57.29578f);
-                    GameObject obj15 = this.crossR2;
-                    obj15.transform.localPosition = obj14.transform.localPosition;
-                    obj15.transform.localRotation = obj14.transform.localRotation;
-                    if (hit2.distance > 120f)
-                    {
-                        Transform transform18 = obj14.transform;
-                        transform18.localPosition += Vector3.up * 10000f;
-                    }
-                    else
-                    {
-                        Transform transform19 = obj15.transform;
-                        transform19.localPosition += Vector3.up * 10000f;
-                    }
-                }
+                LabelDistance.transform.localPosition -= new Vector3(0f, 15f, 0f);
             }
         }
     }
