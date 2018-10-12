@@ -121,7 +121,7 @@ namespace Mod.Interface
                 builder.Append(" || ");
 
                 var color = room.IsJoinable ? "00FF00" : "FF0000";
-                builder.AppendFormat("<color=#{1}{0}>{2}/{3}</color>", alpha, color, Room.CurrentPlayers, room.MaxPlayers);
+                builder.AppendFormat("<color=#{1}{0}>{2}/{3}</color>", alpha, color, room.Players, room.MaxPlayers);
             }
             builder.Append("</color>");
             return builder.ToString();
