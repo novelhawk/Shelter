@@ -17,14 +17,15 @@
     <Copyright>Copyright 2013-2018 Hawk of the Death</Copyright>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
-    <DefineConstants>DEBUG</DefineConstants>
+    <DefineConstants>DEBUG;NETFRAMEWORK;NET35;ABUSIVE</DefineConstants>
+    <Optimize>true</Optimize>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
-    <DefineConstants>RELEASE</DefineConstants>
+    <DefineConstants>RELEASE;NETFRAMEWORK;NET35;ABUSIVE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Mod\Resources\*" />
-    <None Remove="Mod\Resources\*\Config\*" />
+    <None Remove="Mod\Resources\Config\*" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Mod\Resources\*" />
