@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using Mod;
 using Mod.GameSettings;
+using Mod.Managers;
 using Mod.Modules;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
@@ -1846,7 +1847,7 @@ public class TITAN : Photon.MonoBehaviour
     {
         this.skin = 86;
         this.eye = false;
-        if ((IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine) && Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins)))
+        if ((IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine) && ModuleManager.Enabled(nameof(ModuleEnableSkins)))
         {
             var titanSkin = FengGameManagerMKII.settings.TitanSkin;
             var index = Random.Range(0, titanSkin.Body.Length);
@@ -1940,7 +1941,7 @@ public class TITAN : Photon.MonoBehaviour
     [RPC]
     public void LoadskinRPC(string body, string eye)
     {
-        if (Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins)))
+        if (ModuleManager.Enabled(nameof(ModuleEnableSkins)))
         {
             StartCoroutine(this.LoadSkinEnumerator(body, eye));
         }

@@ -8,6 +8,7 @@ using Mod.Exceptions;
 using Mod.GameSettings;
 using Mod.Interface;
 using Mod.Keybinds;
+using Mod.Managers;
 using Mod.Modules;
 using UnityEngine;
 using Xft;
@@ -543,7 +544,7 @@ public class HERO : Photon.MonoBehaviour
             this.skillCDDuration -= Time.deltaTime;
             if (skillCDDuration < 0f) skillCDDuration = 0f;
             
-            if (Shelter.ModuleManager.Enabled(nameof(ModuleNoSkillCD)))
+            if (ModuleManager.Enabled(nameof(ModuleNoSkillCD)))
                 skillCDDuration = 0;
         }
     }
@@ -1932,7 +1933,7 @@ public class HERO : Photon.MonoBehaviour
 
     private void UpdateNameScale()
     {
-        if (Player.Self.Properties.Alive == false || Player.Self.Hero == null || photonView.isMine || !Shelter.ModuleManager.Enabled(nameof(ModuleNameScaling)))
+        if (Player.Self.Properties.Alive == false || Player.Self.Hero == null || photonView.isMine || !ModuleManager.Enabled(nameof(ModuleNameScaling)))
         {
             myNetWorkName.transform.localScale = new Vector3(14, 14, 14);
             return;
@@ -2246,13 +2247,13 @@ public class HERO : Photon.MonoBehaviour
     {
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine)
         {
-            if (!Shelter.ModuleManager.Enabled(nameof(ModuleWind)))
+            if (!ModuleManager.Enabled(nameof(ModuleWind)))
             {
                 var windRenderer = GetComponentsInChildren<Renderer>().FirstOrDefault(x => x.name.Contains("speed"));
                 if (windRenderer != null)
                     windRenderer.enabled = false;
             }
-            if (Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins)))
+            if (ModuleManager.Enabled(nameof(ModuleEnableSkins)))
             {
                 var skins = FengGameManagerMKII.settings.HumanSkin.Set;
                 StringBuilder url = new StringBuilder(skins.Length * 45);
@@ -2286,7 +2287,7 @@ public class HERO : Photon.MonoBehaviour
         string[] urls = url.Split(',');
         if (urls.Length < 13)
             yield break; // Not allowed exception?
-        bool skinGas = Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins));
+        bool skinGas = ModuleManager.Enabled(nameof(ModuleEnableSkins));
         bool hasHorse = LevelInfoManager.Get(FengGameManagerMKII.Level).Horse || FengGameManagerMKII.settings.EnableHorse;
         bool isMe = IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || this.photonView.isMine;
 
@@ -2760,7 +2761,7 @@ public class HERO : Photon.MonoBehaviour
     [RPC]
     public void LoadskinRPC(int horse, string url)
     {
-        if (Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins)))
+        if (ModuleManager.Enabled(nameof(ModuleEnableSkins)))
         {
             StartCoroutine(this.loadskinE(horse, url));
         }
@@ -3627,7 +3628,7 @@ public class HERO : Photon.MonoBehaviour
     {
         switch (IN_GAME_MAIN_CAMERA.GameMode)
         {
-            case GameMode.Racing when Shelter.ModuleManager.Enabled(nameof(ModuleRacingInterface)):
+            case GameMode.Racing when ModuleManager.Enabled(nameof(ModuleRacingInterface)):
                 GameObject.Find("skill_cd_bottom").transform.localPosition = new Vector3(0, 4000, 0);
                 skillCD = GameObject.Find("skill_cd_" + this.skillIDHUD);
                 
@@ -4863,7 +4864,7 @@ public class HERO : Photon.MonoBehaviour
                                         if (!this.checkBoxLeft.GetComponent<TriggerColliderWeapon>().active_me)
                                         {
                                             this.checkBoxLeft.GetComponent<TriggerColliderWeapon>().active_me = true;
-                                            if (Shelter.ModuleManager.Enabled(nameof(ModuleWeaponTrail)))
+                                            if (ModuleManager.Enabled(nameof(ModuleWeaponTrail)))
                                             {
                                                 this.leftbladetrail2.Activate();
                                                 this.rightbladetrail2.Activate();
@@ -4935,7 +4936,7 @@ public class HERO : Photon.MonoBehaviour
                                         {
                                             this.checkBoxLeft.GetComponent<TriggerColliderWeapon>().active_me = true;
                                             this.slash.Play();
-                                            if (Shelter.ModuleManager.Enabled(nameof(ModuleWeaponTrail)))
+                                            if (ModuleManager.Enabled(nameof(ModuleWeaponTrail)))
                                             {
                                                 this.leftbladetrail2.Activate();
                                                 this.rightbladetrail2.Activate();
@@ -5455,7 +5456,7 @@ public class HERO : Photon.MonoBehaviour
 
     public void useBlade(int amount = 0)
     {
-        if (Shelter.ModuleManager.Enabled(nameof(ModuleInfiniteBlade)))
+        if (ModuleManager.Enabled(nameof(ModuleInfiniteBlade)))
             return;
 
         if (amount == 0)
@@ -5484,7 +5485,7 @@ public class HERO : Photon.MonoBehaviour
 
     private void useGas(float amount = 0)
     {
-        if (Shelter.ModuleManager.Enabled(nameof(ModuleInfiniteGas)))
+        if (ModuleManager.Enabled(nameof(ModuleInfiniteGas)))
             return;
         
         if (amount == 0f)

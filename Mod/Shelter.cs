@@ -38,7 +38,6 @@ namespace Mod
         private static InputManager _inputManager;
         private static EventManager _eventManager;
         private static AnimationManager _animationManager;
-        private static ModuleManager _moduleManager;
         private static ProfileManager _profileManager;
 
         public Shelter()
@@ -49,7 +48,7 @@ namespace Mod
             _animation = new AnimationInfo(AnimationType.Cycle, AnimationColor.Rainbow);
         }
         
-        public void InitComponents()
+        public static void InitComponents()
         {
             _logger = new FileLogger();
             _consoleLogger = new ConsoleLogger();
@@ -58,7 +57,7 @@ namespace Mod
             _profileManager = new ProfileManager();
             _inputManager = new InputManager();
             _animationManager = new AnimationManager();
-            _moduleManager = new ModuleManager();
+            ModuleManager.LoadModules();
             
             Log("Shelter mod initialized.");
         }
@@ -83,8 +82,6 @@ namespace Mod
             _interfaceManager.Enable(nameof(Background));
             _interfaceManager.Enable(nameof(Loading));
             _interfaceManager.Enable(nameof(MainMenu));
-            if (_moduleManager.Enabled(nameof(ModuleShowConsole)))
-                _interfaceManager.Enable(nameof(Console));
             DiscordRpc.SendMainMenu();
         }
         
@@ -94,11 +91,11 @@ namespace Mod
             _commandManager = new CommandManager();
             _interfaceManager.DisableAll();
             _interfaceManager.Enable(nameof(Chat));
-            if (_moduleManager.Enabled(nameof(ModuleShowScoreboard)))
+            if (ModuleManager.Enabled(nameof(ModuleShowScoreboard)))
                 _interfaceManager.Enable(nameof(Scoreboard));
-            if (_moduleManager.Enabled(nameof(ModuleShowGameInfo)))
+            if (ModuleManager.Enabled(nameof(ModuleShowGameInfo)))
                 _interfaceManager.Enable(nameof(GameInfo));
-            if (_moduleManager.Enabled(nameof(ModuleShowConsole)))
+            if (ModuleManager.Enabled(nameof(ModuleShowConsole)))
                 _interfaceManager.Enable(nameof(Console));
             if (PhotonNetwork.Room != null)
                 DiscordApi.UpdatePresence(new DiscordApi.RichPresence
@@ -203,7 +200,6 @@ namespace Mod
 
         public static ConsoleLogger ConsoleLogger => _consoleLogger;
         public static EventManager EventManager => _eventManager;
-        public static ModuleManager ModuleManager => _moduleManager;
         public static ProfileManager ProfileManager => _profileManager;
         public static InputManager InputManager => _inputManager;
         public static AnimationManager AnimationManager => _animationManager;

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Mod;
+using Mod.Managers;
 using Mod.Modules;
 using UnityEngine;
 using UnityEngine.UI;
@@ -140,7 +141,7 @@ public class Minimap : MonoBehaviour, IDisposable
 
     private void CheckUserInput()
     {
-        if (!Shelter.ModuleManager.Enabled(nameof(ModuleShowMap)) || !FengGameManagerMKII.settings.IsMapAllowed)
+        if (!ModuleManager.Enabled(nameof(ModuleShowMap)) || !FengGameManagerMKII.settings.IsMapAllowed)
             Dispose();
     }
 

@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Mod;
+using Mod.Managers;
 using Mod.Modules;
 using UnityEngine;
 
@@ -42,7 +43,7 @@ public class AHSSShotGunCollider : MonoBehaviour
         
         if (other.gameObject.CompareTag("playerHitbox"))
         {
-            if (Shelter.ModuleManager.Enabled(nameof(ModulePVPEverywhere)) || LevelInfoManager.Get(FengGameManagerMKII.Level).IsPvP)
+            if (ModuleManager.Enabled(nameof(ModulePVPEverywhere)) || LevelInfoManager.Get(FengGameManagerMKII.Level).IsPvP)
             {
                 float b = 1f - Vector3.Distance(other.gameObject.transform.position, transform.position) * 0.05f;
                 b = Mathf.Min(1f, b);
@@ -51,7 +52,7 @@ public class AHSSShotGunCollider : MonoBehaviour
                     component.transform.root != null)
                 {
                     var hero = component.transform.root.GetComponent<HERO>();
-                    if (!component.transform.root.gameObject.GetPhotonView().isMine && (hero.myTeam != this.myTeam || Shelter.ModuleManager.Enabled(nameof(ModulePVPEverywhere))) && 
+                    if (!component.transform.root.gameObject.GetPhotonView().isMine && (hero.myTeam != this.myTeam || ModuleManager.Enabled(nameof(ModulePVPEverywhere))) && 
                         !hero.isInvincible() && !hero.HasDied() && !hero.IsGrabbed)
                     {
                         hero.markDie();

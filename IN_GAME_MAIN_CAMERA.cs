@@ -195,7 +195,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     public void CreateMinimap()
     {
-        if (!Shelter.ModuleManager.Enabled(nameof(ModuleShowMap)) || !FengGameManagerMKII.settings.IsMapAllowed)
+        if (!ModuleManager.Enabled(nameof(ModuleShowMap)) || !FengGameManagerMKII.settings.IsMapAllowed)
             return;
         
         LevelInfo info = LevelInfoManager.Get(FengGameManagerMKII.Level);

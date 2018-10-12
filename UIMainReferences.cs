@@ -10,6 +10,7 @@ using LogType = Mod.Logging.LogType;
 
 public class UIMainReferences : MonoBehaviour
 {
+    private const string RCAssetsUrl = @"http://iishawk.it/AoTTG/RCAssets.unity3d";
     public const string Version = "01042015";
     private static bool _done;
     
@@ -24,9 +25,10 @@ public class UIMainReferences : MonoBehaviour
                 Screen.SetResolution((int)(Screen.height * aspectRatio), Screen.height, Screen.fullScreen);
             
             GameObject go = new GameObject("Shelter");
-            Shelter shelter = go.AddComponent<Shelter>();
+            go.AddComponent<Shelter>();
             DontDestroyOnLoad(go);
-            shelter.InitComponents();
+            
+            Shelter.InitComponents();
 
             Application.RegisterLogCallback(UnityLogHandle);
             
@@ -64,14 +66,19 @@ public class UIMainReferences : MonoBehaviour
 
     private static IEnumerator LoadRCAssets()
     {
-        var url = "http://iishawk.it/AoTTG/RCAssets.unity3d";
-        var file = Application.dataPath + "/RCAssets.unity3d";
-        if (File.Exists(file))
-            url = "file://" + file;
+        var download = $"{Application.dataPath}/RCAssets.unity3d";
+        if (File.Exists(download))
+            download = "file://" + download;
+        else
+        {
+            Shelter.LogBoth("RC Assets were not found. Downloading from {0}", LogType.Warning, RCAssetsUrl);
+            Shelter.LogBoth("(If this doesn't work download it yourself and move it to {0} folder)", LogType.Info, Application.dataPath);
+            download = RCAssetsUrl;
+        }
         
         while (!Caching.ready)
             yield return null;
-        using (WWW www = WWW.LoadFromCacheOrDownload(url, 1))
+        using (WWW www = WWW.LoadFromCacheOrDownload(download, 1))
         {
             yield return www;
             if (www.error != null)

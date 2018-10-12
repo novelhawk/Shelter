@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Mod;
 using Mod.GameSettings;
+using Mod.Managers;
 using Mod.Modules;
 using UnityEngine;
 
@@ -1168,7 +1169,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
 
     public void loadskin()
     {
-        if (!Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins))) 
+        if (!ModuleManager.Enabled(nameof(ModuleEnableSkins))) 
             return;
 
         photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, FengGameManagerMKII.settings.TitanSkin.Annie);
@@ -1216,7 +1217,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     [RPC]
     public void LoadskinRPC(string url)
     {
-        if (!Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins)) || !Utility.IsValidImageUrl(url)) 
+        if (!ModuleManager.Enabled(nameof(ModuleEnableSkins)) || !Utility.IsValidImageUrl(url)) 
             return;
         
         StartCoroutine(loadskinE(url));

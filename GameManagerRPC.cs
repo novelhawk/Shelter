@@ -7,6 +7,7 @@ using ExitGames.Client.Photon;
 using Mod;
 using Mod.Exceptions;
 using Mod.GameSettings;
+using Mod.Managers;
 using Mod.Modules;
 using UnityEngine;
 
@@ -440,7 +441,7 @@ public partial class FengGameManagerMKII
     [RPC]
     private void LoadskinRPC(string n, string url, string url2, string[] skybox, PhotonMessageInfo info)
     {
-        if (Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins)) && info.sender.IsMasterClient)
+        if (ModuleManager.Enabled(nameof(ModuleEnableSkins)) && info.sender.IsMasterClient)
         {
             StartCoroutine(LoadSkinEnumerator(n, url, url2, skybox));
         }

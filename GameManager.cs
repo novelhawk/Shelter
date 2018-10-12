@@ -1772,7 +1772,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             racingSpawnPointSet = false;
             racingDoors = new List<GameObject>();
             allowedToCannon = new Dictionary<int, CannonValues>();
-            if (!Level.StartsWith("Custom") && Shelter.ModuleManager.Enabled(nameof(ModuleEnableSkins)) && (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || PhotonNetwork.isMasterClient))
+            if (!Level.StartsWith("Custom") && ModuleManager.Enabled(nameof(ModuleEnableSkins)) && (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || PhotonNetwork.isMasterClient))
             {
                 var obj4 = GameObject.Find("aot_supply");
                 if (obj4 != null && Minimap.instance != null)
