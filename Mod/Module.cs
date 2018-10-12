@@ -6,7 +6,7 @@ namespace Mod
 {
     public abstract class Module : MonoBehaviour
     {
-        public abstract string ID { get; }
+        public string ID => this.GetType().Name;
         public abstract string Name { get; }
         public abstract string Description { get; }
         public abstract bool IsAbusive { get; }

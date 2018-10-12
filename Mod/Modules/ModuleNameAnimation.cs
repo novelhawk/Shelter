@@ -6,7 +6,6 @@ namespace Mod.Modules
 {
     public class ModuleNameAnimation : Module
     {
-        public override string ID => nameof(ModuleNameAnimation);
         public override string Name => "Name Animation";
         public override string Description => "Animates your in game name with an animation of your choice.";
         public override bool IsAbusive => false;

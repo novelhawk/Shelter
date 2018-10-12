@@ -4,7 +4,6 @@ namespace Mod.Modules
 {
     public class ModuleShowMap : Module
     {
-        public override string ID => nameof(ModuleShowMap);
         public override string Name => "Show Minimap";
         public override string Description => "Shows a top-right map with humans and titans icons.";
         public override bool IsAbusive => false;

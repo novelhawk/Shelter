@@ -4,7 +4,6 @@ namespace Mod.Modules
 {
     public class ModuleShowGameInfo : Module
     {
-        public override string ID => nameof(ModuleShowGameInfo);
         public override string Name => "Show GameInfo";
         public override string Description => "Shows the top right GameInfo panel.";
         public override bool IsAbusive => false;

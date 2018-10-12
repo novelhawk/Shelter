@@ -5,7 +5,6 @@ namespace Mod.Modules
 {
     public class ModuleDiscordRPC : Module
     {
-        public override string ID => nameof(ModuleDiscordRPC);
         public override string Name => "Discord RichPresence";
         public override string Description => "Custom aottg status in discord.";
         public override bool IsAbusive => false;

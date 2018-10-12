@@ -6,7 +6,6 @@ namespace Mod.Modules
 {
     public class ModuleShowScoreboard : Module
     {
-        public override string ID => nameof(ModuleShowScoreboard);
         public override string Name => "Show Scoreboard";
         public override string Description => "Shows the scoreboard top left";
         public override bool IsAbusive => false;
