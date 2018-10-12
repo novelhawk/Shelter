@@ -24,6 +24,6 @@ namespace Mod.Logging
             _logs[0] = line;
         }
 
-        public string[] Logs => _logs;
+        public IEnumerable<string> Logs => _logs;
     }
 }

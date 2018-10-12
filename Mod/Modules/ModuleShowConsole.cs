@@ -12,8 +12,7 @@ namespace Mod.Modules
 
         protected override void OnModuleEnable()
         {
-            if (PhotonNetwork.inRoom)
-                Shelter.InterfaceManager.Enable(nameof(Console));
+            Shelter.InterfaceManager.Enable(nameof(Console));
         }
 
         protected override void OnModuleDisable()
