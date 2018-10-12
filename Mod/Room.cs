@@ -1,18 +1,13 @@
 ﻿using System;
-using System.Linq;
-using System.Text;
-using System.Xml.Schema;
-using Boo.Lang;
+using System.Collections.Generic;
 using ExitGames.Client.Photon;
-using Mod.Interface;
-using UnityEngine;
 using LogType = Mod.Logging.LogType;
 
 namespace Mod
 {
     public class Room : IComparable
     {
-        public static System.Collections.Generic.List<Room> List;
+        public static List<Room> List;
 
         private Hashtable _properties;
         private string _fullName;
@@ -216,7 +211,18 @@ namespace Mod
             return 0;
         }
 
-        public bool Join() => PhotonNetwork.JoinRoom(_fullName);
+        public bool Join()
+        {
+#if ABUSIVE
+            return PhotonNetwork.JoinRoom(_fullName);
+#else
+            if (!IsProtected)
+                return PhotonNetwork.JoinRoom(_fullName);
+    
+            Shelter.LogConsole("Password is required to join the room."); //TODO: Add password ui
+            return false;
+#endif
+        }
 
         public Hashtable Properties => _properties;
 
