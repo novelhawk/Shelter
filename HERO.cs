@@ -3817,18 +3817,8 @@ public class HERO : Photon.MonoBehaviour
                     cross2.transform.localPosition = 
                         Input.mousePosition - new Vector3(Screen.width * 0.5f, Screen.height * 0.5f, 0f);
                 float magnitude = (hit.point - baseTransform.position).magnitude;
-                switch (FengGameManagerMKII.settings.SpeedmeterType) //TODO: Custom Text
-                {
-                    default:
-                        LabelDistance.GetComponent<UILabel>().text = magnitude.ToString("0");
-                        break;
-                    case Speedmeter.Speed:
-                        LabelDistance.GetComponent<UILabel>().text = $"{magnitude:0}\n{currentSpeed:F1} u/s";
-                        break;
-                    case Speedmeter.Damage:
-                        LabelDistance.GetComponent<UILabel>().text = $"{magnitude:0}\n{currentSpeed / 100:F1}K";
-                        break;
-                }
+                LabelDistance.GetComponent<UILabel>().text = string.Format(ModuleCursorLabel.LabelFormat,
+                    magnitude, currentSpeed, currentSpeed / 100);
                 if (magnitude > 120f)
                 {
                     cross1.transform.localPosition += Vector3.up * 10000f;

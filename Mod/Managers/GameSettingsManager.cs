@@ -189,7 +189,6 @@ namespace Mod.Managers
             settings.EnableVSync = Utility.GetBoolean("vsync");
             if (!int.TryParse(PlayerPrefs.GetString("fpscap", "-1"), out settings.FPSCap))
                 settings.FPSCap = -1;
-            settings.SpeedmeterType = (Speedmeter) PlayerPrefs.GetInt("speedometer", 0);
             settings.IsBombMode = Utility.GetBoolean("bombMode");
             settings.TeamSort = (TeamSort) PlayerPrefs.GetInt("teamMode", 0);
             settings.EnableRockThrow = Utility.GetBoolean("rockThrow");

@@ -39,9 +39,6 @@ namespace Mod.GameSettings
         [JsonProperty("fpsCap")]
         public int FPSCap; // TODO: Move away
         
-        [JsonProperty("speedmeterType")]
-        public Speedmeter SpeedmeterType;
-        
         [JsonProperty("isBombMode")]
         public bool IsBombMode;
         
