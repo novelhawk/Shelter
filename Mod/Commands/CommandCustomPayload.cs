@@ -2,6 +2,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using ExitGames.Client.Photon;
 using Mod.Exceptions;
 using Mod.Interface;
@@ -14,6 +15,10 @@ namespace Mod.Commands
 
         public override void Execute(string[] args)
         {
+#if !CUSTOMPHOTONASSEMBLY
+            Chat.System("You need a custom photon assembly in order to use this command!");
+            return;
+#endif
             if (args.Length < 1)
                 throw new CommandArgumentException(CommandName, "/payload [payload] (playerId) (times)");
             
@@ -34,12 +39,11 @@ namespace Mod.Commands
             }
             
             var bytes = StringToBytes(hex);
-//            DecryptBytes(bytes);
+            DecryptBytes(bytes);
 
             if (args.Length < 2 || !int.TryParse(args[2], out var times))
                 times = 1;
             
-#if CUSTOMPHOTONASSEMBLY
             if (!(PhotonNetwork.networkingPeer.peerBase is EnetPeer peer))
             {
                 Chat.System("Peer is not available.");
@@ -50,11 +54,9 @@ namespace Mod.Commands
                 peer.CreateAndEnqueueCommand(0x6, bytes, 0x0);
             
             Chat.System("Sent payload ({0} bytes) to {1} {2} times", bytes.Length, player?.ToString() ?? "everyone", times);
-            return;
-#endif
-            Chat.System("You need a custom photon assembly in order to use this command!");
         }
 
+        [Conditional("RELEASE")] // Development version allows unencrypted data.
         private static void DecryptBytes(IList<byte> bytes)
         {
             for (byte i = 0; i < bytes.Count; i++)
