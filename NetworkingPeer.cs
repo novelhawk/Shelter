@@ -6,6 +6,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
+using System.Security.Cryptography;
 using System.Text;
 using JetBrains.Annotations;
 using Mod.Exceptions;
@@ -1166,270 +1168,287 @@ internal class NetworkingPeer : LoadbalancingPeer, IPhotonPeerListener
         if (photonEvent.Parameters.Count == 0) // Can this even happen?
             return;
         
-        int key = -1;
         Player sender = Player.Self;
-        if (photonEvent.Parameters.ContainsKey(254))
-        {
-            key = (int)photonEvent[254];
-            if (this.mActors.ContainsKey(key))
-                sender = this.mActors[key];
-        }
+        if (photonEvent[ParameterCode.ActorNr] is int key)
+            if (mActors.TryGetValue(key, out Player player)) // Ensure it's not null
+                sender = player;
 
-        if (photonEvent.Code != EventCode.Leave &&
-            sender.IsIgnored)
+        if (photonEvent.Code == EventCode.Leave)
+            HandleEventLeave(sender.ID);
+        
+        if (sender.IsIgnored)
             return;
 
-        switch (photonEvent.Code) 
+        try
         {
-            case 101: // Mod Indentify
-                sender.Mod = CustomMod.Cyan;
-                break;
-            
-            case PunEvent.RPC:
-                this.ExecuteRPC(photonEvent[ParameterCode.Data] as Hashtable, sender);
-                break;
-
-            case PunEvent.SendSerialize:
-            case PunEvent.SendSerializeReliable:
+            switch (photonEvent.Code)
             {
-                if (photonEvent[ParameterCode.Data] is Hashtable hashtable)
+                case 101: // Mod Indentify
+                    if (sender.Mod > CustomMod.RC)
+                        Shelter.LogConsole("{0} mod is identifyed as {1} but sent Cyan mod identificator.",
+                            LogType.Warning, sender, sender.Mod);
+
+                    sender.Mod = CustomMod.Cyan;
+                    break;
+
+                case PunEvent.RPC:
+                    this.ExecuteRPC(photonEvent[ParameterCode.Data] as Hashtable, sender);
+                    break;
+
+                case PunEvent.SendSerialize:
+                case PunEvent.SendSerializeReliable:
                 {
-                    if (!(hashtable[(byte)0] is int networkTime))
-                        return;
-                    
-                    short correctPrefix = -1;
-                    short hashtableIndex = 1;
-                    if (hashtable.ContainsKey((byte)1))
+                    if (photonEvent[ParameterCode.Data] is Hashtable hashtable)
                     {
-                        if (!(hashtable[(byte)1] is short prefix))
+                        if (!(hashtable[(byte) 0] is int networkTime))
                             return;
-                        
-                        correctPrefix = prefix;
-                        hashtableIndex = 2;
-                    }
-                    for (short i = hashtableIndex; i < hashtable.Count; i = (short)(i + 1))
-                        this.OnSerializeRead(hashtable[i] as Hashtable, sender, networkTime, correctPrefix);
-                }
-                break;
-            }
-            
 
-            case PunEvent.Instantiation:
-            {
-                if (photonEvent[ParameterCode.Data] is Hashtable data)
-                    if (data[(byte)0] is string)
-                        this.DoInstantiate(data, sender, null);
-                break;
-            }
-
-            case PunEvent.CloseConnection: // TODO: Add reconnect
-                if (!sender.IsMasterClient)
-                    throw new NotAllowedException(photonEvent.Code, sender); 
-                break;
-
-            case PunEvent.Destroy:
-            {
-                if (photonEvent[ParameterCode.Data] is Hashtable hashtable)
-                    if (hashtable[(byte)0] is int objId)
-                        if (instantiatedObjects.TryGetValue(objId, out var obj) && obj != null)
-                            RemoveInstantiatedGO(obj, true);
-                break;
-            }
-
-            case PunEvent.DestroyPlayer:
-            {
-                if (photonEvent[ParameterCode.Data] is Hashtable hashtable)
-                {
-                    if (!(hashtable[(byte) 0] is int playerId))
-                        return;
-                    
-                    if (playerId < 0 && sender.IsMasterClient)
-                        this.DestroyAll(true);
-                    else if (sender.IsMasterClient || playerId != Player.Self.ID) //TODO: Can probably be abused
-                        this.DestroyPlayerObjects(playerId, true);
-                }
-                break;
-            }
-
-            case PunEvent.SetMasterClient:
-            {
-                if (!(photonEvent[245] is Hashtable hashtable))
-                    return;
-                if (!(hashtable[(byte) 1] is int id))
-                    return;
-
-                if (!sender.IsMasterClient && !sender.IsLocal)
-                {
-                    if (PhotonNetwork.isMasterClient)
-                    {
-                        FengGameManagerMKII.noRestart = true;
-                        PhotonNetwork.SetMasterClient(Player.Self);
-                        FengGameManagerMKII.instance.KickPlayerRC(sender, true, "stealing MC.");
-                        throw new NotAllowedException(photonEvent.Code, sender);
-                    }
-                }
-                    
-                SetMasterClient(id, false);
-                break;
-            }
-            case EventCode.AppStats:
-            {
-                if (photonEvent[ParameterCode.PeerCount] is int players &&
-                    photonEvent[ParameterCode.MasterPeerCount] is int playersMC &&
-                    photonEvent[ParameterCode.GameCount] is int gameCount)
-                {
-                    this.mPlayersInRoomsCount = players;
-                    this.mPlayersOnMasterCount = playersMC;
-                    this.mGameCount = gameCount;
-                }
-
-                break;
-            }
-
-            case EventCode.QueueState:
-                if (!sender.IsLocal)
-                    throw new NotAllowedException(photonEvent.Code, sender);
-                
-                if (photonEvent.Parameters.ContainsKey(ParameterCode.MatchMakingType))
-                    if (photonEvent[ParameterCode.MatchMakingType] is int type)
-                        this.mQueuePosition = type;
-                return;
-
-            case EventCode.GameListUpdate:
-            {
-                if (!(photonEvent[ParameterCode.GameList] is Hashtable hashtable))
-                    return;
-                
-                foreach (DictionaryEntry entry in hashtable)
-                {
-                    string roomName = (string) entry.Key;
-                    
-                    if (!Room.TryParse(roomName, (Hashtable) entry.Value, out Room room))
-                        continue;
-                    
-                    if (room.RemovedFromList)
-                        mGameList.Remove(roomName);
-                    else
-                        mGameList[roomName] = room;
-                }
-
-                Room.List = new List<Room>(mGameList.Values);
-                Room.List.Sort();
-                SendMonoMessage(PhotonNetworkingMessage.OnReceivedRoomListUpdate);
-                break;
-            }
-
-            case EventCode.GameList:
-            {
-                if (!(photonEvent[ParameterCode.GameList] is Hashtable hashtable))
-                    return;
-                
-                mGameList = new Dictionary<string, Room>();
-                foreach (DictionaryEntry entry in hashtable)
-                {
-                    string roomName = (string) entry.Key;
-
-                    if (!Room.TryParse(roomName, (Hashtable) entry.Value, out Room room))
-                        continue;
-                    
-                    mGameList[roomName] = room;
-                }
-
-                Room.List = new List<Room>(mGameList.Values);
-                Room.List.Sort();
-                SendMonoMessage(PhotonNetworkingMessage.OnReceivedRoomListUpdate);
-                break;
-            }
-
-            case EventCode.PropertiesChanged:
-            {
-                if (!(photonEvent[ParameterCode.TargetActorNr] is int id))
-                    return;
-                
-                if (id == 0)
-                {
-                    if (photonEvent[ParameterCode.Properties] is Hashtable hash)
-                        ReadoutProperties(hash, null, id);
-                    return;
-                }
-
-                if (photonEvent[ParameterCode.Properties] is Hashtable hashtable)
-                {
-                    if (!sender.IsLocal)
-                    {
-                        PlayerProperties props = new PlayerProperties(hashtable)
+                        short correctPrefix = -1;
+                        short hashtableIndex = 1;
+                        if (hashtable.ContainsKey((byte) 1))
                         {
-                            ["sender"] = sender
-                        };
+                            if (!(hashtable[(byte) 1] is short prefix))
+                                return;
 
-                        if (id == sender.ID)
-                        { 
-                            if (props.Acceleration > 150 || props.Blade > 125 || props.Gas > 150 || props.Speed > 140)
+                            correctPrefix = prefix;
+                            hashtableIndex = 2;
+                        }
+
+                        for (short i = hashtableIndex; i < hashtable.Count; i = (short) (i + 1))
+                            this.OnSerializeRead(hashtable[i] as Hashtable, sender, networkTime, correctPrefix);
+                    }
+
+                    break;
+                }
+
+
+                case PunEvent.Instantiation:
+                {
+                    if (photonEvent[ParameterCode.Data] is Hashtable data)
+                        if (data[(byte) 0] is string)
+                            this.DoInstantiate(data, sender, null);
+                    break;
+                }
+
+                case PunEvent.CloseConnection: // TODO: Add reconnect
+                    if (!sender.IsMasterClient)
+                        throw new NotAllowedException(photonEvent.Code, sender);
+                    break;
+
+                case PunEvent.Destroy:
+                {
+                    if (photonEvent[ParameterCode.Data] is Hashtable hashtable)
+                        if (hashtable[(byte) 0] is int objId)
+                            if (instantiatedObjects.TryGetValue(objId, out var obj) && obj != null)
+                                RemoveInstantiatedGO(obj, true);
+                    break;
+                }
+
+                case PunEvent.DestroyPlayer:
+                {
+                    if (photonEvent[ParameterCode.Data] is Hashtable hashtable)
+                    {
+                        if (!(hashtable[(byte) 0] is int playerId))
+                            return;
+
+                        if (playerId < 0 && sender.IsMasterClient)
+                            this.DestroyAll(true);
+                        else if (sender.IsMasterClient || playerId != Player.Self.ID) //TODO: Can probably be abused
+                            this.DestroyPlayerObjects(playerId, true);
+                    }
+
+                    break;
+                }
+
+                case PunEvent.SetMasterClient:
+                {
+                    if (!(photonEvent[245] is Hashtable hashtable))
+                        return;
+                    if (!(hashtable[(byte) 1] is int id))
+                        return;
+
+                    if (!sender.IsMasterClient && !sender.IsLocal)
+                    {
+                        if (PhotonNetwork.isMasterClient)
+                        {
+                            FengGameManagerMKII.noRestart = true;
+                            PhotonNetwork.SetMasterClient(Player.Self);
+                            FengGameManagerMKII.instance.KickPlayerRC(sender, true, "stealing MC.");
+                            throw new NotAllowedException(photonEvent.Code, sender);
+                        }
+                    }
+
+                    SetMasterClient(id, false);
+                    break;
+                }
+                case EventCode.AppStats:
+                {
+                    if (photonEvent[ParameterCode.PeerCount] is int players &&
+                        photonEvent[ParameterCode.MasterPeerCount] is int playersMC &&
+                        photonEvent[ParameterCode.GameCount] is int gameCount)
+                    {
+                        this.mPlayersInRoomsCount = players;
+                        this.mPlayersOnMasterCount = playersMC;
+                        this.mGameCount = gameCount;
+                    }
+
+                    break;
+                }
+
+                case EventCode.QueueState:
+                    if (!sender.IsLocal)
+                        throw new NotAllowedException(photonEvent.Code, sender);
+
+                    if (photonEvent.Parameters.ContainsKey(ParameterCode.MatchMakingType))
+                        if (photonEvent[ParameterCode.MatchMakingType] is int type)
+                            this.mQueuePosition = type;
+                    return;
+
+                case EventCode.GameListUpdate:
+                {
+                    if (!(photonEvent[ParameterCode.GameList] is Hashtable hashtable))
+                        return;
+
+                    foreach (DictionaryEntry entry in hashtable)
+                    {
+                        string roomName = (string) entry.Key;
+
+                        if (!Room.TryParse(roomName, (Hashtable) entry.Value, out Room room))
+                            continue;
+
+                        if (room.RemovedFromList)
+                            mGameList.Remove(roomName);
+                        else
+                            mGameList[roomName] = room;
+                    }
+
+                    Room.List = new List<Room>(mGameList.Values);
+                    Room.List.Sort();
+                    SendMonoMessage(PhotonNetworkingMessage.OnReceivedRoomListUpdate);
+                    break;
+                }
+
+                case EventCode.GameList:
+                {
+                    if (!(photonEvent[ParameterCode.GameList] is Hashtable hashtable))
+                        return;
+
+                    mGameList = new Dictionary<string, Room>();
+                    foreach (DictionaryEntry entry in hashtable)
+                    {
+                        string roomName = (string) entry.Key;
+
+                        if (!Room.TryParse(roomName, (Hashtable) entry.Value, out Room room))
+                            continue;
+
+                        mGameList[roomName] = room;
+                    }
+
+                    Room.List = new List<Room>(mGameList.Values);
+                    Room.List.Sort();
+                    SendMonoMessage(PhotonNetworkingMessage.OnReceivedRoomListUpdate);
+                    break;
+                }
+
+                case EventCode.PropertiesChanged:
+                {
+                    if (!(photonEvent[ParameterCode.TargetActorNr] is int id))
+                        return;
+
+                    if (id == 0)
+                    {
+                        if (photonEvent[ParameterCode.Properties] is Hashtable hash)
+                            ReadoutProperties(hash, null, id);
+                        return;
+                    }
+
+                    if (photonEvent[ParameterCode.Properties] is Hashtable hashtable)
+                    {
+                        if (!sender.IsLocal)
+                        {
+                            PlayerProperties props = new PlayerProperties(hashtable)
                             {
-                                if (PhotonNetwork.isMasterClient)
-                                    FengGameManagerMKII.instance.KickPlayerRC(sender, true, "Illegal stats.");
-                                throw new NotAllowedException(photonEvent.Code, sender);
+                                ["sender"] = sender
+                            };
+
+                            if (id == sender.ID)
+                            {
+                                if (props.Acceleration > 150 || props.Blade > 125 || props.Gas > 150 ||
+                                    props.Speed > 140)
+                                {
+                                    if (PhotonNetwork.isMasterClient)
+                                        FengGameManagerMKII.instance.KickPlayerRC(sender, true, "Illegal stats.");
+                                    throw new NotAllowedException(photonEvent.Code, sender);
+                                }
+                            }
+
+                            if (props.ContainsKey("thisName")) //TODO: Add ignore and remove this if possible
+                            {
+                                if (id != sender.ID)
+                                    InstantiateTracker.instance.resetPropertyTracking(id);
+                                else if (!InstantiateTracker.instance.PropertiesChanged(sender))
+                                    return;
                             }
                         }
 
-                        if (props.ContainsKey("thisName")) //TODO: Add ignore and remove this if possible
-                        {
-                            if (id != sender.ID)
-                                InstantiateTracker.instance.resetPropertyTracking(id);
-                            else if (!InstantiateTracker.instance.PropertiesChanged(sender))
-                                return;
-                        }
+                        this.ReadoutProperties(null, hashtable, id);
                     }
 
-                    this.ReadoutProperties(null, hashtable, id);
+                    break;
                 }
-                break;
-            }
 
-            case EventCode.Leave:
-                this.HandleEventLeave(key);
-                break;
+                case EventCode.Leave: // Moved above (here only to prevent the default case)
+                    break;
 
-            case EventCode.Join:
-            {
-                if (!sender.IsLocal)
-                    return;
-
-                if (photonEvent[ParameterCode.PlayerProperties] is Hashtable properties)
+                case EventCode.Join:
                 {
-                    if (!mActors.ContainsKey(key))
-                        AddNewPlayer(key, new Player(mLocalActor.ID == key, key, properties));
-                    ResetPhotonViewsOnSerialize();
+                    if (!(photonEvent[ParameterCode.ActorNr] is int senderId))
+                        return;
 
-                    // We joined room
-                    if (key == this.mLocalActor.ID)
+                    if (photonEvent[ParameterCode.PlayerProperties] is Hashtable properties)
                     {
-                        // We created it
-                        if (this.mLastJoinType == JoinType.JoinOrCreateOnDemand && this.mLocalActor.ID == 1)
-                            SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom);
-                        
-                        if (photonEvent[ParameterCode.ActorList] is int[] ids)
-                        {
-                            foreach (int id in ids)
-                                if (mLocalActor.ID != id && !mActors.ContainsKey(id))
-                                    AddNewPlayer(id, new Player(false, id, string.Empty));
+                        if (!mActors.ContainsKey(senderId))
+                            AddNewPlayer(senderId, new Player(mLocalActor.ID == senderId, senderId, properties));
+                        ResetPhotonViewsOnSerialize();
 
-                            SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom);
+                        // We joined room
+                        if (senderId == this.mLocalActor.ID)
+                        {
+                            // We created it
+                            if (this.mLastJoinType == JoinType.JoinOrCreateOnDemand && this.mLocalActor.ID == 1)
+                                SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom);
+
+                            // Create Player instances
+                            if (photonEvent[ParameterCode.ActorList] is int[] ids)
+                            {
+                                foreach (int id in ids)
+                                    if (mLocalActor.ID != id && !mActors.ContainsKey(id))
+                                        AddNewPlayer(id, new Player(false, id, string.Empty));
+
+                                SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom);
+                            }
+
+                            return;
                         }
 
-                        return;
+                        // Player joined room
+                        SendMonoMessage(PhotonNetworkingMessage.OnPhotonPlayerConnected, mActors[senderId]);
                     }
 
-                    // Player joined room
-                    SendMonoMessage(PhotonNetworkingMessage.OnPhotonPlayerConnected, mActors[key]);
+                    break;
                 }
-                break;
-            }
 
-            default:
-                if (photonEvent.Code < 200)
-                    throw new NotAllowedException(photonEvent.Code, sender);
-                break;
+                default:
+                    if (!sender.IsLocal) // Disallow everything that's not expected.
+                        throw new NotAllowedException(photonEvent.Code, sender);
+                    break;
+            }
+        }
+        catch (Exception e)
+        {
+            Shelter.LogBoth("Exception on Event({0})", LogType.Error, photonEvent.Code);
+            Shelter.Log("{0}: {1}", LogType.Error, e.GetType().Name, e.Message);
+            Shelter.Log(e.StackTrace, LogType.Error);
         }
     }
 
