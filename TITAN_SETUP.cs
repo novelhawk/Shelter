@@ -3,7 +3,6 @@ using Mod;
 using Mod.Managers;
 using Mod.Modules;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class TITAN_SETUP : Photon.MonoBehaviour
 {

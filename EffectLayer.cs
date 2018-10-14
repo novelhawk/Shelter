@@ -185,7 +185,7 @@ public class EffectLayer : MonoBehaviour
             node.SetAffectorList(afts);
             if (this.RenderType == 0)
             {
-                node.SetType(this.SpriteWidth, this.SpriteHeight, (STYPE) this.SpriteType, (ORIPOINT) this.OriPoint, this.SpriteUVStretch, this.MaxFps);
+                node.SetType(this.SpriteWidth, this.SpriteHeight, (Style) this.SpriteType, (ORIPOINT) this.OriPoint, this.SpriteUVStretch, this.MaxFps);
             }
             else
             {

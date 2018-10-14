@@ -15,7 +15,7 @@ public class Sprite
     protected Vector3 RotateAxis;
     private Quaternion Rotation;
     private Vector3 ScaleVector;
-    private STYPE Type;
+    private Style Type;
     protected bool UVChanged = false;
     protected Vector2 UVDimensions;
     private int UVStretch;
@@ -26,7 +26,7 @@ public class Sprite
     protected VertexPool.VertexSegment Vertexsegment;
     private Matrix4x4 WorldMat;
 
-    public Sprite(VertexPool.VertexSegment segment, float width, float height, STYPE type, ORIPOINT oripoint, Camera cam, int uvStretch, float maxFps)
+    public Sprite(VertexPool.VertexSegment segment, float width, float height, Style type, ORIPOINT oripoint, Camera cam, int uvStretch, float maxFps)
     {
         this.MyTransform.position = Vector3.zero;
         this.MyTransform.rotation = Quaternion.identity;
@@ -245,7 +245,7 @@ public class Sprite
     public void Transform()
     {
         this.LocalMat.SetTRS(Vector3.zero, this.Rotation, this.ScaleVector);
-        if (this.Type == STYPE.BILLBOARD)
+        if (this.Type == Style.Billboard)
         {
             Transform transform = this.MainCamera.transform;
             this.MyTransform.LookAt(this.MyTransform.position + transform.rotation * Vector3.up, transform.rotation * Vector3.back);
@@ -258,7 +258,7 @@ public class Sprite
         Vector3 vector2 = matrixx.MultiplyPoint3x4(this.v2);
         Vector3 vector3 = matrixx.MultiplyPoint3x4(this.v3);
         Vector3 vector4 = matrixx.MultiplyPoint3x4(this.v4);
-        if (this.Type == STYPE.BILLBOARD_SELF)
+        if (this.Type == Style.BillboardSelf)
         {
             Vector3 zero = Vector3.zero;
             Vector3 vector6 = Vector3.zero;

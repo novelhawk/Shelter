@@ -42,7 +42,7 @@ public class VertexPool
         return new RibbonTrail(this.GetVertices(maxelemnt * 2, (maxelemnt - 1) * 6), width, maxelemnt, len, pos, stretchType, maxFps);
     }
 
-    public Sprite AddSprite(float width, float height, STYPE type, ORIPOINT ori, Camera cam, int uvStretch, float maxFps)
+    public Sprite AddSprite(float width, float height, Style type, ORIPOINT ori, Camera cam, int uvStretch, float maxFps)
     {
         return new Sprite(this.GetVertices(4, 6), width, height, type, ori, cam, uvStretch, maxFps);
     }

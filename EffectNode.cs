@@ -137,7 +137,7 @@ public class EffectNode
         this.Ribbon = this.Owner.GetVertexPool().AddRibbonTrail(width, maxelemnt, len, pos, stretchType, maxFps);
     }
 
-    public void SetType(float width, float height, STYPE type, ORIPOINT orip, int uvStretch, float maxFps)
+    public void SetType(float width, float height, Style type, ORIPOINT orip, int uvStretch, float maxFps)
     {
         this.Type = 1;
         this.Sprite = this.Owner.GetVertexPool().AddSprite(width, height, type, orip, Camera.main, uvStretch, maxFps);
