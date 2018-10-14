@@ -75,17 +75,10 @@ public class CannonPropRegion : Photon.MonoBehaviour
         string[] strArray = settings.Split(',');
         if (strArray.Length > 15)
         {
-            float a = 1f;
-            GameObject gameObject = null;
-            gameObject = this.gameObject;
-            if (strArray[2] != "default")
+            if (!strArray[2].EqualsIgnoreCase("default"))
             {
                 if (strArray[2].EqualsIgnoreCase("transparent"))
                 {
-                    if (float.TryParse(strArray[2].Substring(11), out var num2))
-                    {
-                        a = num2;
-                    }
                     foreach (Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
                     {
                         renderer.material = (Material) FengGameManagerMKII.RCassets.Load("transparent");
@@ -102,19 +95,22 @@ public class CannonPropRegion : Photon.MonoBehaviour
                         renderer.material = (Material) FengGameManagerMKII.RCassets.Load(strArray[2]);
                         if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
                         {
-                            renderer.material.mainTextureScale = new Vector2(renderer.material.mainTextureScale.x * Convert.ToSingle(strArray[10]), renderer.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));
+                            renderer.material.mainTextureScale = new Vector2(
+                                renderer.material.mainTextureScale.x * Convert.ToSingle(strArray[10]),
+                                renderer.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));
                         }
                     }
                 }
             }
-            float x = gameObject.transform.localScale.x * Convert.ToSingle(strArray[3]);
-            x -= 0.001f;
-            float y = gameObject.transform.localScale.y * Convert.ToSingle(strArray[4]);
-            float z = gameObject.transform.localScale.z * Convert.ToSingle(strArray[5]);
+
+            var scale = gameObject.transform.localScale;
+            float x = scale.x * Convert.ToSingle(strArray[3]) - 0.001f;
+            float y = scale.y * Convert.ToSingle(strArray[4]);
+            float z = scale.z * Convert.ToSingle(strArray[5]);
             gameObject.transform.localScale = new Vector3(x, y, z);
             if (strArray[6] != "0")
             {
-                Color color = new Color(Convert.ToSingle(strArray[7]), Convert.ToSingle(strArray[8]), Convert.ToSingle(strArray[9]), a);
+                Color color = new Color(Convert.ToSingle(strArray[7]), Convert.ToSingle(strArray[8]), Convert.ToSingle(strArray[9]), 1f);
                 foreach (MeshFilter filter in gameObject.GetComponentsInChildren<MeshFilter>())
                 {
                     Mesh mesh = filter.mesh;
