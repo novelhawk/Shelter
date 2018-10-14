@@ -1,3 +1,4 @@
+using Mod;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
@@ -21,7 +22,7 @@ public class PickupItemSimple : Photon.MonoBehaviour
         if (!this.SentPickup)
         {
             this.SentPickup = true;
-            photonView.RPC("PunPickupSimple", PhotonTargets.AllViaServer, new object[0]);
+            photonView.RPC(Rpc.PunPickupSimple, PhotonTargets.AllViaServer, new object[0]);
         }
     }
 

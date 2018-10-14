@@ -9,7 +9,7 @@ namespace Mod.Commands
 
         public override void Execute(string[] args)
         {
-            FengGameManagerMKII.instance.photonView.RPC("pauseRPC", PhotonTargets.All, Time.timeScale >= 1);
+            FengGameManagerMKII.instance.photonView.RPC(Rpc.Pause, PhotonTargets.All, Time.timeScale >= 1);
         }
     }
 }

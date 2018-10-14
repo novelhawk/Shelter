@@ -29,7 +29,7 @@ public class BTN_choose_human : MonoBehaviour
             else
             {
                 FengGameManagerMKII.instance.SpawnPlayerAfterGameEnd(selection);
-                FengGameManagerMKII.instance.photonView.RPC("restartGameByClient", PhotonTargets.MasterClient, new object[0]);
+                FengGameManagerMKII.instance.photonView.RPC(Rpc.RestartByClient, PhotonTargets.MasterClient, new object[0]);
             }
         }
         else if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight || IN_GAME_MAIN_CAMERA.GameMode == GameMode.Trost || IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpCapture)
@@ -37,7 +37,7 @@ public class BTN_choose_human : MonoBehaviour
             if (!IsEveryoneDead())
             {
                 FengGameManagerMKII.instance.SpawnPlayerAfterGameEnd(selection);
-                FengGameManagerMKII.instance.photonView.RPC("restartGameByClient", PhotonTargets.MasterClient, new object[0]);
+                FengGameManagerMKII.instance.photonView.RPC(Rpc.RestartByClient, PhotonTargets.MasterClient, new object[0]);
             }
             else
             {

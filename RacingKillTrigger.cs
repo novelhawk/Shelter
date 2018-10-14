@@ -1,3 +1,4 @@
+using Mod;
 using UnityEngine;
 
 public class RacingKillTrigger : MonoBehaviour
@@ -14,7 +15,7 @@ public class RacingKillTrigger : MonoBehaviour
                 if (component != null)
                 {
                     component.markDie();
-                    component.photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, "Server" });
+                    component.photonView.RPC(Rpc.DieRC, PhotonTargets.All, new object[] { -1, "Server" });
                 }
             }
         }

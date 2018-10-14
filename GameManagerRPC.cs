@@ -75,9 +75,9 @@ public partial class FengGameManagerMKII
         if (!Player.Self.IsMasterClient && PhotonNetwork.PlayerList.Any(x => x.ID < Player.Self.ID))
             throw new NotAllowedException(nameof(RequireStatus), info);
         
-        photonView.RPC("refreshStatus", PhotonTargets.Others, humanScore, titanScore, wave, highestwave, roundTime, timeTotalServer, startRacing, endRacing);
-        photonView.RPC("refreshPVPStatus", PhotonTargets.Others, PVPhumanScore, PVPtitanScore);
-        photonView.RPC("refreshPVPStatus_AHSS", PhotonTargets.Others, teamScores);
+        photonView.RPC(Rpc.RefreshStatus, PhotonTargets.Others, humanScore, titanScore, wave, highestwave, roundTime, timeTotalServer, startRacing, endRacing);
+        photonView.RPC(Rpc.RefreshStatus_PVP, PhotonTargets.Others, PVPhumanScore, PVPtitanScore);
+        photonView.RPC(Rpc.RefreshStatus_PVP_AHSS, PhotonTargets.Others, teamScores);
     }
 
     [RPC]
@@ -185,7 +185,7 @@ public partial class FengGameManagerMKII
                 }
 
                 CheckPVPPoints();
-                photonView.RPC("refreshPVPStatus", PhotonTargets.Others, PVPhumanScore, PVPtitanScore);
+                photonView.RPC(Rpc.RefreshStatus_PVP, PhotonTargets.Others, PVPhumanScore, PVPtitanScore);
             }
             else if (IN_GAME_MAIN_CAMERA.GameMode != GameMode.CaveFight)
             {
@@ -211,7 +211,7 @@ public partial class FengGameManagerMKII
                                 {
                                     if (player.Properties.PlayerType != PlayerType.Titan)
                                     {
-                                        photonView.RPC("respawnHeroInNewRound", player);
+                                        photonView.RPC(Rpc.Respawn, player);
                                     }
                                 }
                             }
@@ -355,7 +355,7 @@ public partial class FengGameManagerMKII
                 }
 
                 CheckPVPPoints();
-                photonView.RPC("refreshPVPStatus", PhotonTargets.Others, PVPhumanScore, PVPtitanScore);
+                photonView.RPC(Rpc.RefreshStatus_PVP, PhotonTargets.Others, PVPhumanScore, PVPtitanScore);
                 break;
             
             case GameMode.EndlessTitan:
@@ -668,13 +668,10 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
-    public void VerifyPlayerHasLeft(int ID, PhotonMessageInfo info)
+    public void VerifyPlayerHasLeft(int id, PhotonMessageInfo info)
     {
-        if (info.sender.IsMasterClient && Player.Find(ID) != null)
-        {
-            Player player = Player.Find(ID);
-            banHash.Add(ID, player.Properties.Name);
-        }
+        if (info.sender.IsMasterClient && Player.TryParse(id, out Player player))
+            banHash.Add(id, player.Properties.Name);
     }
 
     [RPC]
@@ -782,8 +779,8 @@ public partial class FengGameManagerMKII
             throw new NotAllowedException(nameof(TitanGetKill), info);
 
         Damage = Mathf.Max(10, Damage);
-        photonView.RPC("netShowDamage", player, Damage);
-        photonView.RPC("oneTitanDown", PhotonTargets.MasterClient, name1, false);
+        photonView.RPC(Rpc.ShowDamage, player, Damage);
+        photonView.RPC(Rpc.OneTitanDown, PhotonTargets.MasterClient, name1, false);
         SendKillInfo(false, player.Properties.Name, true, name1, Damage);
         PlayerKillInfoUpdate(player, Damage);
     }

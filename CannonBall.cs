@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Mod;
 using Mod.GameSettings;
 using UnityEngine;
 
@@ -52,14 +53,14 @@ public class CannonBall : Photon.MonoBehaviour
                             if (Player.Self.Properties.RCTeam == 0 || Player.Self.Properties.RCTeam != owner.Properties.RCTeam)
                             {
                                 gameObject.GetComponent<HERO>().markDie();
-                                gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
+                                gameObject.GetComponent<HERO>().photonView.RPC(Rpc.DieRC, PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
                                 FengGameManagerMKII.instance.PlayerKillInfoUpdate(Player.Self, 0);
                             }
                         }
                         else
                         {
                             gameObject.GetComponent<HERO>().markDie();
-                            gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
+                            gameObject.GetComponent<HERO>().photonView.RPC(Rpc.DieRC, PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
                             FengGameManagerMKII.instance.PlayerKillInfoUpdate(Player.Self, 0);
                         }
                     }
@@ -114,14 +115,14 @@ public class CannonBall : Photon.MonoBehaviour
                         {
                             if (gameObject.name == "head")
                             {
-                                titan.photonView.RPC("DieByCannon", titan.photonView.owner, new object[] { this.myHero.photonView.viewID });
+                                titan.photonView.RPC(Rpc.DieByCannon, titan.photonView.owner, new object[] { this.myHero.photonView.viewID });
                                 titan.dieBlow(transform.position, 0.2f);
                                 i = colliderArray.Length;
                             }
                         }
                         else if (gameObject.name == "head")
                         {
-                            titan.photonView.RPC("DieByCannon", titan.photonView.owner, new object[] { this.myHero.photonView.viewID });
+                            titan.photonView.RPC(Rpc.DieByCannon, titan.photonView.owner, new object[] { this.myHero.photonView.viewID });
                             titan.dieHeadBlow(transform.position, 0.2f);
                             i = colliderArray.Length;
                         }

@@ -1,4 +1,5 @@
 using ExitGames.Client.Photon;
+using Mod;
 using UnityEngine;
 
 public class BTN_choose_titan : MonoBehaviour
@@ -7,13 +8,13 @@ public class BTN_choose_titan : MonoBehaviour
     {
         if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpAHSS)
         {
-            string id = "AHSS";
+            const string id = "AHSS";
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[0], true);
             FengGameManagerMKII.instance.needChooseSide = false;
             if (!PhotonNetwork.isMasterClient && FengGameManagerMKII.instance.roundTime > 60f)
             {
                 FengGameManagerMKII.instance.SpawnPlayerAfterGameEnd(id);
-                FengGameManagerMKII.instance.photonView.RPC("restartGameByClient", PhotonTargets.MasterClient);
+                FengGameManagerMKII.instance.photonView.RPC(Rpc.RestartByClient, PhotonTargets.MasterClient);
             }
             else
             {

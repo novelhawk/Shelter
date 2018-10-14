@@ -61,7 +61,7 @@ public class CannonPropRegion : Photon.MonoBehaviour
                 this.disabled = true;
                 StartCoroutine(this.WaitAndEnable());
                 FengGameManagerMKII.instance.allowedToCannon.Add(info.sender.ID, new CannonValues(photonView.viewID, this.settings));
-                component.photonView.RPC("SpawnCannonRPC", info.sender, new object[] { this.settings });
+                component.photonView.RPC(Rpc.SpawnCannon, info.sender, new object[] { this.settings });
             }
         }
     }

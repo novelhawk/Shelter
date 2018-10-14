@@ -1,4 +1,6 @@
 using System.Collections;
+using Mod;
+using Mod.Exceptions;
 using UnityEngine;
 
 public class Bullet : Photon.MonoBehaviour
@@ -60,12 +62,12 @@ public class Bullet : Photon.MonoBehaviour
         this.phase = 2;
         this.killTime = 0f;
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
-            photonView.RPC("setPhase", PhotonTargets.Others, 2);
+            photonView.RPC(Rpc.SetHookPhase, PhotonTargets.Others, 2);
     }
 
     private void FixedUpdate()
     {
-        if (!(this.phase == 2 || this.phase == 1 ? !this.leviMode : true))
+        if (!(this.phase != 2 && this.phase != 1 || !this.leviMode))
         {
             this.spiralcount++;
             if (this.spiralcount >= 60)
@@ -110,7 +112,7 @@ public class Bullet : Photon.MonoBehaviour
                 if (hit.collider.transform.gameObject.layer == LayerMask.NameToLayer("EnemyBox"))
                 {
                     if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
-                        photonView.RPC("tieMeToOBJ", PhotonTargets.Others, hit.collider.transform.root.gameObject.GetPhotonView().viewID);
+                        photonView.RPC(Rpc.SetHookedObject, PhotonTargets.Others, hit.collider.transform.root.gameObject.GetPhotonView().viewID);
                     
                     this.master.GetComponent<HERO>().lastHook = hit.collider.transform.root;
                     transform.parent = hit.collider.transform;
@@ -123,7 +125,7 @@ public class Bullet : Photon.MonoBehaviour
                 {
                     if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                     {
-                        photonView.RPC("tieMeToOBJ", PhotonTargets.Others, hit.collider.transform.root.gameObject.GetPhotonView().viewID);
+                        photonView.RPC(Rpc.SetHookedObject, PhotonTargets.Others, hit.collider.transform.root.gameObject.GetPhotonView().viewID);
                     }
                     this.master.GetComponent<HERO>().hookToHuman(hit.collider.transform.root.gameObject, transform.position);
                     transform.parent = hit.collider.transform;
@@ -146,10 +148,8 @@ public class Bullet : Photon.MonoBehaviour
                         this.phase = 1;
                         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                         {
-                            object[] objArray4 = new object[] { 1 };
-                            photonView.RPC("setPhase", PhotonTargets.Others, objArray4);
-                            object[] objArray5 = new object[] { transform.position };
-                            photonView.RPC("tieMeTo", PhotonTargets.Others, objArray5);
+                            photonView.RPC(Rpc.SetHookPhase, PhotonTargets.Others, 1);
+                            photonView.RPC(Rpc.SetHookPosition, PhotonTargets.Others, transform.position);
                         }
                         if (this.leviMode)
                         {
@@ -168,8 +168,7 @@ public class Bullet : Photon.MonoBehaviour
                     this.phase = 4;
                     if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                     {
-                        object[] objArray6 = new object[] { 4 };
-                        photonView.RPC("setPhase", PhotonTargets.Others, objArray6);
+                        photonView.RPC(Rpc.SetHookPhase, PhotonTargets.Others, 4);
                     }
                 }
             }
@@ -235,21 +234,20 @@ public class Bullet : Photon.MonoBehaviour
             {
                 this.velocity2 = Vector3.Project(v2, v);
             }
-            if (launcher_ref == "hookRefL1")
+            switch (launcher_ref)
             {
-                this.myRef = hero.GetComponent<HERO>().hookRefL1;
-            }
-            if (launcher_ref == "hookRefL2")
-            {
-                this.myRef = hero.GetComponent<HERO>().hookRefL2;
-            }
-            if (launcher_ref == "hookRefR1")
-            {
-                this.myRef = hero.GetComponent<HERO>().hookRefR1;
-            }
-            if (launcher_ref == "hookRefR2")
-            {
-                this.myRef = hero.GetComponent<HERO>().hookRefR2;
+                case "hookRefL1":
+                    this.myRef = hero.GetComponent<HERO>().hookRefL1;
+                    break;
+                case "hookRefL2":
+                    this.myRef = hero.GetComponent<HERO>().hookRefL2;
+                    break;
+                case "hookRefR1":
+                    this.myRef = hero.GetComponent<HERO>().hookRefR1;
+                    break;
+                case "hookRefR2":
+                    this.myRef = hero.GetComponent<HERO>().hookRefR2;
+                    break;
             }
             this.nodes = new ArrayList
             {
@@ -260,8 +258,8 @@ public class Bullet : Photon.MonoBehaviour
             this.left = isLeft;
             if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
             {
-                photonView.RPC("myMasterIs", PhotonTargets.Others, hero.GetComponent<HERO>().photonView.viewID, launcher_ref);
-                photonView.RPC("setVelocityAndLeft", PhotonTargets.Others, v, velocity2, left);
+                photonView.RPC(Rpc.HookOwner, PhotonTargets.Others, hero.GetComponent<HERO>().photonView.viewID, launcher_ref);
+                photonView.RPC(Rpc.setVelocityAndLeft, PhotonTargets.Others, v, velocity2, left);
             }
             transform.position = this.myRef.transform.position;
             transform.rotation = Quaternion.LookRotation(v.normalized);
@@ -269,24 +267,28 @@ public class Bullet : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void MyMasterIs(int id, string launcherRef)
+    private void MyMasterIs(int id, string launcherRef, PhotonMessageInfo info)
     {
-        this.master = PhotonView.Find(id).gameObject;
-        if (launcherRef == "hookRefL1")
+        if (!PhotonView.TryParse(id, out PhotonView view))
+            throw new NotAllowedException(nameof(MyMasterIs), info);
+        
+        master = view.gameObject;
+        switch (launcherRef)
         {
-            this.myRef = this.master.GetComponent<HERO>().hookRefL1;
-        }
-        if (launcherRef == "hookRefL2")
-        {
-            this.myRef = this.master.GetComponent<HERO>().hookRefL2;
-        }
-        if (launcherRef == "hookRefR1")
-        {
-            this.myRef = this.master.GetComponent<HERO>().hookRefR1;
-        }
-        if (launcherRef == "hookRefR2")
-        {
-            this.myRef = this.master.GetComponent<HERO>().hookRefR2;
+            case "hookRefL1":
+                myRef = master.GetComponent<HERO>().hookRefL1;
+                break;
+            case "hookRefL2":
+                myRef = master.GetComponent<HERO>().hookRefL2;
+                break;
+            case "hookRefR1":
+                myRef = master.GetComponent<HERO>().hookRefR1;
+                break;
+            case "hookRefR2":
+                myRef = master.GetComponent<HERO>().hookRefR2;
+                break;
+            default:
+                throw new NotAllowedException(nameof(MyMasterIs), info);
         }
     }
 

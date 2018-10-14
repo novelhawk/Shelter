@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Mod;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
@@ -25,7 +26,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
                 }
                 if (next != null && !next.Equals(Player.Self))
                 {
-                    photonView.RPC("RequestForPickupTimes", next, new object[0]);
+                    photonView.RPC(Rpc.RequestForPickupTimes, next, new object[0]);
                 }
                 else
                 {
@@ -128,7 +129,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
                     }
                 }
             }
-            photonView.RPC("PickupItemInit", targtePlayer, PhotonNetwork.time, list.ToArray());
+            photonView.RPC(Rpc.PickupItemInit, targtePlayer, PhotonNetwork.time, list.ToArray());
         }
     }
 }

@@ -1,3 +1,4 @@
+using Mod;
 using UnityEngine;
 
 public class EnemyCheckCollider : Photon.MonoBehaviour
@@ -47,7 +48,7 @@ public class EnemyCheckCollider : Photon.MonoBehaviour
                             component.transform.root.GetComponent<HERO>().BlowAway(vector.normalized * multiplier + Vector3.up * 1f);
                             break;
                         case GameType.Multiplayer:
-                            component.transform.root.GetComponent<HERO>().photonView.RPC("blowAway", PhotonTargets.All, 
+                            component.transform.root.GetComponent<HERO>().photonView.RPC(Rpc.BlowAway, PhotonTargets.All, 
                                 vector.normalized * multiplier + Vector3.up * 1f);
                             break;
                     }
@@ -65,7 +66,7 @@ public class EnemyCheckCollider : Photon.MonoBehaviour
                         titanName = transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().titanName;
                     }
                     Vector3 distance = component.transform.root.position - transform.position;
-                    component.transform.root.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, 
+                    component.transform.root.GetComponent<HERO>().photonView.RPC(Rpc.Die, PhotonTargets.All, 
                         distance.normalized * dist * 1000f + Vector3.up * 50f,
                         this.isThisBite,
                         myOwnerViewID,

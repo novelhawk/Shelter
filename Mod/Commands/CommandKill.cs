@@ -30,7 +30,7 @@ namespace Mod.Commands
                             continue;
                         
                         player.Hero.markDie();
-                        player.Hero.photonView.RPC("netDie2", PhotonTargets.All, -1, $"[{AnimationColor.Random}]{msg}[-]  ");
+                        player.Hero.photonView.RPC(Rpc.DieRC, PhotonTargets.All, -1, $"[{AnimationColor.Random}]{msg}[-]  ");
                     }
                     return;
                 }
@@ -38,7 +38,7 @@ namespace Mod.Commands
                 case "titans":
                 {
                     foreach (GameObject obj in GameObject.FindGameObjectsWithTag("titan"))
-                        obj.GetComponent<TITAN>()?.photonView.RPC("netDie", PhotonTargets.All);
+                        obj.GetComponent<TITAN>()?.photonView.RPC(Rpc.Die, PhotonTargets.All);
                     return;
                 }
 
@@ -52,10 +52,10 @@ namespace Mod.Commands
                     if (player.Hero != null)
                     {
                         player.Hero.markDie();
-                        player.Hero.photonView.RPC("netDie2", PhotonTargets.All, -1, $"[{AnimationColor.Random}]{msg}[-]  ");
+                        player.Hero.photonView.RPC(Rpc.DieRC, PhotonTargets.All, -1, $"[{AnimationColor.Random}]{msg}[-]  ");
                     }
                     if (player.Titan != null)
-                        player.Titan.photonView.RPC("netDie", PhotonTargets.All);
+                        player.Titan.photonView.RPC(Rpc.Die, PhotonTargets.All);
                     break;
                 }
             }

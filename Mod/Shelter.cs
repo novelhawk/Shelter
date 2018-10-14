@@ -64,14 +64,14 @@ namespace Mod
 
         public void Update()
         {
-            DiscordApi.RunCallbacks();
+//            DiscordApi.RunCallbacks();
             if (Input.GetKeyDown(KeyCode.I) && Input.GetKey(KeyCode.LeftControl))
                 File.WriteAllLines($"GameObjects{Random.Range(0, 255)}.txt", FindObjectsOfType(typeof(GameObject)).OrderBy(x => x.GetInstanceID()).Select(x => $"{x.GetInstanceID()} - {x.name}").ToArray());
         }
 
         private void OnDisable()
         {
-            DiscordApi.Shutdown();
+//            DiscordApi.Shutdown();
         }
 
         public static void OnMainMenu()
@@ -97,18 +97,18 @@ namespace Mod
                 _interfaceManager.Enable(nameof(GameInfo));
             if (ModuleManager.Enabled(nameof(ModuleShowConsole)))
                 _interfaceManager.Enable(nameof(Console));
-            if (PhotonNetwork.Room != null)
-                DiscordApi.UpdatePresence(new DiscordApi.RichPresence
-                {
-                    details = "In Lobby",
-                    state = PhotonNetwork.Room.Name.RemoveColors().MaxChars(42),
-                    joinSecret = PhotonNetwork.Room.FullName,
-                    partyId = PhotonNetwork.Room.FullName,
-                    partyMax = PhotonNetwork.Room.MaxPlayers,
-                    partySize = Room.CurrentPlayers,
-                    startTimestamp = StartTime,
-                    largeImageKey = "city",
-                });
+//            if (PhotonNetwork.Room != null)
+//                DiscordApi.UpdatePresence(new DiscordApi.RichPresence
+//                {
+//                    details = "In Lobby",
+//                    state = PhotonNetwork.Room.Name.RemoveColors().MaxChars(42),
+//                    joinSecret = PhotonNetwork.Room.FullName,
+//                    partyId = PhotonNetwork.Room.FullName,
+//                    partyMax = PhotonNetwork.Room.MaxPlayers,
+//                    partySize = Room.CurrentPlayers,
+//                    startTimestamp = StartTime,
+//                    largeImageKey = "city",
+//                });
         }
 
         public static bool TryFind(string name, out GameObject go)

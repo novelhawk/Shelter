@@ -77,7 +77,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                     {
                         hero.markDie();
                         Vector3 vector2 = component.transform.root.position - transform.position;
-                        component.transform.root.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All,
+                        component.transform.root.GetComponent<HERO>().photonView.RPC(Rpc.Die, PhotonTargets.All,
                             vector2.normalized * b * 1000f + Vector3.up * 50f,  // force : Vector3
                             false,                                              // isBite : bool
                             view.viewID,                                        // viewID : int
@@ -126,7 +126,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                                 item.transform.root.GetComponent<TITAN>().asClientLookTarget = false;
                             }
 
-                            item.transform.root.GetComponent<TITAN>().photonView.RPC("titanGetHit", item.transform.root.GetComponent<TITAN>().photonView.owner, 
+                            item.transform.root.GetComponent<TITAN>().photonView.RPC(Rpc.TitanGetHit, item.transform.root.GetComponent<TITAN>().photonView.owner, 
                                 transform.root.gameObject.GetPhotonView().viewID, damage);
                         }
                     }
@@ -137,7 +137,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                         int damage = Mathf.Max(10, (int) (velocity.magnitude * 10f * this.scoreMulti));
                         if (!item.transform.root.GetComponent<FEMALE_TITAN>().hasDie)
                         {
-                            item.transform.root.GetComponent<FEMALE_TITAN>().photonView.RPC("titanGetHit", item.transform.root.GetComponent<FEMALE_TITAN>().photonView.owner, 
+                            item.transform.root.GetComponent<FEMALE_TITAN>().photonView.RPC(Rpc.TitanGetHit, item.transform.root.GetComponent<FEMALE_TITAN>().photonView.owner, 
                                 transform.root.gameObject.GetPhotonView().viewID, damage);
                         }
                     }
@@ -148,7 +148,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                         {
                             Vector3 velocity = this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;
                             int damage = Mathf.Max(10, (int) (velocity.magnitude * 10f * this.scoreMulti));
-                            item.transform.root.GetComponent<COLOSSAL_TITAN>().photonView.RPC("titanGetHit",item.transform.root.GetComponent<COLOSSAL_TITAN>().photonView.owner, 
+                            item.transform.root.GetComponent<COLOSSAL_TITAN>().photonView.RPC(Rpc.TitanGetHit,item.transform.root.GetComponent<COLOSSAL_TITAN>().photonView.owner, 
                                 transform.root.gameObject.GetPhotonView().viewID, damage);
                         }
                     }
@@ -237,7 +237,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                         {
                             object[] objArray5 = new object[] {transform.root.gameObject.GetPhotonView().viewID};
                             gameObject.GetComponent<FEMALE_TITAN>().photonView
-                                .RPC("hitEyeRPC", PhotonTargets.MasterClient, objArray5);
+                                .RPC(Rpc.HitEye, PhotonTargets.MasterClient, objArray5);
                         }
                     }
                     else if (!gameObject.GetComponent<FEMALE_TITAN>().hasDie)
@@ -281,30 +281,24 @@ public class TriggerColliderWeapon : MonoBehaviour
                                obj4.rigidbody.velocity;
             int num9 = (int) (vector10.magnitude * 10f * this.scoreMulti);
             num9 = Mathf.Max(10, num9);
-            if (obj4.GetComponent<TITAN>() != null &&
-                obj4.GetComponent<TITAN>().abnormalType != AbnormalType.Crawler)
+            var titan = obj4.GetComponent<TITAN>();
+            if (titan != null && titan.abnormalType != AbnormalType.Crawler)
             {
                 if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                 {
-                    if (!obj4.GetComponent<TITAN>().hasDie)
-                    {
-                        obj4.GetComponent<TITAN>().hitAnkle();
-                    }
+                    if (!titan.hasDie)
+                        titan.hitAnkle();
                 }
                 else
                 {
                     if (!PhotonNetwork.isMasterClient)
                     {
-                        if (!obj4.GetComponent<TITAN>().hasDie)
-                        {
-                            object[] objArray7 = new object[] {transform.root.gameObject.GetPhotonView().viewID};
-                            obj4.GetComponent<TITAN>().photonView
-                                .RPC("hitAnkleRPC", PhotonTargets.MasterClient, objArray7);
-                        }
+                        if (!titan.hasDie)
+                            titan.photonView.RPC(Rpc.HitAnkle, PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID);
                     }
-                    else if (!obj4.GetComponent<TITAN>().hasDie)
+                    else if (!titan.hasDie)
                     {
-                        obj4.GetComponent<TITAN>().hitAnkle();
+                        titan.hitAnkle();
                     }
 
                     this.showCriticalHitFX();
@@ -332,24 +326,19 @@ public class TriggerColliderWeapon : MonoBehaviour
                     {
                         if (!obj4.GetComponent<FEMALE_TITAN>().hasDie)
                         {
-                            object[] objArray8 = new object[] {transform.root.gameObject.GetPhotonView().viewID, num9};
-                            obj4.GetComponent<FEMALE_TITAN>().photonView
-                                .RPC("hitAnkleRRPC", PhotonTargets.MasterClient, objArray8);
+                            obj4.GetComponent<FEMALE_TITAN>().photonView.RPC("hitAnkleRRPC", PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID, num9);
                         }
                     }
                     else if (!obj4.GetComponent<FEMALE_TITAN>().hasDie)
                     {
-                        obj4.GetComponent<FEMALE_TITAN>()
-                            .HitAnkleRRPC(transform.root.gameObject.GetPhotonView().viewID, num9);
+                        obj4.GetComponent<FEMALE_TITAN>().HitAnkleRRPC(transform.root.gameObject.GetPhotonView().viewID, num9);
                     }
                 }
                 else if (!PhotonNetwork.isMasterClient)
                 {
                     if (!obj4.GetComponent<FEMALE_TITAN>().hasDie)
                     {
-                        object[] objArray9 = new object[] {transform.root.gameObject.GetPhotonView().viewID, num9};
-                        obj4.GetComponent<FEMALE_TITAN>().photonView
-                            .RPC("hitAnkleLRPC", PhotonTargets.MasterClient, objArray9);
+                        obj4.GetComponent<FEMALE_TITAN>().photonView.RPC(Rpc.HitLeftAnkle, PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID, num9);
                     }
                 }
                 else if (!obj4.GetComponent<FEMALE_TITAN>().hasDie)

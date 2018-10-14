@@ -1,5 +1,6 @@
 using ExitGames.Client.Photon;
 using System;
+using Mod;
 
 public class RCAction
 {
@@ -375,7 +376,7 @@ public class RCAction
                         {
                             HERO hero = (HERO) FengGameManagerMKII.heroHash[iD];
                             hero.markDie();
-                            hero.photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, this.parameters[1].returnString(null) + " " });
+                            hero.photonView.RPC(Rpc.DieRC, PhotonTargets.All, new object[] { -1, this.parameters[1].returnString(null) + " " });
                         }
                         else
                         {
@@ -384,11 +385,11 @@ public class RCAction
                         return;
                     }
                     case 1:
-                        FengGameManagerMKII.instance.photonView.RPC("respawnHeroInNewRound", targetPlayer, new object[0]);
+                        FengGameManagerMKII.instance.photonView.RPC(Rpc.Respawn, targetPlayer, new object[0]);
                         return;
 
                     case 2:
-                        FengGameManagerMKII.instance.photonView.RPC("spawnPlayerAtRPC", targetPlayer, new object[] { this.parameters[1].returnFloat(null), this.parameters[2].returnFloat(null), this.parameters[3].returnFloat(null) });
+                        FengGameManagerMKII.instance.photonView.RPC(Rpc.SpawnPlayerAt, targetPlayer, new object[] { this.parameters[1].returnFloat(null), this.parameters[2].returnFloat(null), this.parameters[3].returnFloat(null) });
                         return;
 
                     case 3:
@@ -397,7 +398,7 @@ public class RCAction
                         if (FengGameManagerMKII.heroHash.ContainsKey(num6))
                         {
                             HERO hero2 = (HERO) FengGameManagerMKII.heroHash[num6];
-                            hero2.photonView.RPC("moveToRPC", targetPlayer, new object[] { this.parameters[1].returnFloat(null), this.parameters[2].returnFloat(null), this.parameters[3].returnFloat(null) });
+                            hero2.photonView.RPC(Rpc.MoveTo, targetPlayer, new object[] { this.parameters[1].returnFloat(null), this.parameters[2].returnFloat(null), this.parameters[3].returnFloat(null) });
                         }
                         else
                         {
@@ -513,7 +514,7 @@ public class RCAction
                     case 0:
                     {
                         TITAN titan2 = this.parameters[0].returnTitan(null);
-                        titan2.photonView.RPC("titanGetHit", titan2.photonView.owner, this.parameters[1].returnPlayer(null).ID, this.parameters[2].returnInt(null));
+                        titan2.photonView.RPC(Rpc.TitanGetHit, titan2.photonView.owner, this.parameters[1].returnPlayer(null).ID, this.parameters[2].returnInt(null));
                         return;
                     }
                     case 1:
@@ -533,7 +534,7 @@ public class RCAction
                         {
                             titan3.maxHealth = titan3.currentHealth;
                         }
-                        titan3.photonView.RPC("labelRPC", PhotonTargets.AllBuffered, new object[] { titan3.currentHealth, titan3.maxHealth });
+                        titan3.photonView.RPC(Rpc.UpdateHealthLabel, PhotonTargets.AllBuffered, new object[] { titan3.currentHealth, titan3.maxHealth });
                         return;
                     }
                     case 4:
@@ -545,7 +546,7 @@ public class RCAction
                         }
                         else
                         {
-                            titan4.photonView.RPC("moveToRPC", titan4.photonView.owner, new object[] { this.parameters[1].returnFloat(null), this.parameters[2].returnFloat(null), this.parameters[3].returnFloat(null) });
+                            titan4.photonView.RPC(Rpc.MoveTo, titan4.photonView.owner, new object[] { this.parameters[1].returnFloat(null), this.parameters[2].returnFloat(null), this.parameters[3].returnFloat(null) });
                         }
                         return;
                     }
@@ -556,7 +557,7 @@ public class RCAction
                 switch (this.actionType)
                 {
                     case 0:
-                        FengGameManagerMKII.instance.photonView.RPC("Chat", PhotonTargets.All, new object[] { this.parameters[0].returnString(null), string.Empty });
+                        FengGameManagerMKII.instance.photonView.RPC(Rpc.Chat, PhotonTargets.All, new object[] { this.parameters[0].returnString(null), string.Empty });
                         return;
 
                     case 1:

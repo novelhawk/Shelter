@@ -3,6 +3,7 @@ using Mod;
 using Mod.Managers;
 using Mod.Modules;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class TITAN_SETUP : Photon.MonoBehaviour
 {
@@ -114,12 +115,12 @@ public class TITAN_SETUP : Photon.MonoBehaviour
             switch (IN_GAME_MAIN_CAMERA.GameType)
             {
                 case GameType.Multiplayer when photonView.isMine && valid:
-                    photonView.RPC("setHairRPC2", PhotonTargets.AllBuffered, num, eye, hairlink);
+                    photonView.RPC(Rpc.SetHairSkin, PhotonTargets.AllBuffered, num, eye, hairlink);
                     break;
                 
                 case GameType.Multiplayer when photonView.isMine:
                     color = HeroCostume.costume[Random.Range(0, HeroCostume.costume.Length - 5)].hair_color;
-                    photonView.RPC("setHairPRC", PhotonTargets.AllBuffered, num, eye, color.r, color.g, color.b);
+                    photonView.RPC(Rpc.SetHairColor, PhotonTargets.AllBuffered, num, eye, color.r, color.g, color.b);
                     break;
                 
                 case GameType.Singleplayer when valid:
@@ -159,7 +160,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
             {
                 var color = part_hair.renderer.material.color;
-                photonView.RPC("setHairPRC", PhotonTargets.OthersBuffered, 
+                photonView.RPC(Rpc.SetHairColor, PhotonTargets.OthersBuffered, 
                     hairType, 
                     id, 
                     color.r, 
@@ -170,7 +171,10 @@ public class TITAN_SETUP : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void SetHairPRC(int type, int eye_type, float c1, float c2, float c3)
+    private void SetHairRPC(int type, int eye_type, float r, float g, float b) => SetHairPRC(type, eye_type, r, g, b);
+    
+    [RPC]
+    private void SetHairPRC(int type, int eye_type, float r, float g, float b)
     {
         Destroy(this.part_hair);
         this.hair = CostumeHair.MaleHairs[type];
@@ -183,7 +187,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
             obj2.transform.rotation = this.hair_go_ref.transform.rotation;
             obj2.transform.localScale = this.hair_go_ref.transform.localScale;
             obj2.renderer.material = CharacterMaterials.materials[this.hair.Texture];
-            obj2.renderer.material.color = new Color(c1, c2, c3);
+            obj2.renderer.material.color = new Color(r, g, b);
             this.part_hair = obj2;
         }
         SetFacialTexture(this.eye, eye_type);
@@ -227,7 +231,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
         SetFacialTexture(this.eye, 0);
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
-            photonView.RPC("setHairPRC", PhotonTargets.OthersBuffered, this.hairType, 0, this.part_hair.renderer.material.color.r, this.part_hair.renderer.material.color.g, this.part_hair.renderer.material.color.b);
+            photonView.RPC(Rpc.SetHairColor, PhotonTargets.OthersBuffered, this.hairType, 0, this.part_hair.renderer.material.color.r, this.part_hair.renderer.material.color.g, this.part_hair.renderer.material.color.b);
         }
     }
 

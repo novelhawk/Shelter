@@ -45,7 +45,7 @@ public class Cannon : Photon.MonoBehaviour
                 if (FengGameManagerMKII.instance.allowedToCannon.ContainsKey(owner.ID))
                 {
                     this.settings = FengGameManagerMKII.instance.allowedToCannon[owner.ID].settings;
-                    photonView.RPC("SetSize", PhotonTargets.All, new object[] { this.settings });
+                    photonView.RPC(Rpc.SetSize, PhotonTargets.All, new object[] { this.settings });
                     int viewID = FengGameManagerMKII.instance.allowedToCannon[owner.ID].viewID;
                     FengGameManagerMKII.instance.allowedToCannon.Remove(owner.ID);
                     CannonPropRegion component = PhotonView.Find(viewID).gameObject.GetComponent<CannonPropRegion>();
@@ -90,7 +90,7 @@ public class Cannon : Photon.MonoBehaviour
                 {
                     GameObject go = PhotonNetwork.Instantiate("RCAsset/" + strArray[1] + "Prop", new Vector3(Convert.ToSingle(strArray[12]), Convert.ToSingle(strArray[13]), Convert.ToSingle(strArray[14])), new Quaternion(Convert.ToSingle(strArray[15]), Convert.ToSingle(strArray[16]), Convert.ToSingle(strArray[17]), Convert.ToSingle(strArray[18])), 0);
                     go.GetComponent<CannonPropRegion>().settings = this.settings;
-                    go.GetPhotonView().RPC("SetSize", PhotonTargets.AllBuffered, this.settings);
+                    go.GetPhotonView().RPC(Rpc.SetSize, PhotonTargets.AllBuffered, this.settings);
                 }
                 else
                 {
@@ -254,7 +254,7 @@ public class Cannon : Photon.MonoBehaviour
                 this.myHero.myCannonRegion = null;
                 Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(this.myHero.gameObject);
                 this.myHero.baseRigidBody.velocity = Vector3.zero;
-                this.myHero.photonView.RPC("ReturnFromCannon", PhotonTargets.Others);
+                this.myHero.photonView.RPC(Rpc.ReturnFromCannon, PhotonTargets.Others);
                 this.myHero.skillCDLast = this.myHero.skillCDLastCannon;
                 this.myHero.skillCDDuration = this.myHero.skillCDLast;
             }

@@ -87,7 +87,7 @@ public partial class FengGameManagerMKII
         killInfoGO = new ArrayList();
         //        InRoomChat.messages = new List<string>();
         if (!PhotonNetwork.isMasterClient)
-            photonView.RPC("RequireStatus", PhotonTargets.MasterClient);
+            photonView.RPC(Rpc.RequireStatus, PhotonTargets.MasterClient);
         assetCacheTextures = new Dictionary<string, Texture2D>();
         isFirstLoad = true;
         if (OnPrivateServer)
@@ -346,7 +346,7 @@ public partial class FengGameManagerMKII
 
                 if (!PhotonNetwork.isMasterClient)
                 {
-                    photonView.RPC("RequireStatus", PhotonTargets.MasterClient);
+                    photonView.RPC(Rpc.RequireStatus, PhotonTargets.MasterClient);
                 }
 
                 if (info.IsLava)
@@ -405,7 +405,7 @@ public partial class FengGameManagerMKII
             if (!(gameTimesUp || !PhotonNetwork.isMasterClient))
             {
                 RestartGame(true);
-                photonView.RPC("setMasterRC", PhotonTargets.All);
+                photonView.RPC(Rpc.SetMasterclient, PhotonTargets.All);
             }
         }
 
@@ -488,13 +488,13 @@ public partial class FengGameManagerMKII
 
             object[] ignores = PhotonNetwork.PlayerList.Where(x => x.IsIgnored).Cast<object>().ToArray();
             if (ignores.Length > 0)
-                photonView1.RPC("ignorePlayerArray", player, ignores);
+                photonView1.RPC(Rpc.IgnoreMultiple, player, ignores);
 
-            photonView1.RPC("settingRPC", player, GameSettingsManager.EncodeToHashtable(settings));
-            photonView1.RPC("setMasterRC", player);
+            photonView1.RPC(Rpc.Settings, player, GameSettingsManager.EncodeToHashtable(settings));
+            photonView1.RPC(Rpc.SetMasterclient, player);
             if (Time.timeScale <= 0.1f && pauseWaitTime > 3f)
             {
-                photonView1.RPC("pauseRPC", player, true);
+                photonView1.RPC(Rpc.Pause, player, true);
                 Mod.Interface.Chat.SendMessage("MasterClient has paused the game", player);
             }
         }
@@ -514,7 +514,7 @@ public partial class FengGameManagerMKII
         InstantiateTracker.instance.TryRemovePlayer(player.ID);
         if (PhotonNetwork.isMasterClient)
         {
-            photonView.RPC("verifyPlayerHasLeft", PhotonTargets.All, player.ID);
+            photonView.RPC(Rpc.CheckPlayerPresence, PhotonTargets.All, player.ID);
         }
 
         if (settings.AsoPreserveKDA)

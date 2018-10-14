@@ -30,7 +30,7 @@ namespace Mod.Managers
 //
 //            if (FengGameManagerMKII.settings.TeamSort > TeamSort.Off) // Might not work
 //                for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-//                    photonView.RPC("setTeamRPC", PhotonNetwork.PlayerList[i], i % 2 + 1);
+//                    photonView.RPC(Rpc.setTeamRPC, PhotonNetwork.PlayerList[i], i % 2 + 1);
             Application.targetFrameRate = settings.FPSCap;
             QualitySettings.vSyncCount = settings.EnableVSync ? 1 : 0;
             AudioListener.volume = settings.Volume;
@@ -300,7 +300,7 @@ namespace Mod.Managers
             
 //                if (RCSettings.teamMode != (int) settings[193])
 //                    for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
-//                        photonView.RPC("setTeamRPC", PhotonNetwork.PlayerList[i], i % 2 + 1);
+//                        photonView.RPC(Rpc.setTeamRPC, PhotonNetwork.PlayerList[i], i % 2 + 1);
             if (settings.IsPointMode)
                 hashtable.Add("point", settings.PointModeWin);
             

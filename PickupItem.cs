@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Mod;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
@@ -16,7 +17,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
     {
         if (this.PickupIsMine)
         {
-            photonView.RPC("PunRespawn", PhotonTargets.AllViaServer, new object[0]);
+            photonView.RPC(Rpc.PunRespawn, PhotonTargets.AllViaServer, new object[0]);
         }
     }
 
@@ -24,7 +25,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
     {
         if (this.PickupIsMine)
         {
-            photonView.RPC("PunRespawn", PhotonTargets.AllViaServer, newPosition);
+            photonView.RPC(Rpc.PunRespawn, PhotonTargets.AllViaServer, newPosition);
         }
     }
 
@@ -67,7 +68,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
         if (!this.SentPickup)
         {
             this.SentPickup = true;
-            photonView.RPC("PunPickup", PhotonTargets.AllViaServer, new object[0]);
+            photonView.RPC(Rpc.PunPickup, PhotonTargets.AllViaServer, new object[0]);
         }
     }
 

@@ -1,4 +1,5 @@
 using System.Collections;
+using Mod;
 using Mod.Interface;
 using UnityEngine;
 
@@ -156,7 +157,7 @@ public class PVPcheckPoint : Photon.MonoBehaviour
             this.titanPt = 0f;
             this.syncPts();
             this.state = CheckPointState.Human;
-            photonView.RPC("changeState", PhotonTargets.All, 1);
+            photonView.RPC(Rpc.CheckpointChangeState, PhotonTargets.All, 1);
             if (LevelInfoManager.Get(FengGameManagerMKII.Level).LevelName != "The City I")
             {
                 this.supply = PhotonNetwork.Instantiate("aot_supply", transform.position - Vector3.up * (transform.position.y - this.getHeight(transform.position)), transform.rotation, 0);
@@ -187,7 +188,7 @@ public class PVPcheckPoint : Photon.MonoBehaviour
                 if (this.state != CheckPointState.Titan)
                 {
                     this.state = CheckPointState.Non;
-                    photonView.RPC("changeState", PhotonTargets.Others, 0);
+                    photonView.RPC(Rpc.CheckpointChangeState, PhotonTargets.Others, 0);
                 }
             }
         }
@@ -260,8 +261,8 @@ public class PVPcheckPoint : Photon.MonoBehaviour
 
     private void syncPts()
     {
-        photonView.RPC("changeTitanPt", PhotonTargets.Others, titanPt);
-        photonView.RPC("changeHumanPt", PhotonTargets.Others, humanPt);
+        photonView.RPC(Rpc.TitanOverCheckpoint, PhotonTargets.Others, titanPt);
+        photonView.RPC(Rpc.HumanOverCheckpoint, PhotonTargets.Others, humanPt);
     }
 
     private void titanGetsPoint()
@@ -277,7 +278,7 @@ public class PVPcheckPoint : Photon.MonoBehaviour
             }
             this.state = CheckPointState.Titan;
             object[] parameters = new object[] { 2 };
-            photonView.RPC("changeState", PhotonTargets.All, parameters);
+            photonView.RPC(Rpc.CheckpointChangeState, PhotonTargets.All, parameters);
             FengGameManagerMKII component = FengGameManagerMKII.instance;
             component.PVPtitanScore += 2;
             FengGameManagerMKII.instance.CheckPVPPoints();
@@ -321,7 +322,7 @@ public class PVPcheckPoint : Photon.MonoBehaviour
                 {
                     this.state = CheckPointState.Non;
                     object[] parameters = new object[] { 0 };
-                    photonView.RPC("changeState", PhotonTargets.All, parameters);
+                    photonView.RPC(Rpc.CheckpointChangeState, PhotonTargets.All, parameters);
                 }
             }
         }

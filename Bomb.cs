@@ -1,4 +1,5 @@
 using System.Collections;
+using Mod;
 using Mod.GameSettings;
 using UnityEngine;
 
@@ -71,14 +72,14 @@ public class Bomb : Photon.MonoBehaviour
                     if (Player.Self.Properties.RCTeam == 0 || Player.Self.Properties.RCTeam != owner.Properties.RCTeam)
                     {
                         gameObject.GetComponent<HERO>().markDie();
-                        gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
+                        gameObject.GetComponent<HERO>().photonView.RPC(Rpc.DieRC, PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
                         FengGameManagerMKII.instance.PlayerKillInfoUpdate(Player.Self, 0);
                     }
                 }
                 else
                 {
                     gameObject.GetComponent<HERO>().markDie();
-                    gameObject.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
+                    gameObject.GetComponent<HERO>().photonView.RPC(Rpc.DieRC, PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
                     FengGameManagerMKII.instance.PlayerKillInfoUpdate(Player.Self, 0);
                 }
             }

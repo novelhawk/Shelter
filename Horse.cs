@@ -1,3 +1,4 @@
+using Mod;
 using UnityEngine;
 
 public class Horse : Photon.MonoBehaviour
@@ -16,7 +17,7 @@ public class Horse : Photon.MonoBehaviour
         animation.CrossFade(aniName, time);
         if (PhotonNetwork.connected && photonView.isMine)
         {
-            photonView.RPC("netCrossFade", PhotonTargets.Others, aniName, time);
+            photonView.RPC(Rpc.CrossFade, PhotonTargets.Others, aniName, time);
         }
     }
 
@@ -98,7 +99,7 @@ public class Horse : Photon.MonoBehaviour
                     if (!this.dust.GetComponent<ParticleSystem>().enableEmission)
                     {
                         this.dust.GetComponent<ParticleSystem>().enableEmission = true;
-                        photonView.RPC("setDust", PhotonTargets.Others, true);
+                        photonView.RPC(Rpc.HorseParticles, PhotonTargets.Others, true);
                     }
                 }
                 else
@@ -115,7 +116,7 @@ public class Horse : Photon.MonoBehaviour
                     {
                         this.dust.GetComponent<ParticleSystem>().enableEmission = false;
                         object[] objArray2 = new object[] { false };
-                        photonView.RPC("setDust", PhotonTargets.Others, objArray2);
+                        photonView.RPC(Rpc.HorseParticles, PhotonTargets.Others, objArray2);
                     }
                 }
             }
@@ -156,7 +157,7 @@ public class Horse : Photon.MonoBehaviour
                 {
                     this.dust.GetComponent<ParticleSystem>().enableEmission = true;
                     object[] objArray3 = new object[] { true };
-                    photonView.RPC("setDust", PhotonTargets.Others, objArray3);
+                    photonView.RPC(Rpc.HorseParticles, PhotonTargets.Others, objArray3);
                 }
             }
             else
@@ -169,7 +170,7 @@ public class Horse : Photon.MonoBehaviour
                 {
                     this.dust.GetComponent<ParticleSystem>().enableEmission = false;
                     object[] objArray4 = new object[] { false };
-                    photonView.RPC("setDust", PhotonTargets.Others, objArray4);
+                    photonView.RPC(Rpc.HorseParticles, PhotonTargets.Others, objArray4);
                 }
             }
             float num = -Mathf.DeltaAngle(FengMath.getHorizontalAngle(transform.position, this.setPoint), gameObject.transform.rotation.eulerAngles.y - 90f);
@@ -259,7 +260,7 @@ public class Horse : Photon.MonoBehaviour
         animation.Play(aniName);
         if (PhotonNetwork.connected && photonView.isMine)
         {
-            photonView.RPC("netPlayAnimation", PhotonTargets.Others, aniName);
+            photonView.RPC(Rpc.PlayAnimation, PhotonTargets.Others, aniName);
         }
     }
 
@@ -269,7 +270,7 @@ public class Horse : Photon.MonoBehaviour
         animation[aniName].normalizedTime = normalizedTime;
         if (PhotonNetwork.connected && photonView.isMine)
         {
-            photonView.RPC("netPlayAnimationAt", PhotonTargets.Others, aniName, normalizedTime);
+            photonView.RPC(Rpc.PlayAnimationAt, PhotonTargets.Others, aniName, normalizedTime);
         }
     }
 
@@ -300,7 +301,7 @@ public class Horse : Photon.MonoBehaviour
                 if (!this.dust.GetComponent<ParticleSystem>().enableEmission)
                 {
                     this.dust.GetComponent<ParticleSystem>().enableEmission = true;
-                    photonView.RPC("setDust", PhotonTargets.Others, true);
+                    photonView.RPC(Rpc.HorseParticles, PhotonTargets.Others, true);
                 }
             }
             else
@@ -313,7 +314,7 @@ public class Horse : Photon.MonoBehaviour
                 {
                     this.dust.GetComponent<ParticleSystem>().enableEmission = false;
                     object[] objArray2 = new object[] { false };
-                    photonView.RPC("setDust", PhotonTargets.Others, objArray2);
+                    photonView.RPC(Rpc.HorseParticles, PhotonTargets.Others, objArray2);
                 }
             }
         }
@@ -355,7 +356,7 @@ public class Horse : Photon.MonoBehaviour
             {
                 this.dust.GetComponent<ParticleSystem>().enableEmission = false;
                 object[] objArray3 = new object[] { false };
-                photonView.RPC("setDust", PhotonTargets.Others, objArray3);
+                photonView.RPC(Rpc.HorseParticles, PhotonTargets.Others, objArray3);
             }
             rigidbody.AddForce(-rigidbody.velocity, ForceMode.VelocityChange);
         }

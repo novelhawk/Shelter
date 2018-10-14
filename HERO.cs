@@ -236,7 +236,7 @@ public class HERO : Photon.MonoBehaviour
         GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(gameObject, true, false);
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer)
         {
-            photonView.RPC("backToHumanRPC", PhotonTargets.Others, new object[0]);
+            photonView.RPC(Rpc.SwitchToHuman, PhotonTargets.Others, new object[0]);
         }
     }
 
@@ -732,7 +732,7 @@ public class HERO : Photon.MonoBehaviour
         this.customAnimationSpeed();
         this.playAnimation(this.currentPlayingClipName());
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
-            photonView.RPC("netContinueAnimation", PhotonTargets.Others);
+            photonView.RPC(Rpc.ContinueAnimation, PhotonTargets.Others);
     }
 
     public void crossFade(string aniName, float time)
@@ -740,7 +740,7 @@ public class HERO : Photon.MonoBehaviour
         this.currentAnimation = aniName;
         animation.CrossFade(aniName, time);
         if (PhotonNetwork.connected && photonView.isMine)
-            photonView.RPC("netCrossFade", PhotonTargets.Others, aniName, time);
+            photonView.RPC(Rpc.CrossFade, PhotonTargets.Others, aniName, time);
     }
 
     public string currentPlayingClipName()
@@ -928,12 +928,12 @@ public class HERO : Photon.MonoBehaviour
         this.titanForm = true;
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer)
         {
-            photonView.RPC("whoIsMyErenTitan", PhotonTargets.Others, this.eren_titan.GetPhotonView().viewID);
+            photonView.RPC(Rpc.SetErenTitanOwner, PhotonTargets.Others, this.eren_titan.GetPhotonView().viewID);
         }
         if (this.smoke_3dmg.enableEmission && IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
         {
             object[] objArray2 = new object[] { false };
-            photonView.RPC("net3DMGSMOKE", PhotonTargets.Others, objArray2);
+            photonView.RPC(Rpc.GasEmission, PhotonTargets.Others, objArray2);
         }
         this.smoke_3dmg.enableEmission = false;
     }
@@ -1643,7 +1643,7 @@ public class HERO : Photon.MonoBehaviour
                     this.useGas(this.useGasSpeed * Time.deltaTime);
                     if (!this.smoke_3dmg.enableEmission && IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
                     {
-                        photonView.RPC("net3DMGSMOKE", PhotonTargets.Others, true);
+                        photonView.RPC(Rpc.GasEmission, PhotonTargets.Others, true);
                     }
                     this.smoke_3dmg.enableEmission = true;
                 }
@@ -1652,7 +1652,7 @@ public class HERO : Photon.MonoBehaviour
                     if (this.smoke_3dmg.enableEmission && IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
                     {
                         object[] objArray3 = new object[] { false };
-                        photonView.RPC("net3DMGSMOKE", PhotonTargets.Others, objArray3);
+                        photonView.RPC(Rpc.GasEmission, PhotonTargets.Others, objArray3);
                     }
                     this.smoke_3dmg.enableEmission = false;
                 }
@@ -1841,7 +1841,7 @@ public class HERO : Photon.MonoBehaviour
 
     public void hookedByHuman(int hooker, Vector3 hookPosition)
     {
-        photonView.RPC("RPCHookedByHuman", photonView.owner, hooker, hookPosition);
+        photonView.RPC(Rpc.HookedByHuman, photonView.owner, hooker, hookPosition);
     }
 
     [RPC]
@@ -2263,7 +2263,7 @@ public class HERO : Photon.MonoBehaviour
                     {
                         viewID = this.myHorse.GetPhotonView().viewID;
                     }
-                    photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, viewID, url.ToString());
+                    photonView.RPC(Rpc.LoadSkin, PhotonTargets.AllBuffered, viewID, url.ToString());
                 }
             }
         }
@@ -2813,7 +2813,7 @@ public class HERO : Photon.MonoBehaviour
         {
             if (info.sender.IsIgnored)
             {
-                photonView.RPC("backToHumanRPC", PhotonTargets.Others);
+                photonView.RPC(Rpc.SwitchToHuman, PhotonTargets.Others);
                 return;
             }
             if (!info.sender.IsLocal && !info.sender.IsMasterClient)
@@ -2912,7 +2912,7 @@ public class HERO : Photon.MonoBehaviour
                 { PlayerProperty.Dead, true },
                 { PlayerProperty.Deaths, Player.Self.Properties.Deaths + 1 }
             });
-            FengGameManagerMKII.instance.photonView.RPC("someOneIsDead", PhotonTargets.MasterClient, titanName != string.Empty ? 1 : 0);
+            FengGameManagerMKII.instance.photonView.RPC(Rpc.OnPlayerDeath, PhotonTargets.MasterClient, titanName != string.Empty ? 1 : 0);
             if (viewID != -1)
             {
                 PhotonView view2 = PhotonView.Find(viewID);
@@ -2944,7 +2944,7 @@ public class HERO : Photon.MonoBehaviour
         {
             if (info.sender.IsIgnored)
             {
-                photonView.RPC("backToHumanRPC", PhotonTargets.Others, new object[0]);
+                photonView.RPC(Rpc.SwitchToHuman, PhotonTargets.Others, new object[0]);
                 return;
             }
             if (!info.sender.IsLocal && !info.sender.IsMasterClient)
@@ -3041,7 +3041,7 @@ public class HERO : Photon.MonoBehaviour
             {
                 FengGameManagerMKII.instance.SendKillInfo(true, "[FFC000][" + info?.sender.ID + "][FFFFFF]" + titanName, false, Player.Self.Properties.Name, 0);
             }
-            FengGameManagerMKII.instance.photonView.RPC("someOneIsDead", PhotonTargets.MasterClient, titanName != string.Empty ? 1 : 0);
+            FengGameManagerMKII.instance.photonView.RPC(Rpc.OnPlayerDeath, PhotonTargets.MasterClient, titanName != string.Empty ? 1 : 0);
         }
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
         {
@@ -3126,7 +3126,7 @@ public class HERO : Photon.MonoBehaviour
                 { PlayerProperty.Dead, true },
                 { PlayerProperty.Deaths, Player.Self.Properties.Deaths + 1 }
             });
-            FengGameManagerMKII.instance.photonView.RPC("someOneIsDead", PhotonTargets.MasterClient, titanName != string.Empty ? 1 : 0);
+            FengGameManagerMKII.instance.photonView.RPC(Rpc.OnPlayerDeath, PhotonTargets.MasterClient, titanName != string.Empty ? 1 : 0);
             if (viewID != -1)
             {
                 PhotonView view = PhotonView.Find(viewID);
@@ -3331,7 +3331,7 @@ public class HERO : Photon.MonoBehaviour
                 current.speed = 0f;
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
         {
-            photonView.RPC("netPauseAnimation", PhotonTargets.Others, new object[0]);
+            photonView.RPC(Rpc.PauseAnimation, PhotonTargets.Others, new object[0]);
         }
     }
 
@@ -3341,7 +3341,7 @@ public class HERO : Photon.MonoBehaviour
         animation.Play(aniName);
         if (PhotonNetwork.connected && photonView.isMine)
         {
-            photonView.RPC("netPlayAnimation", PhotonTargets.Others, aniName);
+            photonView.RPC(Rpc.PlayAnimation, PhotonTargets.Others, aniName);
         }
     }
 
@@ -3352,7 +3352,7 @@ public class HERO : Photon.MonoBehaviour
         animation[aniName].normalizedTime = normalizedTime;
         if (PhotonNetwork.connected && photonView.isMine)
         {
-            photonView.RPC("netPlayAnimationAt", PhotonTargets.Others, aniName, normalizedTime);
+            photonView.RPC(Rpc.PlayAnimationAt, PhotonTargets.Others, aniName, normalizedTime);
         }
     }
 
@@ -3360,7 +3360,7 @@ public class HERO : Photon.MonoBehaviour
     {
         if (this.hookSomeOne && this.hookTarget != null)
         {
-            this.hookTarget.GetPhotonView().RPC("badGuyReleaseMe", this.hookTarget.GetPhotonView().owner, new object[0]);
+            this.hookTarget.GetPhotonView().RPC(Rpc.ReleasePlayerHook, this.hookTarget.GetPhotonView().owner, new object[0]);
             this.hookTarget = null;
             this.hookSomeOne = false;
         }
@@ -3440,7 +3440,7 @@ public class HERO : Photon.MonoBehaviour
         {
             this.hookBySomeOne = false;
             this.badGuy = null;
-            view.RPC("hookFail", view.owner);
+            view.RPC(Rpc.HookFailed, view.owner);
         }
     }
 
@@ -3585,17 +3585,17 @@ public class HERO : Photon.MonoBehaviour
             if (FengGameManagerMKII.settings.IsFriendlyMode)
             {
                 if (val != 1)
-                    photonView.RPC("setMyTeam", PhotonTargets.AllBuffered, 1);
+                    photonView.RPC(Rpc.SetTeam, PhotonTargets.AllBuffered, 1);
             }
             else switch (FengGameManagerMKII.settings.PVPMode)
             {
                 case PVPMode.Teams:
                     if (photonView.owner.Properties.RCTeam.HasValue && val != photonView.owner.Properties.RCTeam)
-                        photonView.RPC("setMyTeam", PhotonTargets.AllBuffered, photonView.owner.Properties.RCTeam);
+                        photonView.RPC(Rpc.SetTeam, PhotonTargets.AllBuffered, photonView.owner.Properties.RCTeam);
                     break;
                 
                 case PVPMode.FFA when val != photonView.owner.ID:
-                    photonView.RPC("setMyTeam", PhotonTargets.AllBuffered, photonView.owner.ID);
+                    photonView.RPC(Rpc.SetTeam, PhotonTargets.AllBuffered, photonView.owner.ID);
                     break;
             }
         }
@@ -3744,7 +3744,7 @@ public class HERO : Photon.MonoBehaviour
         this.SetMyTeam(team);
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
-            photonView.RPC("setMyTeam", PhotonTargets.OthersBuffered, team);
+            photonView.RPC(Rpc.SetTeam, PhotonTargets.OthersBuffered, team);
             Player.Self.SetCustomProperties(new Hashtable
             {
                 { PlayerProperty.Team, team }
@@ -3756,7 +3756,7 @@ public class HERO : Photon.MonoBehaviour
     {
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
-            photonView.RPC("setMyTeam", PhotonTargets.AllBuffered, team);
+            photonView.RPC(Rpc.SetTeam, PhotonTargets.AllBuffered, team);
             Player.Self.SetCustomProperties(new Hashtable
             {
                 { PlayerProperty.Team, team }
@@ -3951,7 +3951,7 @@ public class HERO : Photon.MonoBehaviour
             }
             if (this.smoke_3dmg.enableEmission && IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
             {
-                photonView.RPC("net3DMGSMOKE", PhotonTargets.Others, false);
+                photonView.RPC(Rpc.GasEmission, PhotonTargets.Others, false);
             }
             this.smoke_3dmg.enableEmission = false;
             rigidbody.velocity = Vector3.zero;
@@ -3971,7 +3971,7 @@ public class HERO : Photon.MonoBehaviour
             this.myCannonRegion = null;
             Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(this.myCannon.transform.Find("Barrel").Find("FiringPoint").gameObject, true, false);
             Camera.main.fieldOfView = 55f;
-            photonView.RPC("SetMyCannon", PhotonTargets.OthersBuffered, new object[] { this.myCannon.GetPhotonView().viewID });
+            photonView.RPC(Rpc.SetMyCannon, PhotonTargets.OthersBuffered, new object[] { this.myCannon.GetPhotonView().viewID });
             this.skillCDLastCannon = this.skillCDLast;
             this.skillCDLast = 3.5f;
             this.skillCDDuration = 3.5f;
@@ -4023,7 +4023,7 @@ public class HERO : Photon.MonoBehaviour
             {
                 circleColor = Color.green;
                 GetComponent<SmoothSyncMovement>().PhotonCamera = true;
-                photonView.RPC("SetMyPhotonCamera", PhotonTargets.OthersBuffered, PlayerPrefs.GetFloat("cameraDistance") + 0.3f);
+                photonView.RPC(Rpc.SetMyPhotonCamera, PhotonTargets.OthersBuffered, PlayerPrefs.GetFloat("cameraDistance") + 0.3f);
             }
             else
             {
@@ -4189,7 +4189,7 @@ public class HERO : Photon.MonoBehaviour
                     {
                         if (Shelter.InputManager.IsDown(InputAction.EnterCannon))
                         {
-                            this.myCannonRegion.photonView.RPC("RequestControlRPC", PhotonTargets.MasterClient, new object[] { photonView.viewID });
+                            this.myCannonRegion.photonView.RPC(Rpc.RequestControl, PhotonTargets.MasterClient, new object[] { photonView.viewID });
                         }
                     }
                     if (this.State == HeroState.Grab && !this.useGun)
@@ -4217,14 +4217,14 @@ public class HERO : Photon.MonoBehaviour
                                 }
                                 else
                                 {
-                                    photonView.RPC("netSetIsGrabbedFalse", PhotonTargets.All, new object[0]);
+                                    photonView.RPC(Rpc.GrabRemove, PhotonTargets.All, new object[0]);
                                     if (PhotonNetwork.isMasterClient)
                                     {
                                         this.titanWhoGrabMe.GetComponent<TITAN>().GrabbedTargetEscape();
                                     }
                                     else
                                     {
-                                        PhotonView.Find(this.titanWhoGrabMeID).RPC("grabbedTargetEscape", PhotonTargets.MasterClient, new object[0]);
+                                        PhotonView.Find(this.titanWhoGrabMeID).RPC(Rpc.GrabEscape, PhotonTargets.MasterClient, new object[0]);
                                     }
                                 }
                             }
@@ -4256,14 +4256,14 @@ public class HERO : Photon.MonoBehaviour
                                         }
                                         else
                                         {
-                                            photonView.RPC("netSetIsGrabbedFalse", PhotonTargets.All, new object[0]);
+                                            photonView.RPC(Rpc.GrabRemove, PhotonTargets.All, new object[0]);
                                             if (PhotonNetwork.isMasterClient)
                                             {
                                                 this.titanWhoGrabMe.GetComponent<TITAN>().GrabbedTargetEscape();
                                             }
                                             else
                                             {
-                                                PhotonView.Find(this.titanWhoGrabMeID).photonView.RPC("grabbedTargetEscape", PhotonTargets.MasterClient, new object[0]);
+                                                PhotonView.Find(this.titanWhoGrabMeID).photonView.RPC(Rpc.GrabEscape, PhotonTargets.MasterClient, new object[0]);
                                             }
                                         }
                                         this.erenTransform();
@@ -4875,7 +4875,7 @@ public class HERO : Photon.MonoBehaviour
                                         {
                                             if (!PhotonNetwork.isMasterClient)
                                             {
-                                                photonView.RPC("netTauntAttack", PhotonTargets.MasterClient, 5f, 100f);
+                                                photonView.RPC(Rpc.TauntAttack, PhotonTargets.MasterClient, 5f, 100f);
                                             }
                                             else
                                             {
@@ -4895,7 +4895,7 @@ public class HERO : Photon.MonoBehaviour
                                         {
                                             if (!PhotonNetwork.isMasterClient)
                                             {
-                                                photonView.RPC("netlaughAttack", PhotonTargets.MasterClient, new object[0]);
+                                                photonView.RPC(Rpc.LaughAttack, PhotonTargets.MasterClient, new object[0]);
                                             }
                                             else
                                             {

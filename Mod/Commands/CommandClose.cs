@@ -16,7 +16,7 @@ namespace Mod.Commands
 
             PhotonNetwork.RaiseEvent(203, null, true, new RaiseEventOptions { TargetActors = new[] { player.ID } });
             PhotonNetwork.DestroyPlayerObjects(player);
-            FengGameManagerMKII.instance.photonView.RPC("showResult", player, "", "", "", "", "", "Kicked by ShelterMod");
+            FengGameManagerMKII.instance.photonView.RPC(Rpc.ShowResult, player, "", "", "", "", "", "Kicked by ShelterMod");
             Notify.New("Player has been kicked!", 3000);
         }
     }

@@ -301,7 +301,7 @@ public class TITAN : Photon.MonoBehaviour
         {
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
             {
-                photonView.RPC("laugh", PhotonTargets.All, 0f);
+                photonView.RPC(Rpc.Laugh, PhotonTargets.All, 0f);
             }
             else if (this.state == TitanState.Idle || this.state == TitanState.Turning || this.state == TitanState.Chasing)
             {
@@ -424,7 +424,7 @@ public class TITAN : Photon.MonoBehaviour
         animation.CrossFade(aniName, time);
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
-            photonView.RPC("netCrossFade", PhotonTargets.Others, aniName, time);
+            photonView.RPC(Rpc.CrossFade, PhotonTargets.Others, aniName, time);
         }
     }
 
@@ -478,7 +478,7 @@ public class TITAN : Photon.MonoBehaviour
         }
         else
         {
-            photonView.RPC("dieBlowRPC", PhotonTargets.All, attacker, hitPauseTime);
+            photonView.RPC(Rpc.Explode, PhotonTargets.All, attacker, hitPauseTime);
         }
     }
 
@@ -499,7 +499,7 @@ public class TITAN : Photon.MonoBehaviour
             {
                 if (this.grabbedTarget != null)
                 {
-                    this.grabbedTarget.GetPhotonView().RPC("netUngrabbed", PhotonTargets.All, new object[0]);
+                    this.grabbedTarget.GetPhotonView().RPC(Rpc.netUngrabbed, PhotonTargets.All, new object[0]);
                 }
                 if (this.nonAI)
                 {
@@ -551,7 +551,7 @@ public class TITAN : Photon.MonoBehaviour
         }
         else
         {
-            FengGameManagerMKII.instance.photonView.RPC("netShowDamage", view.owner, new object[] { this.speed });
+            FengGameManagerMKII.instance.photonView.RPC(Rpc.ShowDamage, view.owner, new object[] { this.speed });
         }
     }
 
@@ -569,7 +569,7 @@ public class TITAN : Photon.MonoBehaviour
             }
             else
             {
-                photonView.RPC("dieHeadBlowRPC", PhotonTargets.All, attacker, hitPauseTime);
+                photonView.RPC(Rpc.HeadBlow, PhotonTargets.All, attacker, hitPauseTime);
             }
         }
     }
@@ -621,7 +621,7 @@ public class TITAN : Photon.MonoBehaviour
             {
                 if (this.grabbedTarget != null)
                 {
-                    this.grabbedTarget.GetPhotonView().RPC("netUngrabbed", PhotonTargets.All, new object[0]);
+                    this.grabbedTarget.GetPhotonView().RPC(Rpc.netUngrabbed, PhotonTargets.All, new object[0]);
                 }
                 if (this.nonAI)
                 {
@@ -674,9 +674,9 @@ public class TITAN : Photon.MonoBehaviour
             this.GrabToRight();
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
             {
-                photonView.RPC("grabToRight", PhotonTargets.Others, new object[0]);
-                grabTarget.GetPhotonView().RPC("netPlayAnimation", PhotonTargets.All, "grabbed");
-                grabTarget.GetPhotonView().RPC("netGrabbed", PhotonTargets.All, photonView.viewID, false);
+                photonView.RPC(Rpc.GrabRight, PhotonTargets.Others, new object[0]);
+                grabTarget.GetPhotonView().RPC(Rpc.PlayAnimation, PhotonTargets.All, "grabbed");
+                grabTarget.GetPhotonView().RPC(Rpc.Grabbed, PhotonTargets.All, photonView.viewID, false);
             }
             else
             {
@@ -693,9 +693,9 @@ public class TITAN : Photon.MonoBehaviour
             this.GrabToLeft();
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
             {
-                photonView.RPC("grabToLeft", PhotonTargets.Others, new object[0]);
-                grabTarget.GetPhotonView().RPC("netPlayAnimation", PhotonTargets.All, "grabbed");
-                grabTarget.GetPhotonView().RPC("netGrabbed", PhotonTargets.All, photonView.viewID, true);
+                photonView.RPC(Rpc.GrabLeft, PhotonTargets.Others, new object[0]);
+                grabTarget.GetPhotonView().RPC(Rpc.PlayAnimation, PhotonTargets.All, "grabbed");
+                grabTarget.GetPhotonView().RPC(Rpc.Grabbed, PhotonTargets.All, photonView.viewID, true);
             }
             else
             {
@@ -817,7 +817,7 @@ public class TITAN : Photon.MonoBehaviour
                     if (Vector3.Distance(obj2.transform.position, position) < FengGameManagerMKII.settings.ExplodeRadius)
                     {
                         obj2.GetComponent<HERO>().markDie();
-                        obj2.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, new object[] { -1, "Server " });
+                        obj2.GetComponent<HERO>().photonView.RPC(Rpc.DieRC, PhotonTargets.All, new object[] { -1, "Server " });
                     }
                 }
             }
@@ -853,9 +853,9 @@ public class TITAN : Photon.MonoBehaviour
             if (myHero != this.myHero && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
             {
                 if (this.myHero == null)
-                    photonView.RPC("setMyTarget", PhotonTargets.Others, -1);
+                    photonView.RPC(Rpc.SetTarget, PhotonTargets.Others, -1);
                 else
-                    photonView.RPC("setMyTarget", PhotonTargets.Others, myHero.GetPhotonView().viewID);
+                    photonView.RPC(Rpc.SetTarget, PhotonTargets.Others, myHero.GetPhotonView().viewID);
             }
             this.tauntTime = 5f;
         }
@@ -868,9 +868,9 @@ public class TITAN : Photon.MonoBehaviour
         if (this.myHero != oldHero && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
             if (this.myHero == null)
-                photonView.RPC("setMyTarget", PhotonTargets.Others, -1);
+                photonView.RPC(Rpc.SetTarget, PhotonTargets.Others, -1);
             else 
-                photonView.RPC("setMyTarget", PhotonTargets.Others, myHero.GetPhotonView().viewID);
+                photonView.RPC(Rpc.SetTarget, PhotonTargets.Others, myHero.GetPhotonView().viewID);
         }
         this.oldHeadRotation = this.head.rotation;
     }
@@ -985,7 +985,7 @@ public class TITAN : Photon.MonoBehaviour
                                     else if (!(IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer || !photonView.isMine || obj2.GetComponent<HERO>().HasDied()))
                                     {
                                         obj2.GetComponent<HERO>().markDie();
-                                        obj2.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, 
+                                        obj2.GetComponent<HERO>().photonView.RPC(Rpc.Die, PhotonTargets.All, 
                                             (obj2.transform.position - position) * 15f * this.myLevel, 
                                             true, 
                                             !this.nonAI ? -1 : photonView.viewID, 
@@ -1448,7 +1448,7 @@ public class TITAN : Photon.MonoBehaviour
                         if (!this.asClientLookTarget)
                         {
                             this.asClientLookTarget = true;
-                            photonView.RPC("setIfLookTarget", PhotonTargets.Others, true);
+                            photonView.RPC(Rpc.SetLookTarget, PhotonTargets.Others, true);
                         }
                         flag2 = true;
                     }
@@ -1456,7 +1456,7 @@ public class TITAN : Photon.MonoBehaviour
                     {
                         this.asClientLookTarget = false;
                         object[] objArray3 = new object[] { false };
-                        photonView.RPC("setIfLookTarget", PhotonTargets.Others, objArray3);
+                        photonView.RPC(Rpc.SetLookTarget, PhotonTargets.Others, objArray3);
                     }
                     if (this.state == TitanState.Attacking || this.state == TitanState.Hitting || this.state == TitanState.Blinded)
                     {
@@ -1539,7 +1539,7 @@ public class TITAN : Photon.MonoBehaviour
         this.needFreshCorePosition = true;
         if (photonView.isMine && this.grabbedTarget != null)
         {
-            this.grabbedTarget.GetPhotonView().RPC("netUngrabbed", PhotonTargets.All, new object[0]);
+            this.grabbedTarget.GetPhotonView().RPC(Rpc.netUngrabbed, PhotonTargets.All, new object[0]);
         }
     }
 
@@ -1549,7 +1549,7 @@ public class TITAN : Photon.MonoBehaviour
         {
             if (this.grabbedTarget != null)
             {
-                this.grabbedTarget.GetPhotonView().RPC("netUngrabbed", PhotonTargets.All, new object[0]);
+                this.grabbedTarget.GetPhotonView().RPC(Rpc.netUngrabbed, PhotonTargets.All, new object[0]);
             }
             this.GetDown();
         }
@@ -1568,7 +1568,7 @@ public class TITAN : Photon.MonoBehaviour
                 {
                     if (photonView.isMine && this.grabbedTarget != null)
                     {
-                        this.grabbedTarget.GetPhotonView().RPC("netUngrabbed", PhotonTargets.All, new object[0]);
+                        this.grabbedTarget.GetPhotonView().RPC(Rpc.netUngrabbed, PhotonTargets.All, new object[0]);
                     }
                     this.GetDown();
                 }
@@ -1592,7 +1592,7 @@ public class TITAN : Photon.MonoBehaviour
             {
                 if (photonView.isMine && this.grabbedTarget != null)
                 {
-                    this.grabbedTarget.GetPhotonView().RPC("netUngrabbed", PhotonTargets.All, new object[0]);
+                    this.grabbedTarget.GetPhotonView().RPC(Rpc.netUngrabbed, PhotonTargets.All, new object[0]);
                 }
                 if (!this.hasDie)
                 {
@@ -1609,7 +1609,7 @@ public class TITAN : Photon.MonoBehaviour
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                 this.hit("hit_eren_L", attacker, hitPauseTime);
             else
-                photonView.RPC("hitLRPC", PhotonTargets.All, attacker, hitPauseTime);
+                photonView.RPC(Rpc.NeckHitLeft, PhotonTargets.All, attacker, hitPauseTime);
         }
     }
 
@@ -1631,7 +1631,7 @@ public class TITAN : Photon.MonoBehaviour
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                 this.hit("hit_eren_R", attacker, hitPauseTime);
             else
-                photonView.RPC("hitRRPC", PhotonTargets.All, attacker, hitPauseTime);
+                photonView.RPC(Rpc.NeckHitRight, PhotonTargets.All, attacker, hitPauseTime);
         }
     }
 
@@ -1697,11 +1697,11 @@ public class TITAN : Photon.MonoBehaviour
                     target.GetComponent<HERO>().markDie();
                     if (this.nonAI)
                     {
-                        target.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, photonView.viewID, name);
+                        target.GetComponent<HERO>().photonView.RPC(Rpc.DieRC, PhotonTargets.All, photonView.viewID, name);
                     }
                     else
                     {
-                        target.GetComponent<HERO>().photonView.RPC("netDie2", PhotonTargets.All, -1, name);
+                        target.GetComponent<HERO>().photonView.RPC(Rpc.DieRC, PhotonTargets.All, -1, name);
                     }
                 }
             }
@@ -1868,7 +1868,7 @@ public class TITAN : Photon.MonoBehaviour
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                 StartCoroutine(this.LoadSkinEnumerator(body, eye));
             else
-                photonView.RPC("loadskinRPC", PhotonTargets.AllBuffered, body, eye);
+                photonView.RPC(Rpc.LoadSkin, PhotonTargets.AllBuffered, body, eye);
         }
     }
 
@@ -2218,7 +2218,7 @@ public class TITAN : Photon.MonoBehaviour
         animation.Play(aniName);
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
-            photonView.RPC("netPlayAnimation", PhotonTargets.Others, aniName);
+            photonView.RPC(Rpc.PlayAnimation, PhotonTargets.Others, aniName);
         }
     }
 
@@ -2228,7 +2228,7 @@ public class TITAN : Photon.MonoBehaviour
         animation[aniName].normalizedTime = normalizedTime;
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
-            photonView.RPC("netPlayAnimationAt", PhotonTargets.Others, aniName, normalizedTime);
+            photonView.RPC(Rpc.PlayAnimationAt, PhotonTargets.Others, aniName, normalizedTime);
         }
     }
 
@@ -2237,7 +2237,7 @@ public class TITAN : Photon.MonoBehaviour
         this.PlaysoundRPC(sndname);
         if (photonView.isMine)
         {
-            photonView.RPC("playsoundRPC", PhotonTargets.Others, sndname);
+            photonView.RPC(Rpc.PlaySound, PhotonTargets.Others, sndname);
         }
     }
 
@@ -2452,7 +2452,7 @@ public class TITAN : Photon.MonoBehaviour
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
         {
             object[] parameters = new object[] { num };
-            photonView.RPC("netSetAbnormalType", PhotonTargets.AllBuffered, parameters);
+            photonView.RPC(Rpc.SetAbnormalType, PhotonTargets.AllBuffered, parameters);
         }
         else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
         {
@@ -2621,7 +2621,7 @@ public class TITAN : Photon.MonoBehaviour
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
         {
             object[] parameters = new object[] { this.myLevel, FengGameManagerMKII.instance.difficulty, Random.Range(0, 4) };
-            photonView.RPC("netSetLevel", PhotonTargets.AllBuffered, parameters);
+            photonView.RPC(Rpc.SetLevel, PhotonTargets.AllBuffered, parameters);
             animation.cullingType = AnimationCullingType.AlwaysAnimate;
         }
         else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
@@ -2631,17 +2631,13 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
-    private void SetMyTarget(int ID)
+    private void SetMyTarget(int id)
     {
-        if (ID == -1)
-        {
+        if (id == -1)
             this.myHero = null;
-        }
-        PhotonView view = PhotonView.Find(ID);
-        if (view != null)
-        {
+        
+        if (PhotonView.TryParse(id, out PhotonView view))
             this.myHero = view.gameObject;
-        }
     }
 
     public void setRoute(GameObject route)
@@ -2736,7 +2732,7 @@ public class TITAN : Photon.MonoBehaviour
         this.healthTime = Time.time;
         if (this.currentHealth > 0 && photonView.isMine)
         {
-            photonView.RPC("labelRPC", PhotonTargets.AllBuffered, this.currentHealth, this.maxHealth);
+            photonView.RPC(Rpc.UpdateHealthLabel, PhotonTargets.AllBuffered, this.currentHealth, this.maxHealth);
         }
         this.hasExplode = false;
         this.colliderEnabled = true;
@@ -2790,7 +2786,7 @@ public class TITAN : Photon.MonoBehaviour
                 }
                 if (this.maxHealth > 0f)
                 {
-                    photonView.RPC("labelRPC", PhotonTargets.AllBuffered, this.currentHealth, this.maxHealth);
+                    photonView.RPC(Rpc.UpdateHealthLabel, PhotonTargets.AllBuffered, this.currentHealth, this.maxHealth);
                 }
                 if (this.currentHealth < 0f)
                 {
@@ -2798,10 +2794,10 @@ public class TITAN : Photon.MonoBehaviour
                     {
                         this.OnTitanDie(view);
                     }
-                    photonView.RPC("netDie", PhotonTargets.OthersBuffered);
+                    photonView.RPC(Rpc.Die, PhotonTargets.OthersBuffered);
                     if (this.grabbedTarget != null)
                     {
-                        this.grabbedTarget.GetPhotonView().RPC("netUngrabbed", PhotonTargets.All, new object[0]);
+                        this.grabbedTarget.GetPhotonView().RPC(Rpc.netUngrabbed, PhotonTargets.All, new object[0]);
                     }
                     this.NetDie();
                     if (this.nonAI)
@@ -2815,7 +2811,7 @@ public class TITAN : Photon.MonoBehaviour
                 }
                 else
                 {
-                    FengGameManagerMKII.instance.photonView.RPC("netShowDamage", view.owner, new object[] { speed });
+                    FengGameManagerMKII.instance.photonView.RPC(Rpc.ShowDamage, view.owner, new object[] { speed });
                 }
             }
         }
@@ -2899,7 +2895,7 @@ public class TITAN : Photon.MonoBehaviour
                 this.myHero = this.whoHasTauntMe;
                 if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
                 {
-                    photonView.RPC("setMyTarget", PhotonTargets.Others, myHero.GetPhotonView().viewID);
+                    photonView.RPC(Rpc.SetTarget, PhotonTargets.Others, myHero.GetPhotonView().viewID);
                 }
             }
         }
@@ -3047,7 +3043,7 @@ public class TITAN : Photon.MonoBehaviour
                                 {
                                     obj5.GetComponent<HERO>().markDie();
                                     object[] objArray3 = new object[] { (obj5.transform.position - position) * 15f * this.myLevel, false, !this.nonAI ? -1 : photonView.viewID, name, true };
-                                    obj5.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray3);
+                                    obj5.GetComponent<HERO>().photonView.RPC(Rpc.Die, PhotonTargets.All, objArray3);
                                 }
                             }
                         }
@@ -3065,7 +3061,7 @@ public class TITAN : Photon.MonoBehaviour
                                 {
                                     obj6.GetComponent<HERO>().markDie();
                                     object[] objArray4 = new object[] { (obj6.transform.position - vector3) * 15f * this.myLevel, false, !this.nonAI ? -1 : photonView.viewID, name, true };
-                                    obj6.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray4);
+                                    obj6.GetComponent<HERO>().photonView.RPC(Rpc.Die, PhotonTargets.All, objArray4);
                                 }
                             }
                         }
@@ -3086,7 +3082,7 @@ public class TITAN : Photon.MonoBehaviour
                                 {
                                     obj7.GetComponent<HERO>().markDie();
                                     object[] objArray5 = new object[] { (obj7.transform.position - vector4) * 15f * this.myLevel, false, !this.nonAI ? -1 : photonView.viewID, name, true };
-                                    obj7.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray5);
+                                    obj7.GetComponent<HERO>().photonView.RPC(Rpc.Die, PhotonTargets.All, objArray5);
                                 }
                             }
                         }
@@ -3104,7 +3100,7 @@ public class TITAN : Photon.MonoBehaviour
                                 {
                                     obj8.GetComponent<HERO>().markDie();
                                     object[] objArray6 = new object[] { (obj8.transform.position - vector5) * 15f * this.myLevel, false, !this.nonAI ? -1 : photonView.viewID, name, true };
-                                    obj8.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray6);
+                                    obj8.GetComponent<HERO>().photonView.RPC(Rpc.Die, PhotonTargets.All, objArray6);
                                 }
                             }
                         }
@@ -3171,7 +3167,7 @@ public class TITAN : Photon.MonoBehaviour
                             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
                             {
                                 object[] objArray7 = new object[] { photonView.viewID, this.baseTransform.localScale, this.throwRock.transform.localPosition, this.myLevel };
-                                this.throwRock.GetPhotonView().RPC("initRPC", PhotonTargets.Others, objArray7);
+                                this.throwRock.GetPhotonView().RPC(Rpc.Initialize, PhotonTargets.Others, objArray7);
                             }
                         }
                         if (this.baseAnimation["attack_" + this.attackAnimation].normalizedTime >= 0.11f)
@@ -3278,7 +3274,7 @@ public class TITAN : Photon.MonoBehaviour
                                 {
                                     obj10.GetComponent<HERO>().markDie();
                                     object[] objArray8 = new object[] { (obj10.transform.position - vector13) * 15f * this.myLevel, true, !this.nonAI ? -1 : photonView.viewID, name, true };
-                                    obj10.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray8);
+                                    obj10.GetComponent<HERO>().photonView.RPC(Rpc.Die, PhotonTargets.All, objArray8);
                                 }
                                 if (this.abnormalType == AbnormalType.Crawler)
                                 {
@@ -3465,7 +3461,7 @@ public class TITAN : Photon.MonoBehaviour
                                         {
                                             obj13.GetComponent<HERO>().markDie();
                                             object[] objArray9 = new object[] { (obj13.transform.position - vector15) * 15f * this.myLevel, true, !this.nonAI ? -1 : photonView.viewID, name, true };
-                                            obj13.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, objArray9);
+                                            obj13.GetComponent<HERO>().photonView.RPC(Rpc.Die, PhotonTargets.All, objArray9);
                                         }
                                     }
                                 }

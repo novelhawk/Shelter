@@ -1,3 +1,4 @@
+using Mod;
 using UnityEngine;
 
 public class RockThrow : Photon.MonoBehaviour
@@ -59,7 +60,7 @@ public class RockThrow : Photon.MonoBehaviour
                     titanName = transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().titanName;
                 }
                 Debug.Log("rock hit player " + titanName);
-                hero.GetComponent<HERO>().photonView.RPC("netDie", PhotonTargets.All, this.v.normalized * 1000f + Vector3.up * 50f, false, myOwnerViewID, titanName, true);
+                hero.GetComponent<HERO>().photonView.RPC(Rpc.Die, PhotonTargets.All, this.v.normalized * 1000f + Vector3.up * 50f, false, myOwnerViewID, titanName, true);
             }
         }
     }
@@ -81,7 +82,7 @@ public class RockThrow : Photon.MonoBehaviour
         this.v = v1;
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
-            photonView.RPC("launchRPC", PhotonTargets.Others, this.v, this.oldP);
+            photonView.RPC(Rpc.ThrowRock, PhotonTargets.Others, this.v, this.oldP);
         }
     }
 
@@ -134,7 +135,7 @@ public class RockThrow : Photon.MonoBehaviour
                                 {
                                     Vector3 vector3 = PhotonView.Find(this.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().myOwnerViewID).transform.position;
                                 }
-                                gameObject.GetComponent<HERO>().photonView.RPC("hitAnkleRPC", PhotonTargets.All, new object[0]);
+                                gameObject.GetComponent<HERO>().photonView.RPC(Rpc.HitAnkle, PhotonTargets.All, new object[0]);
                             }
                         }
                         this.explore();
