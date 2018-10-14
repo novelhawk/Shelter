@@ -827,10 +827,7 @@ public class HERO : Photon.MonoBehaviour
             Transform transform = this.transform.Find("audio_die");
             transform.parent = null;
             transform.GetComponent<AudioSource>().Play();
-            if (PlayerPrefs.HasKey("EnableSS") && PlayerPrefs.GetInt("EnableSS") == 1)
-            {
-                GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().TakeScreenshot(this.transform.position, 0, null, 0.02f);
-            }
+            IN_GAME_MAIN_CAMERA.instance.TakeScreenshot(this.transform.position, 0, null, 0.02f);
             Destroy(gameObject);
         }
     }
@@ -3067,7 +3064,7 @@ public class HERO : Photon.MonoBehaviour
         }
     }
 
-    public void netDieLocal(Vector3 v, bool isBite, int viewID = -1, string titanName = "", bool killByTitan = true)
+    public void netDieLocal(Vector3 force, bool isBite, int viewID = -1, string titanName = "", bool killByTitan = true)
     {
         if (photonView.isMine)
         {
@@ -3106,7 +3103,7 @@ public class HERO : Photon.MonoBehaviour
             this.rightbladetrail2.Deactivate();
         }
         this.falseAttack();
-        this.BreakApart(v, isBite);
+        this.BreakApart(force, isBite);
         if (photonView.isMine)
         {
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(false);

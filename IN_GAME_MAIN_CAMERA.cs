@@ -88,24 +88,13 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         isTyping = false;
         isPausing = false;
         name = "MainCamera";
-        if (PlayerPrefs.HasKey("GameQuality"))
-        {
-            if (PlayerPrefs.GetFloat("GameQuality") >= 0.9f)
-            {
-                GetComponent<TiltShift>().enabled = true;
-            }
-            else
-            {
-                GetComponent<TiltShift>().enabled = false;
-            }
-        }
-        else
-        {
-            GetComponent<TiltShift>().enabled = true;
-        }
+        var tiltShift = GetComponent<TiltShift>();
+        tiltShift.enabled = true;
+        if (PlayerPrefs.GetFloat("GameQuality", 1f) < 0.9f)
+            tiltShift.enabled = false;
     }
 
-    private void OnApplicationFocus(bool hasFocus)
+    private void OnApplicationFocus(bool hasFocus) //TODO: Stop mouse movement while not focussed
     {
         Screen.showCursor = !hasFocus;
     }
@@ -699,6 +688,9 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     public void TakeScreenshot(Vector3 p, int dmg, GameObject target, float startTime)
     {
+        if (!ModuleManager.Enabled(nameof(ModuleSnapshot)))
+            return;
+        
         if (FengGameManagerMKII.settings.SnapshotDamage > 0 && dmg >= FengGameManagerMKII.settings.SnapshotDamage)
         {
             this.snapShotCount = 1;

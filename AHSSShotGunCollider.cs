@@ -86,7 +86,7 @@ public class AHSSShotGunCollider : MonoBehaviour
                 FEMALE_TITAN femaleTitan = item.transform.root.GetComponent<FEMALE_TITAN>();
                 COLOSSAL_TITAN colossalTitan = item.transform.root.GetComponent<COLOSSAL_TITAN>();
 
-                Vector3 velocity = this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;
+                Vector3 velocity = IN_GAME_MAIN_CAMERA.instance.main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;
                 int damage = Mathf.Max(10, (int) (velocity.magnitude * 10f * this.scoreMulti));
                 switch (IN_GAME_MAIN_CAMERA.GameType)
                 {
@@ -95,67 +95,63 @@ public class AHSSShotGunCollider : MonoBehaviour
                     case GameType.Singleplayer when titan != null && !titan.hasDie:
                         
                         FengGameManagerMKII.instance.NetShowDamage(damage, null);
-                        if (damage > item.transform.root.GetComponent<TITAN>().myLevel * 100f)
+                        if (damage > titan.myLevel * 100f)
                         {
-                            item.transform.root.GetComponent<TITAN>().die();
-                            if (PlayerPrefs.HasKey("EnableSS") && PlayerPrefs.GetInt("EnableSS") == 1)
-                                GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().TakeScreenshot(item.transform.position, damage, item.transform.root.gameObject, 0.02f);
+                            titan.die();
+                            IN_GAME_MAIN_CAMERA.instance.TakeScreenshot(item.transform.position, damage, item.transform.root.gameObject, 0.02f);
                             FengGameManagerMKII.instance.PlayerKillInfoSingleplayerUpdate(damage);
                         }
                         break;
                     
                     // Multi as MC
                     case GameType.Multiplayer when PhotonNetwork.isMasterClient && titan != null && !titan.hasDie:
-                        if (damage > item.transform.root.GetComponent<TITAN>().myLevel * 100f)
+                        if (damage > titan.myLevel * 100f)
                         {
-                            if (PlayerPrefs.HasKey("EnableSS") && PlayerPrefs.GetInt("EnableSS") == 1)
-                                GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().TakeScreenshot(item.transform.position, damage, item.transform.root.gameObject, 0.02f);
+                            IN_GAME_MAIN_CAMERA.instance.TakeScreenshot(item.transform.position, damage, item.transform.root.gameObject, 0.02f);
                         
-                            item.transform.root.GetComponent<TITAN>().TitanGetHit(transform.root.gameObject.GetPhotonView().viewID, damage);
+                            titan.TitanGetHit(transform.root.gameObject.GetPhotonView().viewID, damage);
                         }
                         break;
                     
                     // Multi as user
                     case GameType.Multiplayer when titan != null && !titan.hasDie:
-                        if (damage > item.transform.root.GetComponent<TITAN>().myLevel * 100f)
+                        if (damage > titan.myLevel * 100f)
                         {
-                            if (PlayerPrefs.HasKey("EnableSS") && PlayerPrefs.GetInt("EnableSS") == 1)
+                            if (ModuleManager.Enabled(nameof(ModuleSnapshot)))
                             {
-                                GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().TakeScreenshot(item.transform.position, damage, item.transform.root.gameObject, 0.02f);
-                                item.transform.root.GetComponent<TITAN>().asClientLookTarget = false;
+                                IN_GAME_MAIN_CAMERA.instance.TakeScreenshot(item.transform.position, damage, item.transform.root.gameObject, 0.02f);
+                                titan.asClientLookTarget = false;
                             }
                             object[] objArray2 = new object[] { transform.root.gameObject.GetPhotonView().viewID, damage };
-                            item.transform.root.GetComponent<TITAN>().photonView.RPC(Rpc.TitanGetHit, item.transform.root.GetComponent<TITAN>().photonView.owner, objArray2);
+                            titan.photonView.RPC(Rpc.TitanGetHit, titan.photonView.owner, objArray2);
                         }
                         break;
                     
                     // FEMALE TITAN
                     // Multi as MC
                     case GameType.Multiplayer when PhotonNetwork.isMasterClient && femaleTitan != null && !femaleTitan.hasDie:
-                        if (PlayerPrefs.HasKey("EnableSS") && PlayerPrefs.GetInt("EnableSS") == 1)
-                            GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().TakeScreenshot(item.transform.position, damage, null, 0.02f);
+                        IN_GAME_MAIN_CAMERA.instance.TakeScreenshot(item.transform.position, damage, null, 0.02f);
                         
-                        item.transform.root.GetComponent<FEMALE_TITAN>().TitanGetHit(transform.root.gameObject.GetPhotonView().viewID, damage);
+                        femaleTitan.TitanGetHit(transform.root.gameObject.GetPhotonView().viewID, damage);
                         break;
                     
                     // Multi as user
                     case GameType.Multiplayer when femaleTitan != null && !femaleTitan.hasDie:
-                        item.transform.root.GetComponent<FEMALE_TITAN>().photonView.RPC(Rpc.TitanGetHit, item.transform.root.GetComponent<FEMALE_TITAN>().photonView.owner, 
+                        femaleTitan.photonView.RPC(Rpc.TitanGetHit, femaleTitan.photonView.owner, 
                             transform.root.gameObject.GetPhotonView().viewID, damage);
                         break;
                     
                     // COLOSSAL TITAN
                     // Multi as MC
                     case GameType.Multiplayer when PhotonNetwork.isMasterClient && colossalTitan != null && !colossalTitan.hasDie:
-                        if (PlayerPrefs.HasKey("EnableSS") && PlayerPrefs.GetInt("EnableSS") == 1)
-                            GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().TakeScreenshot(item.transform.position, damage, null, 0.02f);
+                        IN_GAME_MAIN_CAMERA.instance.TakeScreenshot(item.transform.position, damage, null, 0.02f);
                         
-                        item.transform.root.GetComponent<COLOSSAL_TITAN>().TitanGetHit(transform.root.gameObject.GetPhotonView().viewID, damage);
+                        colossalTitan.TitanGetHit(transform.root.gameObject.GetPhotonView().viewID, damage);
                         break;
                     
                     // Multi as user
                     case GameType.Multiplayer when colossalTitan != null && !colossalTitan.hasDie:
-                        item.transform.root.GetComponent<COLOSSAL_TITAN>().photonView.RPC(Rpc.TitanGetHit, item.transform.root.GetComponent<COLOSSAL_TITAN>().photonView.owner, 
+                        colossalTitan.photonView.RPC(Rpc.TitanGetHit, colossalTitan.photonView.owner, 
                             transform.root.gameObject.GetPhotonView().viewID, damage);
                         break;
                         
@@ -171,23 +167,28 @@ public class AHSSShotGunCollider : MonoBehaviour
                 this.currentHits.Add(other.gameObject);
                 
                 GameObject eye = other.gameObject.transform.root.gameObject;
-                if (eye.GetComponent<FEMALE_TITAN>() != null && !eye.GetComponent<FEMALE_TITAN>().hasDie)
+
+                var femaleTitan = eye.GetComponent<FEMALE_TITAN>();
+                if (femaleTitan != null && !femaleTitan.hasDie)
                 {
                     if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
-                        eye.GetComponent<FEMALE_TITAN>().hitEye();
+                        femaleTitan.hitEye();
                     else if (!PhotonNetwork.isMasterClient)
-                        eye.GetComponent<FEMALE_TITAN>().photonView.RPC(Rpc.HitEye, PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID);
+                        femaleTitan.photonView.RPC(Rpc.HitEye, PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID);
                     else
-                        eye.GetComponent<FEMALE_TITAN>().HitEyeRPC(transform.root.gameObject.GetPhotonView().viewID);
+                        femaleTitan.HitEyeRPC(transform.root.gameObject.GetPhotonView().viewID);
+                    return;
                 }
-                else if (eye.GetComponent<TITAN>() != null && eye.GetComponent<TITAN>().abnormalType != AbnormalType.Crawler && !eye.GetComponent<TITAN>().hasDie)
+                
+                var titan = eye.GetComponent<TITAN>();
+                if (titan != null && titan.abnormalType != AbnormalType.Crawler && !titan.hasDie)
                 {
                     if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
-                        eye.GetComponent<TITAN>().HitEye();
+                        titan.HitEye();
                     else if (!PhotonNetwork.isMasterClient)
-                        eye.GetComponent<TITAN>().photonView.RPC(Rpc.HitEye, PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID);
-                    else if (!eye.GetComponent<TITAN>().hasDie)
-                        eye.GetComponent<TITAN>().HitEyeRPC(transform.root.gameObject.GetPhotonView().viewID);
+                        titan.photonView.RPC(Rpc.HitEye, PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID);
+                    else if (!titan.hasDie)
+                        titan.HitEyeRPC(transform.root.gameObject.GetPhotonView().viewID);
                     
                     this.ShowCriticalHitFX(other.gameObject.transform.position);
                 }
@@ -197,47 +198,51 @@ public class AHSSShotGunCollider : MonoBehaviour
         {
             currentHits.Add(other.gameObject);
             GameObject obj = other.gameObject.transform.root.gameObject;
-            Vector3 velocity = currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity - obj.rigidbody.velocity;
+            Vector3 velocity = IN_GAME_MAIN_CAMERA.instance.main_object.rigidbody.velocity - obj.rigidbody.velocity;
             int damage = Mathf.Max(10, (int) (velocity.magnitude * 10f * this.scoreMulti));
-            if (obj.GetComponent<TITAN>() != null && obj.GetComponent<TITAN>().abnormalType != AbnormalType.Crawler && !obj.GetComponent<TITAN>().hasDie)
+
+            var titan = obj.GetComponent<TITAN>();
+            var femaleTitan = obj.GetComponent<FEMALE_TITAN>();
+            
+            if (titan != null && titan.abnormalType != AbnormalType.Crawler && !titan.hasDie)
             {
                 if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
-                    obj.GetComponent<TITAN>().hitAnkle();
+                    titan.hitAnkle();
                 else if (!PhotonNetwork.isMasterClient)
-                    obj.GetComponent<TITAN>().photonView.RPC(Rpc.HitEye, PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID);
+                    titan.photonView.RPC(Rpc.HitEye, PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID);
                 else
-                    obj.GetComponent<TITAN>().hitAnkle();
+                    titan.hitAnkle();
                 
                 ShowCriticalHitFX(other.gameObject.transform.position);
             }
-            else if (obj.GetComponent<FEMALE_TITAN>() != null && !obj.GetComponent<FEMALE_TITAN>().hasDie)
+            else if (femaleTitan != null && !femaleTitan.hasDie)
             {
-                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
+                switch (IN_GAME_MAIN_CAMERA.GameType)
                 {
-                    if (obj.GetComponent<FEMALE_TITAN>() != null)
-                    {
+                    case GameType.Singleplayer:
                         if (other.gameObject.name == "ankleR")
-                            obj.GetComponent<FEMALE_TITAN>().hitAnkleR(damage);
+                            femaleTitan.hitAnkleR(damage);
                         else
-                            obj.GetComponent<FEMALE_TITAN>().hitAnkleL(damage);
-                    }
-                }
-                else
-                {
-                    if (PhotonNetwork.isMasterClient)
-                    {
-                        if (other.gameObject.name == "ankleR")
-                            obj.GetComponent<FEMALE_TITAN>().HitAnkleRRPC(transform.root.gameObject.GetPhotonView().viewID, damage);
+                            femaleTitan.hitAnkleL(damage);
+                        break;
+                    
+                    case GameType.Multiplayer:
+                        if (PhotonNetwork.isMasterClient)
+                        {
+                            if (other.gameObject.name == "ankleR")
+                                femaleTitan.HitAnkleRRPC(transform.root.gameObject.GetPhotonView().viewID, damage);
+                            else
+                                femaleTitan.HitAnkleLRPC(transform.root.gameObject.GetPhotonView().viewID, damage);    
+                        }
                         else
-                            obj.GetComponent<FEMALE_TITAN>().HitAnkleLRPC(transform.root.gameObject.GetPhotonView().viewID, damage);    
-                    }
-                    else
-                    {
-                        if (other.gameObject.name == "ankleR")
-                            obj.GetComponent<FEMALE_TITAN>().photonView.RPC(Rpc.HitRightAnkle, PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID, damage);
-                        else
-                            obj.GetComponent<FEMALE_TITAN>().photonView.RPC(Rpc.HitLeftAnkle, PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID, damage);
-                    }
+                        {
+                            if (other.gameObject.name == "ankleR")
+                                femaleTitan.photonView.RPC(Rpc.HitRightAnkle, PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID, damage);
+                            else
+                                femaleTitan.photonView.RPC(Rpc.HitLeftAnkle, PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID, damage);
+                        }
+
+                        break;
                 }
 
                 this.ShowCriticalHitFX(other.gameObject.transform.position);
@@ -247,7 +252,7 @@ public class AHSSShotGunCollider : MonoBehaviour
 
     private void ShowCriticalHitFX(Vector3 position)
     {
-        this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(0.2f, 0.3f);
+        IN_GAME_MAIN_CAMERA.instance.startShake(0.2f, 0.3f);
         
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
             Instantiate(Resources.Load("redCross1"), position, Quaternion.Euler(270f, 0f, 0f));
@@ -260,7 +265,7 @@ public class AHSSShotGunCollider : MonoBehaviour
         switch (IN_GAME_MAIN_CAMERA.GameType)
         {
             case GameType.Singleplayer:
-                this.myTeam = GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().main_object.GetComponent<HERO>().myTeam;
+                this.myTeam = IN_GAME_MAIN_CAMERA.instance.main_object.GetComponent<HERO>().myTeam;
                 break;
             
             case GameType.Multiplayer when !transform.root.gameObject.GetPhotonView().isMine:
