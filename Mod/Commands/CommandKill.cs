@@ -12,7 +12,7 @@ namespace Mod.Commands
 
         public override void Execute(string[] args)
         {
-            var match = Regex.Match(Chat.LastMessage, @"[\\\/]\w+\s(?:\d+|\w+)\s(.*)");
+            var match = Regex.Match(Chat.LastMessage, @"[\\\/]\w+\s+(?:\d+|\w+)\s?(.*)");
             if (!match.Success)
                 throw new CommandArgumentException(CommandName, "/kill [id|all|titans] [msg]");
             
@@ -35,6 +35,8 @@ namespace Mod.Commands
                     return;
                 }
 
+                case "pt":
+                case "titan":
                 case "titans":
                 {
                     foreach (GameObject obj in GameObject.FindGameObjectsWithTag("titan"))
