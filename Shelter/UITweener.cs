@@ -224,11 +224,11 @@ public abstract class UITweener : IgnoreTimeScale
         }
     }
 
-    public AnimationOrTween.Direction direction
+    public Direction direction
     {
         get
         {
-            return this.mAmountPerDelta >= 0f ? AnimationOrTween.Direction.Forward : AnimationOrTween.Direction.Reverse;
+            return this.mAmountPerDelta >= 0f ? Direction.Forward : Direction.Reverse;
         }
     }
 

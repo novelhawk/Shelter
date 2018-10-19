@@ -96,7 +96,7 @@ public class UICheckbox : MonoBehaviour
             current = null;
             if (this.checkAnimation != null)
             {
-                ActiveAnimation.Play(this.checkAnimation, !state ? AnimationOrTween.Direction.Reverse : AnimationOrTween.Direction.Forward);
+                ActiveAnimation.Play(this.checkAnimation, !state ? Direction.Reverse : Direction.Forward);
             }
         }
     }

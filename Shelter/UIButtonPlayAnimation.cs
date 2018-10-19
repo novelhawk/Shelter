@@ -1,4 +1,3 @@
-using AnimationOrTween;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Button Play Animation")]

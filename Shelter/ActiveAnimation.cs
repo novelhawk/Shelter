@@ -1,6 +1,3 @@
-using AnimationOrTween;
-using System;
-using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Animation)), AddComponentMenu("NGUI/Internal/Active Animation")]
