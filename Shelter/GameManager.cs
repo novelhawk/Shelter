@@ -13,6 +13,8 @@ using Mod.Interface;
 using Mod.Keybinds;
 using Mod.Managers;
 using Mod.Modules;
+using NGUI;
+using NGUI.Internal;
 using Photon;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;

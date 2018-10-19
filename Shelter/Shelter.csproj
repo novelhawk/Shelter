@@ -67,4 +67,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\C#\Photon\Photon3Unity3D\Photon3Unity3D.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="NGUI\Tweening" />
+  </ItemGroup>
 </Project>
