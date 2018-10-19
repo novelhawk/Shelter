@@ -1,4 +1,5 @@
-﻿using Mod.Interface;
+﻿using Game;
+using Mod.Interface;
 
 namespace Mod.Commands
 {

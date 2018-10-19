@@ -1,3 +1,4 @@
+using Game;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace

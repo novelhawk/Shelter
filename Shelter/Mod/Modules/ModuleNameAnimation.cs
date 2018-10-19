@@ -1,4 +1,5 @@
-﻿using ExitGames.Client.Photon;
+﻿using Game;
+using ExitGames.Client.Photon;
 using Photon;
 using UnityEngine;
 using Animator = Mod.Animation.Animator;

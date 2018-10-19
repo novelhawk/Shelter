@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Game;
 using ExitGames.Client.Photon;
 using Photon;
 using LogType = Mod.Logging.LogType;

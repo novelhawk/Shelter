@@ -1,4 +1,6 @@
-﻿namespace Mod
+﻿using Game;
+
+namespace Mod
 {
     public struct Hero
     {

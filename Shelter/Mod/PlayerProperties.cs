@@ -1,4 +1,5 @@
-﻿using ExitGames.Client.Photon;
+﻿using Game;
+using ExitGames.Client.Photon;
 using UnityEngine;
 
 namespace Mod

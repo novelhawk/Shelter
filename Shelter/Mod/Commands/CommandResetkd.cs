@@ -1,4 +1,5 @@
-﻿using ExitGames.Client.Photon;
+﻿using Game;
+using ExitGames.Client.Photon;
 using Mod.Exceptions;
 using Mod.Interface;
 using Photon;
