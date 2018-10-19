@@ -1,7 +1,10 @@
-public enum PhotonLogLevel
+namespace Photon
 {
-    ErrorsOnly,
-    Informational,
-    Full
+    public enum PhotonLogLevel
+    {
+        ErrorsOnly,
+        Informational,
+        Full
+    }
 }
 

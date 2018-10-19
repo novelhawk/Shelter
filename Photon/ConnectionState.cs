@@ -1,9 +1,12 @@
-public enum ConnectionState
+namespace Photon
 {
-    Disconnected,
-    Connecting,
-    Connected,
-    Disconnecting,
-    InitializingApplication
+    public enum ConnectionState
+    {
+        Disconnected,
+        Connecting,
+        Connected,
+        Disconnecting,
+        InitializingApplication
+    }
 }
 

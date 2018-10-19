@@ -1,31 +1,34 @@
 using System;
 
-public class AuthenticationValues
+namespace Photon
 {
-    public string AuthParameters;
-    public CustomAuthenticationType AuthType;
-    public string Secret;
-
-    public virtual void SetAuthParameters(string user, string token)
+    public class AuthenticationValues
     {
-        this.AuthParameters = "username=" + Uri.EscapeDataString(user) + "&token=" + Uri.EscapeDataString(token);
-    }
+        public string AuthParameters;
+        public CustomAuthenticationType AuthType;
+        public string Secret;
 
-    public virtual void SetAuthPostData(string stringData)
-    {
-        this.AuthPostData = !string.IsNullOrEmpty(stringData) ? stringData : null;
-    }
+        public void SetAuthParameters(string user, string token)
+        {
+            this.AuthParameters = "username=" + Uri.EscapeDataString(user) + "&token=" + Uri.EscapeDataString(token);
+        }
 
-    public virtual void SetAuthPostData(byte[] byteData)
-    {
-        this.AuthPostData = byteData;
-    }
+        public void SetAuthPostData(string stringData)
+        {
+            this.AuthPostData = !string.IsNullOrEmpty(stringData) ? stringData : null;
+        }
 
-    public override string ToString()
-    {
-        return this.AuthParameters + " s: " + this.Secret;
-    }
+        public void SetAuthPostData(byte[] byteData)
+        {
+            this.AuthPostData = byteData;
+        }
 
-    public object AuthPostData { get; private set; }
+        public override string ToString()
+        {
+            return this.AuthParameters + " s: " + this.Secret;
+        }
+
+        public object AuthPostData { get; private set; }
+    }
 }
 

@@ -7,6 +7,7 @@ using Mod;
 using Mod.GameSettings;
 using Mod.Managers;
 using Mod.Modules;
+using Photon;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 using Random = UnityEngine.Random;

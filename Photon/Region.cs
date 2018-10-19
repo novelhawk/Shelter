@@ -1,25 +1,28 @@
 using System;
 
-public class Region
+namespace Photon
 {
-    public CloudRegionCode Code;
-    public string HostAndPort;
-    public int Ping;
-
-    public static CloudRegionCode Parse(string codeAsString)
+    public class Region
     {
-        codeAsString = codeAsString.ToLower();
-        CloudRegionCode none = CloudRegionCode.none;
-        if (Enum.IsDefined(typeof(CloudRegionCode), codeAsString))
+        public CloudRegionCode Code;
+        public string HostAndPort;
+        public int Ping;
+
+        public static CloudRegionCode Parse(string codeAsString)
         {
-            none = (CloudRegionCode) (int) Enum.Parse(typeof(CloudRegionCode), codeAsString);
+            codeAsString = codeAsString.ToLower();
+            CloudRegionCode none = CloudRegionCode.None;
+            if (Enum.IsDefined(typeof(CloudRegionCode), codeAsString))
+            {
+                none = (CloudRegionCode) (int) Enum.Parse(typeof(CloudRegionCode), codeAsString);
+            }
+            return none;
         }
-        return none;
-    }
 
-    public override string ToString()
-    {
-        return string.Format("'{0}' \t{1}ms \t{2}", this.Code, this.Ping, this.HostAndPort);
+        public override string ToString()
+        {
+            return string.Format("'{0}' \t{1}ms \t{2}", this.Code, this.Ping, this.HostAndPort);
+        }
     }
 }
 

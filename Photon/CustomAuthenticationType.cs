@@ -1,8 +1,11 @@
-public enum CustomAuthenticationType : byte
+namespace Photon
 {
-    Custom = 0,
-    Facebook = 2,
-    None = 255,
-    Steam = 1
+    public enum CustomAuthenticationType : byte
+    {
+        None = 255,
+        Custom = 0,
+        Facebook = 2,
+        Steam = 1
+    }
 }
 

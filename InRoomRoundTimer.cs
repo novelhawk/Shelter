@@ -1,5 +1,8 @@
 using ExitGames.Client.Photon;
+using Mod;
+using Photon;
 using UnityEngine;
+using MonoBehaviour = UnityEngine.MonoBehaviour;
 
 public class InRoomRoundTimer : MonoBehaviour
 {

@@ -1,6 +1,9 @@
 using ExitGames.Client.Photon;
+using Photon;
 using UnityEngine;
+using MonoBehaviour = UnityEngine.MonoBehaviour;
 
+// ReSharper disable once CheckNamespace
 public class PhotonStatsGui : MonoBehaviour
 {
     public bool buttonsOn;

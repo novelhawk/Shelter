@@ -1,4 +1,5 @@
 using Mod;
+using Photon;
 using UnityEngine;
 
 public class InstantiateTracker
@@ -6,7 +7,7 @@ public class InstantiateTracker
     public static readonly InstantiateTracker instance = new InstantiateTracker();
     private Player[] players = new Player[0];
 
-    public bool checkObj(string key, global::Player player, int[] viewIDS)
+    public bool checkObj(string key, global::Mod.Player player, int[] viewIDS)
     {
         if (player.IsMasterClient || player.IsLocal)
         {
@@ -251,14 +252,14 @@ public class InstantiateTracker
         this.players = new Player[0];
     }
 
-    public bool Instantiated(global::Player owner, GameResource type)
+    public bool Instantiated(global::Mod.Player owner, GameResource type)
     {
         int num;
         if (this.TryGetPlayer(owner.ID, out num))
         {
             if (this.players[num].IsThingExcessive(type))
             {
-                global::Player player = owner;
+                global::Mod.Player player = owner;
                 if (player != null && PhotonNetwork.isMasterClient)
                 {
                     FengGameManagerMKII.instance.KickPlayerRC(player, true, "spamming instantiate (" + type + ").");
@@ -275,7 +276,7 @@ public class InstantiateTracker
         return true;
     }
 
-    public bool PropertiesChanged(global::Player owner)
+    public bool PropertiesChanged(global::Mod.Player owner)
     {
         int num;
         if (this.TryGetPlayer(owner.ID, out num))

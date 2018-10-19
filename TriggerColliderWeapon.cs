@@ -4,7 +4,10 @@ using Mod;
 using Mod.Interface;
 using Mod.Managers;
 using Mod.Modules;
+using Photon;
 using UnityEngine;
+using Extensions = Photon.Extensions;
+using MonoBehaviour = UnityEngine.MonoBehaviour;
 
 public class TriggerColliderWeapon : MonoBehaviour
 {
@@ -72,8 +75,8 @@ public class TriggerColliderWeapon : MonoBehaviour
                 {
                     HERO hero = component.transform.root.GetComponent<HERO>();
                     
-                    var view = transform.root.gameObject.GetPhotonView();
-                    if (!component.transform.root.gameObject.GetPhotonView().isMine && (hero.myTeam != this.myTeam && !hero.isInvincible() || ModuleManager.Enabled(nameof(ModulePVPEverywhere))) && !hero.IsGrabbed && !hero.HasDied())
+                    var view = Extensions.GetPhotonView(transform.root.gameObject);
+                    if (!Extensions.GetPhotonView(component.transform.root.gameObject).isMine && (hero.myTeam != this.myTeam && !hero.isInvincible() || ModuleManager.Enabled(nameof(ModulePVPEverywhere))) && !hero.IsGrabbed && !hero.HasDied())
                     {
                         hero.markDie();
                         Vector3 vector2 = component.transform.root.position - transform.position;
@@ -128,7 +131,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                                 titan.asClientLookTarget = false;
                             }
 
-                            titan.photonView.RPC(Rpc.TitanGetHit, titan.photonView.owner, transform.root.gameObject.GetPhotonView().viewID, damage);
+                            titan.photonView.RPC(Rpc.TitanGetHit, titan.photonView.owner, Extensions.GetPhotonView(transform.root.gameObject).viewID, damage);
                         }
                     }
                     else if (femaleTitan != null)
@@ -140,7 +143,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                         {
                             femaleTitan.photonView.RPC(Rpc.TitanGetHit, 
                                 femaleTitan.photonView.owner, 
-                                transform.root.gameObject.GetPhotonView().viewID, 
+                                Extensions.GetPhotonView(transform.root.gameObject).viewID, 
                                 damage);
                         }
                     }
@@ -153,7 +156,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                             int damage = Mathf.Max(10, (int) (velocity.magnitude * 10f * this.scoreMulti));
                             colossalTitan.photonView.RPC(Rpc.TitanGetHit,
                                 colossalTitan.photonView.owner, 
-                                transform.root.gameObject.GetPhotonView().viewID, 
+                                Extensions.GetPhotonView(transform.root.gameObject).viewID, 
                                 damage);
                         }
                     }
@@ -169,7 +172,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                         num6 = Mathf.Max(10, num6);
                         IN_GAME_MAIN_CAMERA.instance.TakeScreenshot(item.transform.position, num6, item.transform.root.gameObject, 0.02f);
 
-                        titan.TitanGetHit(transform.root.gameObject.GetPhotonView().viewID, num6);
+                        titan.TitanGetHit(Extensions.GetPhotonView(transform.root.gameObject).viewID, num6);
                     }
                 }
                 else if (femaleTitan != null)
@@ -182,7 +185,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                         num7 = Mathf.Max(10, num7);
                         IN_GAME_MAIN_CAMERA.instance.TakeScreenshot(item.transform.position, num7, null, 0.02f);
 
-                        femaleTitan.TitanGetHit(transform.root.gameObject.GetPhotonView().viewID, num7);
+                        femaleTitan.TitanGetHit(Extensions.GetPhotonView(transform.root.gameObject).viewID, num7);
                     }
                 }
                 else if (colossalTitan != null)
@@ -197,7 +200,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                         num8 = Mathf.Max(10, num8);
                         IN_GAME_MAIN_CAMERA.instance.TakeScreenshot(item.transform.position, num8, null, 0.02f);
 
-                        colossalTitan.TitanGetHit(transform.root.gameObject.GetPhotonView().viewID, num8);
+                        colossalTitan.TitanGetHit(Extensions.GetPhotonView(transform.root.gameObject).viewID, num8);
                     }
                 }
 
@@ -218,18 +221,18 @@ public class TriggerColliderWeapon : MonoBehaviour
                     if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                         femaleTitan.hitEye();
                     else if (!PhotonNetwork.isMasterClient)
-                        femaleTitan.photonView.RPC(Rpc.HitEye, PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID);
+                        femaleTitan.photonView.RPC(Rpc.HitEye, PhotonTargets.MasterClient, Extensions.GetPhotonView(transform.root.gameObject).viewID);
                     else
-                        femaleTitan.HitEyeRPC(transform.root.gameObject.GetPhotonView().viewID);
+                        femaleTitan.HitEyeRPC(Extensions.GetPhotonView(transform.root.gameObject).viewID);
                 }
                 else if (titan != null && titan.abnormalType != AbnormalType.Crawler && !titan.hasDie)
                 {
                     if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                         titan.HitEye();
                     else if (!PhotonNetwork.isMasterClient)
-                        titan.photonView.RPC("hitEyeRPC", PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID);
+                        titan.photonView.RPC("hitEyeRPC", PhotonTargets.MasterClient, Extensions.GetPhotonView(transform.root.gameObject).viewID);
                     else
-                        titan.HitEyeRPC(transform.root.gameObject.GetPhotonView().viewID);
+                        titan.HitEyeRPC(Extensions.GetPhotonView(transform.root.gameObject).viewID);
                 }
                 
                 this.showCriticalHitFX();
@@ -259,7 +262,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                     if (!PhotonNetwork.isMasterClient)
                     {
                         if (!titan.hasDie)
-                            titan.photonView.RPC(Rpc.HitAnkle, PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID);
+                            titan.photonView.RPC(Rpc.HitAnkle, PhotonTargets.MasterClient, Extensions.GetPhotonView(transform.root.gameObject).viewID);
                     }
                     else if (!titan.hasDie)
                     {
@@ -284,16 +287,16 @@ public class TriggerColliderWeapon : MonoBehaviour
                         if (PhotonNetwork.isMasterClient)
                         {
                             if (other.gameObject.name == "ankleR")
-                                femaleTitan.HitAnkleRRPC(transform.root.gameObject.GetPhotonView().viewID, num9);
+                                femaleTitan.HitAnkleRRPC(Extensions.GetPhotonView(transform.root.gameObject).viewID, num9);
                             else
-                                femaleTitan.HitAnkleLRPC(transform.root.gameObject.GetPhotonView().viewID, num9);
+                                femaleTitan.HitAnkleLRPC(Extensions.GetPhotonView(transform.root.gameObject).viewID, num9);
                         }
                         else
                         {
                             if (other.gameObject.name == "ankleR")
-                                femaleTitan.photonView.RPC("hitAnkleRRPC", PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID, num9);
+                                femaleTitan.photonView.RPC("hitAnkleRRPC", PhotonTargets.MasterClient, Extensions.GetPhotonView(transform.root.gameObject).viewID, num9);
                             else
-                                femaleTitan.photonView.RPC(Rpc.HitLeftAnkle, PhotonTargets.MasterClient, transform.root.gameObject.GetPhotonView().viewID, num9);
+                                femaleTitan.photonView.RPC(Rpc.HitLeftAnkle, PhotonTargets.MasterClient, Extensions.GetPhotonView(transform.root.gameObject).viewID, num9);
                         }
                         break;
                 }

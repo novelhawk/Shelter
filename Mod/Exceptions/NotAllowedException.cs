@@ -3,6 +3,7 @@ using System.Runtime.Remoting.Channels;
 using System.Runtime.Serialization;
 using Mod.Interface;
 using Mod.Logging;
+using Photon;
 
 namespace Mod.Exceptions
 {

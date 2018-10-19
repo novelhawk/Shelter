@@ -1,10 +1,13 @@
 using UnityEngine;
 
-public static class GameObjectExtensions
+namespace Photon
 {
-    public static bool IsActive(this GameObject target)
+    public static class GameObjectExtensions
     {
-        return target.activeInHierarchy;
+        public static bool IsActive(this GameObject target)
+        {
+            return target.activeInHierarchy;
+        }
     }
 }
 

@@ -1,8 +1,11 @@
-public enum ViewSynchronization
+namespace Photon
 {
-    Off,
-    ReliableDeltaCompressed,
-    Unreliable,
-    UnreliableOnChange
+    public enum ViewSynchronization
+    {
+        Off,
+        ReliableDeltaCompressed,
+        Unreliable,
+        UnreliableOnChange
+    }
 }
 

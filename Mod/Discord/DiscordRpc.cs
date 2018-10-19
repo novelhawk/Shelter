@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security;
+using Photon;
 using UnityEngine;
 
 namespace Mod.Discord

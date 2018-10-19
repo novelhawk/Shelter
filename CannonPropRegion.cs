@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Mod;
+using Photon;
 using UnityEngine;
 
 public class CannonPropRegion : Photon.MonoBehaviour

@@ -1,7 +1,11 @@
 using System.Reflection;
+using Mod;
+using Photon;
 using UnityEngine;
+using MonoBehaviour = UnityEngine.MonoBehaviour;
 
 [AddComponentMenu("Miscellaneous/Photon View &v")]
+// ReSharper disable once CheckNamespace
 public class PhotonView : Photon.MonoBehaviour
 {
     protected internal bool destroyedByPhotonNetworkOrQuit;

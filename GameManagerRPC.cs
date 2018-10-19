@@ -9,6 +9,7 @@ using Mod.Exceptions;
 using Mod.GameSettings;
 using Mod.Managers;
 using Mod.Modules;
+using Photon;
 using UnityEngine;
 
 public partial class FengGameManagerMKII

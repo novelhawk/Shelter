@@ -1,7 +1,10 @@
-public enum OnSerializeRigidBody
+namespace Photon
 {
-    OnlyVelocity,
-    OnlyAngularVelocity,
-    All
+    public enum OnSerializeRigidBody
+    {
+        OnlyVelocity,
+        OnlyAngularVelocity,
+        All
+    }
 }
 

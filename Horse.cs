@@ -1,4 +1,5 @@
 using Mod;
+using Photon;
 using UnityEngine;
 
 public class Horse : Photon.MonoBehaviour

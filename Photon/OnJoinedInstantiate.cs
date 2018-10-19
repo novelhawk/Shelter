@@ -1,5 +1,8 @@
+using Photon;
 using UnityEngine;
+using MonoBehaviour = UnityEngine.MonoBehaviour;
 
+// ReSharper disable once CheckNamespace
 public class OnJoinedInstantiate : MonoBehaviour
 {
     public float PositionOffset = 2f;

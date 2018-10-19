@@ -1,7 +1,10 @@
-public enum ServerConnection
+namespace Photon
 {
-    MasterServer,
-    GameServer,
-    NameServer
+    public enum ServerConnection
+    {
+        MasterServer,
+        GameServer,
+        NameServer
+    }
 }
 

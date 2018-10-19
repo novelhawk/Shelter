@@ -1,7 +1,9 @@
 using Mod;
 using Mod.Exceptions;
+using Photon;
 using UnityEngine;
 
+// ReSharper disable once CheckNamespace
 public class SmoothSyncMovement : Photon.MonoBehaviour
 {
     public Vector3 correctCameraPos;

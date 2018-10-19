@@ -1,5 +1,8 @@
-public interface IPunObservable
+namespace Photon
 {
-    void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info);
+    public interface IPunObservable
+    {
+        void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info);
+    }
 }
 

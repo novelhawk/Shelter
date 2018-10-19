@@ -1,5 +1,6 @@
 ﻿using ExitGames.Client.Photon;
 using Mod.GameSettings;
+using Photon;
 using UnityEngine;
 
 namespace Mod.Managers

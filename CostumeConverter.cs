@@ -1,4 +1,5 @@
 using ExitGames.Client.Photon;
+using Mod;
 using UnityEngine;
 
 public static class CostumeConverter

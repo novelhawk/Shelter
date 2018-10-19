@@ -1,13 +1,16 @@
-public class FriendInfo
+namespace Photon
 {
-    public override string ToString()
+    public class FriendInfo
     {
-        return $"{this.Name}\t is: {(this.IsOnline ? (!this.IsInRoom ? "on master" : "playing") : "offline")}";
-    }
+        public override string ToString()
+        {
+            return $"{this.Name}\t is: {(this.IsOnline ? (!this.IsInRoom ? "on master" : "playing") : "offline")}";
+        }
 
-    private bool IsInRoom => this.IsOnline && !string.IsNullOrEmpty(this.Room);
-    public bool IsOnline { get; protected internal set; }
-    public string Name { get; protected internal set; }
-    public string Room { get; protected internal set; }
+        private bool IsInRoom => this.IsOnline && !string.IsNullOrEmpty(this.Room);
+        public bool IsOnline { get; protected internal set; }
+        public string Name { get; protected internal set; }
+        public string Room { get; protected internal set; }
+    }
 }
 

@@ -1,11 +1,13 @@
+using Photon;
 using UnityEngine;
 
+// ReSharper disable once CheckNamespace
 public class ConnectAndJoinRandom : Photon.MonoBehaviour
 {
     public bool AutoConnect = true;
     private bool ConnectInUpdate = true;
 
-    public virtual void OnConnectedToMaster()
+    public void OnConnectedToMaster()
     {
         if (PhotonNetwork.networkingPeer.AvailableRegions != null)
         {
@@ -15,12 +17,12 @@ public class ConnectAndJoinRandom : Photon.MonoBehaviour
         PhotonNetwork.JoinRandomRoom();
     }
 
-    public virtual void OnFailedToConnectToPhoton(DisconnectCause cause)
+    public void OnFailedToConnectToPhoton(DisconnectCause cause)
     {
         Debug.LogError("Cause: " + cause);
     }
 
-    public virtual void OnJoinedLobby()
+    public void OnJoinedLobby()
     {
     }
 
@@ -28,7 +30,7 @@ public class ConnectAndJoinRandom : Photon.MonoBehaviour
     {
     }
 
-    public virtual void OnPhotonRandomJoinFailed()
+    public void OnPhotonRandomJoinFailed()
     {
         Debug.Log("OnPhotonRandomJoinFailed() was called by PUN. No random room available, so we create one. Calling: PhotonNetwork.CreateRoom(null, new RoomOptions() {maxPlayers = 4}, null);");
         RoomOptions roomOptions = new RoomOptions {
@@ -37,12 +39,12 @@ public class ConnectAndJoinRandom : Photon.MonoBehaviour
         PhotonNetwork.CreateRoom(null, roomOptions, null);
     }
 
-    public virtual void Start()
+    public void Start()
     {
         PhotonNetwork.autoJoinLobby = false;
     }
 
-    public virtual void Update()
+    public void Update()
     {
         if (this.ConnectInUpdate && this.AutoConnect && !PhotonNetwork.connected)
         {

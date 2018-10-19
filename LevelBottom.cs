@@ -1,4 +1,5 @@
 using UnityEngine;
+using Extensions = Photon.Extensions;
 
 public class LevelBottom : MonoBehaviour
 {
@@ -15,7 +16,7 @@ public class LevelBottom : MonoBehaviour
                 {
                     if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                     {
-                        if (other.gameObject.GetPhotonView().isMine)
+                        if (Extensions.GetPhotonView(other.gameObject).isMine)
                         {
                             other.gameObject.GetComponent<HERO>().netDieLocal(rigidbody.velocity * 50f, false, -1, string.Empty, true);
                         }

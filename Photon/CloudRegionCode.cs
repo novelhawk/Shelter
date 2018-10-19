@@ -1,9 +1,12 @@
-public enum CloudRegionCode
+namespace Photon
 {
-    eu,
-    us,
-    asia,
-    jp,
-    none
+    public enum CloudRegionCode
+    {
+        None,
+        Europe,
+        Usa,
+        Asia,
+        Japan
+    }
 }
 

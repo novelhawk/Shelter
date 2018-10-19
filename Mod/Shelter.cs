@@ -12,6 +12,7 @@ using Mod.Discord;
 using Mod.Interface;
 using Mod.Logging;
 using Mod.Modules;
+using Mod.Profiles;
 using UnityEngine;
 using AnimationInfo = Mod.Animation.AnimationInfo;
 using Animator = Mod.Animation.Animator;

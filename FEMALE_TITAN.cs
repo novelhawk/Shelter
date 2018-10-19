@@ -6,6 +6,7 @@ using Mod;
 using Mod.GameSettings;
 using Mod.Managers;
 using Mod.Modules;
+using Photon;
 using UnityEngine;
 
 public class FEMALE_TITAN : Photon.MonoBehaviour

@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using Mod;
+using Photon;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
+// ReSharper disable once CheckNamespace
 public class PickupItemSyncer : Photon.MonoBehaviour
 {
     public bool IsWaitingForPickupInit;

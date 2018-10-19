@@ -1,8 +1,11 @@
-internal enum JoinType
+namespace Photon
 {
-    CreateGame,
-    JoinGame,
-    JoinRandomGame,
-    JoinOrCreateOnDemand
+    internal enum JoinType
+    {
+        CreateGame,
+        JoinGame,
+        JoinRandomGame,
+        JoinOrCreateOnDemand
+    }
 }
 

@@ -1,8 +1,12 @@
 using System.Collections.Generic;
 using Mod;
+using Photon;
 using UnityEngine;
+using GameObjectExtensions = Photon.GameObjectExtensions;
+using MonoBehaviour = UnityEngine.MonoBehaviour;
 
 [RequireComponent(typeof(PhotonView))]
+// ReSharper disable once CheckNamespace
 public class PickupItem : Photon.MonoBehaviour, IPunObservable
 {
     public static HashSet<PickupItem> DisabledPickupItems = new HashSet<PickupItem>();
@@ -79,7 +83,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
         {
             this.SentPickup = false;
         }
-        if (!gameObject.IsActive())
+        if (!GameObjectExtensions.IsActive(gameObject))
         {
             Debug.Log(string.Concat(new object[] { "Ignored PU RPC, cause item is inactive. ", gameObject, " SecondsBeforeRespawn: ", this.SecondsBeforeRespawn, " TimeOfRespawn: ", this.TimeOfRespawn, " respawn in future: ", this.TimeOfRespawn > PhotonNetwork.time }));
         }

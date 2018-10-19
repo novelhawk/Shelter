@@ -3,11 +3,13 @@ using System;
 using System.Collections;
 using Mod;
 using Mod.Exceptions;
+using Photon;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 using LogType = Mod.Logging.LogType;
 using MonoBehaviour = Photon.MonoBehaviour;
 
+// ReSharper disable once CheckNamespace
 public class PhotonHandler : MonoBehaviour, IPhotonPeerListener
 {
     private static PhotonHandler _instance;
@@ -164,11 +166,11 @@ public class PhotonHandler : MonoBehaviour, IPhotonPeerListener
             {
                 return Region.Parse(str);
             }
-            return CloudRegionCode.none;
+            return CloudRegionCode.None;
         }
         set
         {
-            if (value == CloudRegionCode.none)
+            if (value == CloudRegionCode.None)
             {
                 PlayerPrefs.DeleteKey("PUNCloudBestRegion");
             }

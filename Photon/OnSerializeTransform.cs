@@ -1,9 +1,12 @@
-public enum OnSerializeTransform
+namespace Photon
 {
-    OnlyPosition,
-    OnlyRotation,
-    OnlyScale,
-    PositionAndRotation,
-    All
+    public enum OnSerializeTransform
+    {
+        OnlyPosition,
+        OnlyRotation,
+        OnlyScale,
+        PositionAndRotation,
+        All
+    }
 }
 

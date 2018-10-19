@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Security.Permissions;
 using System.Text;
+using Photon;
 using UnityEngine;
 
 namespace Mod.Interface

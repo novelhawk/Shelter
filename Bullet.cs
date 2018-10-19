@@ -1,6 +1,7 @@
 using System.Collections;
 using Mod;
 using Mod.Exceptions;
+using Photon;
 using UnityEngine;
 
 public class Bullet : Photon.MonoBehaviour

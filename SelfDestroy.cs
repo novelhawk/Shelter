@@ -1,3 +1,4 @@
+using Photon;
 using UnityEngine;
 
 public class SelfDestroy : Photon.MonoBehaviour

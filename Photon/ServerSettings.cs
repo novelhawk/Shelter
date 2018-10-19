@@ -1,9 +1,11 @@
 using ExitGames.Client.Photon;
 using System;
 using System.Collections.Generic;
+using Photon;
 using UnityEngine;
 
 [Serializable]
+// ReSharper disable once CheckNamespace
 public class ServerSettings : ScriptableObject
 {
     public string AppID = string.Empty;

@@ -2,6 +2,7 @@ using System;
 using Mod;
 using Mod.Exceptions;
 using Mod.Keybinds;
+using Photon;
 using UnityEngine;
 
 public class Cannon : Photon.MonoBehaviour

@@ -1,32 +1,36 @@
 using ExitGames.Client.Photon;
+using Mod;
 
-internal static class ScoreExtensions
+namespace Photon
 {
-    public static void AddScore(this Player player, int scoreToAddToCurrent)
+    internal static class ScoreExtensions
     {
-        int num = player.GetScore() + scoreToAddToCurrent;
-        player.SetCustomProperties(new Hashtable
+        public static void AddScore(this Player player, int scoreToAddToCurrent)
         {
-            ["score"] = num
-        });
-    }
-
-    public static int GetScore(this Player player)
-    {
-        object obj2;
-        if (player.Properties.TryGetValue("score", out obj2))
-        {
-            return (int) obj2;
+            int num = player.GetScore() + scoreToAddToCurrent;
+            player.SetCustomProperties(new Hashtable
+            {
+                ["score"] = num
+            });
         }
-        return 0;
-    }
 
-    public static void SetScore(this Player player, int newScore)
-    {
-        player.SetCustomProperties(new Hashtable
+        public static int GetScore(this Player player)
         {
-            ["score"] = newScore
-        });
+            object obj2;
+            if (player.Properties.TryGetValue("score", out obj2))
+            {
+                return (int) obj2;
+            }
+            return 0;
+        }
+
+        public static void SetScore(this Player player, int newScore)
+        {
+            player.SetCustomProperties(new Hashtable
+            {
+                ["score"] = newScore
+            });
+        }
     }
 }
 

@@ -1,5 +1,7 @@
 using System;
+using Photon;
 using UnityEngine;
+using MonoBehaviour = UnityEngine.MonoBehaviour;
 
 public class ServerTime : MonoBehaviour
 {

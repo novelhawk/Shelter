@@ -1,6 +1,9 @@
-public enum LobbyType : byte
+namespace Photon
 {
-    Default = 0,
-    SqlLobby = 2
+    public enum LobbyType : byte
+    {
+        Default = 0,
+        SqlLobby = 2
+    }
 }
 

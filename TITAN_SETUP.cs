@@ -2,6 +2,7 @@ using System.Collections;
 using Mod;
 using Mod.Managers;
 using Mod.Modules;
+using Photon;
 using UnityEngine;
 
 public class TITAN_SETUP : Photon.MonoBehaviour

@@ -1,6 +1,7 @@
 using ExitGames.Client.Photon;
 using System;
 using Mod;
+using Photon;
 
 public class RCAction
 {

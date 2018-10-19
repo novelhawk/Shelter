@@ -1,7 +1,9 @@
 using Mod;
+using Photon;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
+// ReSharper disable once CheckNamespace
 public class PickupItemSimple : Photon.MonoBehaviour
 {
     public bool PickupOnCollide;

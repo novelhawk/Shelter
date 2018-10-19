@@ -9,6 +9,7 @@ using Mod.Discord;
 using Mod.Interface;
 using Mod.Keybinds;
 using Mod.Managers;
+using Photon;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 

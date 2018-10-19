@@ -4,6 +4,7 @@ using Mod;
 using Mod.GameSettings;
 using Mod.Managers;
 using Mod.Modules;
+using Photon;
 using UnityEngine;
 
 public class COLOSSAL_TITAN : Photon.MonoBehaviour

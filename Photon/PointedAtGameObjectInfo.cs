@@ -1,13 +1,15 @@
 using UnityEngine;
+using Extensions = Photon.Extensions;
 
 [RequireComponent(typeof(InputToEvent))]
+// ReSharper disable once CheckNamespace
 public class PointedAtGameObjectInfo : MonoBehaviour
 {
     private void OnGUI()
     {
         if (InputToEvent.goPointedAt != null)
         {
-            PhotonView photonView = InputToEvent.goPointedAt.GetPhotonView();
+            PhotonView photonView = Extensions.GetPhotonView(InputToEvent.goPointedAt);
             if (photonView != null)
             {
                 object[] args = new object[] { photonView.viewID, photonView.instantiationId, photonView.prefix, !photonView.isSceneView ? (!photonView.isMine ? "owner: " + photonView.ownerId : "mine") : "scene" };

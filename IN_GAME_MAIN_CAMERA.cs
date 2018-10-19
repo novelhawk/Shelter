@@ -4,6 +4,7 @@ using Mod.Keybinds;
 using Mod.Managers;
 using Mod.Modules;
 using UnityEngine;
+using Extensions = Photon.Extensions;
 
 public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 {
@@ -422,7 +423,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             {
                 this.main_object.GetComponent<HERO>().SetSkillHUDPosition();
             }
-            else if (this.main_object.GetPhotonView() != null && this.main_object.GetPhotonView().isMine)
+            else if (Extensions.GetPhotonView(this.main_object) != null && Extensions.GetPhotonView(this.main_object).isMine)
             {
                 this.main_object.GetComponent<HERO>().SetSkillHUDPosition();
             }

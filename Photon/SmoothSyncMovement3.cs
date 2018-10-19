@@ -1,5 +1,7 @@
+using Photon;
 using UnityEngine;
 
+// ReSharper disable once CheckNamespace
 public class SmoothSyncMovement3 : Photon.MonoBehaviour
 {
     private Vector3 correctPlayerPos = Vector3.zero;

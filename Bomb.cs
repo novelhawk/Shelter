@@ -1,6 +1,7 @@
 using System.Collections;
 using Mod;
 using Mod.GameSettings;
+using Photon;
 using UnityEngine;
 
 public class Bomb : Photon.MonoBehaviour

@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// ReSharper disable once CheckNamespace
 public class InputToEvent : MonoBehaviour
 {
     public bool DetectPointedAtGameObject;

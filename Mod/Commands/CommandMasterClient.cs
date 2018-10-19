@@ -1,4 +1,5 @@
 ﻿using Mod.Interface;
+using Photon;
 
 namespace Mod.Commands
 {

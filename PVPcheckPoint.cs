@@ -1,6 +1,7 @@
 using System.Collections;
 using Mod;
 using Mod.Interface;
+using Photon;
 using UnityEngine;
 
 public class PVPcheckPoint : Photon.MonoBehaviour

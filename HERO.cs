@@ -10,6 +10,7 @@ using Mod.Interface;
 using Mod.Keybinds;
 using Mod.Managers;
 using Mod.Modules;
+using Photon;
 using UnityEngine;
 using Xft;
 using Hashtable = ExitGames.Client.Photon.Hashtable;

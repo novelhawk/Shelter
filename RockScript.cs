@@ -1,4 +1,6 @@
+using Photon;
 using UnityEngine;
+using MonoBehaviour = UnityEngine.MonoBehaviour;
 
 public class RockScript : MonoBehaviour
 {

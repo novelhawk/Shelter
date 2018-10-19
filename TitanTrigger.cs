@@ -1,4 +1,5 @@
 using UnityEngine;
+using Extensions = Photon.Extensions;
 
 public class TitanTrigger : MonoBehaviour
 {
@@ -13,7 +14,7 @@ public class TitanTrigger : MonoBehaviour
             {
                 if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                 {
-                    if (gameObject.GetPhotonView().isMine)
+                    if (Extensions.GetPhotonView(gameObject).isMine)
                     {
                         this.isCollide = true;
                     }
@@ -39,7 +40,7 @@ public class TitanTrigger : MonoBehaviour
             {
                 if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                 {
-                    if (gameObject.GetPhotonView().isMine)
+                    if (Extensions.GetPhotonView(gameObject).isMine)
                     {
                         this.isCollide = false;
                     }

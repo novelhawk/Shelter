@@ -1,6 +1,8 @@
 using ExitGames.Client.Photon;
 using Mod;
+using Photon;
 using UnityEngine;
+using MonoBehaviour = UnityEngine.MonoBehaviour;
 
 public class BTN_choose_titan : MonoBehaviour
 {

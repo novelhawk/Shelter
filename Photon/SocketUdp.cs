@@ -1,13 +1,13 @@
+using System;
+using System.Net;
+using System.Net.Sockets;
+using System.Security;
+using System.Threading;
+using ExitGames.Client.Photon;
 using UnityEngine;
 
-namespace ExitGames.Client.Photon
+namespace Photon
 {
-    using System;
-    using System.Net;
-    using System.Net.Sockets;
-    using System.Security;
-    using System.Threading;
-
     internal class SocketUdp : IPhotonSocket
     {
         private Socket sock;

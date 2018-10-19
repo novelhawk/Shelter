@@ -1,31 +1,34 @@
-public class TypedLobby
+namespace Photon
 {
-    public static readonly TypedLobby Default = new TypedLobby();
-    public string Name;
-    public LobbyType Type;
-
-    public TypedLobby()
+    public class TypedLobby
     {
-        this.Name = string.Empty;
-        this.Type = LobbyType.Default;
-    }
+        public static readonly TypedLobby Default = new TypedLobby();
+        public string Name;
+        public LobbyType Type;
 
-    public TypedLobby(string name, LobbyType type)
-    {
-        this.Name = name;
-        this.Type = type;
-    }
-
-    public override string ToString()
-    {
-        return string.Format("Lobby '{0}'[{1}]", this.Name, this.Type);
-    }
-
-    public bool IsDefault
-    {
-        get
+        public TypedLobby()
         {
-            return this.Type == LobbyType.Default && string.IsNullOrEmpty(this.Name);
+            this.Name = string.Empty;
+            this.Type = LobbyType.Default;
+        }
+
+        public TypedLobby(string name, LobbyType type)
+        {
+            this.Name = name;
+            this.Type = type;
+        }
+
+        public override string ToString()
+        {
+            return string.Format("Lobby '{0}'[{1}]", this.Name, this.Type);
+        }
+
+        public bool IsDefault
+        {
+            get
+            {
+                return this.Type == LobbyType.Default && string.IsNullOrEmpty(this.Name);
+            }
         }
     }
 }

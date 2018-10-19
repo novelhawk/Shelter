@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Mod
+namespace Mod.Profiles
 {
     public class Profile
     {
