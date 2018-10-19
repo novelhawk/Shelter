@@ -1,8 +1,8 @@
+using System.Collections.Generic;
+using UnityEngine;
+
 namespace Xft
 {
-    using System.Collections.Generic;
-    using UnityEngine;
-
     public class Spline
     {
         public int Granularity = 20;

@@ -2,8 +2,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Xft;
 
 [AddComponentMenu("Xffect")]
+// ReSharper disable once CheckNamespace
 public class Xffect : MonoBehaviour
 {
     private List<EffectLayer> EflList = new List<EffectLayer>();

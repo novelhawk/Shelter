@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// ReSharper disable once CheckNamespace
 public class CB_cameraTilt : MonoBehaviour
 {
     private bool init;

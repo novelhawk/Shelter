@@ -1,7 +1,8 @@
+using UnityEngine;
+using Xft;
+
 namespace Xft
 {
-    using UnityEngine;
-
     public class SplineControlPoint
     {
         public int ControlPointIndex = -1;

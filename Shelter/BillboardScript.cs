@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BillboardScript : MonoBehaviour
+public class BillboardScript : MonoBehaviour // Probably from Xffect
 {
     public void Main()
     {

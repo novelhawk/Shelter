@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+// ReSharper disable once CheckNamespace
 public class XffectCache : MonoBehaviour
 {
     private readonly Dictionary<string, ArrayList> _objects = new Dictionary<string, ArrayList>();
