@@ -94,7 +94,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         name = "MainCamera";
         var tiltShift = GetComponent<TiltShift>();
         tiltShift.enabled = true;
-        if (PlayerPrefs.GetFloat("GameQuality", 1f) < 0.9f)
+        if (PlayerPrefs.GetInt("GameQuality", 5) < 5)
             tiltShift.enabled = false;
     }
 
