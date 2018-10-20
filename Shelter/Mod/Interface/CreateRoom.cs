@@ -128,7 +128,7 @@ namespace Mod.Interface
         private string roomTime = "99999";
         private int roomDifficultySingle;
         private string roomDifficulty;
-        private DayLight roomDayLight = DayLight.Day;
+        private Daylight _roomDaylight = Daylight.Day;
         private bool roomOpen = true;
         private bool roomVisible = true;
         protected override void Render()
@@ -179,12 +179,12 @@ namespace Mod.Interface
             if (GUI.Button(new Rect(rect.X + rect.Width / 3 * 2 + 20, rect.Y, rect.Width / 3 - 20, rect.Height), "Hard", roomDifficultySingle == 2 ? _buttonSelected : _button))
                 roomDifficultySingle = 2;
             rect.OY(rect.Height + 3);
-            if (GUI.Button(new Rect(rect.X, rect.Y, rect.Width / 3 - 20, rect.Height), "Day", roomDayLight == DayLight.Day ? _buttonSelected : _button))
-                roomDayLight = DayLight.Day;
-            if (GUI.Button(new Rect(rect.X + rect.Width / 3 + 10, rect.Y, rect.Width / 3 - 20, rect.Height), "Dawn", roomDayLight == DayLight.Dawn ? _buttonSelected : _button))
-                roomDayLight = DayLight.Dawn;
-            if (GUI.Button(new Rect(rect.X + rect.Width / 3 * 2 + 20, rect.Y, rect.Width / 3 - 20, rect.Height), "Night", roomDayLight == DayLight.Night ? _buttonSelected : _button))
-                roomDayLight = DayLight.Night;
+            if (GUI.Button(new Rect(rect.X, rect.Y, rect.Width / 3 - 20, rect.Height), "Day", _roomDaylight == Daylight.Day ? _buttonSelected : _button))
+                _roomDaylight = Daylight.Day;
+            if (GUI.Button(new Rect(rect.X + rect.Width / 3 + 10, rect.Y, rect.Width / 3 - 20, rect.Height), "Dawn", _roomDaylight == Daylight.Dawn ? _buttonSelected : _button))
+                _roomDaylight = Daylight.Dawn;
+            if (GUI.Button(new Rect(rect.X + rect.Width / 3 * 2 + 20, rect.Y, rect.Width / 3 - 20, rect.Height), "Night", _roomDaylight == Daylight.Night ? _buttonSelected : _button))
+                _roomDaylight = Daylight.Night;
 
             if (GUI.Button(new Rect(areaRect.x + areaRect.width / 2f - 100f, areaRect.y + areaRect.height - 90f, 200f, 70f), "Play", _button))
             {                    
@@ -240,12 +240,12 @@ namespace Mod.Interface
             if (GUI.Button(new Rect(rect.X + rect.Width / 3 * 2 + 20, rect.Y, rect.Width / 3 - 20, rect.Height), "Hard", roomDifficulty == "hard" ? _buttonSelected : _button))
                 roomDifficulty = "hard";
             rect.OY(rect.Height + 3);
-            if (GUI.Button(new Rect(rect.X, rect.Y, rect.Width / 3 - 20, rect.Height), "Day", roomDayLight == DayLight.Day ? _buttonSelected : _button))
-                roomDayLight = DayLight.Day;
-            if (GUI.Button(new Rect(rect.X + rect.Width / 3 + 10, rect.Y, rect.Width / 3 - 20, rect.Height), "Dawn", roomDayLight == DayLight.Dawn ? _buttonSelected : _button))
-                roomDayLight = DayLight.Dawn;
-            if (GUI.Button(new Rect(rect.X + rect.Width / 3 * 2 + 20, rect.Y, rect.Width / 3 - 20, rect.Height), "Night", roomDayLight == DayLight.Night ? _buttonSelected : _button))
-                roomDayLight = DayLight.Night;
+            if (GUI.Button(new Rect(rect.X, rect.Y, rect.Width / 3 - 20, rect.Height), "Day", _roomDaylight == Daylight.Day ? _buttonSelected : _button))
+                _roomDaylight = Daylight.Day;
+            if (GUI.Button(new Rect(rect.X + rect.Width / 3 + 10, rect.Y, rect.Width / 3 - 20, rect.Height), "Dawn", _roomDaylight == Daylight.Dawn ? _buttonSelected : _button))
+                _roomDaylight = Daylight.Dawn;
+            if (GUI.Button(new Rect(rect.X + rect.Width / 3 * 2 + 20, rect.Y, rect.Width / 3 - 20, rect.Height), "Night", _roomDaylight == Daylight.Night ? _buttonSelected : _button))
+                _roomDaylight = Daylight.Night;
             if (GUI.Button(rect = rect.OY(rect.Height + 3), roomOpen.ToString(), _button))
                 roomOpen = !roomOpen;
             if (GUI.Button(new Rect(rect.X, rect.Y + rect.Height + 3, rect.Width, rect.Height), roomVisible.ToString(), _button))
@@ -260,7 +260,7 @@ namespace Mod.Interface
             isRunning = true;
             while (PhotonNetwork.connectionStatesDetailed != PeerStates.JoinedLobby && PhotonNetwork.connectionStatesDetailed != PeerStates.Joined)
                 yield return null;
-            string roomFullName = $"{roomName}`{LevelInfoManager.Levels[roomMapIndex].Name}`{roomDifficulty}`{roomMaxPlayers}`{roomDayLight}`{(roomPassword != string.Empty ? _aes.Encrypt(roomPassword) : roomPassword)}`{roomTime}";
+            string roomFullName = $"{roomName}`{LevelInfoManager.Levels[roomMapIndex].Name}`{roomDifficulty}`{roomMaxPlayers}`{_roomDaylight}`{(roomPassword != string.Empty ? _aes.Encrypt(roomPassword) : roomPassword)}`{roomTime}";
             PhotonNetwork.CreateRoom(roomFullName, roomVisible, roomOpen, roomMaxPlayers.ToInt());
             isRunning = false;
         }

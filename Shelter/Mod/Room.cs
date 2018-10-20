@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Runtime.Remoting.Messaging;
+using System.Security.Cryptography;
 using Game;
 using ExitGames.Client.Photon;
+using Mod.Interface;
 using Photon;
 using LogType = Mod.Logging.LogType;
 
@@ -17,7 +21,7 @@ namespace Mod
         private readonly string _roomName;
         private readonly LevelInfo _roomMap;
         private readonly Difficulty _roomDifficulty;
-        private readonly DayLight _roomDayLight;
+        private readonly Daylight _roomDaylight;
         private readonly string _roomPassword;
         private readonly int _roomTime;
         private readonly int _roomUUID;
@@ -37,7 +41,7 @@ namespace Mod
             LevelInfo map,
             Difficulty difficulty, 
             int time, 
-            DayLight daylight, 
+            Daylight daylight, 
             string password,
             int uuid)
         {
@@ -46,7 +50,7 @@ namespace Mod
             _roomMap = map;
             _roomDifficulty = difficulty;
             _roomTime = time;
-            _roomDayLight = daylight;
+            _roomDaylight = daylight;
             _roomPassword = password;
             _roomUUID = uuid;
         }
@@ -56,8 +60,11 @@ namespace Mod
             _fullName = fullName;
             
             var split = fullName.Split('`');
-            if (split.Length < 7)
-                throw new Exception("Room..ctor called with invalid arguments: " + nameof(fullName)); //TODO: LOG!
+            if (split.Length != 7)
+            {
+                Shelter.Log("Room '{0}' cannot be parsed into a Room object: Parameters mismatch ({1} expected 7)", LogType.Error, fullName, split.Length);
+                throw new Exception("Room..ctor called with invalid arguments: " + nameof(fullName));
+            }
 
             _roomName = split[0].MaxChars(100);
             if (!LevelInfoManager.TryGet(split[1], out _roomMap))
@@ -65,12 +72,12 @@ namespace Mod
             _roomDifficulty = DifficultyToEnum(split[2]);
             if (!int.TryParse(split[3], out _roomTime))
                 Shelter.LogBoth("Couldn't parse Room({0}) time.", LogType.Warning, _roomName);
-            _roomDayLight = DayLightToEnum(split[4]);
+            _roomDaylight = DaylightToEnum(split[4]);
             _roomPassword = split[5];
             if (!int.TryParse(split[6], out _roomUUID))
                 Shelter.LogBoth("Couldn't parse Room({0}) uuid.", LogType.Warning, _roomName);
-
-            LoadOptions(new RoomOptions(properties));
+            
+            InternalCacheProperties(properties);
         }
 
         public Room(string fullName, RoomOptions options)
@@ -78,8 +85,11 @@ namespace Mod
             _fullName = fullName;
 
             var split = fullName.Split('`');
-            if (split.Length < 7)
-                throw new Exception(); //TODO: LOG!
+            if (split.Length != 7)
+            {
+                Shelter.Log("Room '{0}' cannot be parsed into a Room object: Parameters mismatch ({1} expected 7)", LogType.Error, fullName, split.Length);
+                throw new Exception("Room..ctor called with invalid arguments: " + nameof(fullName));
+            }
 
             _roomName = split[0];
             if (!LevelInfoManager.TryGet(split[1], out _roomMap))
@@ -87,39 +97,66 @@ namespace Mod
             _roomDifficulty = DifficultyToEnum(split[2]);
             if (!int.TryParse(split[3], out _roomTime))
                 Shelter.LogBoth("Couldn't parse Room({0}) time.", LogType.Warning, _roomName);
-            _roomDayLight = DayLightToEnum(split[4]);
+            _roomDaylight = DaylightToEnum(split[4]);
             _roomPassword = split[5];
             if (!int.TryParse(split[6], out _roomUUID))
                 Shelter.LogBoth("Couldn't parse Room({0}) uuid.", LogType.Warning, _roomName);
-
-            LoadOptions(options);
+            
+            InternalCacheProperties(options);
         }
 
-        private RoomOptions Options { set => LoadOptions(value); }
-
-        public void LoadOptions(RoomOptions options)
+        public void InternalCacheProperties(Hashtable hashtable)
         {
-            if (options == null)
+            if (hashtable == null || hashtable.Count <= 0)
                 return;
             
-            if (options.RemovedFromList != null)
-                _removedFromList = options.RemovedFromList.Value;
-            if (options.MaxPlayers != null) 
-                _maxPlayers = options.MaxPlayers.Value;
-            if (options.CurrentPlayers != null) 
-                _currentPlayers = options.CurrentPlayers.Value;
-            if (options.IsVisible != null) 
-                _isVisible = options.IsVisible.Value;
-            if (options.IsOpen != null) 
-                _isOpen = options.IsOpen.Value;
-            if (options.DoAutoCleanup != null) 
-                _doAutoCleanup = options.DoAutoCleanup.Value;
+            if (hashtable.TryGetValue(GamePropertyKey.Removed, out var obj) && obj is bool)
+                _removedFromList = (bool) obj;
+            if (_removedFromList) return;
+            
+            if (hashtable.TryGetValue(GamePropertyKey.CleanupCacheOnLeave, out obj) && obj is bool)
+                _doAutoCleanup = (bool) obj;
+                
+//            if (hashtable.TryGetValue(GamePropertyKey.ExpectedUsers, out obj) && obj is string[])
+//                _expectedUsers = (string[]) obj;
+                
+            if (hashtable.TryGetValue(GamePropertyKey.IsOpen, out obj) && obj is bool)
+                _isOpen = (bool) obj;
+                
+            if (hashtable.TryGetValue(GamePropertyKey.IsVisible, out obj) && obj is bool)
+                _isVisible = (bool) obj;
+                
+//            if (hashtable.TryGetValue(GamePropertyKey.MasterClientId, out obj) && obj is int)
+//                _masterClientId = (int) obj;
+                
+            if (hashtable.TryGetValue(GamePropertyKey.MaxPlayers, out obj) && obj is byte)
+                _maxPlayers = (byte) obj;
+                
+            if (hashtable.TryGetValue(GamePropertyKey.PlayerCount, out obj) && obj is byte)
+                _currentPlayers = (byte) obj;
 
-            _properties = options;
+            if (hashtable.TryGetValue(GamePropertyKey.PropsListedInLobby, out obj) && obj is string[] a)
+            {
+                foreach (var b in a)
+                {
+                    Shelter.LogConsole(b);
+                }
+//                _lobbyProperties = (string[]) obj;
+//                _shelterRoom = _lobbyProperties.Contains("Shelter");
+            }
+                
+            if (hashtable.TryGetValue(GamePropertyKey.PlayerTTL, out obj) && obj is int)
+                _playerTTL = (int) obj;
+                
+            if (hashtable.TryGetValue(GamePropertyKey.EmptyRoomTTL, out obj) && obj is int)
+                _roomTTL = (int) obj;
+            
+            _properties = new Hashtable();
+            _properties.MergeStringKeys(hashtable);
+            _properties.StripKeysWithNullValues();
         }
 
-        public static bool TryParse(string fullName, Hashtable hashtable, out Room room) => TryParse(fullName, new RoomOptions(hashtable), out room);
-        public static bool TryParse(string fullName, RoomOptions properties, out Room room)
+        public static bool TryParse(string fullName, Hashtable properties, out Room room)
         {
             room = null;
             
@@ -145,12 +182,10 @@ namespace Mod
                 map,
                 DifficultyToEnum(split[2]),
                 time,
-                DayLightToEnum(split[4]),
+                DaylightToEnum(split[4]),
                 split[5],
-                uuid)
-            {
-                Options = properties
-            };
+                uuid);
+            room.InternalCacheProperties(properties);
             
             return true;
         }
@@ -168,16 +203,16 @@ namespace Mod
             }
         }
 
-        public static DayLight DayLightToEnum(string dayLight)
+        private static Daylight DaylightToEnum(string dayLight)
         {
             switch (dayLight.ToLowerInvariant())
             {
                 default:
-                    return DayLight.Day;
+                    return Daylight.Day;
                 case "dawn":
-                    return DayLight.Dawn;
+                    return Daylight.Dawn;
                 case "night":
-                    return DayLight.Night;
+                    return Daylight.Night;
             }
         }
 
@@ -201,14 +236,18 @@ namespace Mod
             {
                 if (IsJoinable && !room.IsJoinable)
                     return -1;
-                
-                if (IsJoinable == room.IsJoinable && 
-                    !IsProtected && room.IsProtected)
-                    return -1;
+                if (!IsJoinable && room.IsJoinable)
+                    return 1;
 
-                if (IsProtected == room.IsProtected && 
-                    IsJoinable && !room.IsJoinable)
+                if (IsOpen && !room.IsOpen)
                     return -1;
+                if (!IsOpen && room.IsOpen)
+                    return 1;
+                
+                if (!IsProtected && room.IsProtected)
+                    return -1;
+                if (IsProtected && !room.IsProtected)
+                    return 1;
             }
             return 0;
         }
@@ -237,7 +276,7 @@ namespace Mod
         public string Name => _roomName;
         public LevelInfo Map => _roomMap;
         public Difficulty Difficulty => _roomDifficulty;
-        public DayLight DayLight => _roomDayLight;
+        public Daylight Daylight => _roomDaylight;
         public string Password => _roomPassword;
         public int Time => _roomTime;
 

@@ -4083,7 +4083,7 @@ public class HERO : Photon.MonoBehaviour
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && !photonView.isMine)
         {
             gameObject.layer = LayerMask.NameToLayer("NetworkObject");
-            if (IN_GAME_MAIN_CAMERA.DayLight == DayLight.Night)
+            if (IN_GAME_MAIN_CAMERA.Daylight == Daylight.Night)
             {
                 GameObject obj3 = (GameObject) Instantiate(Resources.Load("flashlight"));
                 obj3.transform.parent = this.baseTransform;

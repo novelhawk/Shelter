@@ -1,6 +1,6 @@
 namespace Game
 {
-    public enum DayLight
+    public enum Daylight
     {
         Day,
         Dawn,

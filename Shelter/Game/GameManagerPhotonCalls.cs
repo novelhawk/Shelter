@@ -57,7 +57,7 @@ public partial class FengGameManagerMKII
         gameTimesUp = false;
         Level = room.Map.Name;
         IN_GAME_MAIN_CAMERA.difficulty = (int) room.Difficulty;
-        IN_GAME_MAIN_CAMERA.DayLight = room.DayLight;
+        IN_GAME_MAIN_CAMERA.Daylight = room.Daylight;
         time = room.Time * 60;
 
         IN_GAME_MAIN_CAMERA.GameMode = room.Map.Gamemode;
@@ -180,7 +180,7 @@ public partial class FengGameManagerMKII
             LoadMapCustom();
             //TODO: Remove SetInterfacePosition
             Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().SetInterfacePosition();
-            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().SetDayLight(IN_GAME_MAIN_CAMERA.DayLight);
+            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().SetDayLight(IN_GAME_MAIN_CAMERA.Daylight);
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
             {
                 Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled = true;

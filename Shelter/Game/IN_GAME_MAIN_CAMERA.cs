@@ -20,7 +20,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     public static int character = 1;
     private float closestDistance;
     private int currentPeekPlayerIndex;
-    public static DayLight DayLight = DayLight.Dawn;
+    public static Daylight Daylight = Daylight.Dawn;
     private float decay;
     public static int difficulty;
     private float distance = 10f;
@@ -306,12 +306,12 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         return textured;
     }
 
-    public void SetDayLight(DayLight val)
+    public void SetDayLight(Daylight val)
     {
-        DayLight = val;
-        switch (DayLight)
+        Daylight = val;
+        switch (Daylight)
         {
-            case DayLight.Night:
+            case Daylight.Night:
                 GameObject obj2 = (GameObject) Instantiate(Resources.Load("flashlight"));
                 obj2.transform.parent = transform;
                 obj2.transform.position = transform.position;
@@ -320,12 +320,12 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 GameObject.Find("mainLight").GetComponent<Light>().color = FengColor.NightLight;
                 gameObject.GetComponent<Skybox>().material = this.skyBoxNIGHT;
                 break;
-            case DayLight.Day:
+            case Daylight.Day:
                 RenderSettings.ambientLight = FengColor.DayAmbientLight;
                 GameObject.Find("mainLight").GetComponent<Light>().color = FengColor.DayLight;
                 gameObject.GetComponent<Skybox>().material = this.skyBoxDAY;
                 break;
-            case DayLight.Dawn:
+            case Daylight.Dawn:
                 RenderSettings.ambientLight = FengColor.DawnAmbientLight;
                 GameObject.Find("mainLight").GetComponent<Light>().color = FengColor.DawnLight;
                 gameObject.GetComponent<Skybox>().material = this.skyBoxDAWN;
@@ -656,7 +656,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         isPausing = false;
         sensitivityMulti = PlayerPrefs.GetFloat("MouseSensitivity");
         invertY = PlayerPrefs.GetInt("invertMouseY");
-        this.SetDayLight(DayLight);
+        this.SetDayLight(Daylight);
         this.locker = GameObject.Find("locker");
         if (PlayerPrefs.HasKey("cameraTilt"))
         {
