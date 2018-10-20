@@ -153,7 +153,5 @@ namespace Mod.GameSettings
         public float CameraDistance; // TODO: Move away
         [JsonProperty("mouseSensitivity")]
         public float MouseSensitivity; // TODO: Move away
-        [JsonProperty("gameQuality")]
-        public float GameQuality; // TODO: Move away
     }
 }

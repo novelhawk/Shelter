@@ -271,7 +271,6 @@ namespace Mod.Managers
             settings.Volume = PlayerPrefs.GetFloat("vol", 1f);
             settings.CameraDistance = PlayerPrefs.GetFloat("cameraDistance", 1f);
             settings.MouseSensitivity = PlayerPrefs.GetFloat("MouseSensitivity", 0.5f);
-            settings.GameQuality = PlayerPrefs.GetInt("GameQuality", 5);
             return settings;
         }
         

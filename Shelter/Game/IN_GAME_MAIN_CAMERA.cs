@@ -76,7 +76,6 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     private Vector3 snapShotTargetPosition;
     public bool spectatorMode;
     private bool startSnapShotFrameCount;
-    public static STEREO_3D_TYPE stereoType;
     public Transform target;
     public Texture texture;
     public float timer;
@@ -428,10 +427,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 this.main_object.GetComponent<HERO>().SetSkillHUDPosition();
             }
         }
-        if (stereoType == STEREO_3D_TYPE.SIDE_BY_SIDE)
-        {
-            gameObject.GetComponent<Camera>().aspect = 1.777778F;
-        }
+
         this.TakeSnapshotRT();
     }
 
