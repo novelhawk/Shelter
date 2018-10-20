@@ -11,8 +11,8 @@ namespace Mod.Commands
 
         public override void Execute(string[] args)
         {
-            if (args.Length < 2)
-                throw new CommandArgumentException(CommandName, "/room [max/time/visible/roomttl/playerttl] [arg]");
+            if (args.Length < 1)
+                throw new CommandArgumentException(CommandName, "/room [max/time/visible/roomttl/playerttl]");
 
             int num;
             var room = PhotonNetwork.Room;
@@ -26,7 +26,7 @@ namespace Mod.Commands
             {
                 case "players":
                 case "max":
-                    if (!int.TryParse(args[1], out num))
+                    if (args.Length < 2 || !int.TryParse(args[1], out num))
                         throw new CommandArgumentException(CommandName, "/room max [number]");
                     
                     room.MaxPlayers = num;
@@ -64,11 +64,18 @@ namespace Mod.Commands
                     }
 
                     break;
+                
+                case "open":
+                case "close":
+                case "closed":
+                    room.IsOpen = !room.IsOpen;
+                    Chat.System("The room is now {0}.", room.IsOpen ? "open" : "closed");
+                    break;
 
+                case "hide":
+                case "hidden":
                 case "visible":
-                    room.IsVisible = args[1].EqualsIgnoreCase("true");
-                    room.IsOpen = args[1].EqualsIgnoreCase("true");
-
+                    room.IsVisible = !room.IsVisible;
                     Chat.System("The room is now {0}.", room.IsVisible ? "visible" : "invisible");
                     break;
                 
@@ -80,7 +87,7 @@ namespace Mod.Commands
                         return;
                     }
                     
-                    if (!int.TryParse(args[1], out num))
+                    if (args.Length < 2 || !int.TryParse(args[1], out num))
                         throw new CommandArgumentException(CommandName, "/room ttl [number in s]");
 
                     room.RoomTTL = num;
@@ -94,7 +101,7 @@ namespace Mod.Commands
                         return;
                     }
                     
-                    if (!int.TryParse(args[1], out num))
+                    if (args.Length < 2 || !int.TryParse(args[1], out num))
                         throw new CommandArgumentException(CommandName, "/room playerttl [number in s]");
                     
                     room.PlayerTTL = num;
