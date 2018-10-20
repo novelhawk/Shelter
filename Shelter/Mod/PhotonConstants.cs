@@ -4,12 +4,12 @@ namespace Mod
 {
     /// <summary>
     /// Class for constants. These (byte) values are for "well known" room/game properties used in Photon Loadbalancing.
-    /// Pun uses these constants internally.
     /// </summary>
     /// <remarks>
+    /// Pun uses these constants internally.
     /// "Custom properties" have to use a string-type as key. They can be assigned at will.
     /// </remarks>
-    public static class GamePropertyKey
+    public class GamePropertyKey
     {
         /// <summary>(255) Max number of players that "fit" into this room. 0 is for "unlimited".</summary>
         public const byte MaxPlayers = 255;
@@ -38,6 +38,12 @@ namespace Mod
 
         /// <summary>(247) Code for ExpectedUsers in a room. Matchmaking keeps a slot open for the players with these userIDs.</summary>
         public const byte ExpectedUsers = 247;
+
+        /// <summary>(246) Player Time To Live. How long any player can be inactive (due to disconnect or leave) before the user gets removed from the playerlist (freeing a slot).</summary>
+        public const byte PlayerTTL = 246;
+
+        /// <summary>(245) Room Time To Live. How long a room stays available (and in server-memory), after the last player becomes inactive. After this time, the room gets persisted or destroyed.</summary>
+        public const byte EmptyRoomTTL = 245;
     }
     
     /// <summary>
