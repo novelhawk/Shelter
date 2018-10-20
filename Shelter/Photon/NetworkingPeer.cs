@@ -1180,9 +1180,9 @@ namespace Photon
 
             try
             {
-                switch (photonEvent.Code)
+                switch ((PhotonEvent) photonEvent.Code)
                 {
-                    case 101: // Mod Indentify
+                    case PhotonEvent.ModIdentify:
                         if (sender.Mod > CustomMod.RC)
                             Shelter.LogConsole("{0} mod is identifyed as {1} but sent Cyan mod identificator.",
                                 LogType.Warning, sender, sender.Mod);
@@ -1190,12 +1190,12 @@ namespace Photon
                         sender.Mod = CustomMod.Cyan;
                         break;
 
-                    case PunEvent.RPC:
+                    case PhotonEvent.RPC:
                         this.ExecuteRPC(photonEvent[ParameterCode.Data] as Hashtable, sender);
                         break;
 
-                    case PunEvent.SendSerialize:
-                    case PunEvent.SendSerializeReliable:
+                    case PhotonEvent.SendSerialize:
+                    case PhotonEvent.SendSerializeReliable:
                     {
                         if (photonEvent[ParameterCode.Data] is Hashtable hashtable)
                         {
@@ -1221,7 +1221,7 @@ namespace Photon
                     }
 
 
-                    case PunEvent.Instantiation:
+                    case PhotonEvent.Instantiation:
                     {
                         if (photonEvent[ParameterCode.Data] is Hashtable data)
                             if (data[(byte) 0] is string)
@@ -1229,12 +1229,12 @@ namespace Photon
                         break;
                     }
 
-                    case PunEvent.CloseConnection: // TODO: Add reconnect
+                    case PhotonEvent.CloseConnection: // TODO: Add reconnect
                         if (!sender.IsMasterClient)
                             throw new NotAllowedException(photonEvent.Code, sender);
                         break;
 
-                    case PunEvent.Destroy:
+                    case PhotonEvent.Destroy:
                     {
                         if (photonEvent[ParameterCode.Data] is Hashtable hashtable)
                             if (hashtable[(byte) 0] is int objId)
@@ -1243,7 +1243,7 @@ namespace Photon
                         break;
                     }
 
-                    case PunEvent.DestroyPlayer:
+                    case PhotonEvent.DestroyPlayer:
                     {
                         if (photonEvent[ParameterCode.Data] is Hashtable hashtable)
                         {
@@ -1259,7 +1259,7 @@ namespace Photon
                         break;
                     }
 
-                    case PunEvent.SetMasterClient:
+                    case PhotonEvent.SetMasterClient:
                     {
                         if (!(photonEvent[245] is Hashtable hashtable))
                             return;
@@ -1280,7 +1280,7 @@ namespace Photon
                         SetMasterClient(id, false);
                         break;
                     }
-                    case EventCode.AppStats:
+                    case PhotonEvent.AppStats:
                     {
                         if (photonEvent[ParameterCode.PeerCount] is int players &&
                             photonEvent[ParameterCode.MasterPeerCount] is int playersMC &&
@@ -1294,7 +1294,7 @@ namespace Photon
                         break;
                     }
 
-                    case EventCode.QueueState:
+                    case PhotonEvent.QueueState:
                         if (!sender.IsLocal)
                             throw new NotAllowedException(photonEvent.Code, sender);
 
@@ -1303,7 +1303,28 @@ namespace Photon
                                 this.mQueuePosition = type;
                         return;
 
-                    case EventCode.GameListUpdate:
+                    case PhotonEvent.GameList:
+                    {
+                        if (!(photonEvent[ParameterCode.GameList] is Hashtable hashtable))
+                            return;
+
+                        mGameList = new Dictionary<string, Room>();
+                        foreach (DictionaryEntry entry in hashtable)
+                        {
+                            string roomName = (string) entry.Key;
+
+                            if (!Room.TryParse(roomName, (Hashtable) entry.Value, out Room room))
+                                continue;
+
+                            mGameList[roomName] = room;
+                        }
+
+                        Room.List = new List<Room>(mGameList.Values);
+                        Room.List.Sort();
+                        SendMonoMessage(PhotonNetworkingMessage.OnReceivedRoomListUpdate);
+                        break;
+                    }
+                    case PhotonEvent.GameListUpdate:
                     {
                         if (!(photonEvent[ParameterCode.GameList] is Hashtable hashtable))
                             return;
@@ -1327,29 +1348,7 @@ namespace Photon
                         break;
                     }
 
-                    case EventCode.GameList:
-                    {
-                        if (!(photonEvent[ParameterCode.GameList] is Hashtable hashtable))
-                            return;
-
-                        mGameList = new Dictionary<string, Room>();
-                        foreach (DictionaryEntry entry in hashtable)
-                        {
-                            string roomName = (string) entry.Key;
-
-                            if (!Room.TryParse(roomName, (Hashtable) entry.Value, out Room room))
-                                continue;
-
-                            mGameList[roomName] = room;
-                        }
-
-                        Room.List = new List<Room>(mGameList.Values);
-                        Room.List.Sort();
-                        SendMonoMessage(PhotonNetworkingMessage.OnReceivedRoomListUpdate);
-                        break;
-                    }
-
-                    case EventCode.PropertiesChanged:
+                    case PhotonEvent.PropertiesChanged:
                     {
                         if (!(photonEvent[ParameterCode.TargetActorNr] is int id))
                             return;
@@ -1396,10 +1395,10 @@ namespace Photon
                         break;
                     }
 
-                    case EventCode.Leave: // Moved above (here only to prevent the default case)
+                    case PhotonEvent.Leave: // Moved above (here only to prevent the default case)
                         break;
 
-                    case EventCode.Join:
+                    case PhotonEvent.Join:
                     {
                         if (!(photonEvent[ParameterCode.ActorNr] is int senderId))
                             return;
@@ -1445,7 +1444,7 @@ namespace Photon
             }
             catch (Exception e)
             {
-                Shelter.LogBoth("Exception on Event({0})", LogType.Error, photonEvent.Code);
+                Shelter.LogBoth("Exception on Event({0})", LogType.Error, (PhotonEvent) photonEvent.Code);
                 Shelter.Log("{0}: {1}", LogType.Error, e.GetType().Name, e.Message);
                 Shelter.Log(e.StackTrace, LogType.Error);
             }
@@ -2236,7 +2235,7 @@ namespace Photon
         {
             if (this.mCurrentGame != null && gameProperties != null)
             {
-                this.mCurrentGame.LoadOptions(new RoomOptions(gameProperties));
+                this.mCurrentGame.InternalCacheProperties(gameProperties);
                 SendMonoMessage(PhotonNetworkingMessage.OnPhotonCustomRoomPropertiesChanged, gameProperties);
                 if (PhotonNetwork.automaticallySyncScene)
                 {

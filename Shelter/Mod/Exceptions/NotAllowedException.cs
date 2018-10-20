@@ -9,7 +9,7 @@ namespace Mod.Exceptions
     {
         public NotAllowedException(byte eventId, Player sender)
         {
-            Shelter.LogBoth("{0} from {1} on calling Event({2})", LogType.Warning, nameof(NotAllowedException), sender, eventId);
+            Shelter.LogBoth("{0} from {1} on calling Event({2})", LogType.Warning, nameof(NotAllowedException), sender, (PhotonEvent) eventId);
             sender.Ignore();
         }
 
