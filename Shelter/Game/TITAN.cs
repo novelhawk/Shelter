@@ -2505,7 +2505,7 @@ public class TITAN : Photon.MonoBehaviour
         this.head.localScale = this.headscale;
         if (skinColor != 0)
         {
-            this.mainMaterial.GetComponent<SkinnedMeshRenderer>().material.color = skinColor != 1 ? (skinColor != 2 ? FengColor.titanSkin3 : FengColor.titanSkin2) : FengColor.titanSkin1;
+            this.mainMaterial.GetComponent<SkinnedMeshRenderer>().material.color = skinColor != 1 ? (skinColor != 2 ? FengColor.TitanSkin3 : FengColor.TitanSkin2) : FengColor.TitanSkin1;
         }
         float num2 = 1.4f - (this.myLevel - 0.7f) * 0.15f;
         num2 = Mathf.Clamp(num2, 0.9f, 1.5f);
@@ -2575,7 +2575,7 @@ public class TITAN : Photon.MonoBehaviour
         this.head.localScale = this.headscale;
         if (skinColor != 0)
         {
-            this.mainMaterial.GetComponent<SkinnedMeshRenderer>().material.color = skinColor != 1 ? (skinColor != 2 ? FengColor.titanSkin3 : FengColor.titanSkin2) : FengColor.titanSkin1;
+            this.mainMaterial.GetComponent<SkinnedMeshRenderer>().material.color = skinColor != 1 ? (skinColor != 2 ? FengColor.TitanSkin3 : FengColor.TitanSkin2) : FengColor.TitanSkin1;
         }
         float num2 = 1.4f - (this.myLevel - 0.7f) * 0.15f;
         num2 = Mathf.Clamp(num2, 0.9f, 1.5f);

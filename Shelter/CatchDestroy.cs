@@ -7,9 +7,6 @@ public class CatchDestroy : MonoBehaviour
     private void OnDestroy()
     {
         if (this.target != null)
-        {
             Destroy(this.target);
-        }
     }
 }
-

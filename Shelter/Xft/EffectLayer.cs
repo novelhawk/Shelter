@@ -25,7 +25,7 @@ namespace Xft
         public bool ColorAffectorEnable;
         public int ColorAffectType;
         public float ColorGradualTimeLength = 1f;
-        public COLOR_GRADUAL_TYPE ColorGradualType;
+        public ColorGradualType ColorGradualType;
         public int Cols = 1;
         public float DeltaRot;
         public float DeltaScaleX;

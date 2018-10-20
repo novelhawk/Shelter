@@ -224,15 +224,15 @@ public class TITAN_SETUP : Photon.MonoBehaviour
         switch (Random.Range(1, 4))
         {
             case 1:
-                obj2.renderer.material.color = FengColor.hairPunk1;
+                obj2.renderer.material.color = FengColor.PunkHair1;
                 break;
 
             case 2:
-                obj2.renderer.material.color = FengColor.hairPunk2;
+                obj2.renderer.material.color = FengColor.PunkHair2;
                 break;
 
             case 3:
-                obj2.renderer.material.color = FengColor.hairPunk3;
+                obj2.renderer.material.color = FengColor.PunkHair3;
                 break;
         }
         this.part_hair = obj2;

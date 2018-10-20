@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using NGUI;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Checkbox")]

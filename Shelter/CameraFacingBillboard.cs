@@ -9,28 +9,26 @@ public class CameraFacingBillboard : MonoBehaviour
     private void Awake()
     {
         if (this.referenceCamera == null)
-        {
             this.referenceCamera = Camera.main;
-        }
     }
 
-    public Vector3 GetAxis(Axis refAxis)
+    private static Vector3 GetAxisVector(Axis axis)
     {
-        switch (refAxis)
+        switch (axis)
         {
-            case Axis.down:
+            case Axis.Down:
                 return Vector3.down;
 
-            case Axis.left:
+            case Axis.Left:
                 return Vector3.left;
 
-            case Axis.right:
+            case Axis.Right:
                 return Vector3.right;
 
-            case Axis.forward:
+            case Axis.Forward:
                 return Vector3.forward;
 
-            case Axis.back:
+            case Axis.Back:
                 return Vector3.back;
         }
         return Vector3.up;
@@ -39,18 +37,18 @@ public class CameraFacingBillboard : MonoBehaviour
     private void Update()
     {
         Vector3 worldPosition = transform.position + this.referenceCamera.transform.rotation * (!this.reverseFace ? Vector3.back : Vector3.forward);
-        Vector3 worldUp = this.referenceCamera.transform.rotation * this.GetAxis(this.axis);
+        Vector3 worldUp = this.referenceCamera.transform.rotation * GetAxisVector(this.axis);
         transform.LookAt(worldPosition, worldUp);
     }
 
     public enum Axis
     {
-        up,
-        down,
-        left,
-        right,
-        forward,
-        back
+        Up,
+        Down,
+        Left,
+        Right,
+        Forward,
+        Back
     }
 }
 

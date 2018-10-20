@@ -6,26 +6,15 @@ public class CheckHitGround : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground") ||
+            other.gameObject.layer == LayerMask.NameToLayer("EnemyAABB"))
             this.isGrounded = true;
-        }
-        if (other.gameObject.layer == LayerMask.NameToLayer("EnemyAABB"))
-        {
-            this.isGrounded = true;
-        }
     }
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.layer == LayerMask.NameToLayer("Ground"))
-        {
+        if (other.gameObject.layer == LayerMask.NameToLayer("Ground") ||
+            other.gameObject.layer == LayerMask.NameToLayer("EnemyAABB"))
             this.isGrounded = true;
-        }
-        if (other.gameObject.layer == LayerMask.NameToLayer("EnemyAABB"))
-        {
-            this.isGrounded = true;
-        }
     }
 }
-

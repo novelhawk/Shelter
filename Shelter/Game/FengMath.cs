@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Game
 {
-    public class FengMath
+    public static class FengMath
     {
         public static float getHorizontalAngle(Vector3 from, Vector3 to)
         {

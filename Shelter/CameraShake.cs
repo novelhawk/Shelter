@@ -1,7 +1,7 @@
 using JetBrains.Annotations;
 using UnityEngine;
 
-public class CameraShake : MonoBehaviour //TODO: Removed unusued class? || Add camera shake to the game
+public class CameraShake : MonoBehaviour //TODO: Removed unusued class?
 {
     private float _forceDecay;
     private float _duration;

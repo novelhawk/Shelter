@@ -1,3 +1,4 @@
+using NGUI;
 using NGUI.Internal;
 using UnityEngine;
 

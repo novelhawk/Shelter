@@ -1,3 +1,4 @@
+using NGUI;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace

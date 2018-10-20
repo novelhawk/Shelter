@@ -1,3 +1,4 @@
+using Game;
 using UnityEngine;
 
 public class StylishComponent : MonoBehaviour
@@ -115,7 +116,7 @@ public class StylishComponent : MonoBehaviour
         labelS.GetComponent<UILabel>().text = styleRankText[styleRank, 0];
         if (styleRank == 5)
         {
-            labelS2.GetComponent<UILabel>().text = "[" + ColorSet.color_SS + "]S";
+            labelS2.GetComponent<UILabel>().text = "[" + FengColor.RateSS + "]S";
         }
         else
         {
@@ -123,8 +124,8 @@ public class StylishComponent : MonoBehaviour
         }
         if (styleRank == 6)
         {
-            labelS2.GetComponent<UILabel>().text = "[" + ColorSet.color_SSS + "]S";
-            labelS1.GetComponent<UILabel>().text = "[" + ColorSet.color_SSS + "]S";
+            labelS2.GetComponent<UILabel>().text = "[" + FengColor.RateSSS + "]S";
+            labelS1.GetComponent<UILabel>().text = "[" + FengColor.RateSSS + "]S";
         }
         else
         {
@@ -132,35 +133,35 @@ public class StylishComponent : MonoBehaviour
         }
         if (styleRank == 0)
         {
-            labelS.GetComponent<UILabel>().text = "[" + ColorSet.color_D + "]D";
+            labelS.GetComponent<UILabel>().text = "[" + FengColor.RateD + "]D";
         }
         if (styleRank == 1)
         {
-            labelS.GetComponent<UILabel>().text = "[" + ColorSet.color_C + "]C";
+            labelS.GetComponent<UILabel>().text = "[" + FengColor.RateC + "]C";
         }
         if (styleRank == 2)
         {
-            labelS.GetComponent<UILabel>().text = "[" + ColorSet.color_B + "]B";
+            labelS.GetComponent<UILabel>().text = "[" + FengColor.RateB + "]B";
         }
         if (styleRank == 3)
         {
-            labelS.GetComponent<UILabel>().text = "[" + ColorSet.color_A + "]A";
+            labelS.GetComponent<UILabel>().text = "[" + FengColor.RateA + "]A";
         }
         if (styleRank == 4)
         {
-            labelS.GetComponent<UILabel>().text = "[" + ColorSet.color_S + "]S";
+            labelS.GetComponent<UILabel>().text = "[" + FengColor.RateS + "]S";
         }
         if (styleRank == 5)
         {
-            labelS.GetComponent<UILabel>().text = "[" + ColorSet.color_SS + "]S";
+            labelS.GetComponent<UILabel>().text = "[" + FengColor.RateSS + "]S";
         }
         if (styleRank == 6)
         {
-            labelS.GetComponent<UILabel>().text = "[" + ColorSet.color_SSS + "]S";
+            labelS.GetComponent<UILabel>().text = "[" + FengColor.RateSSS + "]S";
         }
         if (styleRank == 7)
         {
-            labelS.GetComponent<UILabel>().text = "[" + ColorSet.color_X + "]X";
+            labelS.GetComponent<UILabel>().text = "[" + FengColor.RateX + "]X";
         }
         labelsub.GetComponent<UILabel>().text = styleRankText[styleRank, 1];
     }

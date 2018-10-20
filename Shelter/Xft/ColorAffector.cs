@@ -6,11 +6,11 @@ namespace Xft
     {
         private readonly Color[] ColorArr;
         private readonly bool IsNodeLife;
-        private readonly COLOR_GRADUAL_TYPE Type;
+        private readonly ColorGradualType Type;
         private float ElapsedTime;
         private float GradualLen;
 
-        public ColorAffector(Color[] colorArr, float gradualLen, COLOR_GRADUAL_TYPE type, EffectNode node) : base(node)
+        public ColorAffector(Color[] colorArr, float gradualLen, ColorGradualType type, EffectNode node) : base(node)
         {
             this.ColorArr = colorArr;
             this.Type = type;
@@ -35,9 +35,9 @@ namespace Xft
             {
                 if (this.ElapsedTime > this.GradualLen)
                 {
-                    if (this.Type != COLOR_GRADUAL_TYPE.CLAMP)
+                    if (this.Type != ColorGradualType.Clamp)
                     {
-                        if (this.Type == COLOR_GRADUAL_TYPE.LOOP)
+                        if (this.Type == ColorGradualType.Loop)
                         {
                             this.ElapsedTime = 0f;
                         }

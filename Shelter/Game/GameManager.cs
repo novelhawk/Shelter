@@ -77,7 +77,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     private int titanScore;
     public static Hashtable titanVariables;
     private GameObject ui;
-    private ArrayList racingResult;
+    private List<RacingResult> racingResult;
 
     public readonly ArrayList Heroes = new ArrayList();
     public readonly ArrayList Hooks = new ArrayList();
@@ -3285,16 +3285,15 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     private void RefreshRacingResult()
     {
         this.localRacingResult = "Result\n";
-        IComparer comparer = new IComparerRacingResult();
-        racingResult.Sort(comparer);
+        racingResult.Sort();
         int num = Mathf.Min(racingResult.Count, 10);
         for (int i = 0; i < num; i++)
         {
             string localRacingResult1 = this.localRacingResult;
             object[] objArray2 = { localRacingResult1, "Rank ", i + 1, " : " };
             this.localRacingResult = string.Concat(objArray2);
-            this.localRacingResult = this.localRacingResult + ((RacingResult) racingResult[i]).name;
-            this.localRacingResult = this.localRacingResult + "   " + ((int) (((RacingResult) racingResult[i]).time * 100f) * 0.01f) + "s";
+            this.localRacingResult = this.localRacingResult + racingResult[i].name;
+            this.localRacingResult = this.localRacingResult + "   " + (int) (racingResult[i].time * 100f) * 0.01f + "s";
             this.localRacingResult = this.localRacingResult + "\n";
         }
         photonView.RPC(Rpc.RefreshRacingResult, PhotonTargets.All, localRacingResult);
@@ -3406,7 +3405,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         wave = 1;
         myRespawnTime = 0f;
         killInfoGO = new ArrayList();
-        racingResult = new ArrayList();
+        racingResult = new List<RacingResult>();
         isRestarting = true;
         DestroyAllExistingCloths();
         PhotonNetwork.DestroyAll();

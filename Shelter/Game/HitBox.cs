@@ -1,6 +1,7 @@
 using Game;
 using UnityEngine;
 
+// ReSharper disable once CheckNamespace
 public class HitBox : MonoBehaviour
 {
     public Group group;

@@ -29,7 +29,7 @@ public partial class FengGameManagerMKII
 
     public void OnCreatedRoom()
     {
-        racingResult = new ArrayList();
+        racingResult = new List<RacingResult>();
         teamScores = new int[2];
     }
 
@@ -149,7 +149,7 @@ public partial class FengGameManagerMKII
         if (levelId != 0 && Application.loadedLevelName != "characterCreation" &&
             Application.loadedLevelName != "SnapShot")
         {
-            ChangeQuality.setCurrentQuality();
+            ChangeQuality.LoadFromPlayerPrefs();
             foreach (GameObject titan in GameObject.FindGameObjectsWithTag("titan"))
             {
                 if (!(titan.GetPhotonView() != null && titan.GetPhotonView().owner.IsMasterClient))
@@ -208,7 +208,7 @@ public partial class FengGameManagerMKII
             }
             else
             {
-                PVPcheckPoint.checkPoints = new ArrayList();
+                PVPcheckPoint.checkPoints = new List<PVPcheckPoint>();
                 UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled = false;
                 UnityEngine.Camera.main.GetComponent<CameraShake>().enabled = false;
                 IN_GAME_MAIN_CAMERA.GameType = GameType.Multiplayer;
@@ -716,7 +716,7 @@ public partial class FengGameManagerMKII
         }
 
         LoadConfig();
-        ChangeQuality.setCurrentQuality();
+        ChangeQuality.LoadFromPlayerPrefs();
 
         DestroyOldMenu();
     }

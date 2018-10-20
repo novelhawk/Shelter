@@ -272,15 +272,16 @@ public class AHSSShotGunCollider : MonoBehaviour
                 this.myTeam = IN_GAME_MAIN_CAMERA.instance.main_object.GetComponent<HERO>().myTeam;
                 break;
             
-            case GameType.Multiplayer when !Extensions.GetPhotonView(transform.root.gameObject).isMine:
+            case GameType.Multiplayer when !transform.root.gameObject.GetPhotonView().isMine:
                 enabled = false;
                 return;
             
             case GameType.Multiplayer:
-                if (transform.root.gameObject.GetComponent<EnemyfxIDcontainer>() != null)
+                var component = transform.root.gameObject.GetComponent<EnemyfxIDcontainer>();
+                if (component != null)
                 {
-                    this.viewID = transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().myOwnerViewID;
-                    this.ownerName = transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().titanName;
+                    this.viewID = component.myOwnerViewID;
+                    this.ownerName = component.titanName;
                     this.myTeam = PhotonView.Find(this.viewID).gameObject.GetComponent<HERO>().myTeam;
                 }
                 break;

@@ -320,18 +320,18 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 obj2.transform.parent = transform;
                 obj2.transform.position = transform.position;
                 obj2.transform.rotation = Quaternion.Euler(353f, 0f, 0f);
-                RenderSettings.ambientLight = FengColor.nightAmbientLight;
-                GameObject.Find("mainLight").GetComponent<Light>().color = FengColor.nightLight;
+                RenderSettings.ambientLight = FengColor.NightAmbientLight;
+                GameObject.Find("mainLight").GetComponent<Light>().color = FengColor.NightLight;
                 gameObject.GetComponent<Skybox>().material = this.skyBoxNIGHT;
                 break;
             case DayLight.Day:
-                RenderSettings.ambientLight = FengColor.dayAmbientLight;
-                GameObject.Find("mainLight").GetComponent<Light>().color = FengColor.dayLight;
+                RenderSettings.ambientLight = FengColor.DayAmbientLight;
+                GameObject.Find("mainLight").GetComponent<Light>().color = FengColor.DayLight;
                 gameObject.GetComponent<Skybox>().material = this.skyBoxDAY;
                 break;
             case DayLight.Dawn:
-                RenderSettings.ambientLight = FengColor.dawnAmbientLight;
-                GameObject.Find("mainLight").GetComponent<Light>().color = FengColor.dawnAmbientLight;
+                RenderSettings.ambientLight = FengColor.DawnAmbientLight;
+                GameObject.Find("mainLight").GetComponent<Light>().color = FengColor.DawnLight;
                 gameObject.GetComponent<Skybox>().material = this.skyBoxDAWN;
                 break;
         }

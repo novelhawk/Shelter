@@ -1,4 +1,3 @@
-using JetBrains.Annotations;
 using Mod;
 using UnityEngine;
 
@@ -7,32 +6,23 @@ public class ChangeQuality : MonoBehaviour
 {
     public bool init;
 
-    public static void setCurrentQuality()
+    public static void LoadFromPlayerPrefs()
     {
         if (PlayerPrefs.HasKey("GameQuality"))
-            setQuality(PlayerPrefs.GetInt("GameQuality"));
+            SetQuality(PlayerPrefs.GetInt("GameQuality"));
     }
 
-    private static void setQuality(int val) // val 0-5
+    private static void SetQuality(int val) // val 0-5
     {
         QualitySettings.SetQualityLevel(val, true);
         
-        if (val < 5)
-            turnOffTiltShift();
-        else
-            turnOnTiltShift();
+        SetTiltShiftState(val >= 5);
     }
 
-    private static void turnOffTiltShift()
+    private static void SetTiltShiftState(bool active)
     {
         if (Shelter.TryFind("MainCamera", out var mainCamera))
-            mainCamera.GetComponent<TiltShift>().enabled = false;
-    }
-
-    private static void turnOnTiltShift()
-    {
-        if (Shelter.TryFind("MainCamera", out var mainCamera))
-            mainCamera.GetComponent<TiltShift>().enabled = true;
+            mainCamera.GetComponent<TiltShift>().enabled = active;
     }
 }
 
