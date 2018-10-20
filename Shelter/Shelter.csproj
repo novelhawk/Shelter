@@ -24,12 +24,11 @@
     <DefineConstants>RELEASE;NETFRAMEWORK;NET35;ABUSIVE</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="Mod\Resources\*" />
-    <None Remove="Mod\Resources\Config\*" />
+    <None Remove="Mod\Resources\**" />
+    <None Remove="packages\**" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Mod\Resources\*" />
-    <EmbeddedResource Include="Mod\Resources\Config\*" />
+    <EmbeddedResource Include="Mod\Resources\**" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Assembly-CSharp-firstpass">
@@ -66,5 +65,8 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\C#\Photon\Photon3Unity3D\Photon3Unity3D.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="packages\**" />
   </ItemGroup>
 </Project>
