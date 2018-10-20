@@ -10,24 +10,14 @@ namespace Mod.Modules
         public override bool IsAbusive => false;
         public override bool HasGUI => false;
 
-        protected override void OnModuleEnable()
+        protected override void OnModuleStatusChange(bool status)
         {
             if (Player.Self.Properties.Alive == false || Player.Self.Hero == null)
                 return;
                 
             var windRenderer = Player.Self.Hero.GetComponentsInChildren<Renderer>().FirstOrDefault(x => x.name.Contains("speed"));
             if (windRenderer != null)
-                windRenderer.enabled = true;
-        }
-
-        protected override void OnModuleDisable()
-        {
-            if (Player.Self.Properties.Alive == false || Player.Self.Hero == null)
-                return;
-            
-            var windRenderer = Player.Self.Hero.GetComponentsInChildren<Renderer>().FirstOrDefault(x => x.name.Contains("speed"));
-            if (windRenderer != null)
-                windRenderer.enabled = false;
+                windRenderer.enabled = status;
         }
     }
 }

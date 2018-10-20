@@ -7,16 +7,10 @@
         public override bool IsAbusive => false;
         public override bool HasGUI => false;
 
-        protected override void OnModuleEnable()
+        protected override void OnModuleStatusChange(bool status)
         {
             if (Shelter.TryFind("MainCamera", out var mainCamera))
-                mainCamera.GetComponent<TiltShift>().enabled = true;
-        }
-        
-        protected override void OnModuleDisable()
-        {
-            if (Shelter.TryFind("MainCamera", out var mainCamera))
-                mainCamera.GetComponent<TiltShift>().enabled = false;
+                mainCamera.GetComponent<TiltShift>().enabled = status;
         }
     }
 }

@@ -17,8 +17,9 @@ namespace Mod
         private bool _isEnabled;
         
         protected virtual void OnModuleEnable() {}
-        protected virtual void OnModuleUpdate() {}
         protected virtual void OnModuleDisable() {}
+        protected virtual void OnModuleUpdate() {}
+        protected virtual void OnModuleStatusChange(bool status) {}
 
         protected virtual void OnGuiOpen() {}
         public virtual void Render(Rect windowRect) {}
@@ -88,6 +89,8 @@ namespace Mod
                 OnModuleEnable();
             else
                 OnModuleDisable();
+
+            OnModuleStatusChange(_isEnabled);
         }
     }
 }
