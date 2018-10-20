@@ -3,8 +3,6 @@ using Game;
 using ExitGames.Client.Photon;
 using JetBrains.Annotations;
 using Mod;
-using Mod.Interface;
-using NGUI;
 using NGUI.Internal;
 using Photon;
 using UnityEngine;
