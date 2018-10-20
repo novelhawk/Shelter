@@ -92,10 +92,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         isTyping = false;
         isPausing = false;
         name = "MainCamera";
-        var tiltShift = GetComponent<TiltShift>();
-        tiltShift.enabled = true;
-        if (PlayerPrefs.GetInt("GameQuality", 5) < 5)
-            tiltShift.enabled = false;
+        GetComponent<TiltShift>().enabled = ModuleManager.Enabled(nameof(ModuleTiltShift));
     }
 
     private void OnApplicationFocus(bool hasFocus) //TODO: Stop mouse movement while not focussed

@@ -15,14 +15,6 @@ public class ChangeQuality : MonoBehaviour
     private static void SetQuality(int val) // val 0-5
     {
         QualitySettings.SetQualityLevel(val, true);
-        
-        SetTiltShiftState(val >= 5);
-    }
-
-    private static void SetTiltShiftState(bool active)
-    {
-        if (Shelter.TryFind("MainCamera", out var mainCamera))
-            mainCamera.GetComponent<TiltShift>().enabled = active;
     }
 }
 
