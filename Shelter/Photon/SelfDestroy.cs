@@ -6,10 +6,6 @@ public class SelfDestroy : Photon.MonoBehaviour
 {
     public float CountDown = 5f;
 
-    private void Start()
-    {
-    }
-
     private void Update()
     {
         this.CountDown -= Time.deltaTime;

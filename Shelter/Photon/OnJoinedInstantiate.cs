@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Photon;
 using UnityEngine;
 using MonoBehaviour = UnityEngine.MonoBehaviour;
@@ -9,6 +10,7 @@ public class OnJoinedInstantiate : MonoBehaviour
     public GameObject[] PrefabsToInstantiate;
     public Transform SpawnPosition;
 
+    [UsedImplicitly]
     public void OnJoinedRoom()
     {
         if (this.PrefabsToInstantiate != null)
