@@ -24,11 +24,7 @@ public class PlanetMouseOrbit : MonoBehaviour
             angle -= 360f;
         }
         return Mathf.Clamp(angle, min, max);
-    }
-
-    public void Main()
-    {
-    }
+    } 
 
     public void Start()
     {
