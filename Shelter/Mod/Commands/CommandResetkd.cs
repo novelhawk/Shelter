@@ -30,6 +30,13 @@ namespace Mod.Commands
 
             if (args[0].EqualsIgnoreCase("all"))
             {
+#if !ABUSIVE
+                if (!Player.Self.IsMasterClient)
+                {
+                    Chat.System("You need to be MC to reset everyone's KDs");
+                    return;
+                }
+#endif
                 foreach (Player p in PhotonNetwork.PlayerList)
                     p.SetCustomProperties(hashtable);
                 Chat.System("You resetted the kds of everyone.");
