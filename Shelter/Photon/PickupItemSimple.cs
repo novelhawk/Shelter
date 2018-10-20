@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Mod;
 using Photon;
 using UnityEngine;
@@ -29,6 +30,7 @@ public class PickupItemSimple : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void PunPickupSimple(PhotonMessageInfo msgInfo)
     {
         if (!this.SentPickup || !msgInfo.sender.IsLocal || !gameObject.IsActive())

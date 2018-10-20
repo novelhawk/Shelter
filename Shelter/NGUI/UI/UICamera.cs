@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using NGUI;
 using NGUI.Internal;
 using UnityEngine;
 

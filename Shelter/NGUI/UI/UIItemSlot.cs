@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using NGUI;
 using NGUI.Internal;
 using UnityEngine;
@@ -20,6 +21,7 @@ public abstract class UIItemSlot : MonoBehaviour
     {
     }
 
+    [UsedImplicitly]
     private void OnClick()
     {
         if (mDraggedItem != null)
@@ -37,6 +39,7 @@ public abstract class UIItemSlot : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnDrag(Vector2 delta)
     {
         if (mDraggedItem == null && this.mItem != null)
@@ -67,6 +70,7 @@ public abstract class UIItemSlot : MonoBehaviour
         this.UpdateCursor();
     }
 
+    [UsedImplicitly]
     private void OnTooltip(bool show)
     {
         InvGameItem item = !show ? null : this.mItem;

@@ -1,16 +1,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
-using System.Text.RegularExpressions;
 using Game;
 using Mod;
 using Mod.Discord;
 using Mod.Interface;
 using Mod.Keybinds;
 using Mod.Managers;
-using NGUI;
 using NGUI.Internal;
 using Photon;
 using UnityEngine;

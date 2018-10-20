@@ -1,5 +1,4 @@
-﻿using System.CodeDom;
-using Mod.Interface;
+﻿using Mod.Interface;
 
 namespace Mod.Exceptions
 {

@@ -1,4 +1,4 @@
-using NGUI;
+using JetBrains.Annotations;
 using NGUI.Internal;
 using UnityEngine;
 
@@ -8,6 +8,7 @@ public class DragDropSurface : MonoBehaviour
 {
     public bool rotatePlacedObject;
 
+    [UsedImplicitly]
     private void OnDrop(GameObject go)
     {
         DragDropItem component = go.GetComponent<DragDropItem>();

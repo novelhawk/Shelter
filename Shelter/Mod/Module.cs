@@ -1,6 +1,4 @@
-﻿using System;
-using Mod.Interface;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Mod
 {

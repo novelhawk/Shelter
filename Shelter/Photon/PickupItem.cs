@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Mod;
 using Photon;
 using UnityEngine;
@@ -77,6 +78,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
     }
 
     [RPC]
+    [UsedImplicitly]
     public void PunPickup(PhotonMessageInfo msgInfo)
     {
         if (msgInfo.sender.IsLocal)
@@ -111,6 +113,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
     }
 
     [RPC]
+    [UsedImplicitly]
     internal void PunRespawn()
     {
         DisabledPickupItems.Remove(this);
@@ -123,6 +126,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
     }
 
     [RPC]
+    [UsedImplicitly]
     internal void PunRespawn(Vector3 pos)
     {
         Debug.Log("PunRespawn with Position.");

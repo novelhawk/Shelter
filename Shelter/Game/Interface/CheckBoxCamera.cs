@@ -1,5 +1,6 @@
 using System;
 using Game;
+using JetBrains.Annotations;
 using Mod;
 using UnityEngine;
 
@@ -8,6 +9,7 @@ public class CheckBoxCamera : MonoBehaviour
 {
     public new CameraType camera;
 
+    [UsedImplicitly]
     private void OnSelectionChange(bool yes)
     {
         if (!yes)

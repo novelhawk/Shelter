@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using NGUI;
+using JetBrains.Annotations;
 using NGUI.Internal;
 using UnityEngine;
 
@@ -100,6 +100,7 @@ public class UIPopupList : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnClick()
     {
         if (this.mChild == null && this.atlas != null && this.font != null && this.items.Count > 0)
@@ -239,6 +240,7 @@ public class UIPopupList : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnKey(KeyCode key)
     {
         if (enabled && NGUITools.GetActive(gameObject) && this.handleEvents)
@@ -265,6 +267,7 @@ public class UIPopupList : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnLocalize(Localization loc)
     {
         if (this.isLocalized && this.textLabel != null)

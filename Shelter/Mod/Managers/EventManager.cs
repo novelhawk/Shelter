@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Mod.Events.EventArgs;
 
 namespace Mod.Managers
 {

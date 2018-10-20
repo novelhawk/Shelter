@@ -1,4 +1,5 @@
 using Game;
+using JetBrains.Annotations;
 using Mod;
 using Photon;
 using UnityEngine;
@@ -240,18 +241,21 @@ public class Horse : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetCrossFade(string aniName, float time)
     {
         animation.CrossFade(aniName, time);
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetPlayAnimation(string aniName)
     {
         animation.Play(aniName);
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetPlayAnimationAt(string aniName, float normalizedTime)
     {
         animation.Play(aniName);
@@ -278,6 +282,7 @@ public class Horse : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void SetDust(bool enable)
     {
         if (this.dust.GetComponent<ParticleSystem>().enableEmission)

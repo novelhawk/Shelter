@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Slider")]
@@ -69,6 +70,7 @@ public class UISlider : IgnoreTimeScale
         }
     }
 
+    [UsedImplicitly]
     private void OnDrag(Vector2 delta)
     {
         this.UpdateDrag();
@@ -79,6 +81,7 @@ public class UISlider : IgnoreTimeScale
         this.UpdateDrag();
     }
 
+    [UsedImplicitly]
     private void OnKey(KeyCode key)
     {
         float num = this.numberOfSteps <= 1f ? 0.125f : 1f / (this.numberOfSteps - 1);
@@ -103,6 +106,7 @@ public class UISlider : IgnoreTimeScale
         }
     }
 
+    [UsedImplicitly]
     private void OnPress(bool pressed)
     {
         if (pressed && UICamera.currentTouchID != -100)

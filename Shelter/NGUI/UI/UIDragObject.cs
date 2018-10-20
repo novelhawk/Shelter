@@ -1,4 +1,4 @@
-using NGUI;
+using JetBrains.Annotations;
 using NGUI.Internal;
 using UnityEngine;
 
@@ -80,6 +80,7 @@ public class UIDragObject : IgnoreTimeScale
         }
     }
 
+    [UsedImplicitly]
     private void OnDrag(Vector2 delta)
     {
         if (enabled && NGUITools.GetActive(gameObject) && this.target != null)
@@ -121,6 +122,7 @@ public class UIDragObject : IgnoreTimeScale
         }
     }
 
+    [UsedImplicitly]
     private void OnPress(bool pressed)
     {
         if (enabled && NGUITools.GetActive(gameObject) && this.target != null)
@@ -154,6 +156,7 @@ public class UIDragObject : IgnoreTimeScale
         }
     }
 
+    [UsedImplicitly]
     private void OnScroll(float delta)
     {
         if (enabled && NGUITools.GetActive(gameObject))

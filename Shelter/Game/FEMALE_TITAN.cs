@@ -1,8 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using Game;
+using JetBrains.Annotations;
 using Mod;
 using Mod.GameSettings;
 using Mod.Managers;
@@ -892,12 +892,14 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void GrabbedTargetEscape()
     {
         grabbedTarget = null;
     }
 
     [RPC]
+    [UsedImplicitly]
     public void GrabToLeft()
     {
         Transform transform = this.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L/hand_L_001");
@@ -915,6 +917,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void GrabToRight()
     {
         Transform transform = this.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R/hand_R_001");
@@ -952,6 +955,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void HitAnkleLRPC(int viewID, int dmg)
     {
         if (!hasDie && state != "anklehurt")
@@ -991,6 +995,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void HitAnkleRRPC(int viewID, int dmg)
     {
         if (!hasDie && state != "anklehurt")
@@ -1026,6 +1031,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void HitEyeRPC(int viewID)
     {
         if (!hasDie)
@@ -1102,6 +1108,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void LabelRPC(int health, int maxHealth)
     {
         if (health < 0)
@@ -1219,6 +1226,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void LoadskinRPC(string url)
     {
         if (!ModuleManager.Enabled(nameof(ModuleEnableSkins)) || !Utility.IsValidImageUrl(url)) 
@@ -1228,12 +1236,14 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetCrossFade(string aniName, float time)
     {
         animation.CrossFade(aniName, time);
     }
 
     [RPC]
+    [UsedImplicitly]
     public void NetDie()
     {
         if (!hasDie)
@@ -1244,12 +1254,14 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetPlayAnimation(string aniName)
     {
         animation.Play(aniName);
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetPlayAnimationAt(string aniName, float normalizedTime)
     {
         animation.Play(aniName);
@@ -1293,12 +1305,14 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void PlaysoundRPC(string sndname)
     {
         transform.Find(sndname).GetComponent<AudioSource>().Play();
     }
 
     [RPC]
+    [UsedImplicitly]
     public void SetSize(float size, PhotonMessageInfo info)
     {
         size = Mathf.Clamp(size, 0.2f, 30f);
@@ -1397,6 +1411,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void TitanGetHit(int viewID, int speed)
     {
         Transform transform = this.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck");

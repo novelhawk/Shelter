@@ -1,5 +1,4 @@
-﻿using Newtonsoft.Json;
-using Photon;
+﻿using Photon;
 using UnityEngine;
 
 namespace Mod.Interface

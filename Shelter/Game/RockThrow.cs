@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using Mod;
 using Photon;
 using UnityEngine;
@@ -68,6 +69,7 @@ public class RockThrow : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void InitRPC(int viewID, Vector3 scale, Vector3 pos, float level)
     {
         GameObject gameObject = PhotonView.Find(viewID).gameObject;
@@ -89,6 +91,7 @@ public class RockThrow : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void LaunchRPC(Vector3 v, Vector3 p)
     {
         this.launched = true;

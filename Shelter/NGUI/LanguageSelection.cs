@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Language Selection"), RequireComponent(typeof(UIPopupList))]
@@ -5,7 +6,8 @@ using UnityEngine;
 public class LanguageSelection : MonoBehaviour
 {
     private UIPopupList mList;
-
+    
+    [UsedImplicitly]
     private void OnLanguageSelection(string language)
     {
         if (Localization.instance != null)

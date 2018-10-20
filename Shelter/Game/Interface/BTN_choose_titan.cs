@@ -1,7 +1,7 @@
 using Game;
 using ExitGames.Client.Photon;
+using JetBrains.Annotations;
 using Mod;
-using NGUI;
 using NGUI.Internal;
 using Photon;
 using UnityEngine;
@@ -10,6 +10,7 @@ using MonoBehaviour = UnityEngine.MonoBehaviour;
 // ReSharper disable once CheckNamespace
 public class BTN_choose_titan : MonoBehaviour
 {
+    [UsedImplicitly]
     private void OnClick()
     {
         if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpAHSS)

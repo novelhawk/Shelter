@@ -1,4 +1,4 @@
-using NGUI;
+using JetBrains.Annotations;
 using NGUI.Internal;
 using UnityEngine;
 
@@ -153,6 +153,7 @@ public class UIInput : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnInput(string input)
     {
         if (this.mDoInit)

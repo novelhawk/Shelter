@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Button Message")]
@@ -11,6 +12,7 @@ public class UIButtonMessage : MonoBehaviour
     public GameObject target;
     public Trigger trigger;
 
+    [UsedImplicitly]
     private void OnClick()
     {
         if (enabled && this.trigger == Trigger.OnClick)
@@ -19,6 +21,7 @@ public class UIButtonMessage : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnDoubleClick()
     {
         if (enabled && this.trigger == Trigger.OnDoubleClick)
@@ -47,6 +50,7 @@ public class UIButtonMessage : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnPress(bool isPressed)
     {
         if (enabled && (isPressed && this.trigger == Trigger.OnPress || !isPressed && this.trigger == Trigger.OnRelease))

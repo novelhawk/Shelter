@@ -47,7 +47,7 @@ public class Minimap : MonoBehaviour, IDisposable
     private CanvasScaler scaler;
     private static UnityEngine.Sprite supplySprite;
     private static UnityEngine.Sprite whiteIconSprite;
-
+    
     private void AddBorderToTexture(ref Texture2D texture, Color borderColor, int borderPixelSize)
     {
         int num = texture.width * borderPixelSize;

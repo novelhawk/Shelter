@@ -2,7 +2,6 @@
 using System.IO;
 using System.Security;
 using System.Text;
-using JetBrains.Annotations;
 using Mod.Logging;
 using Newtonsoft.Json;
 using UnityEngine;

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Text;
-using JetBrains.Annotations;
 using UnityEngine;
 
 namespace Mod.Logging

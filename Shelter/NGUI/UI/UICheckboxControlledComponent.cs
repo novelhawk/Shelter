@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Checkbox Controlled Component")]
@@ -9,6 +10,7 @@ public class UICheckboxControlledComponent : MonoBehaviour
     private bool mUsingDelegates;
     public MonoBehaviour target;
 
+    [UsedImplicitly]
     private void OnActivate(bool isActive)
     {
         if (!this.mUsingDelegates)

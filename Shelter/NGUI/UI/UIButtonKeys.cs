@@ -1,4 +1,4 @@
-using NGUI;
+using JetBrains.Annotations;
 using NGUI.Internal;
 using UnityEngine;
 
@@ -13,6 +13,7 @@ public class UIButtonKeys : MonoBehaviour
     public UIButtonKeys selectOnUp;
     public bool startsSelected;
 
+    [UsedImplicitly]
     private void OnClick()
     {
         if (enabled && this.selectOnClick != null)
@@ -21,6 +22,7 @@ public class UIButtonKeys : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnKey(KeyCode key)
     {
         if (enabled && NGUITools.GetActive(gameObject))

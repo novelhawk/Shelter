@@ -1,4 +1,4 @@
-using NGUI;
+using JetBrains.Annotations;
 using NGUI.Internal;
 using UnityEngine;
 
@@ -11,6 +11,7 @@ public class UIButtonSound : MonoBehaviour
     public Trigger trigger;
     public float volume = 1f;
 
+    [UsedImplicitly]
     private void OnClick()
     {
         if (enabled && this.trigger == Trigger.OnClick)
@@ -19,6 +20,7 @@ public class UIButtonSound : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnHover(bool isOver)
     {
         if (enabled && (isOver && this.trigger == Trigger.OnMouseOver || !isOver && this.trigger == Trigger.OnMouseOut))
@@ -27,6 +29,7 @@ public class UIButtonSound : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnPress(bool isPressed)
     {
         if (enabled && (isPressed && this.trigger == Trigger.OnPress || !isPressed && this.trigger == Trigger.OnRelease))

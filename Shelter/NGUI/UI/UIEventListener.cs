@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Internal/Event Listener")]
@@ -27,6 +28,7 @@ public class UIEventListener : MonoBehaviour
         return component;
     }
 
+    [UsedImplicitly]
     private void OnClick()
     {
         if (this.onClick != null)
@@ -35,6 +37,7 @@ public class UIEventListener : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnDoubleClick()
     {
         if (this.onDoubleClick != null)
@@ -43,6 +46,7 @@ public class UIEventListener : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnDrag(Vector2 delta)
     {
         if (this.onDrag != null)
@@ -51,6 +55,7 @@ public class UIEventListener : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnDrop(GameObject go)
     {
         if (this.onDrop != null)
@@ -59,6 +64,7 @@ public class UIEventListener : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnHover(bool isOver)
     {
         if (this.onHover != null)
@@ -67,6 +73,7 @@ public class UIEventListener : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnInput(string text)
     {
         if (this.onInput != null)
@@ -75,6 +82,7 @@ public class UIEventListener : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnKey(KeyCode key)
     {
         if (this.onKey != null)
@@ -83,6 +91,7 @@ public class UIEventListener : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnPress(bool isPressed)
     {
         if (this.onPress != null)
@@ -91,6 +100,7 @@ public class UIEventListener : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnScroll(float delta)
     {
         if (this.onScroll != null)
@@ -99,6 +109,7 @@ public class UIEventListener : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnSelect(bool selected)
     {
         if (this.onSelect != null)
@@ -107,6 +118,7 @@ public class UIEventListener : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnSubmit()
     {
         if (this.onSubmit != null)

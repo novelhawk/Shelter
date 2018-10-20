@@ -1,5 +1,6 @@
 using System.Collections;
 using Game;
+using JetBrains.Annotations;
 using Mod;
 using Mod.Interface;
 using Photon;
@@ -36,12 +37,14 @@ public class PVPcheckPoint : Photon.MonoBehaviour
     public float titanPtMax = 40f;
 
     [RPC]
+    [UsedImplicitly]
     private void ChangeHumanPt(float pt)
     {
         this.humanPt = pt;
     }
 
     [RPC]
+    [UsedImplicitly]
     private void ChangeState(int num)
     {
         if (num == 0)
@@ -59,6 +62,7 @@ public class PVPcheckPoint : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void ChangeTitanPt(float pt)
     {
         this.titanPt = pt;

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net.Configuration;
-
-namespace Mod.Events
+﻿namespace Mod.Events
 {
     public interface EventListener
     {

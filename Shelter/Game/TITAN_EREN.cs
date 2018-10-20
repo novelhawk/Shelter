@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Game;
+using JetBrains.Annotations;
 using Mod;
 using Mod.Keybinds;
 using Mod.Managers;
@@ -101,6 +102,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void EndMovingRock()
     {
         this.isROCKMOVE = false;
@@ -373,6 +375,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void HitByFTRPC(int phase)
     {
         if (photonView.isMine)
@@ -409,6 +412,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void HitByTitanRPC()
     {
         if (photonView.isMine)
@@ -486,6 +490,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void LoadskinRPC(string url)
     {
         if (ModuleManager.Enabled(nameof(ModuleEnableSkins)) && Utility.IsValidImageUrl(url))
@@ -495,18 +500,21 @@ public class TITAN_EREN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetCrossFade(string aniName, float time)
     {
         animation.CrossFade(aniName, time);
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetPlayAnimation(string aniName)
     {
         animation.Play(aniName);
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetPlayAnimationAt(string aniName, float normalizedTime)
     {
         animation.Play(aniName);
@@ -514,6 +522,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetTauntAttack(float tauntTime, float distance = 100f)
     {
         foreach (GameObject obj2 in GameObject.FindGameObjectsWithTag("titan"))
@@ -566,12 +575,14 @@ public class TITAN_EREN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void PlaysoundRPC(string sndname)
     {
         transform.Find(sndname).GetComponent<AudioSource>().Play();
     }
 
     [RPC]
+    [UsedImplicitly]
     private void RemoveMe()
     {
         PhotonNetwork.RemoveRPCs(photonView);
@@ -579,6 +590,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void RockPlayAnimation(string anim)
     {
         this.rock.animation.Play(anim);
@@ -837,6 +849,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void StartMovingRock()
     {
         this.isROCKMOVE = true;

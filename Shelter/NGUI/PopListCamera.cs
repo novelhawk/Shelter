@@ -1,4 +1,5 @@
 using Game;
+using JetBrains.Annotations;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -24,6 +25,7 @@ public class PopListCamera : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnSelectionChange()
     {
         if (GetComponent<UIPopupList>().selection == "Original")

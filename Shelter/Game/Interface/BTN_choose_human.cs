@@ -1,6 +1,7 @@
 using System.Linq;
 using Game;
 using ExitGames.Client.Photon;
+using JetBrains.Annotations;
 using Mod;
 using Mod.Interface;
 using NGUI;
@@ -17,6 +18,7 @@ public class BTN_choose_human : MonoBehaviour
         return !PhotonNetwork.PlayerList.Any(player => player.Properties.PlayerType == PlayerType.Human && player.Properties.Alive == true);
     }
 
+    [UsedImplicitly]
     private void OnClick()
     {
         string selection = GameObject.Find("PopupListCharacterHUMAN").GetComponent<UIPopupList>().selection;

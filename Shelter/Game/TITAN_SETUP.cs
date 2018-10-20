@@ -1,5 +1,6 @@
 using System.Collections;
 using Game;
+using JetBrains.Annotations;
 using Mod;
 using Mod.Managers;
 using Mod.Modules;
@@ -30,6 +31,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private IEnumerator LoadskinE(int hair, int eyeId, string hairlink)
     {
         bool unloadAssets = false;
@@ -174,9 +176,11 @@ public class TITAN_SETUP : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void SetHairRPC(int type, int eye_type, float r, float g, float b) => SetHairPRC(type, eye_type, r, g, b);
     
     [RPC]
+    [UsedImplicitly]
     private void SetHairPRC(int type, int eye_type, float r, float g, float b)
     {
         Destroy(this.part_hair);
@@ -197,6 +201,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void SetHairRPC2(int hair, int eye, string hairlink)
     {
         if (ModuleManager.Enabled(nameof(ModuleEnableSkins)))

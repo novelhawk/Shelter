@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Text.RegularExpressions;
-using System.Xml.Schema;
 using Newtonsoft.Json;
-using UnityEngine.UI;
-using Debug = UnityEngine.Debug;
 
 namespace Mod.Animation
 {

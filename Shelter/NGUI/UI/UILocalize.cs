@@ -1,4 +1,4 @@
-using NGUI;
+using JetBrains.Annotations;
 using NGUI.Internal;
 using UnityEngine;
 
@@ -49,6 +49,7 @@ public class UILocalize : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnLocalize(Localization loc)
     {
         if (this.mLanguage != loc.currentLanguage)

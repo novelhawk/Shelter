@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using Mod;
 using Photon;
 using UnityEngine;
@@ -58,6 +59,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void PickupItemInit(double timeBase, float[] inactivePickupsAndTimes)
     {
         this.IsWaitingForPickupInit = false;
@@ -87,6 +89,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void RequestForPickupTimes(PhotonMessageInfo msgInfo)
     {
         if (msgInfo.sender == null)

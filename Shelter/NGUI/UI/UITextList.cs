@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
+using JetBrains.Annotations;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/UI/Text List")]
@@ -85,6 +86,7 @@ public class UITextList : MonoBehaviour
         this.UpdateVisibleText();
     }
 
+    [UsedImplicitly]
     private void OnScroll(float val)
     {
         if (this.mSelected && this.supportScrollWheel)
@@ -95,6 +97,7 @@ public class UITextList : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnSelect(bool selected)
     {
         this.mSelected = selected;

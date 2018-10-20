@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using Mod;
 using Mod.Exceptions;
 using Mod.Keybinds;
@@ -119,6 +120,7 @@ public class Cannon : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void SetSize(string settings, PhotonMessageInfo info)
     {
         if (!info.sender.IsMasterClient) 

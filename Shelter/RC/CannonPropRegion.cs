@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using JetBrains.Annotations;
 using Mod;
 using Photon;
 using RC;
@@ -54,6 +55,7 @@ public class CannonPropRegion : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void RequestControlRPC(int viewID, PhotonMessageInfo info)
     {
         if (!(!photonView.isMine || !PhotonNetwork.isMasterClient || this.disabled))
@@ -70,6 +72,7 @@ public class CannonPropRegion : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void SetSize(string settings, PhotonMessageInfo info)
     {
         if (!info.sender.IsMasterClient) 

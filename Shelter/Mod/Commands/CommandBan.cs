@@ -1,5 +1,4 @@
-﻿using System;
-using Mod.Interface;
+﻿using Mod.Interface;
 using Mod.Exceptions;
 
 namespace Mod.Commands

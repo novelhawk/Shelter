@@ -1,4 +1,4 @@
-using NGUI;
+using JetBrains.Annotations;
 using NGUI.Internal;
 using UnityEngine;
 
@@ -9,6 +9,7 @@ public class UIButtonActivate : MonoBehaviour
     public bool state = true;
     public GameObject target;
 
+    [UsedImplicitly]
     private void OnClick()
     {
         if (this.target != null)

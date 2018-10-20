@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using Game;
+using JetBrains.Annotations;
 using Mod;
 using Mod.GameSettings;
 using Mod.Managers;
@@ -221,6 +222,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void ChangeDoor()
     {
         this.door_broken.SetActive(true);
@@ -336,6 +338,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void LabelRPC(int health, int maxHealth)
     {
         if (health < 0)
@@ -430,6 +433,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void LoadskinRPC(string url)
     {
         if (ModuleManager.Enabled(nameof(ModuleEnableSkins)) && Utility.IsValidImageUrl(url))
@@ -472,12 +476,14 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetCrossFade(string aniName, float time)
     {
         animation.CrossFade(aniName, time);
     }
 
     [RPC]
+    [UsedImplicitly]
     public void NetDie()
     {
         if (!this.hasDie)
@@ -487,12 +493,14 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetPlayAnimation(string aniName)
     {
         animation.Play(aniName);
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetPlayAnimationAt(string aniName, float normalizedTime)
     {
         animation.Play(aniName);
@@ -545,18 +553,21 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void PlaysoundRPC(string sndname)
     {
         transform.Find(sndname).GetComponent<AudioSource>().Play();
     }
 
     [RPC]
+    [UsedImplicitly]
     private void RemoveMe()
     {
         Destroy(gameObject);
     }
 
     [RPC]
+    [UsedImplicitly]
     public void SetSize(float size, PhotonMessageInfo info)
     {
         size = Mathf.Clamp(size, 0.1f, 50f);
@@ -664,6 +675,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void StartNeckSteam()
     {
         this.neckSteamObject.GetComponent<ParticleSystem>().Stop();
@@ -671,6 +683,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void StartSweepSmoke()
     {
         this.sweepSmokeObject.GetComponent<ParticleSystem>().enableEmission = true;
@@ -688,6 +701,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void StopSweepSmoke()
     {
         this.sweepSmokeObject.GetComponent<ParticleSystem>().enableEmission = false;
@@ -695,6 +709,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void TitanGetHit(int viewID, int speed)
     {
         Transform transform = this.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck");

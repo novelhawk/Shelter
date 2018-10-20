@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Game;
+using JetBrains.Annotations;
 using Mod;
 using Mod.Exceptions;
 using Mod.GameSettings;
@@ -245,6 +246,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void BackToHumanRPC()
     {
         this.titanForm = false;
@@ -253,6 +255,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void BadGuyReleaseMe()
     {
         this.hookBySomeOne = false;
@@ -260,6 +263,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void BlowAway(Vector3 force, PhotonMessageInfo info = null)
     {
         if (info != null && !info.sender.IsLocal && !info.sender.IsMasterClient && info.sender.Properties.PlayerType != PlayerType.Titan) // This allows MC to blowAway need TODO: To check for force valididy
@@ -937,10 +941,6 @@ public class HERO : Photon.MonoBehaviour
             photonView.RPC(Rpc.GasEmission, PhotonTargets.Others, objArray2);
         }
         this.smoke_3dmg.enableEmission = false;
-    }
-
-    private void escapeFromGrab()
-    {
     }
 
     public void falseAttack()
@@ -1846,6 +1846,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void HookFail()
     {
         this.hookTarget = null;
@@ -1919,6 +1920,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void KillObject()
     {
         Destroy(gameObject);
@@ -2752,6 +2754,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void LoadskinRPC(int horse, string url)
     {
         if (ModuleManager.Enabled(nameof(ModuleEnableSkins)))
@@ -2767,6 +2770,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void MoveToRPC(float posX, float posY, float posZ, PhotonMessageInfo info)
     {
         if (info.sender.IsMasterClient)
@@ -2776,6 +2780,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void Net3DMGSMOKE(bool ifON)
     {
         if (this.smoke_3dmg != null)
@@ -2785,6 +2790,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetContinueAnimation()
     {
         foreach (AnimationState current in animation)
@@ -2800,6 +2806,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetCrossFade(string aniName, float time)
     {
         this.currentAnimation = aniName;
@@ -2808,6 +2815,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void NetDie(Vector3 force, bool isBite, int viewID = -1, string titanName = "", bool killByTitan = true, PhotonMessageInfo info = null)
     {
         if (photonView.isMine && info != null && IN_GAME_MAIN_CAMERA.GameMode != GameMode.BossFight)
@@ -2938,6 +2946,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetDie2(int viewID = -1, string titanName = "", PhotonMessageInfo info = null)
     {
         GameObject obj2;
@@ -3161,6 +3170,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetGrabbed(int id, bool leftHand)
     {
         this.titanWhoGrabMeID = id;
@@ -3168,6 +3178,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetlaughAttack()
     {
         foreach (GameObject obj2 in GameObject.FindGameObjectsWithTag("titan"))
@@ -3180,6 +3191,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetPauseAnimation()
     {
         foreach (AnimationState current in animation)
@@ -3187,6 +3199,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetPlayAnimation(string aniName)
     {
         this.currentAnimation = aniName;
@@ -3197,6 +3210,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetPlayAnimationAt(string aniName, float normalizedTime)
     {
         this.currentAnimation = aniName;
@@ -3208,12 +3222,14 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetSetIsGrabbedFalse()
     {
         this.State = HeroState.Idle;
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetTauntAttack(float tauntTime, float distance = 100f)
     {
         foreach (GameObject obj2 in GameObject.FindGameObjectsWithTag("titan"))
@@ -3226,6 +3242,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetUngrabbed()
     {
         this.ungrabbed();
@@ -3233,6 +3250,7 @@ public class HERO : Photon.MonoBehaviour
         this.falseAttack();
     }
 
+    [UsedImplicitly]
     public void onDeathEvent(int viewID, bool isTitan)
     {
         RCEvent event2;
@@ -3385,6 +3403,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void ReturnFromCannon(PhotonMessageInfo info)
     {
         if (info.sender == photonView.owner)
@@ -3406,6 +3425,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void RPCHookedByHuman(int hooker, Vector3 hookPosition, PhotonMessageInfo info)
     {
         if (!PhotonView.TryParse(hooker, out PhotonView view))
@@ -3543,6 +3563,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void SetMyCannon(int viewID, PhotonMessageInfo info)
     {
         if (info.sender == photonView.owner)
@@ -3562,6 +3583,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void SetMyPhotonCamera(float offset, PhotonMessageInfo info)
     {
         if (photonView.owner == info.sender)
@@ -3573,6 +3595,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void SetMyTeam(int val)
     {
         this.myTeam = val;
@@ -3906,6 +3929,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void ShowHitDamage()
     {
         GameObject target = GameObject.Find("LabelScore");
@@ -3933,6 +3957,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void SpawnCannonRPC(string settings, PhotonMessageInfo info)
     {
         if (info.sender.IsMasterClient && photonView.isMine && this.myCannon == null)
@@ -5400,6 +5425,7 @@ public class HERO : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void WhoIsMyErenTitan(int id)
     {
         if (PhotonView.TryParse(id, out PhotonView view))

@@ -1,10 +1,8 @@
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Security.AccessControl;
 using Game;
 using ExitGames.Client.Photon;
+using JetBrains.Annotations;
 using Mod;
 using Mod.Exceptions;
 using Mod.GameSettings;
@@ -74,6 +72,7 @@ public partial class FengGameManagerMKII
     public int wave = 1;
 
     [RPC]
+    [UsedImplicitly]
     private void RequireStatus(PhotonMessageInfo info)
     {
         if (!Player.Self.IsMasterClient && PhotonNetwork.PlayerList.Any(x => x.ID < Player.Self.ID))
@@ -85,6 +84,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void RefreshStatus(int score1, int score2, int wav, int highestWav, float time1, float time2, bool startRacin, bool endRacin, PhotonMessageInfo info)
     {
         if (!info.sender.IsMasterClient)
@@ -103,6 +103,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void RefreshPVPStatus(int score1, int score2, PhotonMessageInfo info)
     {
         if (!info.sender.IsMasterClient && IN_GAME_MAIN_CAMERA.GameMode != GameMode.PvpCapture)
@@ -113,6 +114,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void RefreshPVPStatus_AHSS(int[] score1, PhotonMessageInfo info)
     {
         if (!info.sender.IsMasterClient)
@@ -122,6 +124,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     public void PauseRPC(bool pause, PhotonMessageInfo info)
     {
         if (!info.sender.IsMasterClient)
@@ -145,6 +148,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void LabelRPC(int viewId, PhotonMessageInfo info)
     {
         if (PhotonView.TryParse(viewId, out PhotonView view))
@@ -157,6 +161,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     public void OneTitanDown(string titanType, bool onPlayerLeave)
     {
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || PhotonNetwork.isMasterClient)
@@ -276,6 +281,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void SetMasterRC(PhotonMessageInfo info)
     {
         if (info.sender.IsMasterClient)
@@ -285,6 +291,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     public void RespawnHeroInNewRound()
     {
         if (!needChooseSide && GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().gameOver)
@@ -295,6 +302,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetGameLose(int score, PhotonMessageInfo info)
     {
         if (!info.sender.IsMasterClient && !info.sender.IsLocal)
@@ -310,6 +318,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void RestartGameByClient(PhotonMessageInfo info)
     {
         if (!Player.Self.IsMasterClient)
@@ -317,6 +326,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetGameWin(int score, PhotonMessageInfo info)
     {
         humanScore = score;
@@ -348,6 +358,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     public void SomeOneIsDead(int id = -1)
     {
         switch (IN_GAME_MAIN_CAMERA.GameMode)
@@ -399,12 +410,14 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetRefreshRacingResult(string tmp)
     {
         localRacingResult = tmp;
     }
 
     [RPC]
+    [UsedImplicitly]
     public void NetShowDamage(int speed, PhotonMessageInfo info)
     {
         if (info != null && !info.sender.IsMasterClient && !info.sender.IsLocal)
@@ -443,6 +456,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void LoadskinRPC(string n, string url, string url2, string[] skybox, PhotonMessageInfo info)
     {
         if (ModuleManager.Enabled(nameof(ModuleEnableSkins)) && info.sender.IsMasterClient)
@@ -454,6 +468,7 @@ public partial class FengGameManagerMKII
     private float _lastMapLoad;
     
     [RPC]
+    [UsedImplicitly]
     private void RPCLoadLevel(PhotonMessageInfo info)
     {
         if (!info.sender.IsMasterClient && PhotonNetwork.isMasterClient) // PhotonNetwork.isMasterClient is needed I think
@@ -479,6 +494,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void GetRacingResult(string player, float time1)
     {
         RacingResult result = new RacingResult
@@ -491,6 +507,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void IgnorePlayer(int id, PhotonMessageInfo info)
     {
         if (!info.sender.IsMasterClient)
@@ -501,6 +518,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void IgnorePlayerArray(IEnumerable<int> ids, PhotonMessageInfo info)
     {
         if (!info.sender.IsMasterClient)
@@ -514,6 +532,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void CustomlevelRPC(string[] content, PhotonMessageInfo info)
     {
         if (info.sender.IsMasterClient)
@@ -544,6 +563,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void Clearlevel(string[] link, int gametype, PhotonMessageInfo info)
     {
         if (info.sender.IsMasterClient)
@@ -577,6 +597,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void ShowResult(string t1, string t2, string t3, string t4, string t5, string t6, PhotonMessageInfo info)
     {
         if (!info.sender.IsMasterClient)
@@ -585,6 +606,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void SpawnTitanRPC(PhotonMessageInfo info)
     {
         if (info.sender.IsMasterClient)
@@ -602,6 +624,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     public void Chat(string content, string sender, PhotonMessageInfo info)
     {
 //        Shelter.EventManager.Fire(nameof(Chat));
@@ -615,6 +638,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void SetTeamRPC(int setting, PhotonMessageInfo info)
     {
         if (info.sender.IsMasterClient || info.sender.IsLocal)
@@ -624,6 +648,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void SettingRPC(Hashtable hash, PhotonMessageInfo info)
     {
         if (!info.sender.IsMasterClient) 
@@ -633,12 +658,14 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void ShowChatContent(string content, PhotonMessageInfo info) 
     {
         throw new NotAllowedException(nameof(ShowChatContent), info);
     }
 
     [RPC]
+    [UsedImplicitly]
     private void UpdateKillInfo(bool t1, string killer, bool t2, string victim, int dmg)
     {
         GameObject obj2 = GameObject.Find("UI_IN_GAME");
@@ -672,6 +699,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     public void VerifyPlayerHasLeft(int id, PhotonMessageInfo info)
     {
         if (info.sender.IsMasterClient && Player.TryParse(id, out Player player))
@@ -679,6 +707,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     public void SpawnPlayerAtRPC(float posX, float posY, float posZ, PhotonMessageInfo info)
     {
         if (info.sender.IsMasterClient && logicLoaded && customLevelLoaded && !needChooseSide &&
@@ -777,6 +806,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     public void TitanGetKill(Player player, int Damage, string name1, PhotonMessageInfo info)
     {
         if (info != null && !info.sender.IsMasterClient)
@@ -790,6 +820,7 @@ public partial class FengGameManagerMKII
     }
 
     [RPC]
+    [UsedImplicitly]
     private void ChatPM(string sender, string content, PhotonMessageInfo info) //TODO: Customize PMs message
     {
         Mod.Interface.Chat.ReceivePrivateMessage($"<color=#1068D4>PM</color><color=#108CD4>></color> <color=#{Mod.Interface.Chat.SystemColor}>{info.sender.Properties.HexName}: {content}</color>", info.sender);

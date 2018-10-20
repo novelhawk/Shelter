@@ -1,4 +1,5 @@
 using System.Collections;
+using JetBrains.Annotations;
 using Mod;
 using Mod.Exceptions;
 using Photon;
@@ -215,6 +216,7 @@ public class Bullet : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void KillObject()
     {
         Destroy(this.rope);
@@ -269,6 +271,7 @@ public class Bullet : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void MyMasterIs(int id, string launcherRef, PhotonMessageInfo info)
     {
         if (!PhotonView.TryParse(id, out PhotonView view))
@@ -295,6 +298,7 @@ public class Bullet : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetLaunch(Vector3 newPosition)
     {
         this.nodes = new ArrayList
@@ -304,6 +308,7 @@ public class Bullet : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetUpdateLeviSpiral(Vector3 newPosition, Vector3 masterPosition, Vector3 masterrotation)
     {
         this.phase = 2;
@@ -328,6 +333,7 @@ public class Bullet : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetUpdatePhase1(Vector3 newPosition, Vector3 masterPosition)
     {
         this.lineRenderer.SetVertexCount(2);
@@ -385,12 +391,14 @@ public class Bullet : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void SetPhase(int value)
     {
         this.phase = value;
     }
 
     [RPC]
+    [UsedImplicitly]
     private void SetVelocityAndLeft(Vector3 value, Vector3 v2, bool l)
     {
         this.velocity = value;
@@ -407,12 +415,14 @@ public class Bullet : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void TieMeTo(Vector3 p)
     {
         transform.position = p;
     }
 
     [RPC]
+    [UsedImplicitly]
     private void TieMeToOBJ(int id)
     {
         if (PhotonView.TryParse(id, out PhotonView view))

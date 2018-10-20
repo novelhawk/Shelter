@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Button Scale")]
@@ -46,6 +47,7 @@ public class UIButtonScale : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnPress(bool isPressed)
     {
         if (enabled)

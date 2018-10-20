@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using Game;
+using JetBrains.Annotations;
 using Mod;
 using Mod.GameSettings;
 using Mod.Managers;
@@ -521,6 +522,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void DieBlowRPC(Vector3 attacker, float hitPauseTime)
     {
         if (photonView.isMine)
@@ -534,6 +536,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void DieByCannon(int viewID)
     {
         PhotonView view = PhotonView.Find(viewID);
@@ -643,6 +646,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void DieHeadBlowRPC(Vector3 attacker, float hitPauseTime)
     {
         if (photonView.isMine)
@@ -1392,12 +1396,14 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void GrabbedTargetEscape()
     {
         this.grabbedTarget = null;
     }
 
     [RPC]
+    [UsedImplicitly]
     public void GrabToLeft()
     {
         Transform transform = this.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L/hand_L_001");
@@ -1414,6 +1420,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void GrabToRight()
     {
         Transform transform = this.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R/hand_R_001");
@@ -1560,6 +1567,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void HitAnkleRPC(int viewID)
     {
         if (!this.hasDie && this.state != TitanState.Down)
@@ -1587,6 +1595,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void HitEyeRPC(int viewID)
     {
         if (!this.hasDie)
@@ -1618,6 +1627,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void HitLRPC(Vector3 attacker, float hitPauseTime)
     {
         if (photonView.isMine)
@@ -1640,6 +1650,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void HitRRPC(Vector3 attacker, float hitPauseTime)
     {
         if (photonView.isMine && !this.hasDie)
@@ -1733,6 +1744,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void LabelRPC(int health, int maxHealth)
     {
         if (health < 0)
@@ -1837,6 +1849,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void Laugh(float sbtime = 0f)
     {
         if (this.state == TitanState.Idle || this.state == TitanState.Turning || this.state == TitanState.Chasing)
@@ -1943,6 +1956,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void LoadskinRPC(string body, string eye)
     {
         if (ModuleManager.Enabled(nameof(ModuleEnableSkins)))
@@ -2008,6 +2022,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void MoveToRPC(float posX, float posY, float posZ, PhotonMessageInfo info)
     {
         if (info.sender.IsMasterClient)
@@ -2017,12 +2032,14 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetCrossFade(string aniName, float time)
     {
         animation.CrossFade(aniName, time);
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetDie()
     {
         this.asClientLookTarget = false;
@@ -2045,12 +2062,14 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetPlayAnimation(string aniName)
     {
         animation.Play(aniName);
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetPlayAnimationAt(string aniName, float normalizedTime)
     {
         animation.Play(aniName);
@@ -2058,6 +2077,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetSetAbnormalType(int type)
     {
         if (!this.hasload)
@@ -2164,6 +2184,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void NetSetLevel(float level, int AI, int skinColor)
     {
         this.setLevel2(level, AI, skinColor);
@@ -2246,6 +2267,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void PlaysoundRPC(string sndname)
     {
         transform.Find(sndname).GetComponent<AudioSource>().Play();
@@ -2465,6 +2487,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void SetIfLookTarget(bool bo)
     {
         this.asClientLookTarget = bo;
@@ -2635,6 +2658,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     private void SetMyTarget(int id)
     {
         if (id == -1)
@@ -2775,6 +2799,7 @@ public class TITAN : Photon.MonoBehaviour
     }
 
     [RPC]
+    [UsedImplicitly]
     public void TitanGetHit(int viewID, int speed)
     {
         PhotonView view = PhotonView.Find(viewID);

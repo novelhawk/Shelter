@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
-using Mod.Interface.Components;
-using Newtonsoft.Json;
 using UnityEngine;
 using LogType = Mod.Logging.LogType;
 

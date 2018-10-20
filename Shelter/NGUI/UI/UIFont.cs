@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Text;
-using NGUI;
 using NGUI.Internal;
 using UnityEngine;
 

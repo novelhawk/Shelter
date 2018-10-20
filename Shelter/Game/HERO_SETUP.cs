@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using Game;
-using Mod.Interface;
 using UnityEngine;
 using Xft;
 

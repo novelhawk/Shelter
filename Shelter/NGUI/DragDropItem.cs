@@ -1,4 +1,4 @@
-using NGUI;
+using JetBrains.Annotations;
 using NGUI.Internal;
 using UnityEngine;
 
@@ -36,6 +36,7 @@ public class DragDropItem : MonoBehaviour
         NGUITools.MarkParentAsChanged(gameObject);
     }
 
+    [UsedImplicitly]
     private void OnDrag(Vector2 delta)
     {
         if (enabled && UICamera.currentTouchID > -2)
@@ -57,6 +58,7 @@ public class DragDropItem : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnPress(bool isPressed)
     {
         if (enabled)

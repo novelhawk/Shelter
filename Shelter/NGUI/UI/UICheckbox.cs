@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Checkbox")]
@@ -37,6 +38,7 @@ public class UICheckbox : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnClick()
     {
         if (enabled)

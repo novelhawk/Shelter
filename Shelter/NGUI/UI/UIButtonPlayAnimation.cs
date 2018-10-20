@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Button Play Animation")]
@@ -18,6 +19,7 @@ public class UIButtonPlayAnimation : MonoBehaviour
     public Animation target;
     public Trigger trigger;
 
+    [UsedImplicitly]
     private void OnActivate(bool isActive)
     {
         if (enabled && (this.trigger == Trigger.OnActivate || this.trigger == Trigger.OnActivateTrue && isActive || this.trigger == Trigger.OnActivateFalse && !isActive))
@@ -26,6 +28,7 @@ public class UIButtonPlayAnimation : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnClick()
     {
         if (enabled && this.trigger == Trigger.OnClick)
@@ -34,6 +37,7 @@ public class UIButtonPlayAnimation : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnDoubleClick()
     {
         if (enabled && this.trigger == Trigger.OnDoubleClick)
@@ -62,6 +66,7 @@ public class UIButtonPlayAnimation : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnPress(bool isPressed)
     {
         if (enabled && (this.trigger == Trigger.OnPress || this.trigger == Trigger.OnPressTrue && isPressed || this.trigger == Trigger.OnPressFalse && !isPressed))
@@ -70,6 +75,7 @@ public class UIButtonPlayAnimation : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnSelect(bool isSelected)
     {
         if (enabled && (this.trigger == Trigger.OnSelect || this.trigger == Trigger.OnSelectTrue && isSelected || this.trigger == Trigger.OnSelectFalse && !isSelected))

@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using JetBrains.Annotations;
 using NGUI;
 using NGUI.Internal;
 using UnityEngine;
@@ -9,6 +10,7 @@ public class EquipRandomItem : MonoBehaviour
 {
     public InvEquipment equipment;
 
+    [UsedImplicitly]
     private void OnClick()
     {
         if (this.equipment != null)

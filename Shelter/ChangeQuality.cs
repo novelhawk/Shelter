@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class ChangeQuality : MonoBehaviour
@@ -5,6 +6,7 @@ public class ChangeQuality : MonoBehaviour
     private bool init;
     public static bool isTiltShiftOn;
 
+    [UsedImplicitly]
     private void OnSliderChange()
     {
         if (!this.init)

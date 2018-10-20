@@ -1,4 +1,4 @@
-using NGUI;
+using JetBrains.Annotations;
 using NGUI.Internal;
 using UnityEngine;
 
@@ -15,6 +15,7 @@ public class UISoundVolume : MonoBehaviour
         this.mSlider.eventReceiver = gameObject;
     }
 
+    [UsedImplicitly]
     private void OnSliderChange(float val)
     {
         NGUITools.soundVolume = val;

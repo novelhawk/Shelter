@@ -1,4 +1,4 @@
-using NGUI;
+using JetBrains.Annotations;
 using NGUI.Internal;
 using UnityEngine;
 
@@ -11,6 +11,7 @@ public class ChatInput : MonoBehaviour
     private UIInput mInput;
     public UITextList textList;
 
+    [UsedImplicitly]
     private void OnSubmit()
     {
         if (this.textList != null)

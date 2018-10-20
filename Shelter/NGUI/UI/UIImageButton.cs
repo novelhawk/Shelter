@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/UI/Image Button"), ExecuteInEditMode]
@@ -23,6 +24,7 @@ public class UIImageButton : MonoBehaviour
         this.UpdateImage();
     }
 
+    [UsedImplicitly]
     private void OnHover(bool isOver)
     {
         if (this.isEnabled && this.target != null)
@@ -32,6 +34,7 @@ public class UIImageButton : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnPress(bool pressed)
     {
         if (pressed)

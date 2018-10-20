@@ -1,9 +1,11 @@
 using Game;
+using JetBrains.Annotations;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 public class LanguageChangeListener : MonoBehaviour
 {
+    [UsedImplicitly]
     private void OnSelectionChange()
     {
         Language.type = Language.GetLangIndex(GetComponent<UIPopupList>().selection);

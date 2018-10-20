@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class CameraShake : MonoBehaviour //TODO: Removed unusued class? || Add camera shake to the game
@@ -7,6 +8,7 @@ public class CameraShake : MonoBehaviour //TODO: Removed unusued class? || Add c
     private bool _direction;
     private float _force;
 
+    [UsedImplicitly]
     private void shakeUpdate()
     {
         if (_duration > 0f)
@@ -24,6 +26,7 @@ public class CameraShake : MonoBehaviour //TODO: Removed unusued class? || Add c
         }
     }
 
+    [UsedImplicitly]
     public void startShake(float force, float duration, float decay = 0.95f)
     {
         if (_duration <= 0)

@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Interaction/Forward Events")]
@@ -16,6 +17,7 @@ public class UIForwardEvents : MonoBehaviour
     public bool onSubmit;
     public GameObject target;
 
+    [UsedImplicitly]
     private void OnClick()
     {
         if (this.onClick && this.target != null)
@@ -24,6 +26,7 @@ public class UIForwardEvents : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnDoubleClick()
     {
         if (this.onDoubleClick && this.target != null)
@@ -32,6 +35,7 @@ public class UIForwardEvents : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnDrag(Vector2 delta)
     {
         if (this.onDrag && this.target != null)
@@ -40,6 +44,7 @@ public class UIForwardEvents : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnDrop(GameObject go)
     {
         if (this.onDrop && this.target != null)
@@ -48,6 +53,7 @@ public class UIForwardEvents : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnHover(bool isOver)
     {
         if (this.onHover && this.target != null)
@@ -56,6 +62,7 @@ public class UIForwardEvents : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnInput(string text)
     {
         if (this.onInput && this.target != null)
@@ -64,6 +71,7 @@ public class UIForwardEvents : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnPress(bool pressed)
     {
         if (this.onPress && this.target != null)
@@ -72,6 +80,7 @@ public class UIForwardEvents : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnScroll(float delta)
     {
         if (this.onScroll && this.target != null)
@@ -80,6 +89,7 @@ public class UIForwardEvents : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnSelect(bool selected)
     {
         if (this.onSelect && this.target != null)
@@ -88,6 +98,7 @@ public class UIForwardEvents : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnSubmit()
     {
         if (this.onSubmit && this.target != null)

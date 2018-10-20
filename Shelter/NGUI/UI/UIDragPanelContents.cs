@@ -1,4 +1,4 @@
-using NGUI;
+using JetBrains.Annotations;
 using NGUI.Internal;
 using UnityEngine;
 
@@ -26,6 +26,7 @@ public class UIDragPanelContents : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnDrag(Vector2 delta)
     {
         if (enabled && NGUITools.GetActive(gameObject) && this.draggablePanel != null)
@@ -34,6 +35,7 @@ public class UIDragPanelContents : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnPress(bool pressed)
     {
         if (enabled && NGUITools.GetActive(gameObject) && this.draggablePanel != null)
@@ -42,6 +44,7 @@ public class UIDragPanelContents : MonoBehaviour
         }
     }
 
+    [UsedImplicitly]
     private void OnScroll(float delta)
     {
         if (enabled && NGUITools.GetActive(gameObject) && this.draggablePanel != null)

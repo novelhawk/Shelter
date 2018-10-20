@@ -1,8 +1,10 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 public class MapNameChange : MonoBehaviour
 {
+    [UsedImplicitly]
     private void OnSelectionChange()
     {
 //        LevelInfo info = LevelInfoManager.GetInfo(GetComponent<UIPopupList>().selection);

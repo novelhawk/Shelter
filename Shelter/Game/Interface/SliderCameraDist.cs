@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
@@ -5,6 +6,7 @@ public class SliderCameraDist : MonoBehaviour
 {
     private bool init;
 
+    [UsedImplicitly]
     private void OnSliderChange(float value)
     {
         if (!this.init)

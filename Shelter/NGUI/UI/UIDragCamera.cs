@@ -1,4 +1,4 @@
-using NGUI;
+using JetBrains.Annotations;
 using NGUI.Internal;
 using UnityEngine;
 
@@ -30,6 +30,7 @@ public class UIDragCamera : IgnoreTimeScale
         }
     }
 
+    [UsedImplicitly]
     private void OnDrag(Vector2 delta)
     {
         if (enabled && NGUITools.GetActive(gameObject) && this.draggableCamera != null)
@@ -38,6 +39,7 @@ public class UIDragCamera : IgnoreTimeScale
         }
     }
 
+    [UsedImplicitly]
     private void OnPress(bool isPressed)
     {
         if (enabled && NGUITools.GetActive(gameObject) && this.draggableCamera != null)
@@ -46,6 +48,7 @@ public class UIDragCamera : IgnoreTimeScale
         }
     }
 
+    [UsedImplicitly]
     private void OnScroll(float delta)
     {
         if (enabled && NGUITools.GetActive(gameObject) && this.draggableCamera != null)

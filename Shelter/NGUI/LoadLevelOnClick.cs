@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 [AddComponentMenu("NGUI/Examples/Load Level On Click")]
@@ -6,6 +7,7 @@ public class LoadLevelOnClick : MonoBehaviour
 {
     public string levelName;
 
+    [UsedImplicitly]
     private void OnClick()
     {
         if (!string.IsNullOrEmpty(this.levelName))
