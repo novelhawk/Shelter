@@ -9,7 +9,7 @@ namespace Game
 
         static CharacterMaterials()
         {
-            materials = new Dictionary<string, Material>();
+            materials = new Dictionary<string, Material>(58);
             AddMaterial("AOTTG_HERO_3DMG");
             AddMaterial("aottg_hero_AHSS_3dmg");
             AddMaterial("aottg_hero_annie_cap_causal");
@@ -67,6 +67,7 @@ namespace Game
             AddMaterial("hair_rico");
             AddMaterial("hair_sasha");
             AddMaterial("hair_mikasa");
+            
             Texture texture = (Texture) Object.Instantiate(Resources.Load("NewTexture/aottg_hero_eyes"));
             Material material = (Material) Object.Instantiate(Resources.Load("NewTexture/MaterialGLASS"));
             material.mainTexture = texture;
@@ -75,9 +76,8 @@ namespace Game
 
         private static void AddMaterial(string pref)
         {
-            Texture texture = (Texture) Object.Instantiate(Resources.Load("NewTexture/" + pref));
             Material material = (Material) Object.Instantiate(Resources.Load("NewTexture/MaterialCharacter"));
-            material.mainTexture = texture;
+            material.mainTexture = (Texture) Object.Instantiate(Resources.Load("NewTexture/" + pref));
             materials.Add(pref, material);
         }
     }
