@@ -40,7 +40,7 @@ public class HERO : Photon.MonoBehaviour
     public float bombSpeed;
     public float bombTime;
     public float bombTimeMax;
-    private float buffTime;
+    private float _speedupTime;
     public GameObject bulletLeft;
     private int bulletMAX = 7;
     public GameObject bulletRight;
@@ -55,7 +55,7 @@ public class HERO : Photon.MonoBehaviour
     public string currentAnimation;
     private int currentBladeNum = 5;
     private float currentBladeSta = 100f;
-    private Buff currentBuff;
+    private bool _isSpeedup; //TODO: Replace with (_speedupTime > 0f)
     public Camera currentCamera;
     private float currentGas = 100f;
     public float currentSpeed;
@@ -465,19 +465,18 @@ public class HERO : Photon.MonoBehaviour
         this.applyForceToBody(obj10, force);
     }
 
-    private void bufferUpdate()
+    private void SpeedupUpdate()
     {
-        if (this.buffTime > 0f)
+        if (_isSpeedup)
         {
-            this.buffTime -= Time.deltaTime;
-            if (this.buffTime <= 0f)
+            _speedupTime -= Time.deltaTime;
+            if (_speedupTime <= 0f)
             {
-                this.buffTime = 0f;
-                if (this.currentBuff == Buff.SpeedUp && animation.IsPlaying("run_sasha"))
-                {
+                _speedupTime = 0f;
+                if (_isSpeedup && animation.IsPlaying("run_sasha"))
                     this.crossFade("run", 0.1f);
-                }
-                this.currentBuff = Buff.NoBuff;
+                
+                _isSpeedup = false;
             }
         }
     }
@@ -1249,22 +1248,17 @@ public class HERO : Photon.MonoBehaviour
                         float num6 = vector8.magnitude <= 0.95f ? (vector8.magnitude >= 0.25f ? vector8.magnitude : 0f) : 1f;
                         zero = zero * num6;
                         zero = zero * this.speed;
-                        if (this.buffTime > 0f && this.currentBuff == Buff.SpeedUp)
-                        {
+                        if (_speedupTime > 0f && _isSpeedup)
                             zero = zero * 4f;
-                        }
+                        
                         if (x != 0f || z != 0f)
                         {
                             if (!this.baseAnimation.IsPlaying("run") && !this.baseAnimation.IsPlaying("jump") && !this.baseAnimation.IsPlaying("run_sasha") && (!this.baseAnimation.IsPlaying("horse_geton") || this.baseAnimation["horse_geton"].normalizedTime >= 0.5f))
                             {
-                                if (this.buffTime > 0f && this.currentBuff == Buff.SpeedUp)
-                                {
+                                if (_speedupTime > 0f && _isSpeedup)
                                     this.crossFade("run_sasha", 0.1f);
-                                }
                                 else
-                                {
                                     this.crossFade("run", 0.1f);
-                                }
                             }
                         }
                         else
@@ -3250,7 +3244,6 @@ public class HERO : Photon.MonoBehaviour
         this.falseAttack();
     }
 
-    [UsedImplicitly]
     public void onDeathEvent(int viewID, bool isTitan)
     {
         RCEvent event2;
@@ -4303,7 +4296,7 @@ public class HERO : Photon.MonoBehaviour
                         if (Shelter.InputManager.IsDown(InputAction.Suicide))
                             this.Suicide();
                         
-                        this.bufferUpdate();
+                        this.SpeedupUpdate();
                         this.updateExt();
                         
                         if (!this.grounded && this.State != HeroState.AirDodge)
@@ -4424,8 +4417,8 @@ public class HERO : Photon.MonoBehaviour
                                             {
                                                 this.attackAnimation = "special_sasha";
                                                 this.playAnimation("special_sasha");
-                                                this.currentBuff = Buff.SpeedUp;
-                                                this.buffTime = 10f;
+                                                _isSpeedup = true;
+                                                this._speedupTime = 10f;
                                             }
                                             else
                                             {
@@ -4905,7 +4898,7 @@ public class HERO : Photon.MonoBehaviour
                                             }
                                             else
                                             {
-                                                this.NetTauntAttack(5f, 100f);
+                                                this.NetTauntAttack(5f);
                                             }
                                         }
                                         else
