@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using Game;
 using Mod;
 using RC;
@@ -10,7 +12,7 @@ namespace Photon
         public static readonly InstantiateTracker instance = new InstantiateTracker();
         private Player[] players = new Player[0];
 
-        public bool checkObj(string key, global::Mod.Player player, int[] viewIDS)
+        public bool checkObj(string key, global::Mod.Player player, IEnumerable<int> viewIDS)
         {
             if (player.IsMasterClient || player.IsLocal)
             {
@@ -18,16 +20,11 @@ namespace Photon
             }
             int num = player.ID * PhotonNetwork.MaxViewIds;
             int num2 = num + PhotonNetwork.MaxViewIds;
-            foreach (int num3 in viewIDS)
+            if (viewIDS.Any(num3 => num3 <= num || num3 >= num2))
             {
-                if (num3 <= num || num3 >= num2)
-                {
-                    if (PhotonNetwork.isMasterClient)
-                    {
-                        FengGameManagerMKII.instance.KickPlayerRC(player, true, "spawning invalid photon view.");
-                    }
-                    return false;
-                }
+                if (PhotonNetwork.isMasterClient)
+                    FengGameManagerMKII.instance.KickPlayerRC(player, true, "spawning invalid photon view.");
+                return false;
             }
             key = key.ToLower();
             switch (key)
@@ -133,17 +130,16 @@ namespace Photon
                     return this.Instantiated(player, GameResource.effect);
 
                 case "hitmeatbig":
-                    if (player.Properties.Character.ToUpper() == "EREN")
+                    switch (player.Properties.Character.ToUpper())
                     {
-                        if (!FengGameManagerMKII.settings.AllowErenTitan)
-                        {
+                        case "EREN" when !FengGameManagerMKII.settings.AllowErenTitan:
                             if (!(!PhotonNetwork.isMasterClient || FengGameManagerMKII.instance.restartingEren))
                             {
                                 FengGameManagerMKII.instance.KickPlayerRC(player, false, "spawning eren effect (" + key + ").");
                             }
                             return false;
-                        }
-                        return this.Instantiated(player, GameResource.effect);
+                        case "EREN":
+                            return this.Instantiated(player, GameResource.effect);
                     }
                     if (PhotonNetwork.isMasterClient)
                     {
@@ -263,11 +259,11 @@ namespace Photon
                 if (this.players[num].IsThingExcessive(type))
                 {
                     global::Mod.Player player = owner;
-                    if (player != null && PhotonNetwork.isMasterClient)
+                    if (PhotonNetwork.isMasterClient)
                     {
                         FengGameManagerMKII.instance.KickPlayerRC(player, true, "spamming instantiate (" + type + ").");
                     }
-                    RCextensions.RemoveAt<Player>(ref this.players, num);
+                    RCextensions.RemoveAt(ref this.players, num);
                     return false;
                 }
             }
