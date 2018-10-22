@@ -5249,22 +5249,22 @@ public class HERO : Photon.MonoBehaviour
                         }
                         if (!this.useGun)
                         {
-                            if (this.leftbladetrail.gameObject.IsActive())
+                            if (this.leftbladetrail.gameObject.GetActive())
                             {
                                 this.leftbladetrail.update();
                                 this.rightbladetrail.update();
                             }
-                            if (this.leftbladetrail2.gameObject.IsActive())
+                            if (this.leftbladetrail2.gameObject.GetActive())
                             {
                                 this.leftbladetrail2.update();
                                 this.rightbladetrail2.update();
                             }
-                            if (this.leftbladetrail.gameObject.IsActive())
+                            if (this.leftbladetrail.gameObject.GetActive())
                             {
                                 this.leftbladetrail.lateUpdate();
                                 this.rightbladetrail.lateUpdate();
                             }
-                            if (this.leftbladetrail2.gameObject.IsActive())
+                            if (this.leftbladetrail2.gameObject.GetActive())
                             {
                                 this.leftbladetrail2.lateUpdate();
                                 this.rightbladetrail2.lateUpdate();

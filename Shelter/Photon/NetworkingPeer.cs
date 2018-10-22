@@ -95,7 +95,7 @@ namespace Photon
                 string str = PhotonNetwork.PhotonServerSettings.RpcList[i];
                 this.rpcShortcuts[str] = i;
             }
-            this.states = PeerStates.PeerCreated;
+            this.states = ClientState.PeerCreated;
         }
 
         private void AddNewPlayer(int ID, Player player)
@@ -221,7 +221,7 @@ namespace Photon
                 Debug.LogWarning("Ignoring Connect() because app gets closed. If this is an error, check PhotonHandler.AppQuits.");
                 return false;
             }
-            if (PhotonNetwork.connectionStatesDetailed == PeerStates.Disconnecting)
+            if (PhotonNetwork.connectionStatesDetailed == ClientState.Disconnecting)
             {
                 Debug.LogError("Connect() failed. Can't connect while disconnecting (still). Current state: " + PhotonNetwork.connectionStatesDetailed);
                 return false;
@@ -231,15 +231,15 @@ namespace Photon
                 switch (type)
                 {
                     case ServerConnection.MasterServer:
-                        this.states = PeerStates.ConnectingToMasterserver;
+                        this.states = ClientState.ConnectingToMasterserver;
                         return flag;
 
                     case ServerConnection.GameServer:
-                        this.states = PeerStates.ConnectingToGameserver;
+                        this.states = ClientState.ConnectingToGameserver;
                         return flag;
 
                     case ServerConnection.NameServer:
-                        this.states = PeerStates.ConnectingToNameServer;
+                        this.states = ClientState.ConnectingToNameServer;
                         return flag;
                 }
             }
@@ -261,7 +261,7 @@ namespace Photon
             }
             this.IsUsingNameServer = true;
             this.CloudRegion = CloudRegionCode.None;
-            if (this.states != PeerStates.ConnectedToNameServer)
+            if (this.states != ClientState.ConnectedToNameServer)
             {
                 string nameServerAddress = this.NameServerAddress;
                 if (!nameServerAddress.Contains(":"))
@@ -275,7 +275,7 @@ namespace Photon
                 {
                     return false;
                 }
-                this.states = PeerStates.ConnectingToNameServer;
+                this.states = ClientState.ConnectingToNameServer;
             }
             return true;
         }
@@ -289,7 +289,7 @@ namespace Photon
             }
             this.IsUsingNameServer = true;
             this.CloudRegion = region;
-            if (this.states == PeerStates.ConnectedToNameServer)
+            if (this.states == ClientState.ConnectedToNameServer)
             {
                 return this.OpAuthenticate(this.mAppId, this.mAppVersionPun, this.PlayerName, this.CustomAuthenticationValues, region.ToString());
             }
@@ -304,7 +304,7 @@ namespace Photon
             {
                 return false;
             }
-            this.states = PeerStates.ConnectingToNameServer;
+            this.states = ClientState.ConnectingToNameServer;
             return true;
         }
 
@@ -447,7 +447,7 @@ namespace Photon
             }
             else
             {
-                this.states = PeerStates.Disconnecting;
+                this.states = ClientState.Disconnecting;
                 base.Disconnect();
             }
         }
@@ -457,17 +457,17 @@ namespace Photon
             switch (this.server)
             {
                 case ServerConnection.MasterServer:
-                    this.states = PeerStates.DisconnectingFromMasterserver;
+                    this.states = ClientState.DisconnectingFromMasterserver;
                     base.Disconnect();
                     break;
 
                 case ServerConnection.GameServer:
-                    this.states = PeerStates.DisconnectingFromGameserver;
+                    this.states = ClientState.DisconnectingFromGameserver;
                     base.Disconnect();
                     break;
 
                 case ServerConnection.NameServer:
-                    this.states = PeerStates.DisconnectingFromNameServer;
+                    this.states = ClientState.DisconnectingFromNameServer;
                     base.Disconnect();
                     break;
             }
@@ -844,7 +844,7 @@ namespace Photon
         {
             if (operationResponse.ReturnCode == ErrorCode.Ok)
             {
-                this.states = PeerStates.Joined;
+                this.states = ClientState.Joined;
                 this.mRoomToGetInto.IsLocalClientInside = true;
                 Hashtable pActorProperties = (Hashtable) operationResponse[249];
                 Hashtable gameProperties = (Hashtable) operationResponse[248];
@@ -1413,7 +1413,7 @@ namespace Photon
                             if (senderId == this.mLocalActor.ID)
                             {
                                 // We created it
-                                if (this.mLastJoinType == JoinType.JoinOrCreateOnDemand && this.mLocalActor.ID == 1)
+                                if (this.mLastJoinType == JoinType.JoinOrCreateRoom && this.mLocalActor.ID == 1)
                                     SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom);
 
                                 // Create Player instances
@@ -1452,7 +1452,7 @@ namespace Photon
 
         public void OnOperationResponse(OperationResponse operationResponse)
         {
-            if (PhotonNetwork.networkingPeer.states == PeerStates.Disconnecting)
+            if (PhotonNetwork.networkingPeer.states == ClientState.Disconnecting)
             {
                 if (PhotonNetwork.LogLevel >= PhotonLogLevel.Informational)
                 {
@@ -1532,7 +1532,7 @@ namespace Photon
                     Debug.LogError(string.Format("The appId this client sent is unknown on the server (Cloud). Check settings. If using the Cloud, check account."));
                     object[] objArray8 = new object[] { DisconnectCause.InvalidAuthentication };
                     SendMonoMessage(PhotonNetworkingMessage.OnFailedToConnectToPhoton, objArray8);
-                    this.states = PeerStates.Disconnecting;
+                    this.states = ClientState.Disconnecting;
                     this.Disconnect();
                     return;
                 }
@@ -1647,13 +1647,13 @@ namespace Photon
                     return;
 
                 case OperationCode.LeaveLobby:
-                    this.states = PeerStates.Authenticated;
+                    this.states = ClientState.Authenticated;
                     this.LeftLobbyCleanup();
                     this.externalListener.OnOperationResponse(operationResponse);
                     return;
 
                 case OperationCode.JoinLobby:
-                    this.states = PeerStates.JoinedLobby;
+                    this.states = ClientState.JoinedLobby;
                     this.insideLobby = true;
                     SendMonoMessage(PhotonNetworkingMessage.OnJoinedLobby);
                     this.externalListener.OnOperationResponse(operationResponse);
@@ -1670,18 +1670,18 @@ namespace Photon
                         else switch (this.server)
                         {
                             case ServerConnection.MasterServer when PhotonNetwork.autoJoinLobby:
-                                this.states = PeerStates.Authenticated;
+                                this.states = ClientState.Authenticated;
                                 this.OpJoinLobby(this.lobby);
                                 break;
                             case ServerConnection.MasterServer:
-                                this.states = PeerStates.ConnectedToMaster;
+                                this.states = ClientState.ConnectedToMaster;
                                 SendMonoMessage(PhotonNetworkingMessage.OnConnectedToMaster);
                                 break;
                             case ServerConnection.GameServer:
-                                this.states = PeerStates.Joining;
-                                if (this.mLastJoinType == JoinType.JoinGame || this.mLastJoinType == JoinType.JoinRandomGame || this.mLastJoinType == JoinType.JoinOrCreateOnDemand)
-                                    this.OpJoinRoom(this.mRoomToGetInto.FullName, this.mRoomOptionsForCreate, this.mRoomToEnterLobby, this.mLastJoinType == JoinType.JoinOrCreateOnDemand);
-                                else if (this.mLastJoinType == JoinType.CreateGame)
+                                this.states = ClientState.Joining;
+                                if (this.mLastJoinType == JoinType.JoinRoom || this.mLastJoinType == JoinType.JoinRandomRoom || this.mLastJoinType == JoinType.JoinOrCreateRoom)
+                                    this.OpJoinRoom(this.mRoomToGetInto.FullName, this.mRoomOptionsForCreate, this.mRoomToEnterLobby, this.mLastJoinType == JoinType.JoinOrCreateRoom);
+                                else if (this.mLastJoinType == JoinType.CreateRoom)
                                     this.OpCreateGame(this.mRoomToGetInto.FullName, this.mRoomOptionsForCreate, this.mRoomToEnterLobby);
                                 break;
                         }
@@ -1736,7 +1736,7 @@ namespace Photon
                     this.externalListener.OnOperationResponse(operationResponse);
                     return;
             }
-            this.states = PeerStates.Disconnecting;
+            this.states = ClientState.Disconnecting;
             this.Disconnect();
             if (operationResponse.ReturnCode == ErrorCode.MaxCcuReached)
             {
@@ -1926,7 +1926,7 @@ namespace Photon
                 case StatusCode.SecurityExceptionOnConnect:
                 case StatusCode.ExceptionOnConnect:
                 {
-                    this.states = PeerStates.PeerCreated;
+                    this.states = ClientState.PeerCreated;
                     if (this.CustomAuthenticationValues != null)
                     {
                         this.CustomAuthenticationValues.Secret = null;
@@ -1938,7 +1938,7 @@ namespace Photon
                 case StatusCode.Connect:
                     switch (this.states)
                     {
-                        case PeerStates.ConnectingToNameServer:
+                        case ClientState.ConnectingToNameServer:
                             if (PhotonNetwork.LogLevel >= PhotonLogLevel.Full)
                                 Debug.Log("Connected to NameServer.");
                         
@@ -1947,22 +1947,22 @@ namespace Photon
                                 this.CustomAuthenticationValues.Secret = null;
 
                             break;
-                        case PeerStates.ConnectingToGameserver:
+                        case ClientState.ConnectingToGameserver:
                             if (PhotonNetwork.LogLevel >= PhotonLogLevel.Full)
                                 Debug.Log("Connected to gameserver.");
                         
                             this.server = ServerConnection.GameServer;
-                            this.states = PeerStates.ConnectedToGameserver;
+                            this.states = ClientState.ConnectedToGameserver;
                             break;
                     }
 
-                    if (this.states == PeerStates.ConnectingToMasterserver)
+                    if (this.states == ClientState.ConnectingToMasterserver)
                     {
                         if (PhotonNetwork.LogLevel >= PhotonLogLevel.Full)
                             Debug.Log("Connected to masterserver.");
                     
                         this.server = ServerConnection.MasterServer;
-                        this.states = PeerStates.ConnectedToMaster;
+                        this.states = ClientState.ConnectedToMaster;
                         if (this.IsInitialConnect)
                         {
                             this.IsInitialConnect = false;
@@ -1975,7 +1975,7 @@ namespace Photon
                         this.didAuthenticate = this.OpAuthenticate(this.mAppId, this.mAppVersionPun, this.PlayerName, this.CustomAuthenticationValues, this.CloudRegion.ToString());
                         if (this.didAuthenticate)
                         {
-                            this.states = PeerStates.Authenticating;
+                            this.states = ClientState.Authenticating;
                         }
                     }
                     break;
@@ -1991,18 +1991,18 @@ namespace Photon
                     {
                         this.LeftLobbyCleanup();
                     }
-                    if (this.states == PeerStates.DisconnectingFromMasterserver)
+                    if (this.states == ClientState.DisconnectingFromMasterserver)
                     {
                         if (this.Connect(this.mGameserver, ServerConnection.GameServer))
                         {
-                            this.states = PeerStates.ConnectingToGameserver;
+                            this.states = ClientState.ConnectingToGameserver;
                         }
                     }
-                    else if (this.states == PeerStates.DisconnectingFromGameserver || this.states == PeerStates.DisconnectingFromNameServer)
+                    else if (this.states == ClientState.DisconnectingFromGameserver || this.states == ClientState.DisconnectingFromNameServer)
                     {
                         if (this.Connect(this.MasterServerAddress, ServerConnection.MasterServer))
                         {
-                            this.states = PeerStates.ConnectingToMasterserver;
+                            this.states = ClientState.ConnectingToMasterserver;
                         }
                     }
                     else
@@ -2011,7 +2011,7 @@ namespace Photon
                         {
                             this.CustomAuthenticationValues.Secret = null;
                         }
-                        this.states = PeerStates.PeerCreated;
+                        this.states = ClientState.PeerCreated;
                         SendMonoMessage(PhotonNetworkingMessage.OnDisconnectedFromPhoton);
                     }
                     break;
@@ -2020,7 +2020,7 @@ namespace Photon
                 {
                     if (!this.IsInitialConnect)
                     {
-                        this.states = PeerStates.PeerCreated;
+                        this.states = ClientState.PeerCreated;
                         cause = (DisconnectCause) statusCode;
                         object[] objArray3 = new object[] { cause };
                         SendMonoMessage(PhotonNetworkingMessage.OnConnectionFail, objArray3);
@@ -2035,7 +2035,7 @@ namespace Photon
                             Debug.LogWarning("This might be a misconfiguration in the game server config. You need to edit it to a (public) address.");
                         }
                     }
-                    this.states = PeerStates.PeerCreated;
+                    this.states = ClientState.PeerCreated;
                     cause = (DisconnectCause) statusCode;
                     object[] objArray2 = new object[] { cause };
                     SendMonoMessage(PhotonNetworkingMessage.OnFailedToConnectToPhoton, objArray2);
@@ -2082,7 +2082,7 @@ namespace Photon
                 case StatusCode.EncryptionEstablished:
                     if (this.server == ServerConnection.NameServer)
                     {
-                        this.states = PeerStates.ConnectedToNameServer;
+                        this.states = ClientState.ConnectedToNameServer;
                         if (!this.didAuthenticate && this.CloudRegion == CloudRegionCode.None)
                         {
                             this.OpGetRegions(this.mAppId);
@@ -2093,7 +2093,7 @@ namespace Photon
                         this.didAuthenticate = this.OpAuthenticate(this.mAppId, this.mAppVersionPun, this.PlayerName, this.CustomAuthenticationValues, this.CloudRegion.ToString());
                         if (this.didAuthenticate)
                         {
-                            this.states = PeerStates.Authenticating;
+                            this.states = ClientState.Authenticating;
                         }
                     }
                     break;
@@ -2143,7 +2143,7 @@ namespace Photon
                 this.mRoomToGetInto = room;
                 this.mRoomToEnterLobby = typedLobby ?? (!this.insideLobby ? null : this.lobby);
             }
-            this.mLastJoinType = JoinType.CreateGame;
+            this.mLastJoinType = JoinType.CreateRoom;
             return OpCreateRoom(roomName, roomOptions, this.mRoomToEnterLobby, this.GetLocalActorProperties(), flag);
         }
 
@@ -2162,7 +2162,7 @@ namespace Photon
         {
             this.mRoomToGetInto = new Room("", (Hashtable)null);
             this.mRoomToEnterLobby = null;
-            this.mLastJoinType = JoinType.JoinRandomGame;
+            this.mLastJoinType = JoinType.JoinRandomRoom;
             return base.OpJoinRandomRoom(expectedCustomRoomProperties, expectedMaxPlayers, playerProperties, matchingType, typedLobby, sqlLobbyFilter);
         }
 
@@ -2179,13 +2179,13 @@ namespace Photon
                     this.mRoomToEnterLobby = typedLobby ?? (!this.insideLobby ? null : this.lobby);
                 }
             }
-            this.mLastJoinType = !createIfNotExists ? JoinType.JoinGame : JoinType.JoinOrCreateOnDemand;
+            this.mLastJoinType = !createIfNotExists ? JoinType.JoinRoom : JoinType.JoinOrCreateRoom;
             return base.OpJoinRoom(roomName, roomOptions, this.mRoomToEnterLobby, createIfNotExists, this.GetLocalActorProperties(), flag);
         }
 
         public virtual bool OpLeave()
         {
-            if (this.states != PeerStates.Joined)
+            if (this.states != ClientState.Joined)
             {
                 Debug.LogWarning("Not sending leave operation. State is not 'Joined': " + this.states);
                 return false;
@@ -2747,7 +2747,7 @@ namespace Photon
 
         private void SendPlayerName()
         {
-            if (this.states == PeerStates.Joining)
+            if (this.states == ClientState.Joining)
             {
                 this.mPlayernameHasToBeUpdated = true;
             }
@@ -3072,7 +3072,7 @@ namespace Photon
 
         protected internal ServerConnection server { get; private set; }
 
-        public PeerStates states { get; internal set; }
+        public ClientState states { get; internal set; }
     }
 }
 

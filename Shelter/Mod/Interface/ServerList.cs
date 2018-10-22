@@ -20,7 +20,7 @@ namespace Mod.Interface
 
         protected override void OnShow()
         {
-            if (PhotonNetwork.connectionStatesDetailed != PeerStates.JoinedLobby)
+            if (PhotonNetwork.connectionStatesDetailed != ClientState.JoinedLobby)
                 Loading.Start("ConnectingToLobby");
             buttonHover = Texture(255, 255, 255, 70);
             buttonActive = Texture(255, 255, 255, 140);
@@ -62,7 +62,7 @@ namespace Mod.Interface
                 _width = 1280f;
                 _height = 720f;
             }
-            else if (PhotonNetwork.connectionStatesDetailed == PeerStates.JoinedLobby && PhotonNetwork.countOfRooms > 0)
+            else if (PhotonNetwork.connectionStatesDetailed == ClientState.JoinedLobby && PhotonNetwork.countOfRooms > 0)
             {
                 Alpha += Time.deltaTime * 100;
                 if (Alpha < 255) return;

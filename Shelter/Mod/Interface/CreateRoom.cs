@@ -258,7 +258,7 @@ namespace Mod.Interface
         private IEnumerator AwaitConnect()
         {
             isRunning = true;
-            while (PhotonNetwork.connectionStatesDetailed != PeerStates.JoinedLobby && PhotonNetwork.connectionStatesDetailed != PeerStates.Joined)
+            while (PhotonNetwork.connectionStatesDetailed != ClientState.JoinedLobby && PhotonNetwork.connectionStatesDetailed != ClientState.Joined)
                 yield return null;
             string roomFullName = $"{roomName}`{LevelInfoManager.Levels[roomMapIndex].Name}`{roomDifficulty}`{roomMaxPlayers}`{_roomDaylight}`{(roomPassword != string.Empty ? _aes.Encrypt(roomPassword) : roomPassword)}`{roomTime}";
             PhotonNetwork.CreateRoom(roomFullName, roomVisible, roomOpen, roomMaxPlayers.ToInt());

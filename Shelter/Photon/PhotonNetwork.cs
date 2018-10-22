@@ -306,7 +306,7 @@ namespace Photon
             {
                 offlineMode = false;
                 offlineModeRoom = null;
-                networkingPeer.states = PeerStates.Disconnecting;
+                networkingPeer.states = ClientState.Disconnecting;
                 networkingPeer.OnStatusChanged(StatusCode.Disconnect);
             }
             else
@@ -540,7 +540,7 @@ namespace Photon
         [Obsolete("Use overload with roomOptions and TypedLobby parameter.")]
         public static bool JoinRoom(string roomName, bool createIfNotExists)
         {
-            if (connectionStatesDetailed != PeerStates.Joining && connectionStatesDetailed != PeerStates.Joined && connectionStatesDetailed != PeerStates.ConnectedToGameserver)
+            if (connectionStatesDetailed != ClientState.Joining && connectionStatesDetailed != ClientState.Joined && connectionStatesDetailed != ClientState.ConnectedToGameserver)
             {
                 if (Room == null)
                 {
@@ -871,7 +871,7 @@ namespace Photon
                 {
                     return false;
                 }
-                return !networkingPeer.IsInitialConnect && networkingPeer.states != PeerStates.PeerCreated && networkingPeer.states != PeerStates.Disconnected && networkingPeer.states != PeerStates.Disconnecting && networkingPeer.states != PeerStates.ConnectingToNameServer;
+                return !networkingPeer.IsInitialConnect && networkingPeer.states != ClientState.PeerCreated && networkingPeer.states != ClientState.Disconnected && networkingPeer.states != ClientState.Disconnecting && networkingPeer.states != ClientState.ConnectingToNameServer;
             }
         }
 
@@ -887,15 +887,15 @@ namespace Photon
                 {
                     switch (connectionStatesDetailed)
                     {
-                        case PeerStates.ConnectingToGameserver:
-                        case PeerStates.Joining:
-                        case PeerStates.Leaving:
-                        case PeerStates.ConnectingToMasterserver:
-                        case PeerStates.Disconnecting:
-                        case PeerStates.Disconnected:
-                        case PeerStates.ConnectingToNameServer:
-                        case PeerStates.Authenticating:
-                        case PeerStates.PeerCreated:
+                        case ClientState.ConnectingToGameserver:
+                        case ClientState.Joining:
+                        case ClientState.Leaving:
+                        case ClientState.ConnectingToMasterserver:
+                        case ClientState.Disconnecting:
+                        case ClientState.Disconnected:
+                        case ClientState.ConnectingToNameServer:
+                        case ClientState.Authenticating:
+                        case ClientState.PeerCreated:
                             return false;
                     }
                 }
@@ -940,17 +940,17 @@ namespace Photon
             }
         }
 
-        public static PeerStates connectionStatesDetailed
+        public static ClientState connectionStatesDetailed
         {
             get
             {
                 if (offlineMode)
                 {
-                    return offlineModeRoom == null ? PeerStates.ConnectedToMaster : PeerStates.Joined;
+                    return offlineModeRoom == null ? ClientState.ConnectedToMaster : ClientState.Joined;
                 }
                 if (networkingPeer == null)
                 {
-                    return PeerStates.Disconnected;
+                    return ClientState.Disconnected;
                 }
                 return networkingPeer.states;
             }
@@ -985,7 +985,7 @@ namespace Photon
             set => networkingPeer.mAppVersion = value;
         }
 
-        public static bool inRoom => connectionStatesDetailed == PeerStates.Joined;
+        public static bool inRoom => connectionStatesDetailed == ClientState.Joined;
         public static bool insideLobby => networkingPeer.insideLobby;
         public static bool isMasterClient => offlineMode || networkingPeer.mMasterClient == networkingPeer.mLocalActor;
         public static bool isMessageQueueRunning

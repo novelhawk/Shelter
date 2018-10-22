@@ -1,3 +1,13 @@
+// ----------------------------------------------------------------------------
+// <copyright file="CustomTypes.cs" company="Exit Games GmbH">
+//   PhotonNetwork Framework for Unity - Copyright (C) 2011 Exit Games GmbH
+// </copyright>
+// <summary>
+//
+// </summary>
+// <author>developer@exitgames.com</author>
+// ----------------------------------------------------------------------------
+
 using System.Text;
 using ExitGames.Client.Photon;
 using Mod;
@@ -6,6 +16,10 @@ using LogType = Mod.Logging.LogType;
 
 namespace Photon
 {
+    /// <summary>
+    /// Internally used class, containing de/serialization methods for various Unity-specific classes.
+    /// Adding those to the Photon serialization protocol allows you to send them in events, etc.
+    /// </summary>
     internal static class CustomTypes
     {
         internal static void Register()
@@ -13,9 +27,21 @@ namespace Photon
             PhotonPeer.RegisterType(typeof(Vector2),       87, SerializeVector2,       DeserializeVector2);
             PhotonPeer.RegisterType(typeof(Vector3),       86, SerializeVector3,       DeserializeVector3);
             PhotonPeer.RegisterType(typeof(Vector4),       88, SerializeVector4,       DeserializeVector4);
-            PhotonPeer.RegisterType(typeof(Quaternion),    81, SerializeQuaternion,    DeserializeQuaternion);
             PhotonPeer.RegisterType(typeof(Player),        80, SerializePhotonPlayer,  DeserializePhotonPlayer);
+            PhotonPeer.RegisterType(typeof(Quaternion),    81, SerializeQuaternion,    DeserializeQuaternion);
             PhotonPeer.RegisterType(typeof(StringBuilder), 84, SerializeStringBuilder, DeserializeStringBuilder);
+        }
+
+        #region Vector2
+
+        private static byte[] SerializeVector2(object obj)
+        {
+            Vector2 vector = (Vector2) obj;
+            byte[] target = new byte[sizeof(float) * 2];
+            int targetOffset = 0;
+            Protocol.Serialize(vector.x, target, ref targetOffset);
+            Protocol.Serialize(vector.y, target, ref targetOffset);
+            return target;
         }
 
         private static object DeserializeVector2(byte[] bytes)
@@ -32,6 +58,21 @@ namespace Photon
             return vector;
         }
 
+        #endregion
+
+        #region Vector3
+
+        private static byte[] SerializeVector3(object obj)
+        {
+            Vector3 vector = (Vector3) obj;
+            int targetOffset = 0;
+            byte[] target = new byte[sizeof(float) * 3];
+            Protocol.Serialize(vector.x, target, ref targetOffset);
+            Protocol.Serialize(vector.y, target, ref targetOffset);
+            Protocol.Serialize(vector.z, target, ref targetOffset);
+            return target;
+        }
+
         private static object DeserializeVector3(byte[] bytes)
         {
             Vector3 vector = new Vector3();
@@ -45,6 +86,22 @@ namespace Photon
             Protocol.Deserialize(out vector.y, bytes, ref offset);
             Protocol.Deserialize(out vector.z, bytes, ref offset);
             return vector;
+        }
+
+        #endregion
+
+        #region Vector4
+
+        private static byte[] SerializeVector4(object obj)
+        {
+            Vector4 vector = (Vector4) obj;
+            int targetOffset = 0;
+            byte[] target = new byte[sizeof(float) * 4];
+            Protocol.Serialize(vector.x, target, ref targetOffset);
+            Protocol.Serialize(vector.y, target, ref targetOffset);
+            Protocol.Serialize(vector.z, target, ref targetOffset);
+            Protocol.Serialize(vector.w, target, ref targetOffset);
+            return target;
         }
 
         private static object DeserializeVector4(byte[] bytes)
@@ -64,6 +121,19 @@ namespace Photon
             return vector;
         }
 
+        #endregion
+
+        #region PhotonPlayer
+
+        private static byte[] SerializePhotonPlayer(object obj)
+        {
+            int id = ((Player) obj).ID;
+            byte[] target = new byte[sizeof(int)];
+            int targetOffset = 0;
+            Protocol.Serialize(id, target, ref targetOffset);
+            return target;
+        }
+
         private static object DeserializePhotonPlayer(byte[] bytes)
         {
             if (bytes.Length < sizeof(int))
@@ -76,6 +146,22 @@ namespace Photon
             if (PhotonNetwork.networkingPeer.mActors.ContainsKey(id))
                 return PhotonNetwork.networkingPeer.mActors[id];
             return null;
+        }
+
+        #endregion
+
+        #region Quaternion
+
+        private static byte[] SerializeQuaternion(object obj)
+        {
+            Quaternion quaternion = (Quaternion) obj;
+            byte[] target = new byte[sizeof(float) * 4];
+            int targetOffset = 0;
+            Protocol.Serialize(quaternion.w, target, ref targetOffset);
+            Protocol.Serialize(quaternion.x, target, ref targetOffset);
+            Protocol.Serialize(quaternion.y, target, ref targetOffset);
+            Protocol.Serialize(quaternion.z, target, ref targetOffset);
+            return target;
         }
 
         private static object DeserializeQuaternion(byte[] bytes)
@@ -93,6 +179,10 @@ namespace Photon
             Protocol.Deserialize(out quaternion.z, bytes, ref offset);
             return quaternion;
         }
+
+        #endregion
+
+        #region StringBuilder
 
         private static byte[] SerializeStringBuilder(object obj)
         {
@@ -113,59 +203,7 @@ namespace Photon
             return new StringBuilder(str);
         }
 
-        private static byte[] SerializeVector4(object obj)
-        {
-            Vector4 vector = (Vector4) obj;
-            int targetOffset = 0;
-            byte[] target = new byte[sizeof(float) * 4];
-            Protocol.Serialize(vector.x, target, ref targetOffset);
-            Protocol.Serialize(vector.y, target, ref targetOffset);
-            Protocol.Serialize(vector.z, target, ref targetOffset);
-            Protocol.Serialize(vector.w, target, ref targetOffset);
-            return target;
-        }
-
-        private static byte[] SerializePhotonPlayer(object obj)
-        {
-            int id = ((Player) obj).ID;
-            byte[] target = new byte[sizeof(int)];
-            int targetOffset = 0;
-            Protocol.Serialize(id, target, ref targetOffset);
-            return target;
-        }
-
-        private static byte[] SerializeQuaternion(object obj)
-        {
-            Quaternion quaternion = (Quaternion) obj;
-            byte[] target = new byte[sizeof(float) * 4];
-            int targetOffset = 0;
-            Protocol.Serialize(quaternion.w, target, ref targetOffset);
-            Protocol.Serialize(quaternion.x, target, ref targetOffset);
-            Protocol.Serialize(quaternion.y, target, ref targetOffset);
-            Protocol.Serialize(quaternion.z, target, ref targetOffset);
-            return target;
-        }
-
-        private static byte[] SerializeVector2(object obj)
-        {
-            Vector2 vector = (Vector2) obj;
-            byte[] target = new byte[sizeof(float) * 2];
-            int targetOffset = 0;
-            Protocol.Serialize(vector.x, target, ref targetOffset);
-            Protocol.Serialize(vector.y, target, ref targetOffset);
-            return target;
-        }
-
-        private static byte[] SerializeVector3(object obj)
-        {
-            Vector3 vector = (Vector3) obj;
-            int targetOffset = 0;
-            byte[] target = new byte[sizeof(float) * 3];
-            Protocol.Serialize(vector.x, target, ref targetOffset);
-            Protocol.Serialize(vector.y, target, ref targetOffset);
-            Protocol.Serialize(vector.z, target, ref targetOffset);
-            return target;
-        }
+        #endregion
     }
 }
 

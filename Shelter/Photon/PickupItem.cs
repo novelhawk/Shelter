@@ -85,7 +85,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
         {
             this.SentPickup = false;
         }
-        if (!GameObjectExtensions.IsActive(gameObject))
+        if (!gameObject.GetActive())
         {
             Debug.Log(string.Concat(new object[] { "Ignored PU RPC, cause item is inactive. ", gameObject, " SecondsBeforeRespawn: ", this.SecondsBeforeRespawn, " TimeOfRespawn: ", this.TimeOfRespawn, " respawn in future: ", this.TimeOfRespawn > PhotonNetwork.time }));
         }

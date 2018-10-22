@@ -3807,26 +3807,26 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
         return list[0];
     }
 
-    public static PeerStates returnPeerState(int peerstate)
+    public static ClientState returnPeerState(int peerstate)
     {
         switch (peerstate)
         {
             case 0:
-                return PeerStates.Authenticated;
+                return ClientState.Authenticated;
 
             case 1:
-                return PeerStates.ConnectedToMaster;
+                return ClientState.ConnectedToMaster;
 
             case 2:
-                return PeerStates.DisconnectingFromMasterserver;
+                return ClientState.DisconnectingFromMasterserver;
 
             case 3:
-                return PeerStates.DisconnectingFromGameserver;
+                return ClientState.DisconnectingFromGameserver;
 
             case 4:
-                return PeerStates.DisconnectingFromNameServer;
+                return ClientState.DisconnectingFromNameServer;
         }
-        return PeerStates.ConnectingToMasterserver;
+        return ClientState.ConnectingToMasterserver;
     }
 
     public void SendChatContentInfo(string content)

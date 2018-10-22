@@ -121,7 +121,7 @@ public class PhotonHandler : MonoBehaviour, IPhotonPeerListener
             return;
         }
         
-        if (PhotonNetwork.connectionStatesDetailed != PeerStates.PeerCreated && PhotonNetwork.connectionStatesDetailed != PeerStates.Disconnected && !PhotonNetwork.offlineMode && PhotonNetwork.isMessageQueueRunning)
+        if (PhotonNetwork.connectionStatesDetailed != ClientState.PeerCreated && PhotonNetwork.connectionStatesDetailed != ClientState.Disconnected && !PhotonNetwork.offlineMode && PhotonNetwork.isMessageQueueRunning)
         {
             bool flag = true;
             while (PhotonNetwork.isMessageQueueRunning && flag)
@@ -185,7 +185,7 @@ public class PhotonHandler : MonoBehaviour, IPhotonPeerListener
     {
         while (PhotonNetwork.networkingPeer.AvailableRegions == null)
         {
-            if (PhotonNetwork.connectionStatesDetailed != PeerStates.ConnectingToNameServer && PhotonNetwork.connectionStatesDetailed != PeerStates.ConnectedToNameServer)
+            if (PhotonNetwork.connectionStatesDetailed != ClientState.ConnectingToNameServer && PhotonNetwork.connectionStatesDetailed != ClientState.ConnectedToNameServer)
             {
                 Debug.LogError("Call ConnectToNameServer to ping available regions.");
                 yield break; // break if we don't connect to the nameserver at all
