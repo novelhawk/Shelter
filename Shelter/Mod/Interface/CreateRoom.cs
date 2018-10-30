@@ -97,8 +97,8 @@ namespace Mod.Interface
             GUI.Label(rect, txt, style);
             
             Vector3 pos = Input.mousePosition;
-            var y = -(Input.mousePosition.y - Screen.height + 1);
-            if (!rect.Contains(new Vector2(pos.x, y))) 
+            pos.y = -(pos.y - Screen.height + 1);
+            if (!rect.Contains(new Vector2(pos.x, pos.y))) 
                 return 0;
             
             if (Event.current.type == EventType.MouseUp)
