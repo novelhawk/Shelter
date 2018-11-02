@@ -1,5 +1,8 @@
-﻿namespace Mod
+﻿using JetBrains.Annotations;
+
+namespace Mod
 {
+    [UsedImplicitly]
     public abstract class Command
     {
         public abstract string CommandName { get; }
