@@ -702,6 +702,9 @@ public partial class FengGameManagerMKII
     [UsedImplicitly]
     public void VerifyPlayerHasLeft(int id, PhotonMessageInfo info)
     {
+        if (id < 0 && info.sender.Mod <= CustomMod.RC) // Cyan mod detection
+            info.sender.Mod = CustomMod.Cyan;
+        
         if (info.sender.IsMasterClient && Player.TryParse(id, out Player player))
             banHash.Add(id, player.Properties.Name);
     }
