@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Linq;
+using System.Text;
 using Photon;
 using UnityEngine;
+using UnityEngine.UI;
 using Animator = Mod.Animation.Animator;
 
 namespace Mod.Interface
 {
     public class Scoreboard : Gui
     {
-        private const string EntryLayout = "<color=#672A42>[<b><color=#DC3052>{0}</color></b>] {10}{1}{2} <b><color=#6E8EEB>{3}</color></b>{9}  <color=#31A5E4>{4}k</color>|<color=#31A5E4>{5}d</color>|<color=#31A5E4>max {6}</color>|<color=#31A5E4>tot {7}</color>|<color=#31A5E4>avg {8}</color></color>";
         private Animator _animator;
         private float _lastAnimationUpdate;
 
@@ -35,84 +36,91 @@ namespace Mod.Interface
             _animator = null;
         }
 
-        private static string Entry(Player player, string color)
+        private static string ModToString(CustomMod mod, string color)
         {
-            string playerName = player.Properties.Name.Trim() == string.Empty ? "Unknown" : player.Properties.HexName;
-            string humanType;
-            
-            if (player.IsIgnored)
-                humanType = "[<b><color=#890000>IGNORED</color></b>]";
-            else if (player.Properties.Alive == false)
-                humanType = "[<b><color=#FF3A3A>DEAD</color></b>]";
-            else if (player.Properties.IsAHSS == true)
-                humanType = "[<b><color=#C42057>A</color></b>]";
-            else switch (player.Properties.PlayerType)
-            {
-                case PlayerType.Human:
-                    humanType = string.Empty;
-                    break;
-                case PlayerType.Titan:
-                    humanType = "[<b><color=#FD5079>T</color></b>]";
-                    break;
-                default:
-                    humanType = "[<i><color=#670018>NULL</color></i>]";
-                    break;
-            }
-            
-            var mod = string.Empty;
-            switch (player.Mod)
+            switch (mod)
             {
                 case CustomMod.None:
-                    break;
+                    return string.Empty;
                 case CustomMod.RC:
-                    mod = "|<b><color=#00FF11>RC</color></b>| ";
-                    break;
+                    return "|<b><color=#00FF11>RC</color></b>| ";
                 case CustomMod.HawkMain:
-                    mod = "|<b><color=#0089FF>Hawk</color></b>| ";
-                    break;
+                    return "|<b><color=#0089FF>Hawk</color></b>| ";
                 case CustomMod.HawkUser:
-                    mod = "|<b><color=#00B7FF>HawkUser</color></b>| ";
-                    break;
+                    return "|<b><color=#00B7FF>HawkUser</color></b>| ";
                 case CustomMod.Shelter:
-                    mod = $"|<b><color=#{color}>Shelter</color></b>| "; 
-                    break;
+                    return $"|<b><color=#{color}>Shelter</color></b>| ";
                 case CustomMod.AlphaX:
-                    mod = "|<b><color=#00D5FF>AlphaX</color></b>| ";
-                    break;
+                    return "|<b><color=#00D5FF>AlphaX</color></b>| ";
                 case CustomMod.Alpha:
-                    mod = "|<b><color=#00FFF3>Alpha</color></b>| ";
-                    break;
+                    return "|<b><color=#00FFF3>Alpha</color></b>| ";
                 case CustomMod.Universe:
-                    mod = "|<b><color=#00FFD5>Universe</color></b>| ";
-                    break;
+                    return "|<b><color=#00FFD5>Universe</color></b>| ";
                 case CustomMod.Cyan:
-                    mod = "|<b><color=#00FFFF>Cyan</color></b>| ";
-                    break;
+                    return "|<b><color=#00FFFF>Cyan</color></b>| ";
                 case CustomMod.Pedobear:
-                    mod = "|<b><color=#00FFAF>PedoBear</color></b>| ";
-                    break;
+                    return "|<b><color=#00FFAF>PedoBear</color></b>| ";
                 case CustomMod.SRC:
-                    mod = "|<b><color=#00FF6F>SRC</color></b>| ";
-                    break;
+                    return "|<b><color=#00FF6F>SRC</color></b>| ";
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            
-            int averangeDmg = player.Properties.Kills > 0 ? (int) Math.Floor((decimal)player.Properties.TotalDamage / player.Properties.Kills) : 0;
+        }
 
-            return string.Format(EntryLayout,
-                player.ID, 
-                mod,
-                humanType,
-                playerName,
-                player.Properties.Kills,
-                player.Properties.Deaths,
-                player.Properties.MaxDamage,
-                player.Properties.TotalDamage,
-                averangeDmg,
-                player.FriendName != string.Empty ? " | " + player.FriendName : "",
-                player.IsMasterClient ? "|<b><color=#8DFF00>MC</color></b>| " : ""
-            );
+        private static string HumanTypeToString(Player player)
+        {
+            if (player.IsIgnored)
+                return "[<b><color=#890000>IGNORED</color></b>] ";
+            if (player.Properties.Alive == false)
+                return "[<b><color=#FF3A3A>DEAD</color></b>] ";
+            switch (player.Properties.PlayerType)
+            {
+                case PlayerType.Human:
+                    if (player.Properties.IsAHSS == true)
+                        return "[<b><color=#C42057>A</color></b>] ";
+                    return string.Empty;
+                case PlayerType.Titan:
+                    return "[<b><color=#FD5079>T</color></b>] ";
+                default:
+                    return "[<i><color=#670018>NULL</color></i>] ";
+            }
+        }
+
+        private static string ReadableDamage(int damage)
+        {
+            if (damage > 10000)
+                return $"{damage / 10000f:F1} M";
+            if (damage > 1000)
+                return $"{damage / 1000f:F1} k";
+            return damage.ToString();
+        }
+
+        private static string Entry(Player player, string color)
+        {
+            StringBuilder builder = new StringBuilder();
+            builder.AppendFormat("<color=#672A42>[<b><color=#DC3052>{0}</color></b>] ", player.ID);
+            
+            // Player info
+            if (player.IsMasterClient)
+                builder.Append("|<b><color=#8DFF00>MC</color></b>| ");
+            builder.Append(HumanTypeToString(player));
+            builder.Append(ModToString(player.Mod, color));
+            builder.AppendFormat("<b><color=#6E8EEB>{0}</color></b> ", player.Properties.HexName ?? "Unknown");
+            if (!string.IsNullOrEmpty(player.FriendName))
+                builder.AppendFormat("| {0} ", player.FriendName);
+            
+            // Average compute
+            var average = 0;
+            if (player.Properties.Kills > 0)
+                average = player.Properties.TotalDamage / player.Properties.Kills;
+            
+            // KDA            
+            builder.AppendFormat("<color=#31A5E4>{0}</color>|", player.Properties.Kills);
+            builder.AppendFormat("<color=#31A5E4>{0}</color>|", player.Properties.Deaths);
+            builder.AppendFormat("<color=#31A5E4>{0}</color>|", ReadableDamage(player.Properties.MaxDamage));
+            builder.AppendFormat("<color=#31A5E4>{0}</color>|", ReadableDamage(average));
+            builder.AppendFormat("<color=#31A5E4>{0}</color></color>", ReadableDamage(player.Properties.TotalDamage));
+            return builder.ToString();
         }
     }
 }
