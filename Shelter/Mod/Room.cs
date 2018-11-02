@@ -248,6 +248,11 @@ namespace Mod
                     return -1;
                 if (IsProtected && !room.IsProtected)
                     return 1;
+                
+                if (Players > room.Players)
+                    return -1;
+                if (Players <= room.Players)
+                    return 1;
             }
             return 0;
         }
