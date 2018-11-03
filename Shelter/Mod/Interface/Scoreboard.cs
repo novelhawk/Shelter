@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Text;
 using Photon;
 using UnityEngine;
-using UnityEngine.UI;
 using Animator = Mod.Animation.Animator;
 
 namespace Mod.Interface
@@ -22,7 +20,7 @@ namespace Mod.Interface
         {
             if (!PhotonNetwork.inRoom) return;
             SmartRect rect = new SmartRect(0, -14, Screen.width * 0.35f, 20);
-            foreach (var player in PhotonNetwork.PlayerList.OrderBy(x => x.ID).ToList())
+            foreach (var player in PhotonNetwork.PlayerList) // .OrderBy(x => x.ID).ToList()
                 GUI.Label(rect.OY(15), Entry(player, _animator.LastColor.ToHex()));
             
             if (Time.time - _lastAnimationUpdate < 0.05f)
@@ -67,7 +65,7 @@ namespace Mod.Interface
             }
         }
 
-        private static string HumanTypeToString(Player player)
+        private static string HumanTypeToString(in Player player)
         {
             if (player.IsIgnored)
                 return "[<b><color=#890000>IGNORED</color></b>] ";
@@ -95,7 +93,7 @@ namespace Mod.Interface
             return damage.ToString();
         }
 
-        private static string Entry(Player player, string color)
+        private static string Entry(in Player player, string color)
         {
             StringBuilder builder = new StringBuilder();
             builder.AppendFormat("<color=#672A42>[<b><color=#DC3052>{0}</color></b>] ", player.ID);
