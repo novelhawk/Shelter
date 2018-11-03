@@ -43,7 +43,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     private float lifeTimeMax = 9999f;
     public float maxVelocityChange = 100f;
     public GameObject myNetWorkName;
-    private float myR;
+    public float myR;
     private bool needFreshCorePosition;
     private bool needRoar;
     private Vector3 oldCorePosition;
@@ -335,35 +335,35 @@ public class TITAN_EREN : Photon.MonoBehaviour
             {
                 GameObject obj2;
                 this.hasDied = true;
-                Transform transform = this.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck");
+                Transform tr = this.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck");
                 if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
                 {
-                    obj2 = PhotonNetwork.Instantiate("bloodExplore", transform.position + Vector3.up * 1f * 4f, Quaternion.Euler(270f, 0f, 0f), 0);
+                    obj2 = PhotonNetwork.Instantiate("bloodExplore", tr.position + Vector3.up * 1f * 4f, Quaternion.Euler(270f, 0f, 0f), 0);
                 }
                 else
                 {
-                    obj2 = (GameObject) Instantiate(Resources.Load("bloodExplore"), transform.position + Vector3.up * 1f * 4f, Quaternion.Euler(270f, 0f, 0f));
+                    obj2 = (GameObject) Instantiate(Resources.Load("bloodExplore"), tr.position + Vector3.up * 1f * 4f, Quaternion.Euler(270f, 0f, 0f));
                 }
                 obj2.transform.localScale = this.transform.localScale;
                 if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
                 {
-                    obj2 = PhotonNetwork.Instantiate("bloodsplatter", transform.position, Quaternion.Euler(90f + transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z), 0);
+                    obj2 = PhotonNetwork.Instantiate("bloodsplatter", tr.position, Quaternion.Euler(90f + tr.rotation.eulerAngles.x, tr.rotation.eulerAngles.y, tr.rotation.eulerAngles.z), 0);
                 }
                 else
                 {
-                    obj2 = (GameObject) Instantiate(Resources.Load("bloodsplatter"), transform.position, Quaternion.Euler(90f + transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, transform.rotation.eulerAngles.z));
+                    obj2 = (GameObject) Instantiate(Resources.Load("bloodsplatter"), tr.position, Quaternion.Euler(90f + tr.rotation.eulerAngles.x, tr.rotation.eulerAngles.y, tr.rotation.eulerAngles.z));
                 }
                 obj2.transform.localScale = this.transform.localScale;
-                obj2.transform.parent = transform;
+                obj2.transform.parent = tr;
                 if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
                 {
-                    obj2 = PhotonNetwork.Instantiate("FX/justSmoke", transform.position, Quaternion.Euler(270f, 0f, 0f), 0);
+                    obj2 = PhotonNetwork.Instantiate("FX/justSmoke", tr.position, Quaternion.Euler(270f, 0f, 0f), 0);
                 }
                 else
                 {
-                    obj2 = (GameObject) Instantiate(Resources.Load("FX/justSmoke"), transform.position, Quaternion.Euler(270f, 0f, 0f));
+                    obj2 = (GameObject) Instantiate(Resources.Load("FX/justSmoke"), tr.position, Quaternion.Euler(270f, 0f, 0f));
                 }
-                obj2.transform.parent = transform;
+                obj2.transform.parent = tr;
             }
         }
     }
@@ -405,11 +405,6 @@ public class TITAN_EREN : Photon.MonoBehaviour
         }
     }
 
-    public void hitByTitanByServer()
-    {
-        photonView.RPC(Rpc.HitByTitan, PhotonTargets.All, new object[0]);
-    }
-
     [RPC]
     [UsedImplicitly]
     private void HitByTitanRPC()
@@ -418,11 +413,6 @@ public class TITAN_EREN : Photon.MonoBehaviour
         {
             this.hitByTitan();
         }
-    }
-
-    public bool IsGrounded()
-    {
-        return this.bottomObject.GetComponent<CheckHitGround>().isGrounded;
     }
 
     public void DoLateUpdate()
@@ -702,7 +692,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                     {
                                         if (obj3.transform.parent.gameObject == obj2)
                                         {
-                                            GameObject obj4 = FengGameManagerMKII.instance.SpawnTitan(70, obj3.transform.position, obj3.transform.rotation, false);
+                                            GameObject obj4 = FengGameManagerMKII.instance.SpawnTitan(70, obj3.transform.position, obj3.transform.rotation);
                                             obj4.GetComponent<TITAN>().isAlarm = true;
                                             obj4.GetComponent<TITAN>().chaseDistance = 999999f;
                                         }
@@ -727,7 +717,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                         {
                             quaternion = transform.rotation * Quaternion.Euler(0f, Random.Range(-30f, 30f), 0f);
                         }
-                        Vector3 vector7 = quaternion * new Vector3(Random.Range((float)100f, (float)200f), 0f, 0f);
+                        Vector3 vector7 = quaternion * new Vector3(Random.Range(100f, 200f), 0f, 0f);
                         Vector3 position = transform.position + vector7;
                         LayerMask mask2 = 1 << LayerMask.NameToLayer("Ground");
                         float y = 0f;
@@ -736,7 +726,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                             y = hit.point.y;
                         }
                         position += Vector3.up * y;
-                        GameObject obj5 = FengGameManagerMKII.instance.SpawnTitan(70, position, transform.rotation, false);
+                        GameObject obj5 = FengGameManagerMKII.instance.SpawnTitan(70, position, transform.rotation);
                         obj5.GetComponent<TITAN>().isAlarm = true;
                         obj5.GetComponent<TITAN>().chaseDistance = 999999f;
                     }
@@ -863,9 +853,9 @@ public class TITAN_EREN : Photon.MonoBehaviour
                 if (animation["run"].normalizedTime % 1f > 0.3f && animation["run"].normalizedTime % 1f < 0.75f && this.stepSoundPhase == 2)
                 {
                     this.stepSoundPhase = 1;
-                    Transform transform = this.transform.Find("snd_eren_foot");
-                    transform.GetComponent<AudioSource>().Stop();
-                    transform.GetComponent<AudioSource>().Play();
+                    Transform tr = this.transform.Find("snd_eren_foot");
+                    tr.GetComponent<AudioSource>().Stop();
+                    tr.GetComponent<AudioSource>().Play();
                 }
                 if (animation["run"].normalizedTime % 1f > 0.75f && this.stepSoundPhase == 1)
                 {
@@ -1114,23 +1104,23 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                         {
                                             this.hitPause = 0.05f;
                                             colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().HitLeft(transform.position, this.hitPause);
-                                            this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(1f, 0.03f, 0.95f);
+                                            this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(1f, 0.03f);
                                         }
                                         else if (this.attackAnimation == "attack_combo_001")
                                         {
-                                            this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(1.2f, 0.04f, 0.95f);
+                                            this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(1.2f, 0.04f);
                                             this.hitPause = 0.08f;
                                             colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().HitRight(transform.position, this.hitPause);
                                         }
                                         else if (this.attackAnimation == "attack_combo_003")
                                         {
-                                            this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(3f, 0.1f, 0.95f);
+                                            this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(3f, 0.1f);
                                             this.hitPause = 0.3f;
                                             colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().dieHeadBlow(transform.position, this.hitPause);
                                         }
                                         else if (this.attackAnimation == "attack_kick")
                                         {
-                                            this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(3f, 0.1f, 0.95f);
+                                            this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(3f, 0.1f);
                                             this.hitPause = 0.2f;
                                             if (colliderArray[i].gameObject.transform.root.GetComponent<TITAN>().abnormalType == AbnormalType.Crawler)
                                             {
@@ -1176,7 +1166,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                             }
                             if (animation["born"].normalizedTime >= 0.5f && animation["born"].normalizedTime <= 0.7f)
                             {
-                                this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(0.5f, 1f, 0.95f);
+                                this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(0.5f, 1f);
                             }
                             if (animation["born"].normalizedTime >= 1f)
                             {

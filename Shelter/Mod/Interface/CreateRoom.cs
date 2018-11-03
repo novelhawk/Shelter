@@ -39,11 +39,11 @@ namespace Mod.Interface
             
             _selectedNormal = Texture(230, 230, 230, 160);
             _selectedHover = Texture(230, 230, 230, 200);
-            _selectedActive = Texture(230, 230, 230, 255);
+            _selectedActive = Texture(230, 230, 230);
             
             _normal = Texture(200, 200, 200, 69);
             _hover = Texture(200, 200, 200, 120);
-            _active = Texture(200, 200, 200, 255);
+            _active = Texture(200, 200, 200);
             
             _label = new GUIStyle
             {

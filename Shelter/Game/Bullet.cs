@@ -33,14 +33,12 @@ public class Bullet : Photon.MonoBehaviour
         GameObject obj2 = Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().main_object;
         if (obj2 != null && this.master != null && this.master == obj2)
         {
-            RaycastHit hit;
             LayerMask mask = 1 << LayerMask.NameToLayer("PlayerAttackBox");
-            if (Physics.Raycast(transform.position, this.velocity, out hit, 10f, mask.value))
+            if (Physics.Raycast(transform.position, this.velocity, out var hit, 10f, mask.value))
             {
-                Collider collider = hit.collider;
-                if (collider.name.Contains("PlayerDetectorRC"))
+                if (hit.collider.name.Contains("PlayerDetectorRC"))
                 {
-                    TITAN component = collider.transform.root.gameObject.GetComponent<TITAN>();
+                    TITAN component = hit.collider.transform.root.gameObject.GetComponent<TITAN>();
                     if (component != null)
                     {
                         if (this.myTitan == null)
@@ -84,8 +82,7 @@ public class Bullet : Photon.MonoBehaviour
         {
             if (this.phase == 0)
             {
-                Transform transform = gameObject.transform;
-                transform.position += this.velocity * Time.deltaTime * 50f + this.velocity2 * Time.deltaTime;
+                gameObject.transform.position += this.velocity * Time.deltaTime * 50f + this.velocity2 * Time.deltaTime;
                 this.nodes.Add(new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z));
             }
         }
@@ -223,7 +220,7 @@ public class Bullet : Photon.MonoBehaviour
         Destroy(gameObject);
     }
 
-    public void launch(Vector3 v, Vector3 v2, string launcher_ref, bool isLeft, GameObject hero, bool leviMode = false)
+    public void launch(Vector3 v, Vector3 v2, string launcher_ref, bool isLeft, GameObject hero, bool isLeviMode = false)
     {
         if (this.phase != 2)
         {
@@ -258,7 +255,7 @@ public class Bullet : Photon.MonoBehaviour
                 this.myRef.transform.position
             };
             this.phase = 0;
-            this.leviMode = leviMode;
+            this.leviMode = isLeviMode;
             this.left = isLeft;
             if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
             {
@@ -453,9 +450,7 @@ public class Bullet : Photon.MonoBehaviour
             else if (this.phase == 1)
             {
                 Vector3 vector = transform.position - this.myRef.transform.position;
-                Vector3 vector1 = transform.position + this.myRef.transform.position;
-                Vector3 velocity = this.master.rigidbody.velocity;
-                float magnitude = velocity.magnitude;
+                float magnitude = this.master.rigidbody.velocity.magnitude;
                 float f = vector.magnitude;
                 int num3 = (int) ((f + magnitude) / 5f);
                 num3 = Mathf.Clamp(num3, 2, 6);
@@ -470,7 +465,7 @@ public class Bullet : Photon.MonoBehaviour
                     float num8 = (num6 - num7) / num6;
                     num8 = Mathf.Pow(num8, 0.5f);
                     float max = (num5 + magnitude) * 0.0015f * num8;
-                    this.lineRenderer.SetPosition(index, new Vector3(Random.Range(-max, max), Random.Range(-max, max), Random.Range(-max, max)) + this.myRef.transform.position + vector * ((float)index / (float)num3) - Vector3.up * num5 * 0.05f * num8 - velocity * 0.001f * num8 * num5);
+                    this.lineRenderer.SetPosition(index, new Vector3(Random.Range(-max, max), Random.Range(-max, max), Random.Range(-max, max)) + this.myRef.transform.position + vector * (index / (float)num3) - Vector3.up * num5 * 0.05f * num8 - this.master.rigidbody.velocity * 0.001f * num8 * num5);
                     index++;
                 }
                 this.lineRenderer.SetPosition(num3 - 1, transform.position);
@@ -512,14 +507,13 @@ public class Bullet : Photon.MonoBehaviour
             }
             else if (this.phase == 4)
             {
-                Transform transform = gameObject.transform;
-                transform.position += this.velocity + this.velocity2 * Time.deltaTime;
+                gameObject.transform.position += this.velocity + this.velocity2 * Time.deltaTime;
                 this.nodes.Add(new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, gameObject.transform.position.z));
                 Vector3 vector10 = this.myRef.transform.position - (Vector3) this.nodes[0];
                 for (int j = 0; j <= this.nodes.Count - 1; j++)
                 {
                     this.lineRenderer.SetVertexCount(this.nodes.Count);
-                    this.lineRenderer.SetPosition(j, (Vector3) this.nodes[j] + vector10 * Mathf.Pow(0.5f, (float)j));
+                    this.lineRenderer.SetPosition(j, (Vector3) this.nodes[j] + vector10 * Mathf.Pow(0.5f, j));
                 }
                 this.killTime2 += Time.deltaTime;
                 if (this.killTime2 > 0.8f)

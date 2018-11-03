@@ -76,19 +76,15 @@ public class KillInfoComponent : MonoBehaviour
             this.spriteSkeleton.SetActive(false);
             this.sleftTitan.SetActive(false);
             this.sspriteSkeleton.SetActive(false);
-            Transform transform = this.labelNameLeft.transform;
-            transform.position += new Vector3(18f, 0f, 0f);
-            Transform transform2 = this.slabelNameLeft.transform;
-            transform2.position += new Vector3(16f, 0f, 0f);
+            labelNameLeft.transform.position += new Vector3(18f, 0f, 0f);
+            slabelNameLeft.transform.position += new Vector3(16f, 0f, 0f);
         }
         else
         {
             this.spriteSword.SetActive(false);
             this.sspriteSword.SetActive(false);
-            Transform transform3 = this.labelNameRight.transform;
-            transform3.position -= new Vector3(18f, 0f, 0f);
-            Transform transform4 = this.slabelNameRight.transform;
-            transform4.position -= new Vector3(16f, 0f, 0f);
+            labelNameRight.transform.position -= new Vector3(18f, 0f, 0f);
+            slabelNameRight.transform.position -= new Vector3(16f, 0f, 0f);
         }
         if (!isTitan2)
         {

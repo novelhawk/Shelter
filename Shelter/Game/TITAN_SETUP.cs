@@ -32,12 +32,12 @@ public class TITAN_SETUP : Photon.MonoBehaviour
 
     [RPC]
     [UsedImplicitly]
-    private IEnumerator LoadskinE(int hair, int eyeId, string hairlink)
+    private IEnumerator LoadskinE(int hairId, int eyeId, string hairlink)
     {
         bool unloadAssets = false;
         Destroy(this.part_hair);
-        this.hair = CostumeHair.MaleHairs[hair];
-        this.hairType = hair;
+        this.hair = CostumeHair.MaleHairs[hairId];
+        this.hairType = hairId;
         if (this.hair.Texture != string.Empty)
         {
             GameObject hairs = (GameObject) Instantiate(Resources.Load("Character/" + this.hair.Texture));
@@ -111,30 +111,30 @@ public class TITAN_SETUP : Photon.MonoBehaviour
                 num = titanSkin.Type[index];
 
             string hairlink = titanSkin.Hairs[index];
-            int eye = Random.Range(1, 8);
+            int eyeId = Random.Range(1, 8);
             if (this.haseye)
             {
-                eye = 0;
+                eyeId = 0;
             }
             bool valid = Utility.IsValidImageUrl(hairlink);
             switch (IN_GAME_MAIN_CAMERA.GameType)
             {
                 case GameType.Multiplayer when photonView.isMine && valid:
-                    photonView.RPC(Rpc.SetHairSkin, PhotonTargets.AllBuffered, num, eye, hairlink);
+                    photonView.RPC(Rpc.SetHairSkin, PhotonTargets.AllBuffered, num, eyeId, hairlink);
                     break;
                 
                 case GameType.Multiplayer when photonView.isMine:
                     color = HeroCostume.costume[Random.Range(0, HeroCostume.costume.Length - 5)].hair_color;
-                    photonView.RPC(Rpc.SetHairColor, PhotonTargets.AllBuffered, num, eye, color.r, color.g, color.b);
+                    photonView.RPC(Rpc.SetHairColor, PhotonTargets.AllBuffered, num, eyeId, color.r, color.g, color.b);
                     break;
                 
                 case GameType.Singleplayer when valid:
-                    StartCoroutine(this.LoadskinE(num, eye, hairlink));
+                    StartCoroutine(this.LoadskinE(num, eyeId, hairlink));
                     break;
                 
                 case GameType.Singleplayer:
                     color = HeroCostume.costume[Random.Range(0, HeroCostume.costume.Length - 5)].hair_color;
-                    this.SetHairPRC(num, eye, color.r, color.g, color.b);
+                    this.SetHairPRC(num, eyeId, color.r, color.g, color.b);
                     break;
             }
         }
@@ -202,50 +202,17 @@ public class TITAN_SETUP : Photon.MonoBehaviour
 
     [RPC]
     [UsedImplicitly]
-    public void SetHairRPC2(int hair, int eye, string hairlink)
+    public void SetHairRPC2(int hairId, int eyeId, string hairlink)
     {
         if (ModuleManager.Enabled(nameof(ModuleEnableSkins)))
         {
-            StartCoroutine(this.LoadskinE(hair, eye, hairlink));
+            StartCoroutine(this.LoadskinE(hairId, eyeId, hairlink));
         }
     }
 
-    public void setPunkHair()
+    public void setVar(int skinId, bool hasEye)
     {
-        Destroy(this.part_hair);
-        this.hair = CostumeHair.MaleHairs[3];
-        this.hairType = 3;
-        GameObject obj2 = (GameObject) Instantiate(Resources.Load("Character/" + this.hair.Texture));
-        obj2.transform.parent = this.hair_go_ref.transform.parent;
-        obj2.transform.position = this.hair_go_ref.transform.position;
-        obj2.transform.rotation = this.hair_go_ref.transform.rotation;
-        obj2.transform.localScale = this.hair_go_ref.transform.localScale;
-        obj2.renderer.material = CharacterMaterials.materials[this.hair.Texture];
-        switch (Random.Range(1, 4))
-        {
-            case 1:
-                obj2.renderer.material.color = FengColor.PunkHair1;
-                break;
-
-            case 2:
-                obj2.renderer.material.color = FengColor.PunkHair2;
-                break;
-
-            case 3:
-                obj2.renderer.material.color = FengColor.PunkHair3;
-                break;
-        }
-        this.part_hair = obj2;
-        SetFacialTexture(this.eye, 0);
-        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
-        {
-            photonView.RPC(Rpc.SetHairColor, PhotonTargets.OthersBuffered, this.hairType, 0, this.part_hair.renderer.material.color.r, this.part_hair.renderer.material.color.g, this.part_hair.renderer.material.color.b);
-        }
-    }
-
-    public void setVar(int skin, bool haseye)
-    {
-        this.skin = skin;
-        this.haseye = haseye;
+        this.skin = skinId;
+        this.haseye = hasEye;
     }
 }

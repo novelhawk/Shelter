@@ -29,7 +29,7 @@ namespace Mod.Interface
             _transparent = Texture(0, 0, 0, 0);
             _normal = Texture(200, 200, 200, 69);
             _hover = Texture(200, 200, 200, 120);
-            _active = Texture(200, 200, 200, 255);
+            _active = Texture(200, 200, 200);
 
             var deleteColor = Color(255, 0, 0, 125);
             

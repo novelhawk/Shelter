@@ -36,7 +36,7 @@ namespace Mod.Managers
             {
                 _dictionary = _file.Deserialize(json);
             }
-            catch (JsonSerializationException e)
+            catch (JsonSerializationException)
             {
                 Load(_file.InvalidateCurrentFile());
                 Shelter.Log("File {0} was corrupted. Restoring defualt.", LogType.Error, File);

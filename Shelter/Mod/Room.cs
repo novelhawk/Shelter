@@ -1,11 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Security.Cryptography;
 using Game;
 using ExitGames.Client.Photon;
-using Mod.Interface;
 using Photon;
 using LogType = Mod.Logging.LogType;
 
@@ -284,6 +280,7 @@ namespace Mod
         public Daylight Daylight => _roomDaylight;
         public string Password => _roomPassword;
         public int Time => _roomTime;
+        public int UUID => _roomUUID;
 
         public bool IsJoinable => (_maxPlayers == 0 || _currentPlayers < _maxPlayers) && _isOpen;
         public bool IsProtected => _roomPassword.Length > 0;

@@ -1,6 +1,5 @@
 using Photon;
 using UnityEngine;
-using Extensions = Photon.Extensions;
 using MonoBehaviour = UnityEngine.MonoBehaviour;
 
 // ReSharper disable once CheckNamespace
@@ -12,23 +11,21 @@ public class TitanTrigger : MonoBehaviour
     {
         if (!this.isCollide)
         {
-            GameObject gameObject = other.transform.root.gameObject;
-            if (gameObject.layer == 8)
+            GameObject go = other.transform.root.gameObject;
+            if (go.layer == 8)
             {
-                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
+                switch (IN_GAME_MAIN_CAMERA.GameType)
                 {
-                    if (Extensions.GetPhotonView(gameObject).isMine)
-                    {
-                        this.isCollide = true;
-                    }
-                }
-                else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
-                {
-                    GameObject obj3 = Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().main_object;
-                    if (obj3 != null && obj3 == gameObject)
-                    {
-                        this.isCollide = true;
-                    }
+                    case GameType.Singleplayer:
+                        GameObject obj3 = Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().main_object;
+                        if (obj3 != null && obj3 == go)
+                            this.isCollide = true;
+                        break;
+                    
+                    case GameType.Multiplayer:
+                        if (go.GetPhotonView().isMine)
+                            this.isCollide = true;
+                        break;
                 }
             }
         }
@@ -38,26 +35,23 @@ public class TitanTrigger : MonoBehaviour
     {
         if (this.isCollide)
         {
-            GameObject gameObject = other.transform.root.gameObject;
-            if (gameObject.layer == 8)
+            GameObject go = other.transform.root.gameObject;
+            if (go.layer == 8)
             {
-                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
+                switch (IN_GAME_MAIN_CAMERA.GameType)
                 {
-                    if (Extensions.GetPhotonView(gameObject).isMine)
-                    {
-                        this.isCollide = false;
-                    }
-                }
-                else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
-                {
-                    GameObject obj3 = Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().main_object;
-                    if (obj3 != null && obj3 == gameObject)
-                    {
-                        this.isCollide = false;
-                    }
+                    case GameType.Singleplayer:
+                        GameObject obj3 = Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().main_object;
+                        if (obj3 != null && obj3 == go)
+                            this.isCollide = false;
+                        break;
+                    
+                    case GameType.Multiplayer:
+                        if (go.GetPhotonView().isMine)
+                            this.isCollide = false;
+                        break;
                 }
             }
         }
     }
 }
-

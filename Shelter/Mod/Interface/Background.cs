@@ -6,11 +6,6 @@ namespace Mod.Interface
     {
         private Texture2D background;
 
-        public Background()
-        {
-//            Enable();
-        }
-
         protected override void OnShow()
         {
             background = GetImage("Background");

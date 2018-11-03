@@ -6,7 +6,7 @@ public class BodyPushBox : MonoBehaviour
 
     private void OnTriggerStay(Collider other)
     {
-        if (other.gameObject.tag == "bodyCollider")
+        if (other.gameObject.CompareTag("bodyCollider"))
         {
             BodyPushBox component = other.gameObject.GetComponent<BodyPushBox>();
             if (component != null && component.parent != null)

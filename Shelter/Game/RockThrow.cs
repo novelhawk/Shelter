@@ -1,5 +1,6 @@
 using JetBrains.Annotations;
 using Mod;
+using Mod.Exceptions;
 using Photon;
 using UnityEngine;
 
@@ -7,8 +8,16 @@ using UnityEngine;
 public class RockThrow : Photon.MonoBehaviour
 {
     private bool launched;
+    
+    /// <summary>
+    /// Rock old position
+    /// </summary>
     private Vector3 oldP;
     private Vector3 r;
+    
+    /// <summary>
+    /// Rock position
+    /// </summary>
     private Vector3 v;
 
     private void explore()
@@ -30,7 +39,7 @@ public class RockThrow : Photon.MonoBehaviour
         obj2.transform.localScale = transform.localScale;
         float b = 1f - Vector3.Distance(GameObject.Find("MainCamera").transform.position, obj2.transform.position) * 0.05f;
         b = Mathf.Min(1f, b);
-        GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().startShake(b, b, 0.95f);
+        GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().startShake(b, b);
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
         {
             Destroy(gameObject);
@@ -70,36 +79,48 @@ public class RockThrow : Photon.MonoBehaviour
 
     [RPC]
     [UsedImplicitly]
-    private void InitRPC(int viewID, Vector3 scale, Vector3 pos, float level)
+    private void InitRPC(int viewID, Vector3 scale, Vector3 pos, float level, PhotonMessageInfo info)
     {
-        GameObject gameObject = PhotonView.Find(viewID).gameObject;
-        Transform transform = gameObject.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R/hand_R_001");
-        this.transform.localScale = gameObject.transform.localScale;
-        this.transform.parent = transform;
+        if (!PhotonView.TryParse(viewID, out var view))
+            throw new NotAllowedException(nameof(InitRPC), info);
+        
+        GameObject go = view.gameObject;
+        Transform tr = go.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R/hand_R_001");
+        this.transform.localScale = go.transform.localScale;
+        this.transform.parent = tr;
         this.transform.localPosition = pos;
     }
 
-    public void launch(Vector3 v1)
+    public void launch(Vector3 position)
     {
         this.launched = true;
         this.oldP = transform.position;
-        this.v = v1;
+        this.v = position;
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
             photonView.RPC(Rpc.ThrowRock, PhotonTargets.Others, this.v, this.oldP);
         }
     }
 
+    /// <summary>
+    /// Launches the rock
+    /// </summary>
+    /// <param name="position">Position to launch the rock from</param>
+    /// <param name="_">Old rock position; Unused.</param>
+    /// <param name="info">RPC message info</param>
     [RPC]
     [UsedImplicitly]
-    private void LaunchRPC(Vector3 v, Vector3 p)
+    private void LaunchRPC(Vector3 position, Vector3 _, PhotonMessageInfo info)
     {
-        this.launched = true;
-        Vector3 vector = p;
-        transform.position = vector;
-        this.oldP = vector;
+        if (launched)
+            throw new NotAllowedException(nameof(LaunchRPC), info);
+        launched = true;
+        
+        transform.position = position;
         transform.parent = null;
-        this.launch(v);
+        
+        oldP = position;
+        launch(position);
     }
 
     private void Start()
@@ -113,7 +134,6 @@ public class RockThrow : Photon.MonoBehaviour
         {
             this.transform.Rotate(this.r);
             this.v -= 20f * Vector3.up * Time.deltaTime;
-            Transform transform = this.transform;
             transform.position += this.v * Time.deltaTime;
             if (IN_GAME_MAIN_CAMERA.GameType != GameType.Multiplayer || PhotonNetwork.isMasterClient)
             {
@@ -125,22 +145,17 @@ public class RockThrow : Photon.MonoBehaviour
                 {
                     if (LayerMask.LayerToName(hit.collider.gameObject.layer) == "EnemyAABB")
                     {
-                        GameObject gameObject = hit.collider.gameObject.transform.root.gameObject;
-                        if (gameObject.GetComponent<TITAN>() != null && !gameObject.GetComponent<TITAN>().hasDie)
+                        GameObject go = hit.collider.gameObject.transform.root.gameObject;
+                        if (go.GetComponent<TITAN>() != null && !go.GetComponent<TITAN>().hasDie)
                         {
-                            gameObject.GetComponent<TITAN>().hitAnkle();
-                            Vector3 position = this.transform.position;
+                            go.GetComponent<TITAN>().hitAnkle();
                             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
                             {
-                                gameObject.GetComponent<TITAN>().hitAnkle();
+                                go.GetComponent<TITAN>().hitAnkle();
                             }
                             else
                             {
-                                if (this.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>() != null && PhotonView.Find(this.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().myOwnerViewID) != null)
-                                {
-                                    Vector3 vector3 = PhotonView.Find(this.transform.root.gameObject.GetComponent<EnemyfxIDcontainer>().myOwnerViewID).transform.position;
-                                }
-                                gameObject.GetComponent<HERO>().photonView.RPC(Rpc.HitAnkle, PhotonTargets.All, new object[0]);
+                                go.GetComponent<HERO>().photonView.RPC(Rpc.HitAnkle, PhotonTargets.All);
                             }
                         }
                         this.explore();
