@@ -47,8 +47,7 @@ public class UIMainReferences : MonoBehaviour
                 Shelter.Log(log, LogType.Error);
                 break;
             case UnityEngine.LogType.Warning:
-                if (!log.Contains("Behaviour is missing!"))
-                    Shelter.Log(log, LogType.Warning);
+                Shelter.Log(log, LogType.Warning);
                 break;
             case UnityEngine.LogType.Log:
                 Shelter.Log(log);
