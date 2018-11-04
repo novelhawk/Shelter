@@ -1,7 +1,10 @@
-public enum RSTYPE
+namespace Xft
 {
-    NONE,
-    SIMPLE,
-    CURVE
+    public enum RSTYPE
+    {
+        NONE,
+        SIMPLE,
+        CURVE
+    }
 }
 
