@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CheckHitGround : MonoBehaviour
+public class CheckHitGround : MonoBehaviour // Used
 {
     public bool isGrounded;
 

@@ -210,7 +210,7 @@ public partial class FengGameManagerMKII
             {
                 PVPcheckPoint.checkPoints = new List<PVPcheckPoint>();
                 UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled = false;
-                UnityEngine.Camera.main.GetComponent<CameraShake>().enabled = false;
+//                UnityEngine.Camera.main.GetComponent<CameraShake>().enabled = false;
                 IN_GAME_MAIN_CAMERA.GameType = GameType.Multiplayer;
                 if (info.Gamemode == GameMode.Trost)
                 {

@@ -500,21 +500,17 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     private void shakeUpdate()
     {
-        if (this.duration > 0f)
+        if (duration > 0f)
         {
-            this.duration -= Time.deltaTime;
-            if (this.flip)
-            {
-                Transform transform = gameObject.transform;
-                transform.position += Vector3.up * this.R;
-            }
+            duration -= Time.deltaTime;
+            
+            if (flip)
+                gameObject.transform.position += Vector3.up * this.R;
             else
-            {
-                Transform transform2 = gameObject.transform;
-                transform2.position -= Vector3.up * this.R;
-            }
-            this.flip = !this.flip;
-            this.R *= this.decay;
+                gameObject.transform.position -= Vector3.up * this.R;
+            
+            flip = !flip;
+            R *= decay;
         }
     }
 
