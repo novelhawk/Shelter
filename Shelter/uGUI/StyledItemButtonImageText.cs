@@ -3,7 +3,7 @@ using System.Collections;
 using UnityEngine.UI;
 using System;
 
-
+// ReSharper disable once CheckNamespace
 public class StyledItemButtonImageText : StyledItem
 {
 	public RawImage 	rawImageCtrl;
@@ -12,9 +12,14 @@ public class StyledItemButtonImageText : StyledItem
 	
 	public class Data
 	{
-		public Data(string t, Texture2D tex) { text = t; image = tex; }
-		public string text;
-		public Texture2D image;
+		public string Text { get; }
+		public Texture2D Texture { get; }
+
+		public Data(string _text, Texture2D texture)
+		{
+			Text = _text; 
+			Texture = texture;
+		}
 	}
 
 	public override Button GetButton () { return buttonCtrl; }
@@ -28,14 +33,11 @@ public class StyledItemButtonImageText : StyledItem
 		if (tex != null)
 		{
 			if (rawImageCtrl != null)
-			{
 				rawImageCtrl.texture = tex;
-			}
 			return;
 		}
 
-		Data d = o as Data;
-		if (d == null)
+		if (!(o is Data d))
 		{
 			if (textCtrl != null)
 				textCtrl.text = o.ToString();	// string..
@@ -43,12 +45,9 @@ public class StyledItemButtonImageText : StyledItem
 		}
 		
 		if (rawImageCtrl != null)
-		{
-			rawImageCtrl.texture = d.image;
-		}
+			rawImageCtrl.texture = d.Texture;
+		
 		if (textCtrl != null)
-		{
-			textCtrl.text = d.text;
-		}
+			textCtrl.text = d.Text;
 	}
 }

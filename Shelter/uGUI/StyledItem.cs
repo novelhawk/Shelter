@@ -2,7 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
- 
+// ReSharper disable once CheckNamespace
 public class StyledItem : MonoBehaviour
 {
 	public virtual void Populate(object o) {}

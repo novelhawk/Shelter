@@ -3,9 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine.UI;
 
-
-
 [RequireComponent(typeof(RectTransform))]
+// ReSharper disable once CheckNamespace
 public class StyledComboBox : StyledItem 
 {
 	public delegate void SelectionChangedHandler(StyledItem item);
@@ -25,12 +24,10 @@ public class StyledComboBox : StyledItem
 
 	[SerializeField]
 	private int selectedIndex = 0;
-	public int SelectedIndex
+
+	private int SelectedIndex
 	{
-		get 
-		{
-			return selectedIndex;
-		}
+		get => selectedIndex;
 		set
 		{
 			if (value >= 0 && value <= items.Count)
@@ -53,13 +50,11 @@ public class StyledComboBox : StyledItem
 		}
 	}
 
-
-	void Awake()
+	private void Awake()
 	{
 		InitControl();
 	}
 	
-
 	private void AddItem(object data)
 	{
 		if (itemPrefab != null)
@@ -94,18 +89,15 @@ public class StyledComboBox : StyledItem
 		}
 	}
 
-	public void OnItemClicked(StyledItem item, int index)
+	private void OnItemClicked(StyledItem item, int index)
 	{
 		SelectedIndex = index;
 
 		TogglePanelState();	// close
-		if (OnSelectionChanged != null)
-		{
-			OnSelectionChanged(item);
-		}
+		OnSelectionChanged?.Invoke(item);
 	}
 
-	public void ClearItems()
+	private void ClearItems()
 	{
 		for (int i = items.Count - 1; i >= 0; --i)
 			DestroyObject(items[i].gameObject);
@@ -114,17 +106,12 @@ public class StyledComboBox : StyledItem
 	public void AddItems(params object[] list)
 	{
 		ClearItems();
-
-		for (int i = 0; i < list.Length; ++i)
-		{
-			AddItem(list[i]);
-		}
+		foreach (var item in list)
+			AddItem(item);
 		SelectedIndex = 0;
 	}
-	
 
-
-	public void InitControl()
+	private void InitControl()
 	{
 		if (root != null)
 			DestroyImmediate(root.gameObject);
@@ -154,7 +141,7 @@ public class StyledComboBox : StyledItem
 		}
 	}
 
-	private void CreateMenuButton(StyledItem toCreate)
+	private void CreateMenuButton(Object toCreate)
 	{
 		if (root.menuItem.transform.childCount > 0)
 		{
@@ -174,21 +161,12 @@ public class StyledComboBox : StyledItem
 			root.gameObject.hideFlags = HideFlags.HideInHierarchy; // should really be HideAndDontSave, but unity crashes
 			Button b = menuItem.GetButton();
 			if (b != null)
-			{
 				b.onClick.AddListener(TogglePanelState);
-			}
 		}
 	}
-	
-	public void TogglePanelState()
+
+	private void TogglePanelState()
 	{
 		root.itemPanel.alpha = Mathf.Abs(root.itemPanel.alpha - 1.0f);
 	}
-
-
-
-
-
 }
-
-

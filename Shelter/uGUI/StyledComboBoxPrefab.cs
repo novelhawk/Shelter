@@ -2,6 +2,7 @@
 using System.Collections;
 using UnityEngine.UI;
 
+// ReSharper disable once CheckNamespace
 public class StyledComboBoxPrefab : MonoBehaviour 
 {
 	public RectTransform    menuItem;	// where to put the menu button
