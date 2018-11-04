@@ -4,6 +4,7 @@ using Mod;
 using Mod.Exceptions;
 using Photon;
 using UnityEngine;
+using LogType = Mod.Logging.LogType;
 
 // ReSharper disable once CheckNamespace
 public class Bullet : Photon.MonoBehaviour
@@ -272,7 +273,7 @@ public class Bullet : Photon.MonoBehaviour
     private void MyMasterIs(int id, string launcherRef, PhotonMessageInfo info)
     {
         if (!PhotonView.TryParse(id, out PhotonView view))
-            throw new NotAllowedException(nameof(MyMasterIs), info);
+            return;
         
         master = view.gameObject;
         switch (launcherRef)
