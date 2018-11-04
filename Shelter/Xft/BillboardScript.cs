@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class BillboardScript : MonoBehaviour // Probably from Xffect
+// ReSharper disable once CheckNamespace
+public class BillboardScript : MonoBehaviour
 {
     public void Update()
     {

@@ -90,7 +90,7 @@ public class LevelTriggerHint : MonoBehaviour
             {
                 this.content = string.Format(
                     "Press <color=#F7D358>{0}</color> to use your normal attack or use <color=#F7D358>{1}</color> to use your special.\n" +
-                    "You can only kill a titan by slashing his <color=#FA5858>neck</color>.\n\n",
+                    "You can only kill a titan by slashing his <color=#FA5858>neck</color>.",
                     Shelter.InputManager[InputAction.Attack], Shelter.InputManager[InputAction.Special]);
                 break;
             }

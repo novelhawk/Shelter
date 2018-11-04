@@ -1,5 +1,6 @@
 using UnityEngine;
 
+// ReSharper disable once CheckNamespace
 public class CameraFacingBillboard : MonoBehaviour
 {
     public Axis axis;

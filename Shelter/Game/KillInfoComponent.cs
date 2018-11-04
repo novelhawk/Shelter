@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class KillInfoComponent : MonoBehaviour
+// ReSharper disable once CheckNamespace
+public class KillInfoComponent : MonoBehaviour // Used by GO "KillInfo"
 {
     private float _alpha = 1f;
     private int col;

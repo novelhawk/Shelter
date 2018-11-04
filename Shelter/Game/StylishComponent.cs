@@ -1,7 +1,8 @@
 using Game;
 using UnityEngine;
 
-public class StylishComponent : MonoBehaviour
+// ReSharper disable once CheckNamespace
+public class StylishComponent : MonoBehaviour // Used by GO "Stylish"
 {
     public GameObject bar;
     private int chainKillRank;
@@ -113,56 +114,44 @@ public class StylishComponent : MonoBehaviour
 
     private void setRankText()
     {
-        labelS.GetComponent<UILabel>().text = styleRankText[styleRank, 0];
-        if (styleRank == 5)
+        var markLabel = labelS.GetComponent<UILabel>();
+ 
+        labelS2.GetComponent<UILabel>().text = string.Empty;
+        labelS1.GetComponent<UILabel>().text = string.Empty;
+        switch (styleRank)
         {
-            labelS2.GetComponent<UILabel>().text = "[" + FengColor.RateSS + "]S";
+            case 0:
+                markLabel.text = $"[{FengColor.RateD}]D";
+                break;
+            case 1:
+                markLabel.text = $"[{FengColor.RateC}]C";
+                break;
+            case 2:
+                markLabel.text = $"[{FengColor.RateB}]B";
+                break;
+            case 3:
+                markLabel.text = $"[{FengColor.RateA}]A";
+                break;
+            case 4:
+                markLabel.text = $"[{FengColor.RateS}]S";
+                break;
+            case 5:
+                markLabel.text = $"[{FengColor.RateSS}]S";
+                markLabel.text = $"[{FengColor.RateSS}]S";
+                break;
+            case 6:
+                markLabel.text = $"[{FengColor.RateSSS}]S";
+                markLabel.text = $"[{FengColor.RateSSS}]S";
+                markLabel.text = $"[{FengColor.RateSSS}]S";
+                break;
+            case 7:
+                markLabel.text = $"[{FengColor.RateX}]X";
+                break;
+            default:
+                markLabel.text = string.Empty;
+                break;
         }
-        else
-        {
-            labelS2.GetComponent<UILabel>().text = string.Empty;
-        }
-        if (styleRank == 6)
-        {
-            labelS2.GetComponent<UILabel>().text = "[" + FengColor.RateSSS + "]S";
-            labelS1.GetComponent<UILabel>().text = "[" + FengColor.RateSSS + "]S";
-        }
-        else
-        {
-            labelS1.GetComponent<UILabel>().text = string.Empty;
-        }
-        if (styleRank == 0)
-        {
-            labelS.GetComponent<UILabel>().text = "[" + FengColor.RateD + "]D";
-        }
-        if (styleRank == 1)
-        {
-            labelS.GetComponent<UILabel>().text = "[" + FengColor.RateC + "]C";
-        }
-        if (styleRank == 2)
-        {
-            labelS.GetComponent<UILabel>().text = "[" + FengColor.RateB + "]B";
-        }
-        if (styleRank == 3)
-        {
-            labelS.GetComponent<UILabel>().text = "[" + FengColor.RateA + "]A";
-        }
-        if (styleRank == 4)
-        {
-            labelS.GetComponent<UILabel>().text = "[" + FengColor.RateS + "]S";
-        }
-        if (styleRank == 5)
-        {
-            labelS.GetComponent<UILabel>().text = "[" + FengColor.RateSS + "]S";
-        }
-        if (styleRank == 6)
-        {
-            labelS.GetComponent<UILabel>().text = "[" + FengColor.RateSSS + "]S";
-        }
-        if (styleRank == 7)
-        {
-            labelS.GetComponent<UILabel>().text = "[" + FengColor.RateX + "]X";
-        }
+        
         labelsub.GetComponent<UILabel>().text = styleRankText[styleRank, 1];
     }
 

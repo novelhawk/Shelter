@@ -2,7 +2,8 @@ using Mod;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]
-public class ShowInfoOfPlayer : Photon.MonoBehaviour
+// ReSharper disable once CheckNamespace
+public class ShowInfoOfPlayer : Photon.MonoBehaviour // Probably unused
 {
     public bool DisableOnOwnObjects;
     public Font font;

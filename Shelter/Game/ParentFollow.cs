@@ -1,6 +1,7 @@
 using UnityEngine;
 
-public class ParentFollow : MonoBehaviour
+// ReSharper disable once CheckNamespace
+public class ParentFollow : MonoBehaviour // Used by skin (ex. mikasa_asset_uni)
 {
     private Transform bTransform;
     public bool isActiveInScene;
