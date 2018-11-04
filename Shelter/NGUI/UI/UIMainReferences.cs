@@ -38,6 +38,9 @@ public class UIMainReferences : MonoBehaviour
     
     private void UnityLogHandle(string log, string stacktrace, UnityEngine.LogType type)
     {
+        if (log == "The referenced script on this Behaviour is missing!")
+            return;
+        
         switch (type)
         {
             case UnityEngine.LogType.Error:
