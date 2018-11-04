@@ -1445,8 +1445,7 @@ namespace Photon
             catch (Exception e)
             {
                 Shelter.LogBoth("Exception on Event({0})", LogType.Error, (PhotonEvent) photonEvent.Code);
-                Shelter.Log("{0}: {1}", LogType.Error, e.GetType().Name, e.Message);
-                Shelter.Log(e.StackTrace, LogType.Error);
+                Shelter.LogException(e);
             }
         }
 

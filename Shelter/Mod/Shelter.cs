@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using JetBrains.Annotations;
 using Mod.Animation;
 using Mod.Discord;
@@ -119,6 +120,15 @@ namespace Mod
 
         #region Static methods
 
+        public static void LogException(Exception e)
+        {
+            e = e.InnerException ?? e;
+            
+            Log("An exception occurred.", LogType.Error);
+            Log("{0}: {1}", LogType.Error, e.GetType().FullName, e.Message);
+            Log(e.StackTrace, LogType.Error);
+        }
+        
         [StringFormatMethod("line")]
         public static void Log(string line, params object[] args) => Log(string.Format(line, args));
         [StringFormatMethod("line")]
