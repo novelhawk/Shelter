@@ -8,6 +8,8 @@ using ExitGames.Client.Photon;
 using ExitGames.Client.Photon.Lite;
 using Mod;
 using Mod.Exceptions;
+using Photon.Enums;
+using RC;
 using UnityEngine;
 using Component = UnityEngine.Component;
 using Debug = UnityEngine.Debug;

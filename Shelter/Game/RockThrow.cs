@@ -2,6 +2,7 @@ using JetBrains.Annotations;
 using Mod;
 using Mod.Exceptions;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace

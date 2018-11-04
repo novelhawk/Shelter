@@ -3,6 +3,7 @@ using Mod.Animation;
 using Mod.Exceptions;
 using Mod.Interface;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 
 namespace Mod.Commands

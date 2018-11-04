@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using JetBrains.Annotations;
 using Mod;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 using GameObjectExtensions = Photon.GameObjectExtensions;
 using MonoBehaviour = UnityEngine.MonoBehaviour;

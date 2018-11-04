@@ -3,6 +3,7 @@ using JetBrains.Annotations;
 using Mod;
 using Mod.Exceptions;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 using LogType = Mod.Logging.LogType;
 

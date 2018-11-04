@@ -13,13 +13,7 @@ namespace Photon
             }
         }
 
-        public PhotonView photonView
-        {
-            get
-            {
-                return PhotonView.Get(this);
-            }
-        }
+        public PhotonView photonView => PhotonView.Get(this);
     }
 }
 

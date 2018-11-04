@@ -10,6 +10,8 @@ using Mod.Keybinds;
 using Mod.Managers;
 using NGUI.Internal;
 using Photon;
+using Photon.Enums;
+using RC;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 

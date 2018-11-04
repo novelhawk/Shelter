@@ -1,4 +1,4 @@
-namespace Photon
+namespace Photon.Enums
 {
     public enum PhotonTargets
     {

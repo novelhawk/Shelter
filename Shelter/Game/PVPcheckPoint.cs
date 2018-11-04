@@ -6,6 +6,7 @@ using JetBrains.Annotations;
 using Mod;
 using Mod.Interface;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 using Random = UnityEngine.Random;
 

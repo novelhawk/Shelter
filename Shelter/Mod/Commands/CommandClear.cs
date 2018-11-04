@@ -1,5 +1,6 @@
 ﻿using Mod.Interface;
 using Photon;
+using Photon.Enums;
 
 namespace Mod.Commands
 {

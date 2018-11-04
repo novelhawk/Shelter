@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using ExitGames.Client.Photon;
 using Mod;
+using Photon.Enums;
 using UnityEngine;
 
 // PUN Version: 1.28

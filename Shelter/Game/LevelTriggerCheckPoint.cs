@@ -1,4 +1,5 @@
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 using MonoBehaviour = UnityEngine.MonoBehaviour;
 

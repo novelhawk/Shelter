@@ -3,6 +3,7 @@ using Game;
 using ExitGames.Client.Photon;
 using Mod.Interface;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 using LogType = Mod.Logging.LogType;
 

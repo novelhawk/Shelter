@@ -1,4 +1,5 @@
 ﻿using Mod;
+using Photon.Enums;
 
 namespace Photon
 {

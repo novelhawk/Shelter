@@ -4,6 +4,7 @@ using System.Collections;
 using Mod;
 using Mod.Exceptions;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 using LogType = Mod.Logging.LogType;

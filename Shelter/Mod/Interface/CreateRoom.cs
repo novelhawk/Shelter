@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using Game;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 
 namespace Mod.Interface

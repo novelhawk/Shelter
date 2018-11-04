@@ -1,6 +1,7 @@
 using JetBrains.Annotations;
 using Mod;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 
 [RequireComponent(typeof(PhotonView))]

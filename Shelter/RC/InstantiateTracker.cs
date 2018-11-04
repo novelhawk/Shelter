@@ -2,10 +2,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Game;
 using Mod;
-using RC;
+using Photon;
 using UnityEngine;
 
-namespace Photon
+namespace RC
 {
     public class InstantiateTracker
     {

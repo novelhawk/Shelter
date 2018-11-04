@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using Mod;
 using NGUI.Internal;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 using MonoBehaviour = UnityEngine.MonoBehaviour;
 

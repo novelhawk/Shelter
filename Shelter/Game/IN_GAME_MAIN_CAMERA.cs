@@ -4,6 +4,7 @@ using Mod.Keybinds;
 using Mod.Managers;
 using Mod.Modules;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 using Extensions = Photon.Extensions;
 using MonoBehaviour = UnityEngine.MonoBehaviour;

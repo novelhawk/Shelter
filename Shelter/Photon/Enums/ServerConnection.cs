@@ -1,4 +1,4 @@
-namespace Photon
+namespace Photon.Enums
 {
     /// <summary>Available server (types) for internally used field: server.</summary>
     /// <remarks>Photon uses 3 different roles of servers: Name Server, Master Server and Game Server.</remarks>

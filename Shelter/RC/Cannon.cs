@@ -4,6 +4,7 @@ using Mod;
 using Mod.Exceptions;
 using Mod.Keybinds;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace

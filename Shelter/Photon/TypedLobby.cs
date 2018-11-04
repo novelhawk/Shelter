@@ -9,6 +9,8 @@
 // <author>developer@photonengine.com</author>
 // ----------------------------------------------------------------------------
 
+using Photon.Enums;
+
 namespace Photon
 {
     /// <summary>Refers to a specific lobby (and type) on the server.</summary>

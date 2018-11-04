@@ -7,6 +7,7 @@ using Mod.GameSettings;
 using Mod.Managers;
 using Mod.Modules;
 using Photon;
+using Photon.Enums;
 using RC;
 using UnityEngine;
 

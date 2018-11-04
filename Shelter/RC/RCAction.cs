@@ -3,6 +3,7 @@ using Game;
 using ExitGames.Client.Photon;
 using Mod;
 using Photon;
+using Photon.Enums;
 
 namespace RC
 {

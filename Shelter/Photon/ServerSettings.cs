@@ -2,6 +2,7 @@ using ExitGames.Client.Photon;
 using System;
 using System.Collections.Generic;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 
 [Serializable]

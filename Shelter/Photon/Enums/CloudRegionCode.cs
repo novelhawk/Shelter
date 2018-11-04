@@ -8,7 +8,7 @@
 // <author>developer@exitgames.com</author>
 // ----------------------------------------------------------------------------
 
-namespace Photon
+namespace Photon.Enums
 {
     /// <summary>Currently available <a href="https://doc.photonengine.com/en-us/pun/current/connection-and-authentication/regions">Photon Cloud regions</a> as enum.</summary>
     /// <remarks>

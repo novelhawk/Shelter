@@ -5,6 +5,7 @@ using JetBrains.Annotations;
 using Mod.Interface.Components;
 using Mod.Managers;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 
 namespace Mod.Interface

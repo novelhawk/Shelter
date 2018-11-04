@@ -1,5 +1,5 @@
 using ExitGames.Client.Photon;
-using Mod;
+using Photon.Enums;
 
 namespace Photon
 {

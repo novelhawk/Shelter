@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Photon
+namespace Photon.Enums
 {
     /// <summary>
     /// Class for constants. These values are for events defined by Photon Loadbalancing.

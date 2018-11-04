@@ -2,6 +2,7 @@ using System.Collections;
 using Mod;
 using Mod.GameSettings;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace

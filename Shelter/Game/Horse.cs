@@ -2,6 +2,7 @@ using Game;
 using JetBrains.Annotations;
 using Mod;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace

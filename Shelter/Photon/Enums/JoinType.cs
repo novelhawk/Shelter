@@ -1,4 +1,4 @@
-namespace Photon
+namespace Photon.Enums
 {
     /// <summary>
     /// Internal state, how this peer gets into a particular room (joining it or creating it).

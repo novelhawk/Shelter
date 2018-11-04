@@ -1,9 +1,8 @@
 using ExitGames.Client.Photon;
 using ExitGames.Client.Photon.Lite;
 using System.Collections.Generic;
-using Mod;
 using Photon;
-using CustomAuthenticationType = Photon.CustomAuthenticationType;
+using Photon.Enums;
 
 // ReSharper disable once CheckNamespace
 internal class LoadbalancingPeer : PhotonPeer

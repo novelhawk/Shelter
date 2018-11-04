@@ -4,6 +4,7 @@ using Mod;
 using Mod.Managers;
 using Mod.Modules;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 using MonoBehaviour = UnityEngine.MonoBehaviour;
 

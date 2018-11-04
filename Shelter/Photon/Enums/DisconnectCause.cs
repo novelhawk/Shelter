@@ -1,6 +1,6 @@
 using ExitGames.Client.Photon;
 
-namespace Photon
+namespace Photon.Enums
 {
     /// <summary>
     /// Summarizes the cause for a disconnect. Used in: OnConnectionFail and OnFailedToConnectToPhoton.

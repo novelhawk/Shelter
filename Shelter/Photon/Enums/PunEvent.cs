@@ -1,4 +1,4 @@
-﻿namespace Photon
+﻿namespace Photon.Enums
 {
     /// <summary>Defines Photon event-codes as used by PUN.</summary>
     public static class PunEvent

@@ -12,6 +12,7 @@ using Mod.Managers;
 using Mod.Modules;
 using NGUI.Internal;
 using Photon;
+using Photon.Enums;
 using RC;
 using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;

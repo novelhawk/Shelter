@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 
 namespace Mod.Interface
