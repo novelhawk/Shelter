@@ -1957,7 +1957,7 @@ public class HERO : Photon.MonoBehaviour
         }
         if (!this.titanForm && !this.isCannon)
         {
-            if (IN_GAME_MAIN_CAMERA.cameraTilt == 1 && (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine))
+            if (ModuleManager.Enabled(nameof(ModuleCameraTilt)) && (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine))
             {
                 Quaternion quaternion2;
                 Vector3 zero = Vector3.zero;

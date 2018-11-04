@@ -17,7 +17,6 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     public AudioSource bgmusic;
     public static float cameraDistance = 0.6f;
     public static CameraType cameraMode;
-    public static int cameraTilt = 1;
     public static int character = 1;
     private float closestDistance;
     private int currentPeekPlayerIndex;
@@ -655,14 +654,6 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         invertY = PlayerPrefs.GetInt("invertMouseY");
         this.SetDayLight(Daylight);
         this.locker = GameObject.Find("locker");
-        if (PlayerPrefs.HasKey("cameraTilt"))
-        {
-            cameraTilt = PlayerPrefs.GetInt("cameraTilt");
-        }
-        else
-        {
-            cameraTilt = 1;
-        }
         if (PlayerPrefs.HasKey("cameraDistance"))
         {
             cameraDistance = PlayerPrefs.GetFloat("cameraDistance") + 0.3f;
