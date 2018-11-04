@@ -37,7 +37,6 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     public float height = 5f;
     public float heightDamping = 2f;
     private float heightMulti;
-    public static int invertY = 1;
     public static bool isCheating;
     public static bool isPausing;
     public static bool isTyping;
@@ -119,7 +118,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             if (Input.GetKey(KeyCode.Mouse2))
             {
                 float angle = Input.GetAxis("Mouse X") * 10f * this.getSensitivityMulti();
-                float num2 = -Input.GetAxis("Mouse Y") * 10f * this.getSensitivityMulti() * this.getReverse();
+                float num2 = -Input.GetAxis("Mouse Y") * 10f * this.getSensitivityMulti();
                 this.transform.RotateAround(this.transform.position, Vector3.up, angle);
                 this.transform.RotateAround(this.transform.position, this.transform.right, num2);
             }
@@ -145,7 +144,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         {
             Screen.lockCursor = true;
             float num5 = Input.GetAxis("Mouse X") * 10f * this.getSensitivityMulti();
-            float num6 = -Input.GetAxis("Mouse Y") * 10f * this.getSensitivityMulti() * this.getReverse();
+            float num6 = -Input.GetAxis("Mouse Y") * 10f * this.getSensitivityMulti();
             this.transform.RotateAround(this.transform.position, Vector3.up, num5);
             float num7 = this.transform.rotation.eulerAngles.x % 360f;
             float num8 = num7 + num6;
@@ -243,11 +242,6 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     {
         GameObject.Find("flash").GetComponent<UISprite>().alpha = 1f;
         this.flashDuration = 2f;
-    }
-
-    private int getReverse()
-    {
-        return invertY;
     }
 
     private float getSensitivityMulti()
@@ -651,7 +645,6 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         instance = this;
         isPausing = false;
         sensitivityMulti = PlayerPrefs.GetFloat("MouseSensitivity");
-        invertY = PlayerPrefs.GetInt("invertMouseY");
         this.SetDayLight(Daylight);
         this.locker = GameObject.Find("locker");
         if (PlayerPrefs.HasKey("cameraDistance"))
