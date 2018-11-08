@@ -44,28 +44,28 @@ public class CannonBall : Photon.MonoBehaviour
             {
                 collider.dmg = 0;
             }
-            if (FengGameManagerMKII.settings.AllowCannonHumanKills)
+            if (GameManager.settings.AllowCannonHumanKills)
             {
-                foreach (HERO hero in FengGameManagerMKII.instance.GetPlayers())
+                foreach (HERO hero in GameManager.instance.GetPlayers())
                 {
                     if (hero != null && Vector3.Distance(hero.transform.position, transform.position) <= 20f && !hero.photonView.isMine)
                     {
                         GameObject gameObject = hero.gameObject;
                         Player owner = gameObject.GetPhotonView().owner;
-                        if (FengGameManagerMKII.settings.TeamSort > TeamSort.Off)
+                        if (GameManager.settings.TeamSort > TeamSort.Off)
                         {
                             if (Player.Self.Properties.RCTeam == 0 || Player.Self.Properties.RCTeam != owner.Properties.RCTeam)
                             {
                                 gameObject.GetComponent<HERO>().markDie();
                                 gameObject.GetComponent<HERO>().photonView.RPC(Rpc.DieRC, PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
-                                FengGameManagerMKII.instance.PlayerKillInfoUpdate(Player.Self, 0);
+                                GameManager.instance.PlayerKillInfoUpdate(Player.Self, 0);
                             }
                         }
                         else
                         {
                             gameObject.GetComponent<HERO>().markDie();
                             gameObject.GetComponent<HERO>().photonView.RPC(Rpc.DieRC, PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
-                            FengGameManagerMKII.instance.PlayerKillInfoUpdate(Player.Self, 0);
+                            GameManager.instance.PlayerKillInfoUpdate(Player.Self, 0);
                         }
                     }
                 }

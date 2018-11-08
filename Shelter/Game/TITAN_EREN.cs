@@ -392,7 +392,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
             {
                 this.crossFade("die", 0.1f);
                 this.isHitWhileCarryingRock = true;
-                FengGameManagerMKII.instance.GameLose();
+                GameManager.instance.GameLose();
                 photonView.RPC(Rpc.PlayRockAnimation, PhotonTargets.All, "set");
             }
             else
@@ -427,7 +427,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
 
     public void loadskin()
     {
-        string url = FengGameManagerMKII.settings.TitanSkin.Eren;
+        string url = GameManager.settings.TitanSkin.Eren;
         if (!Utility.IsValidImageUrl(url))
             return;
 
@@ -446,36 +446,36 @@ public class TITAN_EREN : Photon.MonoBehaviour
         {
             yield return null;
         }
-        bool mipmap = FengGameManagerMKII.settings.UseMipmap;
+        bool mipmap = GameManager.settings.UseMipmap;
         bool iteratorVariable1 = false;
         foreach (Renderer iteratorVariable4 in this.GetComponentsInChildren<Renderer>())
         {
-            if (!FengGameManagerMKII.linkHash[2].ContainsKey(url))
+            if (!GameManager.linkHash[2].ContainsKey(url))
             {
                 WWW link = new WWW(url);
                 yield return link;
                 Texture2D iteratorVariable6 = RCextensions.LoadImageRC(link, mipmap, 1000000);
                 link.Dispose();
-                if (!FengGameManagerMKII.linkHash[2].ContainsKey(url))
+                if (!GameManager.linkHash[2].ContainsKey(url))
                 {
                     iteratorVariable1 = true;
                     iteratorVariable4.material.mainTexture = iteratorVariable6;
-                    FengGameManagerMKII.linkHash[2].Add(url, iteratorVariable4.material);
-                    iteratorVariable4.material = (Material)FengGameManagerMKII.linkHash[2][url];
+                    GameManager.linkHash[2].Add(url, iteratorVariable4.material);
+                    iteratorVariable4.material = (Material)GameManager.linkHash[2][url];
                 }
                 else
                 {
-                    iteratorVariable4.material = (Material)FengGameManagerMKII.linkHash[2][url];
+                    iteratorVariable4.material = (Material)GameManager.linkHash[2][url];
                 }
             }
             else
             {
-                iteratorVariable4.material = (Material)FengGameManagerMKII.linkHash[2][url];
+                iteratorVariable4.material = (Material)GameManager.linkHash[2][url];
             }
         }
         if (iteratorVariable1)
         {
-            FengGameManagerMKII.instance.UnloadAssets();
+            GameManager.instance.UnloadAssets();
         }
     }
 
@@ -532,7 +532,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     {
         if (GameObject.Find("MultiplayerManager") != null)
         {
-            FengGameManagerMKII.instance.ErenTitans.Remove(this);
+            GameManager.instance.ErenTitans.Remove(this);
         }
     }
 
@@ -693,7 +693,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                                     {
                                         if (obj3.transform.parent.gameObject == obj2)
                                         {
-                                            GameObject obj4 = FengGameManagerMKII.instance.SpawnTitan(70, obj3.transform.position, obj3.transform.rotation);
+                                            GameObject obj4 = GameManager.instance.SpawnTitan(70, obj3.transform.position, obj3.transform.rotation);
                                             obj4.GetComponent<TITAN>().isAlarm = true;
                                             obj4.GetComponent<TITAN>().chaseDistance = 999999f;
                                         }
@@ -727,7 +727,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                             y = hit.point.y;
                         }
                         position += Vector3.up * y;
-                        GameObject obj5 = FengGameManagerMKII.instance.SpawnTitan(70, position, transform.rotation);
+                        GameObject obj5 = GameManager.instance.SpawnTitan(70, position, transform.rotation);
                         obj5.GetComponent<TITAN>().isAlarm = true;
                         obj5.GetComponent<TITAN>().chaseDistance = 999999f;
                     }
@@ -763,7 +763,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                     {
                         this.crossFade("die", 0.1f);
                         this.rockPhase++;
-                        FengGameManagerMKII.instance.GameWin();
+                        GameManager.instance.GameWin();
                     }
                     if (animation["rock_fix_hole"].normalizedTime >= 0.62f && !this.rockHitGround)
                     {
@@ -820,7 +820,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
     private void Start()
     {
         this.loadskin();
-        FengGameManagerMKII.instance.ErenTitans.Add(this);
+        GameManager.instance.ErenTitans.Add(this);
         if (this.rockLift)
         {
             this.rock = GameObject.Find("rock");

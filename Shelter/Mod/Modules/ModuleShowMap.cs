@@ -11,7 +11,7 @@ namespace Mod.Modules
 
         protected override void OnModuleEnable()
         {
-            if (!FengGameManagerMKII.settings.IsMapAllowed)
+            if (!GameManager.settings.IsMapAllowed)
             {
                 Notify.New("Map is globally disabled by MC", 5000);
                 Disable();

@@ -8,7 +8,7 @@ namespace Mod.Commands
 
         public override void Execute(string[] args)
         {
-            FengGameManagerMKII.instance.RestartGameRC();
+            GameManager.instance.RestartGameRC();
             Chat.System("You restarted the room.");
         }
     }

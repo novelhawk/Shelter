@@ -29,7 +29,7 @@ namespace Mod.Managers
 //                }
 //            }
 //
-//            if (FengGameManagerMKII.settings.TeamSort > TeamSort.Off) // Might not work
+//            if (GameManager.settings.TeamSort > TeamSort.Off) // Might not work
 //                for (int i = 0; i < PhotonNetwork.PlayerList.Length; i++)
 //                    photonView.RPC(Rpc.setTeamRPC, PhotonNetwork.PlayerList[i], i % 2 + 1);
             Application.targetFrameRate = settings.FPSCap;
@@ -188,6 +188,7 @@ namespace Mod.Managers
             if (!int.TryParse(PlayerPrefs.GetString("snapshot", "0"), out settings.SnapshotDamage))
                 settings.SnapshotDamage = 0;
             settings.EnableVSync = Utility.GetBoolean("vsync");
+            Shelter.LogConsole("VSync: {0}", settings.EnableVSync);
             if (!int.TryParse(PlayerPrefs.GetString("fpscap", "-1"), out settings.FPSCap))
                 settings.FPSCap = -1;
             settings.IsBombMode = Utility.GetBoolean("bombMode");

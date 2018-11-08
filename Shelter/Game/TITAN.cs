@@ -54,7 +54,7 @@ public class TITAN : Photon.MonoBehaviour
     public GameObject mainMaterial;
     public int maxHealth;
     public float maxVelocityChange = 10f;
-    public FengGameManagerMKII MultiplayerManager;
+    public GameManager MultiplayerManager;
     public int myDifficulty;
     public float myDistance;
     public Group myGroup = Group.Titan;
@@ -352,7 +352,7 @@ public class TITAN : Photon.MonoBehaviour
         obj2.layer = 16;
         obj2.transform.parent = this.baseTransform.Find("AABB");
         obj2.transform.localPosition = new Vector3(0f, 0f, 0f);
-        this.MultiplayerManager = FengGameManagerMKII.instance;
+        this.MultiplayerManager = GameManager.instance;
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine)
         {
             this.baseGameObjectTransform = gameObject.transform;
@@ -439,7 +439,7 @@ public class TITAN : Photon.MonoBehaviour
             return false;
         
         hasDie = true;
-        FengGameManagerMKII.instance.OneTitanDown(string.Empty, false);
+        GameManager.instance.OneTitanDown(string.Empty, false);
         this.dieAnimation();
         return true;
     }
@@ -499,7 +499,7 @@ public class TITAN : Photon.MonoBehaviour
             animation[this.hitAnimation].time = 0f;
             animation[this.hitAnimation].speed = 0f;
             this.needFreshCorePosition = true;
-            FengGameManagerMKII.instance.OneTitanDown(string.Empty, false);
+            GameManager.instance.OneTitanDown(string.Empty, false);
             if (photonView.isMine)
             {
                 if (this.grabbedTarget != null)
@@ -549,16 +549,16 @@ public class TITAN : Photon.MonoBehaviour
             }
             if (this.nonAI)
             {
-                FengGameManagerMKII.instance.TitanGetKill(view.owner, damage, Player.Self.Properties.Name, null);
+                GameManager.instance.TitanGetKill(view.owner, damage, Player.Self.Properties.Name, null);
             }
             else
             {
-                FengGameManagerMKII.instance.TitanGetKill(view.owner, damage, name, null);
+                GameManager.instance.TitanGetKill(view.owner, damage, name, null);
             }
         }
         else
         {
-            FengGameManagerMKII.instance.photonView.RPC(Rpc.ShowDamage, view.owner, new object[] { this.speed });
+            GameManager.instance.photonView.RPC(Rpc.ShowDamage, view.owner, new object[] { this.speed });
         }
     }
 
@@ -594,7 +594,7 @@ public class TITAN : Photon.MonoBehaviour
             this.playAnimation(this.hitAnimation);
             animation[this.hitAnimation].time = 0f;
             animation[this.hitAnimation].speed = 0f;
-            FengGameManagerMKII.instance.OneTitanDown(string.Empty, false);
+            GameManager.instance.OneTitanDown(string.Empty, false);
             this.needFreshCorePosition = true;
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
             {
@@ -797,7 +797,7 @@ public class TITAN : Photon.MonoBehaviour
 
     public void Explode()
     {
-        if (FengGameManagerMKII.settings.IsExplodeMode && this.hasDie && this.dieTime >= 1f && !this.hasExplode)
+        if (GameManager.settings.IsExplodeMode && this.hasDie && this.dieTime >= 1f && !this.hasExplode)
         {
             int num = 0;
             float num2 = this.myLevel * 10f;
@@ -822,7 +822,7 @@ public class TITAN : Photon.MonoBehaviour
                 PhotonNetwork.Instantiate("FX/boom1", position, Quaternion.Euler(270f, 0f, 0f), 0);
                 foreach (GameObject obj2 in GameObject.FindGameObjectsWithTag("Player"))
                 {
-                    if (Vector3.Distance(obj2.transform.position, position) < FengGameManagerMKII.settings.ExplodeRadius)
+                    if (Vector3.Distance(obj2.transform.position, position) < GameManager.settings.ExplodeRadius)
                     {
                         obj2.GetComponent<HERO>().markDie();
                         obj2.GetComponent<HERO>().photonView.RPC(Rpc.DieRC, PhotonTargets.All, new object[] { -1, "Server " });
@@ -1866,12 +1866,12 @@ public class TITAN : Photon.MonoBehaviour
         this.eye = false;
         if ((IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine) && ModuleManager.Enabled(nameof(ModuleEnableSkins)))
         {
-            var titanSkin = FengGameManagerMKII.settings.TitanSkin;
+            var titanSkin = GameManager.settings.TitanSkin;
             var index = Random.Range(0, titanSkin.Body.Length);
             
             var body = titanSkin.Body[index];
             string eye;
-            if (FengGameManagerMKII.settings.Randomize)
+            if (GameManager.settings.Randomize)
                 eye = titanSkin.Eyes[Random.Range(0, titanSkin.Eyes.Length)];                
             else
                 eye = titanSkin.Eyes[index];
@@ -1895,7 +1895,7 @@ public class TITAN : Photon.MonoBehaviour
         {
             yield return null;
         }
-        bool mipmap = FengGameManagerMKII.settings.UseMipmap;
+        bool mipmap = GameManager.settings.UseMipmap;
         bool unloadAssets = false;
         
         foreach (Renderer myRenderer in this.GetComponentsInChildren<Renderer>())
@@ -1908,7 +1908,7 @@ public class TITAN : Photon.MonoBehaviour
                 }
                 else if (Utility.IsValidImageUrl(eye))
                 {
-                    if (!FengGameManagerMKII.linkHash[0].ContainsKey(eye))
+                    if (!GameManager.linkHash[0].ContainsKey(eye))
                     {
                         unloadAssets = true;
                         myRenderer.material.mainTextureScale = new Vector2(myRenderer.material.mainTextureScale.x * 4f, myRenderer.material.mainTextureScale.y * 8f);
@@ -1920,18 +1920,18 @@ public class TITAN : Photon.MonoBehaviour
                                 continue;
                             myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
-                        FengGameManagerMKII.linkHash[0].Add(eye, myRenderer.material);
-                        myRenderer.material = (Material)FengGameManagerMKII.linkHash[0][eye];
+                        GameManager.linkHash[0].Add(eye, myRenderer.material);
+                        myRenderer.material = (Material)GameManager.linkHash[0][eye];
                     }
                     else
                     {
-                        myRenderer.material = (Material)FengGameManagerMKII.linkHash[0][eye];
+                        myRenderer.material = (Material)GameManager.linkHash[0][eye];
                     }
                 }
             }
             else if (myRenderer.name == "hair" && Utility.IsValidImageUrl(body))
             {
-                if (!FengGameManagerMKII.linkHash[2].ContainsKey(body))
+                if (!GameManager.linkHash[2].ContainsKey(body))
                 {
                     unloadAssets = true;
                     myRenderer.material = this.mainMaterial.GetComponent<SkinnedMeshRenderer>().material;
@@ -1942,17 +1942,17 @@ public class TITAN : Photon.MonoBehaviour
                             continue;
                         myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 1000000);
                     }
-                    FengGameManagerMKII.linkHash[2].Add(body, myRenderer.material);
-                    myRenderer.material = (Material)FengGameManagerMKII.linkHash[2][body];
+                    GameManager.linkHash[2].Add(body, myRenderer.material);
+                    myRenderer.material = (Material)GameManager.linkHash[2][body];
                 }
                 else
                 {
-                    myRenderer.material = (Material)FengGameManagerMKII.linkHash[2][body];
+                    myRenderer.material = (Material)GameManager.linkHash[2][body];
                 }
             }
         }
         if (unloadAssets)
-            FengGameManagerMKII.instance.UnloadAssets();
+            GameManager.instance.UnloadAssets();
     }
 
     [RPC]
@@ -2005,7 +2005,7 @@ public class TITAN : Photon.MonoBehaviour
                 Vector3 vector3 = this.myHero.transform.position + line;
                 Vector3 vector4 = vector3 - this.baseTransform.position;
                 float sqrMagnitude = vector4.sqrMagnitude;
-                if (sqrMagnitude > 8000f && sqrMagnitude < 90000f && FengGameManagerMKII.settings.EnableRockThrow)
+                if (sqrMagnitude > 8000f && sqrMagnitude < 90000f && GameManager.settings.EnableRockThrow)
                 {
                     this.Attack("throw");
                     this.rockInterval = 2f;
@@ -2192,7 +2192,7 @@ public class TITAN : Photon.MonoBehaviour
         {
             this.headscale = new Vector3(1f, 1f, 1f);
         }
-        else if (level < 1f && FengGameManagerMKII.Level.StartsWith("Custom"))
+        else if (level < 1f && GameManager.Level.StartsWith("Custom"))
         {
             CapsuleCollider component = this.myTitanTrigger.GetComponent<CapsuleCollider>();
             component.radius *= 2.5f - level;
@@ -2208,31 +2208,31 @@ public class TITAN : Photon.MonoBehaviour
     {
         if (GameObject.Find("MultiplayerManager") != null)
         {
-            FengGameManagerMKII.instance.Titans.Remove(this);
+            GameManager.instance.Titans.Remove(this);
         }
     }
 
     public void OnTitanDie(PhotonView view)
     {
-        if (FengGameManagerMKII.logicLoaded && FengGameManagerMKII.RCEvents.ContainsKey("OnTitanDie"))
+        if (GameManager.logicLoaded && GameManager.RCEvents.ContainsKey("OnTitanDie"))
         {
-            RCEvent event2 = (RCEvent) FengGameManagerMKII.RCEvents["OnTitanDie"];
-            string[] strArray = (string[]) FengGameManagerMKII.RCVariableNames["OnTitanDie"];
-            if (FengGameManagerMKII.titanVariables.ContainsKey(strArray[0]))
+            RCEvent event2 = (RCEvent) GameManager.RCEvents["OnTitanDie"];
+            string[] strArray = (string[]) GameManager.RCVariableNames["OnTitanDie"];
+            if (GameManager.titanVariables.ContainsKey(strArray[0]))
             {
-                FengGameManagerMKII.titanVariables[strArray[0]] = this;
+                GameManager.titanVariables[strArray[0]] = this;
             }
             else
             {
-                FengGameManagerMKII.titanVariables.Add(strArray[0], this);
+                GameManager.titanVariables.Add(strArray[0], this);
             }
-            if (FengGameManagerMKII.playerVariables.ContainsKey(strArray[1]))
+            if (GameManager.playerVariables.ContainsKey(strArray[1]))
             {
-                FengGameManagerMKII.playerVariables[strArray[1]] = view.owner;
+                GameManager.playerVariables[strArray[1]] = view.owner;
             }
             else
             {
-                FengGameManagerMKII.playerVariables.Add(strArray[1], view.owner);
+                GameManager.playerVariables.Add(strArray[1], view.owner);
             }
             event2.checkEvent();
         }
@@ -2356,9 +2356,9 @@ public class TITAN : Photon.MonoBehaviour
     public IEnumerator reloadSky()
     {
         yield return new WaitForSeconds(0.5f);
-        if (FengGameManagerMKII.skyMaterial != null && Camera.main.GetComponent<Skybox>().material != FengGameManagerMKII.skyMaterial)
+        if (GameManager.skyMaterial != null && Camera.main.GetComponent<Skybox>().material != GameManager.skyMaterial)
         {
-            Camera.main.GetComponent<Skybox>().material = FengGameManagerMKII.skyMaterial;
+            Camera.main.GetComponent<Skybox>().material = GameManager.skyMaterial;
         }
     }
 
@@ -2377,7 +2377,7 @@ public class TITAN : Photon.MonoBehaviour
 
     public void setAbnormalType2(AbnormalType type, bool forceCrawler)
     {
-        bool flag = FengGameManagerMKII.settings.UseCustomSpawnRates || FengGameManagerMKII.Level.StartsWith("Custom"); // Might be broken
+        bool flag = GameManager.settings.UseCustomSpawnRates || GameManager.Level.StartsWith("Custom"); // Might be broken
         int num = 0;
         float num2 = 0.02f * (IN_GAME_MAIN_CAMERA.difficulty + 1);
         if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpAHSS)
@@ -2451,7 +2451,7 @@ public class TITAN : Photon.MonoBehaviour
         }
         if (num == 4)
         {
-            if (!LevelInfoManager.Get(FengGameManagerMKII.Level).HasPunk)
+            if (!LevelInfoManager.Get(GameManager.Level).HasPunk)
             {
                 num = 1;
             }
@@ -2463,7 +2463,7 @@ public class TITAN : Photon.MonoBehaviour
                 }
                 if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.SurviveMode)
                 {
-                    int wave = FengGameManagerMKII.instance.wave;
+                    int wave = GameManager.instance.wave;
                     if (wave != 5 && wave != 10 && wave != 15 && wave != 20)
                     {
                         num = 1;
@@ -2647,7 +2647,7 @@ public class TITAN : Photon.MonoBehaviour
         animation.cullingType = AnimationCullingType.BasedOnRenderers;
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
         {
-            object[] parameters = new object[] { this.myLevel, FengGameManagerMKII.instance.difficulty, Random.Range(0, 4) };
+            object[] parameters = new object[] { this.myLevel, GameManager.instance.difficulty, Random.Range(0, 4) };
             photonView.RPC(Rpc.SetLevel, PhotonTargets.AllBuffered, parameters);
             animation.cullingType = AnimationCullingType.AlwaysAnimate;
         }
@@ -2725,9 +2725,9 @@ public class TITAN : Photon.MonoBehaviour
             if (!this.hasSetLevel)
             {
                 this.myLevel = Random.Range(0.7f, 3f);
-                if (FengGameManagerMKII.settings.EnableCustomSize)
+                if (GameManager.settings.EnableCustomSize)
                 {
-                    this.myLevel = FengGameManagerMKII.settings.TitanSize.Random;
+                    this.myLevel = GameManager.settings.TitanSize.Random;
                 }
                 this.hasSetLevel = true;
             }
@@ -2744,15 +2744,15 @@ public class TITAN : Photon.MonoBehaviour
                 StartCoroutine(this.reloadSky());
             }
         }
-        if (this.maxHealth == 0 && FengGameManagerMKII.settings.HealthMode > HealthMode.Off)
+        if (this.maxHealth == 0 && GameManager.settings.HealthMode > HealthMode.Off)
         {
-            switch (FengGameManagerMKII.settings.HealthMode)
+            switch (GameManager.settings.HealthMode)
             {
                 case HealthMode.Fixed:
-                    this.maxHealth = this.currentHealth = (int) FengGameManagerMKII.settings.TitanHealth.Random;
+                    this.maxHealth = this.currentHealth = (int) GameManager.settings.TitanHealth.Random;
                     break;
                 case HealthMode.SizeBased:
-                    this.maxHealth = this.currentHealth = (int) FengGameManagerMKII.settings.TitanHealth.Clamp(this.myLevel / 4f * FengGameManagerMKII.settings.TitanHealth.Random);
+                    this.maxHealth = this.currentHealth = (int) GameManager.settings.TitanHealth.Clamp(this.myLevel / 4f * GameManager.settings.TitanHealth.Random);
                     break;
             }
         }
@@ -2774,10 +2774,10 @@ public class TITAN : Photon.MonoBehaviour
         this.NetDie();
         if (this.nonAI)
         {
-            FengGameManagerMKII.instance.SendKillInfo(false, string.Empty, true, Player.Self.Properties.Name, 0);
+            GameManager.instance.SendKillInfo(false, string.Empty, true, Player.Self.Properties.Name, 0);
         }
-        FengGameManagerMKII.instance.needChooseSide = true;
-        FengGameManagerMKII.instance.justSuicide = true;
+        GameManager.instance.needChooseSide = true;
+        GameManager.instance.justSuicide = true;
     }
 
     public void testVisual(bool setCollider)
@@ -2809,7 +2809,7 @@ public class TITAN : Photon.MonoBehaviour
             if (vector.magnitude < this.lagMax && !this.hasDie && Time.time - this.healthTime > 0.2f)
             {
                 this.healthTime = Time.time;
-                if (speed >= FengGameManagerMKII.settings.MinimumDamage || this.abnormalType == AbnormalType.Crawler)
+                if (speed >= GameManager.settings.MinimumDamage || this.abnormalType == AbnormalType.Crawler)
                 {
                     this.currentHealth -= speed;
                 }
@@ -2831,16 +2831,16 @@ public class TITAN : Photon.MonoBehaviour
                     this.NetDie();
                     if (this.nonAI)
                     {
-                        FengGameManagerMKII.instance.TitanGetKill(view.owner, speed, Player.Self.Properties.Name, null);
+                        GameManager.instance.TitanGetKill(view.owner, speed, Player.Self.Properties.Name, null);
                     }
                     else
                     {
-                        FengGameManagerMKII.instance.TitanGetKill(view.owner, speed, name, null);
+                        GameManager.instance.TitanGetKill(view.owner, speed, name, null);
                     }
                 }
                 else
                 {
-                    FengGameManagerMKII.instance.photonView.RPC(Rpc.ShowDamage, view.owner, new object[] { speed });
+                    GameManager.instance.photonView.RPC(Rpc.ShowDamage, view.owner, new object[] { speed });
                 }
             }
         }

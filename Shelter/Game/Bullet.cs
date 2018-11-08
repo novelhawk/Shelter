@@ -343,9 +343,9 @@ public class Bullet : Photon.MonoBehaviour
 
     private void OnDestroy()
     {
-        if (FengGameManagerMKII.instance != null)
+        if (GameManager.instance != null)
         {
-            FengGameManagerMKII.instance.Hooks.Remove(this);
+            GameManager.instance.Hooks.Remove(this);
         }
         if (this.myTitan != null)
         {
@@ -410,7 +410,7 @@ public class Bullet : Photon.MonoBehaviour
     {
         this.rope = (GameObject) Instantiate(Resources.Load("rope"));
         this.lineRenderer = this.rope.GetComponent<LineRenderer>();
-        FengGameManagerMKII.instance.Hooks.Add(this);
+        GameManager.instance.Hooks.Add(this);
     }
 
     [RPC]

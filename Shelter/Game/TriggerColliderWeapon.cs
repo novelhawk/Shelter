@@ -66,7 +66,7 @@ public class TriggerColliderWeapon : MonoBehaviour
 
         if (other.gameObject.CompareTag("playerHitbox"))
         {
-            if ((ModuleManager.Enabled(nameof(ModulePVPEverywhere)) || LevelInfoManager.Get(FengGameManagerMKII.Level).IsPvP) && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
+            if ((ModuleManager.Enabled(nameof(ModulePVPEverywhere)) || LevelInfoManager.Get(GameManager.Level).IsPvP) && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
             {
                 float b = Mathf.Min(1f - Vector3.Distance(other.gameObject.transform.position, transform.position) * 0.05f, 1f);
                 HitBox component = other.gameObject.GetComponent<HitBox>();
@@ -113,8 +113,8 @@ public class TriggerColliderWeapon : MonoBehaviour
 
                         titan.die();
                         napeMeat(IN_GAME_MAIN_CAMERA.instance.main_object.rigidbody.velocity, item.transform.root);
-                        FengGameManagerMKII.instance.NetShowDamage(damage, null);
-                        FengGameManagerMKII.instance.PlayerKillInfoSingleplayerUpdate(damage);
+                        GameManager.instance.NetShowDamage(damage, null);
+                        GameManager.instance.PlayerKillInfoSingleplayerUpdate(damage);
                     }
                 }
                 else if (!PhotonNetwork.isMasterClient)

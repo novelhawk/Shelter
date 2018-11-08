@@ -26,20 +26,20 @@ namespace Mod.Discord
 
         public static void SendInGameMulti()
         {
-            string largeImageKey = "mainmenu", map = FengGameManagerMKII.Level;
-            if (FengGameManagerMKII.Level.Contains("Forest") && !FengGameManagerMKII.Level.Contains("Custom"))
+            string largeImageKey = "mainmenu", map = GameManager.Level;
+            if (GameManager.Level.Contains("Forest") && !GameManager.Level.Contains("Custom"))
             {
                 largeImageKey = "forest";
                 map = "Forest";
             }
 
-            if (FengGameManagerMKII.Level.Contains("City"))
+            if (GameManager.Level.Contains("City"))
             {
                 largeImageKey = "city";
                 map = "City";
             }
 
-            if (FengGameManagerMKII.Level == "OutSide")
+            if (GameManager.Level == "OutSide")
             {
                 largeImageKey = "outsidethewalls";
                 map = "Outside the Walls";

@@ -48,7 +48,7 @@ public class AHSSShotGunCollider : MonoBehaviour
         
         if (other.gameObject.CompareTag("playerHitbox"))
         {
-            if (ModuleManager.Enabled(nameof(ModulePVPEverywhere)) || LevelInfoManager.Get(FengGameManagerMKII.Level).IsPvP)
+            if (ModuleManager.Enabled(nameof(ModulePVPEverywhere)) || LevelInfoManager.Get(GameManager.Level).IsPvP)
             {
                 float b = 1f - Vector3.Distance(other.gameObject.transform.position, transform.position) * 0.05f;
                 b = Mathf.Min(1f, b);
@@ -99,12 +99,12 @@ public class AHSSShotGunCollider : MonoBehaviour
                     // Single
                     case GameType.Singleplayer when titan != null && !titan.hasDie:
                         
-                        FengGameManagerMKII.instance.NetShowDamage(damage, null);
+                        GameManager.instance.NetShowDamage(damage, null);
                         if (damage > titan.myLevel * 100f)
                         {
                             titan.die();
                             IN_GAME_MAIN_CAMERA.instance.TakeScreenshot(item.transform.position, damage, item.transform.root.gameObject, 0.02f);
-                            FengGameManagerMKII.instance.PlayerKillInfoSingleplayerUpdate(damage);
+                            GameManager.instance.PlayerKillInfoSingleplayerUpdate(damage);
                         }
                         break;
                     

@@ -349,7 +349,7 @@ namespace Photon
                 {
                     if (prefabName.StartsWith("RCAsset/"))
                     {
-                        obj2 = FengGameManagerMKII.InstantiateCustomAsset(prefabName);
+                        obj2 = GameManager.InstantiateCustomAsset(prefabName);
                     }
                     else
                     {

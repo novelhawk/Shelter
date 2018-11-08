@@ -18,7 +18,7 @@ using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 // ReSharper disable once CheckNamespace
-public partial class FengGameManagerMKII : Photon.MonoBehaviour
+public partial class GameManager : Photon.MonoBehaviour
 {
     public const string ApplicationID = "f1f6195c-df4a-40f9-bae5-4744c32901ef";
     private const string PlayerRespawnTag = "playerRespawn";
@@ -40,7 +40,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
     private int highestwave = 1;
     private int humanScore;
     public static Hashtable _infectionTitans;
-    public static FengGameManagerMKII instance;
+    public static GameManager instance;
     public static Hashtable intVariables;
     private bool isLosing;
     private bool isWinning;
@@ -130,7 +130,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
                 {
                     SetGameSettings(GetGameSettings());
                 }
-                if (FengGameManagerMKII.settings.IsEndless)
+                if (GameManager.settings.IsEndless)
                 {
 //                    StartCoroutine(RespawnEnumerator(RCSettings.endlessMode)); TODO: Check what the actual fuck is this and make it better
                 }
@@ -1604,7 +1604,7 @@ public partial class FengGameManagerMKII : Photon.MonoBehaviour
             switch (IN_GAME_MAIN_CAMERA.GameMode)
             {
                 case GameMode.Racing:
-                    if (FengGameManagerMKII.settings.IsASORacing)
+                    if (GameManager.settings.IsASORacing)
                         gameEndCD = 1000f;
                     else
                         gameEndCD = 20f;

@@ -43,22 +43,22 @@ namespace RC
                     switch (this.helperType)
                     {
                         case 0:
-                            return this.nextHelper.returnBool(FengGameManagerMKII.intVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnBool(GameManager.intVariables[helper.returnString(null)]);
 
                         case 1:
-                            return (bool) FengGameManagerMKII.boolVariables[helper.returnString(null)];
+                            return (bool) GameManager.boolVariables[helper.returnString(null)];
 
                         case 2:
-                            return this.nextHelper.returnBool(FengGameManagerMKII.stringVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnBool(GameManager.stringVariables[helper.returnString(null)]);
 
                         case 3:
-                            return this.nextHelper.returnBool(FengGameManagerMKII.floatVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnBool(GameManager.floatVariables[helper.returnString(null)]);
 
                         case 4:
-                            return this.nextHelper.returnBool(FengGameManagerMKII.playerVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnBool(GameManager.playerVariables[helper.returnString(null)]);
 
                         case 5:
-                            return this.nextHelper.returnBool(FengGameManagerMKII.titanVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnBool(GameManager.titanVariables[helper.returnString(null)]);
                     }
                     return false;
                 }
@@ -115,9 +115,9 @@ namespace RC
                             case 14:
                             {
                                 int iD = player.ID;
-                                if (FengGameManagerMKII.heroHash.ContainsKey(iD))
+                                if (GameManager.heroHash.ContainsKey(iD))
                                 {
-                                    hero = (HERO) FengGameManagerMKII.heroHash[iD];
+                                    hero = (HERO) GameManager.heroHash[iD];
                                     return this.nextHelper.returnBool(hero.transform.position.x);
                                 }
                                 return false;
@@ -125,9 +125,9 @@ namespace RC
                             case 15:
                             {
                                 int key = player.ID;
-                                if (FengGameManagerMKII.heroHash.ContainsKey(key))
+                                if (GameManager.heroHash.ContainsKey(key))
                                 {
-                                    hero = (HERO) FengGameManagerMKII.heroHash[key];
+                                    hero = (HERO) GameManager.heroHash[key];
                                     return this.nextHelper.returnBool(hero.transform.position.y);
                                 }
                                 return false;
@@ -135,9 +135,9 @@ namespace RC
                             case 16:
                             {
                                 int num6 = player.ID;
-                                if (FengGameManagerMKII.heroHash.ContainsKey(num6))
+                                if (GameManager.heroHash.ContainsKey(num6))
                                 {
-                                    hero = (HERO) FengGameManagerMKII.heroHash[num6];
+                                    hero = (HERO) GameManager.heroHash[num6];
                                     return this.nextHelper.returnBool(hero.transform.position.z);
                                 }
                                 return false;
@@ -145,9 +145,9 @@ namespace RC
                             case 17:
                             {
                                 int num7 = player.ID;
-                                if (FengGameManagerMKII.heroHash.ContainsKey(num7))
+                                if (GameManager.heroHash.ContainsKey(num7))
                                 {
-                                    hero = (HERO) FengGameManagerMKII.heroHash[num7];
+                                    hero = (HERO) GameManager.heroHash[num7];
                                     return this.nextHelper.returnBool(hero.rigidbody.velocity.magnitude);
                                 }
                                 return false;
@@ -187,7 +187,7 @@ namespace RC
                 case 4:
                 {
                     RCActionHelper helper2 = (RCActionHelper) parameters;
-                    RCRegion region = (RCRegion) FengGameManagerMKII.RCRegions[helper2.returnString(null)];
+                    RCRegion region = (RCRegion) GameManager.RCRegions[helper2.returnString(null)];
                     switch (this.helperType)
                     {
                         case 0:
@@ -246,22 +246,22 @@ namespace RC
                     switch (this.helperType)
                     {
                         case 0:
-                            return this.nextHelper.returnFloat(FengGameManagerMKII.intVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnFloat(GameManager.intVariables[helper.returnString(null)]);
 
                         case 1:
-                            return this.nextHelper.returnFloat(FengGameManagerMKII.boolVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnFloat(GameManager.boolVariables[helper.returnString(null)]);
 
                         case 2:
-                            return this.nextHelper.returnFloat(FengGameManagerMKII.stringVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnFloat(GameManager.stringVariables[helper.returnString(null)]);
 
                         case 3:
-                            return (float) FengGameManagerMKII.floatVariables[helper.returnString(null)];
+                            return (float) GameManager.floatVariables[helper.returnString(null)];
 
                         case 4:
-                            return this.nextHelper.returnFloat(FengGameManagerMKII.playerVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnFloat(GameManager.playerVariables[helper.returnString(null)]);
 
                         case 5:
-                            return this.nextHelper.returnFloat(FengGameManagerMKII.titanVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnFloat(GameManager.titanVariables[helper.returnString(null)]);
                     }
                     return 0f;
                 }
@@ -318,9 +318,9 @@ namespace RC
                             case 14:
                             {
                                 int iD = player.ID;
-                                if (FengGameManagerMKII.heroHash.ContainsKey(iD))
+                                if (GameManager.heroHash.ContainsKey(iD))
                                 {
-                                    hero = (HERO) FengGameManagerMKII.heroHash[iD];
+                                    hero = (HERO) GameManager.heroHash[iD];
                                     return hero.transform.position.x;
                                 }
                                 return 0f;
@@ -328,9 +328,9 @@ namespace RC
                             case 15:
                             {
                                 int key = player.ID;
-                                if (FengGameManagerMKII.heroHash.ContainsKey(key))
+                                if (GameManager.heroHash.ContainsKey(key))
                                 {
-                                    hero = (HERO) FengGameManagerMKII.heroHash[key];
+                                    hero = (HERO) GameManager.heroHash[key];
                                     return hero.transform.position.y;
                                 }
                                 return 0f;
@@ -338,9 +338,9 @@ namespace RC
                             case 16:
                             {
                                 int num7 = player.ID;
-                                if (FengGameManagerMKII.heroHash.ContainsKey(num7))
+                                if (GameManager.heroHash.ContainsKey(num7))
                                 {
-                                    hero = (HERO) FengGameManagerMKII.heroHash[num7];
+                                    hero = (HERO) GameManager.heroHash[num7];
                                     return hero.transform.position.z;
                                 }
                                 return 0f;
@@ -348,9 +348,9 @@ namespace RC
                             case 17:
                             {
                                 int num8 = player.ID;
-                                if (FengGameManagerMKII.heroHash.ContainsKey(num8))
+                                if (GameManager.heroHash.ContainsKey(num8))
                                 {
-                                    hero = (HERO) FengGameManagerMKII.heroHash[num8];
+                                    hero = (HERO) GameManager.heroHash[num8];
                                     return hero.rigidbody.velocity.magnitude;
                                 }
                                 return 0f;
@@ -390,7 +390,7 @@ namespace RC
                 case 4:
                 {
                     RCActionHelper helper2 = (RCActionHelper) parameters;
-                    RCRegion region = (RCRegion) FengGameManagerMKII.RCRegions[helper2.returnString(null)];
+                    RCRegion region = (RCRegion) GameManager.RCRegions[helper2.returnString(null)];
                     switch (this.helperType)
                     {
                         case 0:
@@ -449,22 +449,22 @@ namespace RC
                     switch (this.helperType)
                     {
                         case 0:
-                            return (int) FengGameManagerMKII.intVariables[helper.returnString(null)];
+                            return (int) GameManager.intVariables[helper.returnString(null)];
 
                         case 1:
-                            return this.nextHelper.returnInt(FengGameManagerMKII.boolVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnInt(GameManager.boolVariables[helper.returnString(null)]);
 
                         case 2:
-                            return this.nextHelper.returnInt(FengGameManagerMKII.stringVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnInt(GameManager.stringVariables[helper.returnString(null)]);
 
                         case 3:
-                            return this.nextHelper.returnInt(FengGameManagerMKII.floatVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnInt(GameManager.floatVariables[helper.returnString(null)]);
 
                         case 4:
-                            return this.nextHelper.returnInt(FengGameManagerMKII.playerVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnInt(GameManager.playerVariables[helper.returnString(null)]);
 
                         case 5:
-                            return this.nextHelper.returnInt(FengGameManagerMKII.titanVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnInt(GameManager.titanVariables[helper.returnString(null)]);
                     }
                     return 0;
                 }
@@ -521,9 +521,9 @@ namespace RC
                             case 14:
                             {
                                 int iD = player.ID;
-                                if (FengGameManagerMKII.heroHash.ContainsKey(iD))
+                                if (GameManager.heroHash.ContainsKey(iD))
                                 {
-                                    hero = (HERO) FengGameManagerMKII.heroHash[iD];
+                                    hero = (HERO) GameManager.heroHash[iD];
                                     return this.nextHelper.returnInt(hero.transform.position.x);
                                 }
                                 return 0;
@@ -531,9 +531,9 @@ namespace RC
                             case 15:
                             {
                                 int key = player.ID;
-                                if (FengGameManagerMKII.heroHash.ContainsKey(key))
+                                if (GameManager.heroHash.ContainsKey(key))
                                 {
-                                    hero = (HERO) FengGameManagerMKII.heroHash[key];
+                                    hero = (HERO) GameManager.heroHash[key];
                                     return this.nextHelper.returnInt(hero.transform.position.y);
                                 }
                                 return 0;
@@ -541,9 +541,9 @@ namespace RC
                             case 16:
                             {
                                 int num7 = player.ID;
-                                if (FengGameManagerMKII.heroHash.ContainsKey(num7))
+                                if (GameManager.heroHash.ContainsKey(num7))
                                 {
-                                    hero = (HERO) FengGameManagerMKII.heroHash[num7];
+                                    hero = (HERO) GameManager.heroHash[num7];
                                     return this.nextHelper.returnInt(hero.transform.position.z);
                                 }
                                 return 0;
@@ -551,9 +551,9 @@ namespace RC
                             case 17:
                             {
                                 int num8 = player.ID;
-                                if (FengGameManagerMKII.heroHash.ContainsKey(num8))
+                                if (GameManager.heroHash.ContainsKey(num8))
                                 {
-                                    hero = (HERO) FengGameManagerMKII.heroHash[num8];
+                                    hero = (HERO) GameManager.heroHash[num8];
                                     return this.nextHelper.returnInt(hero.rigidbody.velocity.magnitude);
                                 }
                                 return 0;
@@ -593,7 +593,7 @@ namespace RC
                 case 4:
                 {
                     RCActionHelper helper2 = (RCActionHelper) parameters;
-                    RCRegion region = (RCRegion) FengGameManagerMKII.RCRegions[helper2.returnString(null)];
+                    RCRegion region = (RCRegion) GameManager.RCRegions[helper2.returnString(null)];
                     switch (this.helperType)
                     {
                         case 0:
@@ -647,7 +647,7 @@ namespace RC
                 case 1:
                 {
                     RCActionHelper helper = (RCActionHelper) parameters;
-                    return (Player) FengGameManagerMKII.playerVariables[helper.returnString(null)];
+                    return (Player) GameManager.playerVariables[helper.returnString(null)];
                 }
                 case 2:
                     return (Player) parameters;
@@ -673,22 +673,22 @@ namespace RC
                     switch (this.helperType)
                     {
                         case 0:
-                            return this.nextHelper.returnString(FengGameManagerMKII.intVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnString(GameManager.intVariables[helper.returnString(null)]);
 
                         case 1:
-                            return this.nextHelper.returnString(FengGameManagerMKII.boolVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnString(GameManager.boolVariables[helper.returnString(null)]);
 
                         case 2:
-                            return (string) FengGameManagerMKII.stringVariables[helper.returnString(null)];
+                            return (string) GameManager.stringVariables[helper.returnString(null)];
 
                         case 3:
-                            return this.nextHelper.returnString(FengGameManagerMKII.floatVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnString(GameManager.floatVariables[helper.returnString(null)]);
 
                         case 4:
-                            return this.nextHelper.returnString(FengGameManagerMKII.playerVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnString(GameManager.playerVariables[helper.returnString(null)]);
 
                         case 5:
-                            return this.nextHelper.returnString(FengGameManagerMKII.titanVariables[helper.returnString(null)]);
+                            return this.nextHelper.returnString(GameManager.titanVariables[helper.returnString(null)]);
                     }
                     return string.Empty;
                 }
@@ -745,9 +745,9 @@ namespace RC
                             case 14:
                             {
                                 int iD = player.ID;
-                                if (FengGameManagerMKII.heroHash.ContainsKey(iD))
+                                if (GameManager.heroHash.ContainsKey(iD))
                                 {
-                                    hero = (HERO) FengGameManagerMKII.heroHash[iD];
+                                    hero = (HERO) GameManager.heroHash[iD];
                                     return this.nextHelper.returnString(hero.transform.position.x);
                                 }
                                 return string.Empty;
@@ -755,9 +755,9 @@ namespace RC
                             case 15:
                             {
                                 int key = player.ID;
-                                if (FengGameManagerMKII.heroHash.ContainsKey(key))
+                                if (GameManager.heroHash.ContainsKey(key))
                                 {
-                                    hero = (HERO) FengGameManagerMKII.heroHash[key];
+                                    hero = (HERO) GameManager.heroHash[key];
                                     return this.nextHelper.returnString(hero.transform.position.y);
                                 }
                                 return string.Empty;
@@ -765,9 +765,9 @@ namespace RC
                             case 16:
                             {
                                 int num6 = player.ID;
-                                if (FengGameManagerMKII.heroHash.ContainsKey(num6))
+                                if (GameManager.heroHash.ContainsKey(num6))
                                 {
-                                    hero = (HERO) FengGameManagerMKII.heroHash[num6];
+                                    hero = (HERO) GameManager.heroHash[num6];
                                     return this.nextHelper.returnString(hero.transform.position.z);
                                 }
                                 return string.Empty;
@@ -775,9 +775,9 @@ namespace RC
                             case 17:
                             {
                                 int num7 = player.ID;
-                                if (FengGameManagerMKII.heroHash.ContainsKey(num7))
+                                if (GameManager.heroHash.ContainsKey(num7))
                                 {
-                                    hero = (HERO) FengGameManagerMKII.heroHash[num7];
+                                    hero = (HERO) GameManager.heroHash[num7];
                                     return this.nextHelper.returnString(hero.rigidbody.velocity.magnitude);
                                 }
                                 return string.Empty;
@@ -817,7 +817,7 @@ namespace RC
                 case 4:
                 {
                     RCActionHelper helper2 = (RCActionHelper) parameters;
-                    RCRegion region = (RCRegion) FengGameManagerMKII.RCRegions[helper2.returnString(null)];
+                    RCRegion region = (RCRegion) GameManager.RCRegions[helper2.returnString(null)];
                     switch (this.helperType)
                     {
                         case 0:
@@ -870,7 +870,7 @@ namespace RC
                 case 1:
                 {
                     RCActionHelper helper = (RCActionHelper) parameters;
-                    return (TITAN) FengGameManagerMKII.titanVariables[helper.returnString(null)];
+                    return (TITAN) GameManager.titanVariables[helper.returnString(null)];
                 }
                 case 3:
                     return (TITAN) parameters;

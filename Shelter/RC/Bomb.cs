@@ -23,7 +23,7 @@ public class Bomb : Photon.MonoBehaviour
             this.correctPlayerPos = transform.position;
             this.correctPlayerRot = Quaternion.identity;
             Player owner = photonView.owner;
-            if (FengGameManagerMKII.settings.TeamSort > TeamSort.Off)
+            if (GameManager.settings.TeamSort > TeamSort.Off)
             {
                 var num = owner.Properties.RCTeam;
                 switch (num)
@@ -64,26 +64,26 @@ public class Bomb : Photon.MonoBehaviour
         rigidbody.velocity = Vector3.zero;
         Vector3 position = transform.position;
         this.myExplosion = PhotonNetwork.Instantiate("RCAsset/BombExplodeMain", position, Quaternion.Euler(0f, 0f, 0f), 0);
-        foreach (HERO hero in FengGameManagerMKII.instance.GetPlayers())
+        foreach (HERO hero in GameManager.instance.GetPlayers())
         {
             GameObject gameObject = hero.gameObject;
             if (!hero.bombImmune && Vector3.Distance(gameObject.transform.position, position) < radius && !gameObject.GetPhotonView().isMine)
             {
                 Player owner = gameObject.GetPhotonView().owner;
-                if (FengGameManagerMKII.settings.TeamSort > TeamSort.Off)
+                if (GameManager.settings.TeamSort > TeamSort.Off)
                 {
                     if (Player.Self.Properties.RCTeam == 0 || Player.Self.Properties.RCTeam != owner.Properties.RCTeam)
                     {
                         gameObject.GetComponent<HERO>().markDie();
                         gameObject.GetComponent<HERO>().photonView.RPC(Rpc.DieRC, PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
-                        FengGameManagerMKII.instance.PlayerKillInfoUpdate(Player.Self, 0);
+                        GameManager.instance.PlayerKillInfoUpdate(Player.Self, 0);
                     }
                 }
                 else
                 {
                     gameObject.GetComponent<HERO>().markDie();
                     gameObject.GetComponent<HERO>().photonView.RPC(Rpc.DieRC, PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
-                    FengGameManagerMKII.instance.PlayerKillInfoUpdate(Player.Self, 0);
+                    GameManager.instance.PlayerKillInfoUpdate(Player.Self, 0);
                 }
             }
         }

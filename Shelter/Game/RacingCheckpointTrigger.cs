@@ -18,8 +18,8 @@ public class RacingCheckpointTrigger : MonoBehaviour
             {
                 Chat.System("<color=#00ff00>Checkpoint set.</color>");
                 gameObject.GetComponent<HERO>().fillGas();
-                FengGameManagerMKII.instance.racingSpawnPoint = this.gameObject.transform.position;
-                FengGameManagerMKII.instance.racingSpawnPointSet = true;
+                GameManager.instance.racingSpawnPoint = this.gameObject.transform.position;
+                GameManager.instance.racingSpawnPointSet = true;
             }
         }
     }

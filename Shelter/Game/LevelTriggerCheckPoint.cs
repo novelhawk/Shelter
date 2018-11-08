@@ -12,11 +12,11 @@ public class LevelTriggerCheckPoint : MonoBehaviour
         {
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
             {
-                FengGameManagerMKII.instance.checkpoint = gameObject;
+                GameManager.instance.checkpoint = gameObject;
             }
             else if (other.gameObject.GetComponent<HERO>().photonView.isMine)
             {
-                FengGameManagerMKII.instance.checkpoint = gameObject;
+                GameManager.instance.checkpoint = gameObject;
             }
         }
     }

@@ -61,11 +61,11 @@ public class CannonPropRegion : Photon.MonoBehaviour
         if (!(!photonView.isMine || !PhotonNetwork.isMasterClient || this.disabled))
         {
             HERO component = PhotonView.Find(viewID).gameObject.GetComponent<HERO>();
-            if (component != null && component.photonView.owner == info.sender && !FengGameManagerMKII.instance.allowedToCannon.ContainsKey(info.sender.ID))
+            if (component != null && component.photonView.owner == info.sender && !GameManager.instance.allowedToCannon.ContainsKey(info.sender.ID))
             {
                 this.disabled = true;
                 StartCoroutine(this.WaitAndEnable());
-                FengGameManagerMKII.instance.allowedToCannon.Add(info.sender.ID, new CannonValues(photonView.viewID, this.settings));
+                GameManager.instance.allowedToCannon.Add(info.sender.ID, new CannonValues(photonView.viewID, this.settings));
                 component.photonView.RPC(Rpc.SpawnCannon, info.sender, new object[] { this.settings });
             }
         }
@@ -87,7 +87,7 @@ public class CannonPropRegion : Photon.MonoBehaviour
                 {
                     foreach (Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
                     {
-                        renderer.material = (Material) FengGameManagerMKII.RCassets.Load("transparent");
+                        renderer.material = (Material) GameManager.RCassets.Load("transparent");
                         if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
                         {
                             renderer.material.mainTextureScale = new Vector2(renderer.material.mainTextureScale.x * Convert.ToSingle(strArray[10]), renderer.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));
@@ -98,7 +98,7 @@ public class CannonPropRegion : Photon.MonoBehaviour
                 {
                     foreach (Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
                     {
-                        renderer.material = (Material) FengGameManagerMKII.RCassets.Load(strArray[2]);
+                        renderer.material = (Material) GameManager.RCassets.Load(strArray[2]);
                         if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
                         {
                             renderer.material.mainTextureScale = new Vector2(

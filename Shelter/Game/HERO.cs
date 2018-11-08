@@ -337,31 +337,31 @@ public class HERO : Photon.MonoBehaviour
     {
         this.skillIDHUD = this.skillId;
         this.skillCDDuration = this.skillCDLast;
-        if (FengGameManagerMKII.settings.IsBombMode)
+        if (GameManager.settings.IsBombMode)
         {
-            int num = FengGameManagerMKII.settings.BombRadius;
-            int num2 = FengGameManagerMKII.settings.BombRange;
-            int num3 = FengGameManagerMKII.settings.BombSpeed;
-            int num4 = FengGameManagerMKII.settings.BombCountdown;
+            int num = GameManager.settings.BombRadius;
+            int num2 = GameManager.settings.BombRange;
+            int num3 = GameManager.settings.BombSpeed;
+            int num4 = GameManager.settings.BombCountdown;
             if (num < 0 || num > 10)
             {
                 num = 5;
-                FengGameManagerMKII.settings.BombRadius = 5;
+                GameManager.settings.BombRadius = 5;
             }
             if (num2 < 0 || num2 > 10)
             {
                 num2 = 5;
-                FengGameManagerMKII.settings.BombRange = 5;
+                GameManager.settings.BombRange = 5;
             }
             if (num3 < 0 || num3 > 10)
             {
                 num3 = 5;
-                FengGameManagerMKII.settings.BombSpeed = 5;
+                GameManager.settings.BombSpeed = 5;
             }
             if (num4 < 0 || num4 > 10)
             {
                 num4 = 5;
-                FengGameManagerMKII.settings.BombCountdown = 5;
+                GameManager.settings.BombCountdown = 5;
             }
             if (num + num2 + num3 + num4 > 20)
             {
@@ -369,16 +369,16 @@ public class HERO : Photon.MonoBehaviour
                 num2 = 5;
                 num3 = 5;
                 num4 = 5;
-                FengGameManagerMKII.settings.BombRadius = 5;
-                FengGameManagerMKII.settings.BombRange = 5;
-                FengGameManagerMKII.settings.BombSpeed = 5;
-                FengGameManagerMKII.settings.BombCountdown = 5;
+                GameManager.settings.BombRadius = 5;
+                GameManager.settings.BombRange = 5;
+                GameManager.settings.BombSpeed = 5;
+                GameManager.settings.BombCountdown = 5;
             }
             this.bombTimeMax = (num2 * 60f + 200f) / (num3 * 60f + 200f);
             this.bombRadius = num * 4f + 20f;
             this.bombCD = num4 * -0.4f + 5f;
             this.bombSpeed = num3 * 60f + 200f;
-            var color = FengGameManagerMKII.settings.BombColor;
+            var color = GameManager.settings.BombColor;
             Player.Self.SetCustomProperties(new Hashtable
             {
                 { PlayerProperty.RCBombR, color.r },
@@ -391,7 +391,7 @@ public class HERO : Photon.MonoBehaviour
             this.skillIDHUD = "armin";
             this.skillCDLast = this.bombCD;
             this.skillCDDuration = 10f;
-            if (FengGameManagerMKII.instance.roundTime > 10f)
+            if (GameManager.instance.roundTime > 10f)
             {
                 this.skillCDDuration = 5f;
             }
@@ -556,7 +556,7 @@ public class HERO : Photon.MonoBehaviour
 
     private void changeBlade()
     {
-        if (!this.useGun || this.grounded || LevelInfoManager.Get(FengGameManagerMKII.Level).Gamemode != GameMode.PvpAHSS)
+        if (!this.useGun || this.grounded || LevelInfoManager.Get(GameManager.Level).Gamemode != GameMode.PvpAHSS)
         {
             this.State = HeroState.ChangeBlade;
             this.throwedBlades = false;
@@ -829,7 +829,7 @@ public class HERO : Photon.MonoBehaviour
             }
             this.BreakApart(v, isBite);
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
-            FengGameManagerMKII.instance.GameLose();
+            GameManager.instance.GameLose();
             this.falseAttack();
             this.hasDied = true;
             Transform transform = this.transform.Find("audio_die");
@@ -862,7 +862,7 @@ public class HERO : Photon.MonoBehaviour
             this.meatDie.Play();
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(null, true, false);
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
-            FengGameManagerMKII.instance.GameLose();
+            GameManager.instance.GameLose();
             this.falseAttack();
             this.hasDied = true;
             GameObject obj2 = (GameObject) Instantiate(Resources.Load("hitMeat2"));
@@ -2245,7 +2245,7 @@ public class HERO : Photon.MonoBehaviour
             }
             if (ModuleManager.Enabled(nameof(ModuleEnableSkins)))
             {
-                var skins = FengGameManagerMKII.settings.HumanSkin.Set;
+                var skins = GameManager.settings.HumanSkin.Set;
                 StringBuilder url = new StringBuilder(skins.Length * 45);
                 foreach (var skin in skins)
                     url.AppendFormat("{0},", skin);
@@ -2273,12 +2273,12 @@ public class HERO : Photon.MonoBehaviour
             yield return null;
         
         bool unloadAssets = false;
-        bool mipmap = FengGameManagerMKII.settings.UseMipmap;
+        bool mipmap = GameManager.settings.UseMipmap;
         string[] urls = url.Split(',');
         if (urls.Length < 13)
             yield break; // Not allowed exception?
         bool skinGas = ModuleManager.Enabled(nameof(ModuleEnableSkins));
-        bool hasHorse = LevelInfoManager.Get(FengGameManagerMKII.Level).Horse || FengGameManagerMKII.settings.EnableHorse;
+        bool hasHorse = LevelInfoManager.Get(GameManager.Level).Horse || GameManager.settings.EnableHorse;
         bool isMe = IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || this.photonView.isMine;
 
         Renderer myRenderer;
@@ -2287,7 +2287,7 @@ public class HERO : Photon.MonoBehaviour
             myRenderer = this.setup.part_hair_1.renderer;
             if (Utility.IsValidImageUrl(urls[1]))
             {
-                if (!FengGameManagerMKII.linkHash[0].ContainsKey(urls[1]))
+                if (!GameManager.linkHash[0].ContainsKey(urls[1]))
                 {
                     unloadAssets = true;
                     if (this.setup.myCostume.hairInfo.ID >= 0)
@@ -2300,12 +2300,12 @@ public class HERO : Photon.MonoBehaviour
                             yield break;
                         myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                     }
-                    FengGameManagerMKII.linkHash[0].Add(urls[1], myRenderer.material);
-                    myRenderer.material = (Material)FengGameManagerMKII.linkHash[0][urls[1]];
+                    GameManager.linkHash[0].Add(urls[1], myRenderer.material);
+                    myRenderer.material = (Material)GameManager.linkHash[0][urls[1]];
                 }
                 else
                 {
-                    myRenderer.material = (Material)FengGameManagerMKII.linkHash[0][urls[1]];
+                    myRenderer.material = (Material)GameManager.linkHash[0][urls[1]];
                 }
             }
             else if (urls[1].EqualsIgnoreCase("transparent"))
@@ -2318,10 +2318,10 @@ public class HERO : Photon.MonoBehaviour
             myRenderer = this.setup.part_cape.renderer;
             if (Utility.IsValidImageUrl(urls[7]))
             {
-                if (!FengGameManagerMKII.linkHash[0].ContainsKey(urls[7]))
+                if (!GameManager.linkHash[0].ContainsKey(urls[7]))
                 {
                     unloadAssets = true;
-                    FengGameManagerMKII.linkHash[0].Add(urls[7], myRenderer.material);
+                    GameManager.linkHash[0].Add(urls[7], myRenderer.material);
                     using (WWW www = new WWW(urls[7]))
                     {
                         yield return www;
@@ -2329,11 +2329,11 @@ public class HERO : Photon.MonoBehaviour
                             yield break;
                         myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                     }
-                    myRenderer.material = (Material)FengGameManagerMKII.linkHash[0][urls[7]];
+                    myRenderer.material = (Material)GameManager.linkHash[0][urls[7]];
                 }
                 else
                 {
-                    myRenderer.material = (Material)FengGameManagerMKII.linkHash[0][urls[7]];
+                    myRenderer.material = (Material)GameManager.linkHash[0][urls[7]];
                 }
             }
             else if (urls[7].EqualsIgnoreCase("transparent"))
@@ -2346,7 +2346,7 @@ public class HERO : Photon.MonoBehaviour
             myRenderer = this.setup.part_chest_3.renderer;
             if (Utility.IsValidImageUrl(urls[6]))
             {
-                if (!FengGameManagerMKII.linkHash[1].ContainsKey(urls[6]))
+                if (!GameManager.linkHash[1].ContainsKey(urls[6]))
                 {
                     unloadAssets = true;
                     using (WWW www = new WWW(urls[6]))
@@ -2357,12 +2357,12 @@ public class HERO : Photon.MonoBehaviour
                         myRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 500000);
                     }
 
-                    FengGameManagerMKII.linkHash[1].Add(urls[6], myRenderer.material);
-                    myRenderer.material = (Material) FengGameManagerMKII.linkHash[1][urls[6]];
+                    GameManager.linkHash[1].Add(urls[6], myRenderer.material);
+                    myRenderer.material = (Material) GameManager.linkHash[1][urls[6]];
                 }
                 else
                 {
-                    myRenderer.material = (Material) FengGameManagerMKII.linkHash[1][urls[6]];
+                    myRenderer.material = (Material) GameManager.linkHash[1][urls[6]];
                 }
             }
             else if (urls[6].EqualsIgnoreCase("transparent"))
@@ -2377,7 +2377,7 @@ public class HERO : Photon.MonoBehaviour
             {
                 if (Utility.IsValidImageUrl(urls[1]))
                 {
-                    if (!FengGameManagerMKII.linkHash[0].ContainsKey(urls[1]))
+                    if (!GameManager.linkHash[0].ContainsKey(urls[1]))
                     {
                         unloadAssets = true;
                         if (this.setup.myCostume.hairInfo.ID >= 0)
@@ -2390,12 +2390,12 @@ public class HERO : Photon.MonoBehaviour
                                 yield break;
                             currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
-                        FengGameManagerMKII.linkHash[0].Add(urls[1], currentRender.material);
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[1]];
+                        GameManager.linkHash[0].Add(urls[1], currentRender.material);
+                        currentRender.material = (Material)GameManager.linkHash[0][urls[1]];
                     }
                     else
                     {
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[1]];
+                        currentRender.material = (Material)GameManager.linkHash[0][urls[1]];
                     }
                 }
                 else if (urls[1].EqualsIgnoreCase("transparent"))
@@ -2407,7 +2407,7 @@ public class HERO : Photon.MonoBehaviour
             {
                 if (Utility.IsValidImageUrl(urls[2]))
                 {
-                    if (!FengGameManagerMKII.linkHash[0].ContainsKey(urls[2]))
+                    if (!GameManager.linkHash[0].ContainsKey(urls[2]))
                     {
                         unloadAssets = true;
                         currentRender.material.mainTextureScale = currentRender.material.mainTextureScale * 8f;
@@ -2419,12 +2419,12 @@ public class HERO : Photon.MonoBehaviour
                                 yield break;
                             currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
-                        FengGameManagerMKII.linkHash[0].Add(urls[2], currentRender.material);
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[2]];
+                        GameManager.linkHash[0].Add(urls[2], currentRender.material);
+                        currentRender.material = (Material)GameManager.linkHash[0][urls[2]];
                     }
                     else
                     {
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[2]];
+                        currentRender.material = (Material)GameManager.linkHash[0][urls[2]];
                     }
                 }
                 else if (urls[2].EqualsIgnoreCase("transparent"))
@@ -2436,7 +2436,7 @@ public class HERO : Photon.MonoBehaviour
             {
                 if (Utility.IsValidImageUrl(urls[3]))
                 {
-                    if (!FengGameManagerMKII.linkHash[0].ContainsKey(urls[3]))
+                    if (!GameManager.linkHash[0].ContainsKey(urls[3]))
                     {
                         unloadAssets = true;
                         currentRender.material.mainTextureScale = currentRender.material.mainTextureScale * 8f;
@@ -2448,12 +2448,12 @@ public class HERO : Photon.MonoBehaviour
                                 yield break;
                             currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
-                        FengGameManagerMKII.linkHash[0].Add(urls[3], currentRender.material);
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[3]];
+                        GameManager.linkHash[0].Add(urls[3], currentRender.material);
+                        currentRender.material = (Material)GameManager.linkHash[0][urls[3]];
                     }
                     else
                     {
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[3]];
+                        currentRender.material = (Material)GameManager.linkHash[0][urls[3]];
                     }
                 }
                 else if (urls[3].EqualsIgnoreCase("transparent"))
@@ -2465,7 +2465,7 @@ public class HERO : Photon.MonoBehaviour
             {
                 if (Utility.IsValidImageUrl(urls[4]))
                 {
-                    if (!FengGameManagerMKII.linkHash[0].ContainsKey(urls[4]))
+                    if (!GameManager.linkHash[0].ContainsKey(urls[4]))
                     {
                         unloadAssets = true;
                         currentRender.material.mainTextureScale = currentRender.material.mainTextureScale * 8f;
@@ -2477,12 +2477,12 @@ public class HERO : Photon.MonoBehaviour
                                 yield break;
                             currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
-                        FengGameManagerMKII.linkHash[0].Add(urls[4], currentRender.material);
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[4]];
+                        GameManager.linkHash[0].Add(urls[4], currentRender.material);
+                        currentRender.material = (Material)GameManager.linkHash[0][urls[4]];
                     }
                     else
                     {
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[4]];
+                        currentRender.material = (Material)GameManager.linkHash[0][urls[4]];
                     }
                 }
                 else if (urls[4].EqualsIgnoreCase("transparent"))
@@ -2494,7 +2494,7 @@ public class HERO : Photon.MonoBehaviour
             {
                 if (Utility.IsValidImageUrl(urls[5]))
                 {
-                    if (!FengGameManagerMKII.linkHash[0].ContainsKey(urls[5]))
+                    if (!GameManager.linkHash[0].ContainsKey(urls[5]))
                     {
                         unloadAssets = true;
                         using (WWW www = new WWW(urls[5]))
@@ -2504,12 +2504,12 @@ public class HERO : Photon.MonoBehaviour
                                 yield break;
                             currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
-                        FengGameManagerMKII.linkHash[0].Add(urls[5], currentRender.material);
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[5]];
+                        GameManager.linkHash[0].Add(urls[5], currentRender.material);
+                        currentRender.material = (Material)GameManager.linkHash[0][urls[5]];
                     }
                     else
                     {
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[5]];
+                        currentRender.material = (Material)GameManager.linkHash[0][urls[5]];
                     }
                 }
                 else if (urls[5].EqualsIgnoreCase("transparent"))
@@ -2521,7 +2521,7 @@ public class HERO : Photon.MonoBehaviour
             {
                 if (Utility.IsValidImageUrl(urls[6]))
                 {
-                    if (!FengGameManagerMKII.linkHash[1].ContainsKey(urls[6]))
+                    if (!GameManager.linkHash[1].ContainsKey(urls[6]))
                     {
                         unloadAssets = true;
                         using (WWW www = new WWW(urls[6]))
@@ -2531,12 +2531,12 @@ public class HERO : Photon.MonoBehaviour
                                 yield break;
                             currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 500000);
                         }
-                        FengGameManagerMKII.linkHash[1].Add(urls[6], currentRender.material);
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[1][urls[6]];
+                        GameManager.linkHash[1].Add(urls[6], currentRender.material);
+                        currentRender.material = (Material)GameManager.linkHash[1][urls[6]];
                     }
                     else
                     {
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[1][urls[6]];
+                        currentRender.material = (Material)GameManager.linkHash[1][urls[6]];
                     }
                 }
                 else if (urls[6].EqualsIgnoreCase("transparent"))
@@ -2548,7 +2548,7 @@ public class HERO : Photon.MonoBehaviour
             {
                 if (Utility.IsValidImageUrl(urls[7]))
                 {
-                    if (!FengGameManagerMKII.linkHash[0].ContainsKey(urls[7]))
+                    if (!GameManager.linkHash[0].ContainsKey(urls[7]))
                     {
                         unloadAssets = true;
                         using (WWW www = new WWW(urls[7]))
@@ -2558,12 +2558,12 @@ public class HERO : Photon.MonoBehaviour
                                 yield break;
                             currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
-                        FengGameManagerMKII.linkHash[0].Add(urls[7], currentRender.material);
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[7]];
+                        GameManager.linkHash[0].Add(urls[7], currentRender.material);
+                        currentRender.material = (Material)GameManager.linkHash[0][urls[7]];
                     }
                     else
                     {
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[7]];
+                        currentRender.material = (Material)GameManager.linkHash[0][urls[7]];
                     }
                 }
                 else if (urls[7].EqualsIgnoreCase("transparent"))
@@ -2575,7 +2575,7 @@ public class HERO : Photon.MonoBehaviour
             {
                 if (Utility.IsValidImageUrl(urls[8]))
                 {
-                    if (!FengGameManagerMKII.linkHash[1].ContainsKey(urls[8]))
+                    if (!GameManager.linkHash[1].ContainsKey(urls[8]))
                     {
                         unloadAssets = true;
                         using (WWW www = new WWW(urls[8]))
@@ -2585,12 +2585,12 @@ public class HERO : Photon.MonoBehaviour
                                 yield break;
                             currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 500000);
                         }
-                        FengGameManagerMKII.linkHash[1].Add(urls[8], currentRender.material);
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[1][urls[8]];
+                        GameManager.linkHash[1].Add(urls[8], currentRender.material);
+                        currentRender.material = (Material)GameManager.linkHash[1][urls[8]];
                     }
                     else
                     {
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[1][urls[8]];
+                        currentRender.material = (Material)GameManager.linkHash[1][urls[8]];
                     }
                 }
                 else if (urls[8].EqualsIgnoreCase("transparent"))
@@ -2602,7 +2602,7 @@ public class HERO : Photon.MonoBehaviour
             {
                 if (Utility.IsValidImageUrl(urls[9]))
                 {
-                    if (!FengGameManagerMKII.linkHash[1].ContainsKey(urls[9]))
+                    if (!GameManager.linkHash[1].ContainsKey(urls[9]))
                     {
                         unloadAssets = true;
                         using (WWW www = new WWW(urls[9]))
@@ -2612,12 +2612,12 @@ public class HERO : Photon.MonoBehaviour
                                 yield break;
                             currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 500000);
                         }
-                        FengGameManagerMKII.linkHash[1].Add(urls[9], currentRender.material);
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[1][urls[9]];
+                        GameManager.linkHash[1].Add(urls[9], currentRender.material);
+                        currentRender.material = (Material)GameManager.linkHash[1][urls[9]];
                     }
                     else
                     {
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[1][urls[9]];
+                        currentRender.material = (Material)GameManager.linkHash[1][urls[9]];
                     }
                 }
                 else if (urls[9].EqualsIgnoreCase("transparent"))
@@ -2629,7 +2629,7 @@ public class HERO : Photon.MonoBehaviour
             {
                 if (Utility.IsValidImageUrl(urls[10]))
                 {
-                    if (!FengGameManagerMKII.linkHash[0].ContainsKey(urls[10]))
+                    if (!GameManager.linkHash[0].ContainsKey(urls[10]))
                     {
                         unloadAssets = true;
                         using (WWW www = new WWW(urls[10]))
@@ -2639,12 +2639,12 @@ public class HERO : Photon.MonoBehaviour
                                 yield break;
                             currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
-                        FengGameManagerMKII.linkHash[0].Add(urls[10], currentRender.material);
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[10]];
+                        GameManager.linkHash[0].Add(urls[10], currentRender.material);
+                        currentRender.material = (Material)GameManager.linkHash[0][urls[10]];
                     }
                     else
                     {
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[10]];
+                        currentRender.material = (Material)GameManager.linkHash[0][urls[10]];
                     }
                 }
                 else if (urls[10].EqualsIgnoreCase("transparent"))
@@ -2656,7 +2656,7 @@ public class HERO : Photon.MonoBehaviour
             {
                 if (Utility.IsValidImageUrl(urls[11]))
                 {
-                    if (!FengGameManagerMKII.linkHash[0].ContainsKey(urls[11]))
+                    if (!GameManager.linkHash[0].ContainsKey(urls[11]))
                     {
                         unloadAssets = true;
                         using (WWW www = new WWW(urls[11]))
@@ -2666,12 +2666,12 @@ public class HERO : Photon.MonoBehaviour
                                 yield break;
                             currentRender.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                         }
-                        FengGameManagerMKII.linkHash[0].Add(urls[11], currentRender.material);
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[11]];
+                        GameManager.linkHash[0].Add(urls[11], currentRender.material);
+                        currentRender.material = (Material)GameManager.linkHash[0][urls[11]];
                     }
                     else
                     {
-                        currentRender.material = (Material)FengGameManagerMKII.linkHash[0][urls[11]];
+                        currentRender.material = (Material)GameManager.linkHash[0][urls[11]];
                     }
                 }
                 else if (urls[11].EqualsIgnoreCase("transparent"))
@@ -2691,7 +2691,7 @@ public class HERO : Photon.MonoBehaviour
                     {
                         if (Utility.IsValidImageUrl(urls[0]))
                         {
-                            if (!FengGameManagerMKII.linkHash[1].ContainsKey(urls[0]))
+                            if (!GameManager.linkHash[1].ContainsKey(urls[0]))
                             {
                                 unloadAssets = true;
                                 using (WWW www = new WWW(urls[0]))
@@ -2701,12 +2701,12 @@ public class HERO : Photon.MonoBehaviour
                                         yield break;
                                     currentRenderer.material.mainTexture = RCextensions.LoadImageRC(www, mipmap, 500000);
                                 }
-                                FengGameManagerMKII.linkHash[1].Add(urls[0], currentRenderer.material);
-                                currentRenderer.material = (Material)FengGameManagerMKII.linkHash[1][urls[0]];
+                                GameManager.linkHash[1].Add(urls[0], currentRenderer.material);
+                                currentRenderer.material = (Material)GameManager.linkHash[1][urls[0]];
                             }
                             else
                             {
-                                currentRenderer.material = (Material)FengGameManagerMKII.linkHash[1][urls[0]];
+                                currentRenderer.material = (Material)GameManager.linkHash[1][urls[0]];
                             }
                         }
                         else if (urls[0].EqualsIgnoreCase("transparent"))
@@ -2719,7 +2719,7 @@ public class HERO : Photon.MonoBehaviour
         }
         if (isMe && Utility.IsValidImageUrl(urls[12]))
         {
-            if (!FengGameManagerMKII.linkHash[0].ContainsKey(urls[12]))
+            if (!GameManager.linkHash[0].ContainsKey(urls[12]))
             {
                 unloadAssets = true;
                 using (WWW www = new WWW(urls[12]))
@@ -2730,22 +2730,22 @@ public class HERO : Photon.MonoBehaviour
                     leftbladetrail.MyMaterial.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                     rightbladetrail.MyMaterial.mainTexture = RCextensions.LoadImageRC(www, mipmap, 200000);
                 }
-                FengGameManagerMKII.linkHash[0].Add(urls[12], this.leftbladetrail.MyMaterial);
-                this.leftbladetrail.MyMaterial = (Material)FengGameManagerMKII.linkHash[0][urls[12]];
-                this.rightbladetrail.MyMaterial = (Material)FengGameManagerMKII.linkHash[0][urls[12]];
+                GameManager.linkHash[0].Add(urls[12], this.leftbladetrail.MyMaterial);
+                this.leftbladetrail.MyMaterial = (Material)GameManager.linkHash[0][urls[12]];
+                this.rightbladetrail.MyMaterial = (Material)GameManager.linkHash[0][urls[12]];
                 this.leftbladetrail2.MyMaterial = this.leftbladetrail.MyMaterial;
                 this.rightbladetrail2.MyMaterial = this.leftbladetrail.MyMaterial;
             }
             else
             {
-                this.leftbladetrail2.MyMaterial = (Material)FengGameManagerMKII.linkHash[0][urls[12]];
-                this.rightbladetrail2.MyMaterial = (Material)FengGameManagerMKII.linkHash[0][urls[12]];
-                this.leftbladetrail.MyMaterial = (Material)FengGameManagerMKII.linkHash[0][urls[12]];
-                this.rightbladetrail.MyMaterial = (Material)FengGameManagerMKII.linkHash[0][urls[12]];
+                this.leftbladetrail2.MyMaterial = (Material)GameManager.linkHash[0][urls[12]];
+                this.rightbladetrail2.MyMaterial = (Material)GameManager.linkHash[0][urls[12]];
+                this.leftbladetrail.MyMaterial = (Material)GameManager.linkHash[0][urls[12]];
+                this.rightbladetrail.MyMaterial = (Material)GameManager.linkHash[0][urls[12]];
             }
         }
         if (unloadAssets)
-            FengGameManagerMKII.instance.UnloadAssets();
+            GameManager.instance.UnloadAssets();
     }
 
     [RPC]
@@ -2851,9 +2851,9 @@ public class HERO : Photon.MonoBehaviour
         {
             this.onDeathEvent(viewID, killByTitan);
             int id = photonView.owner.ID;
-            if (FengGameManagerMKII.heroHash.ContainsKey(id))
+            if (GameManager.heroHash.ContainsKey(id))
             {
-                FengGameManagerMKII.heroHash.Remove(id);
+                GameManager.heroHash.Remove(id);
             }
         }
         if (photonView.isMine)
@@ -2898,7 +2898,7 @@ public class HERO : Photon.MonoBehaviour
         {
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(false);
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
-            FengGameManagerMKII.instance.myRespawnTime = 0f;
+            GameManager.instance.myRespawnTime = 0f;
         }
         this.hasDied = true;
         Transform audioTransform = this.transform.Find("audio_die");
@@ -2916,13 +2916,13 @@ public class HERO : Photon.MonoBehaviour
                 { PlayerProperty.Dead, true },
                 { PlayerProperty.Deaths, Player.Self.Properties.Deaths + 1 }
             });
-            FengGameManagerMKII.instance.photonView.RPC(Rpc.OnPlayerDeath, PhotonTargets.MasterClient, titanName != string.Empty ? 1 : 0);
+            GameManager.instance.photonView.RPC(Rpc.OnPlayerDeath, PhotonTargets.MasterClient, titanName != string.Empty ? 1 : 0);
             if (viewID != -1)
             {
                 PhotonView view2 = PhotonView.Find(viewID);
                 if (view2 != null)
                 {
-                    FengGameManagerMKII.instance.SendKillInfo(killByTitan, "[FFC000][" + info.sender.ID + "][FFFFFF]" + view2.owner.Properties.Name, false, Player.Self.Properties.Name, 0);
+                    GameManager.instance.SendKillInfo(killByTitan, "[FFC000][" + info.sender.ID + "][FFFFFF]" + view2.owner.Properties.Name, false, Player.Self.Properties.Name, 0);
                     view2.owner.SetCustomProperties(new Hashtable
                     {
                         {PlayerProperty.Kills, view2.owner.Properties.Kills + 1}
@@ -2931,7 +2931,7 @@ public class HERO : Photon.MonoBehaviour
             }
             else
             {
-                FengGameManagerMKII.instance.SendKillInfo(titanName != string.Empty, "[FFC000][" + info.sender.ID + "][FFFFFF]" + titanName, false, Player.Self.Properties.Name, 0);
+                GameManager.instance.SendKillInfo(titanName != string.Empty, "[FFC000][" + info.sender.ID + "][FFFFFF]" + titanName, false, Player.Self.Properties.Name, 0);
             }
         }
         if (photonView.isMine)
@@ -2964,7 +2964,7 @@ public class HERO : Photon.MonoBehaviour
                     {
                         Chat.System("Unusual Kill from ID " + info.sender.ID + " (possibly valid).");
                     }
-                    else if (!FengGameManagerMKII.settings.IsBombMode && FengGameManagerMKII.settings.AllowCannonHumanKills)
+                    else if (!GameManager.settings.IsBombMode && GameManager.settings.AllowCannonHumanKills)
                     {
                         Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                     }
@@ -3017,7 +3017,7 @@ public class HERO : Photon.MonoBehaviour
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(null, true, false);
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(true);
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
-            FengGameManagerMKII.instance.myRespawnTime = 0f;
+            GameManager.instance.myRespawnTime = 0f;
         }
         this.falseAttack();
         this.hasDied = true;
@@ -3035,7 +3035,7 @@ public class HERO : Photon.MonoBehaviour
                 PhotonView view2 = PhotonView.Find(viewID);
                 if (view2 != null)
                 {
-                    FengGameManagerMKII.instance.SendKillInfo(true, "[FFC000][" + info?.sender.ID + "][FFFFFF]" + view2.owner.Properties.Name, false, Player.Self.Properties.Name, 0);
+                    GameManager.instance.SendKillInfo(true, "[FFC000][" + info?.sender.ID + "][FFFFFF]" + view2.owner.Properties.Name, false, Player.Self.Properties.Name, 0);
                     view2.owner.SetCustomProperties(new Hashtable
                     {
                         { PlayerProperty.Kills, view2.owner.Properties.Kills + 1 }
@@ -3044,9 +3044,9 @@ public class HERO : Photon.MonoBehaviour
             }
             else
             {
-                FengGameManagerMKII.instance.SendKillInfo(true, "[FFC000][" + info?.sender.ID + "][FFFFFF]" + titanName, false, Player.Self.Properties.Name, 0);
+                GameManager.instance.SendKillInfo(true, "[FFC000][" + info?.sender.ID + "][FFFFFF]" + titanName, false, Player.Self.Properties.Name, 0);
             }
-            FengGameManagerMKII.instance.photonView.RPC(Rpc.OnPlayerDeath, PhotonTargets.MasterClient, titanName != string.Empty ? 1 : 0);
+            GameManager.instance.photonView.RPC(Rpc.OnPlayerDeath, PhotonTargets.MasterClient, titanName != string.Empty ? 1 : 0);
         }
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
         {
@@ -3065,9 +3065,9 @@ public class HERO : Photon.MonoBehaviour
         {
             this.onDeathEvent(viewID, true);
             int iD = photonView.owner.ID;
-            if (FengGameManagerMKII.heroHash.ContainsKey(iD))
+            if (GameManager.heroHash.ContainsKey(iD))
             {
-                FengGameManagerMKII.heroHash.Remove(iD);
+                GameManager.heroHash.Remove(iD);
             }
         }
     }
@@ -3116,7 +3116,7 @@ public class HERO : Photon.MonoBehaviour
         {
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(false);
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
-            FengGameManagerMKII.instance.myRespawnTime = 0f;
+            GameManager.instance.myRespawnTime = 0f;
         }
         this.hasDied = true;
         Transform transform = this.transform.Find("audio_die");
@@ -3131,13 +3131,13 @@ public class HERO : Photon.MonoBehaviour
                 { PlayerProperty.Dead, true },
                 { PlayerProperty.Deaths, Player.Self.Properties.Deaths + 1 }
             });
-            FengGameManagerMKII.instance.photonView.RPC(Rpc.OnPlayerDeath, PhotonTargets.MasterClient, titanName != string.Empty ? 1 : 0);
+            GameManager.instance.photonView.RPC(Rpc.OnPlayerDeath, PhotonTargets.MasterClient, titanName != string.Empty ? 1 : 0);
             if (viewID != -1)
             {
                 PhotonView view = PhotonView.Find(viewID);
                 if (view != null)
                 {
-                    FengGameManagerMKII.instance.SendKillInfo(killByTitan, view.owner.Properties.Name, false, Player.Self.Properties.Name, 0);
+                    GameManager.instance.SendKillInfo(killByTitan, view.owner.Properties.Name, false, Player.Self.Properties.Name, 0);
                     view.owner.SetCustomProperties(new Hashtable
                     {
                         { PlayerProperty.Kills, view.owner.Properties.Kills + 1 }
@@ -3146,7 +3146,7 @@ public class HERO : Photon.MonoBehaviour
             }
             else
             {
-                FengGameManagerMKII.instance.SendKillInfo(titanName != string.Empty, titanName, false, Player.Self.Properties.Name, 0);
+                GameManager.instance.SendKillInfo(titanName != string.Empty, titanName, false, Player.Self.Properties.Name, 0);
             }
         }
         if (photonView.isMine)
@@ -3157,9 +3157,9 @@ public class HERO : Photon.MonoBehaviour
         {
             this.onDeathEvent(viewID, killByTitan);
             int iD = photonView.owner.ID;
-            if (FengGameManagerMKII.heroHash.ContainsKey(iD))
+            if (GameManager.heroHash.ContainsKey(iD))
             {
-                FengGameManagerMKII.heroHash.Remove(iD);
+                GameManager.heroHash.Remove(iD);
             }
         }
     }
@@ -3251,48 +3251,48 @@ public class HERO : Photon.MonoBehaviour
         string[] strArray;
         if (isTitan)
         {
-            if (FengGameManagerMKII.RCEvents.ContainsKey("OnPlayerDieByTitan"))
+            if (GameManager.RCEvents.ContainsKey("OnPlayerDieByTitan"))
             {
-                event2 = (RCEvent) FengGameManagerMKII.RCEvents["OnPlayerDieByTitan"];
-                strArray = (string[]) FengGameManagerMKII.RCVariableNames["OnPlayerDieByTitan"];
-                if (FengGameManagerMKII.playerVariables.ContainsKey(strArray[0]))
+                event2 = (RCEvent) GameManager.RCEvents["OnPlayerDieByTitan"];
+                strArray = (string[]) GameManager.RCVariableNames["OnPlayerDieByTitan"];
+                if (GameManager.playerVariables.ContainsKey(strArray[0]))
                 {
-                    FengGameManagerMKII.playerVariables[strArray[0]] = photonView.owner;
+                    GameManager.playerVariables[strArray[0]] = photonView.owner;
                 }
                 else
                 {
-                    FengGameManagerMKII.playerVariables.Add(strArray[0], photonView.owner);
+                    GameManager.playerVariables.Add(strArray[0], photonView.owner);
                 }
-                if (FengGameManagerMKII.titanVariables.ContainsKey(strArray[1]))
+                if (GameManager.titanVariables.ContainsKey(strArray[1]))
                 {
-                    FengGameManagerMKII.titanVariables[strArray[1]] = PhotonView.Find(viewID).gameObject.GetComponent<TITAN>();
+                    GameManager.titanVariables[strArray[1]] = PhotonView.Find(viewID).gameObject.GetComponent<TITAN>();
                 }
                 else
                 {
-                    FengGameManagerMKII.titanVariables.Add(strArray[1], PhotonView.Find(viewID).gameObject.GetComponent<TITAN>());
+                    GameManager.titanVariables.Add(strArray[1], PhotonView.Find(viewID).gameObject.GetComponent<TITAN>());
                 }
                 event2.checkEvent();
             }
         }
-        else if (FengGameManagerMKII.RCEvents.ContainsKey("OnPlayerDieByPlayer"))
+        else if (GameManager.RCEvents.ContainsKey("OnPlayerDieByPlayer"))
         {
-            event2 = (RCEvent) FengGameManagerMKII.RCEvents["OnPlayerDieByPlayer"];
-            strArray = (string[]) FengGameManagerMKII.RCVariableNames["OnPlayerDieByPlayer"];
-            if (FengGameManagerMKII.playerVariables.ContainsKey(strArray[0]))
+            event2 = (RCEvent) GameManager.RCEvents["OnPlayerDieByPlayer"];
+            strArray = (string[]) GameManager.RCVariableNames["OnPlayerDieByPlayer"];
+            if (GameManager.playerVariables.ContainsKey(strArray[0]))
             {
-                FengGameManagerMKII.playerVariables[strArray[0]] = photonView.owner;
+                GameManager.playerVariables[strArray[0]] = photonView.owner;
             }
             else
             {
-                FengGameManagerMKII.playerVariables.Add(strArray[0], photonView.owner);
+                GameManager.playerVariables.Add(strArray[0], photonView.owner);
             }
-            if (FengGameManagerMKII.playerVariables.ContainsKey(strArray[1]))
+            if (GameManager.playerVariables.ContainsKey(strArray[1]))
             {
-                FengGameManagerMKII.playerVariables[strArray[1]] = PhotonView.Find(viewID).owner;
+                GameManager.playerVariables[strArray[1]] = PhotonView.Find(viewID).owner;
             }
             else
             {
-                FengGameManagerMKII.playerVariables.Add(strArray[1], PhotonView.Find(viewID).owner);
+                GameManager.playerVariables.Add(strArray[1], PhotonView.Find(viewID).owner);
             }
             event2.checkEvent();
         }
@@ -3314,7 +3314,7 @@ public class HERO : Photon.MonoBehaviour
         }
         if (GameObject.Find("MultiplayerManager") != null)
         {
-            FengGameManagerMKII.instance.Heroes.Remove(this);
+            GameManager.instance.Heroes.Remove(this);
         }
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
@@ -3382,9 +3382,9 @@ public class HERO : Photon.MonoBehaviour
     public IEnumerator reloadSky()
     {
         yield return new WaitForSeconds(0.5f);
-        if (FengGameManagerMKII.skyMaterial != null && Camera.main.GetComponent<Skybox>().material != FengGameManagerMKII.skyMaterial)
+        if (GameManager.skyMaterial != null && Camera.main.GetComponent<Skybox>().material != GameManager.skyMaterial)
         {
-            Camera.main.GetComponent<Skybox>().material = FengGameManagerMKII.skyMaterial;
+            Camera.main.GetComponent<Skybox>().material = GameManager.skyMaterial;
         }
     }
 
@@ -3600,12 +3600,12 @@ public class HERO : Photon.MonoBehaviour
             colliderWeapon.myTeam = val;
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && PhotonNetwork.isMasterClient)
         {
-            if (FengGameManagerMKII.settings.IsFriendlyMode)
+            if (GameManager.settings.IsFriendlyMode)
             {
                 if (val != 1)
                     photonView.RPC(Rpc.SetTeam, PhotonTargets.AllBuffered, 1);
             }
-            else switch (FengGameManagerMKII.settings.PVPMode)
+            else switch (GameManager.settings.PVPMode)
             {
                 case PVPMode.Teams:
                     if (photonView.owner.Properties.RCTeam.HasValue && val != photonView.owner.Properties.RCTeam)
@@ -3625,7 +3625,7 @@ public class HERO : Photon.MonoBehaviour
         if (this.skillCD != null)
         {
             this.skillCD.transform.localPosition = GameObject.Find("skill_cd_bottom").transform.localPosition;
-            if (this.useGun && !FengGameManagerMKII.settings.IsBombMode)
+            if (this.useGun && !GameManager.settings.IsBombMode)
                 this.skillCD.transform.localPosition = Vector3.up * 5000f;
         }
     }
@@ -3675,7 +3675,7 @@ public class HERO : Photon.MonoBehaviour
                 this.skillCDLast = 240;
                 if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
                 {
-                    var level = LevelInfoManager.Get(FengGameManagerMKII.Level);
+                    var level = LevelInfoManager.Get(GameManager.Level);
                     if (level.PlayerTitansNotAllowed || 
                         level.Gamemode == GameMode.Racing || 
                         level.Gamemode == GameMode.PvpCapture || 
@@ -4004,10 +4004,10 @@ public class HERO : Photon.MonoBehaviour
         if (player == null) // Should never happen
             return;
         
-        FengGameManagerMKII.instance.Heroes.Add(this);
+        GameManager.instance.Heroes.Add(this);
         player.Hero = this;
         
-        if ((LevelInfoManager.Get(FengGameManagerMKII.Level).Horse || FengGameManagerMKII.settings.EnableHorse) && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
+        if ((LevelInfoManager.Get(GameManager.Level).Horse || GameManager.settings.EnableHorse) && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
             this.myHorse = PhotonNetwork.Instantiate("horse", this.baseTransform.position + Vector3.up * 5f, this.baseTransform.rotation, 0);
             this.myHorse.GetComponent<Horse>().myHero = gameObject;
@@ -4028,10 +4028,10 @@ public class HERO : Photon.MonoBehaviour
             if (PhotonNetwork.isMasterClient)
             {
                 int id = player.ID;
-                if (FengGameManagerMKII.heroHash.ContainsKey(id))
-                    FengGameManagerMKII.heroHash[id] = this;
+                if (GameManager.heroHash.ContainsKey(id))
+                    GameManager.heroHash[id] = this;
                 else
-                    FengGameManagerMKII.heroHash.Add(id, this);
+                    GameManager.heroHash.Add(id, this);
             }
             this.myNetWorkName = (GameObject) Instantiate(Resources.Load("UI/LabelNameOverHead"));
             this.myNetWorkName.name = "LabelNameOverHead";
@@ -4103,7 +4103,7 @@ public class HERO : Photon.MonoBehaviour
             StartCoroutine(this.reloadSky());
         }
         this.bombImmune = false;
-        if (FengGameManagerMKII.settings.IsBombMode)
+        if (GameManager.settings.IsBombMode)
         {
             this.bombImmune = true;
             StartCoroutine(this.stopImmunity());
@@ -4121,8 +4121,8 @@ public class HERO : Photon.MonoBehaviour
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer)
         {
             this.netDieLocal(rigidbody.velocity * 50f, false, -1, string.Empty, true);
-            FengGameManagerMKII.instance.needChooseSide = true;
-            FengGameManagerMKII.instance.justSuicide = true;
+            GameManager.instance.needChooseSide = true;
+            GameManager.instance.justSuicide = true;
         }
     }
 
@@ -4362,7 +4362,7 @@ public class HERO : Photon.MonoBehaviour
                             {
                                 this.getOffHorse();
                             }
-                            if ((animation.IsPlaying(this.standAnimation) || !this.grounded) && Shelter.InputManager.IsDown(InputAction.Reload) && (!this.useGun || !FengGameManagerMKII.settings.AllowAirAHSSReload || this.grounded))
+                            if ((animation.IsPlaying(this.standAnimation) || !this.grounded) && Shelter.InputManager.IsDown(InputAction.Reload) && (!this.useGun || !GameManager.settings.AllowAirAHSSReload || this.grounded))
                             {
                                 this.changeBlade();
                                 return;
@@ -4752,7 +4752,7 @@ public class HERO : Photon.MonoBehaviour
                                     this.facingDirection = this.gunDummy.transform.rotation.eulerAngles.y;
                                     this.targetRotation = Quaternion.Euler(0f, this.facingDirection, 0f);
                                 }
-                                else if (flag5 && (this.grounded || LevelInfoManager.Get(FengGameManagerMKII.Level).Gamemode != GameMode.PvpAHSS && !FengGameManagerMKII.settings.AllowAirAHSSReload))
+                                else if (flag5 && (this.grounded || LevelInfoManager.Get(GameManager.Level).Gamemode != GameMode.PvpAHSS && !GameManager.settings.AllowAirAHSSReload))
                                 {
                                     this.changeBlade();
                                 }

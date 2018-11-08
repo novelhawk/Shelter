@@ -151,7 +151,7 @@ namespace Photon
 
         public void checkLAN()
         {
-            if (FengGameManagerMKII.OnPrivateServer && this.MasterServerAddress != null && this.MasterServerAddress != string.Empty && this.mGameserver != null && this.mGameserver != string.Empty && this.MasterServerAddress.Contains(":") && this.mGameserver.Contains(":"))
+            if (GameManager.OnPrivateServer && this.MasterServerAddress != null && this.MasterServerAddress != string.Empty && this.mGameserver != null && this.mGameserver != string.Empty && this.MasterServerAddress.Contains(":") && this.mGameserver.Contains(":"))
             {
                 this.mGameserver = this.MasterServerAddress.Split(':')[0] + ":" + this.mGameserver.Split(':')[1];
             }
@@ -481,17 +481,17 @@ namespace Photon
             switch (this.server)
             {
                 case ServerConnection.MasterServer:
-                    this.states = FengGameManagerMKII.returnPeerState(2);
+                    this.states = GameManager.returnPeerState(2);
                     base.Disconnect();
                     break;
 
                 case ServerConnection.GameServer:
-                    this.states = FengGameManagerMKII.returnPeerState(3);
+                    this.states = GameManager.returnPeerState(3);
                     base.Disconnect();
                     break;
 
                 case ServerConnection.NameServer:
-                    this.states = FengGameManagerMKII.returnPeerState(4);
+                    this.states = GameManager.returnPeerState(4);
                     base.Disconnect();
                     break;
             }
@@ -558,7 +558,7 @@ namespace Photon
                 {
                     if (key.StartsWith("RCAsset/"))
                     {
-                        resourceGameObject = FengGameManagerMKII.InstantiateCustomAsset(key);
+                        resourceGameObject = GameManager.InstantiateCustomAsset(key);
                     }
                     else
                     {
@@ -1272,9 +1272,9 @@ namespace Photon
                         {
                             if (PhotonNetwork.isMasterClient)
                             {
-                                FengGameManagerMKII.noRestart = true;
+                                GameManager.noRestart = true;
                                 PhotonNetwork.SetMasterClient(Player.Self);
-                                FengGameManagerMKII.instance.KickPlayerRC(sender, true, "stealing MC.");
+                                GameManager.instance.KickPlayerRC(sender, true, "stealing MC.");
                                 throw new NotAllowedException(photonEvent.Code, sender);
                             }
                         }
@@ -1377,7 +1377,7 @@ namespace Photon
                                         props.Speed > 140)
                                     {
                                         if (PhotonNetwork.isMasterClient)
-                                            FengGameManagerMKII.instance.KickPlayerRC(sender, true, "Illegal stats.");
+                                            GameManager.instance.KickPlayerRC(sender, true, "Illegal stats.");
                                         throw new NotAllowedException(photonEvent.Code, sender);
                                     }
                                 }
@@ -2534,7 +2534,7 @@ namespace Photon
                 {
                     case PhotonTargets.All:
                         options = new RaiseEventOptions {
-//                        TargetActors = PhotonNetwork.playerList.Select(x => x.ID).Where(x => !FengGameManagerMKII.ignoreList.Contains(x)).ToArray()
+//                        TargetActors = PhotonNetwork.playerList.Select(x => x.ID).Where(x => !GameManager.ignoreList.Contains(x)).ToArray()
                             InterestGroup = (byte) view.group
                         };
                         RaiseEventOptions raiseEventOptions = options;

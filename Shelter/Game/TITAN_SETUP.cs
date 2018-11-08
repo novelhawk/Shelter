@@ -47,12 +47,12 @@ public class TITAN_SETUP : Photon.MonoBehaviour
             hairs.transform.rotation = this.hair_go_ref.transform.rotation;
             hairs.transform.localScale = this.hair_go_ref.transform.localScale;
             hairs.renderer.material = CharacterMaterials.materials[this.hair.Texture];
-            bool mipmap = FengGameManagerMKII.settings.UseMipmap;
+            bool mipmap = GameManager.settings.UseMipmap;
             if (hairlink.EqualsIgnoreCase("transparent"))
                 hairs.renderer.enabled = false;
             else if (Utility.IsValidImageUrl(hairlink))
             {
-                if (!FengGameManagerMKII.linkHash[0].ContainsKey(hairlink))
+                if (!GameManager.linkHash[0].ContainsKey(hairlink))
                 {
                     using (WWW www = new WWW(hairlink))
                     {
@@ -63,12 +63,12 @@ public class TITAN_SETUP : Photon.MonoBehaviour
                     }
     
                     unloadAssets = true;
-                    FengGameManagerMKII.linkHash[0].Add(hairlink, hairs.renderer.material);
-                    hairs.renderer.material = (Material) FengGameManagerMKII.linkHash[0][hairlink];
+                    GameManager.linkHash[0].Add(hairlink, hairs.renderer.material);
+                    hairs.renderer.material = (Material) GameManager.linkHash[0][hairlink];
                 }
                 else
                 {
-                    hairs.renderer.material = (Material) FengGameManagerMKII.linkHash[0][hairlink];
+                    hairs.renderer.material = (Material) GameManager.linkHash[0][hairlink];
                 }
             }
             this.part_hair = hairs;
@@ -77,7 +77,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
         if (eyeId >= 0)
             SetFacialTexture(eye, eyeId);
         if (unloadAssets)
-            FengGameManagerMKII.instance.UnloadAssets();
+            GameManager.instance.UnloadAssets();
     }
 
     private static void SetFacialTexture(GameObject go, int id)
@@ -95,7 +95,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
         int num;
         if (ModuleManager.Enabled(nameof(ModuleEnableSkins)) && (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine))
         {
-            var titanSkin = FengGameManagerMKII.settings.TitanSkin;
+            var titanSkin = GameManager.settings.TitanSkin;
             
             Color color;
             num = Random.Range(0, 9);
@@ -103,7 +103,7 @@ public class TITAN_SETUP : Photon.MonoBehaviour
                 num = 9;
 
             int index;
-            if (FengGameManagerMKII.settings.Randomize)
+            if (GameManager.settings.Randomize)
                 index = Random.Range(0, 5);
             else
                 index = 0;

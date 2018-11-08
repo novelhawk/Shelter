@@ -15,8 +15,8 @@ namespace Mod.Interface
         protected override void OnShow()
         {
             PhotonNetwork.Disconnect();
-            PhotonNetwork.ConnectToMaster(PlayerPrefs.GetString("ShelterServer", "app-eu.exitgamescloud.com"), 5055, FengGameManagerMKII.ApplicationID, UIMainReferences.Version);
-//            PhotonNetwork.ConnectToMaster("127.0.0.1", 5055, FengGameManagerMKII.ApplicationID, UIMainReferences.Version);
+            PhotonNetwork.ConnectToMaster(PlayerPrefs.GetString("ShelterServer", "app-eu.exitgamescloud.com"), 5055, GameManager.ApplicationID, UIMainReferences.Version);
+//            PhotonNetwork.ConnectToMaster("127.0.0.1", 5055, GameManager.ApplicationID, UIMainReferences.Version);
 
             btnNormal = Texture(169, 169, 169, 100);
             btnHover = Texture(169, 169, 169, 255);
@@ -47,6 +47,7 @@ namespace Mod.Interface
             GUI.Label(rect.Set(145, 347, 166, 40), "Create", IsVisible("CreateRoom") ? selected : text);
             if (GUI.Button(rect.OY(-10), string.Empty, GUIStyle.none))
             {
+                Disable(nameof(CreateRoom));
                 Enable(nameof(CreateRoom));
                 Disable(nameof(ServerList));
                 Disable(nameof(ProfileChanger));
@@ -72,28 +73,28 @@ namespace Mod.Interface
             if (GUILayout.Button("EU", serverSelect))
             {
                 PhotonNetwork.Disconnect();
-                PhotonNetwork.ConnectToMaster("app-eu.exitgamescloud.com", 5055, FengGameManagerMKII.ApplicationID, UIMainReferences.Version);
+                PhotonNetwork.ConnectToMaster("app-eu.exitgamescloud.com", 5055, GameManager.ApplicationID, UIMainReferences.Version);
                 PlayerPrefs.SetString("ShelterServer", "app-eu.exitgamescloud.com");
                 Loading.Start("ConnectingToLobby");
             }
             if (GUILayout.Button("US", serverSelect))
             {
                 PhotonNetwork.Disconnect();
-                PhotonNetwork.ConnectToMaster("app-us.exitgamescloud.com", 5055, FengGameManagerMKII.ApplicationID, UIMainReferences.Version);
+                PhotonNetwork.ConnectToMaster("app-us.exitgamescloud.com", 5055, GameManager.ApplicationID, UIMainReferences.Version);
                 PlayerPrefs.SetString("ShelterServer", "app-us.exitgamescloud.com");
                 Loading.Start("ConnectingToLobby");
             }
             if (GUILayout.Button("JPN", serverSelect))
             {
                 PhotonNetwork.Disconnect();
-                PhotonNetwork.ConnectToMaster("app-jp.exitgamescloud.com", 5055, FengGameManagerMKII.ApplicationID, UIMainReferences.Version);
+                PhotonNetwork.ConnectToMaster("app-jp.exitgamescloud.com", 5055, GameManager.ApplicationID, UIMainReferences.Version);
                 PlayerPrefs.SetString("ShelterServer", "app-jp.exitgamescloud.com");
                 Loading.Start("ConnectingToLobby");
             }
             if (GUILayout.Button("ASIA", serverSelect))
             {
                 PhotonNetwork.Disconnect();
-                PhotonNetwork.ConnectToMaster("app-asia.exitgamescloud.com", 5055, FengGameManagerMKII.ApplicationID, UIMainReferences.Version);
+                PhotonNetwork.ConnectToMaster("app-asia.exitgamescloud.com", 5055, GameManager.ApplicationID, UIMainReferences.Version);
                 PlayerPrefs.SetString("ShelterServer", "app-asia.exitgamescloud.com");
                 Loading.Start("ConnectingToLobby");
             }

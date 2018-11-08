@@ -14,10 +14,10 @@ namespace Mod.Commands
             
             if (args[0].EqualsIgnoreCase("list"))
             {
-                if (FengGameManagerMKII.banHash.Count > 0)
+                if (GameManager.banHash.Count > 0)
                 {
                     Chat.System("Banned players: ");
-                    foreach (var entry in FengGameManagerMKII.banHash)
+                    foreach (var entry in GameManager.banHash)
                         Chat.System("[{0}] {1}", entry.Key, entry.Value);
                 }
                 else
@@ -31,7 +31,7 @@ namespace Mod.Commands
             if (!Player.TryParse(args[0], out Player player))
                 throw new PlayerNotFoundException(args[0]);
             
-            FengGameManagerMKII.instance.KickPlayerRC(player, true, string.Empty);
+            GameManager.instance.KickPlayerRC(player, true, string.Empty);
             Chat.System("{0} has been banned", player);
         }
     }

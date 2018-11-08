@@ -22,38 +22,38 @@ public class BTN_choose_human : MonoBehaviour
     {
         string selection = GameObject.Find("PopupListCharacterHUMAN").GetComponent<UIPopupList>().selection;
         NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[0], true);
-        FengGameManagerMKII.instance.needChooseSide = false;
+        GameManager.instance.needChooseSide = false;
         if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpCapture)
         {
-            FengGameManagerMKII.instance.checkpoint = GameObject.Find("PVPchkPtH");
+            GameManager.instance.checkpoint = GameObject.Find("PVPchkPtH");
         }
-        if (!PhotonNetwork.isMasterClient && FengGameManagerMKII.instance.roundTime > 60f)
+        if (!PhotonNetwork.isMasterClient && GameManager.instance.roundTime > 60f)
         {
             if (IsEveryoneDead())
             {
-                FengGameManagerMKII.instance.SpawnPlayerAfterGameEnd(selection);
+                GameManager.instance.SpawnPlayerAfterGameEnd(selection);
             }
             else
             {
-                FengGameManagerMKII.instance.SpawnPlayerAfterGameEnd(selection);
-                FengGameManagerMKII.instance.photonView.RPC(Rpc.RestartByClient, PhotonTargets.MasterClient, new object[0]);
+                GameManager.instance.SpawnPlayerAfterGameEnd(selection);
+                GameManager.instance.photonView.RPC(Rpc.RestartByClient, PhotonTargets.MasterClient, new object[0]);
             }
         }
         else if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight || IN_GAME_MAIN_CAMERA.GameMode == GameMode.Trost || IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpCapture)
         {
             if (!IsEveryoneDead())
             {
-                FengGameManagerMKII.instance.SpawnPlayerAfterGameEnd(selection);
-                FengGameManagerMKII.instance.photonView.RPC(Rpc.RestartByClient, PhotonTargets.MasterClient, new object[0]);
+                GameManager.instance.SpawnPlayerAfterGameEnd(selection);
+                GameManager.instance.photonView.RPC(Rpc.RestartByClient, PhotonTargets.MasterClient, new object[0]);
             }
             else
             {
-                FengGameManagerMKII.instance.SpawnPlayer(selection);
+                GameManager.instance.SpawnPlayer(selection);
             }
         }
         else
         {
-            FengGameManagerMKII.instance.SpawnPlayer(selection);
+            GameManager.instance.SpawnPlayer(selection);
         }
         NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[1], false);
         NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[2], false);

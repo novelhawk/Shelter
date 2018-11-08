@@ -1,5 +1,4 @@
 using Mod;
-using Photon;
 using Photon.Enums;
 using UnityEngine;
 using MonoBehaviour = UnityEngine.MonoBehaviour;
@@ -14,7 +13,7 @@ public class LevelTeleport : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && FengGameManagerMKII.Level != "[S]Tutorial")
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && GameManager.Level != "[S]Tutorial")
             {
                 if (this.levelname != string.Empty)
                     Shelter.Log("Someone tried to make you load Level({0})", levelname);

@@ -9,9 +9,9 @@ namespace Mod.Commands
 
         public override void Execute(string[] args)
         {
-            var enter = FengGameManagerMKII.settings.InSpectatorMode == false;
-            FengGameManagerMKII.settings.InSpectatorMode = enter;
-            FengGameManagerMKII.instance.EnterSpecMode(enter);
+            var enter = GameManager.settings.InSpectatorMode == false;
+            GameManager.settings.InSpectatorMode = enter;
+            GameManager.instance.EnterSpecMode(enter);
             if (enter)
                 Chat.System("You are now in spectate mode.");
             else

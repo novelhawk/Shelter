@@ -83,7 +83,7 @@ public class UIMainReferences : MonoBehaviour
             yield return www;
             if (www.error != null)
                 throw new Exception("Error on WWW request (RCAssets):" + www.error);
-            FengGameManagerMKII.RCassets = www.assetBundle;
+            GameManager.RCassets = www.assetBundle;
         }
     }
 }

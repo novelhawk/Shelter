@@ -44,90 +44,90 @@ namespace RC
                     switch (this.actionType)
                     {
                         case 0:
-                            if (!FengGameManagerMKII.intVariables.ContainsKey(key))
+                            if (!GameManager.intVariables.ContainsKey(key))
                             {
-                                FengGameManagerMKII.intVariables.Add(key, num2);
+                                GameManager.intVariables.Add(key, num2);
                             }
                             else
                             {
-                                FengGameManagerMKII.intVariables[key] = num2;
+                                GameManager.intVariables[key] = num2;
                             }
                             return;
 
                         case 1:
-                            if (!FengGameManagerMKII.intVariables.ContainsKey(key))
+                            if (!GameManager.intVariables.ContainsKey(key))
                             {
                                 this.callException("Variable not found: " + key);
                             }
                             else
                             {
-                                FengGameManagerMKII.intVariables[key] = (int) FengGameManagerMKII.intVariables[key] + num2;
+                                GameManager.intVariables[key] = (int) GameManager.intVariables[key] + num2;
                             }
                             return;
 
                         case 2:
-                            if (!FengGameManagerMKII.intVariables.ContainsKey(key))
+                            if (!GameManager.intVariables.ContainsKey(key))
                             {
                                 this.callException("Variable not found: " + key);
                             }
                             else
                             {
-                                FengGameManagerMKII.intVariables[key] = (int) FengGameManagerMKII.intVariables[key] - num2;
+                                GameManager.intVariables[key] = (int) GameManager.intVariables[key] - num2;
                             }
                             return;
 
                         case 3:
-                            if (!FengGameManagerMKII.intVariables.ContainsKey(key))
+                            if (!GameManager.intVariables.ContainsKey(key))
                             {
                                 this.callException("Variable not found: " + key);
                             }
                             else
                             {
-                                FengGameManagerMKII.intVariables[key] = (int) FengGameManagerMKII.intVariables[key] * num2;
+                                GameManager.intVariables[key] = (int) GameManager.intVariables[key] * num2;
                             }
                             return;
 
                         case 4:
-                            if (!FengGameManagerMKII.intVariables.ContainsKey(key))
+                            if (!GameManager.intVariables.ContainsKey(key))
                             {
                                 this.callException("Variable not found: " + key);
                             }
                             else
                             {
-                                FengGameManagerMKII.intVariables[key] = (int) FengGameManagerMKII.intVariables[key] / num2;
+                                GameManager.intVariables[key] = (int) GameManager.intVariables[key] / num2;
                             }
                             return;
 
                         case 5:
-                            if (!FengGameManagerMKII.intVariables.ContainsKey(key))
+                            if (!GameManager.intVariables.ContainsKey(key))
                             {
                                 this.callException("Variable not found: " + key);
                             }
                             else
                             {
-                                FengGameManagerMKII.intVariables[key] = (int) FengGameManagerMKII.intVariables[key] % num2;
+                                GameManager.intVariables[key] = (int) GameManager.intVariables[key] % num2;
                             }
                             return;
 
                         case 6:
-                            if (!FengGameManagerMKII.intVariables.ContainsKey(key))
+                            if (!GameManager.intVariables.ContainsKey(key))
                             {
                                 this.callException("Variable not found: " + key);
                             }
                             else
                             {
-                                FengGameManagerMKII.intVariables[key] = (int) Math.Pow((int)FengGameManagerMKII.intVariables[key], num2);
+                                GameManager.intVariables[key] = (int) Math.Pow((int)GameManager.intVariables[key], num2);
                             }
                             return;
 
                         case 12:
-                            if (!FengGameManagerMKII.intVariables.ContainsKey(key))
+                            if (!GameManager.intVariables.ContainsKey(key))
                             {
-                                FengGameManagerMKII.intVariables.Add(key, UnityEngine.Random.Range(num2, this.parameters[2].returnInt(null)));
+                                GameManager.intVariables.Add(key, UnityEngine.Random.Range(num2, this.parameters[2].returnInt(null)));
                             }
                             else
                             {
-                                FengGameManagerMKII.intVariables[key] = UnityEngine.Random.Range(num2, this.parameters[2].returnInt(null));
+                                GameManager.intVariables[key] = UnityEngine.Random.Range(num2, this.parameters[2].returnInt(null));
                             }
                             return;
                     }
@@ -140,35 +140,35 @@ namespace RC
                     switch (this.actionType)
                     {
                         case 11:
-                            if (!FengGameManagerMKII.boolVariables.ContainsKey(str2))
+                            if (!GameManager.boolVariables.ContainsKey(str2))
                             {
                                 this.callException("Variable not found: " + str2);
                             }
                             else
                             {
-                                FengGameManagerMKII.boolVariables[str2] = !(bool) FengGameManagerMKII.boolVariables[str2];
+                                GameManager.boolVariables[str2] = !(bool) GameManager.boolVariables[str2];
                             }
                             return;
 
                         case 12:
-                            if (!FengGameManagerMKII.boolVariables.ContainsKey(str2))
+                            if (!GameManager.boolVariables.ContainsKey(str2))
                             {
-                                FengGameManagerMKII.boolVariables.Add(str2, Convert.ToBoolean(UnityEngine.Random.Range(0, 2)));
+                                GameManager.boolVariables.Add(str2, Convert.ToBoolean(UnityEngine.Random.Range(0, 2)));
                             }
                             else
                             {
-                                FengGameManagerMKII.boolVariables[str2] = Convert.ToBoolean(UnityEngine.Random.Range(0, 2));
+                                GameManager.boolVariables[str2] = Convert.ToBoolean(UnityEngine.Random.Range(0, 2));
                             }
                             return;
 
                         case 0:
-                            if (!FengGameManagerMKII.boolVariables.ContainsKey(str2))
+                            if (!GameManager.boolVariables.ContainsKey(str2))
                             {
-                                FengGameManagerMKII.boolVariables.Add(str2, flag2);
+                                GameManager.boolVariables.Add(str2, flag2);
                             }
                             else
                             {
-                                FengGameManagerMKII.boolVariables[str2] = flag2;
+                                GameManager.boolVariables[str2] = flag2;
                             }
                             return;
                     }
@@ -186,51 +186,51 @@ namespace RC
                             {
                                 str5 = str5 + this.parameters[i].returnString(null);
                             }
-                            if (!FengGameManagerMKII.stringVariables.ContainsKey(str3))
+                            if (!GameManager.stringVariables.ContainsKey(str3))
                             {
-                                FengGameManagerMKII.stringVariables.Add(str3, str5);
+                                GameManager.stringVariables.Add(str3, str5);
                             }
                             else
                             {
-                                FengGameManagerMKII.stringVariables[str3] = str5;
+                                GameManager.stringVariables[str3] = str5;
                             }
                             return;
                         }
                         case 8:
                         {
                             string str6 = this.parameters[1].returnString(null);
-                            if (!FengGameManagerMKII.stringVariables.ContainsKey(str3))
+                            if (!GameManager.stringVariables.ContainsKey(str3))
                             {
                                 this.callException("No Variable");
                             }
                             else
                             {
-                                FengGameManagerMKII.stringVariables[str3] = (string) FengGameManagerMKII.stringVariables[str3] + str6;
+                                GameManager.stringVariables[str3] = (string) GameManager.stringVariables[str3] + str6;
                             }
                             return;
                         }
                         case 9:
                             this.parameters[1].returnString(null);
-                            if (!FengGameManagerMKII.stringVariables.ContainsKey(str3))
+                            if (!GameManager.stringVariables.ContainsKey(str3))
                             {
                                 this.callException("No Variable");
                             }
                             else
                             {
-                                FengGameManagerMKII.stringVariables[str3] = ((string) FengGameManagerMKII.stringVariables[str3]).Replace(this.parameters[1].returnString(null), this.parameters[2].returnString(null));
+                                GameManager.stringVariables[str3] = ((string) GameManager.stringVariables[str3]).Replace(this.parameters[1].returnString(null), this.parameters[2].returnString(null));
                             }
                             return;
 
                         case 0:
                         {
                             string str4 = this.parameters[1].returnString(null);
-                            if (!FengGameManagerMKII.stringVariables.ContainsKey(str3))
+                            if (!GameManager.stringVariables.ContainsKey(str3))
                             {
-                                FengGameManagerMKII.stringVariables.Add(str3, str4);
+                                GameManager.stringVariables.Add(str3, str4);
                             }
                             else
                             {
-                                FengGameManagerMKII.stringVariables[str3] = str4;
+                                GameManager.stringVariables[str3] = str4;
                             }
                             return;
                         }
@@ -244,90 +244,90 @@ namespace RC
                     switch (this.actionType)
                     {
                         case 0:
-                            if (!FengGameManagerMKII.floatVariables.ContainsKey(str9))
+                            if (!GameManager.floatVariables.ContainsKey(str9))
                             {
-                                FengGameManagerMKII.floatVariables.Add(str9, num4);
+                                GameManager.floatVariables.Add(str9, num4);
                             }
                             else
                             {
-                                FengGameManagerMKII.floatVariables[str9] = num4;
+                                GameManager.floatVariables[str9] = num4;
                             }
                             return;
 
                         case 1:
-                            if (!FengGameManagerMKII.floatVariables.ContainsKey(str9))
+                            if (!GameManager.floatVariables.ContainsKey(str9))
                             {
                                 this.callException("No Variable");
                             }
                             else
                             {
-                                FengGameManagerMKII.floatVariables[str9] = (float) FengGameManagerMKII.floatVariables[str9] + num4;
+                                GameManager.floatVariables[str9] = (float) GameManager.floatVariables[str9] + num4;
                             }
                             return;
 
                         case 2:
-                            if (!FengGameManagerMKII.floatVariables.ContainsKey(str9))
+                            if (!GameManager.floatVariables.ContainsKey(str9))
                             {
                                 this.callException("No Variable");
                             }
                             else
                             {
-                                FengGameManagerMKII.floatVariables[str9] = (float) FengGameManagerMKII.floatVariables[str9] - num4;
+                                GameManager.floatVariables[str9] = (float) GameManager.floatVariables[str9] - num4;
                             }
                             return;
 
                         case 3:
-                            if (!FengGameManagerMKII.floatVariables.ContainsKey(str9))
+                            if (!GameManager.floatVariables.ContainsKey(str9))
                             {
                                 this.callException("No Variable");
                             }
                             else
                             {
-                                FengGameManagerMKII.floatVariables[str9] = (float) FengGameManagerMKII.floatVariables[str9] * num4;
+                                GameManager.floatVariables[str9] = (float) GameManager.floatVariables[str9] * num4;
                             }
                             return;
 
                         case 4:
-                            if (!FengGameManagerMKII.floatVariables.ContainsKey(str9))
+                            if (!GameManager.floatVariables.ContainsKey(str9))
                             {
                                 this.callException("No Variable");
                             }
                             else
                             {
-                                FengGameManagerMKII.floatVariables[str9] = (float) FengGameManagerMKII.floatVariables[str9] / num4;
+                                GameManager.floatVariables[str9] = (float) GameManager.floatVariables[str9] / num4;
                             }
                             return;
 
                         case 5:
-                            if (!FengGameManagerMKII.floatVariables.ContainsKey(str9))
+                            if (!GameManager.floatVariables.ContainsKey(str9))
                             {
                                 this.callException("No Variable");
                             }
                             else
                             {
-                                FengGameManagerMKII.floatVariables[str9] = (float) FengGameManagerMKII.floatVariables[str9] % num4;
+                                GameManager.floatVariables[str9] = (float) GameManager.floatVariables[str9] % num4;
                             }
                             return;
 
                         case 6:
-                            if (!FengGameManagerMKII.floatVariables.ContainsKey(str9))
+                            if (!GameManager.floatVariables.ContainsKey(str9))
                             {
                                 this.callException("No Variable");
                             }
                             else
                             {
-                                FengGameManagerMKII.floatVariables[str9] = (float) Math.Pow((int)FengGameManagerMKII.floatVariables[str9], num4);
+                                GameManager.floatVariables[str9] = (float) Math.Pow((int)GameManager.floatVariables[str9], num4);
                             }
                             return;
 
                         case 12:
-                            if (!FengGameManagerMKII.floatVariables.ContainsKey(str9))
+                            if (!GameManager.floatVariables.ContainsKey(str9))
                             {
-                                FengGameManagerMKII.floatVariables.Add(str9, UnityEngine.Random.Range(num4, this.parameters[2].returnFloat(null)));
+                                GameManager.floatVariables.Add(str9, UnityEngine.Random.Range(num4, this.parameters[2].returnFloat(null)));
                             }
                             else
                             {
-                                FengGameManagerMKII.floatVariables[str9] = UnityEngine.Random.Range(num4, this.parameters[2].returnFloat(null));
+                                GameManager.floatVariables[str9] = UnityEngine.Random.Range(num4, this.parameters[2].returnFloat(null));
                             }
                             return;
                     }
@@ -339,13 +339,13 @@ namespace RC
                     Player player = this.parameters[1].returnPlayer(null);
                     if (this.actionType == 0)
                     {
-                        if (!FengGameManagerMKII.playerVariables.ContainsKey(str10))
+                        if (!GameManager.playerVariables.ContainsKey(str10))
                         {
-                            FengGameManagerMKII.playerVariables.Add(str10, player);
+                            GameManager.playerVariables.Add(str10, player);
                         }
                         else
                         {
-                            FengGameManagerMKII.playerVariables[str10] = player;
+                            GameManager.playerVariables[str10] = player;
                         }
                         break;
                     }
@@ -357,13 +357,13 @@ namespace RC
                     TITAN titan = this.parameters[1].returnTitan(null);
                     if (this.actionType == 0)
                     {
-                        if (!FengGameManagerMKII.titanVariables.ContainsKey(str11))
+                        if (!GameManager.titanVariables.ContainsKey(str11))
                         {
-                            FengGameManagerMKII.titanVariables.Add(str11, titan);
+                            GameManager.titanVariables.Add(str11, titan);
                         }
                         else
                         {
-                            FengGameManagerMKII.titanVariables[str11] = titan;
+                            GameManager.titanVariables[str11] = titan;
                         }
                         break;
                     }
@@ -377,9 +377,9 @@ namespace RC
                         case 0:
                         {
                             int iD = targetPlayer.ID;
-                            if (FengGameManagerMKII.heroHash.ContainsKey(iD))
+                            if (GameManager.heroHash.ContainsKey(iD))
                             {
-                                HERO hero = (HERO) FengGameManagerMKII.heroHash[iD];
+                                HERO hero = (HERO) GameManager.heroHash[iD];
                                 hero.markDie();
                                 hero.photonView.RPC(Rpc.DieRC, PhotonTargets.All, new object[] { -1, this.parameters[1].returnString(null) + " " });
                             }
@@ -390,19 +390,19 @@ namespace RC
                             return;
                         }
                         case 1:
-                            FengGameManagerMKII.instance.photonView.RPC(Rpc.Respawn, targetPlayer, new object[0]);
+                            GameManager.instance.photonView.RPC(Rpc.Respawn, targetPlayer, new object[0]);
                             return;
 
                         case 2:
-                            FengGameManagerMKII.instance.photonView.RPC(Rpc.SpawnPlayerAt, targetPlayer, new object[] { this.parameters[1].returnFloat(null), this.parameters[2].returnFloat(null), this.parameters[3].returnFloat(null) });
+                            GameManager.instance.photonView.RPC(Rpc.SpawnPlayerAt, targetPlayer, new object[] { this.parameters[1].returnFloat(null), this.parameters[2].returnFloat(null), this.parameters[3].returnFloat(null) });
                             return;
 
                         case 3:
                         {
                             int num6 = targetPlayer.ID;
-                            if (FengGameManagerMKII.heroHash.ContainsKey(num6))
+                            if (GameManager.heroHash.ContainsKey(num6))
                             {
-                                HERO hero2 = (HERO) FengGameManagerMKII.heroHash[num6];
+                                HERO hero2 = (HERO) GameManager.heroHash[num6];
                                 hero2.photonView.RPC(Rpc.MoveTo, targetPlayer, new object[] { this.parameters[1].returnFloat(null), this.parameters[2].returnFloat(null), this.parameters[3].returnFloat(null) });
                             }
                             else
@@ -523,11 +523,11 @@ namespace RC
                             return;
                         }
                         case 1:
-                            FengGameManagerMKII.instance.SpawnTitanAction(this.parameters[0].returnInt(null), this.parameters[1].returnFloat(null), this.parameters[2].returnInt(null), this.parameters[3].returnInt(null));
+                            GameManager.instance.SpawnTitanAction(this.parameters[0].returnInt(null), this.parameters[1].returnFloat(null), this.parameters[2].returnInt(null), this.parameters[3].returnInt(null));
                             return;
 
                         case 2:
-                            FengGameManagerMKII.instance.SpawnTitanAtAction(this.parameters[0].returnInt(null), this.parameters[1].returnFloat(null), this.parameters[2].returnInt(null), this.parameters[3].returnInt(null), this.parameters[4].returnFloat(null), this.parameters[5].returnFloat(null), this.parameters[6].returnFloat(null));
+                            GameManager.instance.SpawnTitanAtAction(this.parameters[0].returnInt(null), this.parameters[1].returnFloat(null), this.parameters[2].returnInt(null), this.parameters[3].returnInt(null), this.parameters[4].returnFloat(null), this.parameters[5].returnFloat(null), this.parameters[6].returnFloat(null));
                             return;
 
                         case 3:
@@ -562,46 +562,46 @@ namespace RC
                     switch (this.actionType)
                     {
                         case 0:
-                            FengGameManagerMKII.instance.photonView.RPC(Rpc.Chat, PhotonTargets.All, new object[] { this.parameters[0].returnString(null), string.Empty });
+                            GameManager.instance.photonView.RPC(Rpc.Chat, PhotonTargets.All, new object[] { this.parameters[0].returnString(null), string.Empty });
                             return;
 
                         case 1:
-                            FengGameManagerMKII.instance.GameWin();
+                            GameManager.instance.GameWin();
                             if (this.parameters[0].returnBool(null))
                             {
-                                FengGameManagerMKII.intVariables.Clear();
-                                FengGameManagerMKII.boolVariables.Clear();
-                                FengGameManagerMKII.stringVariables.Clear();
-                                FengGameManagerMKII.floatVariables.Clear();
-                                FengGameManagerMKII.playerVariables.Clear();
-                                FengGameManagerMKII.titanVariables.Clear();
+                                GameManager.intVariables.Clear();
+                                GameManager.boolVariables.Clear();
+                                GameManager.stringVariables.Clear();
+                                GameManager.floatVariables.Clear();
+                                GameManager.playerVariables.Clear();
+                                GameManager.titanVariables.Clear();
                             }
                             return;
 
                         case 2:
-                            FengGameManagerMKII.instance.GameLose();
+                            GameManager.instance.GameLose();
                             if (this.parameters[0].returnBool(null))
                             {
-                                FengGameManagerMKII.intVariables.Clear();
-                                FengGameManagerMKII.boolVariables.Clear();
-                                FengGameManagerMKII.stringVariables.Clear();
-                                FengGameManagerMKII.floatVariables.Clear();
-                                FengGameManagerMKII.playerVariables.Clear();
-                                FengGameManagerMKII.titanVariables.Clear();
+                                GameManager.intVariables.Clear();
+                                GameManager.boolVariables.Clear();
+                                GameManager.stringVariables.Clear();
+                                GameManager.floatVariables.Clear();
+                                GameManager.playerVariables.Clear();
+                                GameManager.titanVariables.Clear();
                             }
                             return;
 
                         case 3:
                             if (this.parameters[0].returnBool(null))
                             {
-                                FengGameManagerMKII.intVariables.Clear();
-                                FengGameManagerMKII.boolVariables.Clear();
-                                FengGameManagerMKII.stringVariables.Clear();
-                                FengGameManagerMKII.floatVariables.Clear();
-                                FengGameManagerMKII.playerVariables.Clear();
-                                FengGameManagerMKII.titanVariables.Clear();
+                                GameManager.intVariables.Clear();
+                                GameManager.boolVariables.Clear();
+                                GameManager.stringVariables.Clear();
+                                GameManager.floatVariables.Clear();
+                                GameManager.playerVariables.Clear();
+                                GameManager.titanVariables.Clear();
                             }
-                            FengGameManagerMKII.instance.RestartGame(false);
+                            GameManager.instance.RestartGame(false);
                             return;
                     }
                     break;

@@ -46,12 +46,12 @@ public class Cannon : Photon.MonoBehaviour
             if (PhotonNetwork.isMasterClient)
             {
                 Player owner = photonView.owner;
-                if (FengGameManagerMKII.instance.allowedToCannon.ContainsKey(owner.ID))
+                if (GameManager.instance.allowedToCannon.ContainsKey(owner.ID))
                 {
-                    this.settings = FengGameManagerMKII.instance.allowedToCannon[owner.ID].settings;
+                    this.settings = GameManager.instance.allowedToCannon[owner.ID].settings;
                     photonView.RPC(Rpc.SetSize, PhotonTargets.All, new object[] { this.settings });
-                    int viewID = FengGameManagerMKII.instance.allowedToCannon[owner.ID].viewID;
-                    FengGameManagerMKII.instance.allowedToCannon.Remove(owner.ID);
+                    int viewID = GameManager.instance.allowedToCannon[owner.ID].viewID;
+                    GameManager.instance.allowedToCannon.Remove(owner.ID);
                     CannonPropRegion component = PhotonView.Find(viewID).gameObject.GetComponent<CannonPropRegion>();
                     if (component != null)
                     {
@@ -60,9 +60,9 @@ public class Cannon : Photon.MonoBehaviour
                         PhotonNetwork.Destroy(component.gameObject);
                     }
                 }
-                else if (!(owner.IsLocal || FengGameManagerMKII.instance.restartingMC))
+                else if (!(owner.IsLocal || GameManager.instance.restartingMC))
                 {
-                    FengGameManagerMKII.instance.KickPlayerRC(owner, false, "spawning cannon without request.");
+                    GameManager.instance.KickPlayerRC(owner, false, "spawning cannon without request.");
                 }
             }
         }
@@ -85,7 +85,7 @@ public class Cannon : Photon.MonoBehaviour
 
     public void OnDestroy()
     {
-        if (PhotonNetwork.isMasterClient && !FengGameManagerMKII.instance.isRestarting)
+        if (PhotonNetwork.isMasterClient && !GameManager.instance.isRestarting)
         {
             string[] strArray = this.settings.Split(',');
             if (strArray[0] == "photon")
@@ -143,7 +143,7 @@ public class Cannon : Photon.MonoBehaviour
                     }
                     foreach (Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
                     {
-                        renderer.material = (Material) FengGameManagerMKII.RCassets.Load("transparent");
+                        renderer.material = (Material) GameManager.RCassets.Load("transparent");
                         if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
                         {
                             renderer.material.mainTextureScale = new Vector2(renderer.material.mainTextureScale.x * Convert.ToSingle(strArray[10]), renderer.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));
@@ -156,7 +156,7 @@ public class Cannon : Photon.MonoBehaviour
                     {
                         if (!renderer.name.Contains("Line Renderer"))
                         {
-                            renderer.material = (Material) FengGameManagerMKII.RCassets.Load(strArray[2]);
+                            renderer.material = (Material) GameManager.RCassets.Load(strArray[2]);
                             if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
                             {
                                 renderer.material.mainTextureScale = new Vector2(renderer.material.mainTextureScale.x * Convert.ToSingle(strArray[10]), renderer.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));

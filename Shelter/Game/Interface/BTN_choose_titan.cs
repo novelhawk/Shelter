@@ -18,15 +18,15 @@ public class BTN_choose_titan : MonoBehaviour
         {
             const string id = "AHSS";
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[0], true);
-            FengGameManagerMKII.instance.needChooseSide = false;
-            if (!PhotonNetwork.isMasterClient && FengGameManagerMKII.instance.roundTime > 60f)
+            GameManager.instance.needChooseSide = false;
+            if (!PhotonNetwork.isMasterClient && GameManager.instance.roundTime > 60f)
             {
-                FengGameManagerMKII.instance.SpawnPlayerAfterGameEnd(id);
-                FengGameManagerMKII.instance.photonView.RPC(Rpc.RestartByClient, PhotonTargets.MasterClient);
+                GameManager.instance.SpawnPlayerAfterGameEnd(id);
+                GameManager.instance.photonView.RPC(Rpc.RestartByClient, PhotonTargets.MasterClient);
             }
             else
             {
-                FengGameManagerMKII.instance.SpawnPlayer(id);
+                GameManager.instance.SpawnPlayer(id);
             }
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[1], false);
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[2], false);
@@ -42,21 +42,21 @@ public class BTN_choose_titan : MonoBehaviour
         {
             if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpCapture)
             {
-                FengGameManagerMKII.instance.checkpoint = GameObject.Find("PVPchkPtT");
+                GameManager.instance.checkpoint = GameObject.Find("PVPchkPtT");
             }
             string selection = GameObject.Find("PopupListCharacterTITAN").GetComponent<UIPopupList>().selection;
             NGUITools.SetActive(transform.parent.gameObject, false);
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[0], true);
-            if (!PhotonNetwork.isMasterClient && FengGameManagerMKII.instance.roundTime > 60f || FengGameManagerMKII.instance.justSuicide)
+            if (!PhotonNetwork.isMasterClient && GameManager.instance.roundTime > 60f || GameManager.instance.justSuicide)
             {
-                FengGameManagerMKII.instance.justSuicide = false;
-                FengGameManagerMKII.instance.SpawnPlayerTitanAfterGameEnd(selection);
+                GameManager.instance.justSuicide = false;
+                GameManager.instance.SpawnPlayerTitanAfterGameEnd(selection);
             }
             else
             {
-                FengGameManagerMKII.instance.SpawnPlayerTitan(selection);
+                GameManager.instance.SpawnPlayerTitan(selection);
             }
-            FengGameManagerMKII.instance.needChooseSide = false;
+            GameManager.instance.needChooseSide = false;
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[1], false);
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[2], false);
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[3], false);
@@ -67,7 +67,7 @@ public class BTN_choose_titan : MonoBehaviour
 
     private void Start()
     {
-        if (!LevelInfoManager.Get(FengGameManagerMKII.Level).PlayerTitansNotAllowed)
+        if (!LevelInfoManager.Get(GameManager.Level).PlayerTitansNotAllowed)
         {
             gameObject.GetComponent<UIButton>().isEnabled = false;
         }

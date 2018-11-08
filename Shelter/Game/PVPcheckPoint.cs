@@ -86,9 +86,9 @@ public class PVPcheckPoint : Photon.MonoBehaviour, IComparable
                 this.playerOn = true;
                 if (this.state == CheckPointState.Human && objArray[num].GetPhotonView().isMine)
                 {
-                    if (FengGameManagerMKII.instance.checkpoint != gameObject)
+                    if (GameManager.instance.checkpoint != gameObject)
                     {
-                        FengGameManagerMKII.instance.checkpoint = gameObject;
+                        GameManager.instance.checkpoint = gameObject;
                         Chat.System("<color=#A8FF24>Respawn point changed to point" + this.id + "</color>");
                     }
                     break;
@@ -102,9 +102,9 @@ public class PVPcheckPoint : Photon.MonoBehaviour, IComparable
                 this.titanOn = true;
                 if (this.state == CheckPointState.Titan && objArray2[num].GetPhotonView().isMine && objArray2[num].GetComponent<TITAN>() != null && objArray2[num].GetComponent<TITAN>().nonAI)
                 {
-                    if (FengGameManagerMKII.instance.checkpoint != gameObject)
+                    if (GameManager.instance.checkpoint != gameObject)
                     {
-                        FengGameManagerMKII.instance.checkpoint = gameObject;
+                        GameManager.instance.checkpoint = gameObject;
                         Chat.System("<color=#A8FF24>Respawn point changed to point" + this.id + "</color>");
                     }
                     break;
@@ -150,13 +150,13 @@ public class PVPcheckPoint : Photon.MonoBehaviour, IComparable
             this.SendRPCs();
             this.state = CheckPointState.Human;
             photonView.RPC(Rpc.CheckpointChangeState, PhotonTargets.All, 1);
-            if (LevelInfoManager.Get(FengGameManagerMKII.Level).LevelName != "The City I")
+            if (LevelInfoManager.Get(GameManager.Level).LevelName != "The City I")
                 this.supply = PhotonNetwork.Instantiate("aot_supply", transform.position - Vector3.up * (transform.position.y - this.GetHeight(transform.position)), transform.rotation, 0);
             
-            FengGameManagerMKII.instance.PVPhumanScore += 2;
-            FengGameManagerMKII.instance.CheckPVPPoints();
+            GameManager.instance.PVPhumanScore += 2;
+            GameManager.instance.CheckPVPPoints();
             if (DidHumanityWin())
-                FengGameManagerMKII.instance.GameWin();
+                GameManager.instance.GameWin();
             return;
         }
         
@@ -183,8 +183,8 @@ public class PVPcheckPoint : Photon.MonoBehaviour, IComparable
 
     private void SpawnTitan()
     {
-        GameObject obj2 = FengGameManagerMKII.instance.SpawnTitan(this.normalTitanRate, transform.position - Vector3.up * (transform.position.y - this.GetHeight(transform.position)), transform.rotation, false);
-        if (LevelInfoManager.Get(FengGameManagerMKII.Level).LevelName == "The City I")
+        GameObject obj2 = GameManager.instance.SpawnTitan(this.normalTitanRate, transform.position - Vector3.up * (transform.position.y - this.GetHeight(transform.position)), transform.rotation, false);
+        if (LevelInfoManager.Get(GameManager.Level).LevelName == "The City I")
         {
             obj2.GetComponent<TITAN>().chaseDistance = 120f;
         }
@@ -215,7 +215,7 @@ public class PVPcheckPoint : Photon.MonoBehaviour, IComparable
             if (this.humanPt == this.humanPtMax)
             {
                 this.state = CheckPointState.Human;
-                if (photonView.isMine && LevelInfoManager.Get(FengGameManagerMKII.Level).LevelName != "The City I")
+                if (photonView.isMine && LevelInfoManager.Get(GameManager.Level).LevelName != "The City I")
                 {
                     this.supply = PhotonNetwork.Instantiate("aot_supply", transform.position - Vector3.up * (transform.position.y - this.GetHeight(transform.position)), transform.rotation, 0);
                 }
@@ -264,12 +264,12 @@ public class PVPcheckPoint : Photon.MonoBehaviour, IComparable
             this.state = CheckPointState.Titan;
             object[] parameters = new object[] { 2 };
             photonView.RPC(Rpc.CheckpointChangeState, PhotonTargets.All, parameters);
-            FengGameManagerMKII component = FengGameManagerMKII.instance;
+            GameManager component = GameManager.instance;
             component.PVPtitanScore += 2;
-            FengGameManagerMKII.instance.CheckPVPPoints();
+            GameManager.instance.CheckPVPPoints();
             if (DidTitanWon())
             {
-                FengGameManagerMKII.instance.GameLose();
+                GameManager.instance.GameLose();
             }
             if (this.hasAnnie)
             {
@@ -366,10 +366,10 @@ public class PVPcheckPoint : Photon.MonoBehaviour, IComparable
                     this.getPtsTimer = 0f;
                     if (!this.isBase)
                     {
-                        FengGameManagerMKII component = FengGameManagerMKII.instance;
+                        GameManager component = GameManager.instance;
                         component.PVPhumanScore++;
                     }
-                    FengGameManagerMKII.instance.CheckPVPPoints();
+                    GameManager.instance.CheckPVPPoints();
                 }
             }
             else if (this.state == CheckPointState.Titan)
@@ -388,16 +388,16 @@ public class PVPcheckPoint : Photon.MonoBehaviour, IComparable
                     this.getPtsTimer = 0f;
                     if (!this.isBase)
                     {
-                        FengGameManagerMKII local2 = FengGameManagerMKII.instance;
+                        GameManager local2 = GameManager.instance;
                         local2.PVPtitanScore++;
                     }
-                    FengGameManagerMKII.instance.CheckPVPPoints();
+                    GameManager.instance.CheckPVPPoints();
                 }
                 this.spawnTitanTimer += Time.deltaTime;
                 if (this.spawnTitanTimer > this.titanInterval)
                 {
                     this.spawnTitanTimer = 0f;
-                    if (LevelInfoManager.Get(FengGameManagerMKII.Level).LevelName == "The City I")
+                    if (LevelInfoManager.Get(GameManager.Level).LevelName == "The City I")
                     {
                         if (GameObject.FindGameObjectsWithTag("titan").Length < 12)
                         {

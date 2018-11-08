@@ -143,7 +143,7 @@ public class Minimap : MonoBehaviour, IDisposable
 
     private void CheckUserInput()
     {
-        if (!ModuleManager.Enabled(nameof(ModuleShowMap)) || !FengGameManagerMKII.settings.IsMapAllowed)
+        if (!ModuleManager.Enabled(nameof(ModuleShowMap)) || !GameManager.settings.IsMapAllowed)
             Dispose();
     }
 
@@ -305,16 +305,16 @@ public class Minimap : MonoBehaviour, IDisposable
     private void Initialize()
     {
         Vector3 pivot = new Vector3(0.5f, 0.5f);
-        Texture2D texture = (Texture2D)FengGameManagerMKII.RCassets.Load("icon");
+        Texture2D texture = (Texture2D)GameManager.RCassets.Load("icon");
         Rect rect = new Rect(0f, 0f, texture.width, texture.height);
         whiteIconSprite = UnityEngine.Sprite.Create(texture, rect, pivot);
-        texture = (Texture2D)FengGameManagerMKII.RCassets.Load("iconpointer");
+        texture = (Texture2D)GameManager.RCassets.Load("iconpointer");
         rect = new Rect(0f, 0f, texture.width, texture.height);
         pointerSprite = UnityEngine.Sprite.Create(texture, rect, pivot);
-        texture = (Texture2D)FengGameManagerMKII.RCassets.Load("supplyicon");
+        texture = (Texture2D)GameManager.RCassets.Load("supplyicon");
         rect = new Rect(0f, 0f, texture.width, texture.height);
         supplySprite = UnityEngine.Sprite.Create(texture, rect, pivot);
-        texture = (Texture2D)FengGameManagerMKII.RCassets.Load("mapborder");
+        texture = (Texture2D)GameManager.RCassets.Load("mapborder");
         rect = new Rect(0f, 0f, texture.width, texture.height);
         Vector4 border = new Vector4(5f, 5f, 5f, 5f);
         borderSprite = UnityEngine.Sprite.Create(texture, rect, pivot, 100f, 1, SpriteMeshType.FullRect, border);

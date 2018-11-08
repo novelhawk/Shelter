@@ -183,10 +183,10 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     public void CreateMinimap()
     {
-        if (!ModuleManager.Enabled(nameof(ModuleShowMap)) || !FengGameManagerMKII.settings.IsMapAllowed)
+        if (!ModuleManager.Enabled(nameof(ModuleShowMap)) || !GameManager.settings.IsMapAllowed)
             return;
         
-        LevelInfo info = LevelInfoManager.Get(FengGameManagerMKII.Level);
+        LevelInfo info = LevelInfoManager.Get(GameManager.Level);
         Minimap minimap = gameObject.AddComponent<Minimap>();
         if (minimap.myCam == null)
         {
@@ -258,7 +258,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     {
         if (GameType == GameType.Singleplayer)
         {
-            FengGameManagerMKII.instance.RestartSingleplayer();
+            GameManager.instance.RestartSingleplayer();
         }
     }
 
@@ -669,7 +669,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         if (!ModuleManager.Enabled(nameof(ModuleSnapshot)))
             return;
         
-        if (FengGameManagerMKII.settings.SnapshotDamage > 0 && dmg >= FengGameManagerMKII.settings.SnapshotDamage)
+        if (GameManager.settings.SnapshotDamage > 0 && dmg >= GameManager.settings.SnapshotDamage)
         {
             this.snapShotCount = 1;
             this.startSnapShotFrameCount = true;
@@ -808,7 +808,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                         Screen.lockCursor = false;
                     }
                     this.verticalRotationOffset = 0f;
-                    if (FengGameManagerMKII.settings.InSpectatorMode || this.main_object.GetComponent<HERO>() == null)
+                    if (GameManager.settings.InSpectatorMode || this.main_object.GetComponent<HERO>() == null)
                     {
                         Screen.showCursor = false;
                     }
@@ -828,19 +828,19 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 }
                 if (this.gameOver && this.main_object != null)
                 {
-//                    if (FengGameManagerMKII.inputRC.isInputHumanDown(InputCodeRC.liveCam))
+//                    if (GameManager.inputRC.isInputHumanDown(InputCodeRC.liveCam))
 //                    {
-//                        if ((int) FengGameManagerMKII.settings[263] == 0)
+//                        if ((int) GameManager.settings[263] == 0)
 //                        {
-//                            FengGameManagerMKII.settings[263] = 1;
+//                            GameManager.settings[263] = 1;
 //                        }
 //                        else
 //                        {
-//                            FengGameManagerMKII.settings[263] = 0;
+//                            GameManager.settings[263] = 0;
 //                        }
 //                    }
 //                    HERO component = this.main_object.GetComponent<HERO>();
-                    /*if (component != null && (int) FengGameManagerMKII.settings[263] == 1 && component.GetComponent<SmoothSyncMovement>().enabled && component.isPhotonCamera)
+                    /*if (component != null && (int) GameManager.settings[263] == 1 && component.GetComponent<SmoothSyncMovement>().enabled && component.isPhotonCamera)
                     {
                         this.CameraMovementLive(component);
                     }

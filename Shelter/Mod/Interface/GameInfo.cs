@@ -34,7 +34,7 @@ namespace Mod.Interface
                 output.AppendFormat(" Ping: {0}", PhotonNetwork.GetPing());
             output.Append("\n");
 
-            output.AppendFormat("Map: {0}\n", FengGameManagerMKII.Level);
+            output.AppendFormat("Map: {0}\n", GameManager.Level);
             
             switch (IN_GAME_MAIN_CAMERA.GameType)
             {

@@ -44,21 +44,21 @@ namespace Mod.Commands
                     switch (match.Groups[1].Value.ToLower())
                     {
                         default:
-                            FengGameManagerMKII.instance.AddTime(num * 60);
+                            GameManager.instance.AddTime(num * 60);
                             Chat.System("You added {0} minutes to the clock.", num);
                             break;
                         
                         case "s":
                         case "second":
                         case "seconds":
-                            FengGameManagerMKII.instance.AddTime(num);
+                            GameManager.instance.AddTime(num);
                             Chat.System("You added {0} seconds to the clock.", num);
                             break;
 
                         case "h":
                         case "hour":
                         case "hours":
-                            FengGameManagerMKII.instance.AddTime(num * 3600);
+                            GameManager.instance.AddTime(num * 3600);
                             Chat.System("You added {0} hours to the clock.", num);
                             break;
                     }

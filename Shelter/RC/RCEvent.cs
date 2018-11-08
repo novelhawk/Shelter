@@ -51,15 +51,15 @@ namespace RC
                     switch (this.eventType)
                     {
                         case 0:
-                            foreach (TITAN titan in FengGameManagerMKII.instance.GetTitans())
+                            foreach (TITAN titan in GameManager.instance.GetTitans())
                             {
-                                if (FengGameManagerMKII.titanVariables.ContainsKey(this.foreachVariableName))
+                                if (GameManager.titanVariables.ContainsKey(this.foreachVariableName))
                                 {
-                                    FengGameManagerMKII.titanVariables[this.foreachVariableName] = titan;
+                                    GameManager.titanVariables[this.foreachVariableName] = titan;
                                 }
                                 else
                                 {
-                                    FengGameManagerMKII.titanVariables.Add(this.foreachVariableName, titan);
+                                    GameManager.titanVariables.Add(this.foreachVariableName, titan);
                                 }
                                 foreach (RCAction action in this.trueActions)
                                 {
@@ -71,13 +71,13 @@ namespace RC
                         case 1:
                             foreach (Player player in PhotonNetwork.PlayerList)
                             {
-                                if (FengGameManagerMKII.playerVariables.ContainsKey(this.foreachVariableName))
+                                if (GameManager.playerVariables.ContainsKey(this.foreachVariableName))
                                 {
-                                    FengGameManagerMKII.playerVariables[this.foreachVariableName] = player;
+                                    GameManager.playerVariables[this.foreachVariableName] = player;
                                 }
                                 else
                                 {
-                                    FengGameManagerMKII.titanVariables.Add(this.foreachVariableName, player);
+                                    GameManager.titanVariables.Add(this.foreachVariableName, player);
                                 }
                                 foreach (RCAction action in this.trueActions)
                                 {

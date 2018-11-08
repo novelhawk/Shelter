@@ -976,8 +976,8 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                     {
                         getDown();
                     }
-                    FengGameManagerMKII.instance.SendKillInfo(false, view.owner.Properties.Name, true, "Female Titan's ankle", dmg);
-                    FengGameManagerMKII.instance.photonView.RPC(Rpc.ShowDamage, view.owner, dmg);
+                    GameManager.instance.SendKillInfo(false, view.owner.Properties.Name, true, "Female Titan's ankle", dmg);
+                    GameManager.instance.photonView.RPC(Rpc.ShowDamage, view.owner, dmg);
                 }
             }
         }
@@ -1016,8 +1016,8 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                     {
                         getDown();
                     }
-                    FengGameManagerMKII.instance.SendKillInfo(false, view.owner.Properties.Name, true, "Female Titan's ankle", dmg);
-                    FengGameManagerMKII.instance.photonView.RPC(Rpc.ShowDamage, view.owner, dmg);
+                    GameManager.instance.SendKillInfo(false, view.owner.Properties.Name, true, "Female Titan's ankle", dmg);
+                    GameManager.instance.photonView.RPC(Rpc.ShowDamage, view.owner, dmg);
                 }
             }
         }
@@ -1184,7 +1184,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         if (!ModuleManager.Enabled(nameof(ModuleEnableSkins))) 
             return;
 
-        photonView.RPC(Rpc.LoadSkin, PhotonTargets.AllBuffered, FengGameManagerMKII.settings.TitanSkin.Annie);
+        photonView.RPC(Rpc.LoadSkin, PhotonTargets.AllBuffered, GameManager.settings.TitanSkin.Annie);
     }
 
     public IEnumerator loadskinE(string url)
@@ -1193,36 +1193,36 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         {
             yield return null;
         }
-        bool mipmap = FengGameManagerMKII.settings.UseMipmap;
+        bool mipmap = GameManager.settings.UseMipmap;
         bool iteratorVariable1 = false;
         foreach (Renderer iteratorVariable4 in GetComponentsInChildren<Renderer>())
         {
-            if (!FengGameManagerMKII.linkHash[2].ContainsKey(url))
+            if (!GameManager.linkHash[2].ContainsKey(url))
             {
                 WWW link = new WWW(url);
                 yield return link;
                 Texture2D iteratorVariable6 = RCextensions.LoadImageRC(link, mipmap, 1000000);
                 link.Dispose();
-                if (!FengGameManagerMKII.linkHash[2].ContainsKey(url))
+                if (!GameManager.linkHash[2].ContainsKey(url))
                 {
                     iteratorVariable1 = true;
                     iteratorVariable4.material.mainTexture = iteratorVariable6;
-                    FengGameManagerMKII.linkHash[2].Add(url, iteratorVariable4.material);
-                    iteratorVariable4.material = (Material)FengGameManagerMKII.linkHash[2][url];
+                    GameManager.linkHash[2].Add(url, iteratorVariable4.material);
+                    iteratorVariable4.material = (Material)GameManager.linkHash[2][url];
                 }
                 else
                 {
-                    iteratorVariable4.material = (Material)FengGameManagerMKII.linkHash[2][url];
+                    iteratorVariable4.material = (Material)GameManager.linkHash[2][url];
                 }
             }
             else
             {
-                iteratorVariable4.material = (Material)FengGameManagerMKII.linkHash[2][url];
+                iteratorVariable4.material = (Material)GameManager.linkHash[2][url];
             }
         }
         if (iteratorVariable1)
         {
-            FengGameManagerMKII.instance.UnloadAssets();
+            GameManager.instance.UnloadAssets();
         }
     }
 
@@ -1273,7 +1273,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     {
         if (GameObject.Find("MultiplayerManager") != null)
         {
-            FengGameManagerMKII.instance.FemaleTitans.Remove(this);
+            GameManager.instance.FemaleTitans.Remove(this);
         }
     }
 
@@ -1334,16 +1334,16 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         
         if (photonView.isMine)
         {
-            if (FengGameManagerMKII.settings.EnableCustomSize)
+            if (GameManager.settings.EnableCustomSize)
             {
-                photonView.RPC(Rpc.SetSize, PhotonTargets.AllBuffered, FengGameManagerMKII.settings.TitanSize.Random);
+                photonView.RPC(Rpc.SetSize, PhotonTargets.AllBuffered, GameManager.settings.TitanSize.Random);
             }
             lagMax = 150f + size * 3f;
             healthTime = 0f;
             maxHealth = NapeArmor;
-            if (FengGameManagerMKII.settings.HealthMode > HealthMode.Off)
+            if (GameManager.settings.HealthMode > HealthMode.Off)
             {
-                maxHealth = NapeArmor = (int) FengGameManagerMKII.settings.TitanHealth.Random;
+                maxHealth = NapeArmor = (int) GameManager.settings.TitanHealth.Random;
             }
             if (NapeArmor > 0)
             {
@@ -1356,7 +1356,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
 
     private void startMain()
     {
-        FengGameManagerMKII.instance.FemaleTitans.Add(this);
+        GameManager.instance.FemaleTitans.Add(this);
         name = "Female Titan";
         grabTF = new GameObject();
         grabTF.name = "titansTmpGrabTF";
@@ -1375,7 +1375,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
         AnkleRHP = 50;
         AnkleLHPMAX = 50;
         AnkleRHPMAX = 50;
-        bool flag = LevelInfoManager.Get(FengGameManagerMKII.Level).RespawnMode == RespawnMode.NEVER;
+        bool flag = LevelInfoManager.Get(GameManager.Level).RespawnMode == RespawnMode.NEVER;
         switch (IN_GAME_MAIN_CAMERA.difficulty)
         {
             case 0:
@@ -1422,7 +1422,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
             Vector3 vector = view.gameObject.transform.position - transform.transform.position;
             if (vector.magnitude < lagMax && healthTime <= 0f)
             {
-                if (speed >= FengGameManagerMKII.settings.MinimumDamage)
+                if (speed >= GameManager.settings.MinimumDamage)
                 {
                     NapeArmor -= speed;
                 }
@@ -1441,13 +1441,13 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                             grabbedTarget.GetPhotonView().RPC(Rpc.netUngrabbed, PhotonTargets.All);
                         }
                         NetDie();
-                        FengGameManagerMKII.instance.TitanGetKill(view.owner, speed, name, null);
+                        GameManager.instance.TitanGetKill(view.owner, speed, name, null);
                     }
                 }
                 else
                 {
-                    FengGameManagerMKII.instance.SendKillInfo(false, view.owner.Properties.Name, true, "Female Titan's neck", speed);
-                    FengGameManagerMKII.instance.photonView.RPC(Rpc.ShowDamage, view.owner, speed);
+                    GameManager.instance.SendKillInfo(false, view.owner.Properties.Name, true, "Female Titan's neck", speed);
+                    GameManager.instance.photonView.RPC(Rpc.ShowDamage, view.owner, speed);
                 }
                 healthTime = 0.2f;
             }
@@ -1495,7 +1495,7 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
                     {
                         for (int i = 0; i < 15; i++)
                         {
-                            FengGameManagerMKII.instance.RandomSpawnOneTitan("titanRespawn", 50).GetComponent<TITAN>().GetTaunted(gameObject, 20f);
+                            GameManager.instance.RandomSpawnOneTitan("titanRespawn", 50).GetComponent<TITAN>().GetTaunted(gameObject, 20f);
                         }
                     }
                 }

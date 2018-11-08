@@ -13,7 +13,7 @@ namespace Mod.Commands
             if (!Player.TryParse(args[0], out Player player))
                 throw new PlayerNotFoundException();
             
-            FengGameManagerMKII.instance.KickPlayerRC(player, false, string.Empty);
+            GameManager.instance.KickPlayerRC(player, false, string.Empty);
             Chat.System("Il player è stato kickato");
         }
     }

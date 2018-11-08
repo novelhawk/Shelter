@@ -16,7 +16,7 @@ using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 // ReSharper disable once CheckNamespace
-public partial class FengGameManagerMKII
+public partial class GameManager
 {
     #region Unity & Photon methods
 

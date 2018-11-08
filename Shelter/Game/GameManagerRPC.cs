@@ -14,7 +14,7 @@ using RC;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
-public partial class FengGameManagerMKII
+public partial class GameManager
 {
     public Dictionary<int, CannonValues> allowedToCannon;
     public Dictionary<string, Texture2D> assetCacheTextures;

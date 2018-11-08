@@ -24,7 +24,7 @@ public class LevelTriggerHint : MonoBehaviour
 
     private void Start()
     {
-        if (!LevelInfoManager.Get(FengGameManagerMKII.Level).Hint)
+        if (!LevelInfoManager.Get(GameManager.Level).Hint)
             enabled = false;
 
         if (this.content != string.Empty) 

@@ -23,7 +23,7 @@ namespace RC
             if (viewIDS.Any(num3 => num3 <= num || num3 >= num2))
             {
                 if (PhotonNetwork.isMasterClient)
-                    FengGameManagerMKII.instance.KickPlayerRC(player, true, "spawning invalid photon view.");
+                    GameManager.instance.KickPlayerRC(player, true, "spawning invalid photon view.");
                 return false;
             }
             key = key.ToLower();
@@ -31,11 +31,11 @@ namespace RC
             {
                 case "rcasset/bombmain":
                 case "rcasset/bombexplodemain":
-                    if (FengGameManagerMKII.settings.IsBombMode)
+                    if (GameManager.settings.IsBombMode)
                     {
-                        if (!(!PhotonNetwork.isMasterClient || FengGameManagerMKII.instance.restartingBomb))
+                        if (!(!PhotonNetwork.isMasterClient || GameManager.instance.restartingBomb))
                         {
-                            FengGameManagerMKII.instance.KickPlayerRC(player, true, "spawning bomb item (" + key + ").");
+                            GameManager.instance.KickPlayerRC(player, true, "spawning bomb item (" + key + ").");
                         }
                         return false;
                     }
@@ -68,13 +68,13 @@ namespace RC
                 case "fx/boom5":
                 case "fx/rockthrow":
                 case "fx/bite":
-                    if (LevelInfoManager.Get(FengGameManagerMKII.Level).PlayerTitansNotAllowed || FengGameManagerMKII.settings.IsInfectionMode || IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight)
+                    if (LevelInfoManager.Get(GameManager.Level).PlayerTitansNotAllowed || GameManager.settings.IsInfectionMode || IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight)
                     {
                         return this.Instantiated(player, GameResource.effect);
                     }
-                    if (!(!PhotonNetwork.isMasterClient || FengGameManagerMKII.instance.restartingTitan))
+                    if (!(!PhotonNetwork.isMasterClient || GameManager.instance.restartingTitan))
                     {
-                        FengGameManagerMKII.instance.KickPlayerRC(player, false, "spawning titan effects.");
+                        GameManager.instance.KickPlayerRC(player, false, "spawning titan effects.");
                     }
                     return false;
 
@@ -91,9 +91,9 @@ namespace RC
 
                 case "rcasset/cannonwall":
                 case "rcasset/cannonground":
-                    if (PhotonNetwork.isMasterClient && !(FengGameManagerMKII.instance.allowedToCannon.ContainsKey(player.ID) || FengGameManagerMKII.instance.restartingMC))
+                    if (PhotonNetwork.isMasterClient && !(GameManager.instance.allowedToCannon.ContainsKey(player.ID) || GameManager.instance.restartingMC))
                     {
-                        FengGameManagerMKII.instance.KickPlayerRC(player, false, "spawning cannon item (" + key + ").");
+                        GameManager.instance.KickPlayerRC(player, false, "spawning cannon item (" + key + ").");
                     }
                     return this.Instantiated(player, GameResource.general);
 
@@ -101,18 +101,18 @@ namespace RC
                 case "rcasset/cannongroundprop":
                     if (PhotonNetwork.isMasterClient)
                     {
-                        FengGameManagerMKII.instance.KickPlayerRC(player, true, "spawning MC item (" + key + ").");
+                        GameManager.instance.KickPlayerRC(player, true, "spawning MC item (" + key + ").");
                     }
                     return false;
 
                 case "titan_eren":
                     if (player.Properties.Character.EqualsIgnoreCase("EREN"))
                     {
-                        if (!FengGameManagerMKII.settings.AllowErenTitan)
+                        if (!GameManager.settings.AllowErenTitan)
                         {
-                            if (!(!PhotonNetwork.isMasterClient || FengGameManagerMKII.instance.restartingEren))
+                            if (!(!PhotonNetwork.isMasterClient || GameManager.instance.restartingEren))
                             {
-                                FengGameManagerMKII.instance.KickPlayerRC(player, false, "spawning titan eren (" + key + ").");
+                                GameManager.instance.KickPlayerRC(player, false, "spawning titan eren (" + key + ").");
                             }
                             return false;
                         }
@@ -120,7 +120,7 @@ namespace RC
                     }
                     if (PhotonNetwork.isMasterClient)
                     {
-                        FengGameManagerMKII.instance.KickPlayerRC(player, true, "spawning titan eren (" + key + ").");
+                        GameManager.instance.KickPlayerRC(player, true, "spawning titan eren (" + key + ").");
                     }
                     return false;
 
@@ -132,10 +132,10 @@ namespace RC
                 case "hitmeatbig":
                     switch (player.Properties.Character.ToUpper())
                     {
-                        case "EREN" when !FengGameManagerMKII.settings.AllowErenTitan:
-                            if (!(!PhotonNetwork.isMasterClient || FengGameManagerMKII.instance.restartingEren))
+                        case "EREN" when !GameManager.settings.AllowErenTitan:
+                            if (!(!PhotonNetwork.isMasterClient || GameManager.instance.restartingEren))
                             {
-                                FengGameManagerMKII.instance.KickPlayerRC(player, false, "spawning eren effect (" + key + ").");
+                                GameManager.instance.KickPlayerRC(player, false, "spawning eren effect (" + key + ").");
                             }
                             return false;
                         case "EREN":
@@ -143,7 +143,7 @@ namespace RC
                     }
                     if (PhotonNetwork.isMasterClient)
                     {
-                        FengGameManagerMKII.instance.KickPlayerRC(player, true, "spawning eren effect (" + key + ").");
+                        GameManager.instance.KickPlayerRC(player, true, "spawning eren effect (" + key + ").");
                     }
                     return false;
 
@@ -154,7 +154,7 @@ namespace RC
                     {
                         return this.Instantiated(player, GameResource.effect);
                     }
-                    FengGameManagerMKII.instance.KickPlayerRC(player, true, "spawning colossal effect (" + key + ").");
+                    GameManager.instance.KickPlayerRC(player, true, "spawning colossal effect (" + key + ").");
                     return false;
 
                 case "rock":
@@ -162,17 +162,17 @@ namespace RC
                     {
                         return this.Instantiated(player, GameResource.general);
                     }
-                    FengGameManagerMKII.instance.KickPlayerRC(player, true, "spawning MC item (" + key + ").");
+                    GameManager.instance.KickPlayerRC(player, true, "spawning MC item (" + key + ").");
                     return false;
 
                 case "horse":
-                    if (LevelInfoManager.Get(FengGameManagerMKII.Level).Horse || FengGameManagerMKII.settings.EnableHorse)
+                    if (LevelInfoManager.Get(GameManager.Level).Horse || GameManager.settings.EnableHorse)
                     {
                         return this.Instantiated(player, GameResource.general);
                     }
-                    if (!(!PhotonNetwork.isMasterClient || FengGameManagerMKII.instance.restartingHorse))
+                    if (!(!PhotonNetwork.isMasterClient || GameManager.instance.restartingHorse))
                     {
-                        FengGameManagerMKII.instance.KickPlayerRC(player, true, "spawning horse (" + key + ").");
+                        GameManager.instance.KickPlayerRC(player, true, "spawning horse (" + key + ").");
                     }
                     return false;
 
@@ -180,10 +180,10 @@ namespace RC
                     int num4;
                     if (!PhotonNetwork.isMasterClient)
                     {
-                        if (FengGameManagerMKII.masterRC && IN_GAME_MAIN_CAMERA.GameMode != GameMode.BossFight)
+                        if (GameManager.masterRC && IN_GAME_MAIN_CAMERA.GameMode != GameMode.BossFight)
                         {
                             num4 = 0;
-                            foreach (TITAN titan in FengGameManagerMKII.instance.GetTitans())
+                            foreach (TITAN titan in GameManager.instance.GetTitans())
                             {
                                 if (titan.photonView.owner == player)
                                 {
@@ -197,14 +197,14 @@ namespace RC
                         }
                         break;
                     }
-                    if (LevelInfoManager.Get(FengGameManagerMKII.Level).PlayerTitansNotAllowed || FengGameManagerMKII.settings.IsInfectionMode || IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight || FengGameManagerMKII.instance.restartingTitan)
+                    if (LevelInfoManager.Get(GameManager.Level).PlayerTitansNotAllowed || GameManager.settings.IsInfectionMode || IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight || GameManager.instance.restartingTitan)
                     {
                         if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight)
                         {
                             break;
                         }
                         num4 = 0;
-                        foreach (TITAN titan in FengGameManagerMKII.instance.GetTitans())
+                        foreach (TITAN titan in GameManager.instance.GetTitans())
                         {
                             if (titan.photonView.owner == player)
                             {
@@ -215,10 +215,10 @@ namespace RC
                         {
                             break;
                         }
-                        FengGameManagerMKII.instance.KickPlayerRC(player, false, "spawning titan (" + key + ").");
+                        GameManager.instance.KickPlayerRC(player, false, "spawning titan (" + key + ").");
                         return false;
                     }
-                    FengGameManagerMKII.instance.KickPlayerRC(player, false, "spawning titan (" + key + ").");
+                    GameManager.instance.KickPlayerRC(player, false, "spawning titan (" + key + ").");
                     return false;
 
                 case "colossal_titan":
@@ -230,13 +230,13 @@ namespace RC
                 case "titan_new_2":
                     if (!PhotonNetwork.isMasterClient)
                     {
-                        if (FengGameManagerMKII.masterRC)
+                        if (GameManager.masterRC)
                         {
                             return false;
                         }
                         return this.Instantiated(player, GameResource.general);
                     }
-                    FengGameManagerMKII.instance.KickPlayerRC(player, true, "spawning MC item (" + key + ").");
+                    GameManager.instance.KickPlayerRC(player, true, "spawning MC item (" + key + ").");
                     return false;
 
                 default:
@@ -261,7 +261,7 @@ namespace RC
                     global::Mod.Player player = owner;
                     if (PhotonNetwork.isMasterClient)
                     {
-                        FengGameManagerMKII.instance.KickPlayerRC(player, true, "spamming instantiate (" + type + ").");
+                        GameManager.instance.KickPlayerRC(player, true, "spamming instantiate (" + type + ").");
                     }
                     RCextensions.RemoveAt(ref this.players, num);
                     return false;

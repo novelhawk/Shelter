@@ -30,14 +30,14 @@ public class RegionTrigger : MonoBehaviour
                 HERO component = gameObject.GetComponent<HERO>();
                 if (component != null)
                 {
-                    str = (string) FengGameManagerMKII.RCVariableNames["OnPlayerEnterRegion[" + this.myName + "]"];
-                    if (FengGameManagerMKII.playerVariables.ContainsKey(str))
+                    str = (string) GameManager.RCVariableNames["OnPlayerEnterRegion[" + this.myName + "]"];
+                    if (GameManager.playerVariables.ContainsKey(str))
                     {
-                        FengGameManagerMKII.playerVariables[str] = component.photonView.owner;
+                        GameManager.playerVariables[str] = component.photonView.owner;
                     }
                     else
                     {
-                        FengGameManagerMKII.playerVariables.Add(str, component.photonView.owner);
+                        GameManager.playerVariables.Add(str, component.photonView.owner);
                     }
                     this.playerEventEnter.checkEvent();
                 }
@@ -48,14 +48,14 @@ public class RegionTrigger : MonoBehaviour
             TITAN titan = gameObject.transform.root.gameObject.GetComponent<TITAN>();
             if (titan != null)
             {
-                str = (string) FengGameManagerMKII.RCVariableNames["OnTitanEnterRegion[" + this.myName + "]"];
-                if (FengGameManagerMKII.titanVariables.ContainsKey(str))
+                str = (string) GameManager.RCVariableNames["OnTitanEnterRegion[" + this.myName + "]"];
+                if (GameManager.titanVariables.ContainsKey(str))
                 {
-                    FengGameManagerMKII.titanVariables[str] = titan;
+                    GameManager.titanVariables[str] = titan;
                 }
                 else
                 {
-                    FengGameManagerMKII.titanVariables.Add(str, titan);
+                    GameManager.titanVariables.Add(str, titan);
                 }
                 this.titanEventEnter.checkEvent();
             }
@@ -73,14 +73,14 @@ public class RegionTrigger : MonoBehaviour
                 HERO component = gameObject.GetComponent<HERO>();
                 if (component != null)
                 {
-                    str = (string) FengGameManagerMKII.RCVariableNames["OnPlayerLeaveRegion[" + this.myName + "]"];
-                    if (FengGameManagerMKII.playerVariables.ContainsKey(str))
+                    str = (string) GameManager.RCVariableNames["OnPlayerLeaveRegion[" + this.myName + "]"];
+                    if (GameManager.playerVariables.ContainsKey(str))
                     {
-                        FengGameManagerMKII.playerVariables[str] = component.photonView.owner;
+                        GameManager.playerVariables[str] = component.photonView.owner;
                     }
                     else
                     {
-                        FengGameManagerMKII.playerVariables.Add(str, component.photonView.owner);
+                        GameManager.playerVariables.Add(str, component.photonView.owner);
                     }
                 }
             }
@@ -90,14 +90,14 @@ public class RegionTrigger : MonoBehaviour
             TITAN titan = gameObject.GetComponent<TITAN>();
             if (titan != null)
             {
-                str = (string) FengGameManagerMKII.RCVariableNames["OnTitanLeaveRegion[" + this.myName + "]"];
-                if (FengGameManagerMKII.titanVariables.ContainsKey(str))
+                str = (string) GameManager.RCVariableNames["OnTitanLeaveRegion[" + this.myName + "]"];
+                if (GameManager.titanVariables.ContainsKey(str))
                 {
-                    FengGameManagerMKII.titanVariables[str] = titan;
+                    GameManager.titanVariables[str] = titan;
                 }
                 else
                 {
-                    FengGameManagerMKII.titanVariables.Add(str, titan);
+                    GameManager.titanVariables.Add(str, titan);
                 }
                 this.titanEventExit.checkEvent();
             }

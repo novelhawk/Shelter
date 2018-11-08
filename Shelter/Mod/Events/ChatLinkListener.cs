@@ -4,7 +4,7 @@ namespace Mod.Events
 {
     public class ChatLinkListener : EventListener
     {
-        [Event(nameof(FengGameManagerMKII.Chat))]
+        [Event(nameof(GameManager.Chat))]
         private void OnChat(object sender, ChatEventArgs e)
         {
             
