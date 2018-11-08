@@ -10,15 +10,19 @@ namespace Mod.Interface
         private Texture2D _normal;
         private Texture2D _hover;
         private Texture2D _active;
-        
         private Texture2D _transparent;
         
         private GUIStyle _textField;
         private GUIStyle _label;
         private GUIStyle _button;
-        
         private GUIStyle _deleteButton;
 
+        private const float Width = 1280;
+        private const float Height = 720;
+        
+        private float _width;
+        private float _height;
+        
         private Profile _profile;
         private int _selectedProfile;
 
@@ -173,20 +177,20 @@ namespace Mod.Interface
             }
         }
 
-        private float _width;
-        private float _height;
         private bool Animation()
         {
-            if (_width < 1280f || _height < 720f)
+            if (_width < Width || _height < Height) // Cache animation done?
             {
-                if (_width < 1280f)
-                    _width += 1280f / 100f * 0.1f + _width / 100 * .5f * Time.deltaTime * 500;
-                if (_height < 720f)
-                    _height += 720f / 100f * 0.1f + _height / 100 * .5f * Time.deltaTime * 500;
-                if (_width < 1280f || _height < 720f)
+                const float changeInValue = 1.5f;
+                const float slowdown = 0.5f;
+                
+                _width += (Width * changeInValue - _width * slowdown) * Time.deltaTime;
+                _height += (Height * changeInValue - _height * slowdown) * Time.deltaTime;
+                
+                if (_width < Width && _height < Height)
                     return false;
-                _width = 1280f;
-                _height = 720f;
+                _width = Width;
+                _height = Height;
             }
             return true;
         }

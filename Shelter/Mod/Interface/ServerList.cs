@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.ComponentModel;
+using System.Text;
 using Photon;
 using UnityEngine;
 
@@ -6,6 +8,8 @@ namespace Mod.Interface
 {
     public class ServerList : Gui
     {
+        private string _filter = string.Empty;
+        
         private GUIStyle filterStyle;
         private GUIStyle searchStyle;
         private GUIStyle buttonStyle;
@@ -13,10 +17,14 @@ namespace Mod.Interface
         private Texture2D buttonActive;
         private Texture2D background;
         private Vector2 _scrollPosition;
-        private string _filter = string.Empty;
+        
+        public static float Alpha;
+
+        private const float Width = 1280;
+        private const float Height = 720;
+        
         private float _width;
         private float _height;
-        public static float Alpha;
 
         protected override void OnShow()
         {
@@ -51,16 +59,19 @@ namespace Mod.Interface
 
         private void Animation()
         {
-            if (_width < 1280f || _height < 720f)
+            if (_width < Width || _height < Height)
             {
-                if (_width < 1280f)
-                    _width += 1280f / 100f * 0.1f + _width / 100 * .5f * Time.deltaTime * 500;
-                if (_height < 720f)
-                    _height += 720f / 100f * 0.1f + _height / 100 * .5f * Time.deltaTime * 500;
-                if (_width < 1280f || _height < 720f)
+                const float changeInValue = 1.5f;
+                const float slowdown = 0.5f;
+                
+                _width += (Width * changeInValue - _width * slowdown) * Time.deltaTime;
+                _height += (Height * changeInValue - _height * slowdown) * Time.deltaTime;
+                
+                if (_width < Width || _height < Height)
                     return;
-                _width = 1280f;
-                _height = 720f;
+                
+                _width = Width;
+                _height = Height;
             }
             else if (PhotonNetwork.connectionStatesDetailed == ClientState.JoinedLobby && PhotonNetwork.countOfRooms > 0)
             {

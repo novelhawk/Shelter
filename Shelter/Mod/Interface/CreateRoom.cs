@@ -22,6 +22,9 @@ namespace Mod.Interface
         private GUIStyle _label;
         private GUIStyle _button;
         private GUIStyle _buttonSelected;
+
+        private const float Width = 1280;
+        private const float Height = 720;
         
         private float _width;
         private float _height;
@@ -78,17 +81,20 @@ namespace Mod.Interface
 
         private void Animation()
         {
-            if (_width < 1280f || _height < 720f)
+            if (_width < Width || _height < Height)
             {
-                if (_width < 1280f)
-                    _width += 1280f / 100f * 0.1f + _width / 100 * .5f * Time.deltaTime * 500;
-                if (_height < 720f)
-                    _height += 720f / 100f * 0.1f + _height / 100 * .5f * Time.deltaTime * 500;
-                if (_width < 1280f || _height < 720f)
+                const float changeInValue = 1.5f;
+                const float slowdown = 0.5f;
+                
+                _width += (Width * changeInValue - _width * slowdown) * Time.deltaTime;
+                _height += (Height * changeInValue - _height * slowdown) * Time.deltaTime;
+                
+                if (_width < Width && _height < Height)
                     return;
-                _width = 1280f;
-                _height = 720f;
                 _animationDone = true;
+                
+                _width = Width;
+                _height = Height;
             }
         }
 
@@ -198,7 +204,7 @@ namespace Mod.Interface
                 Screen.showCursor = false;
 //                if (LevelInfoManager.Levels[roomMapIndex].Map == "trainning_0") Does not exist in LevelInfoManager TODO: Check why
 //                    IN_GAME_MAIN_CAMERA.difficulty = -1;
-                FengGameManagerMKII.Level = LevelInfoManager.Levels[roomMapIndex].Name;
+                GameManager.Level = LevelInfoManager.Levels[roomMapIndex].Name;
                 Application.LoadLevel(LevelInfoManager.Levels[roomMapIndex].LevelName);
                 Shelter.OnJoinedGame();
             }
