@@ -47,7 +47,6 @@ namespace Mod.Interface
             GUI.Label(rect.Set(145, 347, 166, 40), "Create", IsVisible("CreateRoom") ? selected : text);
             if (GUI.Button(rect.OY(-10), string.Empty, GUIStyle.none))
             {
-                Disable(nameof(CreateRoom));
                 Enable(nameof(CreateRoom));
                 Disable(nameof(ServerList));
                 Disable(nameof(ProfileChanger));
