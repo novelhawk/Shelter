@@ -15,12 +15,12 @@ namespace Mod.Commands
 
             if (!Shelter.TryFind(args[0], out GameObject obj))
             {
-                Chat.System("Couldn't find GameObject '{0}'.", args[0]);
+                Shelter.Chat.System("Couldn't find GameObject '{0}'.", args[0]);
                 return;
             }
 
             Object.Destroy(obj);
-            Chat.System("{0} destroyed.", obj.name);
+            Shelter.Chat.System("{0} destroyed.", obj.name);
         }
     }
 }

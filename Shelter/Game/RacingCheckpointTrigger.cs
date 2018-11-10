@@ -1,3 +1,4 @@
+using Mod;
 using Mod.Interface;
 using Photon;
 using Photon.Enums;
@@ -16,7 +17,7 @@ public class RacingCheckpointTrigger : MonoBehaviour
             gameObject = gameObject.transform.root.gameObject;
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && Extensions.GetPhotonView(gameObject) != null && Extensions.GetPhotonView(gameObject).isMine && gameObject.GetComponent<HERO>() != null)
             {
-                Chat.System("<color=#00ff00>Checkpoint set.</color>");
+                Shelter.Chat.System("<color=#00ff00>Checkpoint set.</color>");
                 gameObject.GetComponent<HERO>().fillGas();
                 GameManager.instance.racingSpawnPoint = this.gameObject.transform.position;
                 GameManager.instance.racingSpawnPointSet = true;

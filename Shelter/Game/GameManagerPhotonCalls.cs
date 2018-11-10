@@ -52,7 +52,7 @@ public partial class GameManager
         Shelter.OnJoinedGame();
         DiscordRpc.SendInGameMulti();
         var room = PhotonNetwork.Room;
-        Mod.Interface.Chat.System("Joined {0}", room.Name.RemoveColors());
+        Shelter.Chat.System("Joined {0}", room.Name.RemoveColors());
         Shelter.LogConsole("Joined room {0}",  room.Name.RemoveColors());
         maxPlayers = room.MaxPlayers;
         playerList = string.Empty;
@@ -100,14 +100,11 @@ public partial class GameManager
 
     public void OnLeftRoom()
     {
-        if (_endingMessageId.HasValue)
-            Mod.Interface.Chat.EditMessage(_endingMessageId, "Restart aborted: You left the room", false);
+        Shelter.Chat.Edit(_endingMessageId, "Restart aborted: You left the room");
         _endingMessageId = null;
-        if (_racingMessageId.HasValue)
-            Mod.Interface.Chat.EditMessage(_endingMessageId, "Racing aborted: You left the room", false);
+        Shelter.Chat.Edit(_endingMessageId, "Racing aborted: You left the room");
         _racingMessageId = null;
-        if (_pauseMessageId.HasValue)
-            Mod.Interface.Chat.EditMessage(_endingMessageId, "Pause aborted: You left the room", false);
+        Shelter.Chat.Edit(_endingMessageId, "Pause aborted: You left the room");
         _pauseMessageId = null;
         
         Shelter.OnMainMenu();
@@ -499,7 +496,7 @@ public partial class GameManager
             if (Time.timeScale <= 0.1f && pauseWaitTime > 3f)
             {
                 photonView1.RPC(Rpc.Pause, player, true);
-                Mod.Interface.Chat.SendMessage("MasterClient has paused the game", player);
+                Shelter.Chat.SendMessage("MasterClient has paused the game", string.Empty, player);
             }
         }
     }

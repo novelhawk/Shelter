@@ -13,9 +13,9 @@ namespace Mod.Commands
             GameManager.settings.InSpectatorMode = enter;
             GameManager.instance.EnterSpecMode(enter);
             if (enter)
-                Chat.System("You are now in spectate mode.");
+                Shelter.Chat.System("You are now in spectate mode.");
             else
-                Chat.System("You aren't in spectate mode anymore.");
+                Shelter.Chat.System("You aren't in spectate mode anymore.");
         }
     }
 }

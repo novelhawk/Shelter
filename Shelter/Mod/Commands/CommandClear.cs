@@ -12,11 +12,11 @@ namespace Mod.Commands
         public override void Execute(string[] args)
         {
             if (args.Length > 0)
-                Chat.Clear();
+                Shelter.Chat.Clear();
             for (int i = 0; i < 30; i++)
-                Chat.SendMessage(string.Empty, PhotonTargets.Others);
+                Shelter.Chat.SendMessage(string.Empty, string.Empty, PhotonTargets.Others);
             
-            Chat.System("Chat has been cleaned up by {0}.", Player.Self.Properties.HexName);
+            Shelter.Chat.System("Chat has been cleaned up by {0}.", Player.Self.Properties.HexName);
         }
     }
 }

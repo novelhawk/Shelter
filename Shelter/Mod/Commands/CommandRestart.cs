@@ -9,7 +9,7 @@ namespace Mod.Commands
         public override void Execute(string[] args)
         {
             GameManager.instance.RestartGameRC();
-            Chat.System("You restarted the room.");
+            Shelter.Chat.System("You restarted the room.");
         }
     }
 }

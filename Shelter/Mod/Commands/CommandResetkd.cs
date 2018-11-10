@@ -24,7 +24,7 @@ namespace Mod.Commands
             if (args.Length < 1)
             {
                 Player.Self.SetCustomProperties(hashtable);
-                Chat.System("You resetted your kd.");
+                Shelter.Chat.System("You resetted your kd.");
                 return;
             }
 
@@ -39,7 +39,7 @@ namespace Mod.Commands
 #endif
                 foreach (Player p in PhotonNetwork.PlayerList)
                     p.SetCustomProperties(hashtable);
-                Chat.System("You resetted the kds of everyone.");
+                Shelter.Chat.System("You resetted the kds of everyone.");
                 return;
             }
 
@@ -47,7 +47,7 @@ namespace Mod.Commands
                 throw new PlayerNotFoundException(args[0]);
 
             player.SetCustomProperties(hashtable);
-            Chat.System("You reset {0}'s kda", player);
+            Shelter.Chat.System("You reset {0}'s kda", player);
         }
     }
 }

@@ -9,7 +9,7 @@ namespace Mod.Commands
 
         public override void Execute(string[] args)
         {
-            Chat.System("Active clothes: {0}", ClothFactory.GetDebugInfo());
+            Shelter.Chat.System("Active clothes: {0}", ClothFactory.GetDebugInfo());
         }
     }
 }

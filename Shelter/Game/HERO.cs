@@ -2824,26 +2824,26 @@ public class HERO : Photon.MonoBehaviour
             {
                 if (info.sender.Properties.Name == null || info.sender.Properties.PlayerType == PlayerType.Unknown)
                 {
-                    Chat.System("Unusual Kill from ID " + info.sender.ID + "");
+                    Shelter.Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                 }
                 else if (viewID < 0)
                 {
                     if (titanName == "")
                     {
-                        Chat.System("Unusual Kill from ID " + info.sender.ID + " (possibly valid).");
+                        Shelter.Chat.System("Unusual Kill from ID " + info.sender.ID + " (possibly valid).");
                     }
                     else
                     {
-                        Chat.System("Unusual Kill from ID " + info.sender.ID + "");
+                        Shelter.Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                     }
                 }
                 else if (PhotonView.Find(viewID) == null)
                 {
-                    Chat.System("Unusual Kill from ID " + info.sender.ID + "");
+                    Shelter.Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                 }
                 else if (PhotonView.Find(viewID).owner.ID != info.sender.ID)
                 {
-                    Chat.System("Unusual Kill from ID " + info.sender.ID + "");
+                    Shelter.Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                 }
             }
         }
@@ -2956,26 +2956,26 @@ public class HERO : Photon.MonoBehaviour
             {
                 if (info.sender.Properties.Name == null || info.sender.Properties.PlayerType == PlayerType.Unknown)
                 {
-                    Chat.System("Unusual Kill from ID " + info.sender.ID + "");
+                    Shelter.Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                 }
                 else if (viewID < 0)
                 {
                     if (titanName == "")
                     {
-                        Chat.System("Unusual Kill from ID " + info.sender.ID + " (possibly valid).");
+                        Shelter.Chat.System("Unusual Kill from ID " + info.sender.ID + " (possibly valid).");
                     }
                     else if (!GameManager.settings.IsBombMode && GameManager.settings.AllowCannonHumanKills)
                     {
-                        Chat.System("Unusual Kill from ID " + info.sender.ID + "");
+                        Shelter.Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                     }
                 }
                 else if (PhotonView.Find(viewID) == null)
                 {
-                    Chat.System("Unusual Kill from ID " + info.sender.ID + "");
+                    Shelter.Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                 }
                 else if (PhotonView.Find(viewID).owner.ID != info.sender.ID)
                 {
-                    Chat.System("Unusual Kill from ID " + info.sender.ID + "");
+                    Shelter.Chat.System("Unusual Kill from ID " + info.sender.ID + "");
                 }
             }
         }

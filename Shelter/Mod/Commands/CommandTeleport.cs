@@ -30,7 +30,7 @@ namespace Mod.Commands
                 }
             }
             
-            Chat.System("Player is not alive!");
+            Shelter.Chat.System("Player is not alive!");
         }
     }
 }

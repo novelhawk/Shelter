@@ -47,8 +47,8 @@ namespace Mod
 
         public void SendPrivateMessage(string message)
         {
-            Chat.AddMessage($"<color=#1068D4>TO<color=#108CD4>></color></color> <color=#{Chat.SystemColor}>{Properties.HexName}: {message}</color>");
-            Chat.SendMessage($"<color=#1068D4>PM<color=#108CD4>></color></color> <color=#{Chat.SystemColor}>{Self.Properties.HexName}: {message}</color>", this);
+            Shelter.Chat.AddMessage($"<color=#1068D4>TO<color=#108CD4>></color></color> <color=#{Chat.SystemColor}>{Properties.HexName}: {message}</color>");
+            Shelter.Chat.SendMessage($"<color=#1068D4>PM<color=#108CD4>></color></color> <color=#{Chat.SystemColor}>{Self.Properties.HexName}: {message}</color>", string.Empty, this);
         }
     
         public static Player Find(int id)

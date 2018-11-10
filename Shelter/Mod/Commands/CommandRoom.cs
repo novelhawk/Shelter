@@ -18,7 +18,7 @@ namespace Mod.Commands
             var room = PhotonNetwork.Room;
             if (room == null)
             {
-                Chat.System("You can call this command only in a multiplayer lobby.");
+                Shelter.Chat.System("You can call this command only in a multiplayer lobby.");
                 return;
             }
                 
@@ -30,7 +30,7 @@ namespace Mod.Commands
                         throw new CommandArgumentException(CommandName, "/room max [number]");
                     
                     room.MaxPlayers = num;
-                    Chat.System("Max player changed to " + num + ".");
+                    Shelter.Chat.System("Max player changed to " + num + ".");
                     break;
 
                 case "add":
@@ -45,21 +45,21 @@ namespace Mod.Commands
                     {
                         default:
                             GameManager.instance.AddTime(num * 60);
-                            Chat.System("You added {0} minutes to the clock.", num);
+                            Shelter.Chat.System("You added {0} minutes to the clock.", num);
                             break;
                         
                         case "s":
                         case "second":
                         case "seconds":
                             GameManager.instance.AddTime(num);
-                            Chat.System("You added {0} seconds to the clock.", num);
+                            Shelter.Chat.System("You added {0} seconds to the clock.", num);
                             break;
 
                         case "h":
                         case "hour":
                         case "hours":
                             GameManager.instance.AddTime(num * 3600);
-                            Chat.System("You added {0} hours to the clock.", num);
+                            Shelter.Chat.System("You added {0} hours to the clock.", num);
                             break;
                     }
 
@@ -69,21 +69,21 @@ namespace Mod.Commands
                 case "close":
                 case "closed":
                     room.IsOpen = !room.IsOpen;
-                    Chat.System("The room is now {0}.", room.IsOpen ? "open" : "closed");
+                    Shelter.Chat.System("The room is now {0}.", room.IsOpen ? "open" : "closed");
                     break;
 
                 case "hide":
                 case "hidden":
                 case "visible":
                     room.IsVisible = !room.IsVisible;
-                    Chat.System("The room is now {0}.", room.IsVisible ? "visible" : "invisible");
+                    Shelter.Chat.System("The room is now {0}.", room.IsVisible ? "visible" : "invisible");
                     break;
                 
                 case "ttl":
                 case "roomttl":
                     if (Player.Self.ID != 1)
                     {
-                        Chat.System("You need to be the <b>owner</b> of the room to change the TTL");
+                        Shelter.Chat.System("You need to be the <b>owner</b> of the room to change the TTL");
                         return;
                     }
                     
@@ -91,13 +91,13 @@ namespace Mod.Commands
                         throw new CommandArgumentException(CommandName, "/room ttl [number in s]");
 
                     room.RoomTTL = num;
-                    Chat.System("Room will decay {0} seconds after all player left.", num);
+                    Shelter.Chat.System("Room will decay {0} seconds after all player left.", num);
                     break;
                 
                 case "playerttl":
                     if (Player.Self.ID != 1)
                     {
-                        Chat.System("You need to be the <b>owner</b> of the room to change the TTL");
+                        Shelter.Chat.System("You need to be the <b>owner</b> of the room to change the TTL");
                         return;
                     }
                     
@@ -105,7 +105,7 @@ namespace Mod.Commands
                         throw new CommandArgumentException(CommandName, "/room playerttl [number in s]");
                     
                     room.PlayerTTL = num;
-                    Chat.System("Player instance will decay {0} seconds after the player left.", num);
+                    Shelter.Chat.System("Player instance will decay {0} seconds after the player left.", num);
                     break;
             }
         }

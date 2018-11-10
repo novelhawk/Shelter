@@ -7,6 +7,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Game;
 using Mod.GameSettings;
+using Mod.Interface.Components;
 using Mod.Keybinds;
 using Mod.Managers;
 using Mod.Modules;
@@ -136,7 +137,7 @@ public partial class GameManager : Photon.MonoBehaviour
                 }
             }
             if (settings.EnableChatFeed)
-                Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> Round Start.", roundTime);
+                Shelter.Chat.System("<color=#FFC000>({0:F2})</color> Round Start.", roundTime);
         }
         isFirstLoad = false;
     }
@@ -295,19 +296,19 @@ public partial class GameManager : Photon.MonoBehaviour
                 if (num4 != num5)
                 {
                     int num8 = num3 + 1;
-                    Mod.Interface.Chat.System("Script Error: Parentheses not equal! (line " + num8 + ")");
+                    Shelter.Chat.System("Script Error: Parentheses not equal! (line " + num8 + ")");
                     flag = true;
                 }
                 if (num6 % 2 != 0)
                 {
-                    Mod.Interface.Chat.System("Script Error: Quotations not equal! (line " + (num3 + 1) + ")");
+                    Shelter.Chat.System("Script Error: Quotations not equal! (line " + (num3 + 1) + ")");
                     flag = true;
                 }
             }
         }
         if (num != num2)
         {
-            Mod.Interface.Chat.System("Script Error: Bracket count not equivalent!");
+            Shelter.Chat.System("Script Error: Bracket count not equivalent!");
             flag = true;
         }
         if (!flag)
@@ -522,7 +523,7 @@ public partial class GameManager : Photon.MonoBehaviour
             }
             catch (UnityException exception)
             {
-                Mod.Interface.Chat.System(exception.Message);
+                Shelter.Chat.System(exception.Message);
             }
         }
     }
@@ -555,9 +556,9 @@ public partial class GameManager : Photon.MonoBehaviour
         return 0;
     }
 
-    private int? _racingMessageId;
-    private int? _endingMessageId;
-    private int? _pauseMessageId;
+    private ChatMessage? _racingMessageId;
+    private ChatMessage? _endingMessageId;
+    private ChatMessage? _pauseMessageId;
     private void Core()
     {
         if (false) //TODO: Probably broken || was `(int) settings[64] >= 100`
@@ -658,7 +659,7 @@ public partial class GameManager : Photon.MonoBehaviour
                         if (gameEndCD <= 0f)
                         {
                             gameEndCD = 0f;
-                            Mod.Interface.Chat.EditMessage(_endingMessageId, "Game is now restarting.", false);
+                            Shelter.Chat.Edit(_endingMessageId, "Game is now restarting.", false);
                             _endingMessageId = null;
                             if (PhotonNetwork.isMasterClient)
                                 RestartGameRC();
@@ -666,13 +667,13 @@ public partial class GameManager : Photon.MonoBehaviour
                         else
                         {
                             gameEndCD -= Time.deltaTime;
-                            Mod.Interface.Chat.EditMessage(_endingMessageId, $"Game restarting in {gameEndCD:0.00} seconds.", true);
+                            Shelter.Chat.Edit(_endingMessageId, $"Game restarting in {gameEndCD:0.00} seconds.", true);
                         }
                     }
                 } 
                 else if (_endingMessageId.HasValue)
                 {
-                    Mod.Interface.Chat.EditMessage(_endingMessageId, "Restart failed.", false);
+                    Shelter.Chat.Edit(_endingMessageId, "Restart failed.", false);
                     _endingMessageId = null;
                 }
                 timeElapse += Time.deltaTime;
@@ -704,12 +705,12 @@ public partial class GameManager : Photon.MonoBehaviour
                         if (timeTotalServer < 5f)
                         {
                             if (!_racingMessageId.HasValue)
-                                _racingMessageId = Mod.Interface.Chat.System("Race is starting soon");
-                            Mod.Interface.Chat.EditMessage(_racingMessageId, $"Race is starting in {5 - timeTotalServer:0.00}", true);
+                                _racingMessageId = Shelter.Chat.System("Race is starting soon");
+                            Shelter.Chat.Edit(_racingMessageId, $"Race is starting in {5 - timeTotalServer:0.00}", true);
                         }
                         else if (!startRacing && isWinning)
                         {
-                            Mod.Interface.Chat.EditMessage(_racingMessageId, "Race started.", false);
+                            Shelter.Chat.Edit(_racingMessageId, "Race started.", false);
                             _racingMessageId = null;
                             startRacing = true;
                             endRacing = false;
@@ -722,12 +723,12 @@ public partial class GameManager : Photon.MonoBehaviour
                         if (roundTime < 20f)
                         {
                             if (!_racingMessageId.HasValue)
-                                _racingMessageId = Mod.Interface.Chat.System("Race is starting soon");
-                            Mod.Interface.Chat.EditMessage(_racingMessageId, $"Race is starting in {20 - roundTime:0.00}", true);
+                                _racingMessageId = Shelter.Chat.System("Race is starting soon");
+                            Shelter.Chat.Edit(_racingMessageId, $"Race is starting in {20 - roundTime:0.00}", true);
                         }
                         else if (!startRacing)
                         {
-                            Mod.Interface.Chat.EditMessage(_racingMessageId, "Race started.", false);
+                            Shelter.Chat.Edit(_racingMessageId, "Race started.", false);
                             _racingMessageId = null;
 
                             startRacing = true;
@@ -835,16 +836,16 @@ public partial class GameManager : Photon.MonoBehaviour
             pauseWaitTime -= Time.deltaTime * 1000000f;
             _timeSincePause += Time.deltaTime * 1000000f;
             if (pauseWaitTime <= 3f)
-                Mod.Interface.Chat.EditMessage(_pauseMessageId, $"Pause will end in {pauseWaitTime} seconds.", true);
+                Shelter.Chat.Edit(_pauseMessageId, $"Pause will end in {pauseWaitTime} seconds.", true);
             else 
-                Mod.Interface.Chat.EditMessage(_pauseMessageId, $"Game paused for {_timeSincePause}.", true);
+                Shelter.Chat.Edit(_pauseMessageId, $"Game paused for {_timeSincePause}.", true);
             
             if (pauseWaitTime <= 1f)
                 Camera.main.farClipPlane = 1500f;
             
             if (pauseWaitTime <= 0f)
             {
-                Mod.Interface.Chat.EditMessage(_pauseMessageId, "Pause ended.", false);
+                Shelter.Chat.Edit(_pauseMessageId, "Pause ended.", false);
                 _pauseMessageId = null;
                 pauseWaitTime = 0f;
                 Time.timeScale = 1f;
@@ -1590,7 +1591,7 @@ public partial class GameManager : Photon.MonoBehaviour
             {
                 photonView.RPC(Rpc.OnGameLose, PhotonTargets.Others, titanScore);
                 if (settings.EnableChatFeed)
-                    Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game lose).", roundTime);
+                    Shelter.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game lose).", roundTime);
             }
         }
     }
@@ -1613,7 +1614,7 @@ public partial class GameManager : Photon.MonoBehaviour
                     {
                         photonView.RPC(Rpc.OnGameWin, PhotonTargets.Others, 0);
                         if (settings.EnableChatFeed)
-                            Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game lose).", roundTime);
+                            Shelter.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game lose).", roundTime);
                     }
 
                     break;
@@ -1624,7 +1625,7 @@ public partial class GameManager : Photon.MonoBehaviour
                         object[] objArray3 = { teamWinner };
                         photonView.RPC(Rpc.OnGameWin, PhotonTargets.Others, objArray3);
                         if (settings.EnableChatFeed)
-                            Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game lose).", roundTime);
+                            Shelter.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game lose).", roundTime);
                     }
                     teamScores[teamWinner - 1]++;
                     break;
@@ -1635,7 +1636,7 @@ public partial class GameManager : Photon.MonoBehaviour
                         object[] objArray4 = { humanScore };
                         photonView.RPC(Rpc.OnGameWin, PhotonTargets.Others, objArray4);
                         if (settings.EnableChatFeed)
-                            Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game lose).", roundTime);
+                            Shelter.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game lose).", roundTime);
                     }
 
                     break;
@@ -1699,7 +1700,7 @@ public partial class GameManager : Photon.MonoBehaviour
             }
             
             if (reason != string.Empty)
-                Mod.Interface.Chat.System("Player " + player.ID + " was autobanned. Reason:" + reason);
+                Shelter.Chat.System("Player " + player.ID + " was autobanned. Reason:" + reason);
         }
     }
 
@@ -3385,11 +3386,11 @@ public partial class GameManager : Photon.MonoBehaviour
   
     public void RestartGame(bool masterclientSwitched = false)
     {
-        Mod.Interface.Chat.EditMessage(_endingMessageId, "Restart aborted: Room restarted", false);
+        Shelter.Chat.Edit(_endingMessageId, "Restart aborted: Room restarted");
         _endingMessageId = null;
-        Mod.Interface.Chat.EditMessage(_racingMessageId, "Racing aborted: Room restarted", false);
+        Shelter.Chat.Edit(_racingMessageId, "Racing aborted: Room restarted");
         _racingMessageId = null;
-        Mod.Interface.Chat.EditMessage(_pauseMessageId, "Pause aborted: Room restarted", false);
+        Shelter.Chat.Edit(_pauseMessageId, "Pause aborted: Room restarted");
         _pauseMessageId = null;
 
         PVPtitanScore = 0;

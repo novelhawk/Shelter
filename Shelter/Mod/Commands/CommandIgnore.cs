@@ -18,11 +18,11 @@ namespace Mod.Commands
             {
                 case "list":
                 {
-                    Chat.System("Ignored players:");
+                    Shelter.Chat.System("Ignored players:");
                     foreach (var p in PhotonNetwork.PlayerList)
                     {
                         if (p.IsIgnored)
-                            Chat.System(p);
+                            Shelter.Chat.System(p);
                     }
                     break;
                 }
@@ -37,9 +37,9 @@ namespace Mod.Commands
                         throw new PlayerNotFoundException(id);
                     
                     if (!player.IsIgnored)
-                        Chat.System("Player {0} is now ignored.", player);
+                        Shelter.Chat.System("Player {0} is now ignored.", player);
                     else
-                        Chat.System("Player {0} was already ignored", player);
+                        Shelter.Chat.System("Player {0} was already ignored", player);
                     
                     player.Ignore();
                     break;
@@ -55,9 +55,9 @@ namespace Mod.Commands
                         throw new PlayerNotFoundException(args[1]);
 
                     if (player.IsIgnored)
-                        Chat.System("Player {0} is no longer ignored.", player);
+                        Shelter.Chat.System("Player {0} is no longer ignored.", player);
                     else
-                        Chat.System("Player {0} is not ignored.", player);
+                        Shelter.Chat.System("Player {0} is not ignored.", player);
 
                     player.IsIgnored = false;
                     break;

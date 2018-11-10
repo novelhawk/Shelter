@@ -6,8 +6,8 @@ namespace Mod.Exceptions
     {
         public CommandArgumentException(string command, string usage)
         {
-            Chat.System("Error in '{0}' args", command);
-            Chat.System("Usage: {0}", usage);
+            Shelter.Chat.System("Error in '{0}' args", command);
+            Shelter.Chat.System("Usage: {0}", usage);
         }
     }
 }

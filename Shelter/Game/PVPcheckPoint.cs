@@ -89,7 +89,7 @@ public class PVPcheckPoint : Photon.MonoBehaviour, IComparable
                     if (GameManager.instance.checkpoint != gameObject)
                     {
                         GameManager.instance.checkpoint = gameObject;
-                        Chat.System("<color=#A8FF24>Respawn point changed to point" + this.id + "</color>");
+                        Shelter.Chat.System("<color=#A8FF24>Respawn point changed to point" + this.id + "</color>");
                     }
                     break;
                 }
@@ -105,7 +105,7 @@ public class PVPcheckPoint : Photon.MonoBehaviour, IComparable
                     if (GameManager.instance.checkpoint != gameObject)
                     {
                         GameManager.instance.checkpoint = gameObject;
-                        Chat.System("<color=#A8FF24>Respawn point changed to point" + this.id + "</color>");
+                        Shelter.Chat.System("<color=#A8FF24>Respawn point changed to point" + this.id + "</color>");
                     }
                     break;
                 }

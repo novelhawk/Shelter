@@ -26,7 +26,7 @@ namespace Mod.Commands
             var hex = args[0];
             if (hex.Length > byte.MaxValue * 2)
             {
-                Chat.System("Cannot deserialize payload: Longer than 256 bytes.");
+                Shelter.Chat.System("Cannot deserialize payload: Longer than 256 bytes.");
                 return;
             }
             
@@ -47,14 +47,14 @@ namespace Mod.Commands
             
             if (!(PhotonNetwork.networkingPeer.peerBase is EnetPeer peer))
             {
-                Chat.System("Peer is not available.");
+                Shelter.Chat.System("Peer is not available.");
                 return;
             }
             
             for (int i = 0; i < times; i++)
                 peer.CreateAndEnqueueCommand(0x6, bytes, 0x0);
             
-            Chat.System("Sent payload ({0} bytes) to {1} {2} times", bytes.Length, player?.ToString() ?? "everyone", times);
+            Shelter.Chat.System("Sent payload ({0} bytes) to {1} {2} times", bytes.Length, player?.ToString() ?? "everyone", times);
         }
 
         [Conditional("RELEASE")] // Development version allows unencrypted data.

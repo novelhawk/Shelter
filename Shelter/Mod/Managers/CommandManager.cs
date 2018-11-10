@@ -40,7 +40,7 @@ namespace Mod.Managers
             }
             catch (ArgumentException)
             {
-                Chat.System("Errore degli argomenti del comando " + command.CommandName);
+                Shelter.Chat.System("Errore degli argomenti del comando " + command.CommandName);
                 return null;
             }
             catch (CustomException)

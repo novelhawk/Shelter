@@ -16,13 +16,13 @@ namespace Mod.Commands
             {
                 if (GameManager.banHash.Count > 0)
                 {
-                    Chat.System("Banned players: ");
+                    Shelter.Chat.System("Banned players: ");
                     foreach (var entry in GameManager.banHash)
-                        Chat.System("[{0}] {1}", entry.Key, entry.Value);
+                        Shelter.Chat.System("[{0}] {1}", entry.Key, entry.Value);
                 }
                 else
                 {
-                    Chat.System("The banlist is empty");
+                    Shelter.Chat.System("The banlist is empty");
                 }
 
                 return;
@@ -32,7 +32,7 @@ namespace Mod.Commands
                 throw new PlayerNotFoundException(args[0]);
             
             GameManager.instance.KickPlayerRC(player, true, string.Empty);
-            Chat.System("{0} has been banned", player);
+            Shelter.Chat.System("{0} has been banned", player);
         }
     }
 }

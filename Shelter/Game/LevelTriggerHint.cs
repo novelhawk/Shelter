@@ -1,13 +1,14 @@
 using Game;
 using Mod;
 using Mod.Interface;
+using Mod.Interface.Components;
 using Mod.Keybinds;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace
 public class LevelTriggerHint : MonoBehaviour
 {
-    private static int? _messageId;
+    private static ChatMessage? _messageId;
     
     public string content;
     public HintType myhint;
@@ -17,8 +18,8 @@ public class LevelTriggerHint : MonoBehaviour
         if (other.gameObject.CompareTag("Player"))
         {
             if (_messageId == null)
-                _messageId = Chat.System("");            
-            Chat.EditMessage(_messageId, content, true);
+                _messageId = Shelter.Chat.Create();            
+            Shelter.Chat.Edit(_messageId, content, true);
         }
     }
 

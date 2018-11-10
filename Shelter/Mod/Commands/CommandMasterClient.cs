@@ -13,7 +13,7 @@ namespace Mod.Commands
             if (!Player.TryParse(args[0], out Player player))
                 player = Player.Self;
             PhotonNetwork.SetMasterClient(player);
-            Chat.System("{0} is now MasterClient.", player);
+            Shelter.Chat.System("{0} is now MasterClient.", player);
         }
     }
 }

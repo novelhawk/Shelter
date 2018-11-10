@@ -14,7 +14,7 @@ namespace Mod.Commands
                 throw new PlayerNotFoundException();
             
             GameManager.instance.KickPlayerRC(player, false, string.Empty);
-            Chat.System("Il player è stato kickato");
+            Shelter.Chat.System("Il player è stato kickato");
         }
     }
 }

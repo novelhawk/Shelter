@@ -136,15 +136,15 @@ public partial class GameManager
             pauseWaitTime = 100000f;
             _timeSincePause = 0f;
             Time.timeScale = 1E-06f;
-            _pauseMessageId = Mod.Interface.Chat.SendMessage($"{info.sender.Properties.HexName} paused the game.");
+            _pauseMessageId = Shelter.Chat.SendMessage($"{info.sender.Properties.HexName} paused the game.");
         }
         else
         {
             pauseWaitTime = 3f;
             if (!_pauseMessageId.HasValue)
-                Mod.Interface.Chat.SendMessage($"{info.sender.Properties.HexName} unpaused the game.");
+                Shelter.Chat.SendMessage($"{info.sender.Properties.HexName} unpaused the game.");
             else
-                Mod.Interface.Chat.EditMessage(_pauseMessageId, $"{info.sender.Properties.HexName} unpaused the game.", false);
+                Shelter.Chat.Edit(_pauseMessageId, $"{info.sender.Properties.HexName} unpaused the game.");
         }
     }
 
@@ -313,9 +313,9 @@ public partial class GameManager
         isLosing = true;
         titanScore = score;
         gameEndCD = gameEndTotalCDtime;
-        _endingMessageId = Mod.Interface.Chat.System("Game is restarting soon.");
+        _endingMessageId = Shelter.Chat.System("Game is restarting soon.");
         if (settings.EnableChatFeed)
-            Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game lose).", roundTime);
+            Shelter.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game lose).", roundTime);
     }
 
     [RPC]
@@ -349,13 +349,13 @@ public partial class GameManager
                 gameEndCD = gameEndTotalCDtime;
                 break;
         }
-        _endingMessageId = Mod.Interface.Chat.System("Game is restarting soon.");
+        _endingMessageId = Shelter.Chat.System("Game is restarting soon.");
 
         if (settings.EnableChatFeed)
-            Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game win).", roundTime);
+            Shelter.Chat.System("<color=#FFC000>({0:F2})</color> Round ended (game win).", roundTime);
 
         if (!(Equals(info.sender, PhotonNetwork.MasterClient) || info.sender.IsLocal))
-            Mod.Interface.Chat.System("Round end sent from Player " + info.sender.ID);
+            Shelter.Chat.System("Round end sent from Player " + info.sender.ID);
     }
 
     [RPC]
@@ -633,9 +633,9 @@ public partial class GameManager
             return;
         
         if (sender != string.Empty)
-            Mod.Interface.Chat.AddMessage($"{info.sender.Properties.HexName}: {content}", info.sender);
+            Shelter.Chat.AddMessage(info.sender, $"{info.sender.Properties.HexName}: {content}");
         else 
-            Mod.Interface.Chat.AddMessage(content, info.sender);
+            Shelter.Chat.AddMessage(info.sender, content);
     }
 
     [RPC]
@@ -692,7 +692,7 @@ public partial class GameManager
         obj3.GetComponent<KillInfoComponent>().Show(t1, killer, t2, victim, dmg);
         killInfoGO.Add(obj3);
         if (settings.EnableChatFeed)
-            Mod.Interface.Chat.System("<color=#FFC000>({0:F2})</color> {1} killed {2} for {3} damage.", 
+            Shelter.Chat.System("<color=#FFC000>({0:F2})</color> {1} killed {2} for {3} damage.", 
                 roundTime, 
                 killer.HexColor(), 
                 victim.HexColor(), 
@@ -827,6 +827,6 @@ public partial class GameManager
     [UsedImplicitly]
     private void ChatPM(string sender, string content, PhotonMessageInfo info) //TODO: Customize PMs message
     {
-        Mod.Interface.Chat.ReceivePrivateMessage($"<color=#1068D4>PM</color><color=#108CD4>></color> <color=#{Mod.Interface.Chat.SystemColor}>{info.sender.Properties.HexName}: {content}</color>", info.sender);
+        Shelter.Chat.ReceivePrivateMessage($"<color=#1068D4>PM</color><color=#108CD4>></color> <color=#{Mod.Interface.Chat.SystemColor}>{info.sender.Properties.HexName}: {content}</color>", info.sender);
     }
 }
