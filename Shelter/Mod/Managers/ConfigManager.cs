@@ -12,15 +12,23 @@ namespace Mod.Managers
     public class ConfigManager<T>
     {
         private readonly string _file;
+        private readonly JsonSerializerSettings _settings;
         
         public ConfigManager(string file)
         {
             _file = file;
+            _settings = null;
+        }
+
+        public ConfigManager(string file, JsonSerializerSettings settings)
+        {
+            _file = file;
+            _settings = settings;
         }
         
         public string Serialize(T obj)
         {
-            return JsonConvert.SerializeObject(obj, typeof(T), Formatting.None, new JsonSerializerSettings());
+            return JsonConvert.SerializeObject(obj, typeof(T), Formatting.None, _settings);
         }
 
         public T Deserialize()
@@ -32,7 +40,7 @@ namespace Mod.Managers
         {
             try
             {
-                return JsonConvert.DeserializeObject<T>(json);
+                return JsonConvert.DeserializeObject<T>(json, _settings);
             }
             catch (Exception e)
             {
