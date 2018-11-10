@@ -1,12 +1,13 @@
 namespace Photon.Enums
 {
-    public enum PhotonTargets
+    public enum PhotonTargets // Do not change enums position
     {
-        All,
-        Others,
         MasterClient,
-        AllBuffered,
+        Others,
         OthersBuffered,
+        
+        All,
+        AllBuffered,
         AllViaServer,
         AllBufferedViaServer
     }

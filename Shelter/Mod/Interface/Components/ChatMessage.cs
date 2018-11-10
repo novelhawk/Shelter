@@ -1,27 +1,61 @@
-﻿namespace Mod.Interface.Components
+﻿using System.Net.Configuration;
+using System.Text;
+
+namespace Mod.Interface.Components
 {
     public struct ChatMessage
     {
-        public string Message { get; }
-        public Player Sender { get; }
-        public long Time { get; }
-        public bool IsForemost { get; set; }
-        public bool LocalOnly => Sender == null;
+        private const long MessageTimeout = 10_000;
 
-        public ChatMessage(object message, Player sender = null)
+        private readonly int _id;
+        private readonly Player _sender;
+        private readonly long _time;
+
+        public int ID => _id;
+        public string Content { private get; set; }
+        public bool IsVisible => Shelter.Stopwatch.ElapsedMilliseconds - _time < MessageTimeout;
+        public bool IsForemost { get; set; }
+
+        public ChatMessage(int id, Player sender, string content, bool isForemost)
         {
-            Message = Utility.CheckHTMLTags(message.ToString());
-            Sender = sender;
-            IsForemost = false;
-            Time = Shelter.Stopwatch.ElapsedMilliseconds;
+            _id = id;
+            
+            _sender = sender;
+            Content = content;
+            IsForemost = isForemost;
+            
+            _time = Shelter.Stopwatch.ElapsedMilliseconds;
         }
 
-        public ChatMessage(object message, Player sender, long time)
+        public ChatMessage(int id)
         {
-            Message = Utility.CheckHTMLTags(message.ToString());
-            Sender = sender;
+            _id = id;
+
+            _sender = null;
+            Content = null;
             IsForemost = false;
-            Time = time;
+
+            _time = Shelter.Stopwatch.ElapsedMilliseconds;
+        }
+
+
+        public override string ToString()
+        {
+            var capacity = 0;
+            
+            if (_sender != null)
+                capacity += Utility.IDLength(_sender.ID) + 3;
+            
+            if (Content == null)
+                capacity += 12; // "Null message"
+            else
+                capacity = Content.Length;
+            
+            StringBuilder builder = new StringBuilder(capacity);
+            if (_sender != null)
+                builder.AppendFormat("[{0}] ", _sender.ID);
+            builder.Append(Content ?? "Null message");
+            return builder.ToString();
         }
     }
 }

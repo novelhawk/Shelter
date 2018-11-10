@@ -13,6 +13,32 @@ namespace Mod
         {
             return PlayerPrefs.GetInt(key, 0) != 0;
         }
+
+        /// <summary>
+        /// Used to compute the length of a <see cref="Player"/>'s ID
+        /// </summary>
+        /// <param name="id">The ID of a <see cref="Player"/></param>
+        /// <returns>Number of digits the ID contains</returns>
+        public static int IDLength(int id)
+        {
+            // O(1) algorithm, trying to avoid string conversion
+            if (id < 10)
+                return 1;
+            if (id < 100)
+                return 2;
+            if (id < 1000)
+                return 3;
+
+            // If ID has more than 3 digits, compute using O(n) algorithm
+            id /= 1000;
+            int n = 3;
+            do
+            {
+                id /= 10;
+                n++;
+            } while (id > 0);
+            return n;
+        }
         
         public static bool IsValidImageUrl(string url)
         {

@@ -39,6 +39,7 @@ namespace Mod
         private static EventManager _eventManager;
         private static AnimationManager _animationManager;
         private static ProfileManager _profileManager;
+        private static ChatManager _chatManager;
 
         public Shelter()
         {
@@ -57,6 +58,7 @@ namespace Mod
             _profileManager = new ProfileManager();
             _inputManager = new InputManager();
             _animationManager = new AnimationManager();
+            _chatManager = new ChatManager();
             ModuleManager.LoadModules();
             
             Log("Shelter mod initialized.");
@@ -214,5 +216,6 @@ namespace Mod
         public static AnimationManager AnimationManager => _animationManager;
         public static InterfaceManager InterfaceManager => _interfaceManager;
         public static CommandManager CommandManager => _commandManager;
+        public static ChatManager Chat => _chatManager;
     }
 }
