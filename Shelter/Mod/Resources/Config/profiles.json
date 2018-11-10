@@ -6,6 +6,6 @@
     "guild": "Guild",
     "chatName": "ChatName",
     "friendName": "",
-    "chatFormat": "$(chatName): $(message)"
+    "chatFormat": "$(chatName): $(content)"
   }]
 }

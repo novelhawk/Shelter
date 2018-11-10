@@ -1,4 +1,6 @@
-﻿using Mod.Profiles;
+﻿using System.Collections.Generic;
+using Mod.Profiles;
+using Newtonsoft.Json;
 
 namespace Mod.Managers
 {
@@ -9,7 +11,13 @@ namespace Mod.Managers
 
         public ProfileManager()
         {
-            _file = new ConfigManager<ProfileFile>(ProfileFile.Name);
+            var settings = new JsonSerializerSettings
+            {
+                NullValueHandling = NullValueHandling.Ignore,
+                Converters = new List<JsonConverter> {new ProfileConverter()}
+            };
+            
+            _file = new ConfigManager<ProfileFile>(ProfileFile.Name, settings);
             Load();
         }
 
