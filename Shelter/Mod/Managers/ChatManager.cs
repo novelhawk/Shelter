@@ -21,15 +21,14 @@ namespace Mod.Managers
         public int CurrentIndex = MAX_MESSAGES - 1;
         public int Elements = 0;
 
-        /// <inheritdoc cref="AddMessage(Player, object, bool)"/>
-        public ChatMessage AddMessage(object message) => AddMessage(null, message);
+        public ChatMessage AddMessage(in object message) => AddMessage(null, message);
         /// <summary>
         /// Add a message to the ChatBox
         /// </summary>
         /// <param name="sender">The sender of the message</param>
         /// <param name="message">The <see cref="string"/> message content</param>
         /// <param name="isForemost">Specifies whether the message should be pinned</param>
-        public ChatMessage AddMessage(Player sender, object message, bool isForemost = false)
+        public ChatMessage AddMessage(in Player sender, in object message, in bool isForemost = false)
         {
             var msg = Utility.CheckHTMLTags(message.ToString());
             var ret = Messages[CurrentIndex--] = new ChatMessage(CurrentIndex, sender, msg, isForemost);
@@ -47,16 +46,16 @@ namespace Mod.Managers
             CurrentIndex = MAX_MESSAGES - 1;
         }
 
-        public ChatMessage SendMessage(string message) => SendMessage(message, string.Empty);
-        public ChatMessage SendMessage(string message, string sender) => SendMessage(message, sender, PhotonTargets.All);
+        public ChatMessage SendMessage(in string message) => SendMessage(message, string.Empty);
+        public ChatMessage SendMessage(in string message, in string sender) => SendMessage(message, sender, PhotonTargets.All);
 
-        public ChatMessage SendMessage(string message, string sender, Player player)
+        public ChatMessage SendMessage(in string message, in string sender, in Player player)
         {
             GameManager.instance.photonView.RPC(Rpc.Chat, player, message, sender);
             return AddMessage(Player.Self, message);
         }
         
-        public ChatMessage SendMessage(string message, string sender, PhotonTargets target)
+        public ChatMessage SendMessage(in string message, in string sender, PhotonTargets target)
         {
             ChatMessage ret = default;
             if (target >= PhotonTargets.All)
@@ -79,14 +78,14 @@ namespace Mod.Managers
             return ret;
         }
 
-        public void Edit(ChatMessage? message, string content, bool isForemost = false)
+        public void Edit(ChatMessage? message, in string content, in bool isForemost = false)
         {
             if (message == null)
                 return;
             Edit(message.Value, content, isForemost);
         }
         
-        public void Edit(ChatMessage message, string content, bool isForemost = false) 
+        public void Edit(ChatMessage message, in string content, in bool isForemost = false) 
         {
             message.IsForemost = isForemost;
             message.Content = content;
@@ -107,7 +106,7 @@ namespace Mod.Managers
         /// </summary>
         /// <param name="content">Message content</param>
         /// <returns>Formatted message</returns>
-        public static string MessageFormat(string content)
+        public static string MessageFormat(in string content)
         {
             var profile = Shelter.Profile;
 
@@ -142,7 +141,7 @@ namespace Mod.Managers
         /// <param name="message"><see cref="ChatMessage"/> that will get drawn</param>
         /// <param name="dist">Distance between the bottom of the screen and the message</param>
         /// <param name="style">Label's <see cref="GUIStyle"/></param>
-        public static void DrawMessage(ChatMessage message, float dist, GUIStyle style)
+        public static void DrawMessage(in ChatMessage message, in float dist, in GUIStyle style)
         {
             const float x = 0;
             const float width = 500;
