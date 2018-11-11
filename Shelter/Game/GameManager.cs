@@ -659,7 +659,7 @@ public partial class GameManager : Photon.MonoBehaviour
                         if (gameEndCD <= 0f)
                         {
                             gameEndCD = 0f;
-                            Shelter.Chat.Edit(_endingMessageId, "Game is now restarting.", false);
+                            Shelter.Chat.Edit(_endingMessageId, "Game is now restarting.");
                             _endingMessageId = null;
                             if (PhotonNetwork.isMasterClient)
                                 RestartGameRC();
