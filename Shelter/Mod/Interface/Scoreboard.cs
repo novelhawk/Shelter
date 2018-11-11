@@ -19,14 +19,97 @@ namespace Mod.Interface
         protected override void Render()
         {
             if (!PhotonNetwork.inRoom) return;
-            SmartRect rect = new SmartRect(0, -14, Screen.width * 0.35f, 20);
-            foreach (var player in PhotonNetwork.PlayerList) // .OrderBy(x => x.ID).ToList()
-                GUI.Label(rect.OY(15), Entry(player, _animator.LastColor.ToHex()));
-            
+
+            _maxWidth = 0;
+            float y = 15;
+            foreach (var player in PhotonNetwork.PlayerList) // O(n)
+            {
+                DrawPlayerInfo(player, y);
+                y += 15;
+            }
+
+            DrawLegenda();
+            y = 15;
+            foreach (var player in PhotonNetwork.PlayerList) // O(n)
+            {
+                DrawPlayerScores(player, y);
+                y += 15;
+            }
+        
             if (Time.time - _lastAnimationUpdate < 0.05f)
                 return;
             _animator.ComputeNext();
             _lastAnimationUpdate = Time.time;
+        }
+
+        private void DrawLegenda()
+        {
+            GUI.Label(new Rect(0, 0, _maxWidth, 20), "  Player Info", new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter});
+            GUI.Label(new Rect(_maxWidth + 20, 0, Screen.width, 20), " K/D       max    avg    tot");
+        }
+
+        private void DrawPlayerInfo(in Player player, in float y)
+        {
+            // Compiler computes all const string concatenation.
+            // It looks ugly tho; If we want performance we can switch to it
+            const string SymbolsColor = "#A97AFF";
+            const string IDColor = "#94DC79";
+            const string MCColor = "#8DFF00";
+            const string GuestColor = "#A0A0A0BB";
+            
+            
+            StringBuilder builder = new StringBuilder(120);
+            builder.AppendFormat("<color={0}>[<b><color={1}>{2:00}</color></b>] ", SymbolsColor, IDColor, player.ID);
+
+            builder.Append(ModToString(player.Mod, _animator.LastColor.ToHex()));
+            builder.Append(HumanTypeToString(player));
+            if (player.IsMasterClient)
+                builder.Append("|<b><color=" + MCColor + ">MC</color></b>| ");
+            builder.AppendFormat("<b><color={0}>{1}</color></b> ", GuestColor, player.Properties.HexName ?? "Unknown");
+            if (!string.IsNullOrEmpty(player.FriendName))
+                builder.AppendFormat("| {0} ", player.FriendName);
+            builder.Append("</color>");
+
+            var playerInfo = builder.ToString();
+
+            var content = new GUIContent(playerInfo);
+            GUI.Label(new Rect(0, y, Screen.width * 0.25f, Screen.height * 0.45f), content);
+            
+            GUI.skin.label.CalcMinMaxWidth(content, out _, out float max);
+            _maxWidth = Mathf.Max(max, _maxWidth);
+        }
+
+        private float _maxWidth;
+        private void DrawPlayerScores(in Player player, in float y)
+        {
+            const string NumbersColor = "#5BC0FF";
+            const string TextColor = "#A97AFF";
+            
+            StringBuilder builder = new StringBuilder();
+            builder.Append("<color=" + TextColor + ">");
+            {
+                builder.AppendFormat("<color={0}>{1,2}</color>/<color={0}>{2,-2}</color>", NumbersColor, player.Properties.Kills, 
+                                                                                                    player.Properties.Deaths);
+                builder.Append(' ', 3);
+
+                if (player.Properties.MaxDamage > 0)
+                {
+                    builder.AppendFormat("<color={0}>{1,6}</color>", NumbersColor, ReadableDamage(player.Properties.MaxDamage));
+                    builder.Append(' ');
+                }
+
+                if (player.Properties.Kills > 1 && player.Properties.TotalDamage > 0)
+                {
+                    builder.AppendFormat("<color={0}>{1,6}</color>", NumbersColor, ReadableDamage(player.Properties.TotalDamage / player.Properties.Kills));
+                    builder.Append(' ');
+
+                    builder.AppendFormat("<color={0}>{1,6}</color>", NumbersColor, ReadableDamage(player.Properties.TotalDamage));
+                    builder.Append(' ');
+                }
+            }
+            builder.Append("</color>");
+            
+            GUI.Label(new Rect(_maxWidth + 20, y, Screen.width * 0.25f, 20), builder.ToString());
         }
 
         protected override void OnHide()
@@ -34,7 +117,7 @@ namespace Mod.Interface
             _animator = null;
         }
 
-        private static string ModToString(CustomMod mod, string color)
+        private static string ModToString(in CustomMod mod, in string color)
         {
             switch (mod)
             {
@@ -91,34 +174,6 @@ namespace Mod.Interface
             if (damage > 1000)
                 return $"{damage / 1000f:F1} k";
             return damage.ToString();
-        }
-
-        private static string Entry(in Player player, string color)
-        {
-            StringBuilder builder = new StringBuilder();
-            builder.AppendFormat("<color=#672A42>[<b><color=#DC3052>{0}</color></b>] ", player.ID);
-            
-            // Player info
-            if (player.IsMasterClient)
-                builder.Append("|<b><color=#8DFF00>MC</color></b>| ");
-            builder.Append(HumanTypeToString(player));
-            builder.Append(ModToString(player.Mod, color));
-            builder.AppendFormat("<b><color=#6E8EEB>{0}</color></b> ", player.Properties.HexName ?? "Unknown");
-            if (!string.IsNullOrEmpty(player.FriendName))
-                builder.AppendFormat("| {0} ", player.FriendName);
-            
-            // Average compute
-            var average = 0;
-            if (player.Properties.Kills > 0)
-                average = player.Properties.TotalDamage / player.Properties.Kills;
-            
-            // KDA            
-            builder.AppendFormat("<color=#31A5E4>{0}</color>|", player.Properties.Kills);
-            builder.AppendFormat("<color=#31A5E4>{0}</color>|", player.Properties.Deaths);
-            builder.AppendFormat("<color=#31A5E4>{0}</color>|", ReadableDamage(player.Properties.MaxDamage));
-            builder.AppendFormat("<color=#31A5E4>{0}</color>|", ReadableDamage(average));
-            builder.AppendFormat("<color=#31A5E4>{0}</color></color>", ReadableDamage(player.Properties.TotalDamage));
-            return builder.ToString();
         }
     }
 }
