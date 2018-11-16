@@ -10,11 +10,11 @@ namespace Mod
         public abstract bool IsAbusive { get; }
         public abstract bool HasGUI { get; }
         
-        public bool Enabled => _isEnabled;
-        public bool Visible;
-        
         protected string PlayerPref => $"MOD|{ID}";
+        private bool _visible;
         private bool _isEnabled;
+
+        public bool Enabled => _isEnabled;
         
         protected virtual void OnModuleEnable() {}
         protected virtual void OnModuleDisable() {}
@@ -25,7 +25,7 @@ namespace Mod
         public virtual void Render(Rect windowRect) {}
         protected virtual void OnGuiClose() {}
 
-        public void Start()
+        private void Start()
         {
             _isEnabled = PlayerPrefs.GetString(PlayerPref, "False") == "True";
             if (_isEnabled)
@@ -37,6 +37,18 @@ namespace Mod
             if (_isEnabled)
                 OnModuleUpdate();
         }
+
+        private void OnStatusUpdate()
+        {
+            if (_isEnabled)
+                OnModuleEnable();
+            else
+                OnModuleDisable();
+
+            OnModuleStatusChange(_isEnabled);
+        }
+        
+        #region Public methods
 
         public void Enable()
         {
@@ -67,30 +79,22 @@ namespace Mod
 
         public void Open()
         {
-            if (Visible)
+            if (_visible)
                 return;
             
-            Visible = true;
+            _visible = true;
             OnGuiOpen();
         }
 
         public void Close()
         {
-            if (!Visible)
+            if (!_visible)
                 return;
             
-            Visible = false;
+            _visible = false;
             OnGuiClose();
         }
 
-        private void OnStatusUpdate()
-        {
-            if (_isEnabled)
-                OnModuleEnable();
-            else
-                OnModuleDisable();
-
-            OnModuleStatusChange(_isEnabled);
-        }
+        #endregion
     }
 }
