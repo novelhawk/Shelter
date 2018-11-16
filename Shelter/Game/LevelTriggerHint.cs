@@ -53,7 +53,7 @@ public class LevelTriggerHint : MonoBehaviour
             }
             case HintType.Jump:
                 this.content = string.Format("Press <color=#F7D358>{0}</color> to Jump.",
-                    Shelter.InputManager[InputAction.Jump]);
+                    Shelter.InputManager[InputAction.Gas]);
                 break;
 
             case HintType.WallJump:

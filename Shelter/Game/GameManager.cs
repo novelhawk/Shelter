@@ -594,7 +594,7 @@ public partial class GameManager : Photon.MonoBehaviour
                         UnityEngine.Camera.main.GetComponent<MouseLook>().disable = true;
                     }
                 }
-                if (Shelter.InputManager.IsDown(InputAction.MenuKey) && !_isVisible)
+                if (Shelter.InputManager.IsDown(InputAction.OpenMenu) && !_isVisible)
                 {
                     Screen.showCursor = true;
                     Screen.lockCursor = false;

@@ -13,7 +13,7 @@ public class SpectatorMovement : MonoBehaviour
             return;
 
         float speed = 100;
-        if (Shelter.InputManager.IsKeyPressed(InputAction.Jump))
+        if (Shelter.InputManager.IsKeyPressed(InputAction.Gas))
             speed *= 4f;
         if (Shelter.InputManager.IsKeyPressed(InputAction.SlowMovement))
             speed *= 0.3f;

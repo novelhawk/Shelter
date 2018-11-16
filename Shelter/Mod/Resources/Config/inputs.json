@@ -19,7 +19,7 @@
   "Back": "S" ,
   "Right": "D",
   "Left": "A",
-  "Jump": "LeftShift",
+  "Gas": "LeftShift",
   
   "EnterCannon": "Q",
   "SlowMovement": "LeftAlt",
@@ -34,7 +34,7 @@
   "TitanAntiAE": "Mouse0",
   "TitanBite": "Mouse1",
 
-  "MenuKey": "P",
+  "OpenMenu": "P",
   "OpenNavigator": "RightControl",
   
   "ReelIn": "Mouse4",

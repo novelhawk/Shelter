@@ -604,7 +604,7 @@ public partial class GameManager
 
     private void Update()
     {
-        if (Shelter.InputManager.IsDown(InputAction.MenuKey))
+        if (Shelter.InputManager.IsDown(InputAction.OpenMenu))
             _isVisible = !_isVisible;
         
         //        if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && GameObject.Find("LabelNetworkStatus") != null)

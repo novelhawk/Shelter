@@ -1089,7 +1089,7 @@ public class HERO : Photon.MonoBehaviour
                         {
                             to = to * 2f;
                         }
-                        if (Vector3.Angle(this.baseRigidBody.velocity, to) > 90f && Shelter.InputManager.IsKeyPressed(InputAction.Jump))
+                        if (Vector3.Angle(this.baseRigidBody.velocity, to) > 90f && Shelter.InputManager.IsKeyPressed(InputAction.Gas))
                         {
                             flag3 = true;
                             flag2 = true;
@@ -1132,7 +1132,7 @@ public class HERO : Photon.MonoBehaviour
                         {
                             vector5 = vector5 * 2f;
                         }
-                        if (Vector3.Angle(this.baseRigidBody.velocity, vector5) > 90f && Shelter.InputManager.IsKeyPressed(InputAction.Jump))
+                        if (Vector3.Angle(this.baseRigidBody.velocity, vector5) > 90f && Shelter.InputManager.IsKeyPressed(InputAction.Gas))
                         {
                             flag4 = true;
                             flag2 = true;
@@ -1453,7 +1453,7 @@ public class HERO : Photon.MonoBehaviour
                             this.playAnimation("air_rise");
                         }
                     }
-                    else if (!(this.State != HeroState.Idle || !this.isPressDirectionTowardsHero(x, z) || Shelter.InputManager.IsKeyPressed(InputAction.Jump) || Shelter.InputManager.IsKeyPressed(InputAction.LeftHook) || Shelter.InputManager.IsKeyPressed(InputAction.RightHook) || Shelter.InputManager.IsKeyPressed(InputAction.BothHooks) || !this.IsFrontGrounded() || this.baseAnimation.IsPlaying("wallrun") || this.baseAnimation.IsPlaying("dodge")))
+                    else if (!(this.State != HeroState.Idle || !this.isPressDirectionTowardsHero(x, z) || Shelter.InputManager.IsKeyPressed(InputAction.Gas) || Shelter.InputManager.IsKeyPressed(InputAction.LeftHook) || Shelter.InputManager.IsKeyPressed(InputAction.RightHook) || Shelter.InputManager.IsKeyPressed(InputAction.BothHooks) || !this.IsFrontGrounded() || this.baseAnimation.IsPlaying("wallrun") || this.baseAnimation.IsPlaying("dodge")))
                     {
                         this.crossFade("wallrun", 0.1f);
                         this.wallRunTime = 0f;
@@ -1498,7 +1498,7 @@ public class HERO : Photon.MonoBehaviour
                             this.facingDirection = num12;
                             this.targetRotation = Quaternion.Euler(0f, this.facingDirection, 0f);
                         }
-                        if (!flag3 && !flag4 && !this.isMounted && Shelter.InputManager.IsKeyPressed(InputAction.Jump) && this.currentGas > 0f)
+                        if (!flag3 && !flag4 && !this.isMounted && Shelter.InputManager.IsKeyPressed(InputAction.Gas) && this.currentGas > 0f)
                         {
                             if (x != 0f || z != 0f)
                             {
@@ -4330,7 +4330,7 @@ public class HERO : Photon.MonoBehaviour
                         }
                         if (this.grounded && this.State == HeroState.Idle)
                         {
-                            if (Shelter.InputManager.IsKeyPressed(InputAction.Jump) && !this.baseAnimation.IsPlaying("jump") && !this.baseAnimation.IsPlaying("horse_geton"))
+                            if (Shelter.InputManager.IsKeyPressed(InputAction.Gas) && !this.baseAnimation.IsPlaying("jump") && !this.baseAnimation.IsPlaying("horse_geton"))
                             {
                                 this.idle();
                                 this.crossFade("jump", 0.1f);

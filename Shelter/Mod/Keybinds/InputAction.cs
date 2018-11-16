@@ -14,7 +14,6 @@
         ToggleFullscreen,
         LeftHook,
         RightHook,
-        MenuKey,
         Reload,
         Suicide,
         Salute,
@@ -22,7 +21,9 @@
         Back,
         Right,
         Left,
-        Jump,
+        Gas,
+        
+        OpenMenu,
         OpenNavigator,
 
         EnterCannon,
