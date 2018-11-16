@@ -131,8 +131,10 @@ public class PhotonHandler : MonoBehaviour, IPhotonPeerListener
                 {
                     flag = PhotonNetwork.networkingPeer.DispatchIncomingCommands();
                 }
-                catch (NotAllowedException)
-                {}
+                catch (CustomException)
+                {
+                    // do nothing
+                }
                 catch (Exception e)
                 {
                     Shelter.LogConsole("A {0} has been thrown in Photon3Unity3D.dll", LogType.Error, e.GetType().Name);
