@@ -1,7 +1,6 @@
-﻿using System.Net.Configuration;
-using System.Text;
+﻿using System.Text;
 
-namespace Mod.Interface.Components
+namespace Mod
 {
     public struct ChatMessage
     {
