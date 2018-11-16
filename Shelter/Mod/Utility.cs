@@ -18,13 +18,13 @@ namespace Mod
         {
             var regex = Regex.Match(url, @"https?:\/\/(?:www\.)?.*?(\w+)\.\w+\/[^\?]+\.(?:png|jpg|gif|jpeg)(\?.*)?");
             if (!regex.Success) return false;
-            switch (regex.Groups[1].Value) //BUG: Uppercase breaks it
+            switch (regex.Groups[1].Value.ToUpperInvariant())
             {
-                case "imgur":
-                case "tinypic":
-                case "discordapp":
-                case "postimg":
-                case "staticflickr":
+                case "IMGUR":
+                case "TINYPIC":
+                case "DISCORDAPP":
+                case "POSTIMG":
+                case "STATICFLICKR":
                     return true;
                 default:
                     Shelter.LogConsole("{0} is not an allowed domain.", LogType.Warning, regex.Groups[1].Value);
