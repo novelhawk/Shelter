@@ -1,4 +1,5 @@
-﻿using Mod.Profiles;
+﻿using System.Net;
+using Mod.Profiles;
 using UnityEngine;
 
 namespace Mod.Interface
@@ -103,7 +104,8 @@ namespace Mod.Interface
 
         protected override void Render()
         {
-            GUI.DrawTexture(windowRect = new Rect(Screen.width / 2f - _width / 2, Screen.height / 2f - _height / 2, _width, _height), _background);
+            Rect windowRect = new Rect(Screen.width / 2f - _width / 2, Screen.height / 2f - _height / 2, _width, _height);
+            GUI.DrawTexture(windowRect, _background);
             if (!Animation())
                 return;
 

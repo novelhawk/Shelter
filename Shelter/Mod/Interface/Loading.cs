@@ -37,10 +37,10 @@ namespace Mod.Interface
 
         protected override void Render()
         {
-            windowRect = new Rect(Screen.width - 79, Screen.height - 79, 69, 69);
+            Rect rect = new Rect(Screen.width - 79, Screen.height - 79, 69, 69);
 
-            GUIUtility.RotateAroundPivot(rotAngle, new Vector2(windowRect.x + windowRect.width / 2f, windowRect.y + windowRect.height / 2f));
-            GUI.DrawTexture(windowRect, texture);
+            GUIUtility.RotateAroundPivot(rotAngle, new Vector2(rect.x + rect.width / 2f, rect.y + rect.height / 2f));
+            GUI.DrawTexture(rect, texture);
         }
 
         protected override void OnHide()

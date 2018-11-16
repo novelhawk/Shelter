@@ -140,19 +140,20 @@ namespace Mod.Interface
         private bool roomVisible = true;
         protected override void Render()
         {
-            GUI.DrawTexture(windowRect = new Rect(Screen.width / 2f - _width/2, Screen.height / 2f - _height/2, _width, _height), _background);
+            Rect rect;
+            GUI.DrawTexture(rect = new Rect(Screen.width / 2f - _width/2, Screen.height / 2f - _height/2, _width, _height), _background);
             Animation();
             if (!_animationDone) return;
 
-            if (GUI.Button(new Rect(windowRect.x + windowRect.width / 2f - 150, windowRect.y + 50, 100, 40), "Online", _isSingleplayer ? _button : _buttonSelected))
+            if (GUI.Button(new Rect(rect.x + rect.width / 2f - 150, rect.y + 50, 100, 40), "Online", _isSingleplayer ? _button : _buttonSelected))
                 _isSingleplayer = false;
-            if (GUI.Button(new Rect(windowRect.x + windowRect.width / 2f + 50, windowRect.y + 50, 100, 40), "Offline", !_isSingleplayer ? _button : _buttonSelected))
+            if (GUI.Button(new Rect(rect.x + rect.width / 2f + 50, rect.y + 50, 100, 40), "Offline", !_isSingleplayer ? _button : _buttonSelected))
                 _isSingleplayer = true;
 
             if (_isSingleplayer)
-                SingleplayerUI(new Rect(windowRect.x + windowRect.width / 100f * 10, windowRect.y + 120f, windowRect.width - windowRect.width / 100f * 20, windowRect.height - 200f));
+                SingleplayerUI(new Rect(rect.x + rect.width / 100f * 10, rect.y + 120f, rect.width - rect.width / 100f * 20, rect.height - 200f));
             else
-                MultiplayerUI(new Rect(windowRect.x + windowRect.width / 100f * 10, windowRect.y + 120f, windowRect.width - windowRect.width / 100f * 20, windowRect.height - 200f));
+                MultiplayerUI(new Rect(rect.x + rect.width / 100f * 10, rect.y + 120f, rect.width - rect.width / 100f * 20, rect.height - 200f));
         }
 
         private void SingleplayerUI(Rect areaRect)

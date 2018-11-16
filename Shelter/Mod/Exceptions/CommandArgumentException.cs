@@ -1,7 +1,8 @@
-﻿using Mod.Interface;
+﻿using System;
 
 namespace Mod.Exceptions
 {
+    [Serializable]
     public class CommandArgumentException : CustomException
     {
         public CommandArgumentException(string command, string usage)

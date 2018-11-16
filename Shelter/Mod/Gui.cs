@@ -4,7 +4,6 @@ namespace Mod
 {
     public abstract class Gui : MonoBehaviour
     {
-        protected Rect windowRect;
         public string Name;
         public bool Visible;
 

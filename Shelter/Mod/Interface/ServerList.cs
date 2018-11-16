@@ -86,7 +86,8 @@ namespace Mod.Interface
             if (Event.current.type == EventType.KeyDown)
                 GUI.FocusControl("Search");
 
-            GUI.DrawTexture(windowRect = new Rect(Screen.width / 2f - _width/2, Screen.height / 2f - _height/2, _width, _height), background);
+            Rect windowRect = new Rect(Screen.width / 2f - _width / 2f, Screen.height / 2f - _height / 2f, _width, _height);
+            GUI.DrawTexture(windowRect, background);
             if (Alpha < 255f)
                 Animation();
 

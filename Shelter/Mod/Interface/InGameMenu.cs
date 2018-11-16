@@ -6,6 +6,7 @@ namespace Mod.Interface
 {
     public class InGameMenu : Gui
     {
+        private Rect _windowRect;
         private Texture2D _background;
         private Texture2D _topBar;
         private GUIStyle _menuItem;
@@ -92,14 +93,14 @@ namespace Mod.Interface
             var color = Shelter.Animation.ToColor();
             _selectedEntry.normal.textColor = color;
             
-            windowRect = new Rect(Screen.width / 2f - 400, Screen.height / 2f - 250, 800, 500);
-            GUI.DrawTexture(windowRect, _background);
+            _windowRect = new Rect(Screen.width / 2f - 400, Screen.height / 2f - 250, 800, 500);
+            GUI.DrawTexture(_windowRect, _background);
             
             _topBar = Texture(color);
-            GUI.DrawTexture(new Rect(windowRect.x, windowRect.y, windowRect.width, 4), _topBar);
+            GUI.DrawTexture(new Rect(_windowRect.x, _windowRect.y, _windowRect.width, 4), _topBar);
             Destroy(_topBar);
 
-            SmartRect rect = new SmartRect(windowRect.x, windowRect.y + 9, windowRect.width / 5f, 27);
+            SmartRect rect = new SmartRect(_windowRect.x, _windowRect.y + 9, _windowRect.width / 5f, 27);
             if (GUI.Button(rect, "General", _currentMenu == SubMenu.General ? _selectedEntry : _menuEntry))
                 _currentMenu = SubMenu.General;
             if (GUI.Button(rect.OX(rect.Width), "Keyboard", _currentMenu == SubMenu.Keyboard ? _selectedEntry : _menuEntry))
@@ -143,9 +144,9 @@ namespace Mod.Interface
             const float betweenSpace = 50;
             const float borderDistance = 30;
             
-            float width = (windowRect.width - betweenSpace * (columns - 1) - borderDistance * 2) / columns;
+            float width = (_windowRect.width - betweenSpace * (columns - 1) - borderDistance * 2) / columns;
             
-            SmartRect category = new SmartRect(windowRect.x + borderDistance, windowRect.y + 55, width, 30);
+            SmartRect category = new SmartRect(_windowRect.x + borderDistance, _windowRect.y + 55, width, 30);
             GUI.Label(category, "Graphics", _menuCategory);
             
             SmartRect item = new SmartRect(category.X, category.Y + 30, category.Width, 17);
@@ -191,9 +192,9 @@ namespace Mod.Interface
             const float betweenSpace = 50;
             const float borderDistance = 30;
 
-            float width = (windowRect.width - betweenSpace * (columns - 1) - borderDistance * 2) / columns;
+            float width = (_windowRect.width - betweenSpace * (columns - 1) - borderDistance * 2) / columns;
             
-            SmartRect category = new SmartRect(windowRect.x + borderDistance, windowRect.y + 55, width, 30);
+            SmartRect category = new SmartRect(_windowRect.x + borderDistance, _windowRect.y + 55, width, 30);
             GUI.Label(category, "Human", _menuCategory);
             
             SmartRect item = new SmartRect(category.X, category.Y + 30, category.Width, 17);
@@ -257,7 +258,7 @@ namespace Mod.Interface
             const float betweenSpace = 50;
             const float borderDistance = 30;
 
-            float width = (windowRect.width - betweenSpace * (columns - 1) - borderDistance * 2) / columns;
+            float width = (_windowRect.width - betweenSpace * (columns - 1) - borderDistance * 2) / columns;
         }
         
 

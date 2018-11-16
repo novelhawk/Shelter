@@ -5,12 +5,77 @@ namespace Mod.Interface
 {
     public class Notify : Gui
     {
-        private Notification current;
         private static readonly Queue<Notification> Notifications = new Queue<Notification>();
-        private GUIStyle title;
-        private GUIStyle message;
-        private Texture2D black;
-        private Texture2D white;
+        private const float Width = 300;
+        
+        private Notification _current;
+        private float _width;
+        
+        private GUIStyle _title;
+        private GUIStyle _message;
+        private Texture2D _black;
+        private Texture2D _white;
+
+        protected override void OnShow()
+        {
+            _white = Texture(255, 255, 255, 140);
+            _black = Texture(137, 137, 137, 140);
+            
+            _message = new GUIStyle
+            {
+                alignment = TextAnchor.UpperCenter,
+                fontSize = 15,
+                normal = { textColor = UnityEngine.Color.white },
+            };
+            _title = new GUIStyle(_message)
+            {
+                alignment = TextAnchor.MiddleCenter,
+                fontSize = 16
+            };
+            
+            _width = 0f;
+        }
+
+        private void Update()
+        {
+            
+        }
+
+        protected override void Render()
+        {
+            if (!_current.Done && _width < Width) // != null
+                _width = Mathf.Clamp(_width + 50 * Time.deltaTime + _current.ElapsedTime / 500f, 0, Width);
+            else if (_current.Active && _width > 0) // != null
+                _width = Mathf.Clamp(_width - 50 * Time.deltaTime - (_current.ElapsedTime - _current.Duration) / 1000f, 0, Width);
+            else if (_current.Done) // == null
+            {
+                if (Notifications.Count > 0)
+                {
+                    _current = Notifications.Dequeue();
+                    _current.Start();
+                    _width = 0f;
+                }
+                else
+                {
+                    Disable();
+                    return;
+                }
+            }
+            
+            Rect rect = new Rect(Screen.width - _width, 50, _width, _current.Height);
+            
+            GUI.DrawTexture(new Rect(rect.x, rect.y, rect.width, rect.height), _black);
+            GUI.DrawTexture(new Rect(rect.x - 2, rect.y, 2, rect.height), _white);
+            
+            GUI.Label(new Rect(rect.x, rect.y, Width, 30), _current.Title, _title);
+            GUI.Label(new Rect(rect.x, rect.y + 30, Width, rect.height - 30), _current.Message, _message);
+        }
+
+        protected override void OnHide()
+        {
+            Destroy(_white);
+            Destroy(_black);
+        }
 
         public static void New(string message, long duration, float height = 30F)
         {
@@ -23,64 +88,25 @@ namespace Mod.Interface
             Shelter.InterfaceManager.Enable(nameof(Notify));
         }
 
-        protected override void OnShow()
+        private struct Notification
         {
-            black = Texture(137, 137, 137, 140);
-            white = Texture(255, 255, 255, 140);
-            message = new GUIStyle
-            {
-                alignment = TextAnchor.UpperCenter,
-                fontSize = 15,
-                normal = { textColor = UnityEngine.Color.white },
-            };
-            title = new GUIStyle(message)
-            {
-                alignment = TextAnchor.MiddleCenter,
-                fontSize = 16
-            };
-        }
-
-        protected override void Render()
-        {
-            const float FinalWidth = 300;
-            if (current != null && !current.Done && windowRect.width < FinalWidth)
-                windowRect.width = Mathf.Clamp(windowRect.width + 50 * Time.deltaTime + current.ElapsedTime / 500f, 0, FinalWidth);
-            else if (current != null && current.Done && windowRect.width > 0)
-                windowRect.width = Mathf.Clamp(windowRect.width - 50 * Time.deltaTime - (current.ElapsedTime - current.Duration) / 1000f, 0, FinalWidth);
-            else if ((current == null || current.Done) && Notifications.Count > 0)
-            {
-                current = Notifications.Dequeue();
-                current.Start();
-                windowRect.width = 0f;
-            }
-            else if (current == null || current.Done)
-            {
-                Disable();
-                return;
-            }
-
-            windowRect = new Rect(Screen.width - windowRect.width, 50, windowRect.width, current.Height);
-            GUI.DrawTexture(new Rect(windowRect.x, windowRect.y, windowRect.width, windowRect.height), black);
-            GUI.DrawTexture(new Rect(windowRect.x - 2, windowRect.y, 2, windowRect.height), white);
-            GUI.Label(new Rect(windowRect.x, windowRect.y, FinalWidth, 30), current.Title, title);
-            GUI.Label(new Rect(windowRect.x, windowRect.y + 30, FinalWidth, windowRect.height - 30), current.Message, message);
-        }
-
-        protected override void OnHide()
-        {
-            windowRect.width = 0f;
-            Destroy(white);
-            Destroy(black);
-        }
-
-        private class Notification
-        {
+            private readonly string _title;
+            private readonly string _message;
+            private readonly long _duration;
+            private readonly float _height;
+            
+            private bool _active;
+            private long _startTime;
+            
             public Notification(string title, string message, long duration, float height)
             {
-                Title = title;
-                Message = message;
-                Duration = duration;
-                Height = height;
+                _title = title;
+                _message = message;
+                _duration = duration;
+                _height = height;
+
+                _active = false;
+                _startTime = 0;
             }
 
             public void Start()
@@ -89,12 +115,12 @@ namespace Mod.Interface
                 _active = true;
             }
 
-            private bool _active;
-            private long _startTime;
-            public float Height { get; }
-            public string Title { get; }
-            public string Message { get; }
-            public long Duration { get; }
+            public string Title => _title;
+            public string Message => _message;
+            public long Duration => _duration;
+            public float Height => _height;
+
+            public bool Active => _active;
             public long ElapsedTime => Shelter.Stopwatch.ElapsedMilliseconds - _startTime;
             public bool Done => _active && Shelter.Stopwatch.ElapsedMilliseconds - _startTime > Duration;
         }

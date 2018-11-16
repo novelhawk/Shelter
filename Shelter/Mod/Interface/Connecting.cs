@@ -50,16 +50,19 @@ namespace Mod.Interface
             if (_room == null)
                 return;
             
-            windowRect = new Rect(Screen.width / 2f - 200, Screen.height - 60, 400, 60);
-            GUI.DrawTexture(windowRect, _background);
+            const float width = 400;
+            const float height = 60;
+            
+            Rect wndRect = new Rect(Screen.width / 2f - width / 2f, Screen.height - height, width, height);
+            GUI.DrawTexture(wndRect, _background);
 
-            Rect rect = new Rect(windowRect.x + 65, windowRect.y + 8, windowRect.width - 65, windowRect.height - 16);
+            Rect rect = new Rect(wndRect.x + 65, wndRect.y + 8, width - 65, height - 16);
             if (_room.IsJoinable)
                 GUI.Label(rect, $"Connecting to {_room.Name.HexColor()}", _title);
             else
                 GUI.Label(rect, $"Awaiting empty slot {_room.Players}/{_room.MaxPlayers}\n{_room.Name.HexColor()}", _title);
             
-            rect = new Rect(windowRect.x + 5, windowRect.y + 5, 50, 50);
+            rect = new Rect(wndRect.x + 5, wndRect.y + 5, 50, 50);
             GUIUtility.RotateAroundPivot(_rotation, new Vector2(rect.x + rect.width / 2f, rect.y + rect.height / 2f));
             GUI.DrawTexture(rect, _loading);
         }
