@@ -55,7 +55,6 @@ namespace Mod.Managers
 
         public void Dispose()
         {
-//            Object.Destroy(commandGameObject);
             this.Clear();
         }
     }
