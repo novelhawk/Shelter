@@ -43,10 +43,11 @@ namespace Mod
         protected virtual void Render() { }
         protected virtual void OnHide() { }
 
-        public static Texture2D Texture(byte r, byte g, byte b, byte a = 255)
+        public static Texture2D Texture(byte r, byte g, byte b, byte a = 255) => Texture(Color(r, g, b, a));
+        public static Texture2D Texture(Color color)
         {
             Texture2D texture = new Texture2D(1, 1);
-            texture.SetPixel(1, 1, Color(r, g, b, a));
+            texture.SetPixel(1, 1, color);
             texture.Apply();
             return texture;
         }
