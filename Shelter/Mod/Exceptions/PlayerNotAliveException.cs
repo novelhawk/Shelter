@@ -9,7 +9,7 @@ namespace Mod.Exceptions
         {
         }
 
-        public PlayerNotAliveException(string id) : base($"Player ID({id}) is not alive")
+        public PlayerNotAliveException(object id) : base($"Player ID({id}) is not alive")
         {
         }
 
