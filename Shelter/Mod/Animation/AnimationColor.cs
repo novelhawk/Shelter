@@ -1,11 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.InteropServices;
 using Newtonsoft.Json;
 using UnityEngine;
 
 namespace Mod.Animation
 {
     [JsonConverter(typeof(ColorConverter))]
+    [StructLayout(LayoutKind.Sequential)]
     public struct AnimationColor
     {
         public byte R { get; }
@@ -83,16 +85,5 @@ namespace Mod.Animation
         {
             return new Color(color.R / 255f, color.G / 255f, color.B / 255f, color.A / 255f);
         }
-        
-        public static List<AnimationColor> Rainbow => new List<AnimationColor>
-        {
-            new AnimationColor(255, 0, 0, 255), 
-            new AnimationColor(255, 127, 0, 255), 
-            new AnimationColor(255, 255, 0, 255), 
-            new AnimationColor(0, 255, 0, 255),
-            new AnimationColor(0, 255, 255, 255),
-            new AnimationColor(0, 0, 255, 255),
-            new AnimationColor(139, 0, 255, 255)
-        };
     }
 }

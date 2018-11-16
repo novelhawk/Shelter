@@ -6,7 +6,6 @@ namespace Mod.Interface
 {
     public class InGameMenu : Gui
     {
-        private Animator _animator;
         private Texture2D _background;
         private Texture2D _topBar;
         private GUIStyle _menuItem;
@@ -21,8 +20,6 @@ namespace Mod.Interface
         {
             _background = Texture(255, 255, 255);
             _topBar = Texture(255, 0, 0);
-            _animator = new Animator(Shelter.Animation, 20);
-            _animator.ComputeNext();
             
             _menuEntry = new GUIStyle
             {
@@ -67,12 +64,13 @@ namespace Mod.Interface
 
         protected override void Render()
         {
-            _selectedEntry.normal.textColor = _animator.LastColor;
+            var color = Shelter.Animation.ToColor();
+            _selectedEntry.normal.textColor = color;
             
             windowRect = new Rect(Screen.width / 2f - 400, Screen.height / 2f - 250, 800, 500);
             GUI.DrawTexture(windowRect, _background);
             
-            _topBar = Texture(_animator.LastColor.R, _animator.LastColor.G, _animator.LastColor.B, _animator.LastColor.A);
+            _topBar = Texture(color);
             GUI.DrawTexture(new Rect(windowRect.x, windowRect.y, windowRect.width, 4), _topBar);
             Destroy(_topBar);
 
@@ -110,7 +108,6 @@ namespace Mod.Interface
             if (Time.time - _lastAnimationUpdate < 0.05f)
                 return;
 
-            _animator.ComputeNext();
             _lastAnimationUpdate = Time.time;
         }
         
@@ -179,7 +176,6 @@ namespace Mod.Interface
 
         protected override void OnHide()
         {
-            _animator = null;
             if (_topBar != null)
                 Destroy(_topBar);
             Destroy(_background);

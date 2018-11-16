@@ -8,19 +8,13 @@ namespace Mod.Interface
 {
     public class Scoreboard : Gui
     {
-        private Animator _animator;
-        private float _lastAnimationUpdate;
-
-        protected override void OnShow()
-        {
-            _animator = new Animator(Shelter.Animation, 20);
-        }
-
         protected override void Render()
         {
             if (!PhotonNetwork.inRoom) return;
 
             _maxWidth = 0;
+            
+            // Painfully deoptimised, TODO: Improve Scoreboard 
             float y = 15;
             foreach (var player in PhotonNetwork.PlayerList) // O(n)
             {
@@ -35,11 +29,6 @@ namespace Mod.Interface
                 DrawPlayerScores(player, y);
                 y += 15;
             }
-        
-            if (Time.time - _lastAnimationUpdate < 0.05f)
-                return;
-            _animator.ComputeNext();
-            _lastAnimationUpdate = Time.time;
         }
 
         private void DrawLegenda()
@@ -60,14 +49,15 @@ namespace Mod.Interface
             
             StringBuilder builder = new StringBuilder(120);
             builder.AppendFormat("<color={0}>[<b><color={1}>{2:00}</color></b>] ", SymbolsColor, IDColor, player.ID);
-
-            builder.Append(ModToString(player.Mod, _animator.LastColor.ToHex()));
-            builder.Append(HumanTypeToString(player));
-            if (player.IsMasterClient)
-                builder.Append("|<b><color=" + MCColor + ">MC</color></b>| ");
+            
             builder.AppendFormat("<b><color={0}>{1}</color></b> ", GuestColor, player.Properties.HexName ?? "Unknown");
             if (!string.IsNullOrEmpty(player.FriendName))
                 builder.AppendFormat("| {0} ", player.FriendName);
+
+            if (player.IsMasterClient)
+                builder.Append("|<b><color=" + MCColor + ">MC</color></b>| ");
+            builder.Append(HumanTypeToString(player));
+            builder.Append(ModToString(player.Mod));
             builder.Append("</color>");
 
             var playerInfo = builder.ToString();
@@ -112,12 +102,7 @@ namespace Mod.Interface
             GUI.Label(new Rect(_maxWidth + 20, y, Screen.width * 0.25f, 20), builder.ToString());
         }
 
-        protected override void OnHide()
-        {
-            _animator = null;
-        }
-
-        private static string ModToString(in CustomMod mod, in string color)
+        private static string ModToString(in CustomMod mod)
         {
             switch (mod)
             {
@@ -130,7 +115,7 @@ namespace Mod.Interface
                 case CustomMod.HawkUser:
                     return "|<b><color=#00B7FF>HawkUser</color></b>| ";
                 case CustomMod.Shelter:
-                    return $"|<b><color=#{color}>Shelter</color></b>| ";
+                    return $"|<b><color=#{Shelter.Animation.ToHex()}>Shelter</color></b>| ";
                 case CustomMod.AlphaX:
                     return "|<b><color=#00D5FF>AlphaX</color></b>| ";
                 case CustomMod.Alpha:

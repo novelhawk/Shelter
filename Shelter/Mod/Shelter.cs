@@ -30,9 +30,10 @@ namespace Mod
         public static Profile Profile => _profileManager.ProfileFile.SelectedProfile;
         public static readonly long StartTime = (long)(DateTime.UtcNow - new DateTime(1970, 1, 1)).TotalSeconds;
 
+        private static RainbowAnimation _modAnimation;
+        
         private static FileLogger _logger;
         private static ConsoleLogger _consoleLogger;
-        private static AnimationInfo _animation;
         private static InterfaceManager _interfaceManager;
         private static CommandManager _commandManager;
         private static InputManager _inputManager;
@@ -45,12 +46,12 @@ namespace Mod
         {
             if (!Directory.Exists(ModDirectory))
                 Directory.CreateDirectory(ModDirectory);
-
-            _animation = new AnimationInfo(AnimationType.Cycle, AnimationColor.Rainbow);
         }
         
         public static void InitComponents()
         {
+            _modAnimation = new RainbowAnimation();
+            
             _logger = new FileLogger();
             _consoleLogger = new ConsoleLogger();
             _eventManager = new EventManager();
@@ -66,6 +67,8 @@ namespace Mod
 
         public void Update()
         {
+            _modAnimation.Increment(0.0005f);
+            
 //            DiscordApi.RunCallbacks();
             if (Input.GetKeyDown(KeyCode.I) && Input.GetKey(KeyCode.LeftControl))
                 File.WriteAllLines($"GameObjects{Random.Range(0, 255)}.txt", FindObjectsOfType(typeof(GameObject)).OrderBy(x => x.GetInstanceID()).Select(x => $"{x.GetInstanceID()} - {x.name}").ToArray());
@@ -207,8 +210,8 @@ namespace Mod
 
         #endregion
 
-        public static AnimationInfo Animation => _animation;
-
+        public static RainbowAnimation Animation => _modAnimation;
+        
         public static ConsoleLogger ConsoleLogger => _consoleLogger;
         public static EventManager EventManager => _eventManager;
         public static ProfileManager ProfileManager => _profileManager;
