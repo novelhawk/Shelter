@@ -72,9 +72,9 @@ namespace Mod.Interface
                 return;
             }
             
-            if (!Visible && Shelter.InputManager.IsDown(InputAction.OpenMenu))
-                Enable();
-            else if (Visible && (Shelter.InputManager.IsDown(InputAction.OpenMenu) || Input.GetKeyDown(KeyCode.Escape)))
+            if (Shelter.InputManager.IsDown(InputAction.OpenMenu))
+                Toggle();
+            if (Visible && Input.GetKeyDown(KeyCode.Escape))
                 Disable();
         }
 
