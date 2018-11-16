@@ -87,27 +87,23 @@ namespace Mod
 
         public static bool EqualsIgnoreCase(this string str, string str1)
         {
-            if (str == null && str1 == null) 
-                return true;
-            if (str != null && str1 != null)
-                return str.Equals(str1, StringComparison.CurrentCultureIgnoreCase);
-            return false;
+            return string.Equals(str, str1, StringComparison.OrdinalIgnoreCase);
         }
 
         public static bool ContainsIgnoreCase(this string str, string str1)
         {
-            if (str == null && str1 == null) 
-                return true;
-            if (str != null && str1 != null)
-                return str.IndexOf(str1, StringComparison.CurrentCultureIgnoreCase) > -1;
-            return false;
+            if (str == null || str1 == null)
+                return false;
+            
+            return str.IndexOf(str1, StringComparison.OrdinalIgnoreCase) > -1;
         }
 
         public static bool AnyEqualsIgnoreCase(this string[] arr, string str)
         {
-            if (arr != null)
-                return arr.Any(x => x.EqualsIgnoreCase(str));
-            return false;
+            if (arr == null)
+                return false;
+            
+            return arr.Any(x => x.EqualsIgnoreCase(str));
         }
 
         public static bool AnyContainsIgnoreCase(this string[] arr, string str)
