@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections;
 using Mod.Keybinds;
 using UnityEngine;
-using Animator = Mod.Animation.Animator;
 
 namespace Mod.Interface
 {

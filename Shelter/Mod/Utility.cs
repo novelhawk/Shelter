@@ -33,57 +33,52 @@ namespace Mod
             }
         }
 
-        public static string CheckHTMLTags(string text)
+        
+        public static string ValidateUnityTags(string text)
         {
             StringBuilder builder = new StringBuilder(text);
 
-            Stack<Tag> stack = new Stack<Tag>();
-            foreach (Match match in Regex.Matches(text, @"<([\\\/]?)([^\/]+?)(?:=(.+?))?>"))
+            Stack<Tag> tags = new Stack<Tag>();
+            var matches = Regex.Matches(text, @"<(\/?)(\w+)(?:=.+?)?>");
+            foreach (Match match in matches)
             {
-                if (match.Groups[2].Value.EqualsIgnoreCase("size")) // Remove size
-                {
-                    builder.Replace(match.Value, string.Empty);
-                    continue;
-                }
-
-                Tag tag = new Tag(
-                    match.Value,
+                var tag = new Tag(
                     match.Groups[2].Value,
-                    text.IndexOf(match.Value, StringComparison.OrdinalIgnoreCase),
-                    match.Value.Length,
                     string.IsNullOrEmpty(match.Groups[1].Value));
 
-
                 if (tag.IsOpeningTag)
-                    stack.Push(tag);
-                else if (stack.Peek().TagName == tag.TagName)
-                    stack.Pop();
+                {
+                    tags.Push(tag);
+                }
                 else
-                    builder.Replace(tag.TagFull, stack.Pop().ClosingTag, tag.Index, tag.Length);
+                {
+                    if (tags.Count > 0 && tags.Peek().TagName == tag.TagName)
+                        tags.Pop();
+                    else
+                        builder.Remove(match.Index, match.Length);
+                }
             }
-            while (stack.Count > 0)
-                builder.Append(stack.Pop().ClosingTag);
+            while (tags.Count > 0)
+                builder.Append(tags.Pop().ClosingTag);
 
             return builder.ToString();
         }
 
-        private class Tag
+        private struct Tag
         {
-            public bool IsOpeningTag { get; }
-            public string ClosingTag => $"</{TagName}>";
-            public string TagFull { get; }
-            public string TagName { get; }
-            public int Index { get; }
-            public int Length { get; }
+            private readonly string _name;
+            private readonly bool _isOpening;
 
-            public Tag(string tagFull, string tagName, int index, int length, bool isOpeningTag)
+            public Tag(string name, bool isOpening)
             {
-                TagFull = tagFull;
-                TagName = tagName;
-                Index = index;
-                Length = length;
-                IsOpeningTag = isOpeningTag;
+                _name = name;
+                _isOpening = isOpening;
             }
+
+            public string TagName => _name;
+            public bool IsOpeningTag => _isOpening;
+            
+            public string ClosingTag => $"</{TagName}>";
         }
     }
 }

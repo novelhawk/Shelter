@@ -30,7 +30,7 @@ namespace Mod.Managers
         /// <param name="isForemost">Specifies whether the message should be pinned</param>
         public ChatMessage AddMessage(in Player sender, in object message, in bool isForemost = false)
         {
-            var msg = Utility.CheckHTMLTags(message.ToString());
+            var msg = Utility.ValidateUnityTags(message.ToString());
             var ret = Messages[CurrentIndex--] = new ChatMessage(CurrentIndex, sender, msg, isForemost);
             if (CurrentIndex < 0)
                 CurrentIndex = MAX_MESSAGES - 1;
