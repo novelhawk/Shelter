@@ -53,6 +53,38 @@ namespace Mod
             return Regex.Replace(str as string, @"\[\w{3,8}\]|\[-\]|\<\/color\>|\<color=#\w+\>", "", RegexOptions.IgnoreCase);
         }
 
+        /// <summary>
+        /// Used to compute the length of a number
+        /// </summary>
+        /// <param name="num">The number to count the number of digits from</param>
+        /// <returns>Number of digits of <see cref="num"/></returns>
+        public static int Count(this int num)
+        {
+            if (num < 0)
+                num *= -1;
+            
+            // O(1) algorithm
+            if (num < 10) return 1;
+            if (num < 100) return 2;
+            if (num < 1000) return 3;
+            if (num < 10000) return 4;
+            if (num < 100000) return 5;
+            if (num < 1000000) return 6;
+            if (num < 10000000) return 7;
+            if (num < 100000000) return 8;
+            if (num < 1000000000) return 9;
+
+            // O(2n) algorithm
+            num /= 1000000000;
+            int n = 9;
+            do
+            {
+                num /= 10;
+                n++;
+            } while (num > 0);
+            return n;
+        }
+
         public static bool EqualsIgnoreCase(this string str, string str1)
         {
             if (str == null && str1 == null) 
@@ -77,18 +109,13 @@ namespace Mod
                 return arr.Any(x => x.EqualsIgnoreCase(str));
             return false;
         }
+
         public static bool AnyContainsIgnoreCase(this string[] arr, string str)
         {
-            if (arr != null)
-                return arr.Any(x => x.ContainsIgnoreCase(str));
-            return false;
-        }
-
-        public static bool ToBool(this object obj, bool @default = false)
-        {
-            if (obj != null)
-                return (bool) obj;
-            return @default;
+            if (arr == null) 
+                return false;
+            
+            return arr.Any(x => x.ContainsIgnoreCase(str));
         }
     }
 }

@@ -43,7 +43,7 @@ namespace Mod
             var capacity = 0;
             
             if (_sender != null)
-                capacity += Utility.IDLength(_sender.ID) + 3;
+                capacity += _sender.ID.Count() + 3;
             
             if (Content == null)
                 capacity += 12; // "Null message"
