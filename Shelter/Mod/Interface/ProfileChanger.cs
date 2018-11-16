@@ -167,15 +167,15 @@ namespace Mod.Interface
             if (GUI.Button(new Rect(areaRect.x + areaRect.width / 2f - 175, areaRect.y + areaRect.height - 100, 150f, 70f), "Apply", _button))
             {
                 Shelter.Profiles[_selectedProfile] = _profile;
-                Notify.New("Changes applied", 3000);
+                Notify.New("Changes applied", 3f);
             }
             if (GUI.Button(new Rect(areaRect.x + areaRect.width / 2f + 25, areaRect.y + areaRect.height - 100, 150f, 70f), "Save", _button))
             {
                 Shelter.Profiles[_selectedProfile] = _profile;
                 if (Shelter.ProfileManager.Save())
-                    Notify.New("Successfully saved to file", 3000);
+                    Notify.New("Successfully saved to file", 3f);
                 else
-                    Notify.New("Failed to save to file", 3000);
+                    Notify.New("Failed to save to file", 3f);
             }
         }
 

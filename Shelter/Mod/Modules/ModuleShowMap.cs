@@ -13,7 +13,7 @@ namespace Mod.Modules
         {
             if (!GameManager.settings.IsMapAllowed)
             {
-                Notify.New("Map is globally disabled by MC", 5000);
+                Notify.New("Map is globally disabled by MC", 5f);
                 Disable();
                 return;
             }

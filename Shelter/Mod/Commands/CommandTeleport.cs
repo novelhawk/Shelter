@@ -25,7 +25,7 @@ namespace Mod.Commands
                 {
                     IN_GAME_MAIN_CAMERA.instance.main_object.transform.position = go.transform.position;
                     IN_GAME_MAIN_CAMERA.instance.main_object.transform.rotation = go.transform.rotation;
-                    Notify.New($"You teleported to {player}!", 1300, 35F);
+                    Notify.New($"You teleported to {player}!", 1.3f, 35F);
                     return;
                 }
             }

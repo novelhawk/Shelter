@@ -11,12 +11,12 @@ namespace Mod.Exceptions
 
         protected CustomException(string message)
         {
-            Notify.New(message, 3000);
+            Notify.New(message, 3f);
         }
 
         protected CustomException(string message, float height)
         {
-            Notify.New("<color=#ff0000>Error</color>", message, 3500, height);
+            Notify.New("<color=#ff0000>Error</color>", message, 3.5f, height);
         }
     }
 }

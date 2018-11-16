@@ -17,20 +17,20 @@ namespace Mod.Commands
                 {
                     foreach (Player player in PhotonNetwork.PlayerList)
                         GameManager.instance.photonView.RPC(Rpc.Respawn, player);
-                    Notify.New("Successfully respawned all players!", 1300, 35F);
+                    Notify.New("Successfully respawned all players!", 1.3f, 35F);
                 }
                 else
                 {
                     if (!Player.TryParse(args[0], out Player player))
                         throw new PlayerNotFoundException(args[0]);
                     GameManager.instance.photonView.RPC(Rpc.Respawn, player);
-                    Notify.New($"{player.Properties.HexName} respawned!", 1300, 35F);
+                    Notify.New($"{player.Properties.HexName} respawned!", 1.3f, 35F);
                 }
             }
             else
             {
                 GameManager.instance.RespawnHeroInNewRound();
-                Notify.New("Respawn forced!", 1300, 35F);
+                Notify.New("Respawn forced!", 1.3f, 35F);
             }
         }
     }

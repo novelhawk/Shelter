@@ -22,11 +22,11 @@ namespace Mod.Commands
                 
                 Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(obj);
                 Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(false);
-                Notify.New($"You are spectating to {player}!", 1300, 35F);
+                Notify.New($"You are spectating to {player}!", 1.3f, 35F);
                 return;
             }
             
-            Notify.New("Couldn't find the player's HERO!", 1300, 35F);
+            Notify.New("Couldn't find the player's HERO!", 1.3f, 35F);
         }
     }
 }

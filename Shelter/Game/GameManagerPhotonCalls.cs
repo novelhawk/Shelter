@@ -228,7 +228,7 @@ public partial class GameManager
 
                 if (needChooseSide)
                 {
-                    Notify.New("Join the game", "Press 1 to join the game", 2500, 50f);
+                    Notify.New("Join the game", "Press 1 to join the game", 2.5f, 50f);
                 }
                 else if (!settings.InSpectatorMode)
                 {
