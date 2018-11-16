@@ -34,6 +34,7 @@ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND 
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Mod;
 using UnityEngine;
 // ReSharper disable UnusedMember.Global
 
@@ -3627,7 +3628,7 @@ public class iTween : MonoBehaviour
 		{
 			string targetType = item.type + item.method;
 			targetType = targetType.Substring(0, type.Length);
-			if (string.Equals(targetType, type, StringComparison.CurrentCultureIgnoreCase))
+			if (targetType.EqualsIgnoreCase(type))
 			{
 				item.enabled = true;
 			}
@@ -3640,7 +3641,7 @@ public class iTween : MonoBehaviour
 		{
 			string targetType = item.type + item.method;
 			targetType = targetType.Substring(0, type.Length);
-			if (string.Equals(targetType, type, StringComparison.CurrentCultureIgnoreCase))
+			if (targetType.EqualsIgnoreCase(type))
 			{
 				item.enabled = true;
 			}
@@ -3716,7 +3717,7 @@ public class iTween : MonoBehaviour
 		{
 			string targetType = item.type + item.method;
 			targetType = targetType.Substring(0, type.Length);
-			if (string.Equals(targetType, type, StringComparison.CurrentCultureIgnoreCase))
+			if (targetType.EqualsIgnoreCase(type))
 			{
 				if (item.delay > 0)
 				{
@@ -3736,7 +3737,7 @@ public class iTween : MonoBehaviour
 		{
 			string targetType = item.type + item.method;
 			targetType = targetType.Substring(0, type.Length);
-			if (string.Equals(targetType, type, StringComparison.CurrentCultureIgnoreCase))
+			if (targetType.EqualsIgnoreCase(type))
 			{
 				if (item.delay > 0)
 				{
@@ -3906,7 +3907,7 @@ public class iTween : MonoBehaviour
 			var item = component;
 			string targetType = item.type + item.method;
 			targetType = targetType.Substring(0, type.Length);
-			if (String.Equals(targetType, type, StringComparison.CurrentCultureIgnoreCase))
+			if (targetType.EqualsIgnoreCase(type))
 			{
 				item.Dispose();
 			}
@@ -3932,7 +3933,7 @@ public class iTween : MonoBehaviour
 		{
 			string targetType = item.type + item.method;
 			targetType = targetType.Substring(0, type.Length);
-			if (string.Equals(targetType, type, StringComparison.CurrentCultureIgnoreCase))
+			if (targetType.EqualsIgnoreCase(type))
 			{
 				item.Dispose();
 			}
