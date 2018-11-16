@@ -61,6 +61,11 @@ namespace Mod.Managers
                     return _dictionary[action];
                 return KeyCode.None;
             }
+            set
+            {
+                if (_dictionary.ContainsKey(action))
+                    _dictionary[action] = value;
+            }
         }
     }
 }
