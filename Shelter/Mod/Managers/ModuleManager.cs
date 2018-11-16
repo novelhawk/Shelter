@@ -25,7 +25,7 @@ namespace Mod.Managers
 
         public static bool Enabled(string id)
         {
-            return Modules.Any(x => x.ID == id && x.Enabled);
+            return Modules.FirstOrDefault(x => x.ID == id)?.Enabled ?? false;
         }
     }
 }
