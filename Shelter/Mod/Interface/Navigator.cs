@@ -1,4 +1,5 @@
-﻿using Mod.Keybinds;
+﻿using System.Text;
+using Mod.Keybinds;
 using Mod.Managers;
 using UnityEngine;
 
@@ -6,19 +7,21 @@ namespace Mod.Interface
 {
     public class Navigator : Gui
     {
-        private Module _module;
         private GUIStyle _textStyle;
         private GUIStyle _buttonText;
         private GUIStyle _buttonMenu;
         private GUIStyle _moduleName;
         private GUIStyle _moduleDescription;
         private GUIStyle _moduleButton;
+        
         private Texture2D _background;
         private Texture2D _moduleBackground;
         private Texture2D _verticalLine;
         private Texture2D _enabledTexture;
         private Texture2D _disabledTexture;
-        private string _searchQuery;
+        
+        private Module _module;
+        private StringBuilder _searchQuery;
 
         protected override void OnShow()
         {
@@ -63,7 +66,7 @@ namespace Mod.Interface
                 fontSize = 14,
                 alignment = TextAnchor.MiddleCenter
             };
-            _searchQuery = string.Empty;
+            _searchQuery = new StringBuilder();
         }
 
         protected override void Render()
@@ -72,7 +75,7 @@ namespace Mod.Interface
             int width = Screen.width / 100 * 58;
             int height = Screen.height / 100 * 90;
             Rect rect = new Rect(Screen.width / 2f - width / 2f, Screen.height / 2f - height / 2f, width, height);
-            if (_module != null && _module.Visible)
+            if (_module != null)
             {
                 GUI.DrawTexture(rect = new Rect(Screen.width / 2f - 640, Screen.height / 2f - 360, 1280, 720), _moduleBackground);
                 GUI.Label(new Rect(rect.x + 30, rect.y + 10, rect.width - 60, 30), _module.Name, _moduleName);
@@ -88,7 +91,7 @@ namespace Mod.Interface
             }
             
             GUI.Label(new Rect(rect.x, rect.y + 10, rect.width, rect.height - 10), "Search:", _textStyle);
-            GUI.Label(new Rect(rect.x + 120, rect.y + 10, rect.width - 240, rect.height - 10), _searchQuery, _textStyle);
+            GUI.Label(new Rect(rect.x + 120, rect.y + 10, rect.width - 240, rect.height - 10), _searchQuery.ToString(), _textStyle);
 
             CreateButtons(new Rect(rect.x, rect.y + 50, rect.width - 50, rect.height));
         }
@@ -99,7 +102,7 @@ namespace Mod.Interface
             SmartRect rect = new SmartRect(box.x, box.y, 200, 40);
             foreach (Module module in ModuleManager.Modules)
             {
-                if (!string.IsNullOrEmpty(_searchQuery) && !module.Name.ContainsIgnoreCase(_searchQuery))
+                if (_searchQuery.Length > 0 && !module.Name.ContainsIgnoreCase(_searchQuery.ToString()))
                     continue;
                 
 #if !ABUSIVE
@@ -138,18 +141,22 @@ namespace Mod.Interface
                 if (Input.GetKeyDown(KeyCode.Backspace))
                 {
                     if (_searchQuery.Length > 0)
-                        _searchQuery = _searchQuery.Substring(0, _searchQuery.Length - 1);
+                        _searchQuery = _searchQuery.Remove(_searchQuery.Length - 1, 1);
                 }
                 else if (Input.GetKeyDown(KeyCode.KeypadEnter) || Input.GetKeyDown(KeyCode.Insert) || Input.GetKeyDown(KeyCode.Return)) { }
                 else if (Input.anyKeyDown)
-                    _searchQuery += Input.inputString;
+                    _searchQuery.Append(Input.inputString);
             }
 
             if (Shelter.InputManager.IsDown(InputAction.OpenNavigator))
-            {
                 Toggle();
-                if (!Visible && _module.Visible)
-                    _module.Close();
+            
+            if (Visible && Input.GetKeyDown(KeyCode.Escape))
+            {
+                if (_module != null)
+                    _module = null;
+                else
+                    Disable();
             }
         }
 
