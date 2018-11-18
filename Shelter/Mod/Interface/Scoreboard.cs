@@ -33,7 +33,7 @@ namespace Mod.Interface
 
         private void DrawLegenda()
         {
-            GUI.Label(new Rect(0, 0, _maxWidth, 20), "  Player Info", new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter});
+            GUI.Label(new Rect(40, 0, _maxWidth, 20), "Player Info", new GUIStyle(GUI.skin.label) {alignment = TextAnchor.MiddleCenter});
             GUI.Label(new Rect(_maxWidth + 20, 0, Screen.width, 20), " K/D       max    avg    tot");
         }
 
