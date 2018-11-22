@@ -158,7 +158,7 @@ namespace Mod.Interface
             EnableDisableButton(item.OY(item.Height + 10), "Texture Quality", true);
             EnableDisableButton(item.OY(item.Height + 5), "Mipmapping", true);
             
-            GUI.Label(category.OX(2 * (width + betweenSpace)), "Other", _menuCategory);
+            GUI.Label(category.OX(width + betweenSpace), "Other", _menuCategory);
             
             item = new SmartRect(category.X, category.Y + categoryDistance, category.Width, 17);
             EnableDisableButton(item, "Volume", true);
