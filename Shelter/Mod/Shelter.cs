@@ -67,7 +67,7 @@ namespace Mod
 
         public void Update()
         {
-            _modAnimation.Increment(0.0005f);
+            _modAnimation.Increment(0.1f * Time.deltaTime);
             
 //            DiscordApi.RunCallbacks();
             if (Input.GetKeyDown(KeyCode.I) && Input.GetKey(KeyCode.LeftControl))
