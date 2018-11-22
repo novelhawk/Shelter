@@ -180,7 +180,7 @@ namespace Mod.Interface
             GUI.Label(rect, text, _menuItem);
 
             var key = Shelter.InputManager[action];
-            GUI.Label(rect, key == KeyCode.None ? "+" : key.ToString(), _menuValue);
+            GUI.Label(rect, key == KeyCode.None ? "<b>+</b>" : key.ToString(), _menuValue);
             if (GUI.Button(rect, string.Empty, GUIStyle.none))
             {
                 _action = action;
