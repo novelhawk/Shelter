@@ -140,16 +140,18 @@ namespace Mod.Interface
         
         private void DoGeneral()
         {
-            const float columns = 3;
+            const float columns = 2;
             const float betweenSpace = 50;
             const float borderDistance = 30;
+
+            const float categoryDistance = 40;
             
             float width = (_windowRect.width - betweenSpace * (columns - 1) - borderDistance * 2) / columns;
             
             SmartRect category = new SmartRect(_windowRect.x + borderDistance, _windowRect.y + 55, width, 30);
             GUI.Label(category, "Graphics", _menuCategory);
             
-            SmartRect item = new SmartRect(category.X, category.Y + 30, category.Width, 17);
+            SmartRect item = new SmartRect(category.X, category.Y + categoryDistance, category.Width, 17);
             EnableDisableButton(item, "Skin gas", true);
             EnableDisableButton(item.OY(item.Height + 5), "Weapon trail", true);
             EnableDisableButton(item.OY(item.Height + 5), "Wind effect", true);
@@ -160,7 +162,7 @@ namespace Mod.Interface
             
             GUI.Label(category.OX(2 * (width + betweenSpace)), "Other", _menuCategory);
             
-            item = new SmartRect(category.X, category.Y + 30, category.Width, 17);
+            item = new SmartRect(category.X, category.Y + categoryDistance, category.Width, 17);
             EnableDisableButton(item, "Volume", true);
             EnableDisableButton(item.OY(item.Height + 5), "Mouse Speed", true);
             EnableDisableButton(item.OY(item.Height + 5), "Camera Distance", true);
@@ -192,12 +194,14 @@ namespace Mod.Interface
             const float betweenSpace = 50;
             const float borderDistance = 30;
 
+            const float categoryDistance = 40;
+
             float width = (_windowRect.width - betweenSpace * (columns - 1) - borderDistance * 2) / columns;
             
             SmartRect category = new SmartRect(_windowRect.x + borderDistance, _windowRect.y + 55, width, 30);
             GUI.Label(category, "Human", _menuCategory);
             
-            SmartRect item = new SmartRect(category.X, category.Y + 30, category.Width, 17);
+            SmartRect item = new SmartRect(category.X, category.Y + categoryDistance, category.Width, 17);
             
             KeyboardButton(item                    , "Attack", InputAction.Attack);
             KeyboardButton(item.OY(item.Height + 3), "Special", InputAction.Special);
@@ -221,7 +225,7 @@ namespace Mod.Interface
             
             GUI.Label(category.OX(width + betweenSpace), "Titan", _menuCategory);
 
-            item = new SmartRect(category.X, category.Y + 30, category.Width, 17);
+            item = new SmartRect(category.X, category.Y + categoryDistance, category.Width, 17);
             KeyboardButton(item                    , "Jump", InputAction.TitanJump);
             KeyboardButton(item.OY(item.Height + 3), "Slam", InputAction.TitanSlam);
             KeyboardButton(item.OY(item.Height + 3), "Double Punch", InputAction.TitanDoublePunch);
@@ -234,7 +238,7 @@ namespace Mod.Interface
             
             GUI.Label(category.OX(width + betweenSpace), "Other", _menuCategory);
             
-            item = new SmartRect(category.X, category.Y + 30, category.Width, 17);
+            item = new SmartRect(category.X, category.Y + categoryDistance, category.Width, 17);
             KeyboardButton(item                    , "Lock titan", InputAction.LockTitan);
             KeyboardButton(item.OY(item.Height + 3), "Slowdown", InputAction.SlowMovement);
             KeyboardButton(item.OY(item.Height + 3), "Horse Jump", InputAction.HorseJump);
