@@ -16,7 +16,7 @@ namespace Mod.Interface
             
             // Painfully deoptimised, TODO: Improve Scoreboard 
             float y = 15;
-            foreach (var player in PhotonNetwork.PlayerList) // O(n)
+            foreach (var player in PhotonNetwork.PlayerList) // O(3n)
             {
                 DrawPlayerInfo(player, y);
                 y += 15;
@@ -24,7 +24,7 @@ namespace Mod.Interface
 
             DrawLegenda();
             y = 15;
-            foreach (var player in PhotonNetwork.PlayerList) // O(n)
+            foreach (var player in PhotonNetwork.PlayerList) // O(n + nx)
             {
                 DrawPlayerScores(player, y);
                 y += 15;
