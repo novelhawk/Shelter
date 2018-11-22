@@ -8,7 +8,6 @@ namespace Mod.Interface
     {
         private Rect _windowRect;
         private Texture2D _background;
-        private Texture2D _topBar;
         private GUIStyle _menuItem;
         private GUIStyle _menuValue;
         private GUIStyle _menuCategory;
@@ -20,7 +19,6 @@ namespace Mod.Interface
         protected override void OnShow()
         {
             _background = Texture(255, 255, 255);
-            _topBar = Texture(255, 0, 0);
             
             _menuEntry = new GUIStyle
             {
@@ -96,17 +94,17 @@ namespace Mod.Interface
             _windowRect = new Rect(Screen.width / 2f - 400, Screen.height / 2f - 250, 800, 500);
             GUI.DrawTexture(_windowRect, _background);
             
-            _topBar = Texture(color);
-            GUI.DrawTexture(new Rect(_windowRect.x, _windowRect.y, _windowRect.width, 4), _topBar);
-            Destroy(_topBar);
+            //PERFORMANCE: Use custom shader instead
+            var bar = Texture(color);
+            GUI.DrawTexture(new Rect(_windowRect.x, _windowRect.y, _windowRect.width, 4), bar);
+            Destroy(bar);
 
             SmartRect rect = new SmartRect(_windowRect.x, _windowRect.y + 9, _windowRect.width / 5f, 27);
             if (GUI.Button(rect, "General", _currentMenu == SubMenu.General ? _selectedEntry : _menuEntry))
                 _currentMenu = SubMenu.General;
             if (GUI.Button(rect.OX(rect.Width), "Keyboard", _currentMenu == SubMenu.Keyboard ? _selectedEntry : _menuEntry))
                 _currentMenu = SubMenu.Keyboard;
-            if (GUI.Button(rect.OX(rect.Width), "Game Settings",
-                _currentMenu == SubMenu.GameSettings ? _selectedEntry : _menuEntry))
+            if (GUI.Button(rect.OX(rect.Width), "Game Settings", _currentMenu == SubMenu.GameSettings ? _selectedEntry : _menuEntry))
                 _currentMenu = SubMenu.GameSettings;
             if (GUI.Button(rect.OX(rect.Width), "Skins", _currentMenu == SubMenu.Skins ? _selectedEntry : _menuEntry))
                 _currentMenu = SubMenu.Skins;
@@ -268,8 +266,6 @@ namespace Mod.Interface
 
         protected override void OnHide()
         {
-            if (_topBar != null)
-                Destroy(_topBar);
             Destroy(_background);
         }
 
