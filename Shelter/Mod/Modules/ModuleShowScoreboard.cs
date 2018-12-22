@@ -10,17 +10,20 @@ namespace Mod.Modules
         public override bool IsAbusive => false;
         public override bool HasGUI => true;
 
+        private Gui _scoreboard;
+        private bool _alwaysShow;
+
         protected override void OnModuleEnable()
         {
             _scoreboard = Shelter.InterfaceManager.GetGUI(nameof(Scoreboard));
-            _showOnTab = PlayerPrefs.GetInt(PlayerPref + ".showOnTab", 0) == 1;
-            if (!_showOnTab)
+            _alwaysShow = PlayerPrefs.GetInt(PlayerPref + ".alwaysShow", 0) == 1;
+            if (_alwaysShow)
                 _scoreboard.Enable();
         }
 
         protected override void OnModuleUpdate()
         {
-            if (!_showOnTab)
+            if (_alwaysShow)
                 return;
             
             if (Input.GetKey(KeyCode.Tab) && !_scoreboard.Visible)
@@ -34,23 +37,21 @@ namespace Mod.Modules
             _scoreboard.Disable();
             _scoreboard = null;
         }
-
-        private Gui _scoreboard;
-        private bool _showOnTab;
         
         public override void Render(Rect windowRect)
         {
             GUILayout.BeginArea(windowRect);
             
-            GUILayout.Label("Show scoreboard only when Tab is pressed:");
-            var newValue = GUILayout.Toggle(_showOnTab, "On/Off");
-            if (newValue != _showOnTab)
+            var show = GUILayout.Toggle(_alwaysShow, "Always show the Scoreboard (otherwise show only on Tab)");
+            if (show != _alwaysShow)
             {
-                if (!newValue)
+                _alwaysShow = show;
+                
+                PlayerPrefs.SetInt(PlayerPref + ".alwaysShow", show ? 1 : 0);
+                if (show)
                     _scoreboard.Enable();
-                PlayerPrefs.SetInt(PlayerPref + ".showOnTab", newValue ? 1 : 0);
-                _showOnTab = newValue;
             }
+            
             GUILayout.EndArea();
         }
     }
