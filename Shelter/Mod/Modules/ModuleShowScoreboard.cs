@@ -48,7 +48,7 @@ namespace Mod.Modules
             {
                 if (!newValue)
                     _scoreboard.Enable();
-                PlayerPrefs.SetInt(PlayerPref + ".showOnTab", _showOnTab ? 1 : 0);
+                PlayerPrefs.SetInt(PlayerPref + ".showOnTab", newValue ? 1 : 0);
                 _showOnTab = newValue;
             }
             GUILayout.EndArea();
