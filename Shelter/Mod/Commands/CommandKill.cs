@@ -50,8 +50,6 @@ namespace Mod.Commands
                 {
                     if (!Player.TryParse(args[0], out Player player))
                         throw new PlayerNotFoundException(args[0]);
-                    if (player.IsLocal)
-                        throw new TargetCannotBeLocalException("You cannot kill yourself"); // Do I want this?
 
                     if (player.Hero != null)
                     {
