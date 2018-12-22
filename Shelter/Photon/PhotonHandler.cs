@@ -152,7 +152,7 @@ public class PhotonHandler : MonoBehaviour, IPhotonPeerListener
             num = (int)(Time.realtimeSinceStartup * 1000f);
             if (num > this.nextSendTickCount)
             {
-                while (PhotonNetwork.isMessageQueueRunning && PhotonNetwork.networkingPeer.SendOutgoingCommands())
+                while (PhotonNetwork.isMessageQueueRunning && PhotonNetwork.networkingPeer.SendOutgoingCommands()) // SendOutgoingCommands was being called once more if isMessageQueueRunning turns false
                 {
                 }
                 this.nextSendTickCount = num + this.updateInterval;
