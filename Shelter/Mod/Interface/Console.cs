@@ -18,9 +18,9 @@ namespace Mod.Interface
 
         protected override void Render()
         {
-            SmartRect rect = new SmartRect(Screen.width * 0.65f, Screen.height, Screen.width / 2f, 12);
+            float y = Screen.height;
             foreach (string log in Shelter.ConsoleLogger.Logs)
-                GUI.Label(rect.OY(-12), log, _textStyle);
+                GUI.Label(new Rect(Screen.width * 0.75f, y -= 12, Screen.width * 0.25f, 12), log, _textStyle);
         }
     }
 }
