@@ -16,7 +16,7 @@ namespace Mod.Modules
         protected override void OnModuleEnable()
         {
             _scoreboard = Shelter.InterfaceManager.GetGUI(nameof(Scoreboard));
-            _alwaysShow = PlayerPrefs.GetInt(PlayerPref + ".alwaysShow", 0) == 1;
+            _alwaysShow = PlayerPrefs.GetInt(PlayerPref + ".alwaysShow", 1) == 1;
             if (_alwaysShow)
                 _scoreboard.Enable();
         }
