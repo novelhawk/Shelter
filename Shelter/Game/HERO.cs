@@ -1058,6 +1058,7 @@ public class HERO : Photon.MonoBehaviour
                         this.hookBySomeOne = false;
                     }
                 }
+                
                 float z = 0;
                 float x = 0;
                 if (!IN_GAME_MAIN_CAMERA.isTyping)
@@ -1163,6 +1164,7 @@ public class HERO : Photon.MonoBehaviour
                         }
                     }
                 }
+                
                 if (this.grounded)
                 {
                     Vector3 vector7;
@@ -1321,7 +1323,10 @@ public class HERO : Photon.MonoBehaviour
                     {
                         this.sparks.enableEmission = false;
                     }
-                    if (this.myHorse != null && (this.baseAnimation.IsPlaying("horse_geton") || this.baseAnimation.IsPlaying("air_fall")) && this.baseRigidBody.velocity.y < 0f && Vector3.Distance(this.myHorse.transform.position + Vector3.up * 1.65f, this.baseTransform.position) < 0.5f)
+                    if (this.myHorse != null && 
+                        (this.baseAnimation.IsPlaying("horse_geton") || this.baseAnimation.IsPlaying("air_fall")) && 
+                        this.baseRigidBody.velocity.y < 0f && 
+                        Vector3.Distance(this.myHorse.transform.position + Vector3.up * 1.65f, this.baseTransform.position) < 0.5f)
                     {
                         this.baseTransform.position = this.myHorse.transform.position + Vector3.up * 1.65f;
                         this.baseTransform.rotation = this.myHorse.transform.rotation;
@@ -1337,11 +1342,11 @@ public class HERO : Photon.MonoBehaviour
                         }
                         else
                         {
-                            bool flag5 = Mathf.Abs(this.baseRigidBody.velocity.x) + Mathf.Abs(this.baseRigidBody.velocity.z) > 25f;
-                            bool flag6 = this.baseRigidBody.velocity.y < 0f;
-                            if (!flag5)
+                            bool isMoving = Mathf.Abs(this.baseRigidBody.velocity.x) + Mathf.Abs(this.baseRigidBody.velocity.z) > 25f;
+                            bool isFalling = this.baseRigidBody.velocity.y < 0f;
+                            if (!isMoving)
                             {
-                                if (flag6)
+                                if (isFalling)
                                 {
                                     if (!this.baseAnimation.IsPlaying("air_fall"))
                                     {
@@ -4003,12 +4008,7 @@ public class HERO : Photon.MonoBehaviour
     
     private void Start()
     {
-        var player = photonView.owner;
-        if (player == null) // Should never happen
-            return;
-        
         GameManager.instance.Heroes.Add(this);
-        player.Hero = this;
         
         if ((LevelInfoManager.Get(GameManager.Level).Horse || GameManager.settings.EnableHorse) && IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
         {
@@ -4026,8 +4026,16 @@ public class HERO : Photon.MonoBehaviour
         this.speedFXPS = this.speedFX1.GetComponent<ParticleSystem>();
         this.speedFXPS.enableEmission = false;
         Color circleColor = Color.green;
+        
+        Player player = null;
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
         {
+            player = photonView.owner;
+            if (player == null) // Should never happen
+                return;
+            
+            player.Hero = this;
+
             if (PhotonNetwork.isMasterClient)
             {
                 int id = player.ID;
