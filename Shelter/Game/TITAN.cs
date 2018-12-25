@@ -5,6 +5,7 @@ using System.Linq;
 using Game;
 using JetBrains.Annotations;
 using Mod;
+using Mod.Exceptions;
 using Mod.GameSettings;
 using Mod.Managers;
 using Mod.Modules;
@@ -1745,7 +1746,7 @@ public class TITAN : Photon.MonoBehaviour
 
     [RPC]
     [UsedImplicitly]
-    public void LabelRPC(int health, int maxHealth)
+    public void LabelRPC(int health, int maxHealth, PhotonMessageInfo info)
     {
         if (health < 0)
         {
