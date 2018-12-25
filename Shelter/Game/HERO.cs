@@ -2766,12 +2766,15 @@ public class HERO : Photon.MonoBehaviour
 
     [RPC]
     [UsedImplicitly]
-    public void MoveToRPC(float posX, float posY, float posZ, PhotonMessageInfo info)
+    public void MoveToRPC(float x, float y, float z, PhotonMessageInfo info)
     {
-        if (info.sender.IsMasterClient)
-        {
-            transform.position = new Vector3(posX, posY, posZ);
-        }
+        if (!info.sender.IsMasterClient)
+            throw new NotAllowedException(nameof(MoveToRPC), info);
+
+        if (ModuleManager.Enabled(nameof(ModuleDisableTP)))
+            return;
+        
+        transform.position = new Vector3(x, y, z);
     }
 
     [RPC]
