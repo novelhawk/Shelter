@@ -1,5 +1,4 @@
 ﻿using Mod.GameSettings;
-using Mod.Interface;
 
 namespace Mod.Commands
 {

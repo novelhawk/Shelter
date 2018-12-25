@@ -1,4 +1,3 @@
-using Photon;
 using Photon.Enums;
 using UnityEngine;
 using MonoBehaviour = UnityEngine.MonoBehaviour;
@@ -19,10 +18,6 @@ public class LevelTriggerCheckPoint : MonoBehaviour
                 GameManager.instance.checkpoint = gameObject;
             }
         }
-    }
-
-    private void Start()
-    {
     }
 }
 

@@ -223,8 +223,8 @@ namespace Photon
                     return false;
                 }
                 offlineModeRoom = new Room(roomName, roomOptions);
-                NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom, new object[0]);
-                NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom, new object[0]);
+                NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom);
+                NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom);
                 return true;
             }
             if (networkingPeer.server == ServerConnection.MasterServer && connectedAndReady)
@@ -378,7 +378,7 @@ namespace Photon
                 Hashtable evData = networkingPeer.SendInstantiate(prefabName, position, rotation, group, viewIDs, data, false);
                 return networkingPeer.DoInstantiate(evData, networkingPeer.mLocalActor, obj2);
             }
-            Debug.LogError(string.Concat(new object[] { "Failed to Instantiate prefab: ", prefabName, ". Client should be in a room. Current connectionStateDetailed: ", connectionStatesDetailed }));
+            Debug.LogError(string.Concat("Failed to Instantiate prefab: ", prefabName, ". Client should be in a room. Current connectionStateDetailed: ", connectionStatesDetailed));
             return null;
         }
 
@@ -413,13 +413,13 @@ namespace Photon
                 int[] viewIDs = AllocateSceneViewIDs(obj2.GetPhotonViewsInChildren().Length);
                 if (viewIDs == null)
                 {
-                    Debug.LogError(string.Concat(new object[] { "Failed to InstantiateSceneObject prefab: ", prefabName, ". No ViewIDs are free to use. Max is: ", MaxViewIds }));
+                    Debug.LogError(string.Concat("Failed to InstantiateSceneObject prefab: ", prefabName, ". No ViewIDs are free to use. Max is: ", MaxViewIds));
                     return null;
                 }
                 Hashtable evData = networkingPeer.SendInstantiate(prefabName, position, rotation, group, viewIDs, data, true);
                 return networkingPeer.DoInstantiate(evData, networkingPeer.mLocalActor, obj2);
             }
-            Debug.LogError(string.Concat(new object[] { "Failed to InstantiateSceneObject prefab: ", prefabName, ". Client should be in a room. Current connectionStateDetailed: ", connectionStatesDetailed }));
+            Debug.LogError(string.Concat("Failed to InstantiateSceneObject prefab: ", prefabName, ". Client should be in a room. Current connectionStateDetailed: ", connectionStatesDetailed));
             return null;
         }
 
@@ -468,8 +468,8 @@ namespace Photon
                     return false;
                 }
                 offlineModeRoom = new Room(roomName, roomOptions);
-                NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom, new object[0]);
-                NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom, new object[0]);
+                NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnCreatedRoom);
+                NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom);
                 return true;
             }
             if (networkingPeer.server == ServerConnection.MasterServer && connectedAndReady)
@@ -495,7 +495,7 @@ namespace Photon
                     return false;
                 }
                 offlineModeRoom = new Room("offline room", (Hashtable)null);
-                NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom, new object[0]);
+                NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom);
                 return true;
             }
             if (networkingPeer.server == ServerConnection.MasterServer && connectedAndReady)
@@ -522,7 +522,7 @@ namespace Photon
                     return false;
                 }
                 offlineModeRoom = new Room(roomName, (Hashtable)null);
-                NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom, new object[0]);
+                NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom);
                 return true;
             }
             if (networkingPeer.server == ServerConnection.MasterServer && connectedAndReady)
@@ -550,7 +550,7 @@ namespace Photon
                         if (offlineMode)
                         {
                             offlineModeRoom = new Room(roomName, (Hashtable)null);
-                            NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom, new object[0]);
+                            NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnJoinedRoom);
                             return true;
                         }
                         return networkingPeer.OpJoinRoom(roomName, null, null, createIfNotExists);
@@ -579,7 +579,7 @@ namespace Photon
             if (offlineMode)
             {
                 offlineModeRoom = null;
-                NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnLeftRoom, new object[0]);
+                NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnLeftRoom);
                 return true;
             }
             if (Room == null)
@@ -1070,7 +1070,7 @@ namespace Photon
                         isOfflineMode = value;
                         if (isOfflineMode)
                         {
-                            NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnConnectedToMaster, new object[0]);
+                            NetworkingPeer.SendMonoMessage(PhotonNetworkingMessage.OnConnectedToMaster);
                             networkingPeer.ChangeLocalID(1);
                             networkingPeer.mMasterClient = Player.Self;
                         }

@@ -48,15 +48,15 @@ public class SpringPanel : IgnoreTimeScale
         }
         bool flag = false;
         Vector3 localPosition = this.mTrans.localPosition;
-        Vector3 target = NGUIMath.SpringLerp(this.mTrans.localPosition, this.target, this.strength, deltaTime);
-        if (this.mThreshold >= Vector3.Magnitude(target - this.target))
+        Vector3 targ = NGUIMath.SpringLerp(this.mTrans.localPosition, this.target, this.strength, deltaTime);
+        if (this.mThreshold >= Vector3.Magnitude(targ - this.target))
         {
-            target = this.target;
+            targ = this.target;
             enabled = false;
             flag = true;
         }
-        this.mTrans.localPosition = target;
-        Vector3 vector4 = target - localPosition;
+        this.mTrans.localPosition = targ;
+        Vector3 vector4 = targ - localPosition;
         Vector4 clipRange = this.mPanel.clipRange;
         clipRange.x -= vector4.x;
         clipRange.y -= vector4.y;

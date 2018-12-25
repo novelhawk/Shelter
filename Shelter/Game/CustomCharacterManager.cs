@@ -249,7 +249,7 @@ public class CustomCharacterManager : MonoBehaviour
         HeroCostume from = CostumeConverter.LocalDataToHeroCostume(this.currentSlot);
         if (from != null)
         {
-            this.copyCostume(from, this.setup.myCostume, false);
+            this.copyCostume(from, this.setup.myCostume);
             this.setup.deleteCharacterComponent2();
             this.setup.setCharacterComponent();
         }
@@ -261,7 +261,7 @@ public class CustomCharacterManager : MonoBehaviour
     {
         if (part == CreatePart.Preset)
         {
-            this.presetId = this.toNext(this.presetId, HeroCostume.costume.Length, 0);
+            this.presetId = this.toNext(this.presetId, HeroCostume.costume.Length);
             this.copyCostume(HeroCostume.costume[this.presetId], this.setup.myCostume, true);
             this.CostumeDataToMyID();
             this.setup.deleteCharacterComponent2();
@@ -279,7 +279,7 @@ public class CustomCharacterManager : MonoBehaviour
     {
         if (type == CreateStat.Skill)
         {
-            this.skillId = this.toNext(this.skillId, this.skillOption.Length, 0);
+            this.skillId = this.toNext(this.skillId, this.skillOption.Length);
             this.setup.myCostume.stat.SkillName = this.skillOption[this.skillId];
             this.character.GetComponent<CharacterCreateAnimationControl>().playAttack(this.setup.myCostume.stat.SkillName);
             this.freshLabel();
@@ -326,7 +326,7 @@ public class CustomCharacterManager : MonoBehaviour
     {
         if (part == CreatePart.Preset)
         {
-            this.presetId = this.toPrev(this.presetId, HeroCostume.costume.Length, 0);
+            this.presetId = this.toPrev(this.presetId, HeroCostume.costume.Length);
             this.copyCostume(HeroCostume.costume[this.presetId], this.setup.myCostume, true);
             this.CostumeDataToMyID();
             this.setup.deleteCharacterComponent2();
@@ -344,7 +344,7 @@ public class CustomCharacterManager : MonoBehaviour
     {
         if (type == CreateStat.Skill)
         {
-            this.skillId = this.toPrev(this.skillId, this.skillOption.Length, 0);
+            this.skillId = this.toPrev(this.skillId, this.skillOption.Length);
             this.setup.myCostume.stat.SkillName = this.skillOption[this.skillId];
             this.character.GetComponent<CharacterCreateAnimationControl>().playAttack(this.setup.myCostume.stat.SkillName);
             this.freshLabel();
@@ -406,7 +406,7 @@ public class CustomCharacterManager : MonoBehaviour
         this.costumeOption = HeroCostume.costumeOption;
         this.setup = this.character.GetComponent<HERO_SETUP>();
         this.setup.myCostume = new HeroCostume();
-        this.copyCostume(HeroCostume.costume[2], this.setup.myCostume, false);
+        this.copyCostume(HeroCostume.costume[2], this.setup.myCostume);
         this.setup.myCostume.setMesh2();
         this.setup.setCharacterComponent();
         Sex[] sexArray1 = new Sex[2];
@@ -447,7 +447,7 @@ public class CustomCharacterManager : MonoBehaviour
         divisionArray1[2] = Division.TheMilitaryPolice;
         divisionArray1[3] = Division.TheSurveryCorps;
         this.divisionOption = divisionArray1;
-        this.skillOption = new string[] { "mikasa", "levi", "sasha", "jean", "marco", "armin", "petra" };
+        this.skillOption = new[] { "mikasa", "levi", "sasha", "jean", "marco", "armin", "petra" };
         this.CostumeDataToMyID();
         this.freshLabel();
     }
@@ -468,7 +468,7 @@ public class CustomCharacterManager : MonoBehaviour
         switch (part)
         {
             case CreatePart.Sex:
-                this.sexId = !next ? this.toPrev(this.sexId, this.sexOption.Length, 0) : this.toNext(this.sexId, this.sexOption.Length, 0);
+                this.sexId = !next ? this.toPrev(this.sexId, this.sexOption.Length) : this.toNext(this.sexId, this.sexOption.Length);
                 if (this.sexId != 0)
                 {
                     this.costumeId = 0;
@@ -478,13 +478,13 @@ public class CustomCharacterManager : MonoBehaviour
                 break;
 
             case CreatePart.Eye:
-                this.eyeId = !next ? this.toPrev(this.eyeId, this.eyeOption.Length, 0) : this.toNext(this.eyeId, this.eyeOption.Length, 0);
+                this.eyeId = !next ? this.toPrev(this.eyeId, this.eyeOption.Length) : this.toNext(this.eyeId, this.eyeOption.Length);
                 this.setup.myCostume.eye_texture_id = this.eyeId;
                 this.setup.setFacialTexture(this.setup.part_eye, this.eyeOption[this.eyeId]);
                 goto Label_06AE;
 
             case CreatePart.Face:
-                this.faceId = !next ? this.toPrev(this.faceId, this.faceOption.Length, 0) : this.toNext(this.faceId, this.faceOption.Length, 0);
+                this.faceId = !next ? this.toPrev(this.faceId, this.faceOption.Length) : this.toNext(this.faceId, this.faceOption.Length);
                 this.setup.myCostume.beard_texture_id = this.faceOption[this.faceId];
                 if (this.setup.part_face == null)
                 {
@@ -494,7 +494,7 @@ public class CustomCharacterManager : MonoBehaviour
                 goto Label_06AE;
 
             case CreatePart.Glass:
-                this.glassId = !next ? this.toPrev(this.glassId, this.glassOption.Length, 0) : this.toNext(this.glassId, this.glassOption.Length, 0);
+                this.glassId = !next ? this.toPrev(this.glassId, this.glassOption.Length) : this.toNext(this.glassId, this.glassOption.Length);
                 this.setup.myCostume.glass_texture_id = this.glassOption[this.glassId];
                 if (this.setup.part_glass == null)
                 {
@@ -504,7 +504,7 @@ public class CustomCharacterManager : MonoBehaviour
                 goto Label_06AE;
 
             case CreatePart.Hair:
-                this.hairId = !next ? this.toPrev(this.hairId, this.hairOption.Length, 0) : this.toNext(this.hairId, this.hairOption.Length, 0);
+                this.hairId = !next ? this.toPrev(this.hairId, this.hairOption.Length) : this.toNext(this.hairId, this.hairOption.Length);
                 if (this.sexId != 0)
                 {
                     this.setup.myCostume.hair_mesh = CostumeHair.FemaleHairs[this.hairOption[this.hairId]].Texture;
@@ -524,7 +524,7 @@ public class CustomCharacterManager : MonoBehaviour
             case CreatePart.Skin:
                 if (this.setup.myCostume.uniform_type != UniformType.CasualAHSS)
                 {
-                    this.skinId = !next ? this.toPrev(this.skinId, 2, 0) : this.toNext(this.skinId, 2, 0);
+                    this.skinId = !next ? this.toPrev(this.skinId, 2) : this.toNext(this.skinId, 2);
                 }
                 else
                 {
@@ -544,7 +544,7 @@ public class CustomCharacterManager : MonoBehaviour
                     }
                     else
                     {
-                        this.costumeId = !next ? this.toPrev(this.costumeId, 10, 0) : this.toNext(this.costumeId, 10, 0);
+                        this.costumeId = !next ? this.toPrev(this.costumeId, 10) : this.toNext(this.costumeId, 10);
                     }
                 }
                 else
@@ -561,7 +561,7 @@ public class CustomCharacterManager : MonoBehaviour
                 goto Label_06AE;
 
             case CreatePart.Cape:
-                this.capeId = !next ? this.toPrev(this.capeId, this.capeOption.Length, 0) : this.toNext(this.capeId, this.capeOption.Length, 0);
+                this.capeId = !next ? this.toPrev(this.capeId, this.capeOption.Length) : this.toNext(this.capeId, this.capeOption.Length);
                 this.setup.myCostume.cape = this.capeId == 1;
                 this.setup.myCostume.setCape();
                 this.setup.myCostume.setTexture();
@@ -569,7 +569,7 @@ public class CustomCharacterManager : MonoBehaviour
                 goto Label_06AE;
 
             case CreatePart.Division:
-                this.divisionId = !next ? this.toPrev(this.divisionId, this.divisionOption.Length, 0) : this.toNext(this.divisionId, this.divisionOption.Length, 0);
+                this.divisionId = !next ? this.toPrev(this.divisionId, this.divisionOption.Length) : this.toNext(this.divisionId, this.divisionOption.Length);
                 this.setup.myCostume.division = this.divisionOption[this.divisionId];
                 this.setup.myCostume.setTexture();
                 this.setup.createUpperBody2();
@@ -593,7 +593,7 @@ public class CustomCharacterManager : MonoBehaviour
         switch (part)
         {
             case CreatePart.Sex:
-                this.sexId = !next ? this.toPrev(this.sexId, this.sexOption.Length, 0) : this.toNext(this.sexId, this.sexOption.Length, 0);
+                this.sexId = !next ? this.toPrev(this.sexId, this.sexOption.Length) : this.toNext(this.sexId, this.sexOption.Length);
                 if (this.sexId == 0)
                 {
                     this.costumeId = 11;
@@ -611,13 +611,13 @@ public class CustomCharacterManager : MonoBehaviour
                 goto Label_0750;
 
             case CreatePart.Eye:
-                this.eyeId = !next ? this.toPrev(this.eyeId, this.eyeOption.Length, 0) : this.toNext(this.eyeId, this.eyeOption.Length, 0);
+                this.eyeId = !next ? this.toPrev(this.eyeId, this.eyeOption.Length) : this.toNext(this.eyeId, this.eyeOption.Length);
                 this.setup.myCostume.eye_texture_id = this.eyeId;
                 this.setup.setFacialTexture(this.setup.part_eye, this.eyeOption[this.eyeId]);
                 goto Label_0750;
 
             case CreatePart.Face:
-                this.faceId = !next ? this.toPrev(this.faceId, this.faceOption.Length, 0) : this.toNext(this.faceId, this.faceOption.Length, 0);
+                this.faceId = !next ? this.toPrev(this.faceId, this.faceOption.Length) : this.toNext(this.faceId, this.faceOption.Length);
                 this.setup.myCostume.beard_texture_id = this.faceOption[this.faceId];
                 if (this.setup.part_face == null)
                 {
@@ -627,7 +627,7 @@ public class CustomCharacterManager : MonoBehaviour
                 goto Label_0750;
 
             case CreatePart.Glass:
-                this.glassId = !next ? this.toPrev(this.glassId, this.glassOption.Length, 0) : this.toNext(this.glassId, this.glassOption.Length, 0);
+                this.glassId = !next ? this.toPrev(this.glassId, this.glassOption.Length) : this.toNext(this.glassId, this.glassOption.Length);
                 this.setup.myCostume.glass_texture_id = this.glassOption[this.glassId];
                 if (this.setup.part_glass == null)
                 {
@@ -637,7 +637,7 @@ public class CustomCharacterManager : MonoBehaviour
                 goto Label_0750;
 
             case CreatePart.Hair:
-                this.hairId = !next ? this.toPrev(this.hairId, this.hairOption.Length, 0) : this.toNext(this.hairId, this.hairOption.Length, 0);
+                this.hairId = !next ? this.toPrev(this.hairId, this.hairOption.Length) : this.toNext(this.hairId, this.hairOption.Length);
                 if (this.sexId == 0)
                 {
                     this.setup.myCostume.hair_mesh = CostumeHair.MaleHairs[this.hairOption[this.hairId]].Texture;
@@ -657,7 +657,7 @@ public class CustomCharacterManager : MonoBehaviour
                 }
                 else
                 {
-                    this.skinId = !next ? this.toPrev(this.skinId, 2, 0) : this.toNext(this.skinId, 2, 0);
+                    this.skinId = !next ? this.toPrev(this.skinId, 2) : this.toNext(this.skinId, 2);
                 }
                 this.setup.myCostume.skin_color = this.skinOption[this.skinId];
                 this.setup.myCostume.setTexture();
@@ -679,7 +679,7 @@ public class CustomCharacterManager : MonoBehaviour
                 }
                 else if (this.sexId != 0)
                 {
-                    this.costumeId = !next ? this.toPrev(this.costumeId, 10, 0) : this.toNext(this.costumeId, 10, 0);
+                    this.costumeId = !next ? this.toPrev(this.costumeId, 10) : this.toNext(this.costumeId, 10);
                 }
                 else
                 {
@@ -695,7 +695,7 @@ public class CustomCharacterManager : MonoBehaviour
                 goto Label_0750;
 
             case CreatePart.Cape:
-                this.capeId = !next ? this.toPrev(this.capeId, this.capeOption.Length, 0) : this.toNext(this.capeId, this.capeOption.Length, 0);
+                this.capeId = !next ? this.toPrev(this.capeId, this.capeOption.Length) : this.toNext(this.capeId, this.capeOption.Length);
                 this.setup.myCostume.cape = this.capeId == 1;
                 this.setup.myCostume.setCape();
                 this.setup.myCostume.setTexture();
@@ -703,7 +703,7 @@ public class CustomCharacterManager : MonoBehaviour
                 goto Label_0750;
 
             case CreatePart.Division:
-                this.divisionId = !next ? this.toPrev(this.divisionId, this.divisionOption.Length, 0) : this.toNext(this.divisionId, this.divisionOption.Length, 0);
+                this.divisionId = !next ? this.toPrev(this.divisionId, this.divisionOption.Length) : this.toNext(this.divisionId, this.divisionOption.Length);
                 this.setup.myCostume.division = this.divisionOption[this.divisionId];
                 this.setup.myCostume.setTexture();
                 this.setup.createUpperBody2();

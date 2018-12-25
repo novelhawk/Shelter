@@ -191,12 +191,7 @@ namespace NGUI.Internal
             float num3 = x + relativeSize.x + relativePadding.x + relativePadding.z;
             float num4 = y - relativeSize.y - relativePadding.y - relativePadding.w;
             Transform cachedTransform = w.cachedTransform;
-            return new Vector3[] { cachedTransform.TransformPoint(x, y, 0f), cachedTransform.TransformPoint(x, num4, 0f), cachedTransform.TransformPoint(num3, num4, 0f), cachedTransform.TransformPoint(num3, y, 0f) };
-        }
-
-        public static int ClampIndex(int val, int max)
-        {
-            return val >= 0 ? (val >= max ? max - 1 : val) : 0;
+            return new[] { cachedTransform.TransformPoint(x, y, 0f), cachedTransform.TransformPoint(x, num4, 0f), cachedTransform.TransformPoint(num3, num4, 0f), cachedTransform.TransformPoint(num3, y, 0f) };
         }
 
         public static int ColorToInt(Color c)
@@ -277,23 +272,15 @@ namespace NGUI.Internal
             return rect2;
         }
 
+        /// <summary>
+        /// Converts <paramref name="num"/> to a <b>six-digit</b> hexadecimal number
+        /// </summary>
+        /// <param name="num">The number to convert</param>
+        /// <returns>The six-digit hexadecimal number representation of <paramref name="num"/></returns>
         public static string DecimalToHex(int num)
         {
             num &= 16777215;
             return num.ToString("X6");
-        }
-
-        public static char DecimalToHexChar(int num)
-        {
-            if (num > 15)
-            {
-                return 'F';
-            }
-            if (num < 10)
-            {
-                return (char)(48 + num);
-            }
-            return (char)(65 + num - 10);
         }
 
         private static float DistancePointToLineSegment(Vector2 point, Vector2 a, Vector2 b)
@@ -368,95 +355,23 @@ namespace NGUI.Internal
             return IntToColor((int)val);
         }
 
-        public static int HexToDecimal(char ch)
+        public static int HexToDecimal(char c)
         {
-            char ch2 = ch;
-            switch (ch2)
-            {
-                case '0':
-                    return 0;
+            int value = c;
+            
+            // Return value if less than 10
+            if (value >= '0' && value <= '9') 
+                return value - '0';
 
-                case '1':
-                    return 1;
+            // Enforce UpperCase
+            if (value >= 'a' && value <= 'f')
+                value -= 0x20;
+            
+            // Return HexValue
+            if (value >= 'A' && value <= 'F')
+                return value - 'A';
 
-                case '2':
-                    return 2;
-
-                case '3':
-                    return 3;
-
-                case '4':
-                    return 4;
-
-                case '5':
-                    return 5;
-
-                case '6':
-                    return 6;
-
-                case '7':
-                    return 7;
-
-                case '8':
-                    return 8;
-
-                case '9':
-                    return 9;
-
-                case 'A':
-                    break;
-
-                case 'B':
-                    goto Label_00A5;
-
-                case 'C':
-                    goto Label_00A8;
-
-                case 'D':
-                    goto Label_00AB;
-
-                case 'E':
-                    goto Label_00AE;
-
-                case 'F':
-                    goto Label_00B1;
-
-                default:
-                    switch (ch2)
-                    {
-                        case 'a':
-                            break;
-
-                        case 'b':
-                            goto Label_00A5;
-
-                        case 'c':
-                            goto Label_00A8;
-
-                        case 'd':
-                            goto Label_00AB;
-
-                        case 'e':
-                            goto Label_00AE;
-
-                        case 'f':
-                            goto Label_00B1;
-
-                        default:
-                            return 15;
-                    }
-                    break;
-            }
-            return 10;
-            Label_00A5:
-            return 11;
-            Label_00A8:
-            return 12;
-            Label_00AB:
-            return 13;
-            Label_00AE:
-            return 14;
-            Label_00B1:
+            // c is not an hexadecimal number
             return 15;
         }
 

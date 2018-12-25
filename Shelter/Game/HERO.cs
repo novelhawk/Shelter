@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Game;
@@ -8,7 +9,6 @@ using JetBrains.Annotations;
 using Mod;
 using Mod.Exceptions;
 using Mod.GameSettings;
-using Mod.Interface;
 using Mod.Keybinds;
 using Mod.Managers;
 using Mod.Modules;
@@ -239,10 +239,10 @@ public class HERO : Photon.MonoBehaviour
         this.ungrabbed();
         this.falseAttack();
         this.skillCDDuration = this.skillCDLast;
-        GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(gameObject, true, false);
+        GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(gameObject);
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer)
         {
-            photonView.RPC(Rpc.SwitchToHuman, PhotonTargets.Others, new object[0]);
+            photonView.RPC(Rpc.SwitchToHuman, PhotonTargets.Others);
         }
     }
 
@@ -428,19 +428,19 @@ public class HERO : Photon.MonoBehaviour
             this.applyForceToBody(obj5, force);
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine)
             {
-                this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(gO, false, false);
+                this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(gO, false);
             }
         }
         else if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || photonView.isMine)
         {
-            this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(obj2, false, false);
+            this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(obj2, false);
         }
         this.applyForceToBody(obj2, force);
-        Transform transform = this.transform.Find("Amarture/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L").transform;
+        Transform t = this.transform.Find("Amarture/Controller_Body/hip/spine/chest/shoulder_L/upper_arm_L/forearm_L/hand_L").transform;
         Transform transform2 = this.transform.Find("Amarture/Controller_Body/hip/spine/chest/shoulder_R/upper_arm_R/forearm_R/hand_R").transform;
         if (this.useGun)
         {
-            obj6 = (GameObject) Instantiate(Resources.Load("Character_parts/character_gun_l"), transform.position, transform.rotation);
+            obj6 = (GameObject) Instantiate(Resources.Load("Character_parts/character_gun_l"), t.position, t.rotation);
             obj7 = (GameObject) Instantiate(Resources.Load("Character_parts/character_gun_r"), transform2.position, transform2.rotation);
             obj8 = (GameObject) Instantiate(Resources.Load("Character_parts/character_3dmg_2"), this.transform.position, this.transform.rotation);
             obj9 = (GameObject) Instantiate(Resources.Load("Character_parts/character_gun_mag_l"), this.transform.position, this.transform.rotation);
@@ -448,7 +448,7 @@ public class HERO : Photon.MonoBehaviour
         }
         else
         {
-            obj6 = (GameObject) Instantiate(Resources.Load("Character_parts/character_blade_l"), transform.position, transform.rotation);
+            obj6 = (GameObject) Instantiate(Resources.Load("Character_parts/character_blade_l"), t.position, t.rotation);
             obj7 = (GameObject) Instantiate(Resources.Load("Character_parts/character_blade_r"), transform2.position, transform2.rotation);
             obj8 = (GameObject) Instantiate(Resources.Load("Character_parts/character_3dmg"), this.transform.position, this.transform.rotation);
             obj9 = (GameObject) Instantiate(Resources.Load("Character_parts/character_3dmg_gas_l"), this.transform.position, this.transform.rotation);
@@ -686,17 +686,17 @@ public class HERO : Photon.MonoBehaviour
         for (count = 0; count < list.Count; count++)
         {
             RaycastHit hit2 = list[count];
-            GameObject gameObject = hit2.collider.gameObject;
-            if (gameObject.layer == 16)
+            GameObject go = hit2.collider.gameObject;
+            if (go.layer == 16)
             {
-                if (gameObject.name.Contains("PlayerDetectorRC") && (hit2 = list[count]).distance < num2)
+                if (go.name.Contains("PlayerDetectorRC") && (hit2 = list[count]).distance < num2)
                 {
                     num2 -= 60f;
                     if (num2 <= 60f)
                     {
                         count = list.Count;
                     }
-                    TITAN component = gameObject.transform.root.gameObject.GetComponent<TITAN>();
+                    TITAN component = go.transform.root.gameObject.GetComponent<TITAN>();
                     if (component != null)
                     {
                         list2.Add(component);
@@ -832,9 +832,9 @@ public class HERO : Photon.MonoBehaviour
             GameManager.instance.GameLose();
             this.falseAttack();
             this.hasDied = true;
-            Transform transform = this.transform.Find("audio_die");
-            transform.parent = null;
-            transform.GetComponent<AudioSource>().Play();
+            Transform t = this.transform.Find("audio_die");
+            t.parent = null;
+            t.GetComponent<AudioSource>().Play();
             IN_GAME_MAIN_CAMERA.instance.TakeScreenshot(this.transform.position, 0, null, 0.02f);
             Destroy(gameObject);
         }
@@ -856,11 +856,11 @@ public class HERO : Photon.MonoBehaviour
             {
                 this.bulletRight.GetComponent<Bullet>().removeMe();
             }
-            Transform transform = this.transform.Find("audio_die");
-            transform.parent = null;
-            transform.GetComponent<AudioSource>().Play();
+            Transform t = this.transform.Find("audio_die");
+            t.parent = null;
+            t.GetComponent<AudioSource>().Play();
             this.meatDie.Play();
-            this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(null, true, false);
+            this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(null);
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
             GameManager.instance.GameLose();
             this.falseAttack();
@@ -925,7 +925,7 @@ public class HERO : Photon.MonoBehaviour
         }
         this.eren_titan.GetComponent<TITAN_EREN>().realBody = gameObject;
         GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().flashBlind();
-        GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(this.eren_titan, true, false);
+        GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(this.eren_titan);
         this.eren_titan.GetComponent<TITAN_EREN>().born();
         this.eren_titan.rigidbody.velocity = rigidbody.velocity;
         rigidbody.velocity = Vector3.zero;
@@ -1230,7 +1230,7 @@ public class HERO : Photon.MonoBehaviour
                         vector7 = Vector3.zero;
                         this.baseRigidBody.velocity = vector7;
                         zero = vector7;
-                        this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(0.2f, 0.3f, 0.95f);
+                        this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().startShake(0.2f, 0.3f);
                     }
                     if (this.State == HeroState.GroundDodge)
                     {
@@ -1489,7 +1489,7 @@ public class HERO : Photon.MonoBehaviour
                         Vector3 vector12 = this.getGlobaleFacingVector3(num12);
                         float num13 = vector11.magnitude <= 0.95f ? (vector11.magnitude >= 0.25f ? vector11.magnitude : 0f) : 1f;
                         vector12 = vector12 * num13;
-                        vector12 = vector12 * ((float)this.setup.myCostume.stat.Acceleration / 10f * 2f);
+                        vector12 = vector12 * (this.setup.myCostume.stat.Acceleration / 10f * 2f);
                         if (x == 0f && z == 0f)
                         {
                             if (this.State == HeroState.Attack)
@@ -1674,31 +1674,6 @@ public class HERO : Photon.MonoBehaviour
         }
     }
 
-    public string getDebugInfo()
-    {
-        string str = "\n";
-        str = "Left:" + this.isLeftHandHooked + " ";
-        if (this.isLeftHandHooked && this.bulletLeft != null)
-        {
-            Vector3 vector = this.bulletLeft.transform.position - transform.position;
-            str = str + (int) (Mathf.Atan2(vector.x, vector.z) * 57.29578f);
-        }
-        string str2 = str;
-        object[] objArray1 = new object[] { str2, "\nRight:", this.isRightHandHooked, " " };
-        str = string.Concat(objArray1);
-        if (this.isRightHandHooked && this.bulletRight != null)
-        {
-            Vector3 vector2 = this.bulletRight.transform.position - transform.position;
-            str = str + (int) (Mathf.Atan2(vector2.x, vector2.z) * 57.29578f);
-        }
-        str = str + "\nfacingDirection:" + (int) this.facingDirection + "\nActual facingDirection:" + (int) transform.rotation.eulerAngles.y + "\nState:" + this.State + "\n\n\n\n\n";
-        if (this.State == HeroState.Attack)
-        {
-            this.targetRotation = Quaternion.Euler(0f, this.facingDirection, 0f);
-        }
-        return str;
-    }
-
     private Vector3 getGlobaleFacingVector3(float resultAngle)
     {
         float num = -resultAngle + 90f;
@@ -1824,10 +1799,10 @@ public class HERO : Photon.MonoBehaviour
 
     private void headMovement()
     {
-        Transform transform = this.transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head");
+        Transform t = this.transform.Find("Amarture/Controller_Body/hip/spine/chest/neck/head");
         Transform transform2 = this.transform.Find("Amarture/Controller_Body/hip/spine/chest/neck");
         float x = Mathf.Sqrt((this.gunTarget.x - this.transform.position.x) * (this.gunTarget.x - this.transform.position.x) + (this.gunTarget.z - this.transform.position.z) * (this.gunTarget.z - this.transform.position.z));
-        this.targetHeadRotation = transform.rotation;
+        this.targetHeadRotation = t.rotation;
         Vector3 vector5 = this.gunTarget - this.transform.position;
         float current = -Mathf.Atan2(vector5.z, vector5.x) * 57.29578f;
         float num3 = -Mathf.DeltaAngle(current, this.transform.rotation.eulerAngles.y - 90f);
@@ -1835,9 +1810,9 @@ public class HERO : Photon.MonoBehaviour
         float y = transform2.position.y - this.gunTarget.y;
         float num5 = Mathf.Atan2(y, x) * 57.29578f;
         num5 = Mathf.Clamp(num5, -40f, 30f);
-        this.targetHeadRotation = Quaternion.Euler(transform.rotation.eulerAngles.x + num5, transform.rotation.eulerAngles.y + num3, transform.rotation.eulerAngles.z);
+        this.targetHeadRotation = Quaternion.Euler(t.rotation.eulerAngles.x + num5, t.rotation.eulerAngles.y + num3, t.rotation.eulerAngles.z);
         this.oldHeadRotation = Quaternion.Lerp(this.oldHeadRotation, this.targetHeadRotation, Time.deltaTime * 60f);
-        transform.rotation = this.oldHeadRotation;
+        t.rotation = this.oldHeadRotation;
     }
 
     public void hookedByHuman(int hooker, Vector3 hookPosition)
@@ -1866,7 +1841,7 @@ public class HERO : Photon.MonoBehaviour
         float num = Mathf.Pow(this.launchForce.magnitude, 0.1f);
         if (this.grounded)
         {
-            rigidbody.AddForce(Vector3.up * Mathf.Min((float)(this.launchForce.magnitude * 0.2f), (float)10f), ForceMode.Impulse);
+            rigidbody.AddForce(Vector3.up * Mathf.Min(this.launchForce.magnitude * 0.2f, 10f), ForceMode.Impulse);
         }
         rigidbody.AddForce(this.launchForce * num * 0.1f, ForceMode.Impulse);
     }
@@ -2167,7 +2142,7 @@ public class HERO : Photon.MonoBehaviour
     {
         if (this.currentGas != 0f)
         {
-            this.useGas(0f);
+            this.useGas();
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
             {
                 this.bulletLeft = (GameObject) Instantiate(Resources.Load("hook"));
@@ -2189,7 +2164,7 @@ public class HERO : Photon.MonoBehaviour
             }
             else
             {
-                component.launch(vector * 3f, rigidbody.velocity, str, true, gameObject, false);
+                component.launch(vector * 3f, rigidbody.velocity, str, true, gameObject);
             }
             this.launchPointLeft = Vector3.zero;
         }
@@ -2199,7 +2174,7 @@ public class HERO : Photon.MonoBehaviour
     {
         if (this.currentGas != 0f)
         {
-            this.useGas(0f);
+            this.useGas();
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
             {
                 this.bulletRight = (GameObject) Instantiate(Resources.Load("hook"));
@@ -2221,7 +2196,7 @@ public class HERO : Photon.MonoBehaviour
             }
             else
             {
-                component.launch(vector * 3f, rigidbody.velocity, str, false, gameObject, false);
+                component.launch(vector * 3f, rigidbody.velocity, str, false, gameObject);
             }
             this.launchPointRight = Vector3.zero;
         }
@@ -2687,10 +2662,10 @@ public class HERO : Photon.MonoBehaviour
         }
         if (hasHorse && horse >= 0)
         {
-            GameObject gameObject = PhotonView.Find(horse).gameObject;
-            if (gameObject != null)
+            GameObject go = PhotonView.Find(horse).gameObject;
+            if (go != null)
             {
-                foreach (Renderer currentRenderer in gameObject.GetComponentsInChildren<Renderer>())
+                foreach (Renderer currentRenderer in go.GetComponentsInChildren<Renderer>())
                 {
                     if (currentRenderer.name.Contains("HORSE"))
                     {
@@ -2930,7 +2905,7 @@ public class HERO : Photon.MonoBehaviour
                 PhotonView view2 = PhotonView.Find(viewID);
                 if (view2 != null)
                 {
-                    GameManager.instance.SendKillInfo(killByTitan, "[FFC000][" + info.sender.ID + "][FFFFFF]" + view2.owner.Properties.Name, false, Player.Self.Properties.Name, 0);
+                    GameManager.instance.SendKillInfo(killByTitan, "[FFC000][" + info.sender.ID + "][FFFFFF]" + view2.owner.Properties.Name, false, Player.Self.Properties.Name);
                     view2.owner.SetCustomProperties(new Hashtable
                     {
                         {PlayerProperty.Kills, view2.owner.Properties.Kills + 1}
@@ -2939,7 +2914,7 @@ public class HERO : Photon.MonoBehaviour
             }
             else
             {
-                GameManager.instance.SendKillInfo(titanName != string.Empty, "[FFC000][" + info.sender.ID + "][FFFFFF]" + titanName, false, Player.Self.Properties.Name, 0);
+                GameManager.instance.SendKillInfo(titanName != string.Empty, "[FFC000][" + info.sender.ID + "][FFFFFF]" + titanName, false, Player.Self.Properties.Name);
             }
         }
         if (photonView.isMine)
@@ -2957,7 +2932,7 @@ public class HERO : Photon.MonoBehaviour
         {
             if (info.sender.IsIgnored)
             {
-                photonView.RPC(Rpc.SwitchToHuman, PhotonTargets.Others, new object[0]);
+                photonView.RPC(Rpc.SwitchToHuman, PhotonTargets.Others);
                 return;
             }
             if (!info.sender.IsLocal && !info.sender.IsMasterClient)
@@ -3017,12 +2992,12 @@ public class HERO : Photon.MonoBehaviour
         {
             this.bulletRight.GetComponent<Bullet>().removeMe();
         }
-        Transform transform = this.transform.Find("audio_die");
-        transform.parent = null;
-        transform.GetComponent<AudioSource>().Play();
+        Transform t = this.transform.Find("audio_die");
+        t.parent = null;
+        t.GetComponent<AudioSource>().Play();
         if (photonView.isMine)
         {
-            this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(null, true, false);
+            this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(null);
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(true);
             this.currentCamera.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
             GameManager.instance.myRespawnTime = 0f;
@@ -3043,7 +3018,7 @@ public class HERO : Photon.MonoBehaviour
                 PhotonView view2 = PhotonView.Find(viewID);
                 if (view2 != null)
                 {
-                    GameManager.instance.SendKillInfo(true, "[FFC000][" + info?.sender.ID + "][FFFFFF]" + view2.owner.Properties.Name, false, Player.Self.Properties.Name, 0);
+                    GameManager.instance.SendKillInfo(true, "[FFC000][" + info?.sender.ID + "][FFFFFF]" + view2.owner.Properties.Name, false, Player.Self.Properties.Name);
                     view2.owner.SetCustomProperties(new Hashtable
                     {
                         { PlayerProperty.Kills, view2.owner.Properties.Kills + 1 }
@@ -3052,7 +3027,7 @@ public class HERO : Photon.MonoBehaviour
             }
             else
             {
-                GameManager.instance.SendKillInfo(true, "[FFC000][" + info?.sender.ID + "][FFFFFF]" + titanName, false, Player.Self.Properties.Name, 0);
+                GameManager.instance.SendKillInfo(true, "[FFC000][" + info?.sender.ID + "][FFFFFF]" + titanName, false, Player.Self.Properties.Name);
             }
             GameManager.instance.photonView.RPC(Rpc.OnPlayerDeath, PhotonTargets.MasterClient, titanName != string.Empty ? 1 : 0);
         }
@@ -3127,9 +3102,9 @@ public class HERO : Photon.MonoBehaviour
             GameManager.instance.myRespawnTime = 0f;
         }
         this.hasDied = true;
-        Transform transform = this.transform.Find("audio_die");
-        transform.parent = null;
-        transform.GetComponent<AudioSource>().Play();
+        Transform t = this.transform.Find("audio_die");
+        t.parent = null;
+        t.GetComponent<AudioSource>().Play();
         gameObject.GetComponent<SmoothSyncMovement>().disabled = true;
         if (photonView.isMine)
         {
@@ -3145,7 +3120,7 @@ public class HERO : Photon.MonoBehaviour
                 PhotonView view = PhotonView.Find(viewID);
                 if (view != null)
                 {
-                    GameManager.instance.SendKillInfo(killByTitan, view.owner.Properties.Name, false, Player.Self.Properties.Name, 0);
+                    GameManager.instance.SendKillInfo(killByTitan, view.owner.Properties.Name, false, Player.Self.Properties.Name);
                     view.owner.SetCustomProperties(new Hashtable
                     {
                         { PlayerProperty.Kills, view.owner.Properties.Kills + 1 }
@@ -3154,7 +3129,7 @@ public class HERO : Photon.MonoBehaviour
             }
             else
             {
-                GameManager.instance.SendKillInfo(titanName != string.Empty, titanName, false, Player.Self.Properties.Name, 0);
+                GameManager.instance.SendKillInfo(titanName != string.Empty, titanName, false, Player.Self.Properties.Name);
             }
         }
         if (photonView.isMine)
@@ -3352,7 +3327,7 @@ public class HERO : Photon.MonoBehaviour
                 current.speed = 0f;
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && photonView.isMine)
         {
-            photonView.RPC(Rpc.PauseAnimation, PhotonTargets.Others, new object[0]);
+            photonView.RPC(Rpc.PauseAnimation, PhotonTargets.Others);
         }
     }
 
@@ -3381,7 +3356,7 @@ public class HERO : Photon.MonoBehaviour
     {
         if (this.hookSomeOne && this.hookTarget != null)
         {
-            this.hookTarget.GetPhotonView().RPC(Rpc.ReleasePlayerHook, this.hookTarget.GetPhotonView().owner, new object[0]);
+            this.hookTarget.GetPhotonView().RPC(Rpc.ReleasePlayerHook, this.hookTarget.GetPhotonView().owner);
             this.hookTarget = null;
             this.hookSomeOne = false;
         }
@@ -3765,19 +3740,6 @@ public class HERO : Photon.MonoBehaviour
         }
     }
 
-    public void setTeam(int team)
-    {
-        this.SetMyTeam(team);
-        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
-        {
-            photonView.RPC(Rpc.SetTeam, PhotonTargets.OthersBuffered, team);
-            Player.Self.SetCustomProperties(new Hashtable
-            {
-                { PlayerProperty.Team, team }
-            });
-        }
-    }
-
     public void setTeam2(int team)
     {
         if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
@@ -3938,14 +3900,14 @@ public class HERO : Photon.MonoBehaviour
         if (target != null)
         {
             this.speed = Mathf.Max(10f, this.speed);
-            target.GetComponent<UILabel>().text = this.speed.ToString();
+            target.GetComponent<UILabel>().text = this.speed.ToString(CultureInfo.InvariantCulture);
             target.transform.localScale = Vector3.zero;
             this.speed = (int) (this.speed * 0.1f);
             this.speed = Mathf.Clamp(this.speed, 40f, 150f);
             iTween.Stop(target);
-            object[] args = new object[] { "x", this.speed, "y", this.speed, "z", this.speed, "easetype", iTween.EaseType.easeOutElastic, "time", 1f };
+            object[] args = { "x", this.speed, "y", this.speed, "z", this.speed, "easetype", iTween.EaseType.easeOutElastic, "time", 1f };
             iTween.ScaleTo(target, iTween.Hash(args));
-            object[] objArray2 = new object[] { "x", 0, "y", 0, "z", 0, "easetype", iTween.EaseType.easeInBounce, "time", 0.5f, "delay", 2f };
+            object[] objArray2 = { "x", 0, "y", 0, "z", 0, "easetype", iTween.EaseType.easeInBounce, "time", 0.5f, "delay", 2f };
             iTween.ScaleTo(target, iTween.Hash(objArray2));
         }
     }
@@ -3983,7 +3945,7 @@ public class HERO : Photon.MonoBehaviour
             }
             this.smoke_3dmg.enableEmission = false;
             rigidbody.velocity = Vector3.zero;
-            string[] strArray = settings.Split(new char[] { ',' });
+            string[] strArray = settings.Split(',');
             if (strArray.Length > 15)
             {
                 this.myCannon = PhotonNetwork.Instantiate("RCAsset/" + strArray[1], new Vector3(Convert.ToSingle(strArray[12]), Convert.ToSingle(strArray[13]), Convert.ToSingle(strArray[14])), new Quaternion(Convert.ToSingle(strArray[15]), Convert.ToSingle(strArray[16]), Convert.ToSingle(strArray[17]), Convert.ToSingle(strArray[18])), 0);
@@ -3997,9 +3959,9 @@ public class HERO : Photon.MonoBehaviour
             this.isCannon = true;
             this.myCannon.GetComponent<Cannon>().myHero = this;
             this.myCannonRegion = null;
-            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(this.myCannon.transform.Find("Barrel").Find("FiringPoint").gameObject, true, false);
+            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(this.myCannon.transform.Find("Barrel").Find("FiringPoint").gameObject);
             Camera.main.fieldOfView = 55f;
-            photonView.RPC(Rpc.SetMyCannon, PhotonTargets.OthersBuffered, new object[] { this.myCannon.GetPhotonView().viewID });
+            photonView.RPC(Rpc.SetMyCannon, PhotonTargets.OthersBuffered, this.myCannon.GetPhotonView().viewID);
             this.skillCDLastCannon = this.skillCDLast;
             this.skillCDLast = 3.5f;
             this.skillCDDuration = 3.5f;
@@ -4131,7 +4093,7 @@ public class HERO : Photon.MonoBehaviour
     {
         if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer)
         {
-            this.netDieLocal(rigidbody.velocity * 50f, false, -1, string.Empty, true);
+            this.netDieLocal(rigidbody.velocity * 50f, false, -1, string.Empty);
             GameManager.instance.needChooseSide = true;
             GameManager.instance.justSuicide = true;
         }
@@ -4139,9 +4101,9 @@ public class HERO : Photon.MonoBehaviour
 
     private void throwBlades()
     {
-        Transform transform = this.setup.part_blade_l.transform;
+        Transform t = this.setup.part_blade_l.transform;
         Transform transform2 = this.setup.part_blade_r.transform;
-        GameObject obj2 = (GameObject) Instantiate(Resources.Load("Character_parts/character_blade_l"), transform.position, transform.rotation);
+        GameObject obj2 = (GameObject) Instantiate(Resources.Load("Character_parts/character_blade_l"), t.position, t.rotation);
         GameObject obj3 = (GameObject) Instantiate(Resources.Load("Character_parts/character_blade_r"), transform2.position, transform2.rotation);
         obj2.renderer.material = CharacterMaterials.materials[this.setup.myCostume._3dmg_texture];
         obj3.renderer.material = CharacterMaterials.materials[this.setup.myCostume._3dmg_texture];
@@ -4220,7 +4182,7 @@ public class HERO : Photon.MonoBehaviour
                     {
                         if (Shelter.InputManager.IsDown(InputAction.EnterCannon))
                         {
-                            this.myCannonRegion.photonView.RPC(Rpc.RequestControl, PhotonTargets.MasterClient, new object[] { photonView.viewID });
+                            this.myCannonRegion.photonView.RPC(Rpc.RequestControl, PhotonTargets.MasterClient, photonView.viewID);
                         }
                     }
                     if (this.State == HeroState.Grab && !this.useGun)
@@ -4248,14 +4210,14 @@ public class HERO : Photon.MonoBehaviour
                                 }
                                 else
                                 {
-                                    photonView.RPC(Rpc.GrabRemove, PhotonTargets.All, new object[0]);
+                                    photonView.RPC(Rpc.GrabRemove, PhotonTargets.All);
                                     if (PhotonNetwork.isMasterClient)
                                     {
                                         this.titanWhoGrabMe.GetComponent<TITAN>().GrabbedTargetEscape();
                                     }
                                     else
                                     {
-                                        PhotonView.Find(this.titanWhoGrabMeID).RPC(Rpc.GrabEscape, PhotonTargets.MasterClient, new object[0]);
+                                        PhotonView.Find(this.titanWhoGrabMeID).RPC(Rpc.GrabEscape, PhotonTargets.MasterClient);
                                     }
                                 }
                             }
@@ -4270,12 +4232,7 @@ public class HERO : Photon.MonoBehaviour
                             }
                             if (Shelter.InputManager.IsDown(InputAction.Special))
                             {
-                                bool flag2 = false;
-                                if (this.skillCDDuration > 0f || flag2)
-                                {
-                                    flag2 = true;
-                                }
-                                else
+                                if (this.skillCDDuration <= 0f)
                                 {
                                     this.skillCDDuration = this.skillCDLast;
                                     if (this.skillId == "eren" && this.titanWhoGrabMe.GetComponent<TITAN>() != null)
@@ -4287,16 +4244,18 @@ public class HERO : Photon.MonoBehaviour
                                         }
                                         else
                                         {
-                                            photonView.RPC(Rpc.GrabRemove, PhotonTargets.All, new object[0]);
+                                            photonView.RPC(Rpc.GrabRemove, PhotonTargets.All);
                                             if (PhotonNetwork.isMasterClient)
                                             {
                                                 this.titanWhoGrabMe.GetComponent<TITAN>().GrabbedTargetEscape();
                                             }
                                             else
                                             {
-                                                PhotonView.Find(this.titanWhoGrabMeID).photonView.RPC(Rpc.GrabEscape, PhotonTargets.MasterClient, new object[0]);
+                                                PhotonView.Find(this.titanWhoGrabMeID).photonView.RPC(Rpc.GrabEscape,
+                                                    PhotonTargets.MasterClient);
                                             }
                                         }
+
                                         this.erenTransform();
                                     }
                                 }
@@ -4352,7 +4311,7 @@ public class HERO : Photon.MonoBehaviour
                                 if (this.myHorse != null && !this.isMounted && Vector3.Distance(this.myHorse.transform.position, transform.position) < 15f)
                                     this.getOnHorse();
                                 else
-                                    this.Dodge(false);
+                                    this.Dodge();
                             }
                         }
                         if (this.State == HeroState.Idle)
@@ -4492,8 +4451,8 @@ public class HERO : Photon.MonoBehaviour
                                                     this.releaseIfIHookSb();
                                                 }
                                                 this.dashDirection = hit2.point - this.baseTransform.position;
-                                                this.launchLeftRope(hit2, true, 0);
-                                                this.launchRightRope(hit2, true, 0);
+                                                this.launchLeftRope(hit2, true);
+                                                this.launchRightRope(hit2, true);
                                                 this.rope.Play();
                                             }
                                             this.facingDirection = Mathf.Atan2(this.dashDirection.x, this.dashDirection.z) * 57.29578f;
@@ -4915,7 +4874,7 @@ public class HERO : Photon.MonoBehaviour
                                         }
                                         else
                                         {
-                                            this.NetTauntAttack(5f, 100f);
+                                            this.NetTauntAttack(5f);
                                         }
                                         this.falseAttack();
                                         this.idle();
@@ -4926,7 +4885,7 @@ public class HERO : Photon.MonoBehaviour
                                         {
                                             if (!PhotonNetwork.isMasterClient)
                                             {
-                                                photonView.RPC(Rpc.LaughAttack, PhotonTargets.MasterClient, new object[0]);
+                                                photonView.RPC(Rpc.LaughAttack, PhotonTargets.MasterClient);
                                             }
                                             else
                                             {
@@ -5029,8 +4988,8 @@ public class HERO : Photon.MonoBehaviour
                                     if (!(this.leftGunHasBullet || !this.setup.part_blade_l.activeSelf))
                                     {
                                         this.setup.part_blade_l.SetActive(false);
-                                        Transform transform = this.setup.part_blade_l.transform;
-                                        GameObject obj5 = (GameObject) Instantiate(Resources.Load("Character_parts/character_gun_l"), transform.position, transform.rotation);
+                                        Transform t = this.setup.part_blade_l.transform;
+                                        GameObject obj5 = (GameObject) Instantiate(Resources.Load("Character_parts/character_gun_l"), t.position, t.rotation);
                                         obj5.renderer.material = CharacterMaterials.materials[this.setup.myCostume._3dmg_texture];
                                         Vector3 force = -this.baseTransform.forward * 10f + this.baseTransform.up * 5f - this.baseTransform.right;
                                         obj5.rigidbody.AddForce(force, ForceMode.Impulse);
@@ -5204,7 +5163,7 @@ public class HERO : Photon.MonoBehaviour
                                 LayerMask mask12 = mask11 | mask10;
                                 if (Physics.Raycast(ray4, out var hit4, 10000f, mask12.value))
                                 {
-                                    this.launchLeftRope(hit4, true, 0);
+                                    this.launchLeftRope(hit4, true);
                                     this.rope.Play();
                                 }
                             }
@@ -5227,7 +5186,7 @@ public class HERO : Photon.MonoBehaviour
                                 LayerMask mask15 = mask14 | mask13;
                                 if (Physics.Raycast(ray5, out var hit5, 10000f, mask15.value))
                                 {
-                                    this.launchRightRope(hit5, true, 0);
+                                    this.launchRightRope(hit5, true);
                                     this.rope.Play();
                                 }
                             }
@@ -5248,8 +5207,8 @@ public class HERO : Photon.MonoBehaviour
                                 LayerMask mask18 = mask17 | mask16;
                                 if (Physics.Raycast(ray6, out var hit6, 1000000f, mask18.value))
                                 {
-                                    this.launchLeftRope(hit6, false, 0);
-                                    this.launchRightRope(hit6, false, 0);
+                                    this.launchLeftRope(hit6, false);
+                                    this.launchRightRope(hit6, false);
                                     this.rope.Play();
                                 }
                             }

@@ -5,13 +5,13 @@ using UnityEngine;
 public class StylishComponent : MonoBehaviour // Used by GO "Stylish"
 {
     public GameObject bar;
-    private int chainKillRank;
-    private float[] chainRankMultiplier;
-    private float chainTime;
-    private float duration;
-    private Vector3 exitPosition;
-    private bool flip;
-    private bool hasLostRank;
+    public int chainKillRank;
+    public float[] chainRankMultiplier;
+    public float chainTime;
+    public float duration;
+    public Vector3 exitPosition;
+    public bool flip;
+    public bool hasLostRank;
     public GameObject labelChain;
     public GameObject labelHits;
     public GameObject labelS;
@@ -19,15 +19,15 @@ public class StylishComponent : MonoBehaviour // Used by GO "Stylish"
     public GameObject labelS2;
     public GameObject labelsub;
     public GameObject labelTotal;
-    private Vector3 originalPosition;
-    private float R;
-    private int styleHits;
-    private float stylePoints;
-    private int styleRank;
-    private int[] styleRankDepletions;
-    private int[] styleRankPoints;
-    private string[,] styleRankText;
-    private int styleTotalDamage;
+    public Vector3 originalPosition;
+    public float R;
+    public int styleHits;
+    public float stylePoints;
+    public int styleRank;
+    public int[] styleRankDepletions;
+    public int[] styleRankPoints;
+    public string[,] styleRankText;
+    public int styleTotalDamage;
 
     public StylishComponent()
     {
@@ -74,7 +74,7 @@ public class StylishComponent : MonoBehaviour // Used by GO "Stylish"
 
     private void SetRank()
     {
-        int styleRank = this.styleRank;
+        int oldStyleRank = this.styleRank;
         int index = 0;
         while (index < styleRankPoints.Length)
         {
@@ -92,7 +92,7 @@ public class StylishComponent : MonoBehaviour // Used by GO "Stylish"
         {
             this.styleRank = styleRankPoints.Length;
         }
-        if (this.styleRank < styleRank)
+        if (this.styleRank < oldStyleRank)
         {
             if (hasLostRank)
             {
@@ -106,7 +106,7 @@ public class StylishComponent : MonoBehaviour // Used by GO "Stylish"
                 hasLostRank = true;
             }
         }
-        else if (this.styleRank > styleRank)
+        else if (this.styleRank > oldStyleRank)
         {
             hasLostRank = false;
         }
@@ -182,12 +182,12 @@ public class StylishComponent : MonoBehaviour // Used by GO "Stylish"
         transform.localPosition = exitPosition;
     }
 
-    public void startShake(int R, float duration)
+    private void startShake(int intensity, float time)
     {
-        if (this.duration < duration)
+        if (this.duration < time)
         {
-            this.R = R;
-            this.duration = duration;
+            this.R = intensity;
+            this.duration = time;
         }
     }
 

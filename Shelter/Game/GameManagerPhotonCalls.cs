@@ -208,7 +208,7 @@ public partial class GameManager
             else
             {
                 PVPcheckPoint.checkPoints = new List<PVPcheckPoint>();
-                UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled = false;
+                Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled = false;
 //                UnityEngine.Camera.main.GetComponent<CameraShake>().enabled = false;
                 IN_GAME_MAIN_CAMERA.GameType = GameType.Multiplayer;
                 if (info.Gamemode == GameMode.Trost)
@@ -662,8 +662,8 @@ public partial class GameManager
         }
 
         ResetGameSettings();
-        banHash = new ExitGames.Client.Photon.Hashtable();
-        _infectionTitans = new ExitGames.Client.Photon.Hashtable();
+        banHash = new Hashtable();
+        _infectionTitans = new Hashtable();
         oldScript = string.Empty;
         currentLevel = string.Empty;
         if (currentScript == null)
@@ -681,18 +681,18 @@ public partial class GameManager
         noRestart = false;
         masterRC = false;
         isSpawning = false;
-        intVariables = new ExitGames.Client.Photon.Hashtable();
-        heroHash = new ExitGames.Client.Photon.Hashtable();
-        boolVariables = new ExitGames.Client.Photon.Hashtable();
-        stringVariables = new ExitGames.Client.Photon.Hashtable();
-        floatVariables = new ExitGames.Client.Photon.Hashtable();
-        globalVariables = new ExitGames.Client.Photon.Hashtable();
-        RCRegions = new ExitGames.Client.Photon.Hashtable();
-        RCEvents = new ExitGames.Client.Photon.Hashtable();
-        RCVariableNames = new ExitGames.Client.Photon.Hashtable();
-        RCRegionTriggers = new ExitGames.Client.Photon.Hashtable();
-        playerVariables = new ExitGames.Client.Photon.Hashtable();
-        titanVariables = new ExitGames.Client.Photon.Hashtable();
+        intVariables = new Hashtable();
+        heroHash = new Hashtable();
+        boolVariables = new Hashtable();
+        stringVariables = new Hashtable();
+        floatVariables = new Hashtable();
+        globalVariables = new Hashtable();
+        RCRegions = new Hashtable();
+        RCEvents = new Hashtable();
+        RCVariableNames = new Hashtable();
+        RCRegionTriggers = new Hashtable();
+        playerVariables = new Hashtable();
+        titanVariables = new Hashtable();
         logicLoaded = false;
         customLevelLoaded = false;
         oldScriptLogic = string.Empty;

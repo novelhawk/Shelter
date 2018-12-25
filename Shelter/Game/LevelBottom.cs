@@ -1,4 +1,3 @@
-using Photon;
 using Photon.Enums;
 using UnityEngine;
 using Extensions = Photon.Extensions;
@@ -23,7 +22,7 @@ namespace Game
                         {
                             if (Extensions.GetPhotonView(other.gameObject).isMine)
                             {
-                                other.gameObject.GetComponent<HERO>().netDieLocal(rigidbody.velocity * 50f, false, -1, string.Empty, true);
+                                other.gameObject.GetComponent<HERO>().netDieLocal(rigidbody.velocity * 50f, false, -1, string.Empty);
                             }
                         }
                         else
@@ -44,14 +43,6 @@ namespace Game
                     }
                 }
             }
-        }
-
-        private void Start()
-        {
-        }
-
-        private void Update()
-        {
         }
     }
 }

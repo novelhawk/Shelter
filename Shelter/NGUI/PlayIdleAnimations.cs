@@ -49,12 +49,12 @@ public class PlayIdleAnimations : MonoBehaviour
             if (this.mBreaks.Count == 1)
             {
                 AnimationClip clip = this.mBreaks[0];
-                this.mNextBreak = Time.time + clip.length + UnityEngine.Random.Range(5f, 15f);
+                this.mNextBreak = Time.time + clip.length + Random.Range(5f, 15f);
                 this.mAnim.CrossFade(clip.name);
             }
             else
             {
-                int num = UnityEngine.Random.Range(0, this.mBreaks.Count - 1);
+                int num = Random.Range(0, this.mBreaks.Count - 1);
                 if (this.mLastIndex == num)
                 {
                     num++;
@@ -65,7 +65,7 @@ public class PlayIdleAnimations : MonoBehaviour
                 }
                 this.mLastIndex = num;
                 AnimationClip clip2 = this.mBreaks[num];
-                this.mNextBreak = Time.time + clip2.length + UnityEngine.Random.Range(2f, 8f);
+                this.mNextBreak = Time.time + clip2.length + Random.Range(2f, 8f);
                 this.mAnim.CrossFade(clip2.name);
             }
         }

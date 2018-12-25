@@ -4,7 +4,6 @@ using System.Linq;
 using Game;
 using JetBrains.Annotations;
 using Mod;
-using Mod.Interface;
 using Photon;
 using Photon.Enums;
 using UnityEngine;
@@ -183,7 +182,7 @@ public class PVPcheckPoint : Photon.MonoBehaviour, IComparable
 
     private void SpawnTitan()
     {
-        GameObject obj2 = GameManager.instance.SpawnTitan(this.normalTitanRate, transform.position - Vector3.up * (transform.position.y - this.GetHeight(transform.position)), transform.rotation, false);
+        GameObject obj2 = GameManager.instance.SpawnTitan(this.normalTitanRate, transform.position - Vector3.up * (transform.position.y - this.GetHeight(transform.position)), transform.rotation);
         if (LevelInfoManager.Get(GameManager.Level).LevelName == "The City I")
         {
             obj2.GetComponent<TITAN>().chaseDistance = 120f;

@@ -30,7 +30,7 @@ public class UICenterOnChild : MonoBehaviour
             this.mDrag = NGUITools.FindInParents<UIDraggablePanel>(gameObject);
             if (this.mDrag == null)
             {
-                Debug.LogWarning(string.Concat(new object[] { GetType(), " requires ", typeof(UIDraggablePanel), " on a parent object in order to work" }), this);
+                Debug.LogWarning(string.Concat(GetType(), " requires ", typeof(UIDraggablePanel), " on a parent object in order to work"), this);
                 enabled = false;
                 return;
             }

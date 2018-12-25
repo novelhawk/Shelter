@@ -19,8 +19,8 @@ public class DragDropItem : MonoBehaviour
 
     private void Drop()
     {
-        Collider collider = UICamera.lastHit.collider;
-        DragDropContainer container = collider == null ? null : collider.gameObject.GetComponent<DragDropContainer>();
+        Collider c = UICamera.lastHit.collider;
+        DragDropContainer container = c == null ? null : c.gameObject.GetComponent<DragDropContainer>();
         if (container != null)
         {
             this.mTrans.parent = container.transform;
@@ -77,15 +77,11 @@ public class DragDropItem : MonoBehaviour
                 UICamera.current.stickyPress = false;
             }
             this.mIsDragging = false;
-            Collider collider = this.collider;
-            if (collider != null)
-            {
-                collider.enabled = !isPressed;
-            }
+            Collider c = this.collider;
+            if (c != null)
+                c.enabled = !isPressed;
             if (!isPressed)
-            {
                 this.Drop();
-            }
         }
     }
 

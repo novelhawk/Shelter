@@ -22,7 +22,7 @@ public class PhotonStatsGui : MonoBehaviour
         }
         if (this.statsWindowOn)
         {
-            this.statsRect = GUILayout.Window(this.WindowId, this.statsRect, new GUI.WindowFunction(this.TrafficStatsWindow), "Messages (shift+tab)", new GUILayoutOption[0]);
+            this.statsRect = GUILayout.Window(this.WindowId, this.statsRect, new GUI.WindowFunction(this.TrafficStatsWindow), "Messages (shift+tab)");
         }
     }
 
@@ -40,27 +40,27 @@ public class PhotonStatsGui : MonoBehaviour
         {
             num = 1L;
         }
-        GUILayout.BeginHorizontal(new GUILayoutOption[0]);
-        this.buttonsOn = GUILayout.Toggle(this.buttonsOn, "buttons", new GUILayoutOption[0]);
-        this.healthStatsVisible = GUILayout.Toggle(this.healthStatsVisible, "health", new GUILayoutOption[0]);
-        this.trafficStatsOn = GUILayout.Toggle(this.trafficStatsOn, "traffic", new GUILayoutOption[0]);
+        GUILayout.BeginHorizontal();
+        this.buttonsOn = GUILayout.Toggle(this.buttonsOn, "buttons");
+        this.healthStatsVisible = GUILayout.Toggle(this.healthStatsVisible, "health");
+        this.trafficStatsOn = GUILayout.Toggle(this.trafficStatsOn, "traffic");
         GUILayout.EndHorizontal();
         string text = string.Format("Out|In|Sum:\t{0,4} | {1,4} | {2,4}", trafficStatsGameLevel.TotalOutgoingMessageCount, trafficStatsGameLevel.TotalIncomingMessageCount, trafficStatsGameLevel.TotalMessageCount);
         string str2 = string.Format("{0}sec average:", num);
         string str3 = string.Format("Out|In|Sum:\t{0,4} | {1,4} | {2,4}", trafficStatsGameLevel.TotalOutgoingMessageCount / num, trafficStatsGameLevel.TotalIncomingMessageCount / num, trafficStatsGameLevel.TotalMessageCount / num);
-        GUILayout.Label(text, new GUILayoutOption[0]);
-        GUILayout.Label(str2, new GUILayoutOption[0]);
-        GUILayout.Label(str3, new GUILayoutOption[0]);
+        GUILayout.Label(text);
+        GUILayout.Label(str2);
+        GUILayout.Label(str3);
         if (this.buttonsOn)
         {
-            GUILayout.BeginHorizontal(new GUILayoutOption[0]);
-            this.statsOn = GUILayout.Toggle(this.statsOn, "stats on", new GUILayoutOption[0]);
-            if (GUILayout.Button("Reset", new GUILayoutOption[0]))
+            GUILayout.BeginHorizontal();
+            this.statsOn = GUILayout.Toggle(this.statsOn, "stats on");
+            if (GUILayout.Button("Reset"))
             {
                 PhotonNetwork.networkingPeer.TrafficStatsReset();
                 PhotonNetwork.networkingPeer.TrafficStatsEnabled = true;
             }
-            flag = GUILayout.Button("To Log", new GUILayoutOption[0]);
+            flag = GUILayout.Button("To Log");
             GUILayout.EndHorizontal();
         }
         string str4 = string.Empty;
@@ -69,15 +69,15 @@ public class PhotonStatsGui : MonoBehaviour
         {
             str4 = "Incoming: " + PhotonNetwork.networkingPeer.TrafficStatsIncoming;
             str5 = "Outgoing: " + PhotonNetwork.networkingPeer.TrafficStatsOutgoing;
-            GUILayout.Label(str4, new GUILayoutOption[0]);
-            GUILayout.Label(str5, new GUILayoutOption[0]);
+            GUILayout.Label(str4);
+            GUILayout.Label(str5);
         }
         string str6 = string.Empty;
         if (this.healthStatsVisible)
         {
             object[] args = new object[] { trafficStatsGameLevel.LongestDeltaBetweenSending, trafficStatsGameLevel.LongestDeltaBetweenDispatching, trafficStatsGameLevel.LongestEventCallback, trafficStatsGameLevel.LongestEventCallbackCode, trafficStatsGameLevel.LongestOpResponseCallback, trafficStatsGameLevel.LongestOpResponseCallbackOpCode, PhotonNetwork.networkingPeer.RoundTripTime, PhotonNetwork.networkingPeer.RoundTripTimeVariance };
             str6 = string.Format("ping: {6}[+/-{7}]ms\nlongest delta between\nsend: {0,4}ms disp: {1,4}ms\nlongest time for:\nev({3}):{2,3}ms op({5}):{4,3}ms", args);
-            GUILayout.Label(str6, new GUILayoutOption[0]);
+            GUILayout.Label(str6);
         }
         if (flag)
         {

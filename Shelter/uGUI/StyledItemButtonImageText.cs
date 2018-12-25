@@ -1,7 +1,5 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
-using System;
 
 // ReSharper disable once CheckNamespace
 public class StyledItemButtonImageText : StyledItem

@@ -112,7 +112,7 @@ namespace Game
             };
             if (costume.costumeId == 25 && costume.sex == Sex.Female)
                 costume.costumeId = 26;
-            costume.setBodyByCostumeId(-1);
+            costume.setBodyByCostumeId();
             costume.setMesh2();
             costume.setTexture();
             return costume;

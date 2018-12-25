@@ -119,14 +119,14 @@ public class CannonBall : Photon.MonoBehaviour
                         {
                             if (gameObject.name == "head")
                             {
-                                titan.photonView.RPC(Rpc.DieByCannon, titan.photonView.owner, new object[] { this.myHero.photonView.viewID });
+                                titan.photonView.RPC(Rpc.DieByCannon, titan.photonView.owner, this.myHero.photonView.viewID);
                                 titan.dieBlow(transform.position, 0.2f);
                                 i = colliderArray.Length;
                             }
                         }
                         else if (gameObject.name == "head")
                         {
-                            titan.photonView.RPC(Rpc.DieByCannon, titan.photonView.owner, new object[] { this.myHero.photonView.viewID });
+                            titan.photonView.RPC(Rpc.DieByCannon, titan.photonView.owner, this.myHero.photonView.viewID);
                             titan.dieHeadBlow(transform.position, 0.2f);
                             i = colliderArray.Length;
                         }

@@ -12,7 +12,7 @@ public class ConnectAndJoinRandom : Photon.MonoBehaviour
     {
         if (PhotonNetwork.networkingPeer.AvailableRegions != null)
         {
-            Debug.LogWarning(string.Concat(new object[] { "List of available regions counts ", PhotonNetwork.networkingPeer.AvailableRegions.Count, ". First: ", PhotonNetwork.networkingPeer.AvailableRegions[0], " \t Current Region: ", PhotonNetwork.networkingPeer.CloudRegion }));
+            Debug.LogWarning(string.Concat("List of available regions counts ", PhotonNetwork.networkingPeer.AvailableRegions.Count, ". First: ", PhotonNetwork.networkingPeer.AvailableRegions[0], " \t Current Region: ", PhotonNetwork.networkingPeer.CloudRegion));
         }
         Debug.Log("OnConnectedToMaster() was called by PUN. Now this client is connected and could join a room. Calling: PhotonNetwork.JoinRandomRoom();");
         PhotonNetwork.JoinRandomRoom();

@@ -3,7 +3,6 @@ using Mod;
 using Mod.Keybinds;
 using Mod.Managers;
 using Mod.Modules;
-using Photon;
 using Photon.Enums;
 using UnityEngine;
 using Extensions = Photon.Extensions;
@@ -13,11 +12,10 @@ using MonoBehaviour = UnityEngine.MonoBehaviour;
 public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 {
     public static IN_GAME_MAIN_CAMERA instance;
-    public RotationAxes axes;
+//    public RotationAxes axes;
     public AudioSource bgmusic;
     public static float cameraDistance = 0.6f;
     public static CameraType cameraMode;
-    public static int character = 1;
     private float closestDistance;
     private int currentPeekPlayerIndex;
     public static Daylight Daylight = Daylight.Dawn;
@@ -37,12 +35,10 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     public float height = 5f;
     public float heightDamping = 2f;
     private float heightMulti;
-    public static bool isCheating;
     public static bool isPausing;
     public static bool isTyping;
     public float justHit;
     public int lastScore;
-    public static int level;
     private bool lockAngle;
     private Vector3 lockCameraPosition;
     private GameObject locker;
@@ -158,7 +154,8 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             transform.position += this.transform.right * Mathf.Max((0.6f - cameraDistance) * 2f, 0.65f);
     }
 
-    public void CameraMovementLive(HERO hero)
+    // ReSharper disable once UnusedMember.Global
+    public void CameraMovementLive(HERO hero) // TODO: Look what that did, and re-implement it
     {
         float magnitude = hero.rigidbody.velocity.magnitude;
         if (magnitude > 10f)
@@ -171,12 +168,12 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         }
         float num2 = hero.CameraMultiplier * (200f - Camera.main.fieldOfView) / 150f;
         this.transform.position = this.head.transform.position + Vector3.up * this.heightMulti - Vector3.up * (0.6f - cameraDistance) * 2f;
-        Transform transform = this.transform;
-        transform.position -= this.transform.forward * this.distance * this.distanceMulti * num2;
+        Transform t = this.transform;
+        t.position -= this.transform.forward * this.distance * this.distanceMulti * num2;
         if (hero.CameraMultiplier < 0.65f)
         {
             Transform transform2 = this.transform;
-            transform2.position += this.transform.right * Mathf.Max((float)((0.6f - hero.CameraMultiplier) * 2f), (float)0.65f);
+            transform2.position += this.transform.right * Mathf.Max((0.6f - hero.CameraMultiplier) * 2f, 0.65f);
         }
         this.transform.rotation = Quaternion.Lerp(Camera.main.transform.rotation, hero.GetComponent<SmoothSyncMovement>().correctCameraRot, Time.deltaTime * 5f);
     }
@@ -264,21 +261,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     private Texture2D RTImage(Camera cam)
     {
-        RenderTexture active = RenderTexture.active;
-        RenderTexture.active = cam.targetTexture;
-        cam.Render();
-        Texture2D textured = new Texture2D(cam.targetTexture.width, cam.targetTexture.height);
-        int num = (int) (cam.targetTexture.width * 0.04f);
-        int destX = (int) (cam.targetTexture.width * 0.02f);
-        textured.ReadPixels(new Rect(num, num, cam.targetTexture.width - num, cam.targetTexture.height - num), destX, destX);
-        textured.Apply();
-        RenderTexture.active = active;
-        return textured;
-    }
-
-    private Texture2D RTImage2(Camera cam)
-    {
-        RenderTexture active = RenderTexture.active;
+        RenderTexture tmp = RenderTexture.active;
         RenderTexture.active = cam.targetTexture;
         cam.Render();
         Texture2D textured = new Texture2D(cam.targetTexture.width, cam.targetTexture.height);
@@ -289,7 +272,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             textured.SetPixel(0, 0, Color.white);
             textured.ReadPixels(new Rect(num, num, cam.targetTexture.width - num, cam.targetTexture.height - num), destX, destX);
             textured.Apply();
-            RenderTexture.active = active;
+            RenderTexture.active = tmp;
         }
         catch
         {
@@ -425,7 +408,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         this.TakeSnapshotRT();
     }
 
-    public GameObject setMainObject(GameObject obj, bool resetRotation = true, bool lockAngle = false)
+    public GameObject setMainObject(GameObject obj, bool resetRotation = true, bool doLockAngle = false)
     {
         float num;
         this.main_object = obj;
@@ -468,7 +451,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 transform.rotation = Quaternion.Euler(0f, 0f, 0f);
             }
         }
-        this.lockAngle = lockAngle;
+        this.lockAngle = doLockAngle;
         return obj;
     }
 
@@ -513,8 +496,8 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         Vector3 vector;
         RaycastHit hit;
         this.snapShotCamera.transform.position = this.head == null ? this.main_object.transform.position : this.head.transform.position;
-        Transform transform = this.snapShotCamera.transform;
-        transform.position += Vector3.up * this.heightMulti;
+        Transform t = this.snapShotCamera.transform;
+        t.position += Vector3.up * this.heightMulti;
         Transform transform2 = this.snapShotCamera.transform;
         transform2.position -= Vector3.up * 1.1f;
         Vector3 worldPosition = vector = this.snapShotCamera.transform.position;
@@ -538,7 +521,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             num += (index - 1) * this.snapShotTarget.transform.localScale.x * 10f;
         }
         Transform transform3 = this.snapShotCamera.transform;
-        transform3.position -= this.snapShotCamera.transform.forward * Random.Range((float)(num + 3f), (float)(num + 10f));
+        transform3.position -= this.snapShotCamera.transform.forward * Random.Range(num + 3f, num + 10f);
         this.snapShotCamera.transform.LookAt(worldPosition);
         this.snapShotCamera.transform.RotateAround(worldPosition, this.transform.forward, Random.Range(-30f, 30f));
         Vector3 end = this.head == null ? this.main_object.transform.position : this.head.transform.position;
@@ -565,17 +548,17 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         switch (index)
         {
             case 1:
-                this.snapshot1 = this.RTImage2(this.snapShotCamera.GetComponent<Camera>());
+                this.snapshot1 = this.RTImage(this.snapShotCamera.GetComponent<Camera>());
                 SnapShotSaves.addIMG(this.snapshot1, this.snapShotDmg);
                 break;
 
             case 2:
-                this.snapshot2 = this.RTImage2(this.snapShotCamera.GetComponent<Camera>());
+                this.snapshot2 = this.RTImage(this.snapShotCamera.GetComponent<Camera>());
                 SnapShotSaves.addIMG(this.snapshot2, this.snapShotDmg);
                 break;
 
             case 3:
-                this.snapshot3 = this.RTImage2(this.snapShotCamera.GetComponent<Camera>());
+                this.snapshot3 = this.RTImage(this.snapShotCamera.GetComponent<Camera>());
                 SnapShotSaves.addIMG(this.snapshot3, this.snapShotDmg);
                 break;
         }
@@ -654,17 +637,17 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         this.TakeSnapshotRT();
     }
 
-    public void startShake(float R, float duration, float decay = 0.95f)
+    public void startShake(float force, float time, float effectDecay = 0.95f)
     {
-        if (this.duration < duration)
+        if (this.duration < time)
         {
-            this.R = R;
-            this.duration = duration;
-            this.decay = decay;
+            this.R = force;
+            this.duration = time;
+            this.decay = effectDecay;
         }
     }
 
-    public void TakeScreenshot(Vector3 p, int dmg, GameObject target, float startTime)
+    public void TakeScreenshot(Vector3 p, int dmg, GameObject targ, float startTime)
     {
         if (!ModuleManager.Enabled(nameof(ModuleSnapshot)))
             return;
@@ -674,7 +657,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
             this.snapShotCount = 1;
             this.startSnapShotFrameCount = true;
             this.snapShotTargetPosition = p;
-            this.snapShotTarget = target;
+            this.snapShotTarget = targ;
             this.snapShotStartCountDownTime = startTime;
             this.snapShotInterval = 0.05f + Random.Range(0f, 0.03f);
             this.snapShotDmg = dmg;
@@ -722,7 +705,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                     }
                     if (length > 0)
                     {
-                        this.setMainObject(GameObject.FindGameObjectsWithTag("Player")[this.currentPeekPlayerIndex], true, false);
+                        this.setMainObject(GameObject.FindGameObjectsWithTag("Player")[this.currentPeekPlayerIndex]);
                         this.setSpectorMode(false);
                         this.lockAngle = false;
                     }
@@ -741,7 +724,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                     }
                     if (num2 > 0)
                     {
-                        this.setMainObject(GameObject.FindGameObjectsWithTag("Player")[this.currentPeekPlayerIndex], true, false);
+                        this.setMainObject(GameObject.FindGameObjectsWithTag("Player")[this.currentPeekPlayerIndex]);
                         this.setSpectorMode(false);
                         this.lockAngle = false;
                     }
@@ -861,8 +844,8 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                 if (triggerAutoLock && this.lockTarget != null)
                 {
                     float z = this.transform.eulerAngles.z;
-                    Transform transform = this.lockTarget.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck");
-                    Vector3 vector2 = transform.position - (this.head == null ? this.main_object.transform.position : this.head.transform.position);
+                    Transform t = this.lockTarget.transform.Find("Amarture/Core/Controller_Body/hip/spine/chest/neck");
+                    Vector3 vector2 = t.position - (this.head == null ? this.main_object.transform.position : this.head.transform.position);
                     vector2.Normalize();
                     this.lockCameraPosition = this.head == null ? this.main_object.transform.position : this.head.transform.position;
                     this.lockCameraPosition -= vector2 * this.distance * this.distanceMulti * this.distanceOffsetMulti;
@@ -870,14 +853,14 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                     this.transform.position = Vector3.Lerp(this.transform.position, this.lockCameraPosition, Time.deltaTime * 4f);
                     if (this.head != null)
                     {
-                        this.transform.LookAt(this.head.transform.position * 0.8f + transform.position * 0.2f);
+                        this.transform.LookAt(this.head.transform.position * 0.8f + t.position * 0.2f);
                     }
                     else
                     {
-                        this.transform.LookAt(this.main_object.transform.position * 0.8f + transform.position * 0.2f);
+                        this.transform.LookAt(this.main_object.transform.position * 0.8f + t.position * 0.2f);
                     }
                     this.transform.localEulerAngles = new Vector3(this.transform.eulerAngles.x, this.transform.eulerAngles.y, z);
-                    Vector2 vector3 = camera.WorldToScreenPoint(transform.position - transform.forward * this.lockTarget.transform.localScale.x);
+                    Vector2 vector3 = camera.WorldToScreenPoint(t.position - t.forward * this.lockTarget.transform.localScale.x);
                     this.locker.transform.localPosition = new Vector3(vector3.x - Screen.width * 0.5f, vector3.y - Screen.height * 0.5f, 0f);
                     if (this.lockTarget.GetComponent<TITAN>() != null && this.lockTarget.GetComponent<TITAN>().hasDie)
                     {
@@ -916,11 +899,5 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         }
     }
 
-    public enum RotationAxes
-    {
-        MouseXAndY,
-        MouseX,
-        MouseY
-    }
 }
 

@@ -4,7 +4,6 @@ using Mod;
 using Photon;
 using Photon.Enums;
 using UnityEngine;
-using GameObjectExtensions = Photon.GameObjectExtensions;
 using MonoBehaviour = UnityEngine.MonoBehaviour;
 
 [RequireComponent(typeof(PhotonView))]
@@ -23,7 +22,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
     {
         if (this.PickupIsMine)
         {
-            photonView.RPC(Rpc.PunRespawn, PhotonTargets.AllViaServer, new object[0]);
+            photonView.RPC(Rpc.PunRespawn, PhotonTargets.AllViaServer);
         }
     }
 
@@ -74,7 +73,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
         if (!this.SentPickup)
         {
             this.SentPickup = true;
-            photonView.RPC(Rpc.PunPickup, PhotonTargets.AllViaServer, new object[0]);
+            photonView.RPC(Rpc.PunPickup, PhotonTargets.AllViaServer);
         }
     }
 
@@ -88,7 +87,7 @@ public class PickupItem : Photon.MonoBehaviour, IPunObservable
         }
         if (!gameObject.GetActive())
         {
-            Debug.Log(string.Concat(new object[] { "Ignored PU RPC, cause item is inactive. ", gameObject, " SecondsBeforeRespawn: ", this.SecondsBeforeRespawn, " TimeOfRespawn: ", this.TimeOfRespawn, " respawn in future: ", this.TimeOfRespawn > PhotonNetwork.time }));
+            Debug.Log(string.Concat("Ignored PU RPC, cause item is inactive. ", gameObject, " SecondsBeforeRespawn: ", this.SecondsBeforeRespawn, " TimeOfRespawn: ", this.TimeOfRespawn, " respawn in future: ", this.TimeOfRespawn > PhotonNetwork.time));
         }
         else
         {

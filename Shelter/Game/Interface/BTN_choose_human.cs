@@ -36,7 +36,7 @@ public class BTN_choose_human : MonoBehaviour
             else
             {
                 GameManager.instance.SpawnPlayerAfterGameEnd(selection);
-                GameManager.instance.photonView.RPC(Rpc.RestartByClient, PhotonTargets.MasterClient, new object[0]);
+                GameManager.instance.photonView.RPC(Rpc.RestartByClient, PhotonTargets.MasterClient);
             }
         }
         else if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.BossFight || IN_GAME_MAIN_CAMERA.GameMode == GameMode.Trost || IN_GAME_MAIN_CAMERA.GameMode == GameMode.PvpCapture)
@@ -44,7 +44,7 @@ public class BTN_choose_human : MonoBehaviour
             if (!IsEveryoneDead())
             {
                 GameManager.instance.SpawnPlayerAfterGameEnd(selection);
-                GameManager.instance.photonView.RPC(Rpc.RestartByClient, PhotonTargets.MasterClient, new object[0]);
+                GameManager.instance.photonView.RPC(Rpc.RestartByClient, PhotonTargets.MasterClient);
             }
             else
             {

@@ -1,5 +1,4 @@
-﻿using Photon;
-using Photon.Enums;
+﻿using Photon.Enums;
 using UnityEngine;
 
 namespace Mod.Commands

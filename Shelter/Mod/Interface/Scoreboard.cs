@@ -2,7 +2,6 @@
 using System.Text;
 using Photon;
 using UnityEngine;
-using Animator = Mod.Animation.Animator;
 
 namespace Mod.Interface
 {

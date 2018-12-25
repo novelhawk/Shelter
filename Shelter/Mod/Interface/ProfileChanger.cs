@@ -1,5 +1,4 @@
-﻿using System.Net;
-using Mod.Profiles;
+﻿using Mod.Profiles;
 using UnityEngine;
 
 namespace Mod.Interface

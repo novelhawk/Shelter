@@ -16,7 +16,7 @@ public class Minimap : MonoBehaviour, IDisposable
     private GameObject[] _interface;
     
     private bool assetsInitialized = false;
-    private static UnityEngine.Sprite borderSprite;
+    private static Sprite borderSprite;
     private RectTransform borderT;
     private Canvas canvas;
     private Vector2 cornerPosition;
@@ -43,10 +43,10 @@ public class Minimap : MonoBehaviour, IDisposable
     private Bounds minimapOrthographicBounds;
     public RenderTexture minimapRT;
     public Camera myCam;
-    private static UnityEngine.Sprite pointerSprite;
+    private static Sprite pointerSprite;
     private CanvasScaler scaler;
-    private static UnityEngine.Sprite supplySprite;
-    private static UnityEngine.Sprite whiteIconSprite;
+    private static Sprite supplySprite;
+    private static Sprite whiteIconSprite;
     
     private void AddBorderToTexture(ref Texture2D texture, Color borderColor, int borderPixelSize)
     {
@@ -283,7 +283,7 @@ public class Minimap : MonoBehaviour, IDisposable
         return Vector2.zero;
     }
 
-    private static UnityEngine.Sprite GetSpriteForStyle(IconStyle style)
+    private static Sprite GetSpriteForStyle(IconStyle style)
     {
         if (style == IconStyle.CIRCLE)
         {
@@ -307,17 +307,17 @@ public class Minimap : MonoBehaviour, IDisposable
         Vector3 pivot = new Vector3(0.5f, 0.5f);
         Texture2D texture = (Texture2D)GameManager.RCassets.Load("icon");
         Rect rect = new Rect(0f, 0f, texture.width, texture.height);
-        whiteIconSprite = UnityEngine.Sprite.Create(texture, rect, pivot);
+        whiteIconSprite = Sprite.Create(texture, rect, pivot);
         texture = (Texture2D)GameManager.RCassets.Load("iconpointer");
         rect = new Rect(0f, 0f, texture.width, texture.height);
-        pointerSprite = UnityEngine.Sprite.Create(texture, rect, pivot);
+        pointerSprite = Sprite.Create(texture, rect, pivot);
         texture = (Texture2D)GameManager.RCassets.Load("supplyicon");
         rect = new Rect(0f, 0f, texture.width, texture.height);
-        supplySprite = UnityEngine.Sprite.Create(texture, rect, pivot);
+        supplySprite = Sprite.Create(texture, rect, pivot);
         texture = (Texture2D)GameManager.RCassets.Load("mapborder");
         rect = new Rect(0f, 0f, texture.width, texture.height);
         Vector4 border = new Vector4(5f, 5f, 5f, 5f);
-        borderSprite = UnityEngine.Sprite.Create(texture, rect, pivot, 100f, 1, SpriteMeshType.FullRect, border);
+        borderSprite = Sprite.Create(texture, rect, pivot, 100f, 1, SpriteMeshType.FullRect, border);
         this.MINIMAP_ICON_SIZE = new Vector2(whiteIconSprite.texture.width, whiteIconSprite.texture.height);
         this.MINIMAP_POINTER_SIZE = (pointerSprite.texture.width + pointerSprite.texture.height) / 2f;
         this.MINIMAP_POINTER_DIST = (this.MINIMAP_ICON_SIZE.x + this.MINIMAP_ICON_SIZE.y) * 0.25f;
@@ -653,7 +653,7 @@ public class Minimap : MonoBehaviour, IDisposable
 
         public static MinimapIcon Create(RectTransform parent, GameObject trackedObject, IconStyle style)
         {
-            UnityEngine.Sprite spriteForStyle = GetSpriteForStyle(style);
+            Sprite spriteForStyle = GetSpriteForStyle(style);
             GameObject uiElement = new GameObject("MinimapIcon");
             RectTransform transform = uiElement.AddComponent<RectTransform>();
             transform.anchorMin = transform.anchorMax = new Vector3(0.5f, 0.5f);
@@ -667,7 +667,7 @@ public class Minimap : MonoBehaviour, IDisposable
 
         public static MinimapIcon CreateWithRotation(RectTransform parent, GameObject trackedObject, IconStyle style, float pointerDist)
         {
-            UnityEngine.Sprite spriteForStyle = GetSpriteForStyle(style);
+            Sprite spriteForStyle = GetSpriteForStyle(style);
             GameObject uiElement = new GameObject("MinimapIcon");
             RectTransform transform = uiElement.AddComponent<RectTransform>();
             transform.anchorMin = transform.anchorMax = new Vector3(0.5f, 0.5f);

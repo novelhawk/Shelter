@@ -16,7 +16,7 @@ public class PopuplistCharacterSelection : MonoBehaviour
     {
         // destroy the Camera Typesadasdasdasdadsasdasdasdasdasdasdasdasdasdasasd label
         // use instance id instead?
-        foreach (Object obj in GameObject.FindObjectsOfType(typeof(GameObject)))
+        foreach (Object obj in FindObjectsOfType(typeof(GameObject)))
         {
             if (obj is GameObject go)
             {

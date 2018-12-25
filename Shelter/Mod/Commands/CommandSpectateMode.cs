@@ -1,6 +1,4 @@
-﻿using Mod.Interface;
-
-namespace Mod.Commands
+﻿namespace Mod.Commands
 {
     public class CommandSpectateMode : Command
     {

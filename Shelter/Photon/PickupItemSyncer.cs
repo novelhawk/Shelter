@@ -29,7 +29,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
                 }
                 if (next != null && !next.Equals(Player.Self))
                 {
-                    photonView.RPC(Rpc.RequestForPickupTimes, next, new object[0]);
+                    photonView.RPC(Rpc.RequestForPickupTimes, next);
                 }
                 else
                 {
@@ -42,7 +42,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
 
     public void OnJoinedRoom()
     {
-        Debug.Log(string.Concat(new object[] { "Joined Room. isMasterClient: ", PhotonNetwork.isMasterClient, " id: ", Player.Self.ID }));
+        Debug.Log(string.Concat("Joined Room. isMasterClient: ", PhotonNetwork.isMasterClient, " id: ", Player.Self.ID));
         this.IsWaitingForPickupInit = !PhotonNetwork.isMasterClient;
         if (PhotonNetwork.PlayerList.Length >= 2)
         {
@@ -77,7 +77,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
             else
             {
                 double num5 = num4 + timeBase;
-                Debug.Log(string.Concat(new object[] { view.viewID, " respawn: ", num5, " timeUntilRespawnBasedOnTimeBase:", num4, " SecondsBeforeRespawn: ", component.SecondsBeforeRespawn }));
+                Debug.Log(string.Concat(view.viewID, " respawn: ", num5, " timeUntilRespawnBasedOnTimeBase:", num4, " SecondsBeforeRespawn: ", component.SecondsBeforeRespawn));
                 double num6 = num5 - PhotonNetwork.time;
                 if (num4 <= 0f)
                 {
@@ -128,7 +128,7 @@ public class PickupItemSyncer : Photon.MonoBehaviour
                     double num4 = item.TimeOfRespawn - PhotonNetwork.time;
                     if (item.TimeOfRespawn > num2)
                     {
-                        Debug.Log(string.Concat(new object[] { item.ViewID, " respawn: ", item.TimeOfRespawn, " timeUntilRespawn: ", num4, " (now: ", PhotonNetwork.time, ")" }));
+                        Debug.Log(string.Concat(item.ViewID, " respawn: ", item.TimeOfRespawn, " timeUntilRespawn: ", num4, " (now: ", PhotonNetwork.time, ")"));
                         list.Add(item.ViewID);
                         list.Add((float) num4);
                     }

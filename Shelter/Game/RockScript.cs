@@ -27,8 +27,8 @@ public class RockScript : MonoBehaviour
         if (!this.disable)
         {
             this.vv += -Vector3.up * this.g * Time.deltaTime;
-            Transform transform = this.transform;
-            transform.position += this.vv * Time.deltaTime;
+            Transform t = this.transform;
+            t.position += this.vv * Time.deltaTime;
             Transform transform2 = this.transform;
             transform2.position += this.vh * Time.deltaTime;
             if (Vector3.Distance(this.desPt, this.transform.position) < 20f || this.transform.position.y < 0f)

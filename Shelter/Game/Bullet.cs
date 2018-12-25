@@ -5,7 +5,6 @@ using Mod.Exceptions;
 using Photon;
 using Photon.Enums;
 using UnityEngine;
-using LogType = Mod.Logging.LogType;
 
 // ReSharper disable once CheckNamespace
 public class Bullet : Photon.MonoBehaviour

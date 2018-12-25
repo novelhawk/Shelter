@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Mod.Exceptions;
-using Mod.Interface;
 
 namespace Mod.Managers
 {

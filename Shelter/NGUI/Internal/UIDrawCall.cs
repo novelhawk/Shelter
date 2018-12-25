@@ -231,17 +231,17 @@ public class UIDrawCall : MonoBehaviour
             NGUITools.Destroy(this.mDepthMat);
             this.mDepthMat = null;
         }
-        Material material = this.mClippedMat == null ? this.mSharedMat : this.mClippedMat;
+        Material m = this.mClippedMat == null ? this.mSharedMat : this.mClippedMat;
         if (this.mDepthMat != null)
         {
-            if (this.mRen.sharedMaterials == null || this.mRen.sharedMaterials.Length != 2 || this.mRen.sharedMaterials[1] != material)
+            if (this.mRen.sharedMaterials == null || this.mRen.sharedMaterials.Length != 2 || this.mRen.sharedMaterials[1] != m)
             {
-                this.mRen.sharedMaterials = new Material[] { this.mDepthMat, material };
+                this.mRen.sharedMaterials = new[] { this.mDepthMat, m };
             }
         }
-        else if (this.mRen.sharedMaterial != material)
+        else if (this.mRen.sharedMaterial != m)
         {
-            this.mRen.sharedMaterials = new Material[] { material };
+            this.mRen.sharedMaterials = new[] { m };
         }
     }
 

@@ -745,24 +745,24 @@ namespace Game
             };
         }
 
-        public void setBodyByCostumeId(int id = -1)
+        public void setBodyByCostumeId(int newId = -1)
         {
-            if (id == -1)
+            if (newId == -1)
             {
-                id = this.costumeId;
+                newId = this.costumeId;
             }
-            this.costumeId = id;
-            this.arm_l_mesh = costumeOption[id].arm_l_mesh;
-            this.arm_r_mesh = costumeOption[id].arm_r_mesh;
-            this.body_mesh = costumeOption[id].body_mesh;
-            this.body_texture = costumeOption[id].body_texture;
-            this.uniform_type = costumeOption[id].uniform_type;
-            this.part_chest_1_object_mesh = costumeOption[id].part_chest_1_object_mesh;
-            this.part_chest_1_object_texture = costumeOption[id].part_chest_1_object_texture;
-            this.part_chest_object_mesh = costumeOption[id].part_chest_object_mesh;
-            this.part_chest_object_texture = costumeOption[id].part_chest_object_texture;
-            this.part_chest_skinned_cloth_mesh = costumeOption[id].part_chest_skinned_cloth_mesh;
-            this.part_chest_skinned_cloth_texture = costumeOption[id].part_chest_skinned_cloth_texture;
+            this.costumeId = newId;
+            this.arm_l_mesh = costumeOption[newId].arm_l_mesh;
+            this.arm_r_mesh = costumeOption[newId].arm_r_mesh;
+            this.body_mesh = costumeOption[newId].body_mesh;
+            this.body_texture = costumeOption[newId].body_texture;
+            this.uniform_type = costumeOption[newId].uniform_type;
+            this.part_chest_1_object_mesh = costumeOption[newId].part_chest_1_object_mesh;
+            this.part_chest_1_object_texture = costumeOption[newId].part_chest_1_object_texture;
+            this.part_chest_object_mesh = costumeOption[newId].part_chest_object_mesh;
+            this.part_chest_object_texture = costumeOption[newId].part_chest_object_texture;
+            this.part_chest_skinned_cloth_mesh = costumeOption[newId].part_chest_skinned_cloth_mesh;
+            this.part_chest_skinned_cloth_texture = costumeOption[newId].part_chest_skinned_cloth_texture;
         }
 
         public void setCape()

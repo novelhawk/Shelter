@@ -667,7 +667,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                         photonView.RPC(Rpc.PlayRockAnimation, PhotonTargets.All, objArray3);
                         this.rock.animation["move"].normalizedTime = animation["rock_walk"].normalizedTime;
                         this.waitCounter = 0f;
-                        photonView.RPC(Rpc.StartRockAnimation, PhotonTargets.All, new object[0]);
+                        photonView.RPC(Rpc.StartRockAnimation, PhotonTargets.All);
                     }
                 }
                 else if (this.rockPhase == 5)
@@ -753,7 +753,7 @@ public class TITAN_EREN : Photon.MonoBehaviour
                     this.crossFade("rock_fix_hole", 0.1f);
                     object[] objArray4 = new object[] { "set" };
                     photonView.RPC(Rpc.PlayRockAnimation, PhotonTargets.All, objArray4);
-                    photonView.RPC(Rpc.StopRockAnimation, PhotonTargets.All, new object[0]);
+                    photonView.RPC(Rpc.StopRockAnimation, PhotonTargets.All);
                 }
                 else if (this.rockPhase == 7)
                 {

@@ -1,11 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Runtime.Remoting.Channels;
 using System.Text;
 using System.Text.RegularExpressions;
 using JetBrains.Annotations;
-using Mod.Interface.Components;
-using Mod.Profiles;
 using Photon.Enums;
 using UnityEngine;
 
@@ -19,7 +15,7 @@ namespace Mod.Managers
         // TODO: Make array start with 0 elements and use Array.Copy to create a copy with 1 more entry (or add by 5 to reduce performance hit)
         public readonly ChatMessage[] Messages = new ChatMessage[MAX_MESSAGES];
         public int CurrentIndex = MAX_MESSAGES - 1;
-        public int Elements = 0;
+        public int Elements;
 
         public ChatMessage AddMessage(in object message) => AddMessage(null, message);
         /// <summary>

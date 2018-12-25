@@ -18,10 +18,10 @@ public class ParentFollow : MonoBehaviour // Used by skin (ex. mikasa_asset_uni)
         this.parent = null;
     }
 
-    public void SetParent(Transform transform)
+    public void SetParent(Transform t)
     {
-        this.parent = transform;
-        this.bTransform.rotation = transform.rotation;
+        this.parent = t;
+        this.bTransform.rotation = t.rotation;
     }
 
     private void Update()

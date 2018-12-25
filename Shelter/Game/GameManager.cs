@@ -7,7 +7,6 @@ using System.Text;
 using System.Text.RegularExpressions;
 using Game;
 using Mod.GameSettings;
-using Mod.Interface.Components;
 using Mod.Keybinds;
 using Mod.Managers;
 using Mod.Modules;
@@ -110,7 +109,7 @@ public partial class GameManager : Photon.MonoBehaviour
         isUnloading = false;
         isRecompiling = false;
         Time.timeScale = 1f;
-        UnityEngine.Camera.main.farClipPlane = 1500f;
+        Camera.main.farClipPlane = 1500f;
         pauseWaitTime = 0f;
         spectateSprites = new List<GameObject>();
         isRestarting = false;
@@ -131,7 +130,7 @@ public partial class GameManager : Photon.MonoBehaviour
                 {
                     SetGameSettings(GetGameSettings());
                 }
-                if (GameManager.settings.IsEndless)
+                if (settings.IsEndless)
                 {
 //                    StartCoroutine(RespawnEnumerator(RCSettings.endlessMode)); TODO: Check what the actual fuck is this and make it better
                 }
@@ -253,7 +252,7 @@ public partial class GameManager : Photon.MonoBehaviour
             UnloadAssets();
     }
 
-    public void CompileScript(string str)
+    public void CompileScript(string str) // TODO: Remove
     {
         int num3;
         string[] strArray2 = str.Replace(" ", string.Empty).Split(new[] { "\n", "\r\n" }, StringSplitOptions.RemoveEmptyEntries);
@@ -569,7 +568,7 @@ public partial class GameManager : Photon.MonoBehaviour
         {
             if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && needChooseSide)
             {
-                if (Shelter.InputManager.IsDown(Mod.Keybinds.InputAction.RedFlare)) //TODO: Automatically show on room join
+                if (Shelter.InputManager.IsDown(InputAction.RedFlare)) //TODO: Automatically show on room join
                 {
                     if (NGUITools.GetActive(ui.GetComponent<UIReferArray>().panels[3])) //TODO: Remove UI_IN_GAME
                     {
@@ -579,8 +578,8 @@ public partial class GameManager : Photon.MonoBehaviour
                         NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[1], false);
                         NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[2], false);
                         NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[3], false);
-                        UnityEngine.Camera.main.GetComponent<SpectatorMovement>().disable = false;
-                        UnityEngine.Camera.main.GetComponent<MouseLook>().disable = false;
+                        Camera.main.GetComponent<SpectatorMovement>().disable = false;
+                        Camera.main.GetComponent<MouseLook>().disable = false;
                     }
                     else
                     {
@@ -590,27 +589,26 @@ public partial class GameManager : Photon.MonoBehaviour
                         NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[1], false);
                         NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[2], false);
                         NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[3], true);
-                        UnityEngine.Camera.main.GetComponent<SpectatorMovement>().disable = true;
-                        UnityEngine.Camera.main.GetComponent<MouseLook>().disable = true;
+                        Camera.main.GetComponent<SpectatorMovement>().disable = true;
+                        Camera.main.GetComponent<MouseLook>().disable = true;
                     }
                 }
                 if (Shelter.InputManager.IsDown(InputAction.OpenMenu) && !_isVisible)
                 {
                     Screen.showCursor = true;
                     Screen.lockCursor = false;
-                    UnityEngine.Camera.main.GetComponent<SpectatorMovement>().disable = true;
-                    UnityEngine.Camera.main.GetComponent<MouseLook>().disable = true;
+                    Camera.main.GetComponent<SpectatorMovement>().disable = true;
+                    Camera.main.GetComponent<MouseLook>().disable = true;
                     _isVisible = true;
                 }
             }
             if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
             {
-                int length;
                 switch (IN_GAME_MAIN_CAMERA.GameType)
                 {
                     case GameType.Multiplayer:
                         CoreAdd();
-                        if (Camera.main != null && IN_GAME_MAIN_CAMERA.GameMode != GameMode.Racing && UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver && !needChooseSide && !settings.InSpectatorMode)
+                        if (Camera.main != null && IN_GAME_MAIN_CAMERA.GameMode != GameMode.Racing && Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver && !needChooseSide && !settings.InSpectatorMode)
                         {
                             if (LevelInfoManager.Get(Level).RespawnMode == RespawnMode.DEATHMATCH || 
                                 settings.IsEndless || (settings.IsBombMode || settings.PVPMode > PVPMode.Off) && 
@@ -645,7 +643,7 @@ public partial class GameManager : Photon.MonoBehaviour
                         {
                             if (!isLosing)
                             {
-                                currentSpeed = UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity.magnitude; //TODO: Show in new gui
+                                currentSpeed = Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity.magnitude; //TODO: Show in new gui
                                 maxSpeed = Mathf.Max(maxSpeed, currentSpeed);
                             }
                         }
@@ -673,7 +671,7 @@ public partial class GameManager : Photon.MonoBehaviour
                 } 
                 else if (_endingMessageId.HasValue)
                 {
-                    Shelter.Chat.Edit(_endingMessageId, "Restart failed.", false);
+                    Shelter.Chat.Edit(_endingMessageId, "Restart failed.");
                     _endingMessageId = null;
                 }
                 timeElapse += Time.deltaTime;
@@ -710,7 +708,7 @@ public partial class GameManager : Photon.MonoBehaviour
                         }
                         else if (!startRacing && isWinning)
                         {
-                            Shelter.Chat.Edit(_racingMessageId, "Race started.", false);
+                            Shelter.Chat.Edit(_racingMessageId, "Race started.");
                             _racingMessageId = null;
                             startRacing = true;
                             endRacing = false;
@@ -728,7 +726,7 @@ public partial class GameManager : Photon.MonoBehaviour
                         }
                         else if (!startRacing)
                         {
-                            Shelter.Chat.Edit(_racingMessageId, "Race started.", false);
+                            Shelter.Chat.Edit(_racingMessageId, "Race started.");
                             _racingMessageId = null;
 
                             startRacing = true;
@@ -845,7 +843,7 @@ public partial class GameManager : Photon.MonoBehaviour
             
             if (pauseWaitTime <= 0f)
             {
-                Shelter.Chat.Edit(_pauseMessageId, "Pause ended.", false);
+                Shelter.Chat.Edit(_pauseMessageId, "Pause ended.");
                 _pauseMessageId = null;
                 pauseWaitTime = 0f;
                 Time.timeScale = 1f;
@@ -1062,7 +1060,7 @@ public partial class GameManager : Photon.MonoBehaviour
             SpawnPlayerCustomMap();
             Minimap.TryRecaptureInstance();
             UnloadAssets();
-            UnityEngine.Camera.main.GetComponent<TiltShift>().enabled = false;
+            Camera.main.GetComponent<TiltShift>().enabled = false;
         }
         if (renewHash)
         {
@@ -1534,7 +1532,7 @@ public partial class GameManager : Photon.MonoBehaviour
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[2], false);
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[3], false);
             instance.needChooseSide = false;
-            UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled = true;
+            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().enabled = true;
             if (IN_GAME_MAIN_CAMERA.cameraMode == CameraType.Original)
             {
                 Screen.lockCursor = false;
@@ -1543,14 +1541,14 @@ public partial class GameManager : Photon.MonoBehaviour
             GameObject obj4 = GameObject.FindGameObjectWithTag("Player");
             if (obj4 != null && obj4.GetComponent<HERO>() != null)
             {
-                UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(obj4);
+                Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(obj4);
             }
             else
             {
-                UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(null);
+                Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(null);
             }
-            UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(false);
-            UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
+            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(false);
+            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
             StartCoroutine(ReloadSkyEnumerator());
         }
         else
@@ -1574,9 +1572,9 @@ public partial class GameManager : Photon.MonoBehaviour
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[2], false);
             NGUITools.SetActive(GameObject.Find("UI_IN_GAME").GetComponent<UIReferArray>().panels[3], false);
             instance.needChooseSide = true;
-            UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(null);
-            UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(true);
-            UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
+            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(null);
+            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setSpectorMode(true);
+            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = true;
         }
     }
 
@@ -1605,7 +1603,7 @@ public partial class GameManager : Photon.MonoBehaviour
             switch (IN_GAME_MAIN_CAMERA.GameMode)
             {
                 case GameMode.Racing:
-                    if (GameManager.settings.IsASORacing)
+                    if (settings.IsASORacing)
                         gameEndCD = 1000f;
                     else
                         gameEndCD = 20f;
@@ -3304,8 +3302,8 @@ public partial class GameManager : Photon.MonoBehaviour
     public IEnumerator ReloadSkyEnumerator()
     {
         yield return new WaitForSeconds(0.5f);
-        if (skyMaterial != null && UnityEngine.Camera.main.GetComponent<Skybox>().material != skyMaterial)
-            UnityEngine.Camera.main.GetComponent<Skybox>().material = skyMaterial;
+        if (skyMaterial != null && Camera.main.GetComponent<Skybox>().material != skyMaterial)
+            Camera.main.GetComponent<Skybox>().material = skyMaterial;
         Screen.lockCursor = !Screen.lockCursor; //tf? Probably feng's try to fix something lul
         Screen.lockCursor = !Screen.lockCursor;
     }
@@ -4198,7 +4196,7 @@ public partial class GameManager : Photon.MonoBehaviour
     {
         if (!needChooseSide && GameObject.Find("MainCamera").GetComponent<IN_GAME_MAIN_CAMERA>().gameOver)
         {
-            UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
+            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
             if (Player.Self.Properties.PlayerType == PlayerType.Titan)
             {
                 SpawnPlayerTitan(myLastHero);

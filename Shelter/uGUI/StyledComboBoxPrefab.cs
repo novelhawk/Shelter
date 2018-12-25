@@ -1,6 +1,4 @@
 ﻿using UnityEngine;
-using System.Collections;
-using UnityEngine.UI;
 
 // ReSharper disable once CheckNamespace
 public class StyledComboBoxPrefab : MonoBehaviour 

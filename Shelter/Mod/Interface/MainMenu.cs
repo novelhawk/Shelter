@@ -19,8 +19,8 @@ namespace Mod.Interface
 //            PhotonNetwork.ConnectToMaster("127.0.0.1", 5055, GameManager.ApplicationID, UIMainReferences.Version);
 
             btnNormal = Texture(169, 169, 169, 100);
-            btnHover = Texture(169, 169, 169, 255);
-            btnActive = Texture(134, 134, 134, 255);
+            btnHover = Texture(169, 169, 169);
+            btnActive = Texture(134, 134, 134);
             serverSelect = new GUIStyle(GUIStyle.none)
             {
                 normal = {background = btnNormal},

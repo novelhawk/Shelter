@@ -9,7 +9,7 @@ namespace NGUI.Internal
         private static float mGlobalVolume = 1f;
         private static Color mInvisible = new Color(0f, 0f, 0f, 0f);
         private static AudioListener mListener;
-        private static bool mLoaded = false;
+        private static bool mLoaded;
 
         private static void Activate(Transform t)
         {
@@ -133,30 +133,6 @@ namespace NGUI.Internal
                 c.b *= c.a;
             }
             return c;
-        }
-
-        public static void Broadcast(string funcName)
-        {
-            GameObject[] objArray = UnityEngine.Object.FindObjectsOfType(typeof(GameObject)) as GameObject[];
-            int index = 0;
-            int length = objArray.Length;
-            while (index < length)
-            {
-                objArray[index].SendMessage(funcName, SendMessageOptions.DontRequireReceiver);
-                index++;
-            }
-        }
-
-        public static void Broadcast(string funcName, object param)
-        {
-            GameObject[] objArray = UnityEngine.Object.FindObjectsOfType(typeof(GameObject)) as GameObject[];
-            int index = 0;
-            int length = objArray.Length;
-            while (index < length)
-            {
-                objArray[index].SendMessage(funcName, param, SendMessageOptions.DontRequireReceiver);
-                index++;
-            }
         }
 
         public static int CalculateNextDepth(GameObject go)
@@ -376,30 +352,12 @@ namespace NGUI.Internal
             return www;
         }
 
-        public static WWW OpenURL(string url, WWWForm form)
-        {
-            if (form == null)
-            {
-                return OpenURL(url);
-            }
-            WWW www = null;
-            try
-            {
-                www = new WWW(url, form);
-            }
-            catch (Exception exception)
-            {
-                Debug.LogError(exception == null ? "<null>" : exception.Message);
-            }
-            return www;
-        }
-
         public static Color ParseColor(string text, int offset)
         {
             int num = (NGUIMath.HexToDecimal(text[offset]) << 4) | NGUIMath.HexToDecimal(text[offset + 1]);
             int num2 = (NGUIMath.HexToDecimal(text[offset + 2]) << 4) | NGUIMath.HexToDecimal(text[offset + 3]);
             int num3 = (NGUIMath.HexToDecimal(text[offset + 4]) << 4) | NGUIMath.HexToDecimal(text[offset + 5]);
-            float num4 = 0.003921569f;
+            const float num4 = 0.003921569f;
             return new Color(num4 * num, num4 * num2, num4 * num3);
         }
 
@@ -590,24 +548,7 @@ namespace NGUI.Internal
             return text;
         }
 
-        public static string clipboard
-        {
-            get
-            {
-                return null;
-            }
-            set
-            {
-            }
-        }
-
-        public static bool fileAccess
-        {
-            get
-            {
-                return Application.platform != RuntimePlatform.WindowsWebPlayer && Application.platform != RuntimePlatform.OSXWebPlayer;
-            }
-        }
+        public static string clipboard => throw new NotImplementedException("Clipboard is not yet implemented");
 
         public static float soundVolume
         {

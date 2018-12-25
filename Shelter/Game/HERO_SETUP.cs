@@ -8,21 +8,21 @@ public class HERO_SETUP : MonoBehaviour
 {
     public string aniname;
     public float anitime;
-    private List<BoneWeight> boneWeightsList = new List<BoneWeight>();
+    public List<BoneWeight> boneWeightsList = new List<BoneWeight>();
     public bool change;
     public GameObject chest_info;
-    private byte[] config = new byte[4];
+    public byte[] config = new byte[4];
     public int currentOne;
     public SkinnedMeshRenderer[][] elements;
     public bool isDeadBody;
-    private List<Material> materialList;
-    private GameObject mount_3dmg;
-    private GameObject mount_3dmg_gas_l;
-    private GameObject mount_3dmg_gas_r;
-    private GameObject mount_3dmg_gun_mag_l;
-    private GameObject mount_3dmg_gun_mag_r;
-    private GameObject mount_weapon_l;
-    private GameObject mount_weapon_r;
+    public List<Material> materialList;
+    public GameObject mount_3dmg;
+    public GameObject mount_3dmg_gas_l;
+    public GameObject mount_3dmg_gas_r;
+    public GameObject mount_3dmg_gun_mag_l;
+    public GameObject mount_3dmg_gun_mag_r;
+    public GameObject mount_weapon_l;
+    public GameObject mount_weapon_r;
     public HeroCostume myCostume;
     public GameObject part_3dmg;
     public GameObject part_3dmg_belt;
@@ -311,9 +311,9 @@ public class HERO_SETUP : MonoBehaviour
         }
         if (this.myCostume.hair_1_mesh.Length > 0 && !this.isDeadBody)
         {
-            string name = "Character/" + this.myCostume.hair_1_mesh;
+            string str = "Character/" + this.myCostume.hair_1_mesh;
             Material material = CharacterMaterials.materials[this.myCostume.hairInfo.Texture];
-            this.part_hair_1 = ClothFactory.GetHair(this.reference, name, material, this.myCostume.hair_color);
+            this.part_hair_1 = ClothFactory.GetHair(this.reference, str, material, this.myCostume.hair_color);
         }
     }
 
@@ -653,10 +653,6 @@ public class HERO_SETUP : MonoBehaviour
         this.part_chest.renderer.material = CharacterMaterials.materials[this.myCostume.skin_texture];
         this.part_hand_l.renderer.material = CharacterMaterials.materials[this.myCostume.skin_texture];
         this.part_hand_r.renderer.material = CharacterMaterials.materials[this.myCostume.skin_texture];
-    }
-
-    private void Update()
-    {
     }
 }
 

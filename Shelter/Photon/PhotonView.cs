@@ -87,7 +87,7 @@ public class PhotonView : Photon.MonoBehaviour
         {
             if (this.instantiationId > 0)
             {
-                Debug.LogError(string.Concat(new object[] { "OnDestroy() seems to be called without PhotonNetwork.Destroy()?! GameObject: ", gameObject, " Application.isLoadingLevel: ", Application.isLoadingLevel }));
+                Debug.LogError(string.Concat("OnDestroy() seems to be called without PhotonNetwork.Destroy()?! GameObject: ", gameObject, " Application.isLoadingLevel: ", Application.isLoadingLevel));
             }
             else if (this.viewID <= 0)
             {

@@ -26,16 +26,15 @@ namespace NGUI.Internal
         public bool Validate(UIAtlas atlas)
         {
             if (atlas == null)
-            {
                 return false;
-            }
+            
             if (!this.mIsValid)
             {
                 if (string.IsNullOrEmpty(this.spriteName))
                 {
                     return false;
                 }
-                this.mSprite = atlas == null ? null : atlas.GetSprite(this.spriteName);
+                this.mSprite = atlas.GetSprite(this.spriteName);
                 if (this.mSprite != null)
                 {
                     Texture texture = atlas.texture;

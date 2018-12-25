@@ -49,7 +49,7 @@ public class Cannon : Photon.MonoBehaviour
                 if (GameManager.instance.allowedToCannon.ContainsKey(owner.ID))
                 {
                     this.settings = GameManager.instance.allowedToCannon[owner.ID].settings;
-                    photonView.RPC(Rpc.SetSize, PhotonTargets.All, new object[] { this.settings });
+                    photonView.RPC(Rpc.SetSize, PhotonTargets.All, this.settings);
                     int viewID = GameManager.instance.allowedToCannon[owner.ID].viewID;
                     GameManager.instance.allowedToCannon.Remove(owner.ID);
                     CannonPropRegion component = PhotonView.Find(viewID).gameObject.GetComponent<CannonPropRegion>();

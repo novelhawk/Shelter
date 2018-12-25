@@ -7,24 +7,19 @@ namespace NGUI.Internal
 {
     public class ByteReader
     {
-        private byte[] mBuffer;
-        private int mOffset;
-
-        public ByteReader(byte[] bytes)
-        {
-            this.mBuffer = bytes;
-        }
+        private readonly byte[] _buffer;
+        private int _offset;
 
         public ByteReader(TextAsset asset)
         {
-            this.mBuffer = asset.bytes;
+            this._buffer = asset.bytes;
         }
 
         public Dictionary<string, string> ReadDictionary()
         {
             Dictionary<string, string> dictionary = new Dictionary<string, string>();
-            char[] separator = new char[] { '=' };
-            while (this.canRead)
+            char[] separator = { };
+            while (this.CanRead)
             {
                 string str = this.ReadLine();
                 if (str == null)
@@ -45,52 +40,53 @@ namespace NGUI.Internal
             return dictionary;
         }
 
-        public string ReadLine()
+        private string ReadLine()
         {
-            string str;
-            int length = this.mBuffer.Length;
-            while (this.mOffset < length)
+            int length = _buffer.Length;
+            
+            // Ignore every metadata character -- \r\n
+            while (_offset < length)
             {
-                if (this.mBuffer[this.mOffset] >= 32)
-                {
+                if (_buffer[_offset] >= 32)
                     break;
-                }
-                this.mOffset++;
+                
+                _offset++;
             }
-            int mOffset = this.mOffset;
-            if (mOffset >= length)
+            
+            // Reached end of array
+            if (_offset >= length)
             {
-                this.mOffset = length;
+                _offset = length;
                 return null;
             }
-            while (mOffset < length)
+            
+            // Read line
+            int offset = _offset;
+            while (offset < length)
             {
-                switch (this.mBuffer[mOffset++])
+                // The line ends before end of array
+                switch (_buffer[offset++])
                 {
-                    case 10:
-                    case 13:
-                        goto Label_005F;
+                    case 10: // Line Feed \n
+                    case 13: // Carriage Return \r
+                        _offset = offset;
+                        return ByteToString(_buffer, _offset, offset - _offset - 1);
                 }
             }
-            mOffset++;
-            Label_005F:
-            str = ReadLine(this.mBuffer, this.mOffset, mOffset - this.mOffset - 1);
-            this.mOffset = mOffset;
-            return str;
+            
+            // Line ends with end of array 
+            offset++;
+            _offset = offset;
+            return ByteToString(_buffer, _offset, offset - _offset - 1);
         }
 
-        private static string ReadLine(byte[] buffer, int start, int count)
+        private static string ByteToString(byte[] buffer, int start, int count)
         {
             return Encoding.UTF8.GetString(buffer, start, count);
         }
 
-        public bool canRead
-        {
-            get
-            {
-                return this.mBuffer != null && this.mOffset < this.mBuffer.Length;
-            }
-        }
+        private bool CanRead => _buffer != null && 
+                                _offset < _buffer.Length;
     }
 }
 

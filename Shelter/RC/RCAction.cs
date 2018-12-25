@@ -2,7 +2,6 @@ using System;
 using Game;
 using ExitGames.Client.Photon;
 using Mod;
-using Photon;
 using Photon.Enums;
 
 namespace RC
@@ -381,7 +380,7 @@ namespace RC
                             {
                                 HERO hero = (HERO) GameManager.heroHash[iD];
                                 hero.markDie();
-                                hero.photonView.RPC(Rpc.DieRC, PhotonTargets.All, new object[] { -1, this.parameters[1].returnString(null) + " " });
+                                hero.photonView.RPC(Rpc.DieRC, PhotonTargets.All, -1, this.parameters[1].returnString(null) + " ");
                             }
                             else
                             {
@@ -390,11 +389,11 @@ namespace RC
                             return;
                         }
                         case 1:
-                            GameManager.instance.photonView.RPC(Rpc.Respawn, targetPlayer, new object[0]);
+                            GameManager.instance.photonView.RPC(Rpc.Respawn, targetPlayer);
                             return;
 
                         case 2:
-                            GameManager.instance.photonView.RPC(Rpc.SpawnPlayerAt, targetPlayer, new object[] { this.parameters[1].returnFloat(null), this.parameters[2].returnFloat(null), this.parameters[3].returnFloat(null) });
+                            GameManager.instance.photonView.RPC(Rpc.SpawnPlayerAt, targetPlayer, this.parameters[1].returnFloat(null), this.parameters[2].returnFloat(null), this.parameters[3].returnFloat(null));
                             return;
 
                         case 3:
@@ -403,7 +402,7 @@ namespace RC
                             if (GameManager.heroHash.ContainsKey(num6))
                             {
                                 HERO hero2 = (HERO) GameManager.heroHash[num6];
-                                hero2.photonView.RPC(Rpc.MoveTo, targetPlayer, new object[] { this.parameters[1].returnFloat(null), this.parameters[2].returnFloat(null), this.parameters[3].returnFloat(null) });
+                                hero2.photonView.RPC(Rpc.MoveTo, targetPlayer, this.parameters[1].returnFloat(null), this.parameters[2].returnFloat(null), this.parameters[3].returnFloat(null));
                             }
                             else
                             {
@@ -539,7 +538,7 @@ namespace RC
                             {
                                 titan3.maxHealth = titan3.currentHealth;
                             }
-                            titan3.photonView.RPC(Rpc.UpdateHealthLabel, PhotonTargets.AllBuffered, new object[] { titan3.currentHealth, titan3.maxHealth });
+                            titan3.photonView.RPC(Rpc.UpdateHealthLabel, PhotonTargets.AllBuffered, titan3.currentHealth, titan3.maxHealth);
                             return;
                         }
                         case 4:
@@ -551,7 +550,7 @@ namespace RC
                             }
                             else
                             {
-                                titan4.photonView.RPC(Rpc.MoveTo, titan4.photonView.owner, new object[] { this.parameters[1].returnFloat(null), this.parameters[2].returnFloat(null), this.parameters[3].returnFloat(null) });
+                                titan4.photonView.RPC(Rpc.MoveTo, titan4.photonView.owner, this.parameters[1].returnFloat(null), this.parameters[2].returnFloat(null), this.parameters[3].returnFloat(null));
                             }
                             return;
                         }
@@ -562,7 +561,7 @@ namespace RC
                     switch (this.actionType)
                     {
                         case 0:
-                            GameManager.instance.photonView.RPC(Rpc.Chat, PhotonTargets.All, new object[] { this.parameters[0].returnString(null), string.Empty });
+                            GameManager.instance.photonView.RPC(Rpc.Chat, PhotonTargets.All, this.parameters[0].returnString(null), string.Empty);
                             return;
 
                         case 1:
@@ -601,7 +600,7 @@ namespace RC
                                 GameManager.playerVariables.Clear();
                                 GameManager.titanVariables.Clear();
                             }
-                            GameManager.instance.RestartGame(false);
+                            GameManager.instance.RestartGame();
                             return;
                     }
                     break;

@@ -715,10 +715,10 @@ public partial class GameManager
     public void SpawnPlayerAtRPC(float posX, float posY, float posZ, PhotonMessageInfo info)
     {
         if (info.sender.IsMasterClient && logicLoaded && customLevelLoaded && !needChooseSide &&
-            UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver)
+            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver)
         {
             Vector3 position = new Vector3(posX, posY, posZ);
-            IN_GAME_MAIN_CAMERA component = UnityEngine.Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>();
+            IN_GAME_MAIN_CAMERA component = Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>();
             component.setMainObject(PhotonNetwork.Instantiate("AOTTG_HERO 1", position, new Quaternion(0f, 0f, 0f, 1f),
                 0));
             string slot = myLastHero.ToUpper();

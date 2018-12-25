@@ -1,5 +1,4 @@
 ﻿using Mod.Exceptions;
-using Mod.Interface;
 
 namespace Mod.Commands
 {

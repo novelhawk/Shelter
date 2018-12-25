@@ -48,26 +48,18 @@ namespace Mod.Interface
         {
             if (_isListening)
             {
-                try
-                {
-                    var input = Input.inputString;
-                    for (int i = 0; i < 6; i++)
-                        if (Input.GetMouseButtonDown(i))
-                            input = $"Mouse{i}";
-                    
-                    if (string.IsNullOrEmpty(input))
-                        return;
-                    
-                    KeyCode code = (KeyCode) Enum.Parse(typeof(KeyCode), input, true);
-                    Shelter.InputManager[_action] = code;
-                    Shelter.InputManager.Save(); //TODO: Save after Save is pressed
+                var evt = Event.current;
+                if (evt.type != EventType.KeyUp && !evt.isMouse)
+                    return;
 
-                    _isListening = false;
-                }
-                catch (ArgumentException)
-                {
-                    // ignored
-                }
+                KeyCode code = evt.keyCode;
+                if (evt.isMouse)
+                    code = KeyCode.Mouse0 + evt.button;
+                
+                Shelter.InputManager[_action] = code;
+                Shelter.InputManager.Save(); //TODO: Save after Save is pressed
+
+                _isListening = false;
                 return;
             }
             
@@ -261,6 +253,7 @@ namespace Mod.Interface
             const float borderDistance = 30;
 
             float width = (_windowRect.width - betweenSpace * (columns - 1) - borderDistance * 2) / columns;
+            
         }
         
 
