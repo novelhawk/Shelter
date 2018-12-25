@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Game;
+using JetBrains.Annotations;
 using Mod;
 using Mod.Discord;
 using Mod.Interface;
@@ -20,33 +21,39 @@ public partial class GameManager
 {
     #region Unity & Photon methods
 
+    [UsedImplicitly]
     public void OnConnectionFail(DisconnectCause cause)
     {
-        //TODO: Log
+        Shelter.LogBoth("Failed to connect: {0}", cause);
+        
         Screen.lockCursor = false;
         Screen.showCursor = true;
         IN_GAME_MAIN_CAMERA.GameType = GameType.NotInRoom;
         gameStart = false;
     }
 
+    [UsedImplicitly]
     public void OnCreatedRoom()
     {
         racingResult = new List<RacingResult>();
         teamScores = new int[2];
     }
 
+    [UsedImplicitly]
     public void OnDisconnectedFromPhoton()
     {
         Screen.lockCursor = false;
         Screen.showCursor = true;
     }
 
+    [UsedImplicitly]
     public void OnJoinedLobby()
     {
-        Loading.Stop("ConnectingToLobby");
+        Loading.Stop();
         ServerList.Alpha = 0f;
     }
 
+    [UsedImplicitly]
     public void OnJoinedRoom()
     {
         Shelter.OnJoinedGame();
@@ -125,22 +132,6 @@ public partial class GameManager
             Destroy(GameObject.Find("MultiplayerManager"));
             Application.LoadLevel("menu");
         }
-    }
-
-    public void OnUpdate()
-    {
-//        if (RCEvents.ContainsKey("OnUpdate"))
-//        {
-//            if (updateTime > 0f)
-//            {
-//                updateTime -= Time.deltaTime;
-//            }
-//            else
-//            {
-//                ((RCEvent) RCEvents["OnUpdate"]).checkEvent();
-//                updateTime = 1f;
-//            }
-//        }
     }
 
     private void OnLevelWasLoaded(int levelId) //TODO: todo 
@@ -366,6 +357,7 @@ public partial class GameManager
         }
     }
 
+    [UsedImplicitly]
     public void OnMasterClientSwitched(Player newMasterClient)
     {
         if (!noRestart)
@@ -413,11 +405,7 @@ public partial class GameManager
         noRestart = false;
     }
 
-    public void OnPhotonCreateRoomFailed()
-    {
-        print("OnPhotonCreateRoomFailed");
-    }
-
+    [UsedImplicitly]
     public void OnPhotonCustomRoomPropertiesChanged()
     {
         if (PhotonNetwork.isMasterClient)
@@ -439,21 +427,7 @@ public partial class GameManager
         }
     }
 
-    public void OnPhotonInstantiate()
-    {
-        print("OnPhotonInstantiate");
-    }
-
-    public void OnPhotonJoinRoomFailed()
-    {
-        print("OnPhotonJoinRoomFailed");
-    }
-
-    public void OnPhotonMaxCccuReached()
-    {
-        print("OnPhotonMaxCccuReached");
-    }
-
+    [UsedImplicitly]
     public void OnPhotonPlayerConnected(Player player)
     {
         Shelter.LogConsole("{0} connected", player.ToString().RemoveColors());
@@ -501,6 +475,7 @@ public partial class GameManager
         }
     }
 
+    [UsedImplicitly]
     public void OnPhotonPlayerDisconnected(Player player)
     {
         Shelter.LogConsole("{0} disconnected!", player.ToString().RemoveColors());
@@ -537,6 +512,7 @@ public partial class GameManager
         }
     }
 
+    [UsedImplicitly]
     public void OnPhotonPlayerPropertiesChanged(object[] playerAndUpdatedProps)
     {
         if (playerAndUpdatedProps == null || playerAndUpdatedProps.Length < 2 || !(playerAndUpdatedProps[1] is Hashtable hashtable))
@@ -588,34 +564,11 @@ public partial class GameManager
         }
     }
 
-    public void OnPhotonRandomJoinFailed()
-    {
-        print("OnPhotonRandomJoinFailed");
-    }
-
-    public void OnPhotonSerializeView()
-    {
-        print("OnPhotonSerializeView");
-    }
-
-    public void OnReceivedRoomListUpdate()
-    {
-    }
-
     private void Update()
     {
         if (Shelter.InputManager.IsDown(InputAction.OpenMenu))
             _isVisible = !_isVisible;
         
-        //        if (IN_GAME_MAIN_CAMERA.gametype != GAMETYPE.SINGLE && GameObject.Find("LabelNetworkStatus") != null)
-        //        {
-        //            GameObject.Find("LabelNetworkStatus").GetComponent<UILabel>().text = PhotonNetwork.connectionStatesDetailed.ToString();
-        //            if (PhotonNetwork.connected)
-        //            {
-        //                UILabel component = GameObject.Find("LabelNetworkStatus").GetComponent<UILabel>();
-        //                component.text = component.text + " ping:" + PhotonNetwork.GetPing();
-        //            }
-        //        }
         if (gameStart)
         {
             foreach (HERO hero in Heroes)

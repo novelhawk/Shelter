@@ -74,28 +74,28 @@ namespace Mod.Interface
                 PhotonNetwork.Disconnect();
                 PhotonNetwork.ConnectToMaster("app-eu.exitgamescloud.com", 5055, GameManager.ApplicationID, UIMainReferences.Version);
                 PlayerPrefs.SetString("ShelterServer", "app-eu.exitgamescloud.com");
-                Loading.Start("ConnectingToLobby");
+                Loading.Show();
             }
             if (GUILayout.Button("US", serverSelect))
             {
                 PhotonNetwork.Disconnect();
                 PhotonNetwork.ConnectToMaster("app-us.exitgamescloud.com", 5055, GameManager.ApplicationID, UIMainReferences.Version);
                 PlayerPrefs.SetString("ShelterServer", "app-us.exitgamescloud.com");
-                Loading.Start("ConnectingToLobby");
+                Loading.Show();
             }
             if (GUILayout.Button("JPN", serverSelect))
             {
                 PhotonNetwork.Disconnect();
                 PhotonNetwork.ConnectToMaster("app-jp.exitgamescloud.com", 5055, GameManager.ApplicationID, UIMainReferences.Version);
                 PlayerPrefs.SetString("ShelterServer", "app-jp.exitgamescloud.com");
-                Loading.Start("ConnectingToLobby");
+                Loading.Show();
             }
             if (GUILayout.Button("ASIA", serverSelect))
             {
                 PhotonNetwork.Disconnect();
                 PhotonNetwork.ConnectToMaster("app-asia.exitgamescloud.com", 5055, GameManager.ApplicationID, UIMainReferences.Version);
                 PlayerPrefs.SetString("ShelterServer", "app-asia.exitgamescloud.com");
-                Loading.Start("ConnectingToLobby");
+                Loading.Show();
             }
             GUILayout.EndHorizontal();
             GUILayout.EndArea();

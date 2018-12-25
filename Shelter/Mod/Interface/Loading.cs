@@ -5,48 +5,40 @@ namespace Mod.Interface
 {
     public class Loading : Gui
     {
-        private static readonly Queue<string> loadings = new Queue<string>();
-        private float rotAngle;
-        private Texture2D texture;
-
-        // ReSharper disable once Unity.InvalidStaticModifier Unity.InvalidParameters
-        public static void Start(string id)
-        {
-            if (!loadings.Contains(id))
-                loadings.Enqueue(id);
-            Shelter.InterfaceManager.Enable(nameof(Loading));
-        }
-
-        public static void Stop(string id)
-        {
-            if (loadings.Contains(id))
-                loadings.Dequeue();
-            if (loadings.Count <= 0)
-                Shelter.InterfaceManager.Disable(nameof(Loading));
-        }
+        private Texture2D _texture;
+        private float _rotation;
 
         private void Update()
         {
-            rotAngle += Time.deltaTime * 250;
+            _rotation += 250 * Time.deltaTime;
         }
-
+        
         protected override void OnShow()
         {
-            texture = GetImage("Loading");
+            _texture = GetImage("Loading");
         }
 
         protected override void Render()
         {
             Rect rect = new Rect(Screen.width - 79, Screen.height - 79, 69, 69);
 
-            GUIUtility.RotateAroundPivot(rotAngle, new Vector2(rect.x + rect.width / 2f, rect.y + rect.height / 2f));
-            GUI.DrawTexture(rect, texture);
+            GUIUtility.RotateAroundPivot(_rotation, new Vector2(rect.x + rect.width / 2f, rect.y + rect.height / 2f));
+            GUI.DrawTexture(rect, _texture);
         }
 
         protected override void OnHide()
         {
-            Destroy(texture);
+            Destroy(_texture);
         }
 
+        public static void Show()
+        {
+            Shelter.InterfaceManager.Enable(nameof(Loading));
+        }
+
+        public static void Stop()
+        {
+            Shelter.InterfaceManager.Disable(nameof(Loading));
+        }
     }
 }

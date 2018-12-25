@@ -251,7 +251,8 @@ namespace Mod
                 if (Players <= room.Players)
                     return 1;
             }
-            return 0;
+            
+            return -1;
         }
 
         public bool Join()

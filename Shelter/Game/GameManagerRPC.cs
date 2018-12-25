@@ -150,15 +150,9 @@ public partial class GameManager
 
     [RPC]
     [UsedImplicitly]
-    private void LabelRPC(int viewId, PhotonMessageInfo info)
+    private void LabelRPC(int viewId, PhotonMessageInfo info) // Updates Players' Label
     {
-        if (PhotonView.TryParse(viewId, out PhotonView view))
-        {
-            if (info.sender != view.owner)
-                throw new NotAllowedException(nameof(LabelRPC), info);
-            
-            // This is already done automatically in HERO
-        }
+        // This is internally handled by HERO.UpdateName
     }
 
     [RPC]
@@ -285,10 +279,7 @@ public partial class GameManager
     [UsedImplicitly]
     private void SetMasterRC(PhotonMessageInfo info)
     {
-        if (info.sender.IsMasterClient)
-        {
-            masterRC = true;
-        }
+        // This is done by Player Properties analysis
     }
 
     [RPC]
@@ -307,9 +298,8 @@ public partial class GameManager
     private void NetGameLose(int score, PhotonMessageInfo info)
     {
         if (!info.sender.IsMasterClient && !info.sender.IsLocal)
-            throw new NotAllowedException(nameof(NetGameLose), info, false); //TODO: Change to true when sure it doesn't get called by the game
+            throw new NotAllowedException(nameof(NetGameLose), info);
 
-        
         isLosing = true;
         titanScore = score;
         gameEndCD = gameEndTotalCDtime;

@@ -27,7 +27,7 @@ namespace Mod.Interface
         protected override void OnShow()
         {
             if (PhotonNetwork.connectionStatesDetailed != ClientState.JoinedLobby)
-                Loading.Start("ConnectingToLobby");
+                Loading.Show();
             buttonHover = Texture(255, 255, 255, 70);
             buttonActive = Texture(255, 255, 255, 140);
             filterStyle = new GUIStyle(GUI.skin.textArea)

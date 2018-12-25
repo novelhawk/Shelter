@@ -783,7 +783,6 @@ public partial class GameManager : Photon.MonoBehaviour
     {
         if (PhotonNetwork.isMasterClient)
         {
-            OnUpdate();
             if (customLevelLoaded)
             {
                 for (int i = 0; i < titanSpawners.Count; i++)
