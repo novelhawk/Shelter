@@ -138,7 +138,7 @@ namespace Mod
         public static void Log(string line, params object[] args) => Log(string.Format(line, args));
         [StringFormatMethod("line")]
         public static void Log(string line, LogType logType, params object[] args) => Log(string.Format(line, args), logType);
-        public static void Log(object obj, LogType logType = LogType.Info) => Log(obj as string, logType);
+        public static void Log(object obj, LogType logType = LogType.Info) => Log(obj.ToString(), logType);
         public static void Log(string line, LogType logType = LogType.Info)
         {
             if (_logger != null && line != null)
@@ -156,7 +156,7 @@ namespace Mod
         public static void LogBoth(string line, LogType logType, params object[] args) => LogBoth(string.Format(line, args), logType);
         [StringFormatMethod("line")]
         public static void LogBoth(string line, params object[] args) => LogBoth(string.Format(line, args));
-        public static void LogBoth(object obj, LogType logType = LogType.Info) => LogBoth(obj as string, logType);
+        public static void LogBoth(object obj, LogType logType = LogType.Info) => LogBoth(obj.ToString(), logType);
         public static void LogBoth(string line, LogType logType = LogType.Info)
         {
             Log(line, logType);
@@ -167,7 +167,7 @@ namespace Mod
         public static void LogConsole(string line, LogType logType, params object[] args) => LogConsole(string.Format(line, args), logType);
         [StringFormatMethod("line")]
         public static void LogConsole(string line, params object[] args) => LogConsole(string.Format(line, args));
-        public static void LogConsole(object obj, LogType logType = LogType.Info) => LogConsole(obj as string, logType);
+        public static void LogConsole(object obj, LogType logType = LogType.Info) => LogConsole(obj.ToString(), logType);
         public static void LogConsole(string line, LogType logType = LogType.Info)
         {
             if (_consoleLogger != null && line != null)
