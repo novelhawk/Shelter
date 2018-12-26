@@ -1229,10 +1229,13 @@ public class FEMALE_TITAN : Photon.MonoBehaviour
     [UsedImplicitly]
     public void LoadskinRPC(string url)
     {
-        if (!ModuleManager.Enabled(nameof(ModuleEnableSkins)) || !Utility.IsValidImageUrl(url)) 
-            return;
-        
-        StartCoroutine(loadskinE(url));
+        Shelter.LogBoth("LOADING {0} SKIN", nameof(FEMALE_TITAN));
+        Shelter.LogBoth("{0}: {1}", nameof(url), url);
+
+        if (ModuleManager.Enabled(nameof(ModuleEnableSkins)) || !Utility.IsValidImageUrl(url))
+        {
+            StartCoroutine(loadskinE(url));
+        }
     }
 
     [RPC]

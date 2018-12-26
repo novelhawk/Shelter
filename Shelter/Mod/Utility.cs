@@ -15,10 +15,14 @@ namespace Mod
         
         public static bool IsValidImageUrl(string url)
         {
+            if (string.IsNullOrEmpty(url))
+                return false;
+            
             var regex = Regex.Match(url, @"https?:\/\/(?:www\.)?.*?(\w+)\.\w+\/[^\?]+\.(?:png|jpg|gif|jpeg)(\?.*)?");
             if (!regex.Success) return false;
             switch (regex.Groups[1].Value.ToUpperInvariant())
             {
+                // TODO: Move to a Module and allow manual add of domains
                 case "IMGUR":
                 case "TINYPIC":
                 case "DISCORDAPP":
@@ -32,6 +36,20 @@ namespace Mod
             }
         }
 
+        public static bool ValidateHEROStats(in PlayerProperties properties) => ValidateHEROStats(properties.Speed, properties.Acceleration, properties.Blade, properties.Gas);
+        public static bool ValidateHEROStats(float speed, float acceleration, float blade, float gas)
+        {
+            if (acceleration > 150)
+                return false;
+            if (blade > 125)
+                return false;
+            if (gas > 150)
+                return false;
+            if (speed > 140)
+                return false;
+
+            return true;
+        }
         
         public static string ValidateUnityTags(string text)
         {

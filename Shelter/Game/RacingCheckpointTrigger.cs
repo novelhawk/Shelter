@@ -2,7 +2,6 @@ using Mod;
 using Photon;
 using Photon.Enums;
 using UnityEngine;
-using Extensions = Photon.Extensions;
 using MonoBehaviour = UnityEngine.MonoBehaviour;
 
 // ReSharper disable once CheckNamespace

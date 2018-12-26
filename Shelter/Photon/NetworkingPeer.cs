@@ -1373,11 +1373,10 @@ namespace Photon
 
                                 if (id == sender.ID)
                                 {
-                                    if (props.Acceleration > 150 || props.Blade > 125 || props.Gas > 150 ||
-                                        props.Speed > 140)
+                                    if (!Utility.ValidateHEROStats(props))
                                     {
                                         if (PhotonNetwork.isMasterClient)
-                                            GameManager.instance.KickPlayerRC(sender, true, "Illegal stats.");
+                                            GameManager.instance.KickPlayerRC(sender, true, "Invalid HERO stats");
                                         throw new NotAllowedException(photonEvent.Code, sender);
                                     }
                                 }

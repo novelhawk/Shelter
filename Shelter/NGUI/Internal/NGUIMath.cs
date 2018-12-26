@@ -363,13 +363,13 @@ namespace NGUI.Internal
             if (value >= '0' && value <= '9') 
                 return value - '0';
 
-            // Enforce UpperCase
+            // Return HexValue
             if (value >= 'a' && value <= 'f')
-                value -= 0x20;
+                return 10 + value - 'a';
             
             // Return HexValue
             if (value >= 'A' && value <= 'F')
-                return value - 'A';
+                return 10 + value - 'A';
 
             // c is not an hexadecimal number
             return 15;

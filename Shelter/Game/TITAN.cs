@@ -1960,6 +1960,10 @@ public class TITAN : Photon.MonoBehaviour
     [UsedImplicitly]
     public void LoadskinRPC(string body, string eyeUrl)
     {
+        Shelter.LogBoth("LOADING {0} SKIN", nameof(TITAN));
+        Shelter.LogBoth("{0}: {1}", nameof(body), body);
+        Shelter.LogBoth("{0}: {1}", nameof(eyeUrl), eyeUrl);
+        
         if (ModuleManager.Enabled(nameof(ModuleEnableSkins)))
         {
             StartCoroutine(this.LoadSkinEnumerator(body, eyeUrl));

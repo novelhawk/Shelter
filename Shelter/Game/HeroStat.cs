@@ -1,8 +1,10 @@
+using JetBrains.Annotations;
+
 namespace Game
 {
     public struct HeroStat
     {
-        public string SkillName;
+        [CanBeNull] public string SkillName;
         public int Speed;
         public int Gas;
         public int Blade;

@@ -6,12 +6,10 @@ using UnityEngine;
 // ReSharper disable once CheckNamespace
 public class CharacterCreateAnimationControl : MonoBehaviour
 {
-    [CompilerGenerated]
-    private static Dictionary<string, int> f__switchSmap0;
-    private string currentAnimation;
-    private float interval = 10f;
-    private HERO_SETUP setup;
-    private float timeElapsed;
+    public string currentAnimation;
+    public float interval = 10f;
+    public HERO_SETUP setup;
+    public float timeElapsed;
 
     private void play(string id)
     {
@@ -21,57 +19,35 @@ public class CharacterCreateAnimationControl : MonoBehaviour
 
     public void playAttack(string id)
     {
-        string key = id;
-        if (key != null)
+        switch (id)
         {
-            int num;
-            if (f__switchSmap0 == null)
-            {
-                Dictionary<string, int> dictionary = new Dictionary<string, int>(7)
-                {
-                    { "mikasa", 0 },
-                    { "levi", 1 },
-                    { "sasha", 2 },
-                    { "jean", 3 },
-                    { "marco", 4 },
-                    { "armin", 5 },
-                    { "petra", 6 }
-                };
-                f__switchSmap0 = dictionary;
-            }
-            if (f__switchSmap0.TryGetValue(key, out num))
-            {
-                switch (num)
-                {
-                    case 0:
-                        this.currentAnimation = "attack3_1";
-                        break;
+            case "mikasa":
+                this.currentAnimation = "attack3_1";
+                break;
 
-                    case 1:
-                        this.currentAnimation = "attack5";
-                        break;
+            case "levi":
+                this.currentAnimation = "attack5";
+                break;
 
-                    case 2:
-                        this.currentAnimation = "special_sasha";
-                        break;
+            case "sasha":
+                this.currentAnimation = "special_sasha";
+                break;
 
-                    case 3:
-                        this.currentAnimation = "grabbed_jean";
-                        break;
+            case "jean":
+                this.currentAnimation = "grabbed_jean";
+                break;
 
-                    case 4:
-                        this.currentAnimation = "special_marco_0";
-                        break;
+            case "marco":
+                this.currentAnimation = "special_marco_0";
+                break;
 
-                    case 5:
-                        this.currentAnimation = "special_armin";
-                        break;
+            case "armin":
+                this.currentAnimation = "special_armin";
+                break;
 
-                    case 6:
-                        this.currentAnimation = "special_petra";
-                        break;
-                }
-            }
+            case "petra":
+                this.currentAnimation = "special_petra";
+                break;
         }
         animation.Play(this.currentAnimation);
     }
@@ -123,11 +99,11 @@ public class CharacterCreateAnimationControl : MonoBehaviour
             if (this.timeElapsed > this.interval)
             {
                 this.timeElapsed = 0f;
-                if (Random.Range(1, 1000) < 350)
+                if (Random.Range(0, 100) < 35)
                 {
                     this.play("salute");
                 }
-                else if (Random.Range(1, 1000) < 350)
+                else if (Random.Range(0, 100) < 35)
                 {
                     this.play("supply");
                 }

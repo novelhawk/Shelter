@@ -205,6 +205,7 @@ namespace Mod
         }
 
         public override string ToString() => $"{(IsMasterClient ? "[M] " : string.Empty)}{Properties.Name} ({ID})";
+        public string ToStringHex() => $"{(IsMasterClient ? "[M] " : string.Empty)}{Properties.HexName} ({ID})";
 
         public Hashtable AllProperties
         {

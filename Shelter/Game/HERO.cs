@@ -18,167 +18,204 @@ using RC;
 using UnityEngine;
 using Xft;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
+using LogType = Mod.Logging.LogType;
 
 // ReSharper disable once CheckNamespace
 public class HERO : Photon.MonoBehaviour
 {
     private HeroState _state;
-    private bool almostSingleHook;
-    private string attackAnimation;
-    private int attackLoop;
-    private bool attackMove;
-    private bool attackReleased;
-    public AudioSource audio_ally;
-    public AudioSource audio_hitwall;
-    private GameObject badGuy;
-    public Animation baseAnimation;
-    public Rigidbody baseRigidBody;
-    public Transform baseTransform;
-    public bool bigLean;
-    public float bombCD;
-    public bool bombImmune;
-    public float bombRadius;
-    public float bombSpeed;
-    public float bombTime;
-    public float bombTimeMax;
-    private float _speedupTime;
-    public GameObject bulletLeft;
-    private int bulletMAX = 7;
-    public GameObject bulletRight;
-    private bool buttonAttackRelease;
-    public Dictionary<string, UISprite> cachedSprites;
-    public float CameraMultiplier;
-    public bool canJump = true;
-    public GameObject checkBoxLeft;
-    public GameObject checkBoxRight;
-    public GameObject cross1;
-    public GameObject cross2;
-    public string currentAnimation;
-    private int currentBladeNum = 5;
-    private float currentBladeSta = 100f;
-    private bool _isSpeedup; //TODO: Replace with (_speedupTime > 0f)
-    public Camera currentCamera;
-    private float currentGas = 100f;
-    public float currentSpeed;
-    public Vector3 currentV;
-    private bool dashD;
-    private Vector3 dashDirection;
-    private bool dashL;
-    private bool dashR;
-    private float dashTime;
-    private bool dashU;
-    private Vector3 dashV;
-    public bool detonate;
+    
+    // Audios
+    [UnityInitialized] public AudioSource audio_ally;
+    [UnityInitialized] public AudioSource audio_hitwall;
+    [UnityInitialized] public AudioSource meatDie;
+    [UnityInitialized] public AudioSource slash;
+    [UnityInitialized] public AudioSource slashHit;
+    [UnityInitialized] public AudioSource rope;
+
+    // Flares CDs
+    private const float FlareCD = 30f;
+    private float flare1CD;
+    private float flare2CD;
+    private float flare3CD;
+    
+    private const int MaxBlades = 5;
+    [UnityInitialized] public float totalBladeSta = 100f;
+    [UnityInitialized] public float totalGas = 100f;
+    private int currentBladeNum = 5;       // [HeroStat] BLADE Number of blades remaining
+    private float currentBladeSta = 100f;  // [HeroStat] BLADE Duration
+    private float currentGas = 100f;       // [HeroStat] GAS   Gas remaining
+    
+    private int bulletMAX = 7;             // [AHSS] Max Bullets
+    private bool leftGunHasBullet = true;  // [AHSS] LEFT  Has bullet
+    private int leftBulletLeft = 7;        // [AHSS] LEFT  Remaining shots
+    [UnityInitialized] public GameObject bulletLeft;         // [AHSS] LEFT  Bullet Icon
+    private bool rightGunHasBullet = true; // [AHSS] RIGHT Has bullet
+    private int rightBulletLeft = 7;       // [AHSS] RIGHT Remaining shots
+    [UnityInitialized] public GameObject bulletRight;        // [AHSS] RIGHT Bullet Icon
+    
+    [UnityInitialized] public Group myGroup;                 // [HERO] HUMAN, TITAN, AHSS
+    private GameObject myHorse;            // [HERO] Horse
+    private GameObject myNetWorkName;      // [HERO] Name label
+    private bool almostSingleHook;         // [HERO] Both hooks are really close to each other
+    private bool grounded;                 // [HERO] Is Grounded
+    [UnityInitialized] public bool hasDied;                  // [HERO] Is Dead
+    [UnityInitialized] public float currentSpeed;            // [HERO] Speed
+    
+    [UnityInitialized] public GameObject checkBoxLeft;       // [HERO] LEFT   Blade
+    [UnityInitialized] public XWeaponTrail leftbladetrail;   // [HERO] LEFT   Blade Trail 1
+    [UnityInitialized] public XWeaponTrail leftbladetrail2;  // [HERO] LEFT   Blade Trail 2
+    [UnityInitialized] public GameObject checkBoxRight;      // [HERO] RIGHT  Blade
+    [UnityInitialized] public XWeaponTrail rightbladetrail;  // [HERO] RIGHT  Blade Trail 1
+    [UnityInitialized] public XWeaponTrail rightbladetrail2; // [HERO] RIGHT  Blade Trail 2
+    
+    private GameObject badGuy;             // [HERO] Hooked by -- Type HERO
+    private bool hookBySomeOne = true;     // [HERO] Is hooked
+    [UnityInitialized] public bool canJump = true;           // Can jump? Probably always true
+    
+    private string standAnimation = "stand"; // [ANIMATION] Stand animation || Can be "AHSS_stand_gun" for AHSS, "stand" for females, "stand_levi" for males
+    private string attackAnimation;          // [ANIMATION] Attack animation || A lot of possibilities, attack1; attack2; attack3_1; special_... etc
+    private int attackLoop;                  // [ANIMATION] Number of times to repeat the animation
+    private bool attackMove;          // Cannot figure out what this does
+    private bool attackReleased;      // Whether the attack animation is still going
+    private bool buttonAttackRelease; // Whether the attack button has been released
+
+    // Lean
+    private bool bigLean;
+    private bool needLean;
+    private bool leanLeft;
+
+    // Paricles
+    private ParticleSystem smoke_3dmg;
+    private ParticleSystem sparks;
+
+    // Dash
+    private float dashTime;        // [DASH] Time
+    private Vector3 dashDirection; // [DASH] Position
+    private Vector3 dashV;         // [DASH] Direction
+    private bool dashU;            // [DASH] Direction: Up
+    private bool dashD;            // [DASH] Direction: Down
+    private bool dashL;            // [DASH] Direction: Left
+    private bool dashR;            // [DASH] Direction: Right
+    
+
+    [UnityInitialized] public string currentAnimation;
+    [UnityInitialized] public Camera currentCamera;
     private float dTapTime = -1f;
     private bool EHold;
     private GameObject eren_titan;
     private int escapeTimes = 1;
     private float facingDirection;
-    private float flare1CD;
-    private float flare2CD;
-    private float flare3CD;
-    private float flareTotalCD = 30f;
     private Transform forearmL;
     private Transform forearmR;
-    private float gravity = 20f;
-    private bool grounded;
+    [UnityInitialized] public float gravity = 20f;
     private GameObject gunDummy;
     private Vector3 gunTarget;
     private Transform handL;
     private Transform handR;
-    private bool hasDied;
-    public bool hasspawn;
-    private bool hookBySomeOne = true;
-    public GameObject hookRefL1;
-    public GameObject hookRefL2;
-    public GameObject hookRefR1;
-    public GameObject hookRefR2;
+    [UnityInitialized] public GameObject hookRefL1;
+    [UnityInitialized] public GameObject hookRefL2;
+    [UnityInitialized] public GameObject hookRefR1;
+    [UnityInitialized] public GameObject hookRefR2;
     private bool hookSomeOne;
     private GameObject hookTarget;
     private float invincible = 3f;
-    public bool isCannon;
     private bool isLaunchLeft;
     private bool isLaunchRight;
     private bool isLeftHandHooked;
     private bool isMounted;
-    public bool isPhotonCamera;
     private bool isRightHandHooked;
-    public float jumpHeight = 2f;
-    private bool justGrounded;
-    public GameObject LabelDistance;
-    public Transform lastHook;
+    [UnityInitialized] public float jumpHeight = 2f;
+    [UnityInitialized] public Transform lastHook;
     private float launchElapsedTimeL;
     private float launchElapsedTimeR;
     private Vector3 launchForce;
     private Vector3 launchPointLeft;
     private Vector3 launchPointRight;
-    private bool leanLeft;
     private bool leftArmAim;
-    public XWeaponTrail leftbladetrail;
-    public XWeaponTrail leftbladetrail2;
-    private int leftBulletLeft = 7;
-    private bool leftGunHasBullet = true;
     private float lTapTime = -1f;
-    public GameObject maincamera;
-    public float maxVelocityChange = 10f;
-    public AudioSource meatDie;
-    public Bomb myBomb;
-    public GameObject myCannon;
-    public Transform myCannonBase;
-    public Transform myCannonPlayer;
-    public CannonPropRegion myCannonRegion;
-    public Group myGroup;
-    private GameObject myHorse;
-    public GameObject myNetWorkName;
-    public float myScale = 1f;
-    public int myTeam = 1;
-    public List<TITAN> myTitans;
-    private bool needLean;
+    [UnityInitialized] public float maxVelocityChange = 10f;
+    [UnityInitialized] public float myScale = 1f;
+    [UnityInitialized] public int myTeam = 1;
+    private List<TITAN> myTitans;
     private Quaternion oldHeadRotation;
     private float originVM;
     private bool QHold;
     private string reloadAnimation = string.Empty;
     private bool rightArmAim;
-    public XWeaponTrail rightbladetrail;
-    public XWeaponTrail rightbladetrail2;
-    private int rightBulletLeft = 7;
-    private bool rightGunHasBullet = true;
-    public AudioSource rope;
     private float rTapTime = -1f;
-    public HERO_SETUP setup;
+    [UnityInitialized] public HERO_SETUP setup;
     private GameObject skillCD;
-    public float skillCDDuration;
-    public float skillCDLast;
-    public float skillCDLastCannon;
+    [UnityInitialized] public float skillCDDuration;
+    [UnityInitialized] public float skillCDLast;
     private string skillId;
-    public string skillIDHUD;
-    public AudioSource slash;
-    public AudioSource slashHit;
-    private ParticleSystem smoke_3dmg;
-    private ParticleSystem sparks;
-    public float speed = 10f;
-    public GameObject speedFX;
-    public GameObject speedFX1;
+    [UnityInitialized] public float speed = 10f;
+    [UnityInitialized] public GameObject speedFX;
+    [UnityInitialized] public GameObject speedFX1;
     private ParticleSystem speedFXPS;
-    public bool spinning;
-    private string standAnimation = "stand";
+    private bool spinning;
     private Quaternion targetHeadRotation;
     private Quaternion targetRotation;
-    public Vector3 targetV;
     private bool throwedBlades;
-    public bool titanForm;
+    [UnityInitialized] public bool titanForm;
     private GameObject titanWhoGrabMe;
     private int titanWhoGrabMeID;
-    private int totalBladeNum = 5;
-    public float totalBladeSta = 100f;
-    public float totalGas = 100f;
     private Transform upperarmL;
     private Transform upperarmR;
     private float useGasSpeed = 0.2f;
-    public bool useGun;
+    [UnityInitialized] public bool useGun;
     private float uTapTime = -1f;
     private bool wallJump;
     private float wallRunTime;
+    
+    private bool justGrounded; //TODO: Convert to local variable
+
+    // ===============
+    // == RC Fields ==
+    // ===============
+    
+    // Sprite cache
+    private Dictionary<string, UISprite> cachedSprites;
+    
+    // RC Bomb
+    private float bombCD;
+    private bool bombImmune;
+    private float bombRadius;
+    private float bombSpeed;
+    private float bombTime;
+    private float bombTimeMax; 
+    private Vector3 currentV; // Bomb start position 
+    private Vector3 targetV;  // Bomb direction
+    
+    // Base properties
+    private Animation baseAnimation;
+    private Rigidbody baseRigidBody;
+    private Transform baseTransform;
+    
+    // Cursor
+    private GameObject cross1;
+    private GameObject cross2;
+    
+    private bool _isSpeedup; //TODO: Replace with (_speedupTime > 0f)
+    private float _speedupTime;       // Sasha skill time
+    private float CameraMultiplier;   // CameraMovementLive component
+    private bool detonate;            // [Bomb] Check input for pre-explode the bomb
+    private bool hasspawn;            // Has spawned
+    private bool isCannon;            // Is inside a cannon
+    private bool isPhotonCamera;      // ?
+    private GameObject LabelDistance; // Label under the reticle
+    private GameObject maincamera;    // Main camera?
+
+    private float skillCDLastCannon;  // Time of last cannon
+    private string skillIDHUD;        // Skill ID HUD
+    
+    // Instances of different objects
+    private Bomb myBomb;
+    private GameObject myCannon;
+    private Transform myCannonBase;
+    private Transform myCannonPlayer;
+    private CannonPropRegion myCannonRegion;
+
 
     private void applyForceToBody(GameObject GO, Vector3 v)
     {
@@ -1582,6 +1619,8 @@ public class HERO : Photon.MonoBehaviour
                     this.spinning = true;
                     this.baseRigidBody.velocity = vector18 * num20;
                 }
+                
+                // Probably handles the knockback (maybe only AHSS?)
                 if (this.State == HeroState.Attack && (this.attackAnimation == "attack5" || this.attackAnimation == "special_petra") && this.baseAnimation[this.attackAnimation].normalizedTime > 0.4f && !this.attackMove)
                 {
                     this.attackMove = true;
@@ -1611,21 +1650,16 @@ public class HERO : Photon.MonoBehaviour
                     }
                     this.baseRigidBody.AddForce(Vector3.up * 2f, ForceMode.Impulse);
                 }
-                bool flag7 = false;
                 if (this.bulletLeft != null || this.bulletRight != null)
                 {
                     if (this.bulletLeft != null && this.bulletLeft.transform.position.y > gameObject.transform.position.y && this.isLaunchLeft && this.bulletLeft.GetComponent<Bullet>().isHooked())
                     {
-                        flag7 = true;
+                        this.baseRigidBody.AddForce(new Vector3(0f, -10f * this.baseRigidBody.mass, 0f));
                     }
-                    if (this.bulletRight != null && this.bulletRight.transform.position.y > gameObject.transform.position.y && this.isLaunchRight && this.bulletRight.GetComponent<Bullet>().isHooked())
+                    else if (this.bulletRight != null && this.bulletRight.transform.position.y > gameObject.transform.position.y && this.isLaunchRight && this.bulletRight.GetComponent<Bullet>().isHooked())
                     {
-                        flag7 = true;
+                        this.baseRigidBody.AddForce(new Vector3(0f, -10f * this.baseRigidBody.mass, 0f));
                     }
-                }
-                if (flag7)
-                {
-                    this.baseRigidBody.AddForce(new Vector3(0f, -10f * this.baseRigidBody.mass, 0f));
                 }
                 else
                 {
@@ -1760,7 +1794,7 @@ public class HERO : Photon.MonoBehaviour
 
     public void getSupply()
     {
-        if ((animation.IsPlaying(this.standAnimation) || animation.IsPlaying("run") || animation.IsPlaying("run_sasha")) && (this.currentBladeSta != this.totalBladeSta || this.currentBladeNum != this.totalBladeNum || this.currentGas != this.totalGas || this.leftBulletLeft != this.bulletMAX || this.rightBulletLeft != this.bulletMAX))
+        if ((animation.IsPlaying(this.standAnimation) || animation.IsPlaying("run") || animation.IsPlaying("run_sasha")) && (this.currentBladeSta != this.totalBladeSta || this.currentBladeNum != MaxBlades || this.currentGas != this.totalGas || this.leftBulletLeft != this.bulletMAX || this.rightBulletLeft != this.bulletMAX))
         {
             this.State = HeroState.FillGas;
             this.crossFade("supply", 0.1f);
@@ -2247,6 +2281,14 @@ public class HERO : Photon.MonoBehaviour
         }
     }
 
+    public IEnumerator LoadSkin(int horseViewID, HumanSkin skin)
+    {
+        while (!hasspawn)
+            yield return null;
+        
+        
+    }
+
     public IEnumerator loadskinE(int horse, string url)
     {
         while (!this.hasspawn)
@@ -2262,7 +2304,7 @@ public class HERO : Photon.MonoBehaviour
         bool isMe = IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || this.photonView.isMine;
 
         Renderer myRenderer;
-        if (this.setup.part_hair_1 != null)
+        if (this.setup.part_hair_1 != null) // urls[1]
         {
             myRenderer = this.setup.part_hair_1.renderer;
             if (Utility.IsValidImageUrl(urls[1]))
@@ -2293,7 +2335,7 @@ public class HERO : Photon.MonoBehaviour
                 myRenderer.enabled = false;
             }
         }
-        if (this.setup.part_cape != null)
+        if (this.setup.part_cape != null) // urls[7]
         {
             myRenderer = this.setup.part_cape.renderer;
             if (Utility.IsValidImageUrl(urls[7]))
@@ -2321,7 +2363,7 @@ public class HERO : Photon.MonoBehaviour
                 myRenderer.enabled = false;
             }
         }
-        if (this.setup.part_chest_3 != null)
+        if (this.setup.part_chest_3 != null) // urls[6]
         {
             myRenderer = this.setup.part_chest_3.renderer;
             if (Utility.IsValidImageUrl(urls[6]))
@@ -2351,9 +2393,25 @@ public class HERO : Photon.MonoBehaviour
             }
         }
 
+        /*
+         * 0  Horse
+         * 1  Hair
+         * 2  Eye
+         * 3  Glass
+         * 4  Face
+         * 5  Body
+         * 6  Costume
+         * 7  Cape
+         * 8  Blade, 3dmg, Gun (left)
+         * 9  Blade, 3dmg_gas, Gun (right)
+         * 10 Gas
+         * 11 Hoodie
+         * 12 Trail
+         */
+        
         foreach (Renderer currentRender in this.GetComponentsInChildren<Renderer>())
         {
-            if (currentRender.name.Contains("hair"))
+            if (currentRender.name.Contains("hair")) // url[1]
             {
                 if (Utility.IsValidImageUrl(urls[1]))
                 {
@@ -2383,7 +2441,7 @@ public class HERO : Photon.MonoBehaviour
                     currentRender.enabled = false;
                 }
             }
-            else if (currentRender.name.Contains("character_eye"))
+            else if (currentRender.name.Contains("character_eye")) // url[2]
             {
                 if (Utility.IsValidImageUrl(urls[2]))
                 {
@@ -2412,7 +2470,7 @@ public class HERO : Photon.MonoBehaviour
                     currentRender.enabled = false;
                 }
             }
-            else if (currentRender.name.Contains("glass"))
+            else if (currentRender.name.Contains("glass")) // url[3]
             {
                 if (Utility.IsValidImageUrl(urls[3]))
                 {
@@ -2441,7 +2499,7 @@ public class HERO : Photon.MonoBehaviour
                     currentRender.enabled = false;
                 }
             }
-            else if (currentRender.name.Contains("character_face"))
+            else if (currentRender.name.Contains("character_face")) // url[4]
             {
                 if (Utility.IsValidImageUrl(urls[4]))
                 {
@@ -2470,7 +2528,9 @@ public class HERO : Photon.MonoBehaviour
                     currentRender.enabled = false;
                 }
             }
-            else if (currentRender.name.Contains("character_head") || currentRender.name.Contains("character_hand") || currentRender.name.Contains("character_chest"))
+            else if (currentRender.name.Contains("character_head") || 
+                     currentRender.name.Contains("character_hand") || 
+                     currentRender.name.Contains("character_chest")) // url[5]
             {
                 if (Utility.IsValidImageUrl(urls[5]))
                 {
@@ -2497,7 +2557,10 @@ public class HERO : Photon.MonoBehaviour
                     currentRender.enabled = false;
                 }
             }
-            else if (currentRender.name.Contains("character_body") || currentRender.name.Contains("character_arm") || currentRender.name.Contains("character_leg") || currentRender.name.Contains("mikasa_asset"))
+            else if (currentRender.name.Contains("character_body") || 
+                     currentRender.name.Contains("character_arm") || 
+                     currentRender.name.Contains("character_leg") || 
+                     currentRender.name.Contains("mikasa_asset")) // url[6]
             {
                 if (Utility.IsValidImageUrl(urls[6]))
                 {
@@ -2524,7 +2587,8 @@ public class HERO : Photon.MonoBehaviour
                     currentRender.enabled = false;
                 }
             }
-            else if (currentRender.name.Contains("character_cape") || currentRender.name.Contains("character_brand"))
+            else if (currentRender.name.Contains("character_cape") || 
+                     currentRender.name.Contains("character_brand")) // url[7]
             {
                 if (Utility.IsValidImageUrl(urls[7]))
                 {
@@ -2551,7 +2615,10 @@ public class HERO : Photon.MonoBehaviour
                     currentRender.enabled = false;
                 }
             }
-            else if (currentRender.name.Contains("character_blade_l") || (currentRender.name.Contains("character_3dmg") || currentRender.name.Contains("character_gun")) && !currentRender.name.Contains("_r"))
+            else if (currentRender.name.Contains("character_blade_l") || 
+                     (currentRender.name.Contains("character_3dmg") || 
+                      currentRender.name.Contains("character_gun")) && 
+                     !currentRender.name.Contains("_r")) // url[8]
             {
                 if (Utility.IsValidImageUrl(urls[8]))
                 {
@@ -2578,7 +2645,10 @@ public class HERO : Photon.MonoBehaviour
                     currentRender.enabled = false;
                 }
             }
-            else if (currentRender.name.Contains("character_blade_r") || currentRender.name.Contains("character_3dmg_gas_r") || currentRender.name.Contains("character_gun") && currentRender.name.Contains("_r")) //TODO: _r tf is this
+            else if (currentRender.name.Contains("character_blade_r") || 
+                     currentRender.name.Contains("character_3dmg_gas_r") || 
+                     currentRender.name.Contains("character_gun") && 
+                     currentRender.name.Contains("_r")) // url[9]
             {
                 if (Utility.IsValidImageUrl(urls[9]))
                 {
@@ -2605,7 +2675,7 @@ public class HERO : Photon.MonoBehaviour
                     currentRender.enabled = false;
                 }
             }
-            else if (currentRender.name == "3dmg_smoke" && skinGas)
+            else if (currentRender.name == "3dmg_smoke" && skinGas) // url[10]
             {
                 if (Utility.IsValidImageUrl(urls[10]))
                 {
@@ -2632,7 +2702,7 @@ public class HERO : Photon.MonoBehaviour
                     currentRender.enabled = false;
                 }
             }
-            else if (currentRender.name.Contains("character_cap_"))
+            else if (currentRender.name.Contains("character_cap_")) // url[11]
             {
                 if (Utility.IsValidImageUrl(urls[11]))
                 {
@@ -2667,7 +2737,7 @@ public class HERO : Photon.MonoBehaviour
             {
                 foreach (Renderer currentRenderer in go.GetComponentsInChildren<Renderer>())
                 {
-                    if (currentRenderer.name.Contains("HORSE"))
+                    if (currentRenderer.name.Contains("HORSE")) // url[0]
                     {
                         if (Utility.IsValidImageUrl(urls[0]))
                         {
@@ -2730,12 +2800,18 @@ public class HERO : Photon.MonoBehaviour
 
     [RPC]
     [UsedImplicitly]
-    public void LoadskinRPC(int horse, string url)
+    public void LoadskinRPC(int horseViewID, string url, PhotonMessageInfo info)
     {
-        if (ModuleManager.Enabled(nameof(ModuleEnableSkins)))
+        if (!ModuleManager.Enabled(nameof(ModuleEnableSkins))) 
+            return;
+
+        if (!HumanSkin.TryParse(url, out HumanSkin skin))
         {
-            StartCoroutine(this.loadskinE(horse, url));
+            Shelter.Log("Invalid hero skin from {0}.", LogType.Warning, info.sender);
+            return;
         }
+        
+        StartCoroutine(this.loadskinE(horseViewID, url));
     }
 
     public void markDie()
@@ -3563,10 +3639,10 @@ public class HERO : Photon.MonoBehaviour
     [UsedImplicitly]
     public void SetMyPhotonCamera(float offset, PhotonMessageInfo info)
     {
-        if (photonView.owner == info.sender)
+        if (photonView.owner == info.sender) // Should this be local-only?
         {
             this.CameraMultiplier = offset;
-            GetComponent<SmoothSyncMovement>().PhotonCamera = true;
+            GetComponent<SmoothSyncMovement>().PhotonCamera = true; // This might have effect on others too
             this.isPhotonCamera = true;
         }
     }
@@ -3761,13 +3837,13 @@ public class HERO : Photon.MonoBehaviour
         switch (type)
         {
             case 1 when this.flare1CD == 0f:
-                this.flare1CD = this.flareTotalCD;
+                this.flare1CD = FlareCD;
                 break;
             case 2 when this.flare2CD == 0f:
-                this.flare2CD = this.flareTotalCD;
+                this.flare2CD = FlareCD;
                 break;
             case 3 when this.flare3CD == 0f:
-                this.flare3CD = this.flareTotalCD;
+                this.flare3CD = FlareCD;
                 break;
             default: 
                 return;
@@ -4926,12 +5002,11 @@ public class HERO : Photon.MonoBehaviour
                                 this.baseTransform.rotation = Quaternion.Lerp(this.baseTransform.rotation, this.gunDummy.transform.rotation, Time.deltaTime * 30f);
                                 if (!this.attackReleased && this.baseAnimation[this.attackAnimation].normalizedTime > 0.167f)
                                 {
-                                    GameObject obj4;
                                     this.attackReleased = true;
-                                    bool flag7 = false;
+                                    string prefabName = "FX/shotGun";
                                     if (this.attackAnimation == "AHSS_shoot_both" || this.attackAnimation == "AHSS_shoot_both_air")
                                     {
-                                        flag7 = true;
+                                        prefabName = "FX/shotGun 1";
                                         this.leftGunHasBullet = false;
                                         this.rightGunHasBullet = false;
                                         this.baseRigidBody.AddForce(-this.baseTransform.forward * 1000f, ForceMode.Acceleration);
@@ -4949,22 +5024,18 @@ public class HERO : Photon.MonoBehaviour
                                         this.baseRigidBody.AddForce(-this.baseTransform.forward * 600f, ForceMode.Acceleration);
                                     }
                                     this.baseRigidBody.AddForce(Vector3.up * 200f, ForceMode.Acceleration);
-                                    string prefabName = "FX/shotGun";
-                                    if (flag7)
-                                    {
-                                        prefabName = "FX/shotGun 1";
-                                    }
                                     if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && photonView.isMine)
                                     {
-                                        obj4 = PhotonNetwork.Instantiate(prefabName, this.baseTransform.position + this.baseTransform.up * 0.8f - this.baseTransform.right * 0.1f, this.baseTransform.rotation, 0);
+                                        var obj4 = PhotonNetwork.Instantiate(prefabName, this.baseTransform.position + this.baseTransform.up * 0.8f - this.baseTransform.right * 0.1f, this.baseTransform.rotation, 0);
                                         if (obj4.GetComponent<EnemyfxIDcontainer>() != null)
-                                        {
                                             obj4.GetComponent<EnemyfxIDcontainer>().myOwnerViewID = photonView.viewID;
-                                        }
                                     }
                                     else
                                     {
-                                        obj4 = (GameObject) Instantiate(Resources.Load(prefabName), this.baseTransform.position + this.baseTransform.up * 0.8f - this.baseTransform.right * 0.1f, this.baseTransform.rotation);
+                                        Instantiate(
+                                            Resources.Load(prefabName), 
+                                            baseTransform.position + baseTransform.up * 0.8f - baseTransform.right * 0.1f, 
+                                            baseTransform.rotation);
                                     }
                                 }
                                 if (this.baseAnimation[this.attackAnimation].normalizedTime >= 1f)
@@ -5106,7 +5177,7 @@ public class HERO : Photon.MonoBehaviour
                             if (this.baseAnimation.IsPlaying("supply") && this.baseAnimation["supply"].normalizedTime >= 1f)
                             {
                                 this.currentBladeSta = this.totalBladeSta;
-                                this.currentBladeNum = this.totalBladeNum;
+                                this.currentBladeNum = MaxBlades;
                                 this.currentGas = this.totalGas;
                                 if (!this.useGun)
                                 {
@@ -5345,15 +5416,12 @@ public class HERO : Photon.MonoBehaviour
         }
     }
 
-    public void useBlade(int amount = 0)
+    public void useBlade(int amount = 1)
     {
         if (ModuleManager.Enabled(nameof(ModuleInfiniteBlade)))
             return;
 
-        if (amount == 0)
-            amount = 1;
-        
-        amount *= 2;
+        amount *= 2; //TODO: Overflow on 4 calls (with argument int.MaxValue) [int.MaxValue * 2 = -2 (0b11..110)]
         if (this.currentBladeSta > 0f)
         {
             this.currentBladeSta -= amount;

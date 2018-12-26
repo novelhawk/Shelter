@@ -6,8 +6,8 @@ using MonoBehaviour = UnityEngine.MonoBehaviour;
 // ReSharper disable once CheckNamespace
 public class supplyCheck : MonoBehaviour
 {
-    private float elapsedTime;
-    private float stepTime = 1f;
+    public float elapsedTime;
+    public float stepTime = 1f;
 
     private void Start()
     {

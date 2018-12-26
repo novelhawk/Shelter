@@ -136,7 +136,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                     }
                     else if (femaleTitan != null)
                     {
-                        transform.root.GetComponent<HERO>().useBlade(int.MaxValue);
+                        transform.root.GetComponent<HERO>().useBlade(int.MaxValue); // Probably unexpected behaviour
                         Vector3 velocity = IN_GAME_MAIN_CAMERA.instance.main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;
                         int damage = Mathf.Max(10, (int) (velocity.magnitude * 10f * this.scoreMulti));
                         if (!femaleTitan.hasDie)
@@ -149,7 +149,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                     }
                     else if (colossalTitan != null)
                     {
-                        transform.root.GetComponent<HERO>().useBlade(2147483647);
+                        transform.root.GetComponent<HERO>().useBlade(int.MaxValue); // Probably unexpected behaviour
                         if (!colossalTitan.hasDie)
                         {
                             Vector3 velocity = IN_GAME_MAIN_CAMERA.instance.main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;
@@ -177,7 +177,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                 }
                 else if (femaleTitan != null)
                 {
-                    transform.root.GetComponent<HERO>().useBlade(int.MaxValue);
+                    transform.root.GetComponent<HERO>().useBlade(int.MaxValue); // Probably unexpected behaviour
                     if (!femaleTitan.hasDie)
                     {
                         Vector3 vector8 = IN_GAME_MAIN_CAMERA.instance.main_object.rigidbody.velocity - item.transform.root.rigidbody.velocity;
@@ -190,7 +190,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                 }
                 else if (colossalTitan != null)
                 {
-                    transform.root.GetComponent<HERO>().useBlade(2147483647);
+                    transform.root.GetComponent<HERO>().useBlade(int.MaxValue); // Probably unexpected behaviour
                     if (!colossalTitan.hasDie)
                     {
                         Vector3 vector9 =

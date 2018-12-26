@@ -5,7 +5,7 @@ using MonoBehaviour = UnityEngine.MonoBehaviour;
 // ReSharper disable once CheckNamespace
 public class LevelTriggerRacingEnd : MonoBehaviour
 {
-    private bool disable;
+    public bool disable;
 
     private void OnTriggerStay(Collider other)
     {

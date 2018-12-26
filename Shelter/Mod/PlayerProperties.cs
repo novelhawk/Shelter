@@ -39,15 +39,7 @@ namespace Mod
         public Sex Sex => this[PlayerProperty.Sex] as Sex? ?? Sex.Male;
         public bool? IsAHSS => Team == 2;
 
-        public HeroStat HeroStat
-        {
-            get
-            {
-                if (Acceleration > 150 || Blade > 125 || Gas > 150 || Speed > 140)
-                    return new HeroStat(Skill, 100, 100, 100, 100);                
-                return new HeroStat(Skill, Speed, Gas, Blade, Acceleration);                
-            }
-        }
+        public HeroStat HeroStat => new HeroStat(Skill, Speed, Gas, Blade, Acceleration);
         public string Skill => this[PlayerProperty.Skill] as string;
         public int Speed => this[PlayerProperty.Speed] as int? ?? 100;
         public int Gas => this[PlayerProperty.Gas] as int? ?? 100;

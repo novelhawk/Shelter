@@ -442,10 +442,7 @@ public partial class GameManager
                 return;
             }
 
-            if (player.Properties.Acceleration > 150 || 
-                player.Properties.Blade > 125 || 
-                player.Properties.Gas > 150 || 
-                player.Properties.Speed > 140)
+            if (!Utility.ValidateHEROStats(player.Properties))
             {
                 KickPlayerRC(player, true, "excessive stats.");
                 return;
@@ -513,52 +510,33 @@ public partial class GameManager
     }
 
     [UsedImplicitly]
-    public void OnPhotonPlayerPropertiesChanged(object[] playerAndUpdatedProps)
+    public void OnPhotonPlayerPropertiesChanged(object[] playerAndUpdatedProps) //TODO: Add anti name change
     {
-        if (playerAndUpdatedProps == null || playerAndUpdatedProps.Length < 2 || !(playerAndUpdatedProps[1] is Hashtable hashtable))
+        if (playerAndUpdatedProps == null || 
+            playerAndUpdatedProps.Length < 2 || 
+            !(playerAndUpdatedProps[0] is Player player) || 
+            !(playerAndUpdatedProps[1] is Hashtable hashtable))
             return;
         
-        Player player = playerAndUpdatedProps[0] as Player;
-        if (player == null) return;
-
         if (player.Hero != null && (hashtable.ContainsKey(PlayerProperty.Name) || hashtable.ContainsKey(PlayerProperty.Guild)))
             player.Hero.UpdateName(player.Properties);
 
-        //TODO: Add anti name change
-
-        if (player != Player.Self) return;
-        if (hashtable.ContainsKey(PlayerProperty.Acceleration) || hashtable.ContainsKey(PlayerProperty.Blade) ||
-            hashtable.ContainsKey(PlayerProperty.Gas) || hashtable.ContainsKey(PlayerProperty.Speed))
+        if (!player.IsLocal)
+            return;
+        
+        if (hashtable.ContainsKey(PlayerProperty.Acceleration) || 
+            hashtable.ContainsKey(PlayerProperty.Blade) ||
+            hashtable.ContainsKey(PlayerProperty.Gas) || 
+            hashtable.ContainsKey(PlayerProperty.Speed))
         {
-            if (player.Properties.Acceleration > 150)
+            if (!Utility.ValidateHEROStats(player.Properties))
             {
                 player.SetCustomProperties(new Hashtable
                 {
-                    {PlayerProperty.Acceleration, 100}
-                });
-            }
-
-            if (player.Properties.Blade > 125)
-            {
-                player.SetCustomProperties(new Hashtable
-                {
-                    {PlayerProperty.Blade, 100}
-                });
-            }
-
-            if (player.Properties.Gas > 150)
-            {
-                player.SetCustomProperties(new Hashtable
-                {
-                    {PlayerProperty.Gas, 100}
-                });
-            }
-
-            if (player.Properties.Speed > 140)
-            {
-                player.SetCustomProperties(new Hashtable
-                {
-                    {PlayerProperty.Speed, 100}
+                    [PlayerProperty.Acceleration] = 100,
+                    [PlayerProperty.Blade] = 100,
+                    [PlayerProperty.Gas] = 100,
+                    [PlayerProperty.Speed] = 100
                 });
             }
         }

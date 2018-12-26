@@ -449,7 +449,7 @@ public partial class GameManager
     [RPC]
     [UsedImplicitly]
     private void LoadskinRPC(string n, string url, string url2, string[] skybox, PhotonMessageInfo info)
-    {
+    {        
         if (ModuleManager.Enabled(nameof(ModuleEnableSkins)) && info.sender.IsMasterClient)
         {
             StartCoroutine(LoadSkinEnumerator(n, url, url2, skybox));

@@ -483,6 +483,9 @@ public class TITAN_EREN : Photon.MonoBehaviour
     [UsedImplicitly]
     public void LoadskinRPC(string url)
     {
+        Shelter.LogBoth("LOADING {0} SKIN", nameof(TITAN_EREN));
+        Shelter.LogBoth("{0}: {1}", nameof(url), url);
+        
         if (ModuleManager.Enabled(nameof(ModuleEnableSkins)) && Utility.IsValidImageUrl(url))
         {
             StartCoroutine(this.loadskinE(url));

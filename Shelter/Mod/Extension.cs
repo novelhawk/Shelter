@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using ExitGames.Client.Photon;
-using Mod.Logging;
+using UnityEngine;
+using LogType = Mod.Logging.LogType;
 
 namespace Mod
 {
