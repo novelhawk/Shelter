@@ -17,18 +17,15 @@ namespace Mod.Commands
             if (!Player.TryParse(args[0], out Player player))
                 throw new PlayerNotFoundException(args[0]);
 
-            foreach (GameObject go in GameObject.FindGameObjectsWithTag("Player"))
+            if (player.Hero != null) //TODO: Change to player.Hero.IsInstantiated, as it is not granted that if it exist it is already instantiated
             {
-                if (go.GetPhotonView().owner.ID == player.ID)
-                {
-                    IN_GAME_MAIN_CAMERA.instance.main_object.transform.position = go.transform.position;
-                    IN_GAME_MAIN_CAMERA.instance.main_object.transform.rotation = go.transform.rotation;
-                    Notify.New($"You teleported to {player}!", 1.3f, 35F);
-                    return;
-                }
+                Transform t = player.Hero.transform;
+                Player.Self.Hero.transform.position = t.position;
+                Player.Self.Hero.transform.rotation = t.rotation;
+                Notify.New($"You teleported to {player.Properties.HexName}!", 1.3f, 35F);
             }
-            
-            Shelter.Chat.System("Player is not alive!");
+
+            Shelter.Chat.System("Player [{0}] is not alive", player.ToStringHex());
         }
     }
 }
