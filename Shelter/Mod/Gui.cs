@@ -4,8 +4,8 @@ namespace Mod
 {
     public abstract class Gui : MonoBehaviour
     {
-        public string Name;
-        public bool Visible;
+        public string Name { get; }
+        public bool Visible { get; set; }
 
         protected Gui()
         {

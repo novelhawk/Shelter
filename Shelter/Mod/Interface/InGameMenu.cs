@@ -86,7 +86,7 @@ namespace Mod.Interface
             _windowRect = new Rect(Screen.width / 2f - 400, Screen.height / 2f - 250, 800, 500);
             GUI.DrawTexture(_windowRect, _background);
             
-            //PERFORMANCE: Use custom shader instead
+            //PERFORMANCE: Use custom shader instead -- Probably very hard to do. We don't use objects, we use the builtin unity UI which is probably only 1 object
             var bar = Texture(color);
             GUI.DrawTexture(new Rect(_windowRect.x, _windowRect.y, _windowRect.width, 4), bar);
             Destroy(bar);
