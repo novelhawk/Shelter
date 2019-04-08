@@ -416,11 +416,8 @@ namespace RC
                             return Convert.ToSingle((bool) parameters);
 
                         case 2:
-                            float num4;
-                            if (float.TryParse((string) parameters, out num4))
-                            {
+                            if (float.TryParse((string) parameters, out var num4))
                                 return num4;
-                            }
                             return 0f;
 
                         case 3:

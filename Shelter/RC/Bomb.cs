@@ -66,23 +66,23 @@ public class Bomb : Photon.MonoBehaviour
         this.myExplosion = PhotonNetwork.Instantiate("RCAsset/BombExplodeMain", position, Quaternion.Euler(0f, 0f, 0f), 0);
         foreach (HERO hero in GameManager.instance.GetPlayers())
         {
-            GameObject gameObject = hero.gameObject;
-            if (!hero.bombImmune && Vector3.Distance(gameObject.transform.position, position) < radius && !gameObject.GetPhotonView().isMine)
+            GameObject go = hero.gameObject;
+            if (!hero.RCBombImmune && Vector3.Distance(go.transform.position, position) < radius && !go.GetPhotonView().isMine)
             {
-                Player owner = gameObject.GetPhotonView().owner;
+                Player owner = go.GetPhotonView().owner;
                 if (GameManager.settings.TeamSort > TeamSort.Off)
                 {
                     if (Player.Self.Properties.RCTeam == 0 || Player.Self.Properties.RCTeam != owner.Properties.RCTeam)
                     {
-                        gameObject.GetComponent<HERO>().markDie();
-                        gameObject.GetComponent<HERO>().photonView.RPC(Rpc.DieRC, PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
+                        go.GetComponent<HERO>().markDie();
+                        go.GetComponent<HERO>().photonView.RPC(Rpc.DieRC, PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
                         GameManager.instance.PlayerKillInfoUpdate(Player.Self, 0);
                     }
                 }
                 else
                 {
-                    gameObject.GetComponent<HERO>().markDie();
-                    gameObject.GetComponent<HERO>().photonView.RPC(Rpc.DieRC, PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
+                    go.GetComponent<HERO>().markDie();
+                    go.GetComponent<HERO>().photonView.RPC(Rpc.DieRC, PhotonTargets.All, -1, Player.Self.Properties.Name + " ");
                     GameManager.instance.PlayerKillInfoUpdate(Player.Self, 0);
                 }
             }

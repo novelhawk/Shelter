@@ -68,14 +68,12 @@ public class Cannon : Photon.MonoBehaviour
         }
     }
 
-    public void Fire()
+    public void CannonFire()
     {
         if (this.myHero.skillCDDuration <= 0f)
         {
-            foreach (EnemyCheckCollider collider in PhotonNetwork.Instantiate("FX/boom2", this.firingPoint.position, this.firingPoint.rotation, 0).GetComponentsInChildren<EnemyCheckCollider>())
-            {
-                collider.dmg = 0;
-            }
+            foreach (EnemyCheckCollider c in PhotonNetwork.Instantiate("FX/boom2", this.firingPoint.position, this.firingPoint.rotation, 0).GetComponentsInChildren<EnemyCheckCollider>())
+                c.dmg = 0;
             this.myCannonBall = PhotonNetwork.Instantiate("RCAsset/CannonBallObject", this.ballPoint.position, this.firingPoint.rotation, 0);
             this.myCannonBall.rigidbody.velocity = this.firingPoint.forward * 300f;
             this.myCannonBall.GetComponent<CannonBall>().myHero = this.myHero;
@@ -92,13 +90,13 @@ public class Cannon : Photon.MonoBehaviour
             {
                 if (strArray.Length > 15)
                 {
-                    GameObject go = PhotonNetwork.Instantiate("RCAsset/" + strArray[1] + "Prop", new Vector3(Convert.ToSingle(strArray[12]), Convert.ToSingle(strArray[13]), Convert.ToSingle(strArray[14])), new Quaternion(Convert.ToSingle(strArray[15]), Convert.ToSingle(strArray[16]), Convert.ToSingle(strArray[17]), Convert.ToSingle(strArray[18])), 0);
+                    GameObject go = PhotonNetwork.Instantiate("RCAsset/" + strArray[1] + "Prop", new Vector3(float.Parse(strArray[12]), float.Parse(strArray[13]), float.Parse(strArray[14])), new Quaternion(float.Parse(strArray[15]), float.Parse(strArray[16]), float.Parse(strArray[17]), float.Parse(strArray[18])), 0);
                     go.GetComponent<CannonPropRegion>().settings = this.settings;
                     go.GetPhotonView().RPC(Rpc.SetSize, PhotonTargets.AllBuffered, this.settings);
                 }
                 else
                 {
-                    PhotonNetwork.Instantiate("RCAsset/" + strArray[1] + "Prop", new Vector3(Convert.ToSingle(strArray[2]), Convert.ToSingle(strArray[3]), Convert.ToSingle(strArray[4])), new Quaternion(Convert.ToSingle(strArray[5]), Convert.ToSingle(strArray[6]), Convert.ToSingle(strArray[7]), Convert.ToSingle(strArray[8])), 0).GetComponent<CannonPropRegion>().settings = this.settings;
+                    PhotonNetwork.Instantiate("RCAsset/" + strArray[1] + "Prop", new Vector3(float.Parse(strArray[2]), float.Parse(strArray[3]), float.Parse(strArray[4])), new Quaternion(float.Parse(strArray[5]), float.Parse(strArray[6]), float.Parse(strArray[7]), float.Parse(strArray[8])), 0).GetComponent<CannonPropRegion>().settings = this.settings;
                 }
             }
         }
@@ -144,9 +142,9 @@ public class Cannon : Photon.MonoBehaviour
                     foreach (Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
                     {
                         renderer.material = (Material) GameManager.RCassets.Load("transparent");
-                        if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
+                        if (float.Parse(strArray[10]) != 1f || float.Parse(strArray[11]) != 1f)
                         {
-                            renderer.material.mainTextureScale = new Vector2(renderer.material.mainTextureScale.x * Convert.ToSingle(strArray[10]), renderer.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));
+                            renderer.material.mainTextureScale = new Vector2(renderer.material.mainTextureScale.x * float.Parse(strArray[10]), renderer.material.mainTextureScale.y * float.Parse(strArray[11]));
                         }
                     }
                 }
@@ -157,30 +155,29 @@ public class Cannon : Photon.MonoBehaviour
                         if (!renderer.name.Contains("Line Renderer"))
                         {
                             renderer.material = (Material) GameManager.RCassets.Load(strArray[2]);
-                            if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
+                            if (float.Parse(strArray[10]) != 1f || float.Parse(strArray[11]) != 1f)
                             {
-                                renderer.material.mainTextureScale = new Vector2(renderer.material.mainTextureScale.x * Convert.ToSingle(strArray[10]), renderer.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));
+                                renderer.material.mainTextureScale = new Vector2(renderer.material.mainTextureScale.x * float.Parse(strArray[10]), renderer.material.mainTextureScale.y * float.Parse(strArray[11]));
                             }
                         }
                     }
                 }
             }
-            float x = gameObject.transform.localScale.x * Convert.ToSingle(strArray[3]);
-            x -= 0.001f;
-            float y = gameObject.transform.localScale.y * Convert.ToSingle(strArray[4]);
-            float z = gameObject.transform.localScale.z * Convert.ToSingle(strArray[5]);
-            gameObject.transform.localScale = new Vector3(x, y, z);
+
+            Vector3 localScale = gameObject.transform.localScale;
+            gameObject.transform.localScale = new Vector3(
+                localScale.x * float.Parse(strArray[3]) - 0.001f,
+                localScale.y * float.Parse(strArray[4]), 
+                localScale.z * float.Parse(strArray[5]));
             if (strArray[6] != "0")
             {
-                Color color = new Color(Convert.ToSingle(strArray[7]), Convert.ToSingle(strArray[8]), Convert.ToSingle(strArray[9]), a);
+                Color color = new Color(float.Parse(strArray[7]), float.Parse(strArray[8]), float.Parse(strArray[9]), a);
                 foreach (MeshFilter filter in gameObject.GetComponentsInChildren<MeshFilter>())
                 {
                     Mesh mesh = filter.mesh;
                     Color[] colorArray = new Color[mesh.vertexCount];
                     for (int i = 0; i < mesh.vertexCount; i++)
-                    {
                         colorArray[i] = color;
-                    }
                     mesh.colors = colorArray;
                 }
             }
@@ -249,20 +246,12 @@ public class Cannon : Photon.MonoBehaviour
         
         if (Shelter.InputManager.IsDown(InputAction.Attack))
         {
-            this.Fire();
+            CannonFire();
         }
         else if (Shelter.InputManager.IsDown(InputAction.EnterCannon))
         {
-            if (this.myHero != null)
-            {
-                this.myHero.isCannon = false;
-                this.myHero.myCannonRegion = null;
-                Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().setMainObject(this.myHero.gameObject);
-                this.myHero.baseRigidBody.velocity = Vector3.zero;
-                this.myHero.photonView.RPC(Rpc.ReturnFromCannon, PhotonTargets.Others);
-                this.myHero.skillCDLast = this.myHero.skillCDLastCannon;
-                this.myHero.skillCDDuration = this.myHero.skillCDLast;
-            }
+            if (myHero != null)
+                myHero.ExitCannon();
             PhotonNetwork.Destroy(gameObject);
         }
     }

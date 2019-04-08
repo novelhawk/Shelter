@@ -155,6 +155,10 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
     }
 
     // ReSharper disable once UnusedMember.Global
+    /// <summary>
+    /// Changes the FOV of the camera
+    /// </summary>
+    /// <param name="hero"></param>
     public void CameraMovementLive(HERO hero) // TODO: Look what that did, and re-implement it
     {
         float magnitude = hero.rigidbody.velocity.magnitude;
@@ -166,14 +170,14 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
         {
             Camera.main.fieldOfView = Mathf.Lerp(Camera.main.fieldOfView, 50f, 0.1f);
         }
-        float num2 = hero.CameraMultiplier * (200f - Camera.main.fieldOfView) / 150f;
-        this.transform.position = this.head.transform.position + Vector3.up * this.heightMulti - Vector3.up * (0.6f - cameraDistance) * 2f;
+        float num2 = HERO.CameraMultiplier * (200f - Camera.main.fieldOfView) / 150f;
         Transform t = this.transform;
-        t.position -= this.transform.forward * this.distance * this.distanceMulti * num2;
-        if (hero.CameraMultiplier < 0.65f)
+        t.position = this.head.transform.position + Vector3.up * this.heightMulti - Vector3.up * (0.6f - cameraDistance) * 2f;
+        t.position -= t.forward * this.distance * this.distanceMulti * num2;
+        if (HERO.CameraMultiplier < 0.65f)
         {
             Transform transform2 = this.transform;
-            transform2.position += this.transform.right * Mathf.Max((0.6f - hero.CameraMultiplier) * 2f, 0.65f);
+            transform2.position += this.transform.right * Mathf.Max((0.6f - HERO.CameraMultiplier) * 2f, 0.65f);
         }
         this.transform.rotation = Quaternion.Lerp(Camera.main.transform.rotation, hero.GetComponent<SmoothSyncMovement>().correctCameraRot, Time.deltaTime * 5f);
     }

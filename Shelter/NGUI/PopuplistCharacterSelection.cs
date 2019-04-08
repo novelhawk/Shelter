@@ -14,6 +14,7 @@ public class PopuplistCharacterSelection : MonoBehaviour
 
     private void Start()
     {
+        return;
         // destroy the Camera Typesadasdasdasdadsasdasdasdasdasdasdasdasdasdasasd label
         // use instance id instead?
         foreach (Object obj in FindObjectsOfType(typeof(GameObject)))
@@ -48,11 +49,11 @@ public class PopuplistCharacterSelection : MonoBehaviour
         
         if (selection != "Set 1" && selection != "Set 2" && selection != "Set 3")
         {
-            stat = HeroStat.GetInfo(list.selection);
+            stat = HeroStat.GetInfo(selection);
         }
         else
         {
-            HeroCostume costume = CostumeConverter.LocalDataToHeroCostume(selection.ToUpper());
+            HeroCostume costume = CostumeConverter.LocalDataToHeroCostume(selection.ToUpperInvariant());
             if (costume == null)
                 stat = new HeroStat();
             else

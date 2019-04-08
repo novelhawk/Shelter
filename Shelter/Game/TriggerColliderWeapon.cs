@@ -76,7 +76,7 @@ public class TriggerColliderWeapon : MonoBehaviour
                     HERO hero = component.transform.root.GetComponent<HERO>();
                     
                     var view = transform.root.gameObject.GetPhotonView();
-                    if (!component.transform.root.gameObject.GetPhotonView().isMine && (hero.myTeam != this.myTeam && !hero.isInvincible() || ModuleManager.Enabled(nameof(ModulePVPEverywhere))) && !hero.IsGrabbed && !hero.HasDied())
+                    if (!component.transform.root.gameObject.GetPhotonView().isMine && (hero.myTeam != this.myTeam && !hero.IsInvincible || ModuleManager.Enabled(nameof(ModulePVPEverywhere))) && !hero.IsGrabbed && !hero.HasDied())
                     {
                         hero.markDie();
                         Vector3 vector2 = component.transform.root.position - transform.position;

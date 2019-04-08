@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using JetBrains.Annotations;
+using Mod;
 using NGUI.Internal;
 using UnityEngine;
 
@@ -8,12 +9,12 @@ using UnityEngine;
 public class UIPopupList : MonoBehaviour
 {
     private const float animSpeed = 0.15f;
-    public UIAtlas atlas;
+    [UnityInitialized] public UIAtlas atlas;
     public Color backgroundColor = Color.white;
     public string backgroundSprite;
     public static UIPopupList current;
     public GameObject eventReceiver;
-    public UIFont font;
+    [UnityInitialized] public UIFont font;
     public string functionName = "OnSelectionChange";
     public Color highlightColor = new Color(0.5960785f, 1f, 0.2f, 1f);
     public string highlightSprite;

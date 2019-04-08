@@ -1076,13 +1076,13 @@ public partial class GameManager : Photon.MonoBehaviour
                     switch (strArray[0])
                     {
                         case "titan":
-                            titanSpawns.Add(new Vector3(Convert.ToSingle(strArray[1]), Convert.ToSingle(strArray[2]), Convert.ToSingle(strArray[3])));
+                            titanSpawns.Add(new Vector3(float.Parse(strArray[1]), float.Parse(strArray[2]), float.Parse(strArray[3])));
                             break;
                         case "playerC":
-                            playerSpawnsC.Add(new Vector3(Convert.ToSingle(strArray[1]), Convert.ToSingle(strArray[2]), Convert.ToSingle(strArray[3])));
+                            playerSpawnsC.Add(new Vector3(float.Parse(strArray[1]), float.Parse(strArray[2]), float.Parse(strArray[3])));
                             break;
                         case "playerM":
-                            playerSpawnsM.Add(new Vector3(Convert.ToSingle(strArray[1]), Convert.ToSingle(strArray[2]), Convert.ToSingle(strArray[3])));
+                            playerSpawnsM.Add(new Vector3(float.Parse(strArray[1]), float.Parse(strArray[2]), float.Parse(strArray[3])));
                             break;
                     }
                 }
@@ -1113,7 +1113,7 @@ public partial class GameManager : Photon.MonoBehaviour
                 if (strArray[0].StartsWith("custom"))
                 {
                     num2 = 1f;
-                    obj2 = (GameObject)Instantiate((GameObject) RCassets.Load(strArray[1]), new Vector3(Convert.ToSingle(strArray[12]), Convert.ToSingle(strArray[13]), Convert.ToSingle(strArray[14])), new Quaternion(Convert.ToSingle(strArray[15]), Convert.ToSingle(strArray[16]), Convert.ToSingle(strArray[17]), Convert.ToSingle(strArray[18])));
+                    obj2 = (GameObject)Instantiate((GameObject) RCassets.Load(strArray[1]), new Vector3(float.Parse(strArray[12]), float.Parse(strArray[13]), float.Parse(strArray[14])), new Quaternion(float.Parse(strArray[15]), float.Parse(strArray[16]), float.Parse(strArray[17]), float.Parse(strArray[18])));
                     if (strArray[2] != "default")
                     {
                         if (strArray[2].EqualsIgnoreCase("transparent"))
@@ -1125,9 +1125,9 @@ public partial class GameManager : Photon.MonoBehaviour
                             foreach (Renderer renderer1 in obj2.GetComponentsInChildren<Renderer>())
                             {
                                 renderer1.material = (Material) RCassets.Load("transparent");
-                                if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
+                                if (float.Parse(strArray[10]) != 1f || float.Parse(strArray[11]) != 1f)
                                 {
-                                    renderer1.material.mainTextureScale = new Vector2(renderer1.material.mainTextureScale.x * Convert.ToSingle(strArray[10]), renderer1.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));
+                                    renderer1.material.mainTextureScale = new Vector2(renderer1.material.mainTextureScale.x * float.Parse(strArray[10]), renderer1.material.mainTextureScale.y * float.Parse(strArray[11]));
                                 }
                             }
                         }
@@ -1136,21 +1136,21 @@ public partial class GameManager : Photon.MonoBehaviour
                             foreach (Renderer renderer1 in obj2.GetComponentsInChildren<Renderer>())
                             {
                                 renderer1.material = (Material) RCassets.Load(strArray[2]);
-                                if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
+                                if (float.Parse(strArray[10]) != 1f || float.Parse(strArray[11]) != 1f)
                                 {
-                                    renderer1.material.mainTextureScale = new Vector2(renderer1.material.mainTextureScale.x * Convert.ToSingle(strArray[10]), renderer1.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));
+                                    renderer1.material.mainTextureScale = new Vector2(renderer1.material.mainTextureScale.x * float.Parse(strArray[10]), renderer1.material.mainTextureScale.y * float.Parse(strArray[11]));
                                 }
                             }
                         }
                     }
-                    num5 = obj2.transform.localScale.x * Convert.ToSingle(strArray[3]);
+                    num5 = obj2.transform.localScale.x * float.Parse(strArray[3]);
                     num5 -= 0.001f;
-                    num6 = obj2.transform.localScale.y * Convert.ToSingle(strArray[4]);
-                    num7 = obj2.transform.localScale.z * Convert.ToSingle(strArray[5]);
+                    num6 = obj2.transform.localScale.y * float.Parse(strArray[4]);
+                    num7 = obj2.transform.localScale.z * float.Parse(strArray[5]);
                     obj2.transform.localScale = new Vector3(num5, num6, num7);
                     if (strArray[6] != "0")
                     {
-                        color = new Color(Convert.ToSingle(strArray[7]), Convert.ToSingle(strArray[8]), Convert.ToSingle(strArray[9]), num2);
+                        color = new Color(float.Parse(strArray[7]), float.Parse(strArray[8]), float.Parse(strArray[9]), num2);
                         foreach (MeshFilter filter in obj2.GetComponentsInChildren<MeshFilter>())
                         {
                             mesh = filter.mesh;
@@ -1169,12 +1169,12 @@ public partial class GameManager : Photon.MonoBehaviour
                 {
                     if (strArray.Length < 15)
                     {
-                        Instantiate(Resources.Load(strArray[1]), new Vector3(Convert.ToSingle(strArray[2]), Convert.ToSingle(strArray[3]), Convert.ToSingle(strArray[4])), new Quaternion(Convert.ToSingle(strArray[5]), Convert.ToSingle(strArray[6]), Convert.ToSingle(strArray[7]), Convert.ToSingle(strArray[8])));
+                        Instantiate(Resources.Load(strArray[1]), new Vector3(float.Parse(strArray[2]), float.Parse(strArray[3]), float.Parse(strArray[4])), new Quaternion(float.Parse(strArray[5]), float.Parse(strArray[6]), float.Parse(strArray[7]), float.Parse(strArray[8])));
                     }
                     else
                     {
                         num2 = 1f;
-                        obj2 = (GameObject)Instantiate((GameObject) Resources.Load(strArray[1]), new Vector3(Convert.ToSingle(strArray[12]), Convert.ToSingle(strArray[13]), Convert.ToSingle(strArray[14])), new Quaternion(Convert.ToSingle(strArray[15]), Convert.ToSingle(strArray[16]), Convert.ToSingle(strArray[17]), Convert.ToSingle(strArray[18])));
+                        obj2 = (GameObject)Instantiate((GameObject) Resources.Load(strArray[1]), new Vector3(float.Parse(strArray[12]), float.Parse(strArray[13]), float.Parse(strArray[14])), new Quaternion(float.Parse(strArray[15]), float.Parse(strArray[16]), float.Parse(strArray[17]), float.Parse(strArray[18])));
                         if (strArray[2] != "default")
                         {
                             if (strArray[2].EqualsIgnoreCase("transparent"))
@@ -1186,9 +1186,9 @@ public partial class GameManager : Photon.MonoBehaviour
                                 foreach (Renderer renderer1 in obj2.GetComponentsInChildren<Renderer>())
                                 {
                                     renderer1.material = (Material) RCassets.Load("transparent");
-                                    if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
+                                    if (float.Parse(strArray[10]) != 1f || float.Parse(strArray[11]) != 1f)
                                     {
-                                        renderer1.material.mainTextureScale = new Vector2(renderer1.material.mainTextureScale.x * Convert.ToSingle(strArray[10]), renderer1.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));
+                                        renderer1.material.mainTextureScale = new Vector2(renderer1.material.mainTextureScale.x * float.Parse(strArray[10]), renderer1.material.mainTextureScale.y * float.Parse(strArray[11]));
                                     }
                                 }
                             }
@@ -1199,22 +1199,22 @@ public partial class GameManager : Photon.MonoBehaviour
                                     if (!(renderer1.name.Contains("Particle System") && obj2.name.Contains("aot_supply")))
                                     {
                                         renderer1.material = (Material) RCassets.Load(strArray[2]);
-                                        if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
+                                        if (float.Parse(strArray[10]) != 1f || float.Parse(strArray[11]) != 1f)
                                         {
-                                            renderer1.material.mainTextureScale = new Vector2(renderer1.material.mainTextureScale.x * Convert.ToSingle(strArray[10]), renderer1.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));
+                                            renderer1.material.mainTextureScale = new Vector2(renderer1.material.mainTextureScale.x * float.Parse(strArray[10]), renderer1.material.mainTextureScale.y * float.Parse(strArray[11]));
                                         }
                                     }
                                 }
                             }
                         }
-                        num5 = obj2.transform.localScale.x * Convert.ToSingle(strArray[3]);
+                        num5 = obj2.transform.localScale.x * float.Parse(strArray[3]);
                         num5 -= 0.001f;
-                        num6 = obj2.transform.localScale.y * Convert.ToSingle(strArray[4]);
-                        num7 = obj2.transform.localScale.z * Convert.ToSingle(strArray[5]);
+                        num6 = obj2.transform.localScale.y * float.Parse(strArray[4]);
+                        num7 = obj2.transform.localScale.z * float.Parse(strArray[5]);
                         obj2.transform.localScale = new Vector3(num5, num6, num7);
                         if (strArray[6] != "0")
                         {
-                            color = new Color(Convert.ToSingle(strArray[7]), Convert.ToSingle(strArray[8]), Convert.ToSingle(strArray[9]), num2);
+                            color = new Color(float.Parse(strArray[7]), float.Parse(strArray[8]), float.Parse(strArray[9]), num2);
                             foreach (MeshFilter filter in obj2.GetComponentsInChildren<MeshFilter>())
                             {
                                 mesh = filter.mesh;
@@ -1232,37 +1232,37 @@ public partial class GameManager : Photon.MonoBehaviour
                 {
                     if (strArray[1].StartsWith("barrier"))
                     {
-                        obj2 = (GameObject)Instantiate((GameObject) RCassets.Load(strArray[1]), new Vector3(Convert.ToSingle(strArray[5]), Convert.ToSingle(strArray[6]), Convert.ToSingle(strArray[7])), new Quaternion(Convert.ToSingle(strArray[8]), Convert.ToSingle(strArray[9]), Convert.ToSingle(strArray[10]), Convert.ToSingle(strArray[11])));
-                        num5 = obj2.transform.localScale.x * Convert.ToSingle(strArray[2]);
+                        obj2 = (GameObject)Instantiate((GameObject) RCassets.Load(strArray[1]), new Vector3(float.Parse(strArray[5]), float.Parse(strArray[6]), float.Parse(strArray[7])), new Quaternion(float.Parse(strArray[8]), float.Parse(strArray[9]), float.Parse(strArray[10]), float.Parse(strArray[11])));
+                        num5 = obj2.transform.localScale.x * float.Parse(strArray[2]);
                         num5 -= 0.001f;
-                        num6 = obj2.transform.localScale.y * Convert.ToSingle(strArray[3]);
-                        num7 = obj2.transform.localScale.z * Convert.ToSingle(strArray[4]);
+                        num6 = obj2.transform.localScale.y * float.Parse(strArray[3]);
+                        num7 = obj2.transform.localScale.z * float.Parse(strArray[4]);
                         obj2.transform.localScale = new Vector3(num5, num6, num7);
                     }
                     else if (strArray[1].StartsWith("racingStart"))
                     {
-                        obj2 = (GameObject)Instantiate((GameObject) RCassets.Load(strArray[1]), new Vector3(Convert.ToSingle(strArray[5]), Convert.ToSingle(strArray[6]), Convert.ToSingle(strArray[7])), new Quaternion(Convert.ToSingle(strArray[8]), Convert.ToSingle(strArray[9]), Convert.ToSingle(strArray[10]), Convert.ToSingle(strArray[11])));
-                        num5 = obj2.transform.localScale.x * Convert.ToSingle(strArray[2]);
+                        obj2 = (GameObject)Instantiate((GameObject) RCassets.Load(strArray[1]), new Vector3(float.Parse(strArray[5]), float.Parse(strArray[6]), float.Parse(strArray[7])), new Quaternion(float.Parse(strArray[8]), float.Parse(strArray[9]), float.Parse(strArray[10]), float.Parse(strArray[11])));
+                        num5 = obj2.transform.localScale.x * float.Parse(strArray[2]);
                         num5 -= 0.001f;
-                        num6 = obj2.transform.localScale.y * Convert.ToSingle(strArray[3]);
-                        num7 = obj2.transform.localScale.z * Convert.ToSingle(strArray[4]);
+                        num6 = obj2.transform.localScale.y * float.Parse(strArray[3]);
+                        num7 = obj2.transform.localScale.z * float.Parse(strArray[4]);
                         obj2.transform.localScale = new Vector3(num5, num6, num7);
                         racingDoors?.Add(obj2);
                     }
                     else if (strArray[1].StartsWith("racingEnd"))
                     {
-                        obj2 = (GameObject)Instantiate((GameObject) RCassets.Load(strArray[1]), new Vector3(Convert.ToSingle(strArray[5]), Convert.ToSingle(strArray[6]), Convert.ToSingle(strArray[7])), new Quaternion(Convert.ToSingle(strArray[8]), Convert.ToSingle(strArray[9]), Convert.ToSingle(strArray[10]), Convert.ToSingle(strArray[11])));
-                        num5 = obj2.transform.localScale.x * Convert.ToSingle(strArray[2]);
+                        obj2 = (GameObject)Instantiate((GameObject) RCassets.Load(strArray[1]), new Vector3(float.Parse(strArray[5]), float.Parse(strArray[6]), float.Parse(strArray[7])), new Quaternion(float.Parse(strArray[8]), float.Parse(strArray[9]), float.Parse(strArray[10]), float.Parse(strArray[11])));
+                        num5 = obj2.transform.localScale.x * float.Parse(strArray[2]);
                         num5 -= 0.001f;
-                        num6 = obj2.transform.localScale.y * Convert.ToSingle(strArray[3]);
-                        num7 = obj2.transform.localScale.z * Convert.ToSingle(strArray[4]);
+                        num6 = obj2.transform.localScale.y * float.Parse(strArray[3]);
+                        num7 = obj2.transform.localScale.z * float.Parse(strArray[4]);
                         obj2.transform.localScale = new Vector3(num5, num6, num7);
                         obj2.AddComponent<LevelTriggerRacingEnd>();
                     }
                     else if (strArray[1].StartsWith("region") && PhotonNetwork.isMasterClient)
                     {
-                        Vector3 loc = new Vector3(Convert.ToSingle(strArray[6]), Convert.ToSingle(strArray[7]), Convert.ToSingle(strArray[8]));
-                        RCRegion region = new RCRegion(loc, Convert.ToSingle(strArray[3]), Convert.ToSingle(strArray[4]), Convert.ToSingle(strArray[5]));
+                        Vector3 loc = new Vector3(float.Parse(strArray[6]), float.Parse(strArray[7]), float.Parse(strArray[8]));
+                        RCRegion region = new RCRegion(loc, float.Parse(strArray[3]), float.Parse(strArray[4]), float.Parse(strArray[5]));
                         string key = strArray[2];
                         if (RCRegionTriggers.ContainsKey(key))
                         {
@@ -1270,10 +1270,10 @@ public partial class GameManager : Photon.MonoBehaviour
                             obj3.transform.position = loc;
                             obj3.AddComponent<RegionTrigger>();
                             obj3.GetComponent<RegionTrigger>().CopyTrigger((RegionTrigger) RCRegionTriggers[key]);
-                            num5 = obj3.transform.localScale.x * Convert.ToSingle(strArray[3]);
+                            num5 = obj3.transform.localScale.x * float.Parse(strArray[3]);
                             num5 -= 0.001f;
-                            num6 = obj3.transform.localScale.y * Convert.ToSingle(strArray[4]);
-                            num7 = obj3.transform.localScale.z * Convert.ToSingle(strArray[5]);
+                            num6 = obj3.transform.localScale.y * float.Parse(strArray[4]);
+                            num7 = obj3.transform.localScale.z * float.Parse(strArray[5]);
                             obj3.transform.localScale = new Vector3(num5, num6, num7);
                             region.myBox = obj3;
                         }
@@ -1284,41 +1284,41 @@ public partial class GameManager : Photon.MonoBehaviour
                 {
                     if (strArray[1].StartsWith("start"))
                     {
-                        obj2 = (GameObject)Instantiate((GameObject) RCassets.Load(strArray[1]), new Vector3(Convert.ToSingle(strArray[5]), Convert.ToSingle(strArray[6]), Convert.ToSingle(strArray[7])), new Quaternion(Convert.ToSingle(strArray[8]), Convert.ToSingle(strArray[9]), Convert.ToSingle(strArray[10]), Convert.ToSingle(strArray[11])));
-                        num5 = obj2.transform.localScale.x * Convert.ToSingle(strArray[2]);
+                        obj2 = (GameObject)Instantiate((GameObject) RCassets.Load(strArray[1]), new Vector3(float.Parse(strArray[5]), float.Parse(strArray[6]), float.Parse(strArray[7])), new Quaternion(float.Parse(strArray[8]), float.Parse(strArray[9]), float.Parse(strArray[10]), float.Parse(strArray[11])));
+                        num5 = obj2.transform.localScale.x * float.Parse(strArray[2]);
                         num5 -= 0.001f;
-                        num6 = obj2.transform.localScale.y * Convert.ToSingle(strArray[3]);
-                        num7 = obj2.transform.localScale.z * Convert.ToSingle(strArray[4]);
+                        num6 = obj2.transform.localScale.y * float.Parse(strArray[3]);
+                        num7 = obj2.transform.localScale.z * float.Parse(strArray[4]);
                         obj2.transform.localScale = new Vector3(num5, num6, num7);
                         racingDoors?.Add(obj2);
                     }
                     else if (strArray[1].StartsWith("end"))
                     {
-                        obj2 = (GameObject)Instantiate((GameObject) RCassets.Load(strArray[1]), new Vector3(Convert.ToSingle(strArray[5]), Convert.ToSingle(strArray[6]), Convert.ToSingle(strArray[7])), new Quaternion(Convert.ToSingle(strArray[8]), Convert.ToSingle(strArray[9]), Convert.ToSingle(strArray[10]), Convert.ToSingle(strArray[11])));
-                        num5 = obj2.transform.localScale.x * Convert.ToSingle(strArray[2]);
+                        obj2 = (GameObject)Instantiate((GameObject) RCassets.Load(strArray[1]), new Vector3(float.Parse(strArray[5]), float.Parse(strArray[6]), float.Parse(strArray[7])), new Quaternion(float.Parse(strArray[8]), float.Parse(strArray[9]), float.Parse(strArray[10]), float.Parse(strArray[11])));
+                        num5 = obj2.transform.localScale.x * float.Parse(strArray[2]);
                         num5 -= 0.001f;
-                        num6 = obj2.transform.localScale.y * Convert.ToSingle(strArray[3]);
-                        num7 = obj2.transform.localScale.z * Convert.ToSingle(strArray[4]);
+                        num6 = obj2.transform.localScale.y * float.Parse(strArray[3]);
+                        num7 = obj2.transform.localScale.z * float.Parse(strArray[4]);
                         obj2.transform.localScale = new Vector3(num5, num6, num7);
                         obj2.GetComponentInChildren<Collider>().gameObject.AddComponent<LevelTriggerRacingEnd>();
                     }
                     else if (strArray[1].StartsWith("kill"))
                     {
-                        obj2 = (GameObject)Instantiate((GameObject) RCassets.Load(strArray[1]), new Vector3(Convert.ToSingle(strArray[5]), Convert.ToSingle(strArray[6]), Convert.ToSingle(strArray[7])), new Quaternion(Convert.ToSingle(strArray[8]), Convert.ToSingle(strArray[9]), Convert.ToSingle(strArray[10]), Convert.ToSingle(strArray[11])));
-                        num5 = obj2.transform.localScale.x * Convert.ToSingle(strArray[2]);
+                        obj2 = (GameObject)Instantiate((GameObject) RCassets.Load(strArray[1]), new Vector3(float.Parse(strArray[5]), float.Parse(strArray[6]), float.Parse(strArray[7])), new Quaternion(float.Parse(strArray[8]), float.Parse(strArray[9]), float.Parse(strArray[10]), float.Parse(strArray[11])));
+                        num5 = obj2.transform.localScale.x * float.Parse(strArray[2]);
                         num5 -= 0.001f;
-                        num6 = obj2.transform.localScale.y * Convert.ToSingle(strArray[3]);
-                        num7 = obj2.transform.localScale.z * Convert.ToSingle(strArray[4]);
+                        num6 = obj2.transform.localScale.y * float.Parse(strArray[3]);
+                        num7 = obj2.transform.localScale.z * float.Parse(strArray[4]);
                         obj2.transform.localScale = new Vector3(num5, num6, num7);
                         obj2.GetComponentInChildren<Collider>().gameObject.AddComponent<RacingKillTrigger>();
                     }
                     else if (strArray[1].StartsWith("checkpoint"))
                     {
-                        obj2 = (GameObject)Instantiate((GameObject) RCassets.Load(strArray[1]), new Vector3(Convert.ToSingle(strArray[5]), Convert.ToSingle(strArray[6]), Convert.ToSingle(strArray[7])), new Quaternion(Convert.ToSingle(strArray[8]), Convert.ToSingle(strArray[9]), Convert.ToSingle(strArray[10]), Convert.ToSingle(strArray[11])));
-                        num5 = obj2.transform.localScale.x * Convert.ToSingle(strArray[2]);
+                        obj2 = (GameObject)Instantiate((GameObject) RCassets.Load(strArray[1]), new Vector3(float.Parse(strArray[5]), float.Parse(strArray[6]), float.Parse(strArray[7])), new Quaternion(float.Parse(strArray[8]), float.Parse(strArray[9]), float.Parse(strArray[10]), float.Parse(strArray[11])));
+                        num5 = obj2.transform.localScale.x * float.Parse(strArray[2]);
                         num5 -= 0.001f;
-                        num6 = obj2.transform.localScale.y * Convert.ToSingle(strArray[3]);
-                        num7 = obj2.transform.localScale.z * Convert.ToSingle(strArray[4]);
+                        num6 = obj2.transform.localScale.y * float.Parse(strArray[3]);
+                        num7 = obj2.transform.localScale.z * float.Parse(strArray[4]);
                         obj2.transform.localScale = new Vector3(num5, num6, num7);
                         obj2.GetComponentInChildren<Collider>().gameObject.AddComponent<RacingCheckpointTrigger>();
                     }
@@ -1337,13 +1337,13 @@ public partial class GameManager : Photon.MonoBehaviour
                     {
                         if (strArray.Length > 15)
                         {
-                            GameObject go = PhotonNetwork.Instantiate("RCAsset/" + strArray[1] + "Prop", new Vector3(Convert.ToSingle(strArray[12]), Convert.ToSingle(strArray[13]), Convert.ToSingle(strArray[14])), new Quaternion(Convert.ToSingle(strArray[15]), Convert.ToSingle(strArray[16]), Convert.ToSingle(strArray[17]), Convert.ToSingle(strArray[18])), 0);
+                            GameObject go = PhotonNetwork.Instantiate("RCAsset/" + strArray[1] + "Prop", new Vector3(float.Parse(strArray[12]), float.Parse(strArray[13]), float.Parse(strArray[14])), new Quaternion(float.Parse(strArray[15]), float.Parse(strArray[16]), float.Parse(strArray[17]), float.Parse(strArray[18])), 0);
                             go.GetComponent<CannonPropRegion>().settings = content[num];
                             go.GetPhotonView().RPC(Rpc.SetSize, PhotonTargets.AllBuffered, content[num]);
                         }
                         else
                         {
-                            PhotonNetwork.Instantiate("RCAsset/" + strArray[1] + "Prop", new Vector3(Convert.ToSingle(strArray[2]), Convert.ToSingle(strArray[3]), Convert.ToSingle(strArray[4])), new Quaternion(Convert.ToSingle(strArray[5]), Convert.ToSingle(strArray[6]), Convert.ToSingle(strArray[7]), Convert.ToSingle(strArray[8])), 0).GetComponent<CannonPropRegion>().settings = content[num];
+                            PhotonNetwork.Instantiate("RCAsset/" + strArray[1] + "Prop", new Vector3(float.Parse(strArray[2]), float.Parse(strArray[3]), float.Parse(strArray[4])), new Quaternion(float.Parse(strArray[5]), float.Parse(strArray[6]), float.Parse(strArray[7]), float.Parse(strArray[8])), 0).GetComponent<CannonPropRegion>().settings = content[num];
                         }
                     }
                     else
@@ -1352,7 +1352,7 @@ public partial class GameManager : Photon.MonoBehaviour
                         num5 = 30f;
                         if (float.TryParse(strArray[2], out num3))
                         {
-                            num5 = Mathf.Max(Convert.ToSingle(strArray[2]), 1f);
+                            num5 = Mathf.Max(float.Parse(strArray[2]), 1f);
                         }
                         item.time = num5;
                         item.delay = num5;
@@ -1365,7 +1365,7 @@ public partial class GameManager : Photon.MonoBehaviour
                         {
                             item.endless = false;
                         }
-                        item.location = new Vector3(Convert.ToSingle(strArray[4]), Convert.ToSingle(strArray[5]), Convert.ToSingle(strArray[6]));
+                        item.location = new Vector3(float.Parse(strArray[4]), float.Parse(strArray[5]), float.Parse(strArray[6]));
                         titanSpawners.Add(item);
                     }
                 }
@@ -1901,13 +1901,13 @@ public partial class GameManager : Photon.MonoBehaviour
                                             switch (strArray6[1])
                                             {
                                                 case "titan":
-                                                    titanSpawns.Add(new Vector3(Convert.ToSingle(strArray6[2]), Convert.ToSingle(strArray6[3]), Convert.ToSingle(strArray6[4])));
+                                                    titanSpawns.Add(new Vector3(float.Parse(strArray6[2]), float.Parse(strArray6[3]), float.Parse(strArray6[4])));
                                                     break;
                                                 case "playerC":
-                                                    playerSpawnsC.Add(new Vector3(Convert.ToSingle(strArray6[2]), Convert.ToSingle(strArray6[3]), Convert.ToSingle(strArray6[4])));
+                                                    playerSpawnsC.Add(new Vector3(float.Parse(strArray6[2]), float.Parse(strArray6[3]), float.Parse(strArray6[4])));
                                                     break;
                                                 case "playerM":
-                                                    playerSpawnsM.Add(new Vector3(Convert.ToSingle(strArray6[2]), Convert.ToSingle(strArray6[3]), Convert.ToSingle(strArray6[4])));
+                                                    playerSpawnsM.Add(new Vector3(float.Parse(strArray6[2]), float.Parse(strArray6[3]), float.Parse(strArray6[4])));
                                                     break;
                                             }
                                         }
@@ -1931,15 +1931,15 @@ public partial class GameManager : Photon.MonoBehaviour
                                             strArray6 = strArray4[num2].Split(',');
                                             if (strArray6[1] == "titan")
                                             {
-                                                titanSpawns.Add(new Vector3(Convert.ToSingle(strArray6[2]), Convert.ToSingle(strArray6[3]), Convert.ToSingle(strArray6[4])));
+                                                titanSpawns.Add(new Vector3(float.Parse(strArray6[2]), float.Parse(strArray6[3]), float.Parse(strArray6[4])));
                                             }
                                             else if (strArray6[1] == "playerC")
                                             {
-                                                playerSpawnsC.Add(new Vector3(Convert.ToSingle(strArray6[2]), Convert.ToSingle(strArray6[3]), Convert.ToSingle(strArray6[4])));
+                                                playerSpawnsC.Add(new Vector3(float.Parse(strArray6[2]), float.Parse(strArray6[3]), float.Parse(strArray6[4])));
                                             }
                                             else if (strArray6[1] == "playerM")
                                             {
-                                                playerSpawnsM.Add(new Vector3(Convert.ToSingle(strArray6[2]), Convert.ToSingle(strArray6[3]), Convert.ToSingle(strArray6[4])));
+                                                playerSpawnsM.Add(new Vector3(float.Parse(strArray6[2]), float.Parse(strArray6[3]), float.Parse(strArray6[4])));
                                             }
                                         }
                                         strArray5[num7] = strArray4[num2];

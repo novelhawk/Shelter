@@ -42,9 +42,9 @@ namespace Mod.Interface
 
         protected override void Render()
         {
-            SmartRect rect = new SmartRect();
+            SmartRect rect;
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(Screen.width / 1920f, Screen.height / 1080f, 1)); // Scale the gui for any resoultion
-            GUI.Label(rect.Set(145, 347, 166, 40), "Create", IsVisible("CreateRoom") ? selected : text);
+            GUI.Label(rect = new SmartRect(145, 347, 166, 40), "Create", IsVisible("CreateRoom") ? selected : text);
             if (GUI.Button(rect.OY(-10), string.Empty, GUIStyle.none))
             {
                 Enable(nameof(CreateRoom));

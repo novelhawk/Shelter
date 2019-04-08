@@ -14,49 +14,49 @@ public class CannonPropRegion : Photon.MonoBehaviour
     public string settings;
     public HERO storedHero;
 
-    public void OnDestroy()
-    {
-        if (this.storedHero != null)
-        {
-            this.storedHero.myCannonRegion = null;
-        }
-    }
+//    public void OnDestroy()
+//    {
+//        if (this.storedHero != null)
+//        {
+//            this.storedHero.myCannonRegion = null;
+//        }
+//    }
 
-    public void OnTriggerEnter(Collider collider)
-    {
-        GameObject gameObject = collider.transform.root.gameObject;
-        if (gameObject.layer == 8 && gameObject.GetPhotonView().isMine)
-        {
-            HERO component = gameObject.GetComponent<HERO>();
-            if (component != null && !component.isCannon)
-            {
-                if (component.myCannonRegion != null)
-                {
-                    component.myCannonRegion.storedHero = null;
-                }
-                component.myCannonRegion = this;
-                this.storedHero = component;
-            }
-        }
-    }
+//    public void OnTriggerEnter(Collider c)
+//    {
+//        GameObject go = c.transform.root.gameObject;
+//        if (go.layer == 8 && go.GetPhotonView().isMine)
+//        {
+//            HERO hero = go.GetComponent<HERO>();
+//            if (hero != null && !hero.isCannon)
+//            {
+//                if (hero.myCannonRegion != null)
+//                {
+//                    hero.myCannonRegion.storedHero = null;
+//                }
+//                hero.myCannonRegion = this;
+//                this.storedHero = hero;
+//            }
+//        }
+//    }
 
-    public void OnTriggerExit(Collider collider)
-    {
-        GameObject gameObject = collider.transform.root.gameObject;
-        if (gameObject.layer == 8 && gameObject.GetPhotonView().isMine)
-        {
-            HERO component = gameObject.GetComponent<HERO>();
-            if (component != null && this.storedHero != null && component == this.storedHero)
-            {
-                component.myCannonRegion = null;
-                this.storedHero = null;
-            }
-        }
-    }
+//    public void OnTriggerExit(Collider c)
+//    {
+//        GameObject go = c.transform.root.gameObject;
+//        if (go.layer == 8 && go.GetPhotonView().isMine)
+//        {
+//            HERO hero = go.GetComponent<HERO>();
+//            if (hero != null && this.storedHero != null && hero == this.storedHero)
+//            {
+//                hero.myCannonRegion = null;
+//                this.storedHero = null;
+//            }
+//        }
+//    }
 
     [RPC]
     [UsedImplicitly]
-    public void RequestControlRPC(int viewID, PhotonMessageInfo info)
+    public void RequestControlRPC(int viewID, PhotonMessageInfo info) //TODO: Check for viewID validity
     {
         if (!(!photonView.isMine || !PhotonNetwork.isMasterClient || this.disabled))
         {
@@ -81,50 +81,54 @@ public class CannonPropRegion : Photon.MonoBehaviour
         string[] strArray = settings.Split(',');
         if (strArray.Length > 15)
         {
-            if (!strArray[2].EqualsIgnoreCase("default"))
+            if (!string.Equals(strArray[2], "default", StringComparison.OrdinalIgnoreCase))
             {
-                if (strArray[2].EqualsIgnoreCase("transparent"))
+                if (string.Equals(strArray[2], "transparent", StringComparison.OrdinalIgnoreCase))
                 {
-                    foreach (Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
+                    foreach (Renderer render in gameObject.GetComponentsInChildren<Renderer>())
                     {
-                        renderer.material = (Material) GameManager.RCassets.Load("transparent");
-                        if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
+                        render.material = (Material) GameManager.RCassets.Load("transparent");
+                        if (float.Parse(strArray[10]) != 1f || float.Parse(strArray[11]) != 1f)
                         {
-                            renderer.material.mainTextureScale = new Vector2(renderer.material.mainTextureScale.x * Convert.ToSingle(strArray[10]), renderer.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));
+                            render.material.mainTextureScale = new Vector2(
+                                render.material.mainTextureScale.x * float.Parse(strArray[10]), 
+                                render.material.mainTextureScale.y * float.Parse(strArray[11]));
                         }
                     }
                 }
                 else
                 {
-                    foreach (Renderer renderer in gameObject.GetComponentsInChildren<Renderer>())
+                    foreach (Renderer render in gameObject.GetComponentsInChildren<Renderer>())
                     {
-                        renderer.material = (Material) GameManager.RCassets.Load(strArray[2]);
-                        if (Convert.ToSingle(strArray[10]) != 1f || Convert.ToSingle(strArray[11]) != 1f)
+                        render.material = (Material) GameManager.RCassets.Load(strArray[2]);
+                        if (float.Parse(strArray[10]) != 1f || float.Parse(strArray[11]) != 1f)
                         {
-                            renderer.material.mainTextureScale = new Vector2(
-                                renderer.material.mainTextureScale.x * Convert.ToSingle(strArray[10]),
-                                renderer.material.mainTextureScale.y * Convert.ToSingle(strArray[11]));
+                            render.material.mainTextureScale = new Vector2(
+                                render.material.mainTextureScale.x * float.Parse(strArray[10]),
+                                render.material.mainTextureScale.y * float.Parse(strArray[11]));
                         }
                     }
                 }
             }
 
             var scale = gameObject.transform.localScale;
-            float x = scale.x * Convert.ToSingle(strArray[3]) - 0.001f;
-            float y = scale.y * Convert.ToSingle(strArray[4]);
-            float z = scale.z * Convert.ToSingle(strArray[5]);
+            float x = scale.x * float.Parse(strArray[3]) - 0.001f;
+            float y = scale.y * float.Parse(strArray[3]);
+            float z = scale.z * float.Parse(strArray[3]);
             gameObject.transform.localScale = new Vector3(x, y, z);
             if (strArray[6] != "0")
             {
-                Color color = new Color(Convert.ToSingle(strArray[7]), Convert.ToSingle(strArray[8]), Convert.ToSingle(strArray[9]), 1f);
+                Color color = new Color(
+                    float.Parse(strArray[7]), 
+                    float.Parse(strArray[8]), 
+                    float.Parse(strArray[9]), 
+                    1f);
                 foreach (MeshFilter filter in gameObject.GetComponentsInChildren<MeshFilter>())
                 {
                     Mesh mesh = filter.mesh;
                     Color[] colorArray = new Color[mesh.vertexCount];
                     for (int i = 0; i < mesh.vertexCount; i++)
-                    {
                         colorArray[i] = color;
-                    }
                     mesh.colors = colorArray;
                 }
             }
@@ -133,18 +137,17 @@ public class CannonPropRegion : Photon.MonoBehaviour
 
     public void Start()
     {
+        Destroy(GetComponent<Collider>());
         if (false) //TODO: Probably broken || was `(int) settings[64] >= 100`
         {
             GetComponent<Collider>().enabled = false;
         }
     }
 
-    public IEnumerator WaitAndEnable()
+    private IEnumerator WaitAndEnable()
     {
         yield return new WaitForSeconds(5f);
-        if (!this.destroyed)
-        {
-            this.disabled = false;
-        }
+        if (!destroyed)
+            disabled = false;
     }
 }

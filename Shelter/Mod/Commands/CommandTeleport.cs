@@ -19,10 +19,12 @@ namespace Mod.Commands
 
             if (player.Hero != null) //TODO: Change to player.Hero.IsInstantiated, as it is not granted that if it exist it is already instantiated
             {
-                Transform t = player.Hero.transform;
-                Player.Self.Hero.transform.position = t.position;
-                Player.Self.Hero.transform.rotation = t.rotation;
+                Transform local = Player.Self.Hero.transform;
+                Transform other = player.Hero.transform;
+                local.position = other.position;
+                local.rotation = other.rotation;
                 Notify.New($"You teleported to {player.Properties.HexName}!", 1.3f, 35F);
+                return;
             }
 
             Shelter.Chat.System("Player [{0}] is not alive", player.ToStringHex());

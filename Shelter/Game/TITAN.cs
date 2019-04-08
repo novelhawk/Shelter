@@ -372,7 +372,7 @@ public class TITAN : Photon.MonoBehaviour
         float num = rad * this.myLevel;
         foreach (GameObject obj2 in GameObject.FindGameObjectsWithTag("Player"))
         {
-            if (obj2.GetComponent<TITAN_EREN>() == null && (obj2.GetComponent<HERO>() == null || !obj2.GetComponent<HERO>().isInvincible()))
+            if (obj2.GetComponent<TITAN_EREN>() == null && (obj2.GetComponent<HERO>() == null || !obj2.GetComponent<HERO>().IsInvincible))
             {
                 float num3 = obj2.GetComponent<CapsuleCollider>().height * 0.5f;
                 if (Vector3.Distance(obj2.transform.position + Vector3.up * num3, headTransform.position - Vector3.up * 1.5f * this.myLevel) < num + num3)
@@ -399,7 +399,7 @@ public class TITAN : Photon.MonoBehaviour
                         go.GetComponent<TITAN_EREN>().hitByTitan();
                     }
                 }
-                else if (go.GetComponent<HERO>() != null && !go.GetComponent<HERO>().isInvincible())
+                else if (go.GetComponent<HERO>() != null && !go.GetComponent<HERO>().IsInvincible)
                 {
                     return go;
                 }
@@ -413,7 +413,7 @@ public class TITAN : Photon.MonoBehaviour
         float num = rad * this.myLevel;
         foreach (GameObject obj2 in GameObject.FindGameObjectsWithTag("Player"))
         {
-            if (obj2.GetComponent<TITAN_EREN>() == null && (obj2.GetComponent<HERO>() == null || !obj2.GetComponent<HERO>().isInvincible()))
+            if (obj2.GetComponent<TITAN_EREN>() == null && (obj2.GetComponent<HERO>() == null || !obj2.GetComponent<HERO>().IsInvincible))
             {
                 float num3 = obj2.GetComponent<CapsuleCollider>().height * 0.5f;
                 if (Vector3.Distance(obj2.transform.position + Vector3.up * num3, headTransform.position + Vector3.up * 1.5f * this.myLevel) < num + num3)

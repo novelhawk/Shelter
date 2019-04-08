@@ -559,25 +559,23 @@ public partial class GameManager
     {
         if (info.sender.IsMasterClient)
         {
-            if (gametype == 0)
+            switch (gametype)
             {
-                IN_GAME_MAIN_CAMERA.GameMode = GameMode.KillTitan;
-            }
-            else if (gametype == 1)
-            {
-                IN_GAME_MAIN_CAMERA.GameMode = GameMode.SurviveMode;
-            }
-            else if (gametype == 2)
-            {
-                IN_GAME_MAIN_CAMERA.GameMode = GameMode.PvpAHSS;
-            }
-            else if (gametype == 3)
-            {
-                IN_GAME_MAIN_CAMERA.GameMode = GameMode.Racing;
-            }
-            else if (gametype == 4)
-            {
-                IN_GAME_MAIN_CAMERA.GameMode = GameMode.None;
+                case 0:
+                    IN_GAME_MAIN_CAMERA.GameMode = GameMode.KillTitan;
+                    break;
+                case 1:
+                    IN_GAME_MAIN_CAMERA.GameMode = GameMode.SurviveMode;
+                    break;
+                case 2:
+                    IN_GAME_MAIN_CAMERA.GameMode = GameMode.PvpAHSS;
+                    break;
+                case 3:
+                    IN_GAME_MAIN_CAMERA.GameMode = GameMode.Racing;
+                    break;
+                case 4:
+                    IN_GAME_MAIN_CAMERA.GameMode = GameMode.None;
+                    break;
             }
 
             if (info.sender.IsMasterClient && link.Length > 6)

@@ -248,7 +248,7 @@ public class COLOSSAL_TITAN : Photon.MonoBehaviour
                     }
                     return go;
                 }
-                if (go.GetComponent<HERO>() != null && !go.GetComponent<HERO>().isInvincible())
+                if (go.GetComponent<HERO>() != null && !go.GetComponent<HERO>().IsInvincible)
                 {
                     return go;
                 }

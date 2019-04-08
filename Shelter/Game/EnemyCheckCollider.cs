@@ -56,7 +56,7 @@ public class EnemyCheckCollider : Photon.MonoBehaviour
                             break;
                     }
                 }
-                else if (!component.transform.root.GetComponent<HERO>().isInvincible() && 
+                else if (!component.transform.root.GetComponent<HERO>().IsInvincible && 
                          !component.transform.root.GetComponent<HERO>().IsGrabbed && 
                          !component.transform.root.GetComponent<HERO>().HasDied())
                 {
