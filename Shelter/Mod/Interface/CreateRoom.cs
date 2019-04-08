@@ -161,15 +161,15 @@ namespace Mod.Interface
             GUI.DrawTexture(new Rect(areaRect.x + areaRect.width / 2f - 1, areaRect.y, 2, 160), _hover);
 
             SmartRect rect = new SmartRect(areaRect.x, areaRect.y, areaRect.width / 2f - 20, 30);
-            GUI.Label(rect                    , "Character", _label);
-            GUI.Label(rect.OY(rect.Height + 3), "Map", _label);
-            GUI.Label(rect.OY(rect.Height + 3), "Time", _label);
-            GUI.Label(rect.OY(rect.Height + 3), "Difficulty", _label);
-            GUI.Label(rect.OY(rect.Height + 3), "Daylight", _label);
+            GUI.Label(rect, "Character", _label);
+            GUI.Label(rect.TranslateY(rect.Height + 3), "Map", _label);
+            GUI.Label(rect.TranslateY(rect.Height + 3), "Time", _label);
+            GUI.Label(rect.TranslateY(rect.Height + 3), "Difficulty", _label);
+            GUI.Label(rect.TranslateY(rect.Height + 3), "Daylight", _label);
 
             rect = new SmartRect(areaRect.x + areaRect.width / 2f + 20, areaRect.y, areaRect.width / 2f - 20, 30);
             roomCharacter = GUI.TextField(rect, roomCharacter, _textField);
-            switch (CustomButton(rect.OY(rect.Height + 3), LevelInfoManager.Levels[roomMapIndex].Name, _button))
+            switch (CustomButton(rect.TranslateY(rect.Height + 3), LevelInfoManager.Levels[roomMapIndex].Name, _button))
             {
                 case 1:
                     roomMapIndex = LevelInfoManager.Levels.Length - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
@@ -178,15 +178,15 @@ namespace Mod.Interface
                     roomMapIndex = roomMapIndex == 0 ? LevelInfoManager.Levels.Length - 1 : roomMapIndex - 1;
                     break;
             }
-            roomTime = GUI.TextField(rect.OY(rect.Height + 3), roomTime, _textField);
-            rect.OY(rect.Height + 3);
+            roomTime = GUI.TextField(rect.TranslateY(rect.Height + 3), roomTime, _textField);
+            rect.TranslateY(rect.Height + 3);
             if (GUI.Button(new Rect(rect.X, rect.Y, rect.Width / 3 - 20, rect.Height), "Easy", roomDifficultySingle == 0 ? _buttonSelected : _button))
                 roomDifficultySingle = 0;
             if (GUI.Button(new Rect(rect.X + rect.Width / 3 + 10, rect.Y, rect.Width / 3 - 20, rect.Height), "Normal", roomDifficultySingle == 1 ? _buttonSelected : _button))
                 roomDifficultySingle = 1;
             if (GUI.Button(new Rect(rect.X + rect.Width / 3 * 2 + 20, rect.Y, rect.Width / 3 - 20, rect.Height), "Hard", roomDifficultySingle == 2 ? _buttonSelected : _button))
                 roomDifficultySingle = 2;
-            rect.OY(rect.Height + 3);
+            rect.TranslateY(rect.Height + 3);
             if (GUI.Button(new Rect(rect.X, rect.Y, rect.Width / 3 - 20, rect.Height), "Day", _roomDaylight == Daylight.Day ? _buttonSelected : _button))
                 _roomDaylight = Daylight.Day;
             if (GUI.Button(new Rect(rect.X + rect.Width / 3 + 10, rect.Y, rect.Width / 3 - 20, rect.Height), "Dawn", _roomDaylight == Daylight.Dawn ? _buttonSelected : _button))
@@ -217,19 +217,19 @@ namespace Mod.Interface
 
             SmartRect rect = new SmartRect(areaRect.x, areaRect.y, areaRect.width / 2f - 20, 30);
             GUI.Label(rect                    , "Name", _label);
-            GUI.Label(rect.OY(rect.Height + 3), "Password", _label);
-            GUI.Label(rect.OY(rect.Height + 3), "Map", _label);
-            GUI.Label(rect.OY(rect.Height + 3), "Players", _label);
-            GUI.Label(rect.OY(rect.Height + 3), "Time", _label);
-            GUI.Label(rect.OY(rect.Height + 3), "Difficulty", _label);
-            GUI.Label(rect.OY(rect.Height + 3), "Daylight", _label);
-            GUI.Label(rect.OY(rect.Height + 3), "Open", _label);
-            GUI.Label(rect.OY(rect.Height + 3), "Visible", _label);
+            GUI.Label(rect.TranslateY(rect.Height + 3), "Password", _label);
+            GUI.Label(rect.TranslateY(rect.Height + 3), "Map", _label);
+            GUI.Label(rect.TranslateY(rect.Height + 3), "Players", _label);
+            GUI.Label(rect.TranslateY(rect.Height + 3), "Time", _label);
+            GUI.Label(rect.TranslateY(rect.Height + 3), "Difficulty", _label);
+            GUI.Label(rect.TranslateY(rect.Height + 3), "Daylight", _label);
+            GUI.Label(rect.TranslateY(rect.Height + 3), "Open", _label);
+            GUI.Label(rect.TranslateY(rect.Height + 3), "Visible", _label);
 
             rect = new SmartRect(areaRect.x + areaRect.width / 2f + 20, areaRect.y, areaRect.width / 2f - 20, 30);
             roomName = GUI.TextField(rect, roomName, _textField);
-            roomPassword = GUI.TextField(rect.OY(rect.Height + 3), roomPassword, _textField);
-            switch (CustomButton(rect.OY(rect.Height + 3), LevelInfoManager.Levels[roomMapIndex].Name + " " + roomMapIndex, _button))
+            roomPassword = GUI.TextField(rect.TranslateY(rect.Height + 3), roomPassword, _textField);
+            switch (CustomButton(rect.TranslateY(rect.Height + 3), LevelInfoManager.Levels[roomMapIndex].Name + " " + roomMapIndex, _button))
             {
                 case 1:
                     roomMapIndex = LevelInfoManager.Levels.Length - 1 == roomMapIndex ? 0 : roomMapIndex + 1;
@@ -238,23 +238,23 @@ namespace Mod.Interface
                     roomMapIndex = roomMapIndex == 0 ? LevelInfoManager.Levels.Length - 1 : roomMapIndex - 1;
                     break;
             }
-            roomMaxPlayers = GUI.TextField(rect = rect.OY(rect.Height + 3), roomMaxPlayers, _textField);
-            roomTime = GUI.TextField(rect.OY(rect.Height + 3), roomTime, _textField);
-            rect.OY(rect.Height + 3);
+            roomMaxPlayers = GUI.TextField(rect = rect.TranslateY(rect.Height + 3), roomMaxPlayers, _textField);
+            roomTime = GUI.TextField(rect.TranslateY(rect.Height + 3), roomTime, _textField);
+            rect.TranslateY(rect.Height + 3);
             if (GUI.Button(new Rect(rect.X, rect.Y, rect.Width / 3 - 20, rect.Height), "Easy", roomDifficulty == "easy" ? _buttonSelected : _button))
                 roomDifficulty = "easy";
             if (GUI.Button(new Rect(rect.X + rect.Width / 3 + 10, rect.Y, rect.Width / 3 - 20, rect.Height), "Normal", roomDifficulty == "normal" ? _buttonSelected : _button))
                 roomDifficulty = "normal";
             if (GUI.Button(new Rect(rect.X + rect.Width / 3 * 2 + 20, rect.Y, rect.Width / 3 - 20, rect.Height), "Hard", roomDifficulty == "hard" ? _buttonSelected : _button))
                 roomDifficulty = "hard";
-            rect.OY(rect.Height + 3);
+            rect.TranslateY(rect.Height + 3);
             if (GUI.Button(new Rect(rect.X, rect.Y, rect.Width / 3 - 20, rect.Height), "Day", _roomDaylight == Daylight.Day ? _buttonSelected : _button))
                 _roomDaylight = Daylight.Day;
             if (GUI.Button(new Rect(rect.X + rect.Width / 3 + 10, rect.Y, rect.Width / 3 - 20, rect.Height), "Dawn", _roomDaylight == Daylight.Dawn ? _buttonSelected : _button))
                 _roomDaylight = Daylight.Dawn;
             if (GUI.Button(new Rect(rect.X + rect.Width / 3 * 2 + 20, rect.Y, rect.Width / 3 - 20, rect.Height), "Night", _roomDaylight == Daylight.Night ? _buttonSelected : _button))
                 _roomDaylight = Daylight.Night;
-            if (GUI.Button(rect = rect.OY(rect.Height + 3), roomOpen.ToString(), _button))
+            if (GUI.Button(rect = rect.TranslateY(rect.Height + 3), roomOpen.ToString(), _button))
                 roomOpen = !roomOpen;
             if (GUI.Button(new Rect(rect.X, rect.Y + rect.Height + 3, rect.Width, rect.Height), roomVisible.ToString(), _button))
                 roomVisible = !roomVisible;

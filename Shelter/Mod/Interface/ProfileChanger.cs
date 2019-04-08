@@ -142,19 +142,19 @@ namespace Mod.Interface
             
             rect = new SmartRect(areaRect.x, areaRect.y, areaRect.width / 2f - 20, 30);
             GUI.Label(rect                    , "Profile"   , _label);
-            GUI.Label(rect.OY(rect.Height + 3), "Name"      , _label);
-            GUI.Label(rect.OY(rect.Height + 3), "Guild"     , _label);
-            GUI.Label(rect.OY(rect.Height + 3), "FriendName", _label);
-            GUI.Label(rect.OY(rect.Height + 3), "ChatName"  , _label);
-            GUI.Label(rect.OY(rect.Height + 3), "ChatFormat", _label);
+            GUI.Label(rect.TranslateY(rect.Height + 3), "Name"      , _label);
+            GUI.Label(rect.TranslateY(rect.Height + 3), "Guild"     , _label);
+            GUI.Label(rect.TranslateY(rect.Height + 3), "FriendName", _label);
+            GUI.Label(rect.TranslateY(rect.Height + 3), "ChatName"  , _label);
+            GUI.Label(rect.TranslateY(rect.Height + 3), "ChatFormat", _label);
 
             rect = new SmartRect(areaRect.x + areaRect.width / 2f + 20, areaRect.y, areaRect.width / 2f - 20, 30);
             _profile.ProfileName = GUI.TextField(rect, _profile.ProfileName ?? "Profile name", _textField);
-            _profile.Name = GUI.TextField(rect.OY(rect.Height + 3), _profile.Name ?? "InGame Name", _textField);
-            _profile.Guild = GUI.TextField(rect.OY(rect.Height + 3), _profile.Guild ?? string.Empty, _textField);
-            _profile.FriendName = GUI.TextField(rect.OY(rect.Height + 3), _profile.FriendName ?? string.Empty, _textField);
-            _profile.ChatName = GUI.TextField(rect.OY(rect.Height + 3), _profile.ChatName ?? "ChatName", _textField);
-            _profile.ChatFormat = GUI.TextField(rect.OY(rect.Height + 3), _profile.ChatFormat ?? "$(chatName): $(message)", _textField);
+            _profile.Name = GUI.TextField(rect.TranslateY(rect.Height + 3), _profile.Name ?? "InGame Name", _textField);
+            _profile.Guild = GUI.TextField(rect.TranslateY(rect.Height + 3), _profile.Guild ?? string.Empty, _textField);
+            _profile.FriendName = GUI.TextField(rect.TranslateY(rect.Height + 3), _profile.FriendName ?? string.Empty, _textField);
+            _profile.ChatName = GUI.TextField(rect.TranslateY(rect.Height + 3), _profile.ChatName ?? "ChatName", _textField);
+            _profile.ChatFormat = GUI.TextField(rect.TranslateY(rect.Height + 3), _profile.ChatFormat ?? "$(chatName): $(message)", _textField);
 
             if (Shelter.Profiles.Count > 1 && GUI.Button(new Rect(areaRect.x + areaRect.width / 2f - 150, rect.Y + 100, 300f, 50f), "Delete profile", _deleteButton))
             {

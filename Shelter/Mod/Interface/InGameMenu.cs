@@ -94,13 +94,13 @@ namespace Mod.Interface
             SmartRect rect = new SmartRect(_windowRect.x, _windowRect.y + 9, _windowRect.width / 5f, 27);
             if (GUI.Button(rect, "General", _currentMenu == SubMenu.General ? _selectedEntry : _menuEntry))
                 _currentMenu = SubMenu.General;
-            if (GUI.Button(rect.OX(rect.Width), "Keyboard", _currentMenu == SubMenu.Keyboard ? _selectedEntry : _menuEntry))
+            if (GUI.Button(rect.TranslateX(rect.Width), "Keyboard", _currentMenu == SubMenu.Keyboard ? _selectedEntry : _menuEntry))
                 _currentMenu = SubMenu.Keyboard;
-            if (GUI.Button(rect.OX(rect.Width), "Game Settings", _currentMenu == SubMenu.GameSettings ? _selectedEntry : _menuEntry))
+            if (GUI.Button(rect.TranslateX(rect.Width), "Game Settings", _currentMenu == SubMenu.GameSettings ? _selectedEntry : _menuEntry))
                 _currentMenu = SubMenu.GameSettings;
-            if (GUI.Button(rect.OX(rect.Width), "Skins", _currentMenu == SubMenu.Skins ? _selectedEntry : _menuEntry))
+            if (GUI.Button(rect.TranslateX(rect.Width), "Skins", _currentMenu == SubMenu.Skins ? _selectedEntry : _menuEntry))
                 _currentMenu = SubMenu.Skins;
-            if (GUI.Button(rect.OX(rect.Width), "Custom Map", _currentMenu == SubMenu.CustomMap ? _selectedEntry : _menuEntry))
+            if (GUI.Button(rect.TranslateX(rect.Width), "Custom Map", _currentMenu == SubMenu.CustomMap ? _selectedEntry : _menuEntry))
                 _currentMenu = SubMenu.CustomMap;
 
             switch (_currentMenu)
@@ -143,24 +143,24 @@ namespace Mod.Interface
             
             SmartRect item = new SmartRect(category.X, category.Y + categoryDistance, category.Width, 17);
             EnableDisableButton(item, "Skin gas", true);
-            EnableDisableButton(item.OY(item.Height + 5), "Weapon trail", true);
-            EnableDisableButton(item.OY(item.Height + 5), "Wind effect", true);
-            EnableDisableButton(item.OY(item.Height + 10), "VSync", true);
-            EnableDisableButton(item.OY(item.Height + 5), "FPS Cap", true);
-            EnableDisableButton(item.OY(item.Height + 10), "Texture Quality", true);
-            EnableDisableButton(item.OY(item.Height + 5), "Mipmapping", true);
+            EnableDisableButton(item.TranslateY(item.Height + 5), "Weapon trail", true);
+            EnableDisableButton(item.TranslateY(item.Height + 5), "Wind effect", true);
+            EnableDisableButton(item.TranslateY(item.Height + 10), "VSync", true);
+            EnableDisableButton(item.TranslateY(item.Height + 5), "FPS Cap", true);
+            EnableDisableButton(item.TranslateY(item.Height + 10), "Texture Quality", true);
+            EnableDisableButton(item.TranslateY(item.Height + 5), "Mipmapping", true);
             
-            GUI.Label(category.OX(width + betweenSpace), "Other", _menuCategory);
+            GUI.Label(category.TranslateX(width + betweenSpace), "Other", _menuCategory);
             
             item = new SmartRect(category.X, category.Y + categoryDistance, category.Width, 17);
             EnableDisableButton(item, "Volume", true);
-            EnableDisableButton(item.OY(item.Height + 5), "Mouse Speed", true);
-            EnableDisableButton(item.OY(item.Height + 5), "Camera Distance", true);
-            EnableDisableButton(item.OY(item.Height + 5), "Camera Tilt", true);
-            EnableDisableButton(item.OY(item.Height + 5), "Invert Mouse", true);
-            EnableDisableButton(item.OY(item.Height + 5), "Speedmeter", true);
-            EnableDisableButton(item.OY(item.Height + 5), "Minimap", true);
-            EnableDisableButton(item.OY(item.Height + 5), "Game feed", true);
+            EnableDisableButton(item.TranslateY(item.Height + 5), "Mouse Speed", true);
+            EnableDisableButton(item.TranslateY(item.Height + 5), "Camera Distance", true);
+            EnableDisableButton(item.TranslateY(item.Height + 5), "Camera Tilt", true);
+            EnableDisableButton(item.TranslateY(item.Height + 5), "Invert Mouse", true);
+            EnableDisableButton(item.TranslateY(item.Height + 5), "Speedmeter", true);
+            EnableDisableButton(item.TranslateY(item.Height + 5), "Minimap", true);
+            EnableDisableButton(item.TranslateY(item.Height + 5), "Game feed", true);
         }
 
         private InputAction _action;
@@ -194,56 +194,56 @@ namespace Mod.Interface
             SmartRect item = new SmartRect(category.X, category.Y + categoryDistance, category.Width, 17);
             
             KeyboardButton(item                    , "Attack", InputAction.Attack);
-            KeyboardButton(item.OY(item.Height + 3), "Special", InputAction.Special);
-            KeyboardButton(item.OY(item.Height + 3), "Gas", InputAction.Gas);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Special", InputAction.Special);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Gas", InputAction.Gas);
             
-            KeyboardButton(item.OY(item.Height + 10), "Both hooks", InputAction.BothHooks);
-            KeyboardButton(item.OY(item.Height + 3), "Left hook", InputAction.LeftHook);
-            KeyboardButton(item.OY(item.Height + 3), "Right hook", InputAction.RightHook);
+            KeyboardButton(item.TranslateY(item.Height + 10), "Both hooks", InputAction.BothHooks);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Left hook", InputAction.LeftHook);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Right hook", InputAction.RightHook);
             
-            KeyboardButton(item.OY(item.Height + 10), "Forward", InputAction.Forward);
-            KeyboardButton(item.OY(item.Height + 3), "Back", InputAction.Back);
-            KeyboardButton(item.OY(item.Height + 3), "Right", InputAction.Right);
-            KeyboardButton(item.OY(item.Height + 3), "Left", InputAction.Left);
+            KeyboardButton(item.TranslateY(item.Height + 10), "Forward", InputAction.Forward);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Back", InputAction.Back);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Right", InputAction.Right);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Left", InputAction.Left);
             
-            KeyboardButton(item.OY(item.Height + 10), "Reel in", InputAction.ReelIn);
-            KeyboardButton(item.OY(item.Height + 3), "Reel out", InputAction.ReelOut);
+            KeyboardButton(item.TranslateY(item.Height + 10), "Reel in", InputAction.ReelIn);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Reel out", InputAction.ReelOut);
             
-            KeyboardButton(item.OY(item.Height + 10), "Suicide", InputAction.Suicide);
-            KeyboardButton(item.OY(item.Height + 3), "Dodge", InputAction.Dodge);
-            KeyboardButton(item.OY(item.Height + 3), "Reload", InputAction.Reload);
+            KeyboardButton(item.TranslateY(item.Height + 10), "Suicide", InputAction.Suicide);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Dodge", InputAction.Dodge);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Reload", InputAction.Reload);
             
-            GUI.Label(category.OX(width + betweenSpace), "Titan", _menuCategory);
+            GUI.Label(category.TranslateX(width + betweenSpace), "Titan", _menuCategory);
 
             item = new SmartRect(category.X, category.Y + categoryDistance, category.Width, 17);
             KeyboardButton(item                    , "Jump", InputAction.TitanJump);
-            KeyboardButton(item.OY(item.Height + 3), "Slam", InputAction.TitanSlam);
-            KeyboardButton(item.OY(item.Height + 3), "Double Punch", InputAction.TitanDoublePunch);
-            KeyboardButton(item.OY(item.Height + 3), "Cover", InputAction.TitanCover);
-            KeyboardButton(item.OY(item.Height + 3), "Grab front", InputAction.TitanGrabFront);
-            KeyboardButton(item.OY(item.Height + 3), "Grab back", InputAction.TitanGrabBack);
-            KeyboardButton(item.OY(item.Height + 3), "Grab nape", InputAction.TitanGrabNape);
-            KeyboardButton(item.OY(item.Height + 3), "AntiAE", InputAction.TitanAntiAE);
-            KeyboardButton(item.OY(item.Height + 3), "Bite", InputAction.TitanBite);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Slam", InputAction.TitanSlam);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Double Punch", InputAction.TitanDoublePunch);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Cover", InputAction.TitanCover);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Grab front", InputAction.TitanGrabFront);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Grab back", InputAction.TitanGrabBack);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Grab nape", InputAction.TitanGrabNape);
+            KeyboardButton(item.TranslateY(item.Height + 3), "AntiAE", InputAction.TitanAntiAE);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Bite", InputAction.TitanBite);
             
-            GUI.Label(category.OX(width + betweenSpace), "Other", _menuCategory);
+            GUI.Label(category.TranslateX(width + betweenSpace), "Other", _menuCategory);
             
             item = new SmartRect(category.X, category.Y + categoryDistance, category.Width, 17);
             KeyboardButton(item                    , "Lock titan", InputAction.LockTitan);
-            KeyboardButton(item.OY(item.Height + 3), "Slowdown", InputAction.SlowMovement);
-            KeyboardButton(item.OY(item.Height + 3), "Horse Jump", InputAction.HorseJump);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Slowdown", InputAction.SlowMovement);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Horse Jump", InputAction.HorseJump);
             
-            KeyboardButton(item.OY(item.Height + 10), "Enter cannon", InputAction.EnterCannon);
-            KeyboardButton(item.OY(item.Height + 3), "Change camera mode", InputAction.ChangeCamera);
+            KeyboardButton(item.TranslateY(item.Height + 10), "Enter cannon", InputAction.EnterCannon);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Change camera mode", InputAction.ChangeCamera);
             
-            KeyboardButton(item.OY(item.Height + 10), "Salute", InputAction.Salute);
-            KeyboardButton(item.OY(item.Height + 3), "Red flare", InputAction.RedFlare);
-            KeyboardButton(item.OY(item.Height + 3), "Green flare", InputAction.GreenFlare);
-            KeyboardButton(item.OY(item.Height + 3), "Black flare", InputAction.BlackFlare);
+            KeyboardButton(item.TranslateY(item.Height + 10), "Salute", InputAction.Salute);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Red flare", InputAction.RedFlare);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Green flare", InputAction.GreenFlare);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Black flare", InputAction.BlackFlare);
             
-            KeyboardButton(item.OY(item.Height + 10), "Toggle fullscreen", InputAction.ToggleFullscreen);
-            KeyboardButton(item.OY(item.Height + 3), "Open menu", InputAction.OpenMenu);
-            KeyboardButton(item.OY(item.Height + 3), "Open navigator", InputAction.OpenNavigator);
+            KeyboardButton(item.TranslateY(item.Height + 10), "Toggle fullscreen", InputAction.ToggleFullscreen);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Open menu", InputAction.OpenMenu);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Open navigator", InputAction.OpenNavigator);
         }
 
         private void DoGameSettings()

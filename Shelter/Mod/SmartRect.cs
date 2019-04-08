@@ -9,10 +9,6 @@ namespace Mod
         private float _width;
         private float _height;
 
-        public SmartRect()
-        {
-        }
-
         public SmartRect(Rect rect)
         {
             _x = rect.x;
@@ -29,6 +25,7 @@ namespace Mod
             _height = height;
         }
 
+
         public SmartRect Set(float x, float y, float width, float height)
         {
             _x = x;
@@ -38,33 +35,52 @@ namespace Mod
             return this;
         }
 
-        public SmartRect Offset(float offsetX, float offsetY, float offsetWidth, float offsetHeight)
+        /// <summary>
+        /// Translates the SmartRect on the X axis
+        /// </summary>
+        /// <param name="offset">The X translation offset</param>
+        /// <returns>The instance of the SmartRect</returns>
+        public SmartRect TranslateX(float offset) => Translate(offset, 0);
+
+        /// <summary>
+        /// Translates the SmartRect on the Y axis
+        /// </summary>
+        /// <param name="offset">The Y translation offset</param>
+        /// <returns>The instance of the SmartRect</returns>
+        public SmartRect TranslateY(float offset) => Translate(0, offset);
+
+        /// <summary>
+        /// Translates the SmartRect
+        /// </summary>
+        /// <param name="x">The X translation offset</param>
+        /// <param name="y">The Y translation offset</param>
+        /// <returns>The instance of the SmartRect</returns>
+        public SmartRect Translate(float x, float y)
         {
-            _x += offsetX;
-            _y += offsetY;
-            _width += offsetWidth;
-            _height += offsetHeight;
+            _x += x;
+            _y += y;
             return this;
         }
 
-        public SmartRect Offset(float offsetWidth, float offsetHeight)
-        {
-            return Offset(offsetWidth / 2, offsetHeight / 2, offsetWidth, offsetHeight);
-        }
-
-        public SmartRect OX(float offset)
-        {
-            return Offset(offset, 0, 0, 0);
-        }
-
-        public SmartRect OY(float offset)
-        {
-            return Offset(0, offset, 0, 0);
-        }
-
+        /// <summary>
+        /// Creates a new concentric SmartRect of specified size
+        /// </summary>
+        /// <param name="width">The width of the new SmartRect</param>
+        /// <param name="height">The height of the new SmartRect</param>
+        /// <returns>A concentric SmartRect of size (<paramref name="width"/>, <paramref name="height"/>)</returns>
         public SmartRect Center(float width, float height)
         {
-            return Offset(_width / 2 - width / 2, _height / 2 - height / 2, width, height); // maybe we want to create a new instance
+            return new SmartRect(_width / 2 - width / 2, _height / 2 - height / 2, width, height);
+        }
+
+        public static implicit operator Rect(SmartRect smartRect)
+        {
+            return new Rect(smartRect.X, smartRect.Y, smartRect.Width, smartRect.Height);
+        }
+
+        public static implicit operator SmartRect(Rect rect)
+        {
+            return new SmartRect(rect);
         }
 
         public float X => _x;
@@ -73,10 +89,5 @@ namespace Mod
         public float Height => _height;
         public float Bottom => _height + _y;
         public float Right => _width + _x;
-
-        public static implicit operator Rect(SmartRect smartRect)
-        {
-            return new Rect(smartRect.X, smartRect.Y, smartRect.Width, smartRect.Height);
-        }
     }
 }

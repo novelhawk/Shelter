@@ -129,7 +129,7 @@ namespace Mod.Interface
                 if (GUI.Button(new Rect(rect.X, rect.Y, rect.Width - 30, rect.Height), string.Empty, GUIStyle.none))
                     module.Toggle();
 
-                if (rect.OX((box.width - 200 * times) / times + 200).X - 200 > box.width)
+                if (rect.TranslateX((box.width - 200 * times) / times + 200).X - 200 > box.width)
                     rect = new SmartRect(box.x, rect.Y + 50, rect.Width, rect.Height);
             }
         }

@@ -45,21 +45,21 @@ namespace Mod.Interface
             SmartRect rect;
             GUI.matrix = Matrix4x4.TRS(new Vector3(0, 0, 0), Quaternion.identity, new Vector3(Screen.width / 1920f, Screen.height / 1080f, 1)); // Scale the gui for any resoultion
             GUI.Label(rect = new SmartRect(145, 347, 166, 40), "Create", IsVisible("CreateRoom") ? selected : text);
-            if (GUI.Button(rect.OY(-10), string.Empty, GUIStyle.none))
+            if (GUI.Button(rect.TranslateY(-10), string.Empty, GUIStyle.none))
             {
                 Enable(nameof(CreateRoom));
                 Disable(nameof(ServerList));
                 Disable(nameof(ProfileChanger));
             }
             GUI.Label(rect.Set(143, 370, 167, 40), "Server list", IsVisible("ServerList") ? selected : text);
-            if (GUI.Button(rect.OY(-10), string.Empty, GUIStyle.none))
+            if (GUI.Button(rect.TranslateY(-10), string.Empty, GUIStyle.none))
             {
                 Enable(nameof(ServerList));
                 Disable(nameof(CreateRoom));
                 Disable(nameof(ProfileChanger));
             }
             GUI.Label(rect.Set(143, 393, 167, 40), "Profile", IsVisible("ProfileChanger") ? selected : text);
-            if (GUI.Button(rect.OY(-10), string.Empty, GUIStyle.none))
+            if (GUI.Button(rect.TranslateY(-10), string.Empty, GUIStyle.none))
             {
                 Enable(nameof(ProfileChanger));
                 Disable(nameof(CreateRoom));

@@ -84,7 +84,7 @@ namespace Mod.Modules
             for (var i = 0; i < Shelter.AnimationManager.Animations.Count; i++)
             {
                 var info = Shelter.AnimationManager.Animations[i];
-                if (GUI.Button(rect.OY(30), info.Name, Shelter.AnimationManager.Selected != i ? _button : _selectedButton))
+                if (GUI.Button(rect.TranslateY(30), info.Name, Shelter.AnimationManager.Selected != i ? _button : _selectedButton))
                 {
                     Shelter.AnimationManager.Selected = i;
                     _animator = new Animator(info, _shades);
@@ -92,11 +92,11 @@ namespace Mod.Modules
                 }
             }
                 
-            GUI.Label(rect.OY(40), $"Shades: {_shades}", _sliderText);
-            _shades = (int) GUI.HorizontalSlider(rect.OY(20), _shades, 1, 100);
+            GUI.Label(rect.TranslateY(40), $"Shades: {_shades}", _sliderText);
+            _shades = (int) GUI.HorizontalSlider(rect.TranslateY(20), _shades, 1, 100);
             
-            GUI.Label(rect.OY(20), $"Frequency: {_updatesPerSecond:0.00} hZ", _sliderText);
-            _updatesPerSecond = GUI.HorizontalSlider(rect.OY(20), _updatesPerSecond, 1, 100); //TODO: Color viewer and Animation selector
+            GUI.Label(rect.TranslateY(20), $"Frequency: {_updatesPerSecond:0.00} hZ", _sliderText);
+            _updatesPerSecond = GUI.HorizontalSlider(rect.TranslateY(20), _updatesPerSecond, 1, 100); //TODO: Color viewer and Animation selector
         }
 
         protected override void OnGuiClose()
