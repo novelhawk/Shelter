@@ -30,9 +30,6 @@
     <EmbeddedResource Include="Mod\Resources\**" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\C#\Photon\Photon3Unity3D\Photon3Unity3D.csproj" />
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="JetBrains.Annotations" Version="2018.2.1" />
     <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
   </ItemGroup>
@@ -48,6 +45,9 @@
     </Reference>
     <Reference Include="Boo.Lang, Version=2.0.9.5, Culture=neutral, PublicKeyToken=32c39770e9a21a67">
       <HintPath>..\..\..\Assemblies\Boo.Lang.dll</HintPath>
+    </Reference>
+    <Reference Include="Photon3Unity3D, Version=4.0.0.4, Culture=neutral, PublicKeyToken=null">
+      <HintPath>..\..\..\Assemblies\Photon3Unity3D.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
       <HintPath>..\..\..\Assemblies\UnityEngine.dll</HintPath>
