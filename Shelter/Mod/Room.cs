@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Game;
 using ExitGames.Client.Photon;
+using Game.Enums;
 using Photon;
 using Photon.Enums;
 using LogType = Mod.Logging.LogType;

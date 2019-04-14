@@ -1,3 +1,5 @@
+using Game.Enums;
+
 namespace Game
 {
     public struct LevelInfo

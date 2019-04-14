@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 using Game;
+using Game.Enums;
 using JetBrains.Annotations;
 using Mod;
 using Mod.Exceptions;

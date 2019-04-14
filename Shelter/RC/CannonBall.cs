@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using Game;
+using Game.Enums;
 using Mod;
 using Mod.GameSettings;
 using Photon;

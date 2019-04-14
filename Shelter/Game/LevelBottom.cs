@@ -1,3 +1,4 @@
+using Game.Enums;
 using Photon.Enums;
 using UnityEngine;
 using Extensions = Photon.Extensions;

@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Game;
+using Game.Enums;
 using Mod;
 using Photon;
 using UnityEngine;

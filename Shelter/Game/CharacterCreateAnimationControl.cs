@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Game;
+using Game.Enums;
 using UnityEngine;
 
 // ReSharper disable once CheckNamespace

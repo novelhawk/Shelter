@@ -1,4 +1,5 @@
 using Game;
+using Game.Enums;
 using JetBrains.Annotations;
 using UnityEngine;
 
