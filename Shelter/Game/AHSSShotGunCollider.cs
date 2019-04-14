@@ -1,5 +1,6 @@
 using System.Collections;
 using Game;
+using Game.Enums;
 using Mod;
 using Mod.Managers;
 using Mod.Modules;

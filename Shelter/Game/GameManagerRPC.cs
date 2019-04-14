@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Game;
 using ExitGames.Client.Photon;
+using Game.Enums;
 using JetBrains.Annotations;
 using Mod;
 using Mod.Exceptions;

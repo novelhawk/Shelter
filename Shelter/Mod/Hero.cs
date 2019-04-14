@@ -1,4 +1,5 @@
 ﻿using Game;
+using Game.Enums;
 
 namespace Mod
 {

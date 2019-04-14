@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using Game;
+using Game.Enums;
 using Photon;
 using Photon.Enums;
 using UnityEngine;

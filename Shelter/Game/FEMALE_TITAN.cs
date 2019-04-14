@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Game;
+using Game.Enums;
 using JetBrains.Annotations;
 using Mod;
 using Mod.Exceptions;

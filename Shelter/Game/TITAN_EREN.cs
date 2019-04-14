@@ -1,5 +1,6 @@
 using System.Collections;
 using Game;
+using Game.Enums;
 using JetBrains.Annotations;
 using Mod;
 using Mod.Keybinds;

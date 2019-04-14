@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Game;
+using Game.Enums;
 using UnityEngine;
 using Xft;
 

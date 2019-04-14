@@ -1,4 +1,5 @@
 using Game;
+using Game.Enums;
 using Mod;
 using Mod.Keybinds;
 using Mod.Managers;
