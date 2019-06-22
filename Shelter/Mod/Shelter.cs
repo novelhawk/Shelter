@@ -82,6 +82,7 @@ namespace Mod
             _commandManager?.Dispose();
             _commandManager = null;
             _interfaceManager.DisableAll();
+            _interfaceManager.Enable(nameof(ExitMenu));
             _interfaceManager.Enable(nameof(Background));
             _interfaceManager.Enable(nameof(Loading));
             _interfaceManager.Enable(nameof(MainMenu));

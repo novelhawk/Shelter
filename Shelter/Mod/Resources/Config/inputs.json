@@ -1,4 +1,8 @@
 ﻿{
+  "OpenExitMenu": "Escape",
+  "OpenSettingsMenu": "P",
+  "OpenNavigator": "RightControl",
+  
   "Attack": "Mouse0",
   "Special": "Mouse1",
   "BothHooks": "F",
@@ -33,9 +37,6 @@
   "TitanGrabNape": "V",
   "TitanAntiAE": "Mouse0",
   "TitanBite": "Mouse1",
-
-  "OpenMenu": "P",
-  "OpenNavigator": "RightControl",
   
   "ReelIn": "Mouse4",
   "ReelOut": "Mouse3",

@@ -2,6 +2,10 @@
 {
     public enum InputAction
     {
+        OpenExitMenu,
+        OpenSettingsMenu,
+        OpenNavigator,
+        
         Attack,
         Special,
         BothHooks,
@@ -22,9 +26,6 @@
         Right,
         Left,
         Gas,
-        
-        OpenMenu,
-        OpenNavigator,
 
         EnterCannon,
         

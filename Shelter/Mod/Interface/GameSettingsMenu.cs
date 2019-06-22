@@ -1,10 +1,11 @@
 ﻿using System;
 using Mod.Keybinds;
+using Mod.Managers;
 using UnityEngine;
 
 namespace Mod.Interface
 {
-    public class InGameMenu : Gui
+    public class GameSettingsMenu : Gui
     {
         private Rect _windowRect;
         private Texture2D _background;
@@ -18,6 +19,8 @@ namespace Mod.Interface
         
         protected override void OnShow()
         {
+            InterfaceManager.OpenMenuCount++;
+            
             _background = Texture(255, 255, 255);
             
             _menuEntry = new GUIStyle
@@ -63,7 +66,7 @@ namespace Mod.Interface
                 return;
             }
             
-            if (Shelter.InputManager.IsDown(InputAction.OpenMenu))
+            if (Shelter.InputManager.IsDown(InputAction.OpenSettingsMenu))
                 Toggle();
             if (Visible && Input.GetKeyDown(KeyCode.Escape))
                 Disable();
@@ -242,7 +245,7 @@ namespace Mod.Interface
             KeyboardButton(item.TranslateY(item.Height + 3), "Black flare", InputAction.BlackFlare);
             
             KeyboardButton(item.TranslateY(item.Height + 10), "Toggle fullscreen", InputAction.ToggleFullscreen);
-            KeyboardButton(item.TranslateY(item.Height + 3), "Open menu", InputAction.OpenMenu);
+            KeyboardButton(item.TranslateY(item.Height + 3), "Open menu", InputAction.OpenSettingsMenu);
             KeyboardButton(item.TranslateY(item.Height + 3), "Open navigator", InputAction.OpenNavigator);
         }
 
@@ -259,6 +262,8 @@ namespace Mod.Interface
 
         protected override void OnHide()
         {
+            InterfaceManager.OpenMenuCount--;
+            
             Destroy(_background);
         }
 

@@ -10,17 +10,18 @@ namespace Mod.Managers
     public class InterfaceManager
     {
         private readonly List<Gui> _interfaces = new List<Gui>();
-
+        
         public InterfaceManager()
         {
             GameObject go = new GameObject("Interface");
             _interfaces.AddRange(new Gui[]
             {
+                go.AddComponent<ExitMenu>(),
                 go.AddComponent<Console>(),
                 go.AddComponent<Notify>(),
                 go.AddComponent<Connecting>(),
                 go.AddComponent<Navigator>(),
-                go.AddComponent<InGameMenu>(),
+                go.AddComponent<GameSettingsMenu>(),
                 go.AddComponent<Scoreboard>(),
                 go.AddComponent<Chat>(),
                 go.AddComponent<Loading>(),
@@ -33,6 +34,8 @@ namespace Mod.Managers
             });
             Object.DontDestroyOnLoad(go);
         }
+
+        public static int OpenMenuCount { get; set; }
 
         public bool IsVisible(string name)
         {

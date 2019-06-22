@@ -739,7 +739,7 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                     return;
                 }
             }
-            if (Shelter.InputManager.IsDown(InputAction.OpenMenu))
+            if (Shelter.InputManager.IsDown(InputAction.OpenSettingsMenu))
             {
                 isPausing = !isPausing;
                 if (isPausing)
