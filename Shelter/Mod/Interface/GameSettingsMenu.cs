@@ -1,6 +1,8 @@
 ﻿using System;
+using Game.Enums;
 using Mod.Keybinds;
 using Mod.Managers;
+using Photon;
 using UnityEngine;
 
 namespace Mod.Interface
@@ -20,6 +22,9 @@ namespace Mod.Interface
         protected override void OnShow()
         {
             InterfaceManager.OpenMenuCount++;
+            
+            Screen.showCursor = true;
+            Screen.lockCursor = false;
             
             _background = Texture(255, 255, 255);
             
@@ -66,8 +71,15 @@ namespace Mod.Interface
                 return;
             }
             
-            if (Shelter.InputManager.IsDown(InputAction.OpenSettingsMenu))
-                Toggle();
+            if (PhotonNetwork.inRoom &&
+                Shelter.InputManager.IsDown(InputAction.OpenSettingsMenu))
+            {
+                if (Visible)
+                    Disable();
+                else if (InterfaceManager.OpenMenuCount == 0)
+                    Enable();
+            }
+            
             if (Visible && Input.GetKeyDown(KeyCode.Escape))
                 Disable();
         }
@@ -263,7 +275,13 @@ namespace Mod.Interface
         protected override void OnHide()
         {
             InterfaceManager.OpenMenuCount--;
-            
+
+            if (PhotonNetwork.inRoom)
+            {
+                Screen.showCursor = false;
+                Screen.lockCursor = IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS;
+            }
+
             Destroy(_background);
         }
 

@@ -561,189 +561,179 @@ public partial class GameManager : Photon.MonoBehaviour
     private ChatMessage? _pauseMessageId;
     private void Core()
     {
-        if (false) //TODO: Probably broken || was `(int) settings[64] >= 100`
+        if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && needChooseSide)
         {
-            CoreEditor();
-        }
-        else
-        {
-            if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && needChooseSide)
+            if (Shelter.InputManager.IsDown(InputAction.RedFlare)) //TODO: Automatically show on room join
             {
-                if (Shelter.InputManager.IsDown(InputAction.RedFlare)) //TODO: Automatically show on room join
+                if (NGUITools.GetActive(ui.GetComponent<UIReferArray>().panels[3])) //TODO: Remove UI_IN_GAME
                 {
-                    if (NGUITools.GetActive(ui.GetComponent<UIReferArray>().panels[3])) //TODO: Remove UI_IN_GAME
-                    {
-                        Screen.lockCursor = true;
-                        Screen.showCursor = true;
-                        NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[0], true);
-                        NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[1], false);
-                        NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[2], false);
-                        NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[3], false);
-                        Camera.main.GetComponent<SpectatorMovement>().disable = false;
-                        Camera.main.GetComponent<MouseLook>().disable = false;
-                    }
-                    else
-                    {
-                        Screen.lockCursor = false;
-                        Screen.showCursor = true;
-                        NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[0], false);
-                        NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[1], false);
-                        NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[2], false);
-                        NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[3], true);
-                        Camera.main.GetComponent<SpectatorMovement>().disable = true;
-                        Camera.main.GetComponent<MouseLook>().disable = true;
-                    }
-                }
-                if (Shelter.InputManager.IsDown(InputAction.OpenSettingsMenu) && !_isVisible)
-                {
+                    Screen.lockCursor = true;
                     Screen.showCursor = true;
+                    NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[0], true);
+                    NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[1], false);
+                    NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[2], false);
+                    NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[3], false);
+                    Camera.main.GetComponent<SpectatorMovement>().disable = false;
+                    Camera.main.GetComponent<MouseLook>().disable = false;
+                }
+                else
+                {
                     Screen.lockCursor = false;
+                    Screen.showCursor = true;
+                    NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[0], false);
+                    NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[1], false);
+                    NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[2], false);
+                    NGUITools.SetActive(ui.GetComponent<UIReferArray>().panels[3], true);
                     Camera.main.GetComponent<SpectatorMovement>().disable = true;
                     Camera.main.GetComponent<MouseLook>().disable = true;
-                    _isVisible = true;
                 }
             }
-            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer || IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
-            {
-                switch (IN_GAME_MAIN_CAMERA.GameType)
-                {
-                    case GameType.Multiplayer:
-                        CoreAdd();
-                        if (Camera.main != null && IN_GAME_MAIN_CAMERA.GameMode != GameMode.Racing && Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver && !needChooseSide && !settings.InSpectatorMode)
-                        {
-                            if (LevelInfoManager.Get(Level).RespawnMode == RespawnMode.DEATHMATCH || 
-                                settings.IsEndless || (settings.IsBombMode || settings.PVPMode > PVPMode.Off) && 
-                                !settings.IsPointMode)
-                            {
-                                myRespawnTime += Time.deltaTime;
-                                int endlessMode = 5;
-                                if (Player.Self.Properties.PlayerType == PlayerType.Titan)
-                                {
-                                    endlessMode = 10;
-                                }
-                                if (settings.IsEndless)
-                                {
-                                    endlessMode = 1;
-                                }
-                                myRespawnTime = 0f; //TODO: Add option to disable insta respawn
-                                Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
-                                if (Player.Self.Properties.PlayerType == PlayerType.Titan)
-                                {
-                                    SpawnPlayerTitan(myLastHero);
-                                }
-                                else
-                                {
-                                    StartCoroutine(WaitAndRespawn1(0.1f));
-                                }
-                                Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
-                            }
-                        }
-                        break;
-                    case GameType.Singleplayer:
-                        if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.Racing)
-                        {
-                            if (!isLosing)
-                            {
-                                currentSpeed = Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody.velocity.magnitude; //TODO: Show in new gui
-                                maxSpeed = Mathf.Max(maxSpeed, currentSpeed);
-                            }
-                        }
-                        break;
-                }
+        }
 
-                if (isWinning || (isLosing && IN_GAME_MAIN_CAMERA.GameMode != GameMode.Racing))
-                {
-                    if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && _endingMessageId.HasValue)
+        if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer ||
+            IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer)
+        {
+            switch (IN_GAME_MAIN_CAMERA.GameType)
+            {
+                case GameType.Multiplayer:
+                    CoreAdd();
+                    if (Camera.main != null && IN_GAME_MAIN_CAMERA.GameMode != GameMode.Racing &&
+                        Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver && !needChooseSide &&
+                        !settings.InSpectatorMode)
                     {
-                        if (gameEndCD <= 0f)
+                        if (LevelInfoManager.Get(Level).RespawnMode == RespawnMode.DEATHMATCH ||
+                            settings.IsEndless || (settings.IsBombMode || settings.PVPMode > PVPMode.Off) &&
+                            !settings.IsPointMode)
                         {
-                            gameEndCD = 0f;
-                            Shelter.Chat.Edit(_endingMessageId, "Game is now restarting.");
-                            _endingMessageId = null;
-                            if (PhotonNetwork.isMasterClient)
-                                RestartGameRC();
-                        }
-                        else
-                        {
-                            gameEndCD -= Time.deltaTime;
-                            Shelter.Chat.Edit(_endingMessageId, $"Game restarting in {gameEndCD:0.00} seconds.", true);
+                            myRespawnTime += Time.deltaTime;
+                            int endlessMode = 5;
+                            if (Player.Self.Properties.PlayerType == PlayerType.Titan)
+                            {
+                                endlessMode = 10;
+                            }
+
+                            if (settings.IsEndless)
+                            {
+                                endlessMode = 1;
+                            }
+
+                            myRespawnTime = 0f; //TODO: Add option to disable insta respawn
+                            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
+                            if (Player.Self.Properties.PlayerType == PlayerType.Titan)
+                            {
+                                SpawnPlayerTitan(myLastHero);
+                            }
+                            else
+                            {
+                                StartCoroutine(WaitAndRespawn1(0.1f));
+                            }
+
+                            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
                         }
                     }
-                } 
-                else if (_endingMessageId.HasValue)
-                {
-                    Shelter.Chat.Edit(_endingMessageId, "Restart failed.");
-                    _endingMessageId = null;
-                }
-                timeElapse += Time.deltaTime;
-                roundTime += Time.deltaTime;
-                switch (IN_GAME_MAIN_CAMERA.GameType)
-                {
-                    case GameType.Singleplayer when IN_GAME_MAIN_CAMERA.GameMode == GameMode.Racing:
-                        if (!isWinning)
-                        {
-                            timeTotalServer += Time.deltaTime;
-                        }
 
-                        break;
-                    case GameType.Singleplayer:
-                        if (!(isLosing || isWinning))
-                        {
-                            timeTotalServer += Time.deltaTime;
-                        }
-
-                        break;
-                    default:
-                        timeTotalServer += Time.deltaTime;
-                        break;
-                }
-                if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.Racing)
-                {
-                    if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
+                    break;
+                case GameType.Singleplayer:
+                    if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.Racing)
                     {
-                        if (timeTotalServer < 5f)
+                        if (!isLosing)
                         {
-                            if (!_racingMessageId.HasValue)
-                                _racingMessageId = Shelter.Chat.System("Race is starting soon");
-                            Shelter.Chat.Edit(_racingMessageId, $"Race is starting in {5 - timeTotalServer:0.00}", true);
+                            currentSpeed = Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().main_object.rigidbody
+                                .velocity.magnitude; //TODO: Show in new gui
+                            maxSpeed = Mathf.Max(maxSpeed, currentSpeed);
                         }
-                        else if (!startRacing && isWinning)
-                        {
-                            Shelter.Chat.Edit(_racingMessageId, "Race started.");
-                            _racingMessageId = null;
-                            startRacing = true;
-                            endRacing = false;
-                            if (Shelter.TryFind("door", out GameObject door))
-                                door.SetActive(false);
-                        }
+                    }
+
+                    break;
+            }
+
+            if (isWinning || (isLosing && IN_GAME_MAIN_CAMERA.GameMode != GameMode.Racing))
+            {
+                if (IN_GAME_MAIN_CAMERA.GameType != GameType.Singleplayer && _endingMessageId.HasValue)
+                {
+                    if (gameEndCD <= 0f)
+                    {
+                        gameEndCD = 0f;
+                        Shelter.Chat.Edit(_endingMessageId, "Game is now restarting.");
+                        _endingMessageId = null;
+                        if (PhotonNetwork.isMasterClient)
+                            RestartGameRC();
                     }
                     else
                     {
-                        if (roundTime < 20f)
-                        {
-                            if (!_racingMessageId.HasValue)
-                                _racingMessageId = Shelter.Chat.System("Race is starting soon");
-                            Shelter.Chat.Edit(_racingMessageId, $"Race is starting in {20 - roundTime:0.00}", true);
-                        }
-                        else if (!startRacing)
-                        {
-                            Shelter.Chat.Edit(_racingMessageId, "Race started.");
-                            _racingMessageId = null;
+                        gameEndCD -= Time.deltaTime;
+                        Shelter.Chat.Edit(_endingMessageId, $"Game restarting in {gameEndCD:0.00} seconds.", true);
+                    }
+                }
+            }
+            else if (_endingMessageId.HasValue)
+            {
+                Shelter.Chat.Edit(_endingMessageId, "Restart failed.");
+                _endingMessageId = null;
+            }
 
-                            startRacing = true;
-                            endRacing = false;
-                            if (Shelter.TryFind("door", out GameObject obj))
-                                obj.SetActive(false);
+            timeElapse += Time.deltaTime;
+            roundTime += Time.deltaTime;
+            switch (IN_GAME_MAIN_CAMERA.GameType)
+            {
+                case GameType.Singleplayer when IN_GAME_MAIN_CAMERA.GameMode == GameMode.Racing:
+                    if (!isWinning)
+                    {
+                        timeTotalServer += Time.deltaTime;
+                    }
 
-                            if (racingDoors != null && customLevelLoaded)
-                            {
-                                foreach (GameObject door in racingDoors)
-                                    door.SetActive(false);
+                    break;
+                case GameType.Singleplayer:
+                    if (!(isLosing || isWinning))
+                    {
+                        timeTotalServer += Time.deltaTime;
+                    }
 
-                                racingDoors = null;
-                            }
-                        }
-                        else if (racingDoors != null && customLevelLoaded)
+                    break;
+                default:
+                    timeTotalServer += Time.deltaTime;
+                    break;
+            }
+
+            if (IN_GAME_MAIN_CAMERA.GameMode == GameMode.Racing)
+            {
+                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
+                {
+                    if (timeTotalServer < 5f)
+                    {
+                        if (!_racingMessageId.HasValue)
+                            _racingMessageId = Shelter.Chat.System("Race is starting soon");
+                        Shelter.Chat.Edit(_racingMessageId, $"Race is starting in {5 - timeTotalServer:0.00}", true);
+                    }
+                    else if (!startRacing && isWinning)
+                    {
+                        Shelter.Chat.Edit(_racingMessageId, "Race started.");
+                        _racingMessageId = null;
+                        startRacing = true;
+                        endRacing = false;
+                        if (Shelter.TryFind("door", out GameObject door))
+                            door.SetActive(false);
+                    }
+                }
+                else
+                {
+                    if (roundTime < 20f)
+                    {
+                        if (!_racingMessageId.HasValue)
+                            _racingMessageId = Shelter.Chat.System("Race is starting soon");
+                        Shelter.Chat.Edit(_racingMessageId, $"Race is starting in {20 - roundTime:0.00}", true);
+                    }
+                    else if (!startRacing)
+                    {
+                        Shelter.Chat.Edit(_racingMessageId, "Race started.");
+                        _racingMessageId = null;
+
+                        startRacing = true;
+                        endRacing = false;
+                        if (Shelter.TryFind("door", out GameObject obj))
+                            obj.SetActive(false);
+
+                        if (racingDoors != null && customLevelLoaded)
                         {
                             foreach (GameObject door in racingDoors)
                                 door.SetActive(false);
@@ -751,31 +741,42 @@ public partial class GameManager : Photon.MonoBehaviour
                             racingDoors = null;
                         }
                     }
-                    if (Camera.main != null && Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver && !needChooseSide && customLevelLoaded)
+                    else if (racingDoors != null && customLevelLoaded)
                     {
-                        myRespawnTime += Time.deltaTime;
-                        if (myRespawnTime > 1.5f)
-                        {
-                            myRespawnTime = 0f;
-                            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
-                            if (checkpoint != null)
-                            {
-                                StartCoroutine(WaitAndRespawn2(0.1f, checkpoint));
-                            }
-                            else
-                            {
-                                StartCoroutine(WaitAndRespawn1(0.1f));
-                            }
-                            Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
-                        }
+                        foreach (GameObject door in racingDoors)
+                            door.SetActive(false);
+
+                        racingDoors = null;
                     }
                 }
-                if (timeElapse > 1f)
-                    timeElapse--;
-                if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && killInfoGO.Count > 0 && killInfoGO[0] == null)
+
+                if (Camera.main != null && Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver &&
+                    !needChooseSide && customLevelLoaded)
                 {
-                    killInfoGO.RemoveAt(0);
+                    myRespawnTime += Time.deltaTime;
+                    if (myRespawnTime > 1.5f)
+                    {
+                        myRespawnTime = 0f;
+                        Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
+                        if (checkpoint != null)
+                        {
+                            StartCoroutine(WaitAndRespawn2(0.1f, checkpoint));
+                        }
+                        else
+                        {
+                            StartCoroutine(WaitAndRespawn1(0.1f));
+                        }
+
+                        Camera.main.GetComponent<IN_GAME_MAIN_CAMERA>().gameOver = false;
+                    }
                 }
+            }
+
+            if (timeElapse > 1f)
+                timeElapse--;
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Multiplayer && killInfoGO.Count > 0 && killInfoGO[0] == null)
+            {
+                killInfoGO.RemoveAt(0);
             }
         }
     }

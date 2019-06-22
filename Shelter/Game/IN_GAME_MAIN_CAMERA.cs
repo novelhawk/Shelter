@@ -84,6 +84,20 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
 
     private void Awake()
     {
+        var cameraType = PlayerPrefs.GetString("cameraType");
+        switch (cameraType)
+        {
+            case "Original":
+                cameraMode = CameraType.Original;
+                break;
+            case "TPS":
+                cameraMode = CameraType.TPS;
+                break;
+            case "Stop":
+                cameraMode = CameraType.Stop;
+                break;
+        }
+        
         isTyping = false;
         isPausing = false;
         name = "MainCamera";
@@ -739,23 +753,10 @@ public class IN_GAME_MAIN_CAMERA : MonoBehaviour
                     return;
                 }
             }
-            if (Shelter.InputManager.IsDown(InputAction.OpenSettingsMenu))
-            {
-                isPausing = !isPausing;
-                if (isPausing)
-                {
-                    if (GameType == GameType.Singleplayer)
-                        Time.timeScale = 0f;
-                    Screen.showCursor = true;
-                    Screen.lockCursor = false;
-                }
-            }
             if (this.needSetHUD)
             {
                 this.needSetHUD = false;
                 this.SetInterfacePosition();
-                Screen.lockCursor = !Screen.lockCursor;
-                Screen.lockCursor = !Screen.lockCursor;
             }
             if (Shelter.InputManager.IsDown(InputAction.ToggleFullscreen) && !Screen.showCursor)
             {

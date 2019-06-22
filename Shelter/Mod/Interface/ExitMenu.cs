@@ -1,6 +1,8 @@
+using Game.Enums;
 using Mod.Keybinds;
 using Mod.Managers;
 using Photon;
+using Photon.Enums;
 using UnityEngine;
 
 namespace Mod.Interface
@@ -14,6 +16,12 @@ namespace Mod.Interface
         protected override void OnShow()
         {
             InterfaceManager.OpenMenuCount++;
+            
+            Screen.showCursor = true;
+            Screen.lockCursor = false;
+            
+            if (IN_GAME_MAIN_CAMERA.GameType == GameType.Singleplayer)
+                Time.timeScale = 0f;
             
             _background = Texture(0, 0, 0, 80);
             _buttonBackground = Texture(0, 0, 0, 40);
@@ -54,8 +62,8 @@ namespace Mod.Interface
             
             if (GUI.Button(rect, "Game Settings", _button))
             {
-                Enable(nameof(GameSettingsMenu));
                 Toggle();
+                Enable(nameof(GameSettingsMenu));
             }
             rect.TranslateY(btnHeight + spacing);
             
@@ -67,17 +75,25 @@ namespace Mod.Interface
         {
             InterfaceManager.OpenMenuCount--;
             
+            if (PhotonNetwork.inRoom)
+            {
+                Screen.showCursor = false;
+                Screen.lockCursor = IN_GAME_MAIN_CAMERA.cameraMode == CameraType.TPS;
+            }
+            
             Destroy(_background);
             Destroy(_buttonBackground);
         }
 
         private void Update()
         {
-            if (InterfaceManager.OpenMenuCount == 0 &&
-                PhotonNetwork.inRoom &&
+            if (PhotonNetwork.inRoom &&
                 Shelter.InputManager.IsDown(InputAction.OpenExitMenu))
             {
-                Toggle();
+                if (Visible)
+                    Disable();
+                else if (InterfaceManager.OpenMenuCount == 0)
+                    Enable();
             }
         }
     }

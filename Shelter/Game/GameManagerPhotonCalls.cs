@@ -545,9 +545,6 @@ public partial class GameManager
 
     private void Update()
     {
-        if (Shelter.InputManager.IsDown(InputAction.OpenSettingsMenu))
-            _isVisible = !_isVisible;
-        
         if (gameStart)
         {
             foreach (HERO hero in Heroes)
